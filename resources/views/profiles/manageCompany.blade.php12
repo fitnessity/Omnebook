@@ -1,0 +1,505 @@
+@inject('request', 'Illuminate\Http\Request')
+@extends('layouts.profile')
+
+@section('content')
+<style>
+  table.dp_monthpicker.dp_body td {
+    padding: 15px !important;
+}
+  .Zebra_DatePicker .dp_body .dp_selected {
+    background: #f53b49 !important;
+    color: #fff !important;ava
+}
+  .Zebra_DatePicker .dp_daypicker th {
+    background: #f53b49 !important;
+    cursor: text;
+    font-weight: 700;
+    color: #fff !important;
+}
+  input#frm1_birthday{
+    padding-right: 0px !important;
+  }
+  .Zebra_DatePicker{
+    width: 100% !important;
+  }
+  button.Zebra_DatePicker_Icon {
+    display: none !important;
+}
+
+    .lbl{
+
+        float:left;
+
+    }
+    .Zebra_DatePicker_Icon_Wrapper{
+        width:150px !important;
+    }
+    .avatar {
+  vertical-align: middle;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.texttr{
+    text-transform:capitalize;
+}
+
+</style>
+<style>
+	table.dp_monthpicker.dp_body td {
+    padding: 15px !important;
+}
+.Zebra_DatePicker{
+	width: 70% !important;
+}
+ img.header_img {
+    position: absolute;
+    left: 0;
+}
+    hr.heading_hr {
+    width: 10%;
+    color: #f53b49;
+    margin-top: 0;
+    border-top: 3px solid;
+    position: absolute;
+    margin-bottom: 0 !important;
+}
+    .introduction_section,.Education_section,.Company_section{
+      padding-left: 16.7%;
+    }
+    h3{
+      color: #f53b49;
+    }
+    .modal_buttons{
+      text-align: center;
+    }
+.btn.btn-secondary{
+  width: 249px;
+    display: inline-block;
+    font-size: 23px;
+    margin: 40px 0 25px;
+    background: #f53b49 none repeat scroll 0 0;
+    border: 1px solid #f53b49;
+    padding: 12px 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 0px;
+}
+
+    .user_img{
+      text-align: center;
+      margin: 5% 0px;
+    }
+/*    .avatar {*/
+/*  vertical-align: middle;*/
+/*  width: 120px;*/
+/*  height: 120px;*/
+/*  border-radius: 50%;*/
+/*}*/
+.user_img_content {
+    margin: 3% 0px;
+}
+.header_content {
+    padding: 0px 7%;
+}
+  span.user-img > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+}
+  h4.heading {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 20px 0;
+    border-bottom: 3px solid #f53b49;
+    width: 70%;
+    text-align: center;
+    margin: 0px auto 20px auto;
+    color: #f53b49;
+}
+  span.Zebra_DatePicker_Icon_Wrapper {
+    width: 100% !important;
+}
+    .Zebra_DatePicker {
+    background: #666;
+    border-radius: 4px;
+    box-shadow: 0 0 10px #888;
+    color: #222;
+    font: 13px Tahoma,Arial,Helvetica,sans-serif;
+    padding: 3px;
+    position: absolute;
+    display: table;
+    *width: 255px;
+    z-index: 1200
+}
+.Zebra_DatePicker *,
+.Zebra_DatePicker :after,
+.Zebra_DatePicker :before {
+    box-sizing: content-box!important
+}
+.Zebra_DatePicker * {
+    padding: 0
+}
+.Zebra_DatePicker table {
+    border-collapse: collapse;
+    border-radius: 4px;
+    border-spacing: 0;
+    width: 100%
+}
+.Zebra_DatePicker td,
+.Zebra_DatePicker th {
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 25px;
+    width: 25px
+}
+.Zebra_DatePicker .dp_body td,
+.Zebra_DatePicker .dp_body th {
+    border: 1px solid #bfbfbf
+}
+.Zebra_DatePicker .dp_body td:first-child,
+.Zebra_DatePicker .dp_body th:first-child {
+    border-left: none
+}
+.Zebra_DatePicker .dp_body td:last-child,
+.Zebra_DatePicker .dp_body th:last-child {
+    border-right: none
+}
+.Zebra_DatePicker .dp_body tr:first-child td,
+.Zebra_DatePicker .dp_body tr:first-child th {
+    border-top: none
+}
+.Zebra_DatePicker .dp_body tr:last-child td,
+.Zebra_DatePicker .dp_body tr:last-child th {
+    border-bottom: none
+}
+.Zebra_DatePicker .dp_body td {
+    background: #e6e5e5
+}
+.Zebra_DatePicker .dp_body .dp_weekend {
+    background: #d6d6d6
+}
+.Zebra_DatePicker .dp_body .dp_not_in_month {
+    background: #e0e6f2;
+    color: #98acd4
+}
+.Zebra_DatePicker .dp_body .dp_time_controls_condensed td {
+    width: 25%
+}
+.Zebra_DatePicker .dp_body .dp_current {
+    color: #cc236b
+}
+.Zebra_DatePicker .dp_body .dp_selected {
+    background: #b56a6a;
+    color: #fff
+}
+.Zebra_DatePicker .dp_body .dp_disabled {
+    background: #f2f2f2;
+    color: #ccc;
+    cursor: text
+}
+.Zebra_DatePicker .dp_body .dp_disabled.dp_current {
+    color: #b56a6a
+}
+.Zebra_DatePicker .dp_body .dp_hover {
+    color: #fff;
+    background: #88a09e
+}
+.Zebra_DatePicker .dp_body .dp_hover.dp_time_control {
+    background-color: #8c8c8c;
+    color: #fff
+}
+.Zebra_DatePicker .dp_monthpicker td,
+.Zebra_DatePicker .dp_timepicker td,
+.Zebra_DatePicker .dp_yearpicker td {
+    width: 33.3333%
+}
+.Zebra_DatePicker .dp_timepicker .dp_disabled {
+    border: none;
+    color: #222;
+    font-size: 26px;
+    font-weight: 700
+}
+.Zebra_DatePicker .dp_time_separator div {
+    position: relative
+}
+.Zebra_DatePicker .dp_time_separator div:after {
+    content: ":";
+    color: 1px solid #bfbfbf;
+    font-size: 20px;
+    left: 100%;
+    margin-left: 2px;
+    margin-top: -13px;
+    position: absolute;
+    top: 50%;
+    z-index: 1
+}
+.Zebra_DatePicker .dp_header {
+    margin-bottom: 3px
+}
+@supports (-ms-ime-align:auto) {
+    .Zebra_DatePicker .dp_header {
+        font-family: 'Segoe UI Symbol',Tahoma,Arial,Helvetica,sans-serif
+    }
+}
+.Zebra_DatePicker .dp_footer {
+    margin-top: 3px
+}
+.Zebra_DatePicker .dp_footer .dp_icon {
+    width: 50%
+}
+.Zebra_DatePicker .dp_actions td {
+    border-radius: 4px;
+    color: #fff
+}
+.Zebra_DatePicker .dp_actions .dp_caption {
+    font-weight: 700;
+    width: 100%
+}
+.Zebra_DatePicker .dp_actions .dp_next,
+.Zebra_DatePicker .dp_actions .dp_previous {
+    *padding: 0 10px
+}
+.Zebra_DatePicker .dp_actions .dp_hover {
+    background-color: #8c8c8c;
+    color: #fff
+}
+.Zebra_DatePicker .dp_daypicker th {
+    background: #fc3;
+    cursor: text;
+    font-weight: 700
+}
+.Zebra_DatePicker.dp_hidden {
+    display: none
+}
+.Zebra_DatePicker .dp_icon {
+    height: 16px;
+    background-image: url(icons.png);
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    *text-indent: 0
+}
+.Zebra_DatePicker .dp_icon.dp_confirm {
+    background-position: center -123px
+}
+.Zebra_DatePicker .dp_icon.dp_view_toggler {
+    background-position: center -91px
+}
+.Zebra_DatePicker .dp_icon.dp_view_toggler.dp_calendar {
+    background-position: center -59px
+}
+button.Zebra_DatePicker_Icon {
+    background: url(icons.png) center top no-repeat;
+    border: none;
+    cursor: pointer;
+    display: block;
+    height: 16px;
+    line-height: 0;
+    padding: 0;
+    position: absolute;
+    text-indent: -9000px;
+    width: 16px
+}
+button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
+    background-position: center -32px;
+    cursor: default
+}
+.pad{
+    padding-top:10px;
+}
+</style>
+<style>
+ .mt83{
+  margin-top: 83px;
+}
+.close{
+  opacity: 1 !important;
+}
+.signleft-customer form a {
+    font-size: 13.5px;
+    color: #777;
+    padding-bottom: 0;
+    text-align: left;
+    float: none;
+}
+.t_c {
+    font-size: 13.5px !important;
+    color: #777 !important;
+    padding-bottom: 0;
+    text-align: left;
+    float: none;}
+
+button.FITNESS_ENTHUSIASTS_signup {
+    margin-top: 22.4%;
+}
+.signleft {
+    float: left;
+    width: 45%;
+}
+.signright{
+  width: 45%;
+}
+input,select {
+  margin: 2.2% 0.5%;
+    border: 1px solid #828282;
+    padding: 16px 10px;
+    width: 100%;
+}
+.modallink.mt20 {
+    margin-top: 8% !important;
+}
+.pac-container {
+    z-index: 999999999;
+}
+ </style>
+<style>
+  table.dp_monthpicker.dp_body td {
+    padding: 15px !important;
+}
+  .Zebra_DatePicker .dp_body .dp_selected {
+    background: #f53b49 !important;
+    color: #fff !important;
+}
+  .Zebra_DatePicker .dp_daypicker th {
+    background: #f53b49 !important;
+    cursor: text;
+    font-weight: 700;
+    color: #fff !important;
+}
+  input#frm1_birthday{
+    padding-right: 0px !important;
+  }
+  .Zebra_DatePicker{
+    width: 100% !important;
+  }
+  button.Zebra_DatePicker_Icon {
+    display: none !important;
+}
+
+    .lbl{
+
+        float:left;
+
+    }
+    .Zebra_DatePicker_Icon_Wrapper{
+        width:150px !important;
+    }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.css" rel="stylesheet"/>
+<!--<script src="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Zebra_datepicker/1.9.15/zebra_datepicker.src.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<div class="business-offer-main">
+    <?php 
+       $loggedinUser = Auth::user(); 
+       $customerName = $loggedinUser->firstname.' '.$loggedinUser->lastname;
+       $profilePicture = $loggedinUser->profile_pic;
+    ?>
+
+    @include('includes.sidebar_profile_left',array ('customerName' => $customerName,'profilePicture' => $profilePicture))
+    <div id="systemMessage"></div>
+   
+ @foreach($company as $comp)
+  <div class="business-middle">
+
+    <div class="network_block nw-profile_block">
+       
+      @if(Auth::user()->status == "rejected")
+        <div class="flash-message" style="margin-bottom:15px;">
+            <p class="alert alert-danger"><?php echo nl2br(Auth::user()->rejected_reason); ?></p>
+        </div>
+      @endif
+     
+      <div class="row">
+
+        <div class="nw-user-detail-block">
+          
+        
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nw-user-detail">
+               <div class="row">
+                   <div class="col-lg-2 col-md-2 col-sm-2">
+                        <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$comp->logo}}" alt="Avatar" class="avatar">
+                   </div>
+                   <div class="col-lg-6 col-md-6 col-sm-6">
+                       <p class="texttr">{{$comp->company_name}}</p>
+                       <p class="texttr">{{$comp->first_name}} {{$comp->last_name}}</p>
+                   </div>
+                   <div class="col-lg-4 col-md-4 col-sm-4 row">
+                       <a class="editc btn btn-danger" href="{{url('/pcompany/edit/'.$comp->id)}}">Edit</a>
+                       <a class="viewc btn btn-danger" href="{{url('/pcompany/view/'.$comp->id)}}">View</a>
+                            <a class="deletec btn btn-danger" company_id = "{{$comp->id}}">Delete</a>
+                   </div>
+               </div>
+               
+
+                
+          </div>
+          
+    </div>
+  </div>
+   @include('includes.sidebar_profile_right')
+</div>
+</div>
+@endforeach
+
+
+</div>
+
+        <script src="/public/js/jquery-ui.min.js"></script>
+
+<!--        <script src="/public/js/jquery-ui.multidatespicker.js" defer></script>-->
+        
+        
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>-->
+
+<link href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css"/>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>-->
+<script>
+$(document).ready(function(){
+    //  $('#mdp-demo').multiDatesPicker();
+    //   $('#mdp-demo').click(function() {
+    //       $("#mdp-demo").focus();
+    //     });
+    $(".deletec").click(function(){
+        $.ajax({
+          url:"{{url('/pcompany/delete/')}}"+"/"+$(this).attr('company_id'),
+          type:'GET',
+          dataType: 'json',
+          processData: false,
+          contentType: false,
+          headers: {'X-CSRF-TOKEN': $("#_token").val()},
+          beforeSend: function () {
+            $('.deletec').prop('disabled', true);
+            showSystemMessages('#systemMessage', 'info', 'Please wait while we delete a company with Fitnessity.');
+          },
+          complete: function () {
+            $('#deletec').prop('disabled', false);
+          },
+          success: function (response) {
+              showSystemMessages('#systemMessage', response.type, response.msg);
+              window.location.reload()
+            }
+        });
+    })
+    // $(".editc").click(function(){
+    //     console.log(:asds)
+    //     window.location.href = {{url('/pcompany/edit/')}}"+"/"+$(this).attr('company_id')
+    // })
+})
+    
+</script>
+ 
+
+
+@endsection

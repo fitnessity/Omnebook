@@ -1,0 +1,23 @@
+
+
+.example-code, .example-chart {
+    width: 47%;
+    float: left;
+    margin: 15px;
+}
+
+.example-code pre {
+    width: 500px;
+    height: 300px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}

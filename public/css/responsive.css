@@ -1,0 +1,2540 @@
+@media only screen and (min-width: 1750px) {
+    .online_classes_box .classes_bottom_duration .duration_wrap {
+        font-size: 15px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap {
+        padding: 4px 35px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap a span:first-of-type {
+        font-size: 34px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap a span {
+        font-size: 22px;
+    }
+
+    .online_classes_box .classes_title h3 {
+        font-size: 20px;
+    }
+
+    .online_classes_box .classes_title h3 span {
+        font-size: 15px;
+    }
+
+    .online_wraper {
+        padding: 65px 150px;
+    }
+
+    .frame ul li {
+        width: 490px;
+    }
+    
+    .online_classes_box .imageclasses {
+        height: 470px;
+    }
+    
+    .bepart_easy_content ul li {
+        padding-right: 25% !important;
+    }
+}
+
+@media only screen and (min-width: 1500px) and (max-width: 1749px) {
+    .online_classes_box .classes_bottom_duration .duration_wrap {
+        padding: 15px;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap {
+        padding: 11px 35px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap a span:first-of-type {
+        font-size: 29px;
+    }
+
+    .online_classes_box .classes_bottom_duration .book_wrap a span {
+        font-size: 18px;
+        white-space: nowrap;
+    }
+
+    .frame ul li {
+        width: 490px;
+    }
+    
+    .online_classes_box .imageclasses {
+        height: 470px;
+    }
+    
+    .bepart_easy_content ul li {
+        padding-right: 25% !important;
+    }
+		.find-activity img {  width: 130px !important;  min-height: 141px !important; }
+}
+
+/*MEDIA QUEREIS START FROM HERE*/
+
+/*media query for mobile screen start here*/
+@media screen and (max-width: 767px) {
+    .employe-title h3 {
+        font-size: 20px !important;
+    }
+
+    input#frm_profile_pic {
+        margin: 0 auto !important;
+        width: 91% !important;
+        float: none !important;
+    }
+
+    span.user-img.uploadedpic {
+        margin: 0 auto !important;
+        float: none;
+        padding-top: 40px;
+    }
+
+    .pop-title h3 {
+        font-size: 30px;
+    }
+
+    .text {
+        color: white;
+        font-size: 13px !important;
+        font-weight: 200;
+        position: absolute;
+        top: 28% !important;
+        left: 0%;
+        /*transform: translate(-50%, -50%);*/
+        text-align: center;
+    }
+
+    .overlay_p {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 75% !important;
+        left: -135px;
+        transform: rotate(-90deg);
+    }
+
+    button.btn_select {
+        margin-bottom: 10% !important;
+    }
+
+    .overlay_heading {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 55% !important;
+        left: -75px;
+        font-size: 18px !important;
+        transform: rotate(-90deg);
+        text-align: center !important;
+    }
+
+    /*CUSTOMER LOGIN*/
+    a#btn_myprofile {
+        height: 37px;
+        padding: 9px !important;
+    }
+
+    .header-right {
+        margin-left: 24px;
+    }
+
+    .signleft-3row {
+        width: auto !important;
+    }
+
+    .review-btns a.review-btn-links.pull-left.active.profile-menu-tab2,
+    .review-btns .dropdown.review-follow.pull-right,
+    a.review-btn-links.pull-right.mrgn-rght8.profile-menu-tab2 {
+        text-align: center;
+        width: 48.5%;
+        margin-bottom: 10px;
+    }
+
+    .col-md-6.left_side.creat_meeting {
+        background: none;
+        z-index: -1;
+    }
+
+    /*CUSTOMER LOGIN END*/
+
+    /*Admin dashboard css start*/
+    body.skin-blue.sidebar-mini {
+        overflow-x: hidden !important;
+    }
+
+    .wrapper.admin-wrapper {
+        overflow: unset !important;
+    }
+
+    .manage_business_checkbox {
+        text-align: center !important;
+        padding-left: 0px !important;
+    }
+
+    table.dataTable thead > tr > th {
+        padding-right: 0 !important;
+        padding-left: 13px !important;
+        padding-bottom: 23px !important;
+    }
+
+    .form-control.bookings_page {
+        width: 24% !important;
+        margin-left: 274px;
+    }
+
+    .btn-group.bootstrap-select.form-control > button {
+        display: none;
+    }
+
+    div.dataTables_filter input {
+        width: 82px !important;
+    }
+
+    select#category_id {
+        margin-left: -13px;
+        margin-top: -7px;
+        width: 108%;
+    }
+
+    section.col-lg-6.connectedSortable.ui-sortable {
+        padding: 0px !important;
+    }
+
+    footer.main-footer.admin {
+        text-align: center !important;
+        padding-top: 23px !important;
+        padding-bottom: 0px !important;
+    }
+
+    /*ol.breadcrumb.admin {
+    margin: 15px !important;
+    }*/
+    section.content.admin_dash {
+        padding: 0px !important;
+    }
+
+    h3.admin-dashboard {
+        margin-bottom: 0px !important;
+    }
+
+    div#module_list_length,
+    div#customers_list_length,
+    div#professional_list_length,
+    div#plan_list_length,
+    div#feedbacks_list_length,
+    div#bookings_list_length {
+        width: 20%;
+        margin-top: 13px;
+        margin-bottom: -35px;
+    }
+
+    .table-responsive {
+        border: 0px !important;
+    }
+
+    .col-md-2.manage_professionals {
+        width: 100%;
+        margin: 2px 0;
+    }
+
+    .panel-body.panel_manage_professionals {
+        padding-top: 0px;
+    }
+
+    .form-group.edit_profile_useless {
+        display: none;
+    }
+
+    select#status {
+        width: 100%;
+    }
+
+    /*admin dashboard css end*/
+
+
+    .fit_for_business {
+        height: 320px !important;
+    }
+
+    .modal-dialog.modal-lg {
+        width: auto !important;
+    }
+
+    div#rc-anchor-container {
+        width: 65%;
+    }
+
+    .about-block {
+        padding-top: 21px;
+    }
+
+    .about-services {
+        padding: 21px 0px 0px 0px;
+    }
+
+    .about-left-right-para h2 {
+        padding-bottom: 0px;
+        margin-bottom: 15px;
+    }
+
+    .about-title h1 {
+        padding-bottom: 0px;
+    }
+
+    .footer-logo input {
+        float: none;
+        background: #fff;
+        border: none;
+        padding: 7px;
+        width: 100%;
+        color: #797979;
+        border-radius: 0 !important;
+        margin: -5px auto;
+    }
+
+    .footer-logo button {
+        width: 100%;
+    }
+
+    .rank-sidebar {
+        padding-right: 0px !important;
+        margin-bottom: 0px;
+    }
+
+    .cate-sidebar ul {
+        margin-right: 0px !important;
+    }
+
+    input.search_input_banner {
+        width: 100% !important;
+    }
+
+    .cat-item.style_prevu_sp.item {
+        margin-left: -7px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .pop-search-detail-sports {
+        opacity: 0;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        bottom: 0px;
+        transition: 0.5s;
+        width: 88%;
+        left: 33px;
+        top: 40px;
+        color: #fff;
+        padding: 5px;
+        height: auto;
+        bottom: 2px !important;
+    }
+
+    .owl-theme .owl-controls {
+        /*display: none !important;*/
+    }
+
+    .cate-sidebar h1 {
+        margin-bottom: 10px !important;
+    }
+
+    .banner-bottom h1 {
+        line-height: 34px !important;
+        font-size: 24px !important;
+    }
+
+    .slider-block p {
+        width: 100% !important;
+    }
+
+    .pad-30 {
+        padding-bottom: 0px !important;
+    }
+
+    .col-md-6.works-heading {
+        margin-bottom: 30px;
+    }
+
+    .pad-50 {
+        padding: 0px !important;
+    }
+
+    .subheading {
+        font-family: 'bebasregular';
+        font-size: 31px;
+        color: #151820;
+        border-bottom: 4px solid #c6c6c6;
+        padding-bottom: 0px;
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+
+    .block-paragraph {
+        font-size: 17px;
+        line-height: 20px;
+        margin-bottom: 5px;
+    }
+
+    .block-button {
+        font-size: 13px;
+        width: 7px;
+        padding: 5px 5px;
+    }
+
+    .block-footer {
+        margin-top: 4%;
+        font-size: 13px;
+    }
+
+    .slider-block-2 {
+        padding: 40px !important;
+        top: 30px !important;
+    }
+
+    .rank-list.happeing_now_mayank .owl-item {
+        width: 50% !important;
+    }
+
+    .rank-list.happeing_now_mayank .item {
+        margin: 0px !important;
+    }
+
+    .inner-banner h1 {
+        text-align: left;
+        margin-bottom: 77px;
+    }
+
+    .pop-title {
+        margin: 30px 0 0px;
+		width: 100% !important;
+    }
+
+    .signor {
+        width: 100% !important;
+    }
+
+    .signleft {
+        width: 100% !important;
+    }
+
+    .banner-bottom {
+        padding: 21px 0px 2px 0px !important;
+    }
+
+    .banner-bottom h1 {
+        padding-bottom: 1px !important;
+        margin-bottom: 17px !important;
+    }
+
+    .category {
+        padding: 50px 15px !important;
+        background-size: cover;
+    }
+
+    .jumbotron.second {
+        padding: 40px 15px;
+    }
+
+    .jumbotron.second h3 {
+        font-size: 28px;
+    }
+
+    .top-rank {
+        padding: 21px 15px !important;
+    }
+
+    .pad-20 {
+        padding: 0px;
+    }
+
+    .about-services-title h1 {
+        padding-bottom: 5px !important;
+        margin-bottom: 22px !important;
+    }
+
+    .steps-block {
+        margin: 0px !important;
+    }
+
+    .row.img-box-1 {
+        padding-top: 0px !important;
+    }
+
+    .row.img-box-2 {
+        padding-top: 0px !important;
+    }
+
+    .row.img-box-3 {
+        padding-top: 30px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .happening_now_btn {
+        margin: 20px auto !important;
+        position: relative;
+        right: 0;
+    }
+
+    .slider-block-2.hp {
+        top: -16px !important;
+    }
+
+    button#btn_feedback {
+        float: none !important;
+    }
+
+    .footer-link-button-say {
+        margin-left: 0;
+        text-align: center;
+        float: none !important;
+    }
+
+    .col-md-6.works-heading.last {
+        margin-bottom: 0;
+    }
+
+    .works-heading h3 {
+        padding-bottom: 2px;
+        margin-bottom: 0px;
+    }
+
+    .rank-item-detail.hp {
+        width: 100%;
+        float: none;
+    }
+
+    section.top-rank.hp {
+        padding-bottom: 0px !important;
+    }
+
+    div#captcha2 > div,
+    div#captcha3 > div {
+        width: 100% !important;
+    }
+
+    .row.hiw_professoinal {
+        padding: 0px;
+    }
+
+    .hiw_find_studios {
+        padding-top: 20px !important;
+    }
+
+    .hiw_adventures_activities {
+        padding-top: 40px !important;
+        padding-bottom: 20px !important;
+    }
+
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1365px) {
+
+    .cat-img-name img {
+        width: 88%;
+        height: 380px;
+    }
+
+    .pop-search-detail-sports {
+        width: 88%;
+    }
+
+    .category .cate-list .owl-controls .owl-buttons {
+        position: absolute;
+        top: 37%;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .category .owl-prev {
+        left: -4%;
+        top: 0;
+    }
+
+    .category .owl-next {
+        right: -4%;
+        top: 0;
+    }
+
+    header .header-right .btn {
+        font-size: 14px;
+        padding: 6px 8px;
+    }
+
+    .frame ul li {
+        width: 375px;
+    }
+	
+}
+
+
+/*media query for tablet screen start here*/
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .pop-title h3 {
+        font-size: 24px;
+    }
+
+    .text {
+        color: white;
+        font-size: 16px !important;
+        font-weight: 200;
+        position: absolute;
+        top: 26% !important;
+        left: 0%;
+        /*transform: translate(-50%, -50%);*/
+        text-align: center;
+    }
+
+    .overlay_p {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 75% !important;
+        left: -135px;
+        transform: rotate(-90deg);
+    }
+
+    button.btn_select {
+        margin-bottom: 8% !important;
+    }
+
+    .overlay_heading {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 55% !important;
+        right: 110px;
+        font-size: 18px !important;
+        transform: rotate(-90deg);
+        text-align: center !important;
+    }
+
+    a#btn_myprofile {
+        height: 37px;
+        padding: 9px !important;
+    }
+
+    .col-md-6.left_side.creat_meeting {
+        background: none;
+        z-index: -1;
+    }
+
+    .select_activity_hp {
+        margin-right: 0px !important;
+    }
+
+    .cate-sidebar.hp {
+        width: 28%;
+    }
+
+    .cate-list.owl-carousel.hp {
+        width: 65%;
+        margin-left: 51px;
+    }
+
+    /*.owl-item{
+	width: 288px !important;
+}*/
+    .owl-next {
+        right: -182px !important;
+    }
+
+    .owl-prev {
+        left: -215px !important;
+    }
+
+    h2.subheading.hp {
+        margin-bottom: 6px !important;
+    }
+
+    .fit_for_business {
+        height: 326px !important;
+    }
+
+    .row.pad-50.why_fitnessity_hp {
+        padding: 0;
+        margin: 0 -15px !important;
+    }
+
+    .top-rank {
+        padding: 40px 0px 0;
+    }
+
+    .col-md-6.works-heading.compare_hp {
+        margin-bottom: 0 !important;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp {
+        padding-bottom: 0;
+    }
+
+    .container.pad-20.why_fitnessity_tr_hp {
+        padding-bottom: 0;
+        margin-bottom: -15px;
+    }
+
+    .header-right {
+        width: 88%;
+    }
+
+    .slider-block input {
+        width: 100% !important;
+    }
+
+    .hiw_professoinal {
+        padding-top: 0 !important;
+    }
+
+    h2.subheading {
+        margin-top: 20px !important;
+        margin-bottom: -15px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .hiw_find_studios {
+        padding-top: 20px !important;
+    }
+
+    .hiw_adventures_activities {
+        padding-top: 40px !important;
+        padding-bottom: 30px !important;
+    }
+
+    .block-h2 {
+        font-size: 62px !important;
+        margin-top: 0px !important;
+    }
+
+    .col-md-6.works-heading {
+        margin-bottom: 35px !important;
+    }
+
+    .col-md-6.works-heading.no-mb {
+        margin-bottom: 0 !important;
+    }
+
+    .works-heading h3 {
+        margin-bottom: 0px;
+    }
+
+    .row.pad-50.np {
+        padding-bottom: 0px;
+    }
+
+    .latest-know-list.help_desk {
+        width: 95.5% !important;
+        float: right !important;
+        margin-right: 15px !important;
+    }
+
+    .latest-knowledge {
+        width: 100% !important;
+        padding: 0 !important;
+        text-align: center !important;
+        margin-bottom: 10px !important;
+    }
+
+    .modal-dialog.modal-lg {
+        width: 70% !important;
+    }
+
+    div#captcha2 > div,
+    div#captcha3 > div {
+        margin-left: 95px !important;
+    }
+
+    /*Footer*/
+    .footer-link-button-say {
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+
+    button#getan {
+        margin: 0px;
+    }
+
+    .footer-link-button-say button.btn-info {
+        float: none !important;
+    }
+
+    .slider-block-2 {
+        top: 6%;
+    }
+
+    .inner-banner h1 {
+        float: left;
+    }
+
+    .rank-sidebar {
+        padding-right: 0px !important;
+        margin-bottom: 30px;
+    }
+
+    #owl-demo .item a {
+        margin-bottom: 0px;
+    }
+
+    .footer-logo input,
+    .footer-logo button {
+        width: 50%;
+        margin: 0 auto;
+        float: none;
+    }
+
+    section.col-lg-6.connectedSortable.ui-sortable {
+        padding: 0px !important;
+    }
+
+    footer.main-footer.admin {
+        text-align: center !important;
+    }
+
+    .form-group.edit_profile_useless {
+        display: none;
+    }
+
+    h3.admin-dashboard {
+        margin-bottom: 0px !important;
+    }
+
+    .container.static_section .col-md-3 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card {
+        margin-bottom: 30px;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 {
+        width: 33.33333333%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 .card_img {
+        margin: 15px 0 15px 0px;
+        border-radius: 50%;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-8 {
+        width: 66.66666667%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row:nth-child(2) .col-md-8 p {
+        margin-top: 22px;
+    }
+
+    header .col-lg-3 {
+        width: 30%;
+        float: left;
+        padding: 12px 0px 12px 15px;
+    }
+
+    header .col-lg-3 img {
+        width: 100%;
+        height: auto;
+    }
+
+    header .col-lg-4 {
+        width: 42%;
+        float: left;
+        padding: 18px 15px;
+    }
+
+    .slider-block .catagories_btn .btn-web-btn {
+        margin-bottom: 10px;
+    }
+
+    header .col-lg-4 .top-serarch {
+        top: 0px;
+    }
+
+    header .header-right {
+        padding: 0px 0px 0 0;
+    }
+
+    header .header-right .without_signin {
+        right: 0px;
+    }
+
+    header .header-right #my_reg_btn {
+        top: 6px;
+    }
+
+    .row.cstm-bnner ul {
+        display: flex;
+        position: relative;
+        left: 0 !important;
+        top: 0 !important;
+    }
+
+    .main-slider .slider-block input {
+        max-width: 100%;
+    }
+
+    .slider-block .cstm-bnner i.fa.fa-map-marker {
+        top: 7px !important;
+        font-size: 28px !important;
+    }
+
+    .main-slider .slider-block {
+        top: 10%;
+    }
+
+    .topmain-slider .banner-bottoncstm h1 {
+        font-size: 28px !important;
+    }
+
+    .cat-item {
+        width: 100%;
+        margin: 0 auto 20px;
+        float: none;
+    }
+
+    .category .cat-img-name .sports_name {
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cat-img-name img {
+        width: 83%;
+    }
+
+    .cat-img-name .sports_name span {
+        position: relative;
+        text-align: center;
+        white-space: nowrap;
+        top: 0;
+        height: 2px;
+        margin-top: -5px;
+        line-height: 0px;
+        left: 0%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pop-search-detail-sports {
+        width: 83%;
+        right: 0px;
+    }
+
+    .cate-sidebar li {
+        text-align: right;
+    }
+
+    .category .owl-next {
+        right: -15% !important;
+    }
+
+    .category .owl-prev {
+        left: -15% !important;
+    }
+
+    .topmain-slider .flexslider .slides img {
+        height: 510px !important;
+    }
+
+    .jumbotron.second {
+        margin-top: 760px !important;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .works-heading {
+        min-height: auto !important;
+        width: 50%;
+        float: left;
+        margin-bottom: 30px;
+        padding: 0 15px;
+    }
+
+    .why_fitnessity_tr_hp .row .col-md-12 {
+        padding: 0px;
+    }
+
+    .about-services-title {
+        padding: 0 15px;
+    }
+
+    #back-top {
+        right: 12%;
+    }
+
+    .steps-block .line-process-home {
+        top: 37% !important;
+    }
+
+    .logo {
+        padding: 0;
+        width: 30%;
+    }
+
+    header .logo img {
+        width: 245px;
+        height: auto;
+    }
+
+    .main-slider .slide {
+        
+        padding-bottom: 80px;
+    }
+
+    .slider-block p {
+        font-size: 16px;
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    .slider-block h5 {
+        font-size: 20px;
+    }
+
+    .slider-block .catagories_btn .links_txt {
+        font-size: 16px;
+        margin-right: 10px;
+        white-space: nowrap;
+    }
+
+    .cate-list {
+        width: 70%;
+    }
+
+    .frame ul li {
+        width: 355px;
+    }
+
+    .menu_nav .header-right .top-serarch input {
+        min-width: 260px;
+    }
+
+    .userblock {
+        padding: 0 5px 0 20px;
+        position: relative;
+    }
+
+    .cate-sidebar h1 {
+        font-size: 25px;
+    }
+
+    .cate-sidebar li a {
+        font-size: 13px;
+    }
+
+    #cssmenu ul {
+        top: 100%;
+    }
+
+    .footer-logo,
+    .footer-link,
+    .footer-bottom-left ul,
+    .location,
+    .social-icon {
+        text-align: left;
+    }
+
+    .slider-block {
+        background: rgb(21, 25, 37);
+    }
+
+    .plr-60 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .why_fitnessity {
+        padding-top: 60px;
+        background-size: cover;
+    }
+
+    .whyfitnessity_content .txt_wrap p {
+        text-align: justify;
+    }
+
+    .video_block {
+        width: 100%;
+        position: relative;
+        bottom: 0;
+        height: 280px;
+        margin-top: 40px;
+    }
+
+    .discover_activities {
+        padding-top: 60px;
+    }
+
+    .activities_box:last-child {
+        margin-bottom: 0;
+    }
+
+    .bepart_easy_content {
+        padding-left: 0;
+    }
+
+    .bepart_easy_content p {
+        text-align: justify;
+    }
+
+    .button_title h3 .button_default_1 {
+        margin: 20px 0;
+    }
+
+    footer {
+        padding: 50px 15px 20px;
+    }
+
+    .footer-logo > p {
+        padding: 5px 0px 5px 0px;
+        text-align: justify;
+    }
+
+    .footer-logo > p br {
+        display: none;
+    }
+
+    .location {
+        padding: 15px 0;
+    }
+
+    .footer-bottom-left ul li {
+        padding: 0;
+    }
+
+    .footer-logo form {
+        padding: 0;
+    }
+
+    .copyright {
+        margin-top: 10px;
+        padding: 15px 0;
+    }
+
+    .video_icon {
+        left: 38%;
+    }
+
+    .footer-logo form .set_input label {
+        padding: 8px;
+    }
+
+    .social_wrap ul li a,
+    .social_wrap ul li a:visited {
+        font-size: 20px;
+    }
+
+    .easyboxes_wrap {
+        justify-content: flex-start;
+    }
+
+    .easyboxes_items {
+        width: 33%;
+        margin-bottom: 25px;
+    }
+
+    .easyboxes_items:nth-last-child(2),
+    .easyboxes_items:nth-last-child(1),
+    .easyboxes_items:last-child {
+        margin-bottom: 0;
+    }
+
+    .slider-block {
+        position: relative;
+        float: left;
+        width: 100%;
+    }
+
+    .activities_box .activites_content h3 {
+        padding: 15px 20px;
+        font-size: 16px;
+    }
+
+    .activities_box .activites_content p {
+        padding: 10px 20px;
+    }
+	.button{display: none;}
+	.top-search {
+		width: 73% !important;
+	}
+	#frmsearchCategory{position: relative;width: 100%;}
+	#frmsearchCategory .direct-hire-sidebar{height: calc(46vh);}
+	.leftside-kickboxing.kicks .kickboxing-block1{width: 47%;}
+	.leftside-kickboxing .col-md-12{margin-left: 6px;}
+	.distance-block{justify-content: flex-start;}
+	.kickboxing_map{margin-left: 0; margin-bottom: 15px;}
+	div#map_canvas{  width: 100% !important;}
+	.special-offer{width: 100%;}
+	#myModal .modal-dialog.modal-lg{width: 88% !important;}
+	.com-setup-space{padding-right: 0px !important;}
+	.company-specifics-day{padding: 30px !important;}
+	.banner-fs{height: 282px; padding-top: 82px; overflow: hidden;}
+	.help-desk form{width: 100%;}
+	.help-desk{min-height: 541px; padding-top: 15%;}
+	.location-detail{background-size: 1020px 830px;}
+	#shopping-cart{margin: 10px !important;}
+	.ord-info {  margin-left: 0;}
+	.ord-img img{margin-bottom: 15px;}
+	.price-section{float: left;}
+	.order-sum-rp{padding: 0px 0px 16px 14px;}
+	.modal-inner-txt p{font-size: 16px !important; padding: 25px 0 !important;}
+	.txt-center{text-align: center !important;}
+	.kickboxing-slider .owl-nav .owl-next{right: -35px !important;}
+	.kickboxing-slider .owl-nav .owl-prev{left: -34px !important;}
+	.img-title-home{line-height: 24px;}
+	.pop-title{width: 100% !important;}
+	.register_wrap form{padding: 0 50px;}
+	.business-offer-main.claimyour-business{padding: 112px 0; background-size: 1290px 1120px; background-repeat: no-repeat;}
+	.claimyour-business .frm-claim{padding-right: 0px !important;}
+	.formfield-block {  padding-right: 0;}
+	.claimyour-business .frm-claim .addbusiness-block button{padding: 6px 12px 6px;}
+	.claim-rightblock{padding-top: 40px;}
+	.side-menu{max-width: 20% !important;}
+	.page-content-wrapper{padding-left: 20% !important;}
+	.fc-head .fc-widget-header span{font-size: 12px; word-wrap: break-word;}
+	.dob input{width: 166px !important;}
+	.date_block{margin-bottom: 15px;}
+	.show_block{margin-top: 3px;}
+	.w-85 {width: 88%;}
+	.divmargin { margin-left: 0px !important;}
+	.comp-mark { text-align: left !important;}
+	.comp-mark #mycamera{left: 90px; right: 0 !important;}
+	.camera-viewprofile{left: 8px !important; top: 8px !important;}
+	.top-1{margin-left: 0 !important;}
+	.profile-section .nav-tabs{border-bottom: none;}
+	.profile-section .nav-tabs > li.active > a:focus{border: none;}
+	.red-box-font {padding: 20px 10px 20px 10px; font-size: 22px;}
+	.your-page ul.page-publishes > li{width: 100%; margin-bottom: 10px;}
+	.friend-name {width: 85.2%;}
+	.post-comt-box{width: 88%;}
+	.your-page ul.page-publishes > li span{ display: block;}
+	.widget-follower > ul{text-align: center;}
+	.get-started{padding: 10px;}
+	.get-text{font-size: 13px;}
+	.get-btn-box{padding: 0 12px; width: Calc(100% - 20px);}
+	a.get-btn{font-size: 19px; padding: 16px;}
+	.card-btns{width: 100%; margin-bottom: 10px;}
+	#mycamera .fa.fa-camera{left: 8px;}
+	.business-slider .editpic-fs{top: 32%;}
+	.your-page > figure{ padding: inherit; width: 100%; max-width: 100%; text-align: center; }
+	.page-meta{text-align: center; width: 100%;}
+	.emoji-picker-icon {  right: 50%;  top: 62%;}
+	.instant-section-info h4{left: 16px !important; right: 16px !important;}
+	.instant-section-info p{top: 65px !important; left: 16px !important; right: 16px !important;}
+	.title-show a{float: none !important;}
+	.direc-right{float: none !important;}
+	.leftside-kickboxing.kicks .col-map-show{width: 33% !important;}
+	.class-info{padding: 13px 5px 0px 5px !important;}
+	.modal-dialog.modal-lg.business{width: 95% !important;}
+	.showall-btn{padding: 5px 5px !important; font-size: 12px;}
+	.modal-sidebox .modal-filter-instant p{float: right !important;}
+	.img-modal-left img{width: 137px !important; min-height: 136px !important;}
+	.modal-dialog.modal-lg.business-details{width: 95% !important;}
+	.age-cat{width: 15%;}
+	.weekly-customer {  width: 20%; }
+	.weekend-price {  width: 30%; }
+	.re-discount {   width: 25%;}
+	.single-dash {  width: 2%; }
+	.fit-fees {  width: 13%;}
+	.single-equal {  width: 2%;}
+	.estimated-earn {  width: 25%;}
+	.cus-week-price a.tooltip-custom{top: 0px;}
+	.discount a.tooltip-custom{top: 0px;}
+	.fees a.tooltip-custom{top: 0px;}
+	.fees label{position: relative;	}
+	.cus-week-price label{position: relative;}
+	.discount label{position: relative;}
+	.cat-age label { color: #f53b49;  font-size: 17px;}
+	.top-area ul.setting-area{padding-left: 0px !important;}
+}
+
+@media screen and (min-width:1025px) and (max-width:1199px) {
+
+    .slider-block input {
+        font-size: 16px;
+    }
+
+    .slider-block .cstm-bnner i.fa.fa-map-marker {
+        font-size: 28px !important;
+        top: 15px !important;
+    }
+
+    .slider-block .cstm-bnner li button {
+        padding: 4px 20px !important;
+        font-size: 13px !important;
+        margin-top: 21px !important;
+        position: relative;
+        right: 20px !important;
+    }
+
+}
+
+@media screen and (min-width:992px) and (max-width:1199px) {
+    .container.static_section .col-md-3 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card {
+        margin-bottom: 30px;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 {
+        width: 33.33333333%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 .card_img {
+        margin: 15px 0 15px 0px;
+        border-radius: 50%;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-8 {
+        width: 66.66666667%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row:nth-child(2) .col-md-8 p {
+        margin-top: 22px;
+    }
+
+    header .col-lg-3 {
+        width: 25%;
+        float: left;
+        padding: 3px 15px 0 15px;
+    }
+
+    header .col-lg-3 img {
+        width: 100%;
+        height: auto;
+    }
+
+    header .col-lg-4 {
+        width: 33.33333333%;
+        float: left;
+        padding: 10px 0px 6px 0px;
+    }
+
+    header .col-lg-4 .top-serarch {
+        top: 0px;
+    }
+
+    header .header-right {
+        width: auto;
+        padding-top: 10px;
+    }
+
+    header .header-right span#loginbtn {
+        top: 0px !important;
+    }
+
+    header .header-right #my_reg_btn {
+        top: 6px !important;
+    }
+
+    .topmain-slider .flexslider .slides img {
+        height: 600px !important;
+    }
+
+    .slider-block .row.cstm-bnner ul {
+        top: 0px !important;
+    }
+
+    .slider-block .cstm-bnner i.fa.fa-map-marker {
+        font-size: 28px !important;
+        top: 7px !important;
+    }
+
+    .slider-block p {
+        margin: 30px auto 40px !important;
+        width: 82%;
+    }
+
+    .cate-sidebar {
+        width: 27%;
+    }
+
+    .cate-list {
+        width: 73%;
+    }
+
+    .category .owl-prev {
+        left: -43.5%;
+    }
+
+    .category .owl-next {
+        right: -43.5%;
+    }
+
+    .category .cat-img-name .sports_name {
+        width: 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cat-img-name .sports_name span {
+        position: relative;
+        text-align: center;
+        white-space: nowrap;
+        top: 0;
+        height: 2px;
+        margin-top: -5px;
+        line-height: 0px;
+        left: 0%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pop-search-detail-sports {
+        width: 87%;
+    }
+
+    .cat-img-name img {
+        height: 350px;
+    }
+
+    .cat-item a {
+        margin-top: 15px;
+    }
+
+    .jumbotron.second {
+        margin-top: 730px !important;
+    }
+
+    .top-rank {
+        padding: 60px 0px 0;
+    }
+
+    #back-top {
+        right: 9%;
+    }
+
+    .social-icon {
+        float: left;
+        margin-top: 7%;
+        margin-left: -30px;
+    }
+
+    .top-rank .container-fluid.pad-20.why_fitnessity_tr_hp .pad-50.why_fitnessity_hp {
+        margin: 0px -15px !important;
+        padding-bottom: 0px;
+    }
+
+    #cssmenu ul {
+        top: 100%;
+    }
+
+    .main-slider .slide {
+       
+        padding-bottom: 100px;
+    }
+
+    .slider-block {
+        position: relative;
+        float: left;
+        width: 100%;
+        background: rgba(21, 25, 37, 1);
+        padding: 40px 0px;
+    }
+
+    .bepart_easy_content {
+        padding-left: 120px;
+    }
+
+    .easyboxes_items .easy_content h3 {
+        font-size: 16px;
+    }
+
+    .footer-logo > p {
+        padding: 5px 20px 5px 10px;
+        font-style: italic;
+    }
+    
+    .footer-logo > p br {
+        display: none;
+    }
+
+}
+
+/*media query for laptops screen start here*/
+@media screen and (min-width: 992px) and (max-width: 1823px) {
+    #login_modal > .modal-dialog.modal-lg {
+        width: 45% !important;
+    }
+
+    .modal-dialog.modal-lg {
+        width: 65% !important;
+    }
+
+    .text {
+        color: white;
+        font-size: 14px;
+        font-weight: 200;
+        position: absolute;
+        top: 16%;
+        left: 0%;
+        /*transform: translate(-50%, -50%);*/
+        text-align: center;
+    }
+
+    .overlay_p {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 150px;
+        z-index: 9;
+        width: 95% !important;
+        left: -112px;
+        transform: rotate(-90deg);
+    }
+
+    .overlay_heading {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 55% !important;
+        right: 22.5%;
+        font-size: 18px !important;
+        transform: rotate(-90deg);
+        text-align: center !important;
+    }
+	.your-page dt{padding: 0 136px 0 0;}
+	.modal-dialog.modal-lg.business{width: 40% !important;}
+	.dob input{width: 222px !important;}
+	.w-38 {  width: 70%;}
+	.w-85 {  width: 80% !important;}
+	.modal-dialog.modal-lg.staff-modal{width: 80% !important;}
+	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
+}
+
+/*media query for laptops & desktops screen start here*/
+@media screen and (min-width: 1824px) {
+    #login_modal > .modal-dialog.modal-lg {
+        width: 45% !important;
+    }
+
+    .modal-dialog.modal-lg {
+        width: 65% !important;
+    }
+
+    .text {
+        color: white;
+        font-size: 16px !important;
+        font-weight: 200;
+        position: absolute;
+        top: 35% !important;
+        left: 0%;
+        /*transform: translate(-50%, -50%);*/
+        text-align: center;
+    }
+
+    .overlay_p {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 75% !important;
+        left: -135px;
+        transform: rotate(-90deg);
+    }
+
+    .overlay_heading {
+        background: #f53b49;
+        color: #ffff !important;
+        padding: 5px !important;
+        font-weight: 500;
+        position: relative;
+        top: 155px;
+        z-index: 9;
+        width: 55% !important;
+        left: -125px;
+        font-size: 18px !important;
+        transform: rotate(-90deg);
+        text-align: center !important;
+    }
+	.modal-dialog.modal-lg.business{width: 35% !important;}
+}
+
+@media screen and (min-width:1920px) and (max-width:2500px){
+	.modal-dialog.modal-lg.business{width: 28% !important;}
+	.find-activity img{
+		width: 175px !important;
+		min-height: 157px !important;
+	}
+	.activity-information{
+		margin-bottom: 15px !important;
+		margin-top: 15px !important;
+	}
+	.hide-bullets > li > img{
+		width: 127px;
+	}
+	.hide-bullets > li{
+		margin-right: 35px;
+	}
+	.ord-summary{
+		min-height: 1005px;
+	}
+}
+@media screen and (min-width:1200px) and (max-width:2500px){
+	.table-responsive{overflow-x: hidden;}
+}
+/*20-09-20*/
+
+@media(max-width: 991px) {
+    #register_modal .signup {
+        max-width: 485px;
+        padding: 0 85px;
+    }
+
+    #register_modal div#captcha2 > div {
+        margin-left: 0 !important;
+    }
+
+    .rank-list {
+        padding: 20px 0;
+    }
+
+}
+
+@media(max-width: 980px) {
+    #register_modal .pop-title {
+        width: auto !important;
+        padding: 0 40px;
+        width: 100% !important;
+    }
+
+    #register_modal .signright-customer {
+        padding-top: 0;
+    }
+
+}
+
+@media screen and (min-width: 575px) and (max-width: 767px) {
+    .cstm-bnner ul li:last-child {
+        top: 9px !important;
+    }
+}
+
+@media(max-width:767px) {
+    section.top-rank.why_fitnessity_tr_hp .row {
+        margin: 0 !important;
+    }
+
+    .about-services-title {
+        padding: 0 15px 30px;
+    }
+
+    .about-services-title h1 + hr {
+        margin-top: -10px !important;
+    }
+
+    #back-top {
+        bottom: 95px;
+        right: 20px;
+    }
+
+    .container.static_section .col-md-3 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card {
+        margin-bottom: 30px;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 {
+        width: 33.33333333%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-4 .card_img {
+        margin: 15px 0 15px 0px;
+        border-radius: 50%;
+    }
+
+    .container.static_section .col-md-3 .card .row .col-md-8 {
+        width: 66.66666667%;
+        float: left;
+    }
+
+    .container.static_section .col-md-3 .card .row:nth-child(2) .col-md-8 p {
+        margin-top: 22px;
+    }
+
+    .top-serarch {
+        top: 0px !important;
+        margin-bottom: 10px;
+        margin-top: 7px;
+    }
+
+    .row.cstm-bnner ul {
+        display: block !important;
+        left: 0px !important;
+        top: 0px !important;
+    }
+
+    .row.cstm-bnner li {
+        margin: 0 0 15px !important;
+        width: 49% !important;
+    }
+
+    .main-slider .slider-block input {
+        width: 100% !important;
+        border-radius: 30px;
+        max-width: 100%;
+    }
+
+    #suggestions {
+        border-radius: 30px;
+    }
+
+    .slider-block .cstm-bnner i.fa.fa-map-marker {
+        left: 90% !important;
+        top: 8px !important;
+        font-size: 25px !important;
+    }
+
+    .slider-block .cstm-bnner ul li:last-child button {
+        right: 0px !important;
+    }
+
+    .main-slider .slider-block {
+        top: 5%;
+        z-index: 99;
+    }
+
+    .slider-block .catagories_btn .btn-web-btn {
+        margin-bottom: 10px;
+    }
+
+    .slider-block .catagories_btn {
+        position: relative !important;
+        top: 0px !important;
+        right: 0 !important;
+    }
+
+    .slider-block h5 {
+        top: 3px !important;
+        margin-bottom: 20px;
+        right: 0 !important;
+        font-size: 24px !important;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .works-heading {
+        min-height: auto !important;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .works-heading:last-child {
+        margin-bottom: 0px;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .col-md-6.works-heading:last-child {
+        margin-bottom: 30px;
+    }
+
+    .col-md-6.works-heading {
+        padding: 0 0;
+    }
+
+    header .header-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    header .col-lg-3 {
+        text-align: center;
+    }
+
+    header .header-right .btn {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    .without_signin {
+        position: relative;
+        right: 20px;
+        width: 50%;
+    }
+
+    #my_reg_btn {
+        top: 5px !important;
+    }
+
+    .social-icon a {
+        margin-top: 15px;
+    }
+
+    footer .row .col-md-3 {
+        float: left;
+        width: 100%;
+    }
+
+    header .logo {
+        width: 80%;
+        margin: 0;
+        text-align: left;
+    }
+
+    header .logo img {
+        width: 232px;
+    }
+
+    .main-slider .owl-dots {
+        display: none;
+    }
+
+    .main-slider .content-column h1 {
+        font-size: 50px;
+    }
+
+    .main-slider .content-column .title {
+        font-size: 20px;
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+    }
+
+    .main-slider .content-column .stext {
+        margin-top: 15px;
+        width: 100%;
+        text-align: center;
+		line-height: 22px;
+    }
+
+    .cat-container .select_activity_hp li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .online_wraper {
+        padding: 50px 15px;
+    }
+
+    .online_wraper1 {
+        padding: 0 15px 50px;
+    }
+
+    .slider-block .catagories_btn .links_txt {
+        font-size: 16px;
+        margin-right: 15px;
+        white-space: nowrap;
+    }
+
+    .main-slider .slide {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 60px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .main-slider .content-column {
+        width: 70%;
+        padding: 0 20px;
+    }
+
+    .slider-block input {
+        padding: 18px 15px 18px 70px;
+        border-radius: 0 !important;
+        border: 0 !important;
+    }
+
+    .slider-block {
+        background: rgb(21, 25, 37);
+    }
+
+    .plr-60 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .why_fitnessity {
+        padding-top: 60px;
+        background-size: cover;
+    }
+
+    .whyfitnessity_content .txt_wrap p {
+        text-align: justify;
+    }
+
+    .video_block {
+        width: 100%;
+        position: relative;
+        bottom: 0;
+        height: 280px;
+        margin-top: 40px;
+    }
+
+    .discover_activities {
+        padding-top: 0px;
+    }
+
+    .activities_box {
+        margin-bottom: 20px;
+    }
+
+    .activities_box:last-child {
+        margin-bottom: 0;
+    }
+
+    .bepart_easy_content {
+        padding-left: 0;
+    }
+
+    .bepart_easy_content p {
+        text-align: justify;
+    }
+
+    .button_title h3 .button_default_1 {
+        margin: 20px 0;
+    }
+
+    footer {
+        padding: 50px 15px 20px;
+    }
+
+    .footer-logo > p {
+        padding: 5px 0px 5px 0px;
+        text-align: justify;
+    }
+
+    .footer-logo > p br {
+        display: none;
+    }
+
+    .location {
+        padding: 15px 0;
+    }
+
+    .footer-bottom-left ul li {
+        padding: 0;
+    }
+
+    .footer-logo form {
+        padding: 0;
+    }
+
+    .copyright {
+        margin-top: 10px;
+        padding: 15px 0;
+    }
+
+    .video_icon {
+        left: 42%;
+    }
+
+    .social_wrap ul {
+        justify-content: flex-start;
+    }
+
+    .social_wrap ul li {
+        width: 25%;
+    }
+
+    .social_wrap ul li a,
+    .social_wrap ul li a:visited {
+        font-size: 20px;
+    }
+
+    .easyboxes_items {
+        width: 50%;
+        margin-bottom: 25px;
+    }
+
+    .easyboxes_items:last-child {
+        margin-bottom: 0;
+    }
+
+    .cat-item h1 {
+        font-size: 20px;
+    }
+
+    .cat-item a {
+        font-size: 14px;
+        padding: 8px 30px;
+        min-width: inherit;
+    }
+
+    .owl-demo-category.owl-carousel .owl-nav .owl-prev {
+        left: -30%;
+    }
+
+    .owl-demo-category.owl-carousel .owl-nav .owl-next {
+        right: -30%;
+    }
+	.cat-container{display: block !important;}
+	.btn-home{text-align: center; margin-left: 0px !important;	}
+	.why_fit_vd{margin-top: 80px !important;}
+	.video_icon{top: 52% !important;}
+	.heading-bt-sp{margin-bottom: 0px;}
+	.cat-container.hide{display: none !important;}
+	.cat-img-name img {  height: auto;}
+	.bepart_easy_content ul li{padding-right: 0px; display: block;}
+	.bepart_easy_content ul li strong{padding-right: 7px;}
+	.button{display: none;}
+	.setting-area{padding-left: 0px !important;}
+	.logo-header{text-align: center;margin: auto;}
+	.main-slider .active .content-column .title{ line-height:22px;}
+	.register_wrap{float: none;}
+	.register_wrap form{float: none; padding: 0 25px;}
+	.register{padding-top: 200px;}
+	#frmsearchCategory{width: 100%; position: inherit; top: 2%;}
+	.kickboxing-block1{width: 100%;}
+	body{overflow: unset !important;}
+	#frmsearchCategory .direct-hire-sidebar{height: calc(53vh);}
+	.leftside-kickboxing .col-md-12{margin-left:0px;}
+	div#map_canvas{width: 100% !important;}
+	.kickboxing_map{margin-left: 0px; margin-bottom: 20px;}
+	.selectProduct{margin: 25px 0px !important;}
+	header{position: relative; }
+	.img-title-home{line-height: 1;}
+	.mapsb{margin-right: 0px;}
+	.distance-block{justify-content: flex-start;}
+	.kickboxing-slider .carousel-control{width: 36px;height: 36px;}
+	.kickboxing-slider .carousel-control .glyphicon-chevron-right, .kickboxing-slider .carousel-control .icon-next{margin-right: 0;margin-top: -8px; font-size: 14px;}
+	.carousel-control .icon-next, .carousel-control .glyphicon-chevron-right{right: 30%;} 
+	.kickboxing-slider .carousel-control .glyphicon-chevron-left, .kickboxing-slider .carousel-control .icon-prev{margin-left: 0; margin-top: -8px; font-size: 14px;}
+	.carousel-control .icon-prev, .carousel-control .glyphicon-chevron-left{left: 30%;}
+	.leftside-kickboxing.kicks .kickboxing-block1{width: 100%;}
+	.choose-sport{padding: 0;}
+	.rev-post{width: 15%;}
+	.ser-rev-take .rev-post-box{width: 82%;}
+	.lefthalf{width: 100%;}
+	.righthalf{width: 100%;}
+	#myModal .modal-dialog.modal-lg{width: 86% !important;}
+	.close{font-size: 22px;}
+	.w3-closebtn{left: 0 !important; right: 0px; margin: auto;}
+	/*header .header-right{margin: 0 auto 0;}*/
+	.direc-hire{margin-top: 0px !important;}
+	.filter-btn{margin: 20px 0 !important;}
+	.direct-hire-sidebar{padding: 20px 25px;}
+	.direc-right.direc-right-new{padding: 7px 5px 0;}
+	.business-offer-main{margin-top: 0px !important;}
+	.inner_top{margin-top: 0px; display: table;}
+	.tab-hed{margin-left: 0px !important;}
+	.com-setup-space{padding-right: 0px !important;}
+	.btn-txt-rp{text-align: left !important; margin-top: 15px;}
+	.company-specifics-day{padding: 0px !important;}
+	.custome-div .row .col-md-2 .pro_card_img1{  margin: auto !important; padding: 5px; position: relative; left: 35%; top: 0; right: 0;}
+	.tab-hed1{text-align: center;}
+	.custome-div .row p{text-align: center;}
+	.custome-div [type="radio"]:not(:checked) + label{padding: 20px 20px 20px 20px !important;}
+	.bus-rp-offer{padding: 20px !important;}
+	.banner-fs{overflow: revert; padding-top: 0;height: auto;}
+	.comp-mark #mycamera{right: 0 !important; position: absolute; left: 20%; margin: auto;}
+	.location-right p:first-child{padding-right: 0px;}
+	.location-right p{width: 100%;}
+	.cont-img-rp{ width:100%; height: auto;}
+	.help-rp{padding: 25px 0 25px !important; }
+	.help-rp-font{float: none !important;}
+	.latest-know-list.help_desk{width: 100%;float: right; margin-right: 0;}
+	.breadcrumbs{padding: 20px 0 !important;}
+	.location-detail{background-size: 740px 900px;}
+	.payment-toptabs ul{display: grid;}
+	#shopping-cart {  margin: 12px !important;}
+	.ord-info {  margin-left: 0;}
+	.ord-img img{margin-bottom: 20px;}
+	.price-section{float: left;}
+	.ord-summary { padding: 0;  box-shadow: none;  border-radius: 6px;}
+	.ord-summary h3{margin-bottom: 25px; margin-top: 25px;}	
+	.sum-box{padding: 13px 10px 13px;}
+	.order-sum-rp{padding-left: 0px; padding-right: 0px;}
+	.payment-section{padding: 13px; margin-top: 0px !important;}
+	.payment-toptabs ul li span{width: 23px; height: 23px;}
+	.payment-toptabs ul li{margin-bottom: 15px; margin-right: 0 !important;}
+	.payment-toptabs{padding: 40px 0 28px;}
+	.folw-detail{float: right; padding: 8px;}
+	.tabs-business-view .nav-tabs .nav-link{padding: 10px 8px;}
+	.your-page dt{padding: 0 210px 0 0;}
+	.txt-center{text-align: center !important;}
+	.modal-dialog.modal-lg.business{width: 95% !important;}
+	.modal-inner-txt p{font-size: 16px !important; padding: 20px 0px !important;}
+	.kickshow-block .lefthalf{width: 100% !important;}
+	.kickshow-block .righthalf{width: 100% !important;}
+	.kickshow-block .divleftserdes{width: 100% !important;}
+	.kickshow-block .divrightserdes{width: 100% !important;}
+	.manage-txt{margin-top: 15px;}
+	.cat-img-name{height: 265px;}
+	.cat-img-name img{min-height: 272px;}
+	.register_wrap form{padding: 0 40px !important;}
+	.bnr-information{text-align: center;}
+	.reatingbox{text-align: center;}
+	.comp-mark{text-align: center;}
+	.top-1{margin-left: 0px !important;}
+	.profile-section .nav{ display: block;}
+	.claiming-section{margin-top: 0px !important;}
+	.claiming-boxn form .form-group span{font-size: 12px;}
+	.business-offer-main.claimyour-business{padding: 32px 0; background-size: 1290px 1120px; background-repeat: no-repeat;}
+	.claimyour-business .frm-claim{padding-right: 0px !important;}
+	.formfield-block {  padding-right: 0;}
+	.claimyour-business .frm-claim .addbusiness-block button{padding: 6px 12px 6px;}
+	.claim-rightblock{padding-top: 40px;}
+	.side-menu{max-width: 100% !important; position: inherit !important;}
+	.enlarged #wrapper .left.side-menu{max-width: 100% !important;  position: inherit;}
+	.page-content-wrapper{padding-left: 0px !important;}
+	.slimScrollDiv.mm-active{height: 390px !important;}
+	.billing-block {  padding-right: 20px !important;}
+	.fc-head .fc-widget-header span{font-size: 8px; word-wrap: break-word;}
+	.page-content-wrapper .content-page {  padding: 20px 0px !important;}
+	#calendar .complete-block{position: absolute; top: 85px !important; left: 0;}
+	.fc-view-container{margin-top: 46px;}
+	.review-block .review-content{width: 80% !important;} 
+	.followers-block .followers-content .followers-right-content{width: 65% !important;}
+	.followers-block .followers-content .followers-right-content ul{width: 100% !important;}
+	.followers-block .followers-button{float: none !important;}
+	.followers-block .followers-content{display: block ruby !important;}
+	.booking-info-menu ul li{padding: 0px 8px !important;}
+	.booking-info-tab .nav-tabs{margin-top: 15px;}
+	.book-info-sear .date_block i{right: 30px !important; top: 28px !important;}
+	.date_block{margin-top: 15px; margin-bottom: 15px;}
+	.w-85 {  width: 100% !important;}
+	/*.page-content-wrapper .content-page label{width: 16%;}*/
+	.w-38 { width: 72% !important;}
+	.show_block{margin-top: 15px;}
+	.rs-birthdate{float: none !important;}
+	.w-80 {  width: 100% !important;}
+	.dob input{width: 265px !important;}
+	.divmargin{margin-left: 0px !important;}
+	.avatar{margin-bottom: 15px;}
+	.camera-viewprofile{left: 0 !important;}
+	.business-slider .editpic-fs{top: 3%;}
+	.ord-details{margin-bottom: 25px;}
+	.ord-details .empty-cart{padding: 120px 0;}
+	.card-btns{width: 100%; margin-bottom: 10px;}
+	#mycamera .fa.fa-camera{left: 7px;top: 8px;position: absolute;}
+	.friend-name {  width: 80%;}
+	.emoji-picker-icon{right: 51%; top: 62%;}
+	.cards-block{width: 100% !important; margin-bottom: 15px;}
+	.favorite-block .favorite-content{width: 44% !important;}
+	.favorite-block .favorite-content .favorite-right-content{padding-left: 0 !important;   width: 100% !important;}
+	.show-all{margin-top: 0px !important;}
+	.border-list{margin-top: 15px;}
+	.pairets-inviable{margin-bottom: 0px; margin-top: 15px;}
+	.pairets{margin-top: 15px; margin-bottom: 0px;}
+	.show-all .header-bg-show .time-base {  float: none;}
+	.show-all .table-inner-data .mg-time {  font-size: 15px;}
+	.instant-hire{margin-top: 0px !important;}
+	.instant-section-info p{margin-top: 7px;}
+	.choose-sport-hire {  display: block !important;}
+	.activity-width{width: 100% !important;}
+	.special-offer{margin-bottom: 8px !important;}
+	.find-activity img{width: 100% !important;}
+	.activity-data {  padding-left: 15px !important; }
+	.dollar-person{margin-bottom: 6px;}
+	.dollar-person span { font-size: 13px;}
+	.activity-time-main span {  font-size: 13px;}
+	.title-show a{float: none !important;}
+	.leftside-kickboxing.kicks .col-map-show{width: 100% !important;}
+	.instant-section-info p{right: 22px;}
+	.direc-right{float: none !important;}
+	.all-details{margin-bottom: 15px;}
+	.business-slider img{height: 170px !important;}
+	.modal-banner .bannar-size img{height: 170px !important;}
+	.kickboxing-moredetails .modal-body .col-md-7{padding-right: 15px; padding-left: 15px;}
+	.membership-details{border-left: none !important; padding-left: 0px !important; margin-top: 17px;}
+	.instructor-img img {  width: 100% !important;  height: 175px !important;  margin-bottom: 13px;}
+	.service-review-desc{margin-bottom: 15px;}
+	.progress-bar-main .review-name{width: 52% !important;}
+	.progress-bar-main .review-name label{font-size: 11px !important;}
+	.img-modal-left img{margin-bottom: 10px !important;}
+	.userblock{margin-top: 8px;}
+	.age-cat {  width: 100%; text-align: center;}
+	.weekly-customer {  width: 100%; margin-right: 15px; margin-left: 15px; }
+	.weekend-price {  width: 100%; margin-right: 15px; margin-left: 15px; }
+	.re-discount {  width: 100%;margin-right: 15px; margin-left: 15px; }
+	.single-dash {  width: 100%;margin-right: 15px; margin-left: 15px;}
+	.fit-fees {  width: 100%; margin-right: 15px; margin-left: 15px;}
+	.single-equal {  width: 100%; margin-right: 15px; margin-left: 15px;}
+	.estimated-earn {  width: 100%; margin-right: 15px; margin-left: 15px;}
+	.sp-select{margin-top: 9px;}
+	.fees label{margin-top: 0px;}
+	.desh label {  margin-top: 0px;}
+	.equal label { margin-top: 0px;}
+	.earn label {  margin-top: 0px;}
+	.setprice h3{margin-top: 20px; margin-bottom: 20px;}
+	.cus-week-price.earn {margin-bottom: 40px;}
+	.fees label{position: relative;	}
+	.cus-week-price label{position: relative;}
+	.discount label{position: relative;}
+	.cus-week-price a.tooltip-custom{top: 0;}
+	.discount a.tooltip-custom{top: 0;}
+	.fees a.tooltip-custom{top: 0;}
+	.cat-age label{color: #f53b49; font-size: 17px;}
+	.btn-list-business.business-sp {  margin-right: 8px !important;}
+	.btn-cart{padding: 1px 7px 0px 6px !important;}
+	header .header-right .btn{font-size: 12px;}
+	.btn-style-one{font-size: 12px;}
+}
+
+@media(max-width: 575px) {
+
+    section.top-rank.why_fitnessity_tr_hp .works-heading {
+        min-height: auto !important;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .works-heading:last-child {
+        margin-bottom: 0px;
+    }
+
+    section.top-rank.why_fitnessity_tr_hp .col-md-6.works-heading:last-child {
+        margin-bottom: 30px;
+    }
+
+    .col-md-6.works-heading {
+        padding: 0 0;
+    }
+
+    .row.cstm-bnner ul {
+        display: block !important;
+        left: 0px !important;
+        top: 0px !important;
+        padding: 0;
+    }
+
+    .row.cstm-bnner li {
+        margin: 0 0 15px !important;
+        width: 100% !important;
+    }
+
+    .main-slider .slider-block input {
+        width: 100% !important;
+        border-radius: 30px;
+        max-width: 100%;
+    }
+
+    #suggestions {
+        border-radius: 30px;
+    }
+
+    .slider-block .cstm-bnner i.fa.fa-map-marker {
+        left: 84% !important;
+        top: 63px !important;
+        font-size: 25px !important;
+    }
+
+    .cstm-bnner ul li:last-child {
+        right: 0px !important;
+        top: 0px !important;
+    }
+
+    .slider-block .cstm-bnner ul li:last-child button {
+        right: 0px !important;
+    }
+
+    .topmain-slider .flexslider .slides img {
+        height: 680px !important;
+    }
+
+    .main-slider .slider-block {
+        top: 2%;
+        z-index: 99;
+    }
+
+    .slider-block .catagories_btn .btn-web-btn {
+        margin-bottom: 10px;
+    }
+
+    .slider-block .catagories_btn {
+        position: relative !important;
+        top: 0px !important;
+        right: 0 !important;
+    }
+
+    .slider-block h5 {
+        top: 0px !important;
+        margin-bottom: 20px;
+        right: 0 !important;
+        font-size: 18px !important;
+    }
+
+    .top-serarch {
+        top: 0px !important;
+        margin-bottom: 10px;
+        margin-top: 7px;
+    }
+
+    .container.static_section .col-md-3 {
+        width: 100%;
+        float: left;
+    }
+
+    .category {
+        padding: 50px 15px !important;
+        float: left;
+    }
+
+    .jumbotron.second {
+        margin-top: 950px !important;
+    }
+
+    .main-slider .slide {
+        position: relative;
+        overflow: hidden;
+       
+        padding-bottom: 60px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .main-slider .content-column {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .slider-block input {
+        padding: 18px 15px 18px 70px;
+        border-radius: 0 !important;
+        border: 0 !important;
+    }
+
+    .online_classes_box .imageclasses {
+        height: 350px;
+    }
+
+    .easyboxes_items {
+        width: 50%;
+        margin-bottom: 25px;
+    }
+
+    .easyboxes_items:last-child {
+        margin-bottom: 0;
+    }
+
+    .social_wrap ul li {
+        padding: 0 20px;
+        width: auto;
+    }
+	.txt-center{text-align: center !important;}
+	.modal-dialog.modal-lg.business{width: 95% !important;}
+}
+
+
+@media(max-width: 480px) {
+    #register_modal > .modal-dialog.modal-lg {
+        width: 375px !important;
+    }
+
+    #register_modal .pop-title h3 {
+        font-size: 26px;
+    }
+
+    #register_modal .signup {
+        max-width: 375px;
+        padding: 0 40px;
+    }
+
+    #my_reg_btn {
+        top: 5px !important;
+    }
+
+    .without_signin {
+        position: relative;
+        margin: auto;
+        width: 60%;
+    }
+
+    header .header-right {
+        padding: 0 0px;
+        width: 100%;
+    }
+
+    .dropdown_login {
+        right: -60px;
+    }
+
+    .icon--nav-triangle-borderless {
+        left: calc(64% - 38px);
+    }
+
+    .bepart_wraper .col-lg-6 .col-xs-4 {
+        width: 50%;
+    }
+	.w-38 { width: 70% !important;}
+	.dob input { width: 249px !important;}
+
+}
+
+@media(max-width: 400px) {
+    .frame ul li {
+        width: 350px;
+    }
+
+    .easyboxes_items {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .easyboxes_items:last-child {
+        margin-bottom: 0;
+    }
+	.your-page dt {  padding: 0 155px 0 0;}
+	.top-1{margin-left: 0px !important;}
+	.claimyour-business .frm-claim button{font-size: 12px;}
+	.review-block .review-content {  width: 78% !important;}
+	.w-38 { width: 65% !important;}
+	.dob input {  width: 220px !important;}
+	.emoji-picker-icon {  right: 48%;  top: 62%;}
+	.btn-cart{padding: 5px 7px 0px 25px !important;}
+	.btn-cart > span{top: 2px;}
+	header .header-right .btn{font-size: 14px;}
+	.btn-style-one{font-size: 14px;}
+}
+
+@media(max-width: 376px) {
+    #register_modal > .modal-dialog.modal-lg {
+        width: 315px !important;
+    }
+
+    #register_modal .pop-title h3 {
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    #register_modal .signup {
+        max-width: 315px;
+        padding: 0 15px;
+    }
+
+    .topmain-slider .flexslider .slides img {
+        height: 790px !important;
+    }
+
+    .jumbotron.second {
+        margin-top: 1020px !important;
+    }
+
+    .slider-block .catagories_btn .links_txt {
+        font-size: 13px;
+        margin-right: 10px;
+    }
+
+    .main-slider .content-column {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .social_wrap ul li {
+        padding: 0 10px;
+    }
+
+    .social_wrap ul li a,
+    .social_wrap ul li a:visited {
+        font-size: 20px;
+    }
+	.dob input { width: 196px !important;}
+	.emoji-picker-icon {  right: 44%;  top: 62%;}
+	
+}
+
+@media(max-width: 280px){
+	header .header-right{display: block ruby;}
+	.userblock{padding: 0px;}
+	.top-area ul.setting-area li a{width: 30px !important;}
+	.btn-style-one{font-size: 13px;padding: 9px !important;}
+	.btn-cart{padding: 0 0px !important;}
+	.main-slider .content-column h1{font-size: 38px;}
+	.img-title-home{line-height: 1;}
+	.cat-item a{padding: 4px 22px;margin: 5px 0 0 0;}
+	.cat-detail{padding: 12px 0;}
+	.video_icon{left: 36%;top: 51% !important;}
+	.activities_box .activites_content h3{padding: 10px 8px;height: 80px;}
+	.register_wrap form{padding: 0 10px !important;}
+	.rev-post {width: 21%;}
+	.ser-rev-take .rev-post-box {width: 75%;}
+	.contactpage-sec .location-left .cont-detail ul li{padding-left: 22px;}
+	.location-detail{background-size: 1020px 900px;}
+	.payment-section{padding: 2px;}
+	.booking-txt-rs{padding-right: 0px;}
+	.booking-txt-rs-left{padding-left: 0px;}
+	.cal-time{padding: 15px 9px;}
+	.your-page dt{padding: 0 80px 0 0;}
+	.claiming-boxn form{display: grid;}
+	.claiming-boxn form .form-group{display: block; width: 100%; margin-bottom: 8px;}
+	.claiming-boxn form .form-group input{width: 100%;}
+	.claiming-boxn.twon form .form-group input{width: 100%;}
+	.enlarged #wrapper .left.side-menu{max-width: 92% !important;}
+	.page-content-wrapper .content-page{width: 94%;}
+	.side-menu{max-width: 92% !important;}
+	#calendar .fc-basic-view .fc-day-number, #calendar .fc-basic-view .fc-week-number{padding: 5px !important;}
+	.dob input{width: 119px !important;}
+	.review-block .review-content { width: 70% !important;}
+	.pr-submit-bg{padding: 0px !important;}
+	.page-content-wrapper .content-page label {  width: 100%;}
+	.book-info-sear .date_block i{top: 29px !important; right: 28px !important;}
+	.w-80 {width: 100% !important;}
+	.w-85 {width: 100% !important;}
+	.w-38 {width: 100% !important;}
+	.booking-info-tab .nav-item{padding: 0px 5px;}
+	.padding-1 {  padding: 6px !important;}
+	.friend-name {  width: 77%;}
+	.post-comt-box{width: 83%;}
+	.like-dislike{left: 69%; width: 100%;}
+	.red-box-font{padding: 25px 7px 25px 7px;}
+	.friend-meta{width: 75% !important;}
+	.we-comment {  width: 80%;}
+	.emoji-picker-icon {  right: 25%;  top: 61%;}
+	.newpst-input {  width: 74%;}
+	.modal-dialog.modal-lg.business{width: 93% !important;}
+	.modal-dialog.modal-lg.business-details{width: 50% !important;}
+	.instant-section-info h4{right: 22px; word-break: break-all;}
+	.instant-section-info p {  right: 22px;  margin-top: 24px !important;}
+	.header-right{display: grid !important;}
+	.btn-list-business.business-sp {  margin-right: 0px;}
+	.btn-cart > span{right: 60px !important;}
+	.header-right a{margin-top: 5px;}
+	header .header-right .btn{margin-bottom: 5px;}
+	.pstyle{margin-left: 17px;}
+}
+/*MEDIA QUEREIS EDN HERE

@@ -1,0 +1,2009 @@
+@extends('layouts.profile')
+
+@section('content')
+
+<div class="profile-div">
+
+  <div class="container">
+
+    <div class="row"> 
+
+    	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+
+        	<div class="signup-block">
+            	<h1>EDIT YOUR PROFILE</h1>
+
+                <!-- <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum</p> -->
+                <p>Let’s showcase your experience level, skills, work experience, business details and what services you offer your clients.</p>
+
+            </div>
+
+            <div class="steps-block">
+
+	            <div class="line-process"></div>
+
+	            	<div class="row">
+
+	                	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 steps"><span class="step-active pull-left step_1">1</span>
+
+	                    </div>
+
+	                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 steps"><span class="step_2">2</span>
+
+	                    </div>
+
+	                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 steps pull-right"><span class="pull-right step_3">3</span>
+
+	                    </div>
+
+	                </div>
+
+	        </div>
+		    <!-- step 1 starts -->
+
+		    <form  id="frmregister" method="post" action="/profile/saveEditedProfileHistory" enctype="multipart/form-data">
+
+		    	<input type="hidden" name="_token" value="{{csrf_token()}}">
+
+		    	<?php $ProfessionalDetail = $UserProfileDetail['ProfessionalDetail']; ?>
+
+		    	<input type="hidden" name="selected_experience_level" id="selected_experience_level" value="{{ @$ProfessionalDetail->experience_level }}">
+		    	<input type="hidden" name="professional_detail_id" value="{{@$ProfessionalDetail->id}}">
+		    	<div id="singup_step_1" class="singup_steps">
+			    	<div class="step-block1">
+			          <h1 class="text-center">Experience & Education</h1>
+			          <div class="signup-block">
+			            <h3>Rate your Experience Level</h3>
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			                	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			                    	<div class="sgnup-rates signup-rates experience_level_div <?php if(@$ProfessionalDetail->experience_level=="entry_level") echo "active"; ?>">
+			                    		<label name="level" style="display: none;" value="entry_level">entry_level</label>
+			                        	<span><i class="fa fa-star"></i></span>
+			                            <div class="clearfix"></div>
+			                            <h3>ENTRY LEVEL $</h3>
+			                            <!-- <p>Senectus et netus et malesuada fames ac turpis </p> -->
+			                            <p>I’m gaining experience. New business. No reviews and no clients.</p>
+			                        </div>
+			                    </div>
+
+			                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			                    	<div class="sgnup-rates signup-rates experience_level_div <?php if(@$ProfessionalDetail->experience_level=="intermediate") echo "active"; ?>">
+			                        	<label name="level" style="display: none;" value="intermediate">intermediate</label>
+			                        	<span><i class="fa fa-star"></i><i class="fa fa-star"></i></span>
+			                            <div class="clearfix"></div>
+			                            <h3>INTERMEDIATE $$</h3>
+			                            <!-- p>Senectus et netus et malesuada fames ac turpis </p> -->
+			                            <p>I have skills, some reviews and I already have a few clients.</p>
+			                        </div>
+			                    </div>
+
+			                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			                    	<div class="sgnup-rates signup-rates experience_level_div <?php if(@$ProfessionalDetail->experience_level=="expert") echo "active"; ?>">
+			                        	<label name="level" style="display: none;" value="expert">expert</label>
+			                        	<span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span>
+			                            <div class="clearfix"></div>
+			                            <h3>Expert $$$</h3>
+			                            <!-- <p>Senectus et netus et malesuada fames ac turpis </p> -->
+			                            <p>I have extensive experience. I have a business, many clients and great reviews.</p>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+				      </div>
+				    </div>
+
+				    <div class="step-block1">
+		            	<h1 class="step2-title">What type of business are you?</h1>
+				    	<div class="signup-block">
+				    		<div class="sgnup-rates mrgn-md-top">
+			            		<div class="row">
+			            			<?php foreach ($businessType as $bkey => $bval) { ?>
+										<div class="col-md-4 col-sm-12 col-xs-12 qh-steps-form">
+											<div class="form-control">
+											    <div class="btn-group" data-toggle="buttons">
+											        <label class="btn btn-primary @if(@$ProfessionalDetail->professional_type == $bval) active @endif">
+											        <input type="radio" class="chk" value="<?php echo $bkey; ?>" name="professional_type_id" autocomplete="off" @if(@$ProfessionalDetail->professional_type == $bval) checked @endif>
+											        <span class="glyphicon glyphicon-ok"></span> </label>
+											        <?php echo $bval; ?>
+											    </div>
+											</div>
+										</div>
+			            			<?php } ?>
+			            		</div>
+			            	</div>
+				    	</div>
+				    </div>
+
+				    <div class="step-block1">
+			          <h1>Write a professional overview about you</h1>
+			          <div class="signup-block">
+			            <div class="sgnup-rates mrgn-md-top">
+			                <textarea name="about_me" rows="7" maxlength="200" style="width:100%;" placeholder="Showcase your skills,experience, and interests.Let the client get to know who you are.">{{ @$ProfessionalDetail->about_me }}</textarea>
+			            </div>
+			            <h6>(Up to 200 words are allowed)</h6>
+			          </div>
+			        </div>
+
+			         <div class="step-block1">
+			          <h1>About Your Business</h1>
+			          <div class="signup-block">
+			            <div class="sgnup-rates mrgn-md-top">
+			                <textarea name="about_business" rows="7" maxlength="200" style="width:100%;" placeholder="Tell Us Something About Your Business...">{{ @$ProfessionalDetail->about_business }}</textarea>
+			            </div>
+			            <h6>(Up to 200 words are allowed)</h6>
+			          </div>
+			        </div>
+			         <div class="step-block1">
+				        <h1><center>Your Company Details & Services</center></h1>
+				        <h1 style="text-transform: none;">The information you put below helps the customer find you in our search options. Choose the options the best describe your business.</h1>
+				    </div>
+
+					<?php 
+						$train_to = array(); $personality = array(); $availability = array(); $languages=array(); $travelTimes = array();
+						  
+						if(count(@$ProfessionalDetail->languages) > 0) $languages = explode(",", @$ProfessionalDetail->languages); 
+						if(count(@$ProfessionalDetail->train_to) > 0) $train_to = explode(",", @$ProfessionalDetail->train_to); 
+						if(count(@$ProfessionalDetail->personality) > 0) $personality = explode(",", @$ProfessionalDetail->personality); 
+						if(count(@$ProfessionalDetail->availability) > 0) $availability = explode(",", @$ProfessionalDetail->availability);
+						if(count(@$ProfessionalDetail->travel_times) > 0) $travelTimes = explode(",", @$ProfessionalDetail->travel_times);
+
+						// $other = implode(',',array_diff($languages,array_keys($allLanguages)));
+						$other = array_values(array_diff($languages,array_keys($allLanguages)));
+					?>
+			    	<div class="step-block1">
+			         
+			          <div class="signup-block">
+			          	 <h1><center>Let's Get To Know Your Services More </center></h1>
+			          	<p>&nbsp;</p>
+			          	 <h3 class="step2-title">Languages (s) you can speak ?</h3>
+			            <!-- <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+			                    <div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array('english', $languages)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="english" name="languages[]" autocomplete="off" @if(in_array('english', $languages)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                            English
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('spanish', $languages)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="spanish" name="languages[]" autocomplete="off" @if(in_array('spanish', $languages)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Spanish
+			                       </div>
+			                    </div>
+
+			                    
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('russions', $languages)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="russions" name="languages[]" autocomplete="off" @if(in_array('russions', $languages)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Russions
+			                       </div>
+			                    </div>
+
+			                    <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                     <span class="qh-lbl"><input type="text" name="languages[otheranswer]" id="otherskill" placeholder="Other" value="@if(in_array('russions', $languages)) active @endif"></span> </div>
+				                </div>
+
+			                    <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary" style="margin-bottom: 10px;">
+				                        <input type="checkbox" value="true" class="chkwhome" id="chkskillother" value="true" name="question[skill][answer]" autocomplete="off">
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                     <span class="qh-lbl"><input type="text" name="question[skill][otheranswer]" id="otherskill" placeholder="Others"/></span> </div>
+				                  </div>
+
+			                  </div>
+			                  
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('french', $languages)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="french" name="languages[]" autocomplete="off" @if(in_array('french', $languages)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          French
+			                        </div>
+			                    </div>
+
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('hebrew', $languages)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="hebrew" name="languages[]" autocomplete="off" @if(in_array('hebrew', $languages)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Hebrew
+			                        </div>
+			                    </div> 
+
+			                     <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('italian', $languages)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="italian" name="languages[]" autocomplete="off" @if(in_array('italian', $languages)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Italian
+			                        </div>
+			                    </div>
+
+			                   </div>
+			                </div>
+			            </div> -->
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+
+			                   @foreach($allLanguages as $key => $language)
+			                    <div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array($key, $languages)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="{{$key}}" name="languages[]" autocomplete="off" @if(in_array($key, $languages)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                           	{{ $language}}
+			                        </div>
+			                    </div>
+			                    @endforeach
+			                    <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                     <span class="qh-lbl"><input type="text" name="languages[otheranswer]" id="otherskill" placeholder="Other" value="{{current($other)}}"></span> </div>
+				                </div>
+
+			                  </div>			                 
+			                </div>
+			            </div>
+			            <p>&nbsp;</p>
+			            <h3 class="step2-title">To whom you provide training ?</h3>
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+			                    <div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array('kid', $train_to)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="kid" name="train_to[]" autocomplete="off" @if(in_array('kid', $train_to)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                            Kid
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('adult', $train_to)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="adult" name="train_to[]" autocomplete="off" @if(in_array('adult', $train_to)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Adult
+			                       </div>
+			                    </div>
+
+			                    
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('couple', $train_to)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="couple" name="train_to[]" autocomplete="off" @if(in_array('couple', $train_to)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          A Couple
+			                        </div>
+			                    </div>
+
+			                  </div>
+			                  
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('teen', $train_to)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="teen" name="train_to[]" autocomplete="off" @if(in_array('teen', $train_to)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Teen
+			                        </div>
+			                    </div>
+
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('family', $train_to)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="family" name="train_to[]" autocomplete="off" @if(in_array('family', $train_to)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Family
+			                       </div>
+			                    </div> 
+
+			                     <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('group', $train_to)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="group" name="train_to[]" autocomplete="off" @if(in_array('group', $train_to)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          A Group
+			                        </div>
+			                    </div> 
+
+			                   </div>
+			                </div>
+			            </div>
+			            <p>&nbsp;</p>
+			            <h3 class="step2-title">Describe your personality as a trainer ?</h3>
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+
+			                  	<div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array('educator', $personality)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="educator" name="personality[]" autocomplete="off" @if(in_array('educator', $personality)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                            An Educator & Teacher
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array('lot-of-energy', $personality)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="lot-of-energy" name="personality[]" autocomplete="off" @if(in_array('lot-of-energy', $personality)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                            A Lot Of Energy
+			                        </div>
+			                    </div>
+
+
+			                    <div class="form-control">
+			                        <div class="btn-group" data-toggle="buttons">
+			                            <label class="btn btn-primary @if(in_array('drill-sergeant', $personality)) active @endif">
+			                            <input type="checkbox" class="chkwhome" value="drill-sergeant" name="personality[]" autocomplete="off" @if(in_array('drill-sergeant', $personality)) checked @endif>
+			                            <span class="glyphicon glyphicon-ok"></span> </label>
+			                            Drill Sergeant
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('challenging', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="challenging" name="personality[]" autocomplete="off" @if(in_array('challenging', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Challenging
+			                       </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('bootcamp', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="bootcamp" name="personality[]" autocomplete="off" @if(in_array('bootcamp', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Bootcamp
+			                       </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('intermediated', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="intermediated" name="personality[]" autocomplete="off" @if(in_array('intermediated', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Intermediate
+			                       </div>
+			                    </div>
+
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('advanced', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="advanced" name="personality[]" autocomplete="off" @if(in_array('advanced', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                        	Adavnced
+			                       </div>
+			                    </div>
+			                  </div>
+			                  
+			                  <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('supportive', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="supportive" name="personality[]" autocomplete="off" @if(in_array('supportive', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Supportive, Soft And Nurturing
+			                        </div>
+			                    </div>
+
+			                  
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('tough-and-firm', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="tough-and-firm" name="personality[]" autocomplete="off" @if(in_array('tough-and-firm', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Tough And Firm
+			                        </div>
+			                    </div>
+
+			                    
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('care-about-details', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="care-about-details" name="personality[]" autocomplete="off" @if(in_array('care-about-details', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Care About The Details
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('gentle', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="gentle" name="personality[]" autocomplete="off" @if(in_array('gentle', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Gentle
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('intense', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="intense" name="personality[]" autocomplete="off" @if(in_array('intense', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Intense
+			                        </div>
+			                    </div>
+
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('beginner', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="beginner" name="personality[]" autocomplete="off" @if(in_array('beginner', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Beginner
+			                        </div>
+			                    </div>
+
+			                    <div class="form-control">
+			                      <div class="btn-group" data-toggle="buttons">
+			                        <label class="btn btn-primary @if(in_array('pro', $personality)) active @endif">
+			                          <input type="checkbox" class="chkwhome" value="pro" name="personality[]" autocomplete="off" @if(in_array('pro', $personality)) checked @endif>
+			                          <span class="glyphicon glyphicon-ok"></span> </label>
+			                          Pro
+			                        </div>
+			                    </div>
+
+
+			                   </div>
+			                </div>
+			            </div>
+			            <p>&nbsp;</p>
+			            <h3 class="step2-title">On which days you are available ?</h3>
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+				                <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('monday', $availability)) active @endif">
+				                        <input type="checkbox" value="monday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('monday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Monday
+				                      </div>
+				                  </div>
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('wednesday', $availability)) active @endif">
+				                        <input type="checkbox" value="wednesday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('wednesday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Wednesday
+				                      </div>
+				                  </div>
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('friday', $availability)) active @endif">
+				                        <input type="checkbox" value="friday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('friday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Friday
+				                      </div>
+				                  </div>
+				                <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('sunday', $availability)) active @endif">
+				                        <input type="checkbox" value="sunday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('sunday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Sunday
+				                     </div>
+				                  </div>
+				                </div>
+				                
+				                <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('tuesday', $availability)) active @endif">
+				                        <input type="checkbox" value="tuesday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('tuesday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Tuesday
+				                      </div>
+				                  </div>
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('thursday', $availability)) active @endif">
+				                        <input type="checkbox" value="thursday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('thursday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Thursday
+				                     </div>
+				                  </div>
+				                  <div class="form-control">
+				                    <div class="btn-group" data-toggle="buttons">
+				                      <label class="btn btn-primary @if(in_array('saturday', $availability)) active @endif">
+				                        <input type="checkbox" value="saturday" class="chkdy" name="availability[]" autocomplete="off" @if(in_array('saturday', $availability)) checked @endif>
+				                        <span class="glyphicon glyphicon-ok"></span> </label>
+				                      	Saturday
+				                     </div>
+				                  </div>
+				                 </div>
+				              </div>
+			            </div>
+
+			            <p>&nbsp;</p>
+			            <h1>Travelling to Clients</h1>
+			            <h3 class="step2-title">Sometimes you can get more clients going further out of your zip code, or a client request could be out of your zip code. Are you willing to travel?</h3>
+			            <div class="sgnup-rates mrgn-md-top">
+			            	<div class="row">
+			            		<div class="col-md-4 col-sm-12 col-xs-12 qh-steps-form">
+				                	<div class="col-md-6 col-sm-6 col-xs-6 qh-steps-form">
+					                  <div class="form-control">
+					                    <div class="btn-group" data-toggle="buttons">
+					                      <label class="btn btn-primary willing_to_travel @if(isset($ProfessionalDetail->willing_to_travel) && $ProfessionalDetail->willing_to_travel == 'yes') active @endif">
+					                        <input type="radio" value="yes" class="chkdy" name="willing_to_travel" autocomplete="off" @if(isset($ProfessionalDetail->willing_to_travel) && $ProfessionalDetail->willing_to_travel == 'yes') checked @endif>
+					                        <span class="glyphicon glyphicon-ok"></span> </label>
+					                      	Yes
+					                      </div>
+					                  </div>
+					                </div>
+					                <div class="col-md-6 col-sm-6 col-xs-6 qh-steps-form">
+					                  <div class="form-control">
+					                    <div class="btn-group" data-toggle="buttons">
+					                      <label class="btn btn-primary willing_to_travel @if(isset($ProfessionalDetail->willing_to_travel) && $ProfessionalDetail->willing_to_travel == 'no') active @endif">
+					                        <input type="radio" value="no" class="chkdy" name="willing_to_travel" autocomplete="off" @if( isset($ProfessionalDetail->willing_to_travel) && $ProfessionalDetail->willing_to_travel == 'no') checked @endif>
+					                        <span class="glyphicon glyphicon-ok"></span> </label>
+					                      	No
+					                      </div>
+					                  </div>
+				                  	</div>
+				                </div>
+
+				                 <div class="col-md-12 col-sm-12 col-xs-12 qh-steps-form">
+				                	<div class="form-control">
+					                	<span class="travel_miles_div"
+					                	style="@if(isset($ProfessionalDetail->willing_to_travel) && $ProfessionalDetail->willing_to_travel == 'no') display: none; @endif">
+								            <div class="select-style">
+								                <?php
+									            $miles_arr = array('1'=>'1 Mile','3'=>'3 Miles','5'=>'5 Miles','10'=>'10 Miles','15'=>'15 Miles','20'=>'20 Miles');
+									            ?>
+								                    <select class="selectpicker" name="travel_miles">
+								                    <?php foreach($miles_arr as $key=>$value) { ?>
+					                      				<option value="<?php echo $key; ?>" @if($key == $ProfessionalDetail->travel_miles) selected @endif ><?php echo $value; ?></option>
+					                      			<?php } ?>
+								                    </select>
+								            </div>
+							                How far are you willing to travel out of your zip code?
+							            </span>
+						            </div>
+				                </div>
+				            	 <span class="travel_miles_div" style="@if($ProfessionalDetail->willing_to_travel == 'no') display: none; @endif">
+					           		<h1 class="step2-title text-left" style="padding-left:15px;text-transform: none;">What's Your Desired Time Slot If You Travel to Clients? </h1>
+							        <div class="col-md-6 col-sm-12 col-xs-12 qh-steps-form">
+					                   @foreach($timeSlots as $key => $slot)
+					                    <div class="form-control">
+					                        <div class="btn-group" data-toggle="buttons">
+					                            <label class="btn btn-primary @if(in_array($key, $travelTimes)) active @endif">
+					                            <input type="checkbox" class="chkwhome" value="{{$key}}" name="travel_times[]" autocomplete="off" @if(in_array($key, $travelTimes)) checked @endif>
+					                            <span class="glyphicon glyphicon-ok"></span> </label>
+					                           	{{ $slot}}
+					                        </div>
+					                    </div>
+					                    @endforeach
+					                  </div>			                 
+					             </span> 
+				            </div>
+			            </div>
+				      </div>				      
+				    </div>
+
+			        <div class="step-block1">
+			          <h1>EMPLOYEMENT HISTORY</h1>
+			          <div class="signup-block">
+			            <div class="row">
+			              <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+			              	<h3 class="step2-title">Add your employment history</h3>
+			                <!-- <p>Senectus et netus et malesuada fames ac turpis egestas Senectus et netus et malesuada fames ac turpis egestasSenectus et netus et malesuada fames ac turpis egestas </p> -->
+			                <p>Write about previous positions, companies, and the number of years you've worked, plus highlight relevant projects and accomplishments.</p>
+			              </div>
+			              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+			              	<span class="user-img" style="overflow:inherit;">
+			              		<i class="fa fa-briefcase"></i>
+			              		<!-- <a href="javascript:void();" class="add_sngp" id="add_sngp" data-toggle="modal" data-target="#addEmployementHistory">+</a> -->
+			              		<a href="#" class="add_sngp" id="add_sngp">+</a>
+			              	</span>
+			              </div>
+
+			              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				              	<div class="table-responsive">
+				              	<input type="hidden" name="edited_employmenthistory_id" id="edited_employmenthistory_id" value="">
+				              	<input type="hidden" name="deleted_employmenthistory_id" id="deleted_employmenthistory_id" value="">
+				                	<table class="table add_education" id="employement_history_table" cellpadding="0" cellspacing="0" border="0">
+				                    	<thead>
+				                        	<tr>
+				                            	<th>Organization</th>
+				                                <th>Position</th>
+				                                <th>From</th>
+				                                <th>To</th>
+				                                <th>Action</th>
+				                            </tr>
+				                        </thead>
+				                        <tbody>
+				                        <?php $employmenthistories = $UserProfileDetail['employmenthistory']; ?>
+            							@if(count($employmenthistories) > 0)
+            								<?php $history_index = 0; ?>
+              								@foreach($employmenthistories as $employmenthistory)
+              									<?php $history_index++; ?>
+						                        <tr id="history_{{$history_index}}">
+						                        	<input type="hidden" name="employmenthistory_id[]" value="{{$employmenthistory->id}}">
+							        				<td valign="middle">
+							        					<input type="text" name="organization[]" value="{{ $employmenthistory->organization }}" class="noborder" title="organization" readonly>
+							        				</td>
+							        				<td valign="middle">
+							        					<input type="text" name="position[]" value="{{ $employmenthistory->position }}" class="noborder"  title="position" readonly>
+							        				</td>
+							        				<td valign="middle">
+							        					<input type="hidden" name="ispresent[]" value="{{ $employmenthistory->is_present }}" class="noborder" title="ispresent">
+							        					<input type="text" name="servicestart[]" value="{{ date('d-m-Y', strtotime($employmenthistory->service_start)) }}" class="noborder"  title="servicestart" readonly>
+							        				</td>
+							        				<td valign="middle">
+							        					@if($employmenthistory->is_present)
+							        						<?php $service_end = "Till Date"; ?>
+							        					@else
+							        						<?php $service_end = date('d-m-Y', strtotime($employmenthistory->service_end)); ?>
+							        					@endif
+							        					<input type="text" name="serviceend[]" value="{{ $service_end }}" class="noborder"  title="serviceend" readonly>
+							        				</td>
+							        				<td valign="middle" align="center">
+							        					<a href="javascript:editHistory({{$history_index}})"><i class="fa fa-pencil-square"></i></a>
+							        					<a href="javascript:deleteRow('history_{{$history_index}}')" title="Delete this detail"><i class="fa fa-trash"></i></a>
+							        				</td>
+							        			</tr>
+						        			@endforeach
+						        		@else
+						        			<tr id="history_0">				                            	
+				                            </tr>			
+              							@endif
+				                        </tbody>
+				                    </table>
+				                </div>
+				            </div>
+
+			              <!-- Modal -->
+						    <div class="modal fade" id="addEmployementHistory" role="dialog">
+						    
+						    <input type="hidden" name="editrowcount" id="editrowcount" value="">
+						      <div class="modal-dialog modal-lg">
+						        <!-- Modal content-->
+						        <div class="modal-content">
+						          <div class="modal-body login-pad">
+						            <div class="pop-title employe-title">
+						              <h3>EMPLOYEMENT HISTORY</h3>
+						            </div>
+						            <button type="button" class="close modal-close" data-dismiss="modal">
+						        		<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+						        	</button>
+						        	
+						            <div class="signup">
+						            	<div id='systemMessage_history'></div>
+						                <div class="emplouyee-form">
+								            <input type="text" name="frm_organization" placeholder="Organization name" />
+								            <input type="text" name="frm_position" placeholder="Position" />
+								            <div class="qh-steps-form">
+							                  <div class="form-control">
+							                    <div class="btn-group" data-toggle="buttons">
+							                      <label class="btn btn-primary present_work_btn">
+							                        <input type="checkbox" autocomplete="off" name="frm_ispresentcheck" id="frm_ispresentcheck" value="1">
+							                        <input type="hidden" name="frm_ispresent" id="frm_ispresent" value="0">
+							                        <span class="glyphicon glyphicon-ok"></span>
+							                      </label>
+							                      <span>Presently working here</span> </div>
+							                  </div>
+							                </div>
+								            
+								            <input type="text" name="frm_servicestart" class="span2" placeholder="From" id="dp1" readonly >
+								            <input type="text" name="frm_serviceend" class="span2" placeholder="To" id="dp2" readonly >
+						              		<button type="button" id="submit_employement_history">SUBMIT</button>
+						              	</div>
+						            </div>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+			            </div>
+			          </div>
+			        </div>
+
+			        <div class="step-block1">
+			          <h1>Education</h1>
+			          <div class="signup-block">
+			            <div class="row">
+			            	<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+				              	<h3 class="step2-title">What’s your education history?</h3>
+				             </div>
+			              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			              	<div class="table-responsive">
+			              		<input type="hidden" name="edited_education_id" id="edited_education_id" value="">
+				              	<input type="hidden" name="deleted_education_id" id="deleted_education_id" value="">
+			                	<table class="table add_education" id="education_table" cellpadding="0" cellspacing="0" border="0">
+			                    	<thead>
+			                        	<tr>
+			                            	<th>Degree/Course</th>
+			                                <th>University/School</th>
+			                                <th>Year graduated/projected graduation</th>
+			                                <th>Action</th>
+			                            </tr>
+			                        </thead>
+			                        <tbody>
+			                        	<?php $educations = $UserProfileDetail['education']; ?>
+            							@if(count($educations) > 0)
+            								<?php $education_index = 0; ?>
+              								@foreach($educations as $education)
+              									<?php $education_index++; ?>
+						                        <tr id="education_{{$education_index}}">
+						                        	<input type="hidden" name="education_id[]" value="{{$education->id}}">
+							        				<td valign="middle">
+							        					<input type="text" name="course[]" value="{{ $education->course }}" class="noborder" title="course" readonly>
+							        				</td>
+							        				<td valign="middle">
+							        					<input type="text" name="university[]" value="{{ $education->university }}" class="noborder"  title="university" readonly>
+							        				</td>
+							        				<td valign="middle">
+							        					<input type="text" name="passingyear[]" value="{{ date('d-m-Y', strtotime($education->passing_year)) }}" class="noborder"  title="passingyear" readonly>
+							        				</td>
+							        				<td valign="middle" align="center">
+							        					<a href="javascript:editEducation({{$education_index}})"><i class="fa fa-pencil-square"></i></a>
+							        					<a href="javascript:deleteRow('education_{{$education_index}}')" title="Delete this detail"><i class="fa fa-trash"></i></a>
+							        				</td>
+							        			</tr>
+						        			@endforeach
+						        		@else
+						        			<tr id="education_0">				                            	
+				                            </tr>			
+              							@endif
+			                        </tbody>
+			                    </table>
+			                </div>
+			              </div>
+
+			              <!-- Education Modal -->
+						    <div class="modal fade" id="addEducation" role="dialog">
+							    <input type="hidden" name="editrowcount_education" id="editrowcount_education" value="">
+							      <div class="modal-dialog modal-lg">
+							        <!-- Modal content-->
+							        <div class="modal-content">
+							          <div class="modal-body login-pad">
+							            <div class="pop-title employe-title">
+							              <h3>Education Details</h3>
+							            </div>
+							            <button type="button" class="close modal-close" data-dismiss="modal">
+							        		<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+							        	</button>
+							            <div class="signup">
+							            	<div id='systemMessage_education'></div>
+							                <div class="emplouyee-form">
+									            <input type="text" name="frm_course" placeholder="Degree/Course (Obtained or Seeking)" />
+									            <input type="text" name="frm_university" placeholder="University/School" />
+                                                                                    <input type="text" name="frm_passingyear" placeholder="Year graduated/projected graduation" id="passingyear" readonly>
+							              		<button type="button" id="submit_education">SUBMIT</button>
+							              	</div>
+							            </div>
+							          </div>
+							        </div>
+							     </div>
+						    </div>
+						    <!-- Education Modal -->
+
+			            </div>
+			            <button class="upload-pic" id="add_education" type="button">ADD EDUCATION</button>
+			          </div>
+			        </div>
+
+			        <div class="step-block1">
+			          <h1>CERTIFICATE</h1>
+			          <div class="signup-block">
+			            <div class="row">
+			              <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+			              	<h3 class="step2-title">Add your certification & Achievement</h3>
+			                <p>If you have official certifications, list them here.</p>
+			              </div>
+			              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+			              	<span class="user-img" style="overflow:inherit;">
+			              		<i class="fa fa-shield"></i>
+			              		<a href="#" class="add_sngp" id="add_certificate">+</a>
+			              	</span>
+			              </div>
+
+			              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				              	<div class="table-responsive">
+				              		<input type="hidden" name="edited_certificate_id" id="edited_certificate_id" value="">
+				              		<input type="hidden" name="deleted_certificate_id" id="deleted_certificate_id" value="">
+				                	<table class="table add_education" id="certificate_table" cellpadding="0" cellspacing="0" border="0">
+				                    	<thead>
+				                        	<tr>
+				                            	<th>Name of Certification</th>
+				                                <th>Completion Date</th>
+				                                <th>Action</th>
+				                            </tr>
+				                        </thead>
+				                        <tbody>
+					                        <?php $certificates = $UserProfileDetail['certification']; ?>
+	            							@if(count($certificates) > 0)
+	            								<?php $certificate_index = 0; ?>
+	              								@foreach($certificates as $certificate)
+	              									<?php $certificate_index++; ?>
+							                        <tr id="certificate_{{$certificate_index}}">
+							                        	<input type="hidden" name="certificate_id[]" value="{{$certificate->id}}">
+								        				<td valign="middle">
+								        					<input type="text" name="certificatetitle[]" value="{{ $certificate->title }}" class="noborder" title="certificatetitle" readonly>
+								        				</td>
+								        				<td valign="middle">
+								        					<input type="text" name="certificatecompletion[]" value="{{ date('d-m-Y', strtotime($certificate->completion_date)) }}" class="noborder"  title="certificatecompletion" readonly>
+								        				</td>
+								        				<td valign="middle" align="center">
+								        					<a href="javascript:editCertificate({{$certificate_index}})"><i class="fa fa-pencil-square"></i></a>
+								        					<a href="javascript:deleteRow('certificate_{{$certificate_index}}')" title="Delete this detail"><i class="fa fa-trash"></i></a>
+								        				</td>
+								        			</tr>
+							        			@endforeach
+							        		@else
+							        			<tr id="certificate_0">				                            	
+					                            </tr>			
+              								@endif
+				                        </tbody>
+				                    </table>
+				                </div>
+				            </div>
+
+				            <!-- Modal -->
+						    <div class="modal fade" id="addCertificate" role="dialog">
+						    <input type="hidden" name="editrowcount_certificate" id="editrowcount_certificate" value="">
+						      <div class="modal-dialog modal-lg">
+						        <!-- Modal content-->
+						        <div class="modal-content">
+						          <div class="modal-body login-pad">
+						            <div class="pop-title employe-title">
+						              <h3>Certifications</h3>
+						            </div>
+						            <button type="button" class="close modal-close" data-dismiss="modal">
+							        	<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+							        </button>
+						            <div class="signup">
+						            	<div id='systemMessage_certificate'></div>
+						                <div class="emplouyee-form">
+								            <input type="text" name="frm_certificatetitle" placeholder="Name of Certification"/>
+                                                                            <input type="text" name="frm_certificatecompletion" placeholder="Completion Date" id="certificatecompletion" readonly/>
+						              		<button type="button" id="submit_certificate">SUBMIT</button>
+						              	</div>
+						            </div>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+
+			            </div>
+			          </div>
+			        </div>
+
+			        <div class="step-block1">
+			         <!-- <h1 class="text-right">lorem ipsum dolor</h1> -->
+			         <h1>Set your services & prices</h1>
+			          <div class="signup-block signup-block1">
+			            <!-- <h3>What are the main services offer to the clients ?</h3> -->
+			            <h3>What service do you offer your clients?</h3>
+			              <div class="row">
+
+			                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 text-center service-icon">
+			                	<span class="user-img" style="overflow:inherit;">
+			                		<i class="fa fa-briefcase"></i>
+			                		<a href="#" class="add_sngp" id="add_service">+</a>
+			                	</span>
+			                </div>
+			                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 text-left ">
+			                  <!-- <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p> -->
+
+			                  <p>This will help clients find you. Make sure your prices are competitive to your skill level. Add an attractive description that will attract potential clients. You can create or delete as many programs as you like.</p>
+			                  	<!-- <a href="#" class="start-over" id="add_service">START OVER -->
+			                  		<!-- <i class="fa fa-angle-right"></i> -->
+			                  	<!-- </a> -->
+			                </div>
+
+			               
+
+			              </div>
+			          </div>
+			        </div>
+
+			        <div class="step-block1">
+			        <?php $services = $UserProfileDetail['service']; ?>
+			        <input type="hidden" name="edited_service_id" id="edited_service_id" value="">
+				    <input type="hidden" name="deleted_service_id" id="deleted_service_id" value="">
+				    <input type="hidden" name="total_service" id="total_service" value="{{ count($services) }}">
+			          <div class="services-block">
+			            <div class="row" id="service_div">              				
+              				@if(count($services) > 0)
+              					<?php $service_index = 0; ?>
+              					@foreach($services as $service)
+              						<?php $service_index++; ?>
+              						<div id="service_{{$service_index}}">
+	              						<input type="hidden" name="service_id[]" value="{{$service->id}}">
+	              						<input type="hidden" name="servicetype[]" value="{{ $service->servicetype }}" title="servicetype">
+	              						<input type="hidden" name="programtype[]" value="{{ $service->programtype }}" title="programtype">
+	              						<input type="hidden" name="agerange[]" value="{{ $service->agerange }}" title="agerange">
+	              						<input type="hidden" name="programfor[]" value="{{ $service->programfor }}" title="programfor">
+	              						<input type="hidden" name="numberofpeople[]" value="{{ $service->numberofpeople }}" title="numberofpeople">
+	              						<input type="hidden" name="experience_level[]" value="{{ $service->experience_level }}" title="experience_level">
+	              						<input type="hidden" name="servicelocation[]" value="{{ $service->servicelocation }}" title="servicelocation">
+	              						<input type="hidden" name="servicefocuses[]" value="{{ $service->focuses }}" title="servicefocuses">
+	              						<input type="hidden" name="specialdeals[]" value="{{ $service->specialdeals }}" title="specialdeals">
+	              						<input type="hidden" name="servicepriceoption[]" value="{{ $service->servicepriceoption }}" title="servicepriceoption">
+	              						<input type="hidden" name="serviceduration[]" value="{{ $service->duration }}" title="serviceduration">
+	              						<input type="hidden" name="profile_pic[]" value="{{ $service->image }}" title="profile_pic">
+	              						<input type="hidden" name="tcdesc[]" value="{{ $service->terms_conditions}}" title="tcdesc">
+
+						            	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+						            		<div class="services-list">
+						            			<a href="javascript:editService({{$service_index}})" class="decoration-none">
+						            				<span class="srv-list-icon"><i class="fa fa-briefcase"></i></span>
+						            			</a>
+						            			<div class="clearfix"></div>
+						            			<h3>
+						            				<input type="hidden" name="servicesport[]" value="{{ $service->sport }}" title="servicesport">
+						             				<!-- <a href="javascript:editService({{$service_index}})" class="decoration-none"> -->
+						             					<span class="display_servicesport" style="padding-left: 30px;"> {{ @$sport_dd[$service->sport] }} </span>
+						             				<!-- </a> -->
+
+						             				<a href="javascript:deleteRow('service_{{$service_index}}')" class="delete_icon" title="Delete this Service"><i class="fa fa-trash"></i></a>
+
+						             				<a href="javascript:editService({{$service_index}})" title="Edit this Service" class="delete_icon"  style="padding-right: 7px;"><i class="fa fa-pencil"></i></a>
+						             			</h3>
+						             			<div class="clearfix"></div>
+						             			<input type="hidden" name="servicetitle[]" value="{{ $service->title }}" title="servicetitle">
+
+						             			<p class="display_servicetitle"><strong> {{ $service->title }} ({{ $service->price }})</strong></p>
+						             			<div class="clearfix"></div>
+						            			<input type="hidden" name="serviceprice[]" value="{{ $service->price }}" title="serviceprice">
+						            			<div class="clearfix"></div>
+						            			<input type="hidden" name="servicedesc[]" value="{{ $service->servicedesc }}" title="servicedesc">
+						            			<p class="display_servicedesc">{{ substr($service->servicedesc, 0,50) }}...</p>
+						            		</div>
+						            	</div>
+						            </div>
+              					@endforeach
+              				@endif			            	
+			            </div>
+			          </div>
+			        </div>
+
+			        <div class="step-block1">
+			         	<a href="/profile/viewProfile"><i class="fa fa-angle-double-left"></i> Back to Profile</a>
+			         	<button type="submit" class="button-nxt button-next">Save & Continue<i class="fa fa-angle-double-right"></i></button>
+			        </div>
+		    	</div>
+		    </form>
+		     <div class="modal fade" id="addService" role="dialog">
+	             <form method="post" enctype="multipart/form-data" id="servicedata">
+	             	<!-- <input type="hidden" name="_token" value="{{csrf_token()}}"> -->
+			      <input type="hidden" name="editrowcount_service" id="editrowcount_service" value="">
+			      <input type="hidden" name="editservice_id" id="editservice_id" value="">
+			      <div class="modal-dialog modal-lg">
+			        <!-- Modal content-->
+			        <div class="modal-content">
+			          <div class="modal-body login-pad">
+			            <div class="pop-title employe-title">
+			              <h3>Services</h3>
+			            </div>
+			            <button type="button" class="close modal-close" data-dismiss="modal">
+				        	<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+				        </button>
+			            <div class="signup">
+			            	<div id='systemMessage_service'></div>            	
+			                <div class="emplouyee-form">
+			                	<div class="select-style review-select2">
+	                            	<select name="frm_servicesport" id="frm_servicesport" class="selectpicker">
+	                            		{!! $sports_select !!}
+	                            	</select>
+	                            </div>
+	                            <input type="text" name="frm_servicetitle" id="frm_servicetitle" placeholder="Name of Program" title="servicetitle" style="margin-top: 0px;margin-bottom: 2px;"/>
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_servicetype" id="frm_servicetype" class="selectpicker">
+	                            		<option value=''>Choose Service Type</option>
+	                            		@foreach ($businessType as $bkey => $bval)
+	                            		<option value='{{$bkey}}'> {{$bval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_programtype" id="frm_programtype" class="selectpicker">
+	                            		<option value=''>Choose Program Type</option>
+	                            		@foreach ($programType as $pkey => $pval)
+	                            			<option value='{{$pkey}}'> {{$pval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                             <div class="select-style review-select2">
+	                            	<select name="frm_agerange" id="frm_agerange" class="selectpicker">
+	                            		<option value=''>Age Range </option>
+	                            		@foreach ($ageRange as $arkey => $arval)
+	                            			<option value='{{$arkey}}'> {{$arval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                           <!--  <div>
+					              <h3><center>Progran Spcefications</center></h3>
+					            </div> -->
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_programfor" id="frm_programfor" class="selectpicker">
+	                            		<option value=''>Program is for?</option>
+	                            		@foreach ($programFor as $pfkey => $pfval)
+	                            			<option value='{{$pfkey}}'> {{$pfval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_numberofpeople" id="frm_numberofpeople" class="selectpicker">
+	                            		<option value=''>Number of People?</option>
+	                            		@foreach ($numberOfPeople as $npkey => $npval)
+	                            			<option value='{{$npkey}}'> {{$npval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                           
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_experience_level" id="frm_experience_level" class="selectpicker">
+	                            		<option value=''>Program Experience Level</option>
+	                            		@foreach ($expLevel as $elkey => $elval)
+	                            			<option value='{{$elkey}}'> {{$elval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_servicelocation" id="frm_servicelocation" class="selectpicker">
+	                            		<option value=''>Where does this program take place?</option>
+	                            		@foreach ($serviceLocation as $slkey => $slval)
+	                            			@if($slkey == 'outdoors')
+	                            			<optgroup label='Outdoors'>
+	                            			@foreach ($serviceLocation[$slkey] as $key => $val)
+	                            				<option value='{{$key}}'>{{$val}}</option>
+	                            			@endforeach
+	                            		    </optgroup>
+	                            		    @else
+	                            			<option value='{{$slkey}}'> {{$slval}}</option>
+	                            			@endif
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                            <div class="select-style review-select2">
+	                            	<select name="frm_servicefocuses" id="frm_servicefocuses" class="selectpicker">
+	                            		<option value=''>Program Focuses On?</option>
+	                            		@foreach ($pFocuses as $pfkey => $pfval)
+	                            			<option value='{{$pfkey}}'> {{$pfval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                             <div class="select-style review-select2">
+	                            	<select name="frm_specialdeals" id="frm_specialdeals" class="selectpicker">
+	                            		<option value=''>Special Deals </option>
+	                            		@foreach ($specialDeals as $pfkey => $pfval)
+	                            			<option value='{{$pfkey}}'> {{$pfval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                           <!--  <div>
+					              <h3><center>Program Price Settings</center></h3>
+					            </div> -->
+	                             <div class="select-style review-select2">
+	                            	<select name="frm_servicepriceoption" id="frm_servicepriceoption" class="selectpicker">
+	                            		<option value=''>Service Price Options</option>
+	                            		@foreach ($servicePriceOption as $pfkey => $pfval)
+	                            			<option value='{{$pfkey}}'> {{$pfval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+	                             <div class="select-style review-select2">
+	                            	<select name="frm_serviceduration" id="frm_serviceduration" class="selectpicker">
+	                            		<option value=''>Duration</option>
+	                            		@foreach ($duration as $pfkey => $pfval)
+	                            			<option value='{{$pfkey}}'> {{$pfval}}</option>
+			            				@endforeach
+	                            	</select>
+	                            </div>
+			              	</div>
+			              	<div class="emplouyee-form" style="width: 95%;">
+			              		<div class="row" style="margin-left: -21px;">
+						            <div class="emplouyee-form" style="width: 95%;">
+						                <p> <b>Upload an image that best represents your program.</b><br>
+						                (Uploading a professional image of your program will appear on your profile and increase your chances of being picked by customers.)</p>
+						                <input type="hidden" name="old_profile_pic" id="old_profile_pic" title="old_profile_pic">
+						                 <input type="hidden" name="updated_profile_pic" id="updated_profile_pic" title="updated_profile_pic">
+						                <input class="upload-pic" type="file" name="frm_profile_pic" id="frm_profile_pic" class="form-control" title="profile_pic" value="{{ old('image') }}" onchange="readURL(this)" style="width:89%;">
+	                                    <br>
+	                                    <font style="color:red">@if ($errors->has('profile_pic')) {{$errors->first('profile_pic')}} @endif</font>
+						                	<span class="user-img uploadedpic" style="margin-left: 13px;width: 75px;height: 75px"><i class="fa fa-user" style="line-height: 56px;"></i></span>
+
+
+						           </div>
+					           </div>
+	                            <input type="text" name="frm_serviceprice" id="frm_serviceprice" value="$"/ title="serviceprice" style="margin-top: 15px;">
+					            <textarea name="frm_servicedesc" id="frm_servicedesc" placeholder="Program Description"></textarea>
+					            <textarea name="frm_tcdesc" id="frm_tcdesc" placeholder="Terms and Conditions for this program" required></textarea>
+					            <button type="submit" id="submit_service">SUBMIT</button>
+			              	</div>
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			  	</form>
+		    </div>
+		    <!-- step 1 ends -->
+
+        </div>
+
+        @include('includes.sidebar_signup')
+
+    </div>
+    
+
+  </div>
+
+</div>
+
+<script>
+
+    $(document).ready(function(){
+
+    	$(".singup_steps").hide();
+    	$("#singup_step_1").show();
+        $("#frm_serviceprice").keydown(function(e) {
+            var field=this;
+            setTimeout(function () {
+                if(field.value.indexOf('$') !== 0) {
+                    $(field).val('$');
+                } 
+            }, 1);
+        });
+
+    	/*** employment history form process - starts ***/
+
+    	$("#addEmployementHistory").on("hidden.bs.modal", function(){
+            removeFormValues('addEmployementHistory');
+        });
+
+     	// open employement history form 
+        $("#add_sngp").click(function() {
+        	$('#addEmployementHistory').modal('show');
+        });       
+
+
+        // save employement history form
+        $("#submit_employement_history").click(function() {
+
+        	// check validations
+        	if(!validateFormEmploymentHistory()) {
+        		return false;
+        	}
+
+        	// check if form is open in edit mode
+        	var editrowcount = $("#addEmployementHistory").find("input[name='editrowcount']").val();
+        	if(editrowcount != "") {
+        		var selected_id = $("#"+editrowcount).find("input[name='employmenthistory_id[]']").val();
+        		if(selected_id > 0) {
+        			if($("#edited_employmenthistory_id").val() == "")
+        				$("#edited_employmenthistory_id").val(selected_id);
+        			else
+        				$("#edited_employmenthistory_id").val($("#edited_employmenthistory_id").val() +","+ selected_id);
+        		}
+        		$("#addEmployementHistory").find("input").each(function() {
+		    		var form_element_name = $(this).attr('name').split("_");
+		    		form_element_name = form_element_name[1];
+		    		$("#"+editrowcount).find("input[title='"+form_element_name+"']").val($(this).val());
+		    	});
+        	}
+        	else {
+        		var last_row_id = $("#employement_history_table > tbody > tr:last-child").closest('tr').attr('id');
+        		var last_row_count = last_row_id.split("_");
+        		employement_history_count = parseInt(last_row_count[1]) + 1;
+	        	var newrow = '<tr id="history_'+employement_history_count+'">'
+	        				+ '<input type="hidden" name="employmenthistory_id[]" value="0">'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="organization[]" value="'+$("input:text[name='frm_organization']").val()+'" class="noborder" title="organization" readonly>'
+	        				+  '</td>'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="position[]" value="'+$("input:text[name='frm_position']").val()+'" class="noborder"  title="position" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle">'
+	        				+ '<input type="hidden" name="ispresent[]" value="'+$("#frm_ispresent").val()+'" class="noborder" title="ispresent">'
+	        				+ '<input type="text" name="servicestart[]" value="'+$("input:text[name='frm_servicestart']").val()+'" class="noborder"  title="servicestart" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="serviceend[]" value="'+$("input:text[name='frm_serviceend']").val()+'" class="noborder"  title="serviceend" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle" align="center">'
+	        				+ '		<a href="javascript:editHistory('+employement_history_count+')"><i class="fa fa-pencil-square"></i></a>'
+	        				+ '		<a href="javascript:deleteRow(\'history_'+employement_history_count+'\')" title="Delete this detail"><i class="fa fa-trash"></i></a>'
+	        				+ '</td>'
+	        				+ '</tr>';
+
+	        	$("#employement_history_table > tbody:last-child").append(newrow);
+        	}        	
+
+        	// remove form field values
+        	removeFormValues('addEmployementHistory');
+        	$('#addEmployementHistory').modal('hide');
+        });
+
+        /*** education form process - starts ***/
+    	$("#addEducation").on("hidden.bs.modal", function(){
+            removeFormValues('addEducation');
+        });
+
+     	// open education form 
+        $("#add_education").click(function() {
+        	$('#addEducation').modal('show');
+        });
+
+        // save education form
+        $("#submit_education").click(function() {
+
+        	// check validations
+        	if(!validateFormEducation()) {
+        		return false;
+        	}
+
+        	// check if form is open in edit mode
+        	var editrowcount = $("#addEducation").find("input[name='editrowcount_education']").val();
+        	if(editrowcount != "") {
+        		var selected_id = $("#"+editrowcount).find("input[name='education_id[]']").val();
+        		if(selected_id > 0) {
+        			if($("#edited_education_id").val() == "")
+        				$("#edited_education_id").val(selected_id);
+        			else
+        				$("#edited_education_id").val($("#edited_education_id").val() +","+ selected_id);
+        		}
+        		$("#addEducation").find("input").each(function() {
+		    		var form_element_name = $(this).attr('name').split("_");
+		    		form_element_name = form_element_name[1];
+		    		$("#"+editrowcount).find("input[title='"+form_element_name+"']").val($(this).val());
+		    	});
+        	}
+        	else {
+
+        		var last_row_id = $("#education_table > tbody > tr:last-child").closest('tr').attr('id');
+        		var last_row_count = last_row_id.split("_");
+        		education_count = parseInt(last_row_count[1]) + 1;
+	        	var newrow = '<tr id="education_'+education_count+'">'
+	        				+ '<input type="hidden" name="education_id[]" value="0">'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="course[]" value="'+$("input:text[name='frm_course']").val()+'" class="noborder" title="course" readonly>'
+	        				+  '</td>'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="university[]" value="'+$("input:text[name='frm_university']").val()+'" class="noborder"  title="university" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="passingyear[]" value="'+$("input:text[name='frm_passingyear']").val()+'" class="noborder"  title="passingyear" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle" align="center">'
+	        				+ '		<a href="javascript:editEducation('+education_count+')"><i class="fa fa-pencil-square"></i></a>'
+	        				+ '		<a href="javascript:deleteRow(\'education_'+education_count+'\')" title="Delete this detail"><i class="fa fa-trash"></i></a>'
+	        				+ '</td>'
+	        				+ '</tr>';
+
+	        	$("#education_table > tbody:last-child").append(newrow);
+        	}        	
+
+        	// remove form field values
+        	removeFormValues('addEducation');
+        	$('#addEducation').modal('hide');
+        });
+
+        /*** certification form process - starts ***/
+    	$("#addCertificate").on("hidden.bs.modal", function(){
+            removeFormValues('addCertificate');
+        });
+
+     	// open certification form 
+        $("#add_certificate").click(function() {
+        	$('#addCertificate').modal('show');
+        });
+
+        // save certificate form
+        $("#submit_certificate").click(function() {
+
+        	// check validations
+        	if(!validateFormCertificate()) {
+        		return false;
+        	}
+
+        	// check if form is open in edit mode
+        	var editrowcount = $("#addCertificate").find("input[name='editrowcount_certificate']").val();
+        	if(editrowcount != "") {
+        		var selected_id = $("#"+editrowcount).find("input[name='certificate_id[]']").val();
+        		if(selected_id > 0) {
+        			if($("#edited_certificate_id").val() == "")
+        				$("#edited_certificate_id").val(selected_id);
+        			else
+        				$("#edited_certificate_id").val($("#edited_certificate_id").val() +","+ selected_id);
+        		}
+        		$("#addCertificate").find("input").each(function() {
+		    		var form_element_name = $(this).attr('name').split("_");
+		    		form_element_name = form_element_name[1];
+		    		$("#"+editrowcount).find("input[title='"+form_element_name+"']").val($(this).val());
+		    	});
+        	}
+        	else {
+
+        		var last_row_id = $("#certificate_table > tbody > tr:last-child").closest('tr').attr('id');
+        		var last_row_count = last_row_id.split("_");
+        		certificate_count = parseInt(last_row_count[1]) + 1;
+	        	var newrow = '<tr id="certificate_'+certificate_count+'">'
+	        				+ '<input type="hidden" name="certificate_id[]" value="0">'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="certificatetitle[]" value="'+$("input:text[name='frm_certificatetitle']").val()+'" class="noborder" title="certificatetitle" readonly>'
+	        				+  '</td>'
+	        				+ '<td valign="middle">' 
+	        				+ '<input type="text" name="certificatecompletion[]" value="'+$("input:text[name='frm_certificatecompletion']").val()+'" class="noborder"  title="certificatecompletion" readonly>'
+	        				+ '</td>'
+	        				+ '<td valign="middle" align="center">'
+	        				+ '		<a href="javascript:editCertificate('+certificate_count+')"><i class="fa fa-pencil-square"></i></a>'
+	        				+ '		<a href="javascript:deleteRow(\'certificate_'+certificate_count+'\')" title="Delete this detail"><i class="fa fa-trash"></i></a>'
+	        				+ '</td>'
+	        				+ '</tr>';
+
+	        	$("#certificate_table > tbody:last-child").append(newrow);
+        	}        	
+
+        	// remove form field values
+        	removeFormValues('addCertificate');
+        	$('#addCertificate').modal('hide');
+        });
+
+        /*** services form process - starts ***/
+    	$("#addService").on("hidden.bs.modal", function(){
+            removeFormValues('addService');
+        });
+
+     	// open service form 
+        $("#add_service").click(function() {
+        	$('#addService').modal('show');
+        });
+
+        // save service form
+        // $("#submit_service1").click(function() {
+       
+
+		$(".button-back").click(function() {
+			var steps_div_id = $(this).closest('div[class="singup_steps"]').attr("id");
+			var step_id = steps_div_id.split("_");
+			var current_step = step_id[2];
+			var next_step = parseInt(current_step) - 1;
+
+			$("#singup_step_"+current_step).fadeOut(function () {
+			  $("#singup_step_"+next_step).fadeIn(1000);
+			});
+
+			$('.steps').find('.step_'+next_step).addClass("step-active");
+		});
+
+		$(".experience_level_div").click(function() {
+			$(".experience_level_div").removeClass('active');
+			var label_value = $(this).find('label').html();
+			$(this).addClass('active');
+			$('#selected_experience_level').val(label_value);
+		});
+
+		$("label.present_work_btn").click(function() {
+			$("#frm_ispresentcheck").attr("checked", !$("#frm_ispresentcheck").attr("checked"));
+			changeDateBasedonPresent();
+		});
+    });
+
+	function changeDateBasedonPresent()
+	{
+		if($("#frm_ispresentcheck").attr("checked")) {
+				$("#frm_ispresent").val("1");
+				$("#dp2").val("Till Date");
+				$("#dp2").attr("disabled", true);	
+			}else {
+				$("#frm_ispresent").val("0");
+				$("#dp2").val("");
+				$("#dp2").attr("disabled", false);
+			}
+	}
+
+	function validateFormEmploymentHistory()
+	{
+		var msg = '';
+		var returnVal;
+		returnVal = true;
+		if($("input:text[name='frm_organization']").val().trim() == "") {
+			msg += '<br>Enter Organization';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_position']").val().trim() == "") {
+			msg += '<br>Enter Position';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_servicestart']").val().trim() == "") {
+			msg += '<br>Enter Service start date';
+			returnVal = false;
+		}
+		if(!$("#frm_ispresentcheck").attr("checked") && $("input:text[name='frm_serviceend']").val() == "") {
+			msg += '<br>Enter Service end date';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_servicestart']").val() != "" && !$("#frm_ispresentcheck").attr("checked") && $("input:text[name='frm_serviceend']").val() != "") {
+			var selected_startDate = $("input:text[name='frm_servicestart']").val().split("-");
+			var startDate = new Date(selected_startDate[2], selected_startDate[1]-1, selected_startDate[0]);
+			var selected_endDate = $("input:text[name='frm_serviceend']").val().split("-");
+			var endDate = new Date(selected_endDate[2], selected_endDate[1]-1, selected_endDate[0]);
+			if (startDate.valueOf() > endDate.valueOf()) {
+				msg += '<br>The from-date can not be greater then the to-date';
+				returnVal = false;
+			}
+		}
+		if(!returnVal) {
+			showSystemMessages('#systemMessage_history', 'danger', msg);
+			return false;
+		}
+		return true;		
+	}
+
+	function validateFormEducation()
+	{
+		var msg = '';
+		var returnVal;
+		returnVal = true;
+		if($("input:text[name='frm_course']").val().trim() == "") {
+			msg += '<br>Enter Course';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_university']").val().trim() == "") {
+			msg += '<br>Enter University';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_passingyear']").val().trim() == "") {
+			msg += '<br>Enter Passing year';
+			returnVal = false;
+		}
+		if(!returnVal) {
+			showSystemMessages('#systemMessage_education', 'danger', msg);
+			return false;
+		}
+		return true;		
+	}
+
+	function validateFormCertificate()
+	{
+		var msg = '';
+		var returnVal;
+		returnVal = true;
+		if($("input:text[name='frm_certificatetitle']").val().trim() == "") {
+			msg += '<br>Enter Name of certification';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_certificatecompletion']").val().trim() == "") {
+			msg += '<br>Enter Completion date';
+			returnVal = false;
+		}
+		if(!returnVal) {
+			showSystemMessages('#systemMessage_certificate', 'danger', msg);
+			return false;
+		}
+		return true;		
+	}
+
+	function validateFormService()
+	{
+		var msg = '';
+		var returnVal;
+		returnVal = true;
+		if($("select[name='frm_servicesport']").val() == "") {
+			msg += '<br>Select Sport';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_servicetitle']").val().trim() == "") {
+			msg += '<br>Enter Name of service';
+			returnVal = false;
+		}
+		if($("input:text[name='frm_serviceprice']").val().trim() == "") {
+			msg += '<br>Enter Price for service';
+			returnVal = false;
+		}else {
+                    var price = $("input:text[name='frm_serviceprice']").val();
+                    var valid = /^\$?(\d{1,3}(\,\d{3})*|(\d+))(\.\d{0,2})?$/.test(price);                    
+                    if(!valid) {
+                        msg += '<br>Enter proper Price for service';
+			returnVal = false;
+                    }
+                }
+                //check valid amountc
+		if($("#frm_servicedesc").val().trim() == "") {
+			msg += '<br>Enter Description';
+			returnVal = false;
+		}
+		if($("select[name='frm_servicesport']").val() == "") {
+			msg += '<br>Select Sport';
+			returnVal = false;
+		}
+		//----------------------new validation for new fields--------------------------------
+		if($("select[name='frm_servicetype']").val() == "") {
+			msg += '<br>Choose Service Type';
+			returnVal = false;
+		}
+		if($("select[name='frm_programtype']").val() == "") {
+			msg += '<br>Choose Program Type';
+			returnVal = false;
+		}		
+		if($("select[name='frm_agerange']").val() == "") {
+			msg += '<br>Select Age Range';
+			returnVal = false;
+		}
+		if($("select[name='frm_programfor']").val() == "") {
+			msg += '<br>Select Program';
+			returnVal = false;
+		}		
+		if($("select[name='frm_numberofpeople']").val() == "") {
+			msg += '<br>Select Number of People';
+			returnVal = false;
+		}
+
+		if($("select[name='frm_experience_level']").val() == "") {
+			msg += '<br>Select Experience Level';
+			returnVal = false;
+		}
+		if($("select[name='frm_servicelocation']").val() == "") {
+			msg += '<br>Select Service Location';
+			returnVal = false;
+		}
+		if($("select[name='frm_servicefocuses']").val() == "") {
+			msg += '<br>Select Program Focuses';
+			returnVal = false;
+		}
+		if($("select[name='frm_specialdeals']").val() == "") {
+			msg += '<br>Select Special Deals';
+			returnVal = false;
+		}
+		if($("select[name='frm_servicepriceoption']").val() == "") {
+			msg += '<br>Select Service Price Options';
+			returnVal = false;
+		}
+		if($("select[name='frm_serviceduration']").val() == "") {
+			msg += '<br>Select Duration';
+			returnVal = false;
+		}
+		if($("input[name='service_image']").val() == "") {
+			msg += '<br>Select Profile pic';
+			returnVal = false;
+		}
+		if($('#frm_tcdesc').val() == "") {
+			msg += '<br>Enter Terms and Conditions';
+			returnVal = false;
+		}
+
+		//-----------------------------------------------------------------------------------
+
+                
+		if(!returnVal) {
+			showSystemMessages('#systemMessage_service', 'danger', msg);
+			return false;
+		}
+		return true;		
+	}
+
+    function editHistory(rowcount)
+    {
+    	$("#history_"+rowcount).find("input").each(function() {
+    		var form_element_name = $(this).attr('title');
+    		$("#addEmployementHistory").find("input[name='frm_"+form_element_name+"']").val($(this).val());
+    	});
+    	if($("#frm_ispresent").val() == "1") {
+    		$("#frm_ispresentcheck").attr("checked",true);
+    		$("label.present_work_btn").addClass('active');
+    		changeDateBasedonPresent();
+    	}else {
+    		$("#frm_ispresentcheck").attr("checked",false);
+    	}
+    	$("#addEmployementHistory").find("input[id='editrowcount']").val("history_"+rowcount);
+    	$('#addEmployementHistory').modal('show');
+    }
+
+    function editEducation(rowcount)
+    {
+    	$("#education_"+rowcount).find("input").each(function() {
+    		var form_element_name = $(this).attr('title');
+    		$("#addEducation").find("input[name='frm_"+form_element_name+"']").val($(this).val());
+    	});
+    	$("#addEducation").find("input[id='editrowcount_education']").val("education_"+rowcount);
+    	$('#addEducation').modal('show');
+    }
+
+    function editCertificate(rowcount)
+    {
+    	$("#certificate_"+rowcount).find("input").each(function() {
+    		var form_element_name = $(this).attr('title');
+    		$("#addCertificate").find("input[name='frm_"+form_element_name+"']").val($(this).val());
+    	});
+    	$("#addCertificate").find("input[id='editrowcount_certificate']").val("certificate_"+rowcount);
+    	$('#addCertificate').modal('show');
+    }
+
+    function editService(rowcount)
+    {
+    	// alert(rowcount);
+    	$("#service_"+rowcount).find("input").each(function() {
+    		var form_element_name = $(this).attr('title');
+    		// alert(form_element_name);
+    		if(form_element_name == "servicedesc")
+    			$("#addService").find("#frm_servicedesc").val($(this).val());
+    		
+    		else if(form_element_name == "servicetitle")
+    			$("#addService").find("#frm_servicetitle").val($(this).val());
+    		else if(form_element_name == "servicesport")
+    			$("#addService").find("#frm_servicesport").val($(this).val());
+    		else if(form_element_name == "servicetype")
+    			$("#addService").find("#frm_servicetype").val($(this).val());
+    		else if(form_element_name == "programtype")
+    			$("#addService").find("#frm_programtype").val($(this).val());
+    		else if(form_element_name == "agerange")
+    			$("#addService").find("#frm_agerange").val($(this).val());
+    		else if(form_element_name == "programfor")
+    			$("#addService").find("#frm_programfor").val($(this).val());
+    		else if(form_element_name == "numberofpeople")
+    			$("#addService").find("#frm_numberofpeople").val($(this).val());
+    		else if(form_element_name == "experience_level")
+    			$("#addService").find("#frm_experience_level").val($(this).val());
+    		else if(form_element_name == "servicelocation")
+    			$("#addService").find("#frm_servicelocation").val($(this).val());
+    		else if(form_element_name == "servicefocuses")
+    			$("#addService").find("#frm_servicefocuses").val($(this).val());
+    		else if(form_element_name == "specialdeals")
+    			$("#addService").find("#frm_specialdeals").val($(this).val());
+    		else if(form_element_name == "servicepriceoption")
+    			$("#addService").find("#frm_servicepriceoption").val($(this).val());
+    		else if(form_element_name == "serviceduration")
+    			$("#addService").find("#frm_serviceduration").val($(this).val());
+    		else if(form_element_name == "profile_pic"){
+    			
+    			$("#addService").find("#updated_profile_pic").val($(this).val());
+    			if($(this).val() != ''){
+    				var html = '<img id="service_image" src="/uploads/service_profile_pic/thumb/'+$(this).val()+'">';
+            		$('.uploadedpic').html(html);
+            		$("#addService").find("#old_profile_pic").val($(this).val());
+    			}
+    			else
+    			{
+    				$('.uploadedpic').html('<i class="fa fa-user" style="line-height: 56px;"></i>');
+    				$("#addService").find("#old_profile_pic").val('');
+    			}
+    		}
+    		else if(form_element_name == "tcdesc")
+    			$("#addService").find("#frm_tcdesc").val($(this).val());
+    		
+    		else if(form_element_name == "serviceprice")
+    			$("#addService").find("#frm_serviceprice").val($(this).val());
+    		// else
+    			// $("#addService").find("input[name='frm_"+form_element_name+"']").val($(this).val());
+    	});
+    	$("#addService").find("input[id='editrowcount_service']").val("service_"+rowcount);
+    	var editrowcount = $("#addService").find("input[name='editrowcount_service']").val();
+        var selected_id = $("#"+editrowcount).find("input[name='service_id[]']").val();
+    	$("#addService").find("input[id='editservice_id']").val(selected_id);
+    	$('#addService').modal('show');
+    }
+
+    function deleteRow(rowid)
+    {
+    	var selected_section = rowid.split("_");
+    	var selected_section_id = "";	
+    	if(selected_section[0] == "history") {
+    		selected_section_id = "employmenthistory_id";
+    	}
+    	else if(selected_section[0] == "education") {
+    		selected_section_id = "education_id";
+    	}
+    	else if(selected_section[0] == "certificate") {
+    		selected_section_id = "certificate_id";
+    	}
+    	else if(selected_section[0] == "service") {
+    		selected_section_id = "service_id";
+    	}
+    	var selected_id = $("#"+rowid).find("input[name='"+selected_section_id+"[]']").val();
+        if(selected_id > 0) {
+        	if($("#deleted_"+selected_section_id).val() == "")
+        		$("#deleted_"+selected_section_id).val(selected_id);
+        	else
+        		$("#deleted_"+selected_section_id).val($("#deleted_"+selected_section_id).val() +","+ selected_id);
+        }
+    	$("#"+rowid).remove();
+    }        
+
+    function removeFormValues(modalName)
+    {
+    	var modalElement = $('#'+modalName).find("input");
+    	modalElement.each(function() {
+    		$(this).val('');
+    	});
+    	if(modalName == "addEmployementHistory") {
+    		$("#systemMessage_history").html('');
+    		$("#frm_ispresentcheck").attr("checked",false);
+    		$("label.present_work_btn").removeClass('active');
+    		$("#dp2").val("");
+			$("#dp2").attr("disabled", false);
+    	}
+    	else if(modalName == "addEducation") {
+    		$("#systemMessage_education").html('');
+    	}    	
+    	else if(modalName == "addCertificate") {
+    		$("#systemMessage_certificate").html('');
+    	}
+    	else if(modalName == "addService") {
+    		$('#servicedata')[0].reset();
+    		// $("#frm_servicedesc").val('');
+    		// $("#frm_servicesport").val('');
+    		$('.uploadedpic').html('<i class="fa fa-user" style="line-height: 56px;"></i>');
+    		$("#systemMessage_service").html('');
+    	}
+    }
+
+    $("label.btn").click(function() {
+              // find clicked button radio option name
+              var radio_option = $(this).find('input[type=radio]');
+              if ($(radio_option).is(':radio')) {
+                var radio_option_name = $(radio_option).attr('name');
+                // make all other options to null
+                $('input[type=radio][name="'+radio_option_name+'"]').each(function() {
+                  $(this).closest('label.btn').removeClass('active');
+                });
+                // make current selection active
+                $(this).addClass('active');
+              }              
+        });    
+    
+    $(".willing_to_travel").click(function() {
+    	var willing_to_travel_radio = $(this).find('input[type=radio]');  
+    	var willing_to_travel_val = $(willing_to_travel_radio).attr('value');     
+
+    	if(willing_to_travel_val == 'yes'){
+    		$('.travel_miles_div').show();
+    	} else {
+			$('.travel_miles_div').hide();
+			// $('.selectpicker').val('1');
+    	}
+
+    });    
+    
+</script>	
+
+<script>
+		if (top.location != location) {
+		    top.location.href = document.location.href ;
+		}
+		$(function(){
+			window.prettyPrint && prettyPrint();
+			$('#dp1').datepicker({
+				format: 'dd-mm-yyyy'
+			}).on('changeDate', function(ev){
+					var selected_enddate = $('#dp2').val().split("-");
+					var endDate = new Date(selected_enddate[2], selected_enddate[1]-1, selected_enddate[0]);
+					console.log(ev.date +"--"+endDate +"--"+ ev.date.valueOf() +"--"+ endDate.valueOf());
+					if (ev.date.valueOf() > endDate.valueOf()){	console.log(ev.date.valueOf());
+						showSystemMessages('#systemMessage_history', 'danger', 'The from-date can not be greater then the to-date');
+					} else {
+						$('#systemMessage_history').html('');
+						// startDate = new Date(ev.date);
+					}
+					$('#dp1').datepicker('hide');
+			});
+			$('#dp2').datepicker({
+				format: 'dd-mm-yyyy'
+			}).on('changeDate', function(ev){
+					var selected_startDate = $('#dp1').val().split("-");
+					var startDate = new Date(selected_startDate[2], selected_startDate[1]-1, selected_startDate[0]);
+					console.log(startDate +"--"+ev.date +"--"+ startDate.valueOf() +"--"+ ev.date.valueOf());
+					if (startDate.valueOf() > ev.date.valueOf()){ console.log(ev.date.valueOf());
+						showSystemMessages('#systemMessage_history', 'danger', 'The from-date can not be greater then the to-date');
+					} else {
+						$('#systemMessage_history').html('');
+						// startDate = new Date(ev.date);
+					}
+					$('#dp2').datepicker('hide');
+			});
+			$('#passingyear').datepicker({
+				format: 'dd-mm-yyyy'
+			});
+			$('#certificatecompletion').datepicker({
+				format: 'dd-mm-yyyy'
+			});
+
+        // disabling dates
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var checkin = $('#dpd1').datepicker({
+          onRender: function(date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+          }
+        }).on('changeDate', function(ev) {
+          if (ev.date.valueOf() > checkout.date.valueOf()) {
+            var newDate = new Date(ev.date)
+            newDate.setDate(newDate.getDate() + 1);
+            checkout.setValue(newDate);
+          }
+          checkin.hide();
+          $('#dpd2')[0].focus();
+        }).data('datepicker');
+        var checkout = $('#dpd2').datepicker({
+          onRender: function(date) {
+            return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+          }
+        }).on('changeDate', function(ev) {
+          checkout.hide();
+        }).data('datepicker');
+		});
+
+
+		$('#servicedata').submit(function(e) {
+			// check validations
+        	if(!validateFormService()) {
+        		return false;
+        	}
+		      e.preventDefault();
+		      var inputData = new FormData($(this)[0]);
+		      inputData.append('_token','{{csrf_token()}}');
+		       $.ajax({
+		        url:'/service/editservicedetail',
+		        type:'POST',
+		        dataType: 'json',
+		        data:inputData,
+		        processData:false,
+		        contentType:false,
+		        // beforeSend: function () {
+		        //   $('#submit_profilepic').prop('disabled', true);
+		        // },
+		        // complete: function () {
+		        //   $('#submit_profilepic').prop('disabled', false);
+		        // },
+		        success: function (response) { 
+		              if (response.type == 'success') {
+		              	showSystemMessages('#systemMessage', response.type, response.msg);
+		              	$("#addService").find("#updated_profile_pic").val(response.image_name);
+		                $('#addService').modal('hide');
+		                saveValues();
+
+		              }else {
+		                  showSystemMessages('#systemMessage', response.type, response.msg);
+		              }
+		          }
+		      });
+		});
+		function readURL(input) {
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+
+	            reader.onload = function (e) {
+	            	var html = '<img src="'+e.target.result+'">';
+	            	$('.uploadedpic').html(html);
+	            };
+
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+	     function saveValues(){
+        	// alert("in");
+        	// console.log($('#frm_profile_pic').files);
+        	// check validations
+        	// if(!validateFormService()) {
+        	// 	return false;
+        	// }
+
+        	// check if form is open in edit mode
+        	var editrowcount = $("#addService").find("input[name='editrowcount_service']").val();
+        	if(editrowcount != "") {
+        		var selected_id = $("#"+editrowcount).find("input[name='service_id[]']").val();
+        		if(selected_id > 0) {
+        			if($("#edited_service_id").val() == "")
+        				$("#edited_service_id").val(selected_id);
+        			else
+        				$("#edited_service_id").val($("#edited_service_id").val() +","+ selected_id);
+        		}
+        		$("#addService").find("input").each(function() {
+		    		var form_element_name = $(this).attr('name').split("_");
+		    		form_element_name = form_element_name[1];
+		    		$("#"+editrowcount).find("input[title='"+form_element_name+"']").val($(this).val());
+		    	});
+		    	
+		    	$("#"+editrowcount).find("input[title='servicesport']").val($("#frm_servicesport").val());
+		    	$("#"+editrowcount).find("input[title='servicedesc']").val($("#frm_servicedesc").val());
+		    	$("#"+editrowcount).find("input[title='servicetype']").val($("#frm_servicetype").val());
+		    	$("#"+editrowcount).find("input[title='programtype']").val($("#frm_programtype").val());
+		    	$("#"+editrowcount).find("input[title='agerange']").val($("#frm_agerange").val());
+		    	$("#"+editrowcount).find("input[title='programfor']").val($("#frm_programfor").val());
+		    	$("#"+editrowcount).find("input[title='experience_level']").val($("#frm_experience_level").val());
+		    	$("#"+editrowcount).find("input[title='numberofpeople']").val($("#frm_numberofpeople").val());
+		    	$("#"+editrowcount).find("input[title='servicelocation']").val($("#frm_servicelocation").val());
+		    	$("#"+editrowcount).find("input[title='servicefocuses']").val($("#frm_servicefocuses").val());
+		    	$("#"+editrowcount).find("input[title='specialdeals']").val($("#frm_specialdeals").val());
+		    	$("#"+editrowcount).find("input[title='servicepriceoption']").val($("#frm_servicepriceoption").val());
+		    	$("#"+editrowcount).find("input[title='serviceduration']").val($("#frm_serviceduration").val());
+            	var image = $("#addService").find("#updated_profile_pic").val();
+            	console.log(image);
+		    	$("#"+editrowcount).find("input[title='profile_pic']").val(image)
+		    	$("#"+editrowcount).find("input[title='tcdesc']").val($("#frm_tcdesc").val());
+
+		    	$("#"+editrowcount).find(".display_servicesport").html($("#frm_servicesport option:selected").text());
+
+		    	$("#"+editrowcount).find(".display_servicetitle").html('<strong>' + $("#frm_servicetitle").val() + ' (' +$("#frm_serviceprice").val() + ')' + '</strong>');
+		    	$("#"+editrowcount).find(".display_servicedesc").html($("#frm_servicedesc").val().substr(0,50)+"...");
+        	}
+        	else {
+        		var last_row_count = $("#total_service").val();
+        		service_count = parseInt(last_row_count) + 1;
+        		var image = $("#addService").find("#updated_profile_pic").val();
+            				console.log(image);
+            				
+        		$("#total_service").val(service_count);
+		        var newrow = '<div id="service_'+service_count+'">'
+		        			+ '<input type="hidden" name="service_id[]" value="0">'
+		        			+ '<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">'
+				            + '	<div class="services-list">'
+				            + '	<a href="javascript:editService('+service_count+')" class="decoration-none">'
+				            + '		<span class="srv-list-icon">'
+				            + '			<i class="fa fa-briefcase"></i>'
+				            + '		</span>'
+				            + '		</a>'
+				            + '		<div class="clearfix"></div>'
+				            + '		<h3>'
+				            + '		<input type="hidden" name="servicesport[]" value="'+$("#frm_servicesport").val()+'" title="servicesport">'
+				            + ' 	<span class="display_servicesport">'
+				            + 		$("#frm_servicesport option:selected").text()
+				            + '		</span>' 
+				            
+				            + '	<a href="javascript:deleteRow(\'service_'+service_count+'\')" title="Delete this detail" class="delete_icon"><i class="fa fa-trash" ></i></a>'
+				            + '	<a href="javascript:editService('+service_count+')" title="Edit this Service" class="delete_icon" style="padding-right: 7px;"><i class="fa fa-pencil"></i>'
+				            + '	</a>'
+				            + '	</h3>'
+				            + '		<div class="clearfix"></div>'
+				            + '		<input type="hidden" name="servicetitle[]" value="'+$("#frm_servicetitle").val()+'" title="servicetitle">'
+				            + '	<input type="hidden" name="servicetype[]" value="'+$("#frm_servicetype").val()+'" title="servicetype">'
+				            + '	<input type="hidden" name="programtype[]" value="'+$("#frm_programtype").val()+'" title="programtype">'
+				            + '	<input type="hidden" name="agerange[]" value="'+$("#frm_agerange").val()+'" title="agerange">'
+				            + ' <input type="hidden" name="programfor[]" value="'+$("#frm_programfor").val()+'" title="programfor">'
+				            + '	<input type="hidden" name="numberofpeople[]" value="'+$("#frm_numberofpeople").val()+'" title="numberofpeople">'
+				            + '	<input type="hidden" name="experience_level[]" value="'+$("#frm_experience_level").val()+'" title="experience_level">'
+				            + '	<input type="hidden" name="servicelocation[]" value="'+$("#frm_servicelocation").val()+'" title="servicelocation">'
+				            + '	<input type="hidden" name="servicefocuses[]" value="'+$("#frm_servicefocuses").val()+'" title="servicefocuses">'
+				            + '	<input type="hidden" name="specialdeals[]" value="'+$("#frm_specialdeals").val()+'" title="specialdeals">'
+				            + '	<input type="hidden" name="servicepriceoption[]" value="'+$("#frm_servicepriceoption").val()+'" title="servicepriceoption">'
+				            + ' <input type="hidden" name="serviceduration[]" value="'+$("#frm_serviceduration").val()+'" title="serviceduration">'
+				            
+				            + '	<input type="hidden" name="profile_pic[]" value="'+image+'" title="profile_pic">'
+				            + '	<input type="hidden" name="tcdesc[]" value="'+$("#frm_tcdesc").val()+'" title="tcdesc">'
+
+				            + '		<p class="display_servicetitle">'+'<strong>'+ $("#frm_servicetitle").val() + ' ('+ $("#frm_serviceprice").val() +')' + '</p>' + '</strong>'
+				            + '		<div class="clearfix"></div>'
+				            + '		<input type="hidden" name="serviceprice[]" value="'+$("#frm_serviceprice").val()+'" title="serviceprice">'
+				            + '		<div class="clearfix"></div>'
+				            + '		<input type="hidden" name="servicedesc[]" value="'+$("#frm_servicedesc").val()+'" title="servicedesc">'
+				            + '		<p class="display_servicedesc">'+ $("#frm_servicedesc").val().substr(0,50) +'...</p>'
+				            + '	</div>'
+				            + '</div>';
+
+		        $("#service_div:last-child").append(newrow);
+		    }
+
+        	// remove form field values
+        	removeFormValues('addService');
+        	$('#addService').modal('hide');
+        // });
+    	}
+	</script>
+
+@endsection
