@@ -11,7 +11,7 @@
 /.idea
 /.vagrant
 /nbproject
-/storage/clockwork/
+/storage
 Homestead.json
 Homestead.yaml
 npm-debug.log
