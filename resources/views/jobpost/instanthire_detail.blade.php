@@ -21,9 +21,11 @@
     //$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
     $companyactid = 0;
     $current_act = BusinessServices::where('id', $serviceid)->orderBy('id','desc')->first();
-    if($current_act != '' || count($current_act) >0){
+    if($current_act != ''){
         $companyactid = $current_act['cid'];
     }
+
+    
 
 ?>
 
@@ -111,7 +113,7 @@
 
                     <hr />
 
-                    <div class="service-review">
+                    <div class="service-review<?php echo $serviceid; ?>">
 
                         <div class="row">
 
@@ -1328,6 +1330,7 @@
                                     <input type="hidden" name="price_title_hidden" id="price_title_hidden{{$service['id']}}{{$service['id']}}" value="{{@$servicePrfirst['price_title']}}">
 
                                     <?php } ?>
+                                    <input type="hidden" name="time_hidden" id="time_hidden{{$service['id']}}{{$service['id']}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
 
                                     <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$service['id']}}{{$service['id']}}" value="{{$Totalspot}}">
 
@@ -1861,7 +1864,9 @@
 
                                         <input type="hidden" name="price_title_hidden" id="price_title_hidden{{$service['id']}}{{$act['id']}}" value="{{@$servicePrfirst['price_title']}}">
 
-                                        <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$service['id']}}{{$act['id']}}" value="{{$Totalspot}}">
+                                        <input type="hidden" name="time_hidden" id="time_hidden{{$service['id']}}{{$act['id']}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
+
+                                        <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$service['id']}}{{$act['id']}}"  value="{{$Totalspot}}" >
 
                                         <form method="post" action="/addtocart" id="frmcart<?php echo @$act["id"]; ?>">
 

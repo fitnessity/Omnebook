@@ -47,6 +47,7 @@ if(isset($cart["cart_item"])){
         <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
         <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
         <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.1.11.1.min.js"></script>
+		<script src="/public/js/ratings.js"></script>
         <style>/*
             .btn-style-one {
                 position: relative;
