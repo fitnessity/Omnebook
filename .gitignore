@@ -4,7 +4,6 @@
 /public/storage
 /public/log
 /public/uploads
-/public/AdminLTE
 /braintree
 /storage/*.key
 /vendor
