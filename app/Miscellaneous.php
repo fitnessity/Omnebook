@@ -880,7 +880,7 @@ class Miscellaneous extends Model {
             "My Office" => "My Office",
             "Outside" => "Outside",
             "Recommended by Provider" => "Recommended by Provider",*/
-			"At Business Address" => "At Business Address",
+			"At Business" => "At Business",
 			"On Location" => "On Location",
             /*"Any" => "Any",*/
         );

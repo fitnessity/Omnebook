@@ -73,7 +73,7 @@
     <div class="row">
     	<div class="col-sm-12 col-md-12 col-lg-12">
 			<div class="wid-sp">
-				<b> Username: </b> @if(isset($userData['username'])) {{ "@".$userData['username']}} @else - @endif
+				<b> Username: </b> @if(isset($userData['username'])) {{ "@".$userData['username']}} @else No Username @endif
 			</div>
 		</div>
 	</div>

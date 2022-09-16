@@ -269,7 +269,7 @@ class LessonController extends Controller {
     }
 
     /* sam filter start */
-    public function samfilter(Request $r) { 
+   /* public function samfilter(Request $r) { 
         $output = '';
         $page = $r->page ? $r->page : 1;
         $offset = ($page * 9) - 9; 
@@ -306,7 +306,7 @@ class LessonController extends Controller {
         );
         $sport_names = $this->sports->getAllSportsNames();
         return view('jobpost.search', compact('serviceData', 'sport_names','filmember'));
-    }
+    }*/
 
     public function filter($request, $filter) {
         $companys = [];
@@ -720,13 +720,13 @@ class LessonController extends Controller {
             }
         }
 
-//   $resultnew =  new LengthAwarePaginator(
-//              array_slice($result, $offset, $perPage, true),  
-//              count($result), 
-//              $perPage, 
-//              $page, 
-//              ['path' => $request->url(), 'query' => $request->query()]  
-//          );
+        //   $resultnew =  new LengthAwarePaginator(
+        //              array_slice($result, $offset, $perPage, true),  
+        //              count($result), 
+        //              $perPage, 
+        //              $page, 
+        //              ['path' => $request->url(), 'query' => $request->query()]  
+        //          );
         /*$searchDatas->get();
         dd(\DB::getQueryLog());*/
         //print_r($companys); exit;
@@ -1070,221 +1070,224 @@ class LessonController extends Controller {
     
     
     public function getInstanthire(Request $request) {
-          if(isset($_GET['action']) && !empty($_GET["action"])) 
-      {
-        $request->session()->put('selected_location_lng', $request->selected_location_lng);
-          switch($_GET["action"]) 
-          {
-            case "add":
-              if(!empty($_POST["quantity"])) {
-                $pid = $_GET["pid"];
-                $price = isset($_POST["price"]) ? $_POST["price"] : 0;
-                $result = DB::select('select * from business_services where id = "'.$pid.'"');
-                if (count($result) > 0) {
-                  foreach ($result as $item) {
-                      $itemArray = array($item->serviceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->serviceid, 'quantity'=>$_POST["quantity"], 'price'=>$price, 'image'=>$item->profile_pic));
-                      if(!empty($_SESSION["cart_item"])) {
-                          if(in_array($item->serviceid, array_keys($_SESSION["cart_item"]))) {
-                              foreach($_SESSION["cart_item"] as $k => $v) {
-                                  if($item->serviceid == $k) {
-                                      if(empty($_SESSION["cart_item"][$k]["quantity"])) {
-                                          $_SESSION["cart_item"][$k]["quantity"] = 0;
-                                      }
-                                      $_SESSION["cart_item"][$k]["quantity"] += $_POST["quantity"];
-                                  }
-                              }
-                          } else {
-                              $_SESSION["cart_item"] = array_merge($_SESSION["cart_item"], $itemArray);
-                          }
-                      }  else {
-                          $_SESSION["cart_item"] = $itemArray;
-                      }
-                  }
-                }
-              }
-            break;
-            // code for removing product from cart
-            case "remove":
-              if(!empty($_SESSION["cart_item"])) {
-                  foreach($_SESSION["cart_item"] as $k => $v) {
-                      if($_GET["code"] == $k)
-                      unset($_SESSION["cart_item"][$k]);                
-                      if(empty($_SESSION["cart_item"]))
-                      unset($_SESSION["cart_item"]);
-                  }
-              }
-            break;
-            // code for if cart is empty
-            case "empty":
+      /* print_r($request->all());exit;*/
+        if(isset($_GET['action']) && !empty($_GET["action"])) 
+        {
+            $request->session()->put('selected_location_lng', $request->selected_location_lng);
+            switch($_GET["action"]) 
+            {
+                case "add":
+                    if(!empty($_POST["quantity"])) {
+                        $pid = $_GET["pid"];
+                        $price = isset($_POST["price"]) ? $_POST["price"] : 0;
+                        $result = DB::select('select * from business_services where id = "'.$pid.'"');
+                        if (count($result) > 0) {
+                            foreach ($result as $item) {
+                                $itemArray = array($item->serviceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->serviceid, 'quantity'=>$_POST["quantity"], 'price'=>$price, 'image'=>$item->profile_pic));
+                                if(!empty($_SESSION["cart_item"])) {
+                                    if(in_array($item->serviceid, array_keys($_SESSION["cart_item"]))) {
+                                        foreach($_SESSION["cart_item"] as $k => $v) {
+                                            if($item->serviceid == $k) {
+                                                if(empty($_SESSION["cart_item"][$k]["quantity"])) {
+                                                    $_SESSION["cart_item"][$k]["quantity"] = 0;
+                                                }
+                                                $_SESSION["cart_item"][$k]["quantity"] += $_POST["quantity"];
+                                            }
+                                        }
+                                    }else {
+                                        $_SESSION["cart_item"] = array_merge($_SESSION["cart_item"], $itemArray);
+                                    }
+                                }else {
+                                    $_SESSION["cart_item"] = $itemArray;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                    // code for removing product from cart
+                case "remove":
+                    if(!empty($_SESSION["cart_item"])) {
+                        foreach($_SESSION["cart_item"] as $k => $v) {
+                            if($_GET["code"] == $k)
+                            unset($_SESSION["cart_item"][$k]);                
+                            if(empty($_SESSION["cart_item"]))
+                            unset($_SESSION["cart_item"]);
+                        }
+                    }
+                    break;
+                    // code for if cart is empty
+                case "empty":
                     unset($_SESSION["cart_item"]);
-            break;  
-          }
-      }
-      if (isset($request->selected_sport)) {
-          $request->session()->put('selected_sport', $request->selected_sport);
-      } else {
-          $request->session()->forget('selected_sport');
-      }
+                break;  
+            }
+        }
+        if (isset($request->selected_sport)) {
+            $request->session()->put('selected_sport', $request->selected_sport);
+        } else {
+            $request->session()->forget('selected_sport');
+        }
         
-      if (isset($request->level_of_experience)) {
+        if (isset($request->level_of_experience)) {
           $request->session()->put('level_of_experience', $request->level_of_experience);
-      } else {
-          $request->session()->forget('level_of_experience');
-      }
+        } else {
+            $request->session()->forget('level_of_experience');
+        }
 
-      if (isset($request->who_is_training)) {
-          $request->session()->put('who_is_training', $request->who_is_training);
-      } else {
-          $request->session()->forget('who_is_training');
-      }
+        if (isset($request->who_is_training)) {
+            $request->session()->put('who_is_training', $request->who_is_training);
+        } else {
+            $request->session()->forget('who_is_training');
+        }
 
-      if (isset($request->gender)) {
-          $request->session()->put('gender', $request->gender);
-      } else {
-          $request->session()->forget('gender');
-      }
+        if (isset($request->gender)) {
+            $request->session()->put('gender', $request->gender);
+        } else {
+            $request->session()->forget('gender');
+        }
 
-      if (isset($request->personality)) {
-          $request->session()->put('personality', $request->personality);
-      } else {
-          $request->session()->forget('personality');
-      }
+        if (isset($request->personality)) {
+            $request->session()->put('personality', $request->personality);
+        } else {
+            $request->session()->forget('personality');
+        }
 
-      if (isset($request->availability_days)) {
-          $request->session()->put('availability_days', $request->availability_days);
-      } else {
-          $request->session()->forget('availability_days');
-      }
+        if (isset($request->availability_days)) {
+            $request->session()->put('availability_days', $request->availability_days);
+        } else {
+            $request->session()->forget('availability_days');
+        }
         
-          $myloc = $request->location;
-      $language = $request->language;
-      $select_language = $request->language;
-      $select_label = $request->label;
-      $select_zipcode = $request->zipcode;
+        $myloc = $request->location;
+        $language = $request->language;
+        $select_language = $request->language;
+        $select_label = $request->label;
+        $select_zipcode = $request->zipcode;
 
-      if (isset($request->selected_location)) {
-          $request->session()->put('selected_location', $request->selected_location);
-          if ($request->selected_location == '') {
-              //If selected_location is not set -> unset miles_radius_filter  
-              $request->session()->forget('miles_radius_filter');
-          } else {
-              //If selected_location and miles_radius_filter both are set  
-              if (isset($request->miles_radius_filter)) {
-                  $request->session()->put('miles_radius_filter', $request->miles_radius_filter);
-              } else {
-                  $request->session()->forget('miles_radius_filter');
-              }
-          }
-      } else {
-          $request->session()->forget('selected_location');
-          //If selected_location is not set -> unset miles_radius_filter  
-          $request->session()->forget('miles_radius_filter');
-      }
+        if (isset($request->selected_location)) {
+            $request->session()->put('selected_location', $request->selected_location);
+            if ($request->selected_location == '') {
+                //If selected_location is not set -> unset miles_radius_filter  
+                $request->session()->forget('miles_radius_filter');
+            } else {
+                //If selected_location and miles_radius_filter both are set  
+                if (isset($request->miles_radius_filter)) {
+                    $request->session()->put('miles_radius_filter', $request->miles_radius_filter);
+                } else {
+                    $request->session()->forget('miles_radius_filter');
+                }
+            }
+        } else {
+            $request->session()->forget('selected_location');
+            //If selected_location is not set -> unset miles_radius_filter  
+            $request->session()->forget('miles_radius_filter');
+        }
 
-      if (isset($request->selected_location_lat)) {
-          $request->session()->put('selected_location_lat', $request->selected_location_lat);
-      } else {
-          $request->session()->forget('selected_location_lat');
-      }
+        if (isset($request->selected_location_lat)) {
+            $request->session()->put('selected_location_lat', $request->selected_location_lat);
+        } else {
+            $request->session()->forget('selected_location_lat');
+        }
 
-      if (isset($request->selected_location_lng)) {
-          $request->session()->put('selected_location_lng', $request->selected_location_lng);
-      } else {
-          $request->session()->forget('selected_location_lng');
-      }
+        if (isset($request->selected_location_lng)) {
+            $request->session()->put('selected_location_lng', $request->selected_location_lng);
+        } else {
+            $request->session()->forget('selected_location_lng');
+        }
 
-      if (isset($request->professional_type)) {
-          $request->session()->put('professional_type', $request->professional_type);
-      } else {
-          $request->session()->forget('professional_type');
-      }
+        if (isset($request->professional_type)) {
+            $request->session()->put('professional_type', $request->professional_type);
+        } else {
+            $request->session()->forget('professional_type');
+        }
 
-      if (isset($request->filter_review_star)) {
-          $request->session()->put('filter_review_star', $request->filter_review_star);
-      } else {
-          $request->session()->forget('filter_review_star');
-      }
+        if (isset($request->filter_review_star)) {
+            $request->session()->put('filter_review_star', $request->filter_review_star);
+        } else {
+            $request->session()->forget('filter_review_star');
+        }
 
-      $selectedSpot = $request->session()->get('selected_sport') ? $request->session()->get('selected_sport') : null;
-      $levelOfExp = $request->session()->get('level_of_experience') ? $request->session()->get('level_of_experience') : null;
-      $whoIsTraining = $request->session()->get('who_is_training') ? $request->session()->get('who_is_training') : null;
-      $gender = $request->session()->get('gender') ? $request->session()->get('gender') : null;
-      $personality = $request->session()->get('personality') ? $request->session()->get('personality') : null;
-      $availability_days = $request->session()->get('availability_days') ? $request->session()->get('availability_days') : null;
-      $selected_location = $request->session()->get('selected_location') ? $request->session()->get('selected_location') : null;
-      $selected_location_lat = $request->session()->get('selected_location_lat') ? $request->session()->get('selected_location_lat') : null;
-      $selected_location_lng = $request->session()->get('selected_location_lng') ? $request->session()->get('selected_location_lng') : null;
-      $miles_radius_filter = $request->session()->get('miles_radius_filter') ? $request->session()->get('miles_radius_filter') : 0;
-      $professional_type = $request->session()->get('professional_type') ? $request->session()->get('professional_type') : '1';
-      $filter_review_star = $request->session()->get('filter_review_star') ? $request->session()->get('filter_review_star') : null;
+        $selectedSpot = $request->session()->get('selected_sport') ? $request->session()->get('selected_sport') : null;
+        $levelOfExp = $request->session()->get('level_of_experience') ? $request->session()->get('level_of_experience') : null;
+        $whoIsTraining = $request->session()->get('who_is_training') ? $request->session()->get('who_is_training') : null;
+        $gender = $request->session()->get('gender') ? $request->session()->get('gender') : null;
+        $personality = $request->session()->get('personality') ? $request->session()->get('personality') : null;
+        $availability_days = $request->session()->get('availability_days') ? $request->session()->get('availability_days') : null;
+        $selected_location = $request->session()->get('selected_location') ? $request->session()->get('selected_location') : null;
+        $selected_location_lat = $request->session()->get('selected_location_lat') ? $request->session()->get('selected_location_lat') : null;
+        $selected_location_lng = $request->session()->get('selected_location_lng') ? $request->session()->get('selected_location_lng') : null;
+        $miles_radius_filter = $request->session()->get('miles_radius_filter') ? $request->session()->get('miles_radius_filter') : 0;
+        $professional_type = $request->session()->get('professional_type') ? $request->session()->get('professional_type') : '1';
+        $filter_review_star = $request->session()->get('filter_review_star') ? $request->session()->get('filter_review_star') : null;
 
-      $sports = $this->sports->getAlphabetsWiseSportsNames();
-      $sport_names = $this->sports->getAllSportsNames();
-      $businessType = Miscellaneous::businessType();
-      $programType = Miscellaneous::programType();
-      $programFor = Miscellaneous::programFor();
-      $numberOfPeople = Miscellaneous::numberOfPeople();
-      $ageRange = Miscellaneous::ageRange();
-      $expLevel = Miscellaneous::expLevel();
-      $serviceLocation = Miscellaneous::serviceLocation();
-      $pFocuses = Miscellaneous::pFocuses();
-      $duration = Miscellaneous::duration();
-      $servicePriceOption = Miscellaneous::servicePriceOption();
-      $specialDeals = Miscellaneous::specialDeals();
-      $activity = Miscellaneous::activity();
-      $teaching = Miscellaneous::teaching();
-      $languages = Miscellaneous::getLanguages();
-      $timeSlots = Miscellaneous::getTimeSlot();
-      $sports_select = '';
-      if ($sports) {
-          $sports_select .= "<option value=''>Choose Activity</option>";
-          foreach ($sports as $key => $value) {
-              foreach ($value as $key1 => $value1) {
-                  if (count($value1->child)) {
-                      $sports_select .= "<optgroup label='" . $value1->title . "'>";
-                      foreach ($value1->child as $key2 => $value2) {
-                          $selected = null; // ($service==$key2)?"selected":"";
-                          $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
-                      }
-                      $sports_select .= "</optgroup>";
-                  } else {
-                      $selected = null; //($service==$value1->value)?"selected":"";
-                      $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
-                  }
-              }
-          }
-      }
-          $myloc = $request->location;
-      //$language = $request->language;
-      //$select_language = $request->language;
-      $select_label = $request->label;
-      $select_zipcode = $request->zipcode;
-          $site_search = $request->site_search;
-      $companyData = $servicePrice = $businessSpec = [];
-      //DB::enableQueryLog();
-          /* 
-          Comment by purvi
-          $searchData = BusinessServices::where('instant_booking', 1)->where('is_active', 1);*/
+        $sports = $this->sports->getAlphabetsWiseSportsNames();
+        $sport_names = $this->sports->getAllSportsNames();
+        $businessType = Miscellaneous::businessType();
+        $programType = Miscellaneous::programType();
+        $programFor = Miscellaneous::programFor();
+        $numberOfPeople = Miscellaneous::numberOfPeople();
+        $ageRange = Miscellaneous::ageRange();
+        $expLevel = Miscellaneous::expLevel();
+        $serviceLocation = Miscellaneous::serviceLocation();
+        $pFocuses = Miscellaneous::pFocuses();
+        $duration = Miscellaneous::duration();
+        $servicePriceOption = Miscellaneous::servicePriceOption();
+        $specialDeals = Miscellaneous::specialDeals();
+        $activity = Miscellaneous::activity();
+        $teaching = Miscellaneous::teaching();
+        $languages = Miscellaneous::getLanguages();
+        $timeSlots = Miscellaneous::getTimeSlot();
+        $sports_select = '';
+        if ($sports) {
+            $sports_select .= "<option value=''>Choose Activity</option>";
+            foreach ($sports as $key => $value) {
+                foreach ($value as $key1 => $value1) {
+                    if (count($value1->child)) {
+                        $sports_select .= "<optgroup label='" . $value1->title . "'>";
+                        foreach ($value1->child as $key2 => $value2) {
+                            $selected = null; // ($service==$key2)?"selected":"";
+                            $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
+                        }
+                        $sports_select .= "</optgroup>";
+                    }else {
+                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
+                    }
+                }
+            }
+        }
+        $myloc = $request->location;
+        //$language = $request->language;
+        //$select_language = $request->language;
+        $select_label = $request->label;
+        $select_zipcode = $request->zipcode;
+        $site_search = $request->site_search;
+        $companyData = $servicePrice = $businessSpec = [];
+        /*if(!empty($request->all())){
+            DB::enableQueryLog();
+        }*/
+        /*  Comment by purvi
+        $searchData = BusinessServices::where('instant_booking', 1)->where('is_active', 1);*/
         
-          $searchData = BusinessServices::where('is_active', 1);
+        $searchData = BusinessServices::where('business_services.is_active', 1);
 
-          //print_r( $searchData);die;
-      $searchDataProfile=array();
-          if ($myloc != null && $myloc != 'undefined') {
-              //$searchData->where('exp_city', 'LIKE', '%'. $myloc . '%')->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
-              $searchData->where(function ($query) use ($myloc) {
-                  $query->where('exp_city', 'LIKE', '%'. $myloc . '%')        
-                    ->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
-              });
-          }
-        
-          if ($select_label != null && $select_label != 'undefined') {//echo "$select_label";die;
+        //print_r( $searchData);die;
+        $searchDataProfile=array();
+        if ($myloc != null && $myloc != 'undefined') {
+            //$searchData->where('exp_city', 'LIKE', '%'. $myloc . '%')->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
+            $searchData->where(function ($query) use ($myloc) {
+                $query->where('exp_city', 'LIKE', '%'. $myloc . '%')        
+                ->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
+            });
+        }
+    
+        if ($select_label != null && $select_label != 'undefined') {
+           /* echo "$select_label";die;*/
             //$searchData->where('sport_activity', 'LIKE', $select_label . '%');
             $searchData->where(function ($query) use ($select_label) {
-                $query->where('sport_activity', 'LIKE', $select_label . '%')        
-                    ->orWhere('program_name', 'LIKE', $select_label . '%');
+                $query->where('sport_activity', 'LIKE', '%'. $select_label . '%');       
+                   /* ->orWhere('program_name', 'LIKE',  '%'.$select_label . '%')*/;
             });
-        $searchDataProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->get();
+           /* $searchDataProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->get();*/
         }
 
         if ($select_zipcode != null && $select_zipcode != 'undefined') {
@@ -1293,125 +1296,301 @@ class LessonController extends Controller {
         if ($site_search != null && $site_search != 'undefined') {
             $searchData->where('sport_activity', 'LIKE', '%'.$site_search . '%');
         }
-        
-          $serviceData = $searchData->get();
-          //dd(DB::getQueryLog());
-        
-          //echo "<pre>";print_r($serviceData);die;
-          /*if ($myloc != null && $myloc != 'undefined') {
-          if ($select_zipcode != null && $select_zipcode != 'undefined') {
-              $company = CompanyInformation::where('sport_activity', 'LIKE', $select_label . '%')->where('program_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
-          } else {
-              $company = CompanyInformation::where('city', 'LIKE', $myloc . '%')->get();
-          }
-      } else {
-        $company = CompanyInformation::where('sport_activity', 'LIKE', $select_label . '%')->orWhere('program_name', 'LIKE', $select_label . '%')->where->get();
-      }*/
-      if (isset($serviceData)) {
-        foreach ($serviceData as $service) {
-          $company = CompanyInformation::where('id', $service['cid'])->get();
-          $company = isset($company[0]) ? $company[0] : [];
-          if(!empty($company)) {
-            $companyData[$company['id']][] = $company;
-          }
-          //$price = BusinessPriceDetails::where('cid', $service['cid'])->get();
-            $price = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-          $price = isset($price[0]) ? $price[0] : [];
-          if(!empty($company)) {
-            $servicePrice[$company['id']][] = $price;
-          }
-          $business_spec = BusinessService::where('cid', $service['cid'])->get();
-          $business_spec = isset($business_spec[0]) ? $business_spec[0] : [];
-          if(!empty($company)) {
-            $businessSpec[$company['id']][] = $business_spec;
-          }
+
+        if($request->program_type  != null) {
+            $search = $request->program_type;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $data = ucwords($data);
+                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
         }
-      }
+
+        if($request->activity_Member  != null) {
+            $search = $request->activity_Member;
+            if(!empty($search) ||$search[0]!= ''){
+                $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $data = ucwords($data);
+                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+
+        if($request->activity_for  != null) {
+            $search = $request->activity_for;
+            if(!empty($search) ||$search[0]!= ''){
+                $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $data = ucwords($data);
+                        $q->orwhereRaw('FIND_IN_SET("'.$data.'",activity_for)');
+                    }
+                });
+            }
+        }
+
+        if($request->activity_location != null  ){
+            $search = $request->activity_location;
+            if(!empty($search) ||$search[0]!= ''){
+                $searchData->where(function($q) use ($search) {
+                    if(!in_array("any", $search)){
+                        foreach ($search as $data) {
+                            /*if(strpos($data,'_')!= ''){
+                                $data = ucwords(str_replace('_',' ', $data));
+                            }
+                            else{*/
+                                $data = ucwords($data);
+                           /* }*/
+                            $q->orwhereRaw('FIND_IN_SET("'.$data.'",activity_location)');
+                        }
+                    }
+                });
+            }
+        }
+
+        if($request->frm_cnumberofpeople  != null) {
+            $search = $request->frm_cnumberofpeople;
+            if(!empty($search[0]) ||$search[0]!= ''){
+                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->orWhere('business_activity_scheduler.spots_available', '>=', $request->frm_cnumberofpeople)->distinct()->groupBy('business_services.id');
+            }
+        }
+
+        if($request->age_range != null ) {
+            $search = $request->age_range;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    if(!in_array("any", $search)){
+                        foreach ($search as $data) {
+                            if(strpos($data,'_')!= ''){
+                                $data = ucwords(str_replace('_',' ', $data));
+                            }
+                            else{
+                                $data = ucwords($data);
+                            }
+                            $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+                        }
+                    }
+                });
+            }
+        }
+
+        if ($request->duration != null ) {
+            $search = $request->duration;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $q->orWhere('mon_duration', 'LIKE', '%'. $data . '%')->orWhere('tue_duration', 'LIKE', '%'. $data . '%')->orWhere('wed_duration', 'LIKE', '%'. $data . '%')->orWhere('thu_duration', 'LIKE', '%'. $data . '%')->orWhere('fri_duration', 'LIKE', '%'. $data . '%')->orWhere('sat_duration', 'LIKE', '%'. $data . '%')->orWhere('sun_duration', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+
+        if($request->service_type != null ) {
+            $search = $request->service_type;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+
+        if ($request->difficulty_level != null ) {
+            $search = $request->difficulty_level;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    if(!in_array("any", $search)){
+                        foreach ($search as $data) {
+                            $data = ucwords($data);
+                            $q->orWhere('difficult_level', 'LIKE', '%'. $data . '%');
+                        }
+                    }
+                });
+            }
+        }
+
+        if ($request->activity_exp != null) {
+            $search = $request->activity_exp;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        if(strpos($data,'_')!= ''){
+                            $data = ucwords(str_replace('_',' ', $data));
+                        }
+                        else{
+                            $data = ucwords($data);
+                        }
+                        $q->orWhere('activity_experience', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+        
+        //Personality Habit
+        if ($request->personality_habit != null ) {
+            $search = $request->personality_habit;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        if(strpos($data, '_')!= ''){
+                            $data = ucwords(str_replace('_',' ', $data));
+                        }
+                        else{
+                            $data = ucwords($data);
+                        }
+                        $q->orWhere('instructor_habit', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+
+        if($request->service_type_two != null ) {
+            $search = $request->service_type_two;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    foreach ($search as $data) {
+                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+                    }
+                });
+            }
+        }
+
+        if ($request->activity_type != null ) {
+            $search = $request->activity_type;
+            if(!empty($search)){
+                $searchData->where(function($q) use ($search) {
+                    if(!in_array("any", $search)){
+                        foreach ($search as $data) {
+                            $data = ucwords($data);
+                            $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+                        }
+                    }
+                });
+            }
+        }
+         
+        $serviceData = $searchData->get();
+        /*if(!empty($request->all())){
+            dd(DB::getQueryLog());
+        }*/
+        //echo "<pre>";print_r($serviceData);die;
+        /*if ($myloc != null && $myloc != 'undefined') {
+            if ($select_zipcode != null && $select_zipcode != 'undefined') {
+              $company = CompanyInformation::where('sport_activity', 'LIKE', $select_label . '%')->where('program_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
+            }else {
+              $company = CompanyInformation::where('city', 'LIKE', $myloc . '%')->get();
+            }
+        } else {
+            $company = CompanyInformation::where('sport_activity', 'LIKE', $select_label . '%')->orWhere('program_name', 'LIKE', $select_label . '%')->where->get();
+        }*/
+        if (isset($serviceData)) {
+            foreach ($serviceData as $service) {
+                $company = CompanyInformation::where('id', $service['cid'])->get();
+                $company = isset($company[0]) ? $company[0] : [];
+                if(!empty($company)) {
+                    $companyData[$company['id']][] = $company;
+                }
+                //$price = BusinessPriceDetails::where('cid', $service['cid'])->get();
+                $price = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+                $price = isset($price[0]) ? $price[0] : [];
+                if(!empty($company)) {
+                    $servicePrice[$company['id']][] = $price;
+                }
+                $business_spec = BusinessService::where('cid', $service['cid'])->get();
+                $business_spec = isset($business_spec[0]) ? $business_spec[0] : [];
+                if(!empty($company)) {
+                    $businessSpec[$company['id']][] = $business_spec;
+                }
+            }
+        }
         
         /*$aid = $request->aid;
         $data='';
         $reviews_count = BusinessServiceReview::where('service_id', $aid)->count();
-          $reviews_sum = BusinessServiceReview::where('service_id', $aid)->sum('rating');
-          $reviews_avg=0;
+        $reviews_sum = BusinessServiceReview::where('service_id', $aid)->sum('rating');
+        $reviews_avg=0;
         if($reviews_count>0)
         { $reviews_avg= round($reviews_sum/$reviews_count,2); }
         $reviews = BusinessServiceReview::where('service_id', $aid)->get();
         $reviews_people = BusinessServiceReview::where('service_id',$aid)->orderBy('id','desc')->limit(6)->get(); */
         
-          $locations = [];
-      foreach($companyData as $company) {
-        foreach($company as $value) {
-                  //review calculation
+        $locations = [];
+        foreach($companyData as $company) {
+            foreach($company as $value) {
+                //review calculation
                 $aid = $value['serviceid'];
                 $data='';
                 $reviews_count = BusinessServiceReview::where('service_id', $aid)->count();
                 $reviews_sum = BusinessServiceReview::where('service_id', $aid)->sum('rating');
                 $reviews_avg=0;
-                  if($reviews_count>0)
-                  { 
-            $reviews_avg= round($reviews_sum/$reviews_count,2);
-          }
-                  $reviews = BusinessServiceReview::where('service_id', $aid)->get();
-                  $reviews_people = BusinessServiceReview::where('service_id',$aid)->orderBy('id','desc')->limit(6)->get();
-                  //end for review calculation
-                
-          $found = 0;
-          foreach ($locations as $key2 => $value2) {
-              if (($value2[1] == $value['latitude']) && ($value2[2] == $value['longitude'])) {
-                  $found = $found + 1;
-              }
-          }
-          if ($found != 0) {
-              $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-              $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-              $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
-          }else {
-            $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
-          }
-          array_push($locations, $a);
-        }
+                if($reviews_count>0)
+                { 
+                    $reviews_avg= round($reviews_sum/$reviews_count,2);
+                }
+                $reviews = BusinessServiceReview::where('service_id', $aid)->get();
+                $reviews_people = BusinessServiceReview::where('service_id',$aid)->orderBy('id','desc')->limit(6)->get();
+                //end for review calculation  
+                $found = 0;
+                foreach ($locations as $key2 => $value2) {
+                    if (($value2[1] == $value['latitude']) && ($value2[2] == $value['longitude'])) {
+                        $found = $found + 1;
+                    }
+                }
+                if ($found != 0) {
+                    $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
+                    $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
+                    $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                }else {
+                    $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                }
+                array_push($locations, $a);
+            }
             //break;
-      }
+        }
         //$servicesData = isset($servicesData[0]) ? $servicesData[0] : [];
         //dd($locations);
         
-      $cart = [];
-      $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
-          $result=array();
-      $search_data2 = $serviceData;
-          if(!empty($serviceData))
-        $result = $serviceData->toArray();
-        
-          $page = $request->page ? $request->page : 1;
-      $perPage = $request->page_size ? $request->page_size : 10;
-      $offset = ($page * $perPage) - $perPage;
+        $cart = [];
+        $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
+        $result=array();
+        $search_data2 = $serviceData;
+        if(!empty($serviceData))
+            $result = $serviceData->toArray();
+        $page = $request->page ? $request->page : 1;
+        $perPage = $request->page_size ? $request->page_size : 10;
+        $offset = ($page * $perPage) - $perPage;
 
-          $resultnew = new LengthAwarePaginator(
+        $resultnew = new LengthAwarePaginator(
         array_slice($result, $offset, $perPage, true), count($result), $perPage, $page, ['path' => $request->url(), 'query' => $request->query()]
-      );
+        );
         
-      // echo "<pre>";print_r($serviceData);die;
-      return view('jobpost.instanthire', [
-        'cart' => $cart,
-              'serviceData' => $resultnew,
-        //'serviceData' => $serviceData,
-        'companyData' => $companyData,
-        'servicePrice' => $servicePrice,
-        'businessSpec' => $businessSpec,
-        'sports' => $sports,
-        'sport_names' => $sport_names,
-        'businessType' => $businessType,
-        'pageTitle' => "DIRECT HIRE",
-        'activity' => $activity,
-        'programType' => $programType,
-        'ageRange' => $ageRange,
-        'alllanguages' => $languages,
-        'pFocuses' => $pFocuses,
-        'serviceLocation' => $serviceLocation,
-        'sports_select' => $sports_select,
-        'locations' => $locations,
-        'searchDataProfile' => $searchDataProfile,
-      ]);
+        // echo "<pre>";print_r($serviceData);die;
+        return view('jobpost.instanthire', [
+            'cart' => $cart,
+                  'serviceData' => $resultnew,
+            //'serviceData' => $serviceData,
+            'companyData' => $companyData,
+            'servicePrice' => $servicePrice,
+            'businessSpec' => $businessSpec,
+            'sports' => $sports,
+            'sport_names' => $sport_names,
+            'businessType' => $businessType,
+            'pageTitle' => "DIRECT HIRE",
+            'activity' => $activity,
+            'programType' => $programType,
+            'ageRange' => $ageRange,
+            'alllanguages' => $languages,
+            'pFocuses' => $pFocuses,
+            'serviceLocation' => $serviceLocation,
+            'sports_select' => $sports_select,
+            'locations' => $locations,
+            'searchDataProfile' => $searchDataProfile,
+        ]);
     }
 
     public function getBookingServiceData(Request $request) {

@@ -310,7 +310,14 @@
                                     </div>
                                     <div class="cat-detail">
                                         <h1>{{$data->sport_name}}</h1>
-                                        <a href="/instant-hire?label={{$data->sport_name}}&location=&zipcode=">Get Started</a>
+                                         <form action="{{route('instant-hire')}}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="label" value="{{$data->sport_name}}">
+                                            <button type="submit" class="getstarted">
+                                                 Get Started
+                                            </button>
+                                        </form>
+                                        <!-- <a href="/instant-hire?label={{$data->sport_name}}&location=&zipcode=">Get Started</a> -->
                                     </div>
                                 </span>
                             </div>
@@ -541,7 +548,7 @@
         	{!!$whydata->content!!}
 			
 			<div class="btn-home">
-				<a href="location.href='/createNewBusinessProfile'">JOIN TODAY</a>
+				<a href="{{url('/createNewBusinessProfile')}}">JOIN TODAY</a>
 			</div>
         </div>
 		<div class="col-md-6 col-sm-6 col-xs-12">

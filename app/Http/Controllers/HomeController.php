@@ -268,6 +268,11 @@ class HomeController extends Controller
 				{
 					$array_data[]=$state->company_name;
 				}
+				$user_name = User::where('username', 'LIKE', '%'.$query.'%')->get();
+				foreach($user_name as $name)
+				{
+					$array_data[]=$name->username;
+				}
 				sort($array_data);
 				$output = '<ul id="country-list">';
 				foreach($array_data as $row)
