@@ -36,7 +36,7 @@
     <a href="javascript:void(0);" class="filter-btn myfilter2" style="width: 100%; text-align: center;">
         CLICK TO APPLY FILTERS
     </a>
-    <!-- </div> -->
+    </div> -->
     <br>
     <div class="choose-sport">
         <div class="special-offer">
@@ -84,8 +84,7 @@
 		<div class="special-offer">
             <div class="multiples">
                 <h2>Search by Activity</h2>
-                <select id="programservices" name="program_type[]" class="myfilter">
-                	<option></option>
+                <select id="programservices" name="program_type[]" class="myfilter" multiple="multiple">
 					<option>Aerobics</option>
 					<option>Archery</option>
 					<option>Badminton</option>
@@ -187,8 +186,8 @@
                 <h2>Location Of Activity</h2>
                 <select id="activity_location" name="activity_location[]" multiple class="myfilter">
                     @foreach (@$serviceLocation as $slkey => $slval)
-                    <?php $slkey = str_replace(' ','_',strtolower($slkey)) ;?>
-                    <option value='{{$slkey}}'>{{$slval}}</option>
+                    <?php //$slkey = str_replace(' ','_',strtolower($slkey)) ;?>
+                    <option value='{{$slval}}'>{{$slval}}</option>
                     @endforeach
                 </select>
             </div>
@@ -239,7 +238,7 @@
         <div class="special-offer">
             <div class="multiples">
                 <h2>Great For</h2>
-                <select id="activity_type" multiple name="activity_type[]" class="myfilter">
+                <select id="activity_type" multiple name="activity_for[]" class="myfilter">
                     <option>Individual</option>
                     <option>Kids</option>
                     <option>Teens</option>
@@ -549,7 +548,7 @@
 		{ $miles_radius_filter = Session::get('miles_radius_filter'); }
 	?>
     {!! Form::close() !!}
-    <a href="javascript:void(0)" class="filter-btn myfilter2" style="width: 100%; text-align: center;margin-top: -11px;">
+    <a href="javascript:void(0)" class="filter-btn myfilter2" style="width: 100%; text-align: center;margin-top: -11px;" onclick="submitForm();">
         SEARCH
     </a>
 

@@ -517,7 +517,7 @@ if(isset($cart["cart_item"])){
                                                     </li>
                                                     <li class="lp-per-pro"> <span> Personal Profile </span> </li>
                                                     <li class="border-1">
-                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{route('business-welcome')}}">Book An Activity </a> </button> 
+                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/instant-hire')}}">Book An Activity </a> </button> 
                                                     </li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
@@ -530,9 +530,9 @@ if(isset($cart["cart_item"])){
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
                                                     </li>
-													<li class="pc-link">
+													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-                                                    </li>
+                                                    </li> -->
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
                                                     </li>
@@ -540,9 +540,9 @@ if(isset($cart["cart_item"])){
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info" style="color: white;">Booking Info</a>
                                                     </li>
-													<li class="pc-link">
+													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
-                                                    </li>
+                                                    </li> -->
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-comments"></i></span>
                                                         <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
@@ -558,15 +558,15 @@ if(isset($cart["cart_item"])){
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
-                                                    <!-- <li class="pc-link">
+                                                    <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-question-circle"></i></span>
                                                         <a href="{{route('help')}}" style="color: white;">Help Desk</a>
-                                                    </li> -->
+                                                    </li>
                                                     <!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-user-plus"></i></span>
                                                         <a href="#" style="color: white;">Invite Friends</a>
                                                     </li> -->
-                                                    
+                                                    <li><div class="border-sidebar"></div></li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-right-from-bracket"></i></span>
                                                         <a href="{{ Config::get('constants.SITE_URL') }}/userlogout" style="color: white;">Logout </a>

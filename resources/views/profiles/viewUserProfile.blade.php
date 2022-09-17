@@ -493,12 +493,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 									<span>
                                     	<a href="{{'mailto:'.$UserProfileDetail['email']}}" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
 									</span>
-									<!-- <span>
+									<?php /*?> <span>
                                     	<a href="#" title="link"  class=""><i class="fa fa-link" aria-hidden="true"></i></a>
-									</span>  -->
-									<span>
+									</span>  
+									 <span>
                                     	<a href="{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
-									</span>
+									</span> <?php */?>
 								</div>
                                 <!--<img src="/public/img/verification.png" />-->
 							</div>
