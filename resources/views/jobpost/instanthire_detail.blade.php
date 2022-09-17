@@ -392,41 +392,23 @@
                                 <div class="">
 
                                     <div class="clearfix"></div>
-
                                     <input type="hidden" name="serviceid<?php echo $serviceid; ?>" id="serviceid<?php echo $serviceid; ?>" value="<?php echo $serviceid; ?>">
-
                                     <input type="hidden" name="rating<?php echo $serviceid; ?>" id="rating<?php echo $serviceid; ?>" value="0">
-
                                     <div class="rvw-overall-rate rvw-ex-mrgn">
-
                                         <span>Rating</span>
-
-                                        <div id="stars<?php echo $serviceid; ?>" data-service="<?php echo $serviceid; ?>" class="starrr" style="font-size:22px">                </div>
-
+                                        <div id="stars<?php echo $serviceid; ?>" data-service="<?php echo $serviceid; ?>" class="starrr" style="font-size:22px"></div>
                                     </div>
-
                                     <input type="text" name="rtitle<?php echo $serviceid; ?>" id="rtitle<?php echo $serviceid; ?>" placeholder="Review Title" class="inputs" />
-
                                     <textarea placeholder="Write your review" name="review<?php echo $serviceid; ?>" id="review<?php echo $serviceid; ?>"></textarea>
-
                                     <input type="file" name="rimg<?php echo $serviceid; ?>[]" id="rimg<?php echo $serviceid; ?>" class="inputs" multiple="multiple" />
-
                                     <div class="reviewerro" id="reviewerro<?php echo $serviceid; ?>"> </div>
-
                                     <input type="button" onclick="submit_rating('<?php echo $serviceid; ?>')" value="Submit" class="btn rev-submit-btn mt-10">
-
                                     <script>
-
-                                     $('#stars<?php echo $serviceid; ?>').on('starrr:change', function(e, value){
-
-                                        $('#rating<?php echo $serviceid; ?>').val(value);
-
-                                     });
-
+                                        $('#stars<?php echo $serviceid; ?>').on('starrr:change', function(e, value){
+                                            $('#rating<?php echo $serviceid; ?>').val(value);
+                                        });
                                     </script>
-
                                 </div>
-
                                 </form>
 
                             </div>
@@ -1037,7 +1019,7 @@
 
                                 <?php 
 
-									$servicePr=''; $bus_schedule='';
+									$servicePr=[]; $bus_schedule=[];
 
 									$servicePrfirst = BusinessPriceDetails::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
 
@@ -1047,9 +1029,9 @@
 
 									//DB::enableQueryLog();
 
-									if(!empty($sercatefirst)){
+									if(!empty(@$sercatefirst)){
 
-                                    	$servicePr = BusinessPriceDetails::where('serviceid', $service['id'])->orderBy('id', 'ASC')->where('category_id',$sercatefirst['id'])->get()->toArray();
+                                    	$servicePr = BusinessPriceDetails::where('serviceid', $service['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
 
 									}
 
@@ -1061,9 +1043,9 @@
 
                                     $todaydate = date('m/d/Y');
 
-									if(!empty($sercatefirst)){
+									if(!empty(@$sercatefirst)){
 
-                                    	$bus_schedule = BusinessActivityScheduler::where('category_id',$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
+                                    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
 
 									}
 
@@ -1071,7 +1053,7 @@
 
                                     $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft =0 ;
 
-                                    if(!empty($bus_schedule)){
+                                    if(!empty(@$bus_schedule)){
 
                                         foreach($bus_schedule as $data){
 
@@ -1169,13 +1151,13 @@
 
 									if(date('l') == 'Saturday' || date('l') == 'Sunday'){
 
-                                        $total_price_val =  $servicePrfirst['adult_weekend_price_diff'];
+                                        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
 
                                         $selectval = '';$priceid = '';$i=1;
 
 										
 
-                                        if (!empty($servicePr)) {
+                                        if (!empty(@$servicePr)) {
 
                                             foreach ($servicePr as  $pr) {
 
@@ -1211,13 +1193,13 @@
 
 										//print_r($servicePr); exit;
 
-										if(!empty($servicePr))
+										if(!empty(@$servicePr))
 
 										{
 
 											
 
-											$total_price_val =  $servicePrfirst['adult_cus_weekly_price'];
+											$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
 
 											$i=1;
 
@@ -1307,9 +1289,9 @@
 
                                        @if(@$servicePrfirst['price_title'] != '')<p>Price Title:  <?php echo @$servicePrfirst['price_title']; ?></p> @endif
 
-                                       <?php if(!empty($servicePrfirst)) { ?>
+                                       <?php if(!empty(@$servicePrfirst)) { ?>
 
-                                        <p>Price Option: <?php echo $servicePrfirst['pay_session']; ?> Session</p>
+                                        <p>Price Option: <?php echo @$servicePrfirst['pay_session']; ?> Session</p>
 
                                        <?php } ?>
 
@@ -1325,7 +1307,7 @@
 
                                     </div>
 
-                					<?php if(!empty($servicePrfirst)) { ?>
+                					<?php if(!empty(@$servicePrfirst)) { ?>
 
                                     <input type="hidden" name="price_title_hidden" id="price_title_hidden{{$service['id']}}{{$service['id']}}" value="{{@$servicePrfirst['price_title']}}">
 
@@ -1364,9 +1346,9 @@
 
                                         @else
 
-                                          @if( !empty($servicePrfirst) )
+                                          @if( !empty(@$servicePrfirst) )
 
-                                            @if( $servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='' )
+                                            @if( @$servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='' )
 
                                                 <input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $service["id"]; ?>')" class="btn btn-addtocart mt-10"  id="addtocart{{$service['id']}}{{$service['id']}}"/>
 
@@ -1614,7 +1596,7 @@
 
                                         $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->first();
 
-                                        $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',$sercatefirst['id'])->get()->toArray();
+                                        $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
 
                                        /* print_r( $servicePr );exit();*/
 
@@ -1622,7 +1604,7 @@
 
                                         $todaydate = date('m/d/Y');
 
-                                        $bus_schedule = BusinessActivityScheduler::where('category_id',$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
+                                        $bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
 
                                         $start =$end= $time= '';$timedata = $SpotsLeft = 0; $Totalspot = $spot_avil= 0; 
 
@@ -1724,7 +1706,7 @@
 
                                         if(date('l') == 'Saturday' || date('l') == 'Sunday'){
 
-                                            $total_price_val =  $servicePrfirst['adult_weekend_price_diff'];
+                                            $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
 
                                             $selectval = '';$priceid = '';$i=1;
 
@@ -1760,7 +1742,7 @@
 
                                         }else{
 
-                                            $total_price_val =  $servicePrfirst['adult_cus_weekly_price'];
+                                            $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
 
                                             $selectval = '';$priceid = '';$i=1;
 
@@ -1806,7 +1788,7 @@
 
                                             <?php $c=1;  
 
-                                            if (!empty($sercate)) { 
+                                            if (!empty(@$sercate)) { 
 
                                                 foreach ($sercate as  $sc) {
 
@@ -1852,7 +1834,7 @@
 
                                             @if(@$servicePrfirst['price_title'] != '')<p>Price Title:  <?php echo @$servicePrfirst['price_title']; ?></p> @endif
 
-                                            <p>Price Option: <?php echo $servicePrfirst['pay_session']; ?> Session</p>
+                                            <p>Price Option: <?php echo @$servicePrfirst['pay_session']; ?> Session</p>
 
                                             <p>Participants: <?php echo '1'; ?></p>
 
@@ -1896,7 +1878,7 @@
 
                                         @else
 
-                                            @if($servicePrfirst['adult_cus_weekly_price'] !='' && @$timedata!='')
+                                            @if(@$servicePrfirst['adult_cus_weekly_price'] !='' && @$timedata!='')
 
                                             <input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $act["id"]; ?>')" class="btn btn-addtocart mt-10"  id="addtocart{{$service['id']}}{{$act['id']}}" />
 
@@ -1974,7 +1956,11 @@
 
 <script>
 
+/*function changerate(sid) {
 
+    $('#rating').val(value);
+    alert(sid);
+}*/
 
 function actFilter(cid,sid)
 
