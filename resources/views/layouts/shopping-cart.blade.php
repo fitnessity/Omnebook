@@ -548,11 +548,11 @@
                                 </div>
                                 <div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
                                     <div class="inner-box-right"> 
-                                        <span> </span>
-                                        <span> </span>
-                                        <span> </span>
-                                        <span> </span>
-                                        <span> </span>
+                                        <span> 0 </span>
+                                        <span> $ 0.00 </span>
+                                        <span> $ 0.00 </span>
+                                        <span> $ 0.00 </span>
+                                        <span> $0 </span>
                                     </div>
                                 </div>
                             </div>
@@ -565,7 +565,7 @@
                                 </div>
                                 <div class="col-lg-6 col-xs-6">
                                     <div class="total-grand">
-                                        <span> </span>
+                                        <span>$ 0.00  </span>
                                     </div>  
                                 </div>
                             </div>

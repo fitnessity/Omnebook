@@ -11804,7 +11804,7 @@ p.or-data {
 header .logo img {
     width: 100%;
     height: auto; 
-    max-width: 201px;
+    max-width: 300px;
 }
 
 #register_modal .logo-my img {
@@ -17967,7 +17967,7 @@ input:checked + .slider:before {
 .claiming-boxn h4 {
     font-weight: 700;
     color: #ea1237;
-    margin-left: -42px;
+    /*margin-left: -42px;*/
     margin-bottom: 15px;
 }
 
@@ -20688,4 +20688,16 @@ span.Zebra_DatePicker_Icon_Wrapper {
     width: 100%!important;
     position: relative!important;
 }
-
+.getstarted{
+	font-size: 16px;
+    color: #FFF;
+    border: 2px solid #fff;
+    background: none;
+    padding: 8px 15px;
+    margin: 15px 0 0 0;
+    display: inline-table;
+    font-weight: 500;
+    border-radius: 50px;
+    min-width: 150px;
+    text-decoration: none;
+}
