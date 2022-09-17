@@ -310,7 +310,7 @@
                                     </div>
                                     <div class="cat-detail">
                                         <h1>{{$data->sport_name}}</h1>
-                                         <form action="{{url('instant-hire')}}" method="POST">
+                                         <form action="{{route('instant-hire')}}" method="POST">
                                             @csrf
                                             <input type="hidden" name="label" value="{{$data->sport_name}}">
                                             <button type="submit" class="getstarted">
