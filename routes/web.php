@@ -670,7 +670,7 @@ Route::any('/direct-hire', 'LessonController@getDirecthire');
 
 //Route::middleware(['basicAuth'])->group(function () {
 Route::any('/instant_hire_search_filter', 'LessonController@instant_hire_search_filter')->name('instant_hire_search_filter');
-Route::any('/instant-hire', 'LessonController@getInstanthire');
+Route::any('/instant-hire', 'LessonController@getInstanthire')->name('instant-hire');
 Route::any('/activity-details/{serviceid}', 'LessonController@getInstanthiredetails');
 //});
 Route::get('/instant-hire-search', 'LessonController@getInstanthireSearch');
