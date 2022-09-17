@@ -7,96 +7,96 @@
     .online_classes_box .classes_bottom_duration .duration_wrap{
         font-size:13px;
     }
-	.title-bg{
-		background: #ed1b24;
-		font-size: 33px;
-		color: #fff;
-	}
-	.img-title-home{
-		font-size: 33px;
-		color: #fff;
-	}
-	.sub-part {
-		display: inline-block;
-		width: 9%;
-		vertical-align: top;
-		padding: 5px 16px;
-	}
-	.sub-part p{
-		color: #f53b49;
-		font-size: 15px;
-		border-radius: 100%;
-		padding: 9px 14px;
-		border: 2px solid #f53b49;
-		font-weight: 600;
-		height: 40px;
-    	width: 40px;
-	}
-	.sub-text {
-		display: inline-block;
-		padding-left: 10px;
-		vertical-align: middle;
-		width: 90%;
-		margin-bottom: 25px;
-	}
-	.sub-text h3 {
-		font-size: 17px;
-		display: inline-block;
-		font-weight: 400;
-		line-height: 40px;
-		color: #fff;
-	}
-	.sub-text p {
-		display: inline-block;
-		font-size: 13px;
-		line-height: 20px;
-		color: #888c8d;
-	}
-	.btn-home a{
-		padding: 12px 50px;
-		font-size: 15px;
-		border-radius: 50px;
-		transition: 0.5s;
-		cursor: pointer;
-		border: 2px solid #f53b49;
-		background: none;
-		color: #fff;
-	}
-	.btn-home a:hover {
-		transition: 0.5s;
-		background: #f53b49;
-		color: #ffffff;
-	}
-	.btn-home{ margin-left: 63px; margin-top: 15px; }
-	.heading-bt-sp{ margin-bottom: 45px; }
-	
-	
+    .title-bg{
+        background: #ed1b24;
+        font-size: 33px;
+        color: #fff;
+    }
+    .img-title-home{
+        font-size: 33px;
+        color: #fff;
+    }
+    .sub-part {
+        display: inline-block;
+        width: 9%;
+        vertical-align: top;
+        padding: 5px 16px;
+    }
+    .sub-part p{
+        color: #f53b49;
+        font-size: 15px;
+        border-radius: 100%;
+        padding: 9px 14px;
+        border: 2px solid #f53b49;
+        font-weight: 600;
+        height: 40px;
+        width: 40px;
+    }
+    .sub-text {
+        display: inline-block;
+        padding-left: 10px;
+        vertical-align: middle;
+        width: 90%;
+        margin-bottom: 25px;
+    }
+    .sub-text h3 {
+        font-size: 17px;
+        display: inline-block;
+        font-weight: 400;
+        line-height: 40px;
+        color: #fff;
+    }
+    .sub-text p {
+        display: inline-block;
+        font-size: 13px;
+        line-height: 20px;
+        color: #888c8d;
+    }
+    .btn-home a{
+        padding: 12px 50px;
+        font-size: 15px;
+        border-radius: 50px;
+        transition: 0.5s;
+        cursor: pointer;
+        border: 2px solid #f53b49;
+        background: none;
+        color: #fff;
+    }
+    .btn-home a:hover {
+        transition: 0.5s;
+        background: #f53b49;
+        color: #ffffff;
+    }
+    .btn-home{ margin-left: 63px; margin-top: 15px; }
+    .heading-bt-sp{ margin-bottom: 45px; }
+    
+    
 
 .kickboxing-slider .owl-nav .owl-prev {
-	width: 30px;
-	height: 30px;
-	text-align: center;
-	background: #c72321;
-	opacity: 1;
-	border-radius: 50px;
-	top: 45%;
-	position: absolute;
-	left: -34px;
-	font-size: 21px;
-	color: #fff;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #c72321;
+    opacity: 1;
+    border-radius: 50px;
+    top: 45%;
+    position: absolute;
+    left: -34px;
+    font-size: 21px;
+    color: #fff;
 }
 .kickboxing-slider .owl-nav .owl-next {
-	width: 30px;
-	height: 30px;
-	text-align: center;
-	background: #c72321;
-	opacity: 1;
-	border-radius: 50px;
-	top: 45%;
-	position: absolute;
-	right: -34px;
-	font-size: 21px;
-	color: #fff;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #c72321;
+    opacity: 1;
+    border-radius: 50px;
+    top: 45%;
+    position: absolute;
+    right: -34px;
+    font-size: 21px;
+    color: #fff;
 }
 .item .activities_img {
   width: 100%;
@@ -159,12 +159,12 @@
     ?>
     <div class="slider-block">
         <div class="container">
-			<h1>{{$content}}<br></h1>
+            <h1>{{$content}}<br></h1>
             <!--<h1>FIND SPORTS, WELLNESS &amp; ADVENTUROUS ACTIVITIES<br></h1>-->
             <form id="searchform" method="get" action="/instant-hire">
                 <div class="row cstm-bnner">
                     <div class="col-sm-12">
-						<ul>
+                        <ul>
                             <li>
                                 <img src="{{ asset('public/images/search-by-activity.png') }}" alt="">
                                 <input autocomplete="off" type="text" name="label" id="activity_label" placeholder="Search by Activity, Business, Person, Username" value="@if(isset($selected_label) && $selected_label != NULL){{$selected_label }}@endif" class="search_input_banner">
@@ -295,7 +295,7 @@
                 @endphp
                 @foreach($most_searched_sports as $data)
                     @php 
-                    	$catdata = explode(",",$data->category_id);
+                        $catdata = explode(",",$data->category_id);
                     @endphp
                     @if($j<=6)
                         @if (in_array($sports->id, $catdata))
@@ -310,7 +310,7 @@
                                     </div>
                                     <div class="cat-detail">
                                         <h1>{{$data->sport_name}}</h1>
-                                         <form action="{{route('instant-hire')}}" method="POST">
+                                         <form action="{{url('instant-hire')}}" method="POST">
                                             @csrf
                                             <input type="hidden" name="label" value="{{$data->sport_name}}">
                                             <button type="submit" class="getstarted">
@@ -543,16 +543,16 @@
 </section>
 @foreach($why_fitnessity as $whydata)
 <section class="ptb-65 plr-60 why_fitnessity" id="why-fitnessity" style=" background-image: url('/public/uploads/cms/{{ $whydata->banner_image }}')">
-	<div class="cat-container">
+    <div class="cat-container">
         <div class="col-md-6 col-sm-6 col-xs-12">
-        	{!!$whydata->content!!}
-			
-			<div class="btn-home">
-				<a href="{{url('/createNewBusinessProfile')}}">JOIN TODAY</a>
-			</div>
+            {!!$whydata->content!!}
+            
+            <div class="btn-home">
+                <a href="{{url('/createNewBusinessProfile')}}">JOIN TODAY</a>
+            </div>
         </div>
-		<div class="col-md-6 col-sm-6 col-xs-12">
-        	<?php if( !empty( $whydata['video'] ) ){ ?>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <?php if( !empty( $whydata['video'] ) ){ ?>
                 <div class="why_fit_vd">
                     <video id="ban_video" class="tv_video">
                         <source src="<?php echo url('/public/' . $whydata['video']); ?>" type="video/mp4">
@@ -564,9 +564,9 @@
                <?php /*?> <div>
                 <p style="color:#fff;"> GET CONNECTED TO ACTIVITIES YOU LOVE OR EXPLORE A NEW ONE </p>
                 </div><?php */?>
-			<?php } ?>
+            <?php } ?>
         </div>
-	</div>
+    </div>
 </section>
 @endforeach
 
@@ -577,26 +577,26 @@
             <h1>DISCOVER ACTIVITIES</h1>
             <h3>GET CONNECTED TO ACTIVITIES YOU LOVE OR EXPLORE A NEW ONE</h3>
         </div>
-		<div class="owl-slider kickboxing-slider">
-			<div id="carousel-discover" class="owl-carousel">
+        <div class="owl-slider kickboxing-slider">
+            <div id="carousel-discover" class="owl-carousel">
                 <?php 
                     if(isset($discovers)) {
                     $divId=1;
                     foreach($discovers as $discover) {
                     ?>
-    				<div class="item">
-    					<div class="activities_img">
-    						<a href="/instant-hire"><img style="height:300px" src="{{ asset('public/uploads/discover/thumb/'.$discover->image) }}" alt=""></a>
-    					</div>
-    					<div class="activites_content">
+                    <div class="item">
+                        <div class="activities_img">
+                            <a href="/instant-hire"><img style="height:300px" src="{{ asset('public/uploads/discover/thumb/'.$discover->image) }}" alt=""></a>
+                        </div>
+                        <div class="activites_content">
                             <h3><a href="/instant-hire">{{$discover->title}}</a></h3>
                             <p>{{$discover->description}}</p>
                         </div>
-    				</div>
-				   <?php } } ?>
-			</div>
-		</div>
-	</div>
+                    </div>
+                   <?php } } ?>
+            </div>
+        </div>
+    </div>
 </section>
 
 
@@ -826,7 +826,7 @@
         });
         $(document).on('click', '.searchclickactivity', function()
         {
-			$("#activity_label").val($(this).attr('data-num'));
+            $("#activity_label").val($(this).attr('data-num'));
             $("#suggesstion-box-search-activity").hide();
         });
         $("#pac-input1").keyup(function(){
