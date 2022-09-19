@@ -2,9 +2,9 @@
 
 		  
 
-		<script type="text/javascript" src="/AdminLTE/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+		<script type="text/javascript" src="/public/AdminLTE/plugins/bootstrap-slider/bootstrap-slider.js"></script>
 
-		<link rel="stylesheet" type="text/css" href="/AdminLTE/plugins/bootstrap-slider/slider.css">
+		<link rel="stylesheet" type="text/css" href="/public/AdminLTE/plugins/bootstrap-slider/slider.css">
 
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 
