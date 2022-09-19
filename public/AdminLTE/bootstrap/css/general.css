@@ -1,0 +1,528 @@
+
+/*# sourceMappingURL=bootstrap.css.map */
+.skin-blue .main-header .logo {
+  background-color: #222d32 !important;
+}
+.skin-blue .main-sidebar {
+  background-color: #3a4246 !important;
+}
+.skin-blue .main-header .navbar {
+  background-color:#222d32 !important;
+}
+.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+	border-left-color: #de1a22 !important;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+	background-color: #de1a22 !important;
+	border-color: #de1a22 !important;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+	background-color: #de1a22 !important;
+}
+.skin-blue .main-header li.user-header{
+	background-color: #3a4246 !important;
+}
+.btn-success, .btn-success:hover, .btn-success:active, .btn-success:focus  {
+	color: #fff !important;
+    background-color: #45B6AF !important;
+    border-color: #3ea49d !important;
+}
+.dataTables_filter {float: right;}
+.glyphicon-star { color:#f53b49 !important; }
+.review-rate-block  span { color:#777 ; }
+.toppadding7 { padding-top: 7px !important; }
+.btn-sm, .btn-xs { font-size: 14px; line-height: 1.5;  }
+
+.booking-booked-text { color:#7eb50b;font-weight: 600; }
+.booking-rejected-text { color:#f53b49;font-weight: 600; }
+.booking-pending-text { color:#ffb300;font-weight: 600; }
+.boking-openall-text { color:#0053f1;font-weight: 600; }
+.leftmargin40{ margin-left: 40px; }
+.topmargin10{ margin-top: 10px; }
+.form-group input.error{border-color: #dd4b39;box-shadow: none;}
+.form-group label.error{color: #dd4b39;}
+.color-red{color:#dd4b39!important}
+.my-form-xo{height: 27px; padding: 1px 4px; background: #fff; border: 1px solid #767676;}
+
+.panel.panel-default .panel-body .form-group label{font-size: 14px; font-weight: 500;}
+.panel.panel-default .panel-body h4{font-size: 18px; font-weight: 600;}
+.panel-textarea{width:100%;}
+.panel-class{margin-right: 15px;}
+.btn-sp{margin-bottom:5px;}
+.btn-success-red{
+	color: #fff !important;
+	background-color: #f53b49 !important;
+	border-color: #f53b49 !important;
+}
+.ss-main .ss-multi-selected .ss-values .ss-value{
+	background-color: #f53b49 !important;
+}
+.ss-main .ss-content .ss-search input:focus {
+  box-shadow: 0 0 5px #f53b49 !important;
+}
+.ss-main .ss-content .ss-list .ss-option:hover {
+  color: #fff;
+  background-color: #f53b49 !important;
+}
+
+.manage-txt {
+  display: grid;
+}
+.manage-txt p {
+  font-size: 11px;
+  color: #333;
+}
+
+.schedle-separator {
+  float: right;
+}
+
+.close-btn-schedule {
+  color: #fff !important;
+  right: 20px !important;
+  position: absolute !important;
+  opacity: 1.2 !important;
+  font-size: 25px;
+}
+
+.closebtn {
+  text-align: right !important;
+  padding-right: 0 !important;
+  background: #df0003 !important;
+  color: #fff !important;
+  margin: 0 !important;
+  width: 23px !important;
+  height: 23px !important;
+  display: inline-block !important;
+  border-radius: 5px !important;
+  float: right;
+}
+
+.modal-inner-txt {
+  margin-bottom: 4px;
+}
+
+.border-modal-data {
+  border: 1px solid #c9c9c9;
+  padding: 12px;
+}
+
+.schedule-modal-title h4 {
+  text-align: center ;
+  color: #000;
+  line-height: inherit;
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.modal-dialog.schedule-model-width {
+  width: 80%;
+}
+
+.modal-inner-txt h4 {
+  color: #000;
+  line-height: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+.step-four {
+  margin-bottom: 20px;
+}
+
+.step-four-highlight {
+    font-size: 20px;
+    padding-top: 10px;
+}
+
+.nav-link1 {
+  color: #ffff;
+  padding: 10px 10px;
+}
+.week-section {
+  width: 73% !important;
+  display: inline-block !important;
+}
+
+.schedule-title {
+  width: 100%;
+}
+
+.days-input {
+  border: 1px solid #000 !important;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+ /* border-radius: 4px;*/
+  width: 25%;
+	display: inline-block;
+}
+
+.showall-btn:hover {
+  background: #2e2e2e;
+  color: #fff;
+}
+
+.schedule-breakdown {
+  margin-bottom: 20px;
+}
+
+.schedule-breakdown .schedule-breakdown-title {
+  text-align: center;
+  background: #151820;
+  color: #fff;
+  padding: 4px;
+}
+.schedule-breakdown th {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.showall-btn {
+  background: #f91942;
+  border: none;
+  padding: 5px 19px;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.form-control {
+  border-color: #000;
+}
+.weekly-time-estimate {
+  text-align: center;
+}
+.weekly-time-estimate label {
+  margin-top: 33px;
+}
+
+.btn-ano-time {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.day_circle.timezone-round.day_circle_fill {
+  background-color: red;
+  color: #fff;
+}
+
+.day_circle.timezone-round {
+  position: relative;
+  display: inline-block;
+  width: 45px !important;
+  height: 45px;
+  margin: 20px 10px 30px;
+  background-color: #ffffff;
+  border: 1px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 40px;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 0 !important;
+}
+
+.timezone-round p {
+  text-align: center;
+}
+
+.sp-select {
+    margin-top: 25px;
+}
+
+.priceselect input {
+    width: 100%;
+    background: white;
+    margin: 0;
+    padding: 8px 5px;
+    font-size: 15px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.priceselect select {
+    width: 100%;
+    background: white;
+    margin: 0;
+    padding: 8px 5px;
+    font-size: 15px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.check-price {
+    width: 6% !important;
+}
+
+input {
+    border: none;
+    background: #fff;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-size: 15px;
+}
+
+.sp-select-sche {
+    margin-top: 55px;
+}
+
+.modal-dialog.editingautopay {
+    width: 70%;
+}
+
+.editingautopay h5 {
+    text-align: center;
+    color: #000;
+    line-height: inherit;
+    font-weight: 600;
+    font-size: 18px;
+}
+.cat-age p {
+    font-size: 15px;
+}
+.cat-age label {
+    margin-bottom: 2px;
+}
+.weekly-customer {
+    width: 14%;
+    margin-left: 5px;
+}
+.cus-week-price {
+    text-align: center;
+}
+.cus-week-price label {
+    margin-bottom: 2px;
+    position: relative;
+}
+.cus-week-price p {
+    text-align: center;
+    font-size: 12px;
+}
+
+
+.weekend-price {
+    width: 15%;
+    margin-left: 5px;
+}
+
+.cus-week-price input {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px 5px;
+    font-size: 15px;
+    width: 100%;
+}
+
+.age-cat {
+    width: 9%;
+    margin-left: 15px;
+}
+
+.Settings-title h5 {
+    font-weight: 600;
+    font-size: 15px;
+    color: #000;
+    text-align: left;
+}
+
+.setting-box {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.contractsettings {
+    color: #000;
+}
+
+.autopay label {
+    font-weight: 500;
+}
+
+.customerscharged label {
+    display: inline-block;
+    font-weight: 500;
+}
+
+.customerscharged select {
+    display: inline-block;
+    width: 50%;
+}
+
+.nuberofautopays {
+    width: 20%;
+}
+
+.contract {
+    margin-top: 5px;
+}
+
+.contract label {
+    display: inline-block;
+}
+
+.contract p {
+    display: inline-block;
+    margin-bottom: 0px;
+}
+
+.customerscharged input {
+    display: inline-block;
+    width: 20%;
+}
+.customerscharged {
+    margin-bottom: 5px;
+}
+
+.saledate {
+    width: 50%;
+}
+
+.set-border {
+    border-bottom: 1px solid #000;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.re-discount {
+    width: 16%;
+    margin-left: 5px;
+}
+.discount {
+    text-align: center;
+}
+.discount label {
+    margin-bottom: 2px;
+    position: relative;
+}
+.discount p {
+    font-size: 12px;
+}
+
+.discount input {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px 5px;
+    font-size: 15px;
+    width: 100%;
+}
+
+.single-dash {
+    width: 2%;
+    margin-left: 5px;
+}
+.desh {
+    text-align: center;
+}
+
+.desh label {
+    margin-top: 43px;
+}
+.fit-fees {
+    width: 10%;
+    margin-left: 5px;
+}
+.fees {
+    text-align: center;
+}
+.fees label {
+    margin-top: 22px;
+    position: relative;
+}
+.fees p {
+    font-size: 17px;
+}
+.single-equal {
+    width: 2%;
+    margin-left: 5px;
+}
+.equal {
+    text-align: center;
+}
+.equal label {
+    margin-top: 43px;
+}
+.estimated-earn {
+    width: 13%;
+    margin-left: 5px;
+}
+
+.btn-cart-price {
+    text-align: center;
+    border-top: 1px solid #b8b8b8;
+    padding-top: 15px;
+}
+
+.btn-cart-price p {
+    margin-bottom: 20px;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.set-num {
+    text-align: center;
+}
+
+.after-select {
+    margin-top: 40px;
+}
+
+.set-num.after label {
+    margin-top: 43px;
+}
+
+.serviceprice h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+}
+
+.set-num label {
+    margin-top: 15px;
+}
+
+.btn-bck {
+    background: #383432;
+    color: #fff;
+    padding: 6px 15px;
+    border: unset;
+    font-size: 16px;
+}
+
+.btn-nxt {
+    background: #ed1b24;
+    color: #fff;
+    padding: 6px 15px;
+    border: unset;
+    font-size: 16px;
+}
+
+.setprice h3 {
+    font-size: 16px;
+    text-align: center;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -0.75rem;
+    margin-left: -0.75rem;
+}
+
+.nw-user-detail-block {
+    float: left;
+    width: 100%;
+}
+.text-center {
+  text-align: center;
+}

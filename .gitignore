@@ -36,8 +36,8 @@ yarn-error.log
 *.jar
 
 # Maven
-target/
-dist/
+/target/
+/dist/
 
 # JetBrains IDE
 .idea/
