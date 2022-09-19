@@ -10206,7 +10206,9 @@ req-line.thumb-light a {
     font-size: 22px;
     margin-bottom: 50px;
 }
-
+.selectProduct .bottom-content h2 {
+	min-height: 40px;
+}
 .selectProduct h3 span {
     border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
