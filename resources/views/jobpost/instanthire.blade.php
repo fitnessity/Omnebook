@@ -986,9 +986,7 @@
                     }
                 
 
-               
-
-               /* @include('jobpost.instanthire_checkout') */?>
+               ?>
 
                 <div class="pagenation" style="display:none">
 
@@ -1144,9 +1142,9 @@
 
 								<div class="col-lg-12 btns-modal">
 
-									<a href="#" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+									<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
 
-									<a href="https://fitnessity.co/claim-your-business" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
+									<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
 
 								</div>
 

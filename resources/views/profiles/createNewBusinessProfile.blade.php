@@ -161,7 +161,7 @@
 
             <form id="companyDetail" name="companyDetail" method="post" action="{{route('addbusinesscompanydetail')}}" enctype="multipart/form-data">
                 <?php
-                    $companyId = $Companyname = $Address = $City = $State = $ZipCode = $Country = $EINnumber = $Establishmentyear = $Businessusername = $Profilepic = $Firstnameb = $Lastnameb = $Emailb = $Phonenumber = $Aboutcompany = $Shortdescription = $EmbedVideo = $dba_business_name = $additional_address = $neighborhood = $business_phone = $business_email = $business_website = $business_type = "";
+                    $companyId = $Companyname = $Address = $City = $State = $ZipCode = $Country = $EINnumber = $Establishmentyear = $Businessusername = $Profilepic = $Firstnameb = $Lastnameb = $Emailb = $Phonenumber = $Aboutcompany = $Shortdescription = $EmbedVideo = $dba_business_name = $additional_address = $neighborhood = $business_phone = $business_email = $business_website = $business_type = $latitude = $longitude ="" ;
                     if(isset($business_details)){
                         if(isset($business_details['cid']) && !empty($business_details['cid'])) {
                             $companyId = $business_details['cid'];
@@ -265,6 +265,14 @@
                             $business_type = $company_info['business_type'];
                         }
 
+                        if(isset($company_info['longitude']) && !empty($company_info['longitude'])) {
+                            $longitude = $company_info['longitude'];
+                        }
+
+                        if(isset($company_info['latitude']) && !empty($company_info['latitude'])) {
+                            $latitude = $company_info['latitude'];
+                        }
+
                         /*var_dump($company_info); exit();*/
                     } 
                 ?>
@@ -326,8 +334,8 @@
                                     <span class="error" id="b_zip"></span>
                                 </div>
 
-                                <input type="hidden" name="lon" id="lon" value="">
-                                <input type="hidden" name="lat" id="lat" value="">
+                                <input type="hidden" name="lon" id="lon" value="{{$longitude}}">
+                                <input type="hidden" name="lat" id="lat" value="{{$latitude}}">
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Neighborhood/Location/Area</label>
                                     <input type="text" class="form-control" name="neighborhood" id="b_neighborhood" size="30" placeholder='Neighborhood' value="{{ $neighborhood }}" maxlength="50">

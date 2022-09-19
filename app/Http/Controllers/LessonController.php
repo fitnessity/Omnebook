@@ -1722,12 +1722,11 @@ class LessonController extends Controller {
     }
     
     public function getCompareProfessionalDetail($id) {
-
+		
         $professional_id = array();
         if (isset($id) && $id != "") {
             $professional_id = explode(",", $id);
         }
-        
         $profiledetail = $this->users->getUserProfileDetail2($professional_id, array('professional_detail', 'certification', 'service'));
         
         $return = array();
@@ -1739,6 +1738,7 @@ class LessonController extends Controller {
         // print_r(count($profiledetail));die;
         $sports_names = $this->sports->getAllSportsNames();
         $data = array();
+		
         foreach ($profiledetail as $profile) {
             // print_r($profile);die;
             $c_names = '';

@@ -1636,7 +1636,7 @@ class UserProfileController extends Controller {
     /* Step 2 - Business Profile */
     public function addbusinesscompanydetail(Request $request) {
 
-        //dd($request->all());
+       /* dd($request->all());*/
         global $cid;
         $cid = $request->cid;
         $request->Country = 'US';
@@ -1683,7 +1683,7 @@ class UserProfileController extends Controller {
         $data['lng'] = $json->results[0]->geometry->location->lng;*/
 
         $data['lat'] = $request->lat;
-        $data['lng'] = $request->lng;
+        $data['lon'] = $request->lon;
         
         $companyData = [
             "user_id" => Auth::user()->id,
@@ -1705,7 +1705,7 @@ class UserProfileController extends Controller {
             "short_description" => $request->Shortdescription,
             "embed_video" => $request->EmbedVideo,
             "latitude" => $data['lat'],
-            "longitude" => $data['lng'],
+            "longitude" => $data['lon'],
             'dba_business_name' => $request->dba_business_name,
 			'additional_address' => $request->additional_address,
 			'neighborhood' => $request->neighborhood,
