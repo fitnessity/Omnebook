@@ -2122,16 +2122,23 @@ function submit_rating(sid)
 function changeactpr(aid,val,part,div,maid)
 
 {
-
 	var n = val.split('~~');
-
+    var datan = '';
+    var price_title = '';
+    if(n[2] != ''){
+        datan = n[2].split('^');
+        if(datan[1] != ''){
+            price_title = datan[1];
+            $('#price_title_hidden'+maid+aid).val(datan[1]);
+        }
+    }
 	var pr; var qty;
 
 	var actfilparticipant=$('#actfilparticipant'+maid).val();
 
 	var category_title = $('#cate_title'+maid+aid).val();
 
-    var price_title = $('#price_title_hidden'+maid+aid).val();
+    //var price_title = $('#price_title_hidden'+maid+aid).val();
 
     var time = $('#time_hidden'+maid+aid).val();
 

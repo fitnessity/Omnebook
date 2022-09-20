@@ -49,11 +49,9 @@ $compinfo = CompanyInformation::where('id',request()->id)->first();
 $loggedinUser = '';
 $loggedinUser = User::where('id',$compinfo->user_id)->first();
 $loggedinUserorignal = Auth::user();
-$loggedinUserId=$customerfname =$customerlname=''; $customerName =''; $profilePicture =''; $coverPicture ='';
+$loggedinUserId=''; $customerName =''; $profilePicture =''; $coverPicture ='';
 if($loggedinUser != ''){
 	$loggedinUserId=$loggedinUser->id;
-    $customerfname=$loggedinUser->firstname;
-    $customerlname=$loggedinUser->lastname;
 	$customerName = $loggedinUser->firstname . ' ' . $loggedinUser->lastname;
     $profilePicture = $loggedinUser->profile_pic;
     $coverPicture = $loggedinUser->cover_photo;
@@ -210,11 +208,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <div class="bnr-information">
                     <div class="viewdisplay">
                     
-                        <h2 style="text-transform: capitalize;">@if($compinfo->dba_business_name == '') {{$compinfo->company_name}} @else {{$compinfo->dba_business_name}} @endif <?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
+                        <h2 style="text-transform: capitalize;">{{$compinfo->dba_business_name}}<?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
                     <?php /*?><span>Claimed</span><?php */?>
 					<!--<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" width="45" height="20">-->
 					</h2></div>
-                    <div class="viewdisplay colorshade"><p>@if($compinfo->is_verified == 0) Unclaimed @else Claimed @endif</p></div>
+                    <div class="viewdisplay colorshade"><p>{{$claim}}</p></div>
                     @if(isset($compinfo->about_company))
                     	<h6> {{$compinfo->about_company}} </h6>
                     @endif
@@ -374,7 +372,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         	<?php 
 							$totpost = PagePost::where('user_id', $compinfo->user_id)->where('page_id', request()->id)->count(); 
 							$totFollowers = PageLike::where('pageid', request()->id)->count();
-                            $totFollowings = PageLike::where('follower_id', $loggedinUserId)->count();
+                            $totFollowings = PageLike::where('follower_id', $loggedinUser->id)->count();
 							?>
 							<li><span>Posts</span><ins><?php echo $totpost; ?></ins></li>
 							<li><span>Followers</span><ins>{{$totFollowers}}</ins></li>
@@ -543,7 +541,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                             @endif
                                         </figure>
                                     <div class="friend-name">
-                                        <ins><a href="#" title="">{{ucfirst($customerfname)}} {{ucfirst($customerlname)}}</a> Post Album</ins>
+                                        <ins><a href="#" title="">{{ucfirst($loggedinUser->firstname)}} {{ucfirst($loggedinUser->lastname)}}</a> Post Album</ins>
                                     </div>
                                     <div class="post-meta">
                                        <p class="postText"></p>
@@ -552,7 +550,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 <div class="row" >
                                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                                         <div class="default-img-profile">
-                                                            <img src="{{url('/public/images/newimage/fitness-img-1.jpg')}}">
+                                                            <img src="https://development.fitnessity.co//public/images/newimage/fitness-img-1.jpg">
                                                             <label> Joined </label>
                                                             <label class="lstyle">  Fitnessity for Business </label>
                                                            <span class="spanstyle"><?php 
@@ -857,7 +855,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         @if($page_posts_like>0)
 															@if(!empty($loginuser_like))
 																<a data-toggle="tooltip" title="" href="#">
-                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$profilePicture) }}" height="32" width="32">  
+                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" height="32" width="32">  
                                                                 </a>
                                                             @endif
                                                    			<?php 
@@ -952,7 +950,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @else
                                                     <?php
                                                     echo '<div class="company-img-text">';
-                                                    $pf=substr($customerfname, 0, 1).substr($customerlname, 0, 1);
+                                                    $pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
                                                     echo '<p>'.$pf.'</p></div>';
                                                     ?>
                                                 @endif
@@ -1699,7 +1697,7 @@ function readURLCOVER(input) {
 $('.editpic').click(function () {
    var imgname = $(this).attr('imgname');
    var id = $(this).attr('id');
-   var foldernm = '<?php echo $loggedinUserId;  ?>';
+   var foldernm = '<?php echo $loggedinUser->id;  ?>';
    $('#imgId').val(id);
    $('#imgname').val(imgname);
    $(".srcappend").attr("src","/public/uploads/page-cover-photo/thumb/"+imgname);

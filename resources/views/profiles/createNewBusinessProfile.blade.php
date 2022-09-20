@@ -12360,7 +12360,7 @@ $('body').delegate('.is_recurring_cls','click',function(){
 
         $("#total_contract_revenue_"+val+i+j).val(price);
 
-        var total = price/part;
+        var total = Math.round(price/part);
 
         if(total == 'Infinity'){
 

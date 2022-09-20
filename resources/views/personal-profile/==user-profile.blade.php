@@ -80,7 +80,7 @@
                                     </div>-->
                                 </div>
 
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                     <div class="row">
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -139,7 +139,7 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
-                                                <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$UserProfileDetail['phone_number'] }}" onkeyup="changeformate()">
+                                                <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$UserProfileDetail['phone_number'] }}">
                                                 @if ($errors->has('phone_number'))
                                                 <span class="help-block" style="color:red">
                                                     <strong>Phone number is required</strong>
@@ -217,7 +217,7 @@
                                     <input type="submit" name="btnprofile" id="btnprofile" value="Update" class="btn-style-one">
                                 </div>
 
-                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 user-top">
+                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 user-top">
 
                                     <div class="form-group editform">
                                         <input type="text" readonly placeholder="Email" class="form-control" value="{{$UserProfileDetail['email'] }}">
@@ -574,17 +574,6 @@ $(document).ready(function() {
                     $(".edit_profile_section").load(location.href + " .edit_profile_section");
                 }
             });
-        }
-    }
-
-    function changeformate(idname) {
-        /*$('#b_contact').val();*/
-        var con = $('#phone_number').val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $('#phone_number').val("(" + con + ")" + " ");
-        } else if (curchr == 9) {
-            $('#phone_number').val(con + "-");
         }
     }
 
