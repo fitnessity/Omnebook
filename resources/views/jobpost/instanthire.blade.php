@@ -2124,7 +2124,7 @@ function changeactpr(aid,val,part,div,maid)
 {
 	var n = val.split('~~');
     var datan = '';
-    var price_title = '';
+    var price_title = '—';
     if(n[2] != ''){
         datan = n[2].split('^');
         if(datan[1] != ''){

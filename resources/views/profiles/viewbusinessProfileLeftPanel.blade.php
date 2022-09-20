@@ -6,25 +6,29 @@
 	use Carbon\Carbon;
 	use App\UserBookingDetail;
 	
-	
 	$userData = User::where('id',$compinfo->user_id)->first();
 	$totpost = PagePost::where('user_id', $compinfo->user_id)->where('page_id', request()->id)->count();
 	$FollowingThisweek = PageLike::where('pageid', request()->id)->whereBetween('created_at', 
 [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
 	$totFollowers = PageLike::where('pageid', request()->id)->count();
+
 	$current_data  = UserBookingDetail::get();
 	$i = 0;
 	foreach ($current_data as $key => $value) {
 	    $serviceid = $value->sport;
 	    $getdata = BusinessServices::where('id',$serviceid)->first();
 	    if($getdata != ''){
-	    	if($getdata->cid == $company->id ){
+	    	if($getdata->cid == $compinfo->id ){
 	      		$i++;
 	    	}
 	    }
 	}
 	$totalbookings = $i;
 	/*$totalbookings = UserBookingStatus::where('user_id',$compinfo->user_id)->count();*/
+	$business_usre_name= '—';
+	if($compinfo != ''){
+		$business_usre_name = "@".$compinfo->business_user_tag;
+	}
 ?>
 
 <?php /*?>
@@ -73,7 +77,7 @@
     <div class="row">
     	<div class="col-sm-12 col-md-12 col-lg-12">
 			<div class="wid-sp">
-				<b> Username: </b> @if(isset($userData['username'])) {{ "@".$userData['username']}} @else No Username @endif
+				<b> Username: </b> {{$business_usre_name}}
 			</div>
 		</div>
 	</div>
@@ -85,9 +89,9 @@
 				</div>
 				@if(isset($userData['dobstatus']))
                     @if($userData['dobstatus'] == 0)
-                        <div class="pro-intro">
-                            <b> Birthday: </b> <p> <?php echo date('F d, Y', strtotime($userData['birthdate']) ); ?></p>
-                        </div>
+                        <!-- <div class="pro-intro">
+                            <b> Birthday: </b> <p> <?php /*echo date('F d, Y', strtotime($userData['birthdate']) );*/ ?></p>
+                        </div> -->
                     @endif
                 @endif
 			</div>
@@ -97,10 +101,10 @@
     	<div class="col-sm-12 col-md-12 col-lg-12">
     		<?php 
     		$country = '';
-    		if($company->country == 'usa' || $company->country == 'USA' || $company->country == 'United States'){
+    		if($compinfo->country == 'usa' || $compinfo->country == 'USA' || $compinfo->country == 'United States' || $compinfo->country == 'US' || $compinfo->country == ''){
     			$country = 'United States';
     		} ?>
-    		@if($compinfo['country'] != '')
+    		<!-- @if($compinfo['country'] != '') -->
 			<div class="wid-sp img-bot">
 				<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" class="img-fluid" width="25" height="15">
 				{{ $country  }}

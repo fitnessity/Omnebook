@@ -28,7 +28,9 @@
         border-radius: 20px;
     }
 </style>
-<?php $today =date('m-d-Y') ;?>
+<?php 
+    $today =date('m-d-Y') ;
+?>
 <div class="page-wrapper inner_top" id="wrapper">
 
     <div class="page-container">
@@ -79,7 +81,20 @@
                                     @if(count($UserFamilyDetails)>0)
 
                                     @foreach($UserFamilyDetails as $family)
+                                    @php 
+                                        $mobile_num = $family->mobile;
+                                        if (preg_match('/()-/', $mobile_num)){ 
+                                            $mobile = $mobile_num;
+                                        }else{
+                                            $mobile = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $mobile_num);
+                                        }
 
+                                        $emergency_contact_num = $family->emergency_contact;
+                                        if (preg_match('/()-/', $emergency_contact_num)){
+                                            $emergency_contact = $emergency_contact_num;
+                                        }else{
+                                            $emergency_contact = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $emergency_contact_num);
+                                        }@endphp
                                     <div class="row" id="familydiv{{$fam_cnt}}">	
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
@@ -153,7 +168,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$family->mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile{{$fam_cnt}}')">
+                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile{{$fam_cnt}}')">
                                             </div>
 
 
@@ -168,7 +183,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$family->emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('emergency_contact{{$fam_cnt}}')">
+                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('emergency_contact{{$fam_cnt}}')">
                                                 <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" >
                                             </div>
 

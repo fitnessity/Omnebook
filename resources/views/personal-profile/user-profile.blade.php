@@ -16,7 +16,16 @@
     opacity: .5;
 }
 </style>
-
+<?php   
+    $phone_num = $UserProfileDetail['phone_number'];
+    if (preg_match('/()-/', $phone_num)){
+       
+        $phone_number = $phone_num;
+    }else{
+        
+        $phone_number = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone_num);
+    }
+?>
 <div class="page-wrapper inner_top" id="wrapper">
 
     <div class="page-container">
@@ -136,10 +145,9 @@
                                                 <input type="text" readonly="readonly" placeholder="@username" class="form-control" value="{{$UserProfileDetail['username'] }}">
                                             </div>
                                         </div>
-
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
-                                                <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$UserProfileDetail['phone_number'] }}" onkeyup="changeformate()">
+                                                <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$phone_number}}" maxlength="14"  onkeyup="changeformate()">
                                                 @if ($errors->has('phone_number'))
                                                 <span class="help-block" style="color:red">
                                                     <strong>Phone number is required</strong>
