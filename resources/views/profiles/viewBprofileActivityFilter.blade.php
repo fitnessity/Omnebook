@@ -297,11 +297,11 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                    $servicePrfirst = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->first();
 	                                    $sercate = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->toArray();
 	                                    $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->first();
-	                                    $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',$sercatefirst['id'])->get()->toArray();
+	                                    $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
 	                                   /* print_r( $servicePr );exit();*/
 	                                    $todayday = date("l");
 	                                    $todaydate = date('m/d/Y');
-	                                    $bus_schedule = BusinessActivityScheduler::where('category_id',$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
+	                                    $bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
 	                                    $start =$end= $time= '';$timedata = $SpotsLeft = 0; $Totalspot = $spot_avil= 0; 
 	                                    if(!empty($bus_schedule)){
 	                                        foreach($bus_schedule as $data){
@@ -352,7 +352,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                        }
 	                                    }
 	                                    if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-	                                        $total_price_val =  $servicePrfirst['adult_weekend_price_diff'];
+	                                        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
 	                                        $selectval = '';$priceid = '';$i=1;
 	                                        if(!empty(@$servicePr)){
 	                                            foreach ($servicePr as  $pr) {
@@ -370,7 +370,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                            }
 	                                        }
 	                                    }else{
-	                                        $total_price_val =  $servicePrfirst['adult_cus_weekly_price'];
+	                                        $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
 	                                        $selectval = '';$priceid = '';$i=1;
 	                                        if(!empty(@$servicePr)){
 	                                            foreach ($servicePr as  $pr) {
@@ -414,7 +414,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                                         <p>@if($timedata!=0){{$timedata}} @endif</p>
                                         <p>Spots Left: {{$Totalspot}}</p><br>
                                         @if(@$servicePrfirst['price_title'] != '')<p>Price Title:  <?php echo @$servicePrfirst['price_title']; ?></p> @endif
-                                        <p>Price Option: <?php echo $servicePrfirst['pay_session']; ?> Session</p>
+                                        <p>Price Option: <?php echo @$servicePrfirst['pay_session']; ?> Session</p>
                                         <p>Participants: <?php echo '1'; ?></p>
                                             <?php /*?><p>Participants: <?php echo @$act['group_size'] ?></p><?php */?>
                                         <p>Total: $<?php echo $total_price_val.'/person'; ?></p>
@@ -436,7 +436,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                        <?php /*?><input type="button" value="Sold Out" class="btn btn-addtocart mt-10" /><?php */?>
 	                                         <a href='javascript:void(0)' class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>
 	                                    @else
-	                                        @if($servicePrfirst['adult_cus_weekly_price'] !='' && @$timedata!='')
+	                                        @if(@$servicePrfirst['adult_cus_weekly_price'] !='' && @$timedata!='')
 	                                        <input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $act["id"]; ?>')" class="btn btn-addtocart mt-10"  id="addtocart{{$act['id']}}" />
 	                                        @endif
 	                                    @endif

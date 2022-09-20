@@ -1272,14 +1272,8 @@ class LessonController extends Controller {
 
         //print_r( $searchData);die;
         $searchDataProfile=array();
-        if ($myloc != null && $myloc != 'undefined') {
-            //$searchData->where('exp_city', 'LIKE', '%'. $myloc . '%')->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
-            $searchData->where(function ($query) use ($myloc) {
-                $query->where('exp_city', 'LIKE', '%'. $myloc . '%')        
-                ->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
-            });
-        }
-    
+        $searchDatauserProfile = '';
+        $searchDatabusiness = '';
         if ($select_label != null && $select_label != 'undefined') {
            /* echo "$select_label";die;*/
             //$searchData->where('sport_activity', 'LIKE', $select_label . '%');
@@ -1287,7 +1281,8 @@ class LessonController extends Controller {
                 $query->where('sport_activity', 'LIKE', '%'. $select_label . '%');       
                    /* ->orWhere('program_name', 'LIKE',  '%'.$select_label . '%')*/;
             });
-           /* $searchDataProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->get();*/
+            $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
+            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
         }
 
         if ($select_zipcode != null && $select_zipcode != 'undefined') {
@@ -1295,6 +1290,22 @@ class LessonController extends Controller {
         }
         if ($site_search != null && $site_search != 'undefined') {
             $searchData->where('sport_activity', 'LIKE', '%'.$site_search . '%');
+        }
+
+        if ($myloc != null && $myloc != 'undefined') {
+            $search = $myloc;
+            if(!empty($search) ||$search[0]!= ''){
+                $searchData->join('company_informations', 'business_services.userid', '=', 'company_informations.user_id')->select('business_services.*','company_informations.*')->groupby('business_services.id')->where(function ($query) use ($search){
+                            $query->Where('company_informations.city', 'LIKE', '%'. $search . '%')->orwhere('company_informations.state', 'LIKE', '%'. $search . '%')->orWhere('company_informations.zip_code', 'LIKE', '%'. $search . '%')->orWhere('company_informations.country', 'LIKE', '%'. $search . '%');
+                        });
+                /*orwhere('company_informations.state', 'LIKE', '%'. $search . '%') ->orWhere('company_informations.city', 'LIKE', '%'. $search . '%')->orWhere('company_informations.zip_code', 'LIKE', '%'. $search . '%');*/
+            }
+            //$searchData->where('exp_city', 'LIKE', '%'. $myloc . '%')->orWhere('exp_state', 'LIKE', '%'. $myloc . '%');
+            /*$searchData->where(function ($query) use ($myloc) {
+                $query->where('state', 'LIKE', '%'. $myloc . '%')        
+                ->orWhere('city', 'LIKE', '%'. $myloc . '%');
+                ->orWhere('zip_code', 'LIKE', '%'. $myloc . '%');
+            });*/
         }
 
         if($request->program_type  != null) {
@@ -1355,7 +1366,7 @@ class LessonController extends Controller {
         if($request->frm_cnumberofpeople  != null) {
             $search = $request->frm_cnumberofpeople;
             if(!empty($search[0]) ||$search[0]!= ''){
-                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->orWhere('business_activity_scheduler.spots_available', '>=', $request->frm_cnumberofpeople)->distinct()->groupBy('business_services.id');
+                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->Where('business_activity_scheduler.spots_available', '>=', $request->frm_cnumberofpeople)->distinct()->groupBy('business_services.id');
             }
         }
 
@@ -1383,7 +1394,7 @@ class LessonController extends Controller {
             if(!empty($search)){
                 $searchData->where(function($q) use ($search) {
                     foreach ($search as $data) {
-                        $q->orWhere('mon_duration', 'LIKE', '%'. $data . '%')->orWhere('tue_duration', 'LIKE', '%'. $data . '%')->orWhere('wed_duration', 'LIKE', '%'. $data . '%')->orWhere('thu_duration', 'LIKE', '%'. $data . '%')->orWhere('fri_duration', 'LIKE', '%'. $data . '%')->orWhere('sat_duration', 'LIKE', '%'. $data . '%')->orWhere('sun_duration', 'LIKE', '%'. $data . '%');
+                        $q->orWhere('mon_duration', 'LIKE', '%'. $data . '%')->orWhere('tue_duration', 'LIKE', '%'. $data . '%')->orWhere('wed_duration', 'LIKE', '%'. $data . '%')->orWhere('thu_duration', 'LIKE', '%'. $data . '%')->orWhere('fri_duration', 'LIKE', '%'. $data . '%')->orWhere('sat_duration', 'LIKE', '%'. $data . '%')->orWhere('sun_duration', 'LIKE', '%'. $data . '%')->where('business_services.is_active',1);
                     }
                 });
             }
@@ -1474,11 +1485,13 @@ class LessonController extends Controller {
             }
         }
          
-        $serviceData = $searchData->get();
+        $serviceData = $searchData->where('business_services.is_active',1)->get();
         /*if(!empty($request->all())){
             dd(DB::getQueryLog());
         }*/
-        //echo "<pre>";print_r($serviceData);die;
+       /* if(!empty($request->all())){
+            echo "<pre>";print_r($serviceData);die;
+        }*/
         /*if ($myloc != null && $myloc != 'undefined') {
             if ($select_zipcode != null && $select_zipcode != 'undefined') {
               $company = CompanyInformation::where('sport_activity', 'LIKE', $select_label . '%')->where('program_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
@@ -1570,27 +1583,35 @@ class LessonController extends Controller {
         );
         
         // echo "<pre>";print_r($serviceData);die;
-        return view('jobpost.instanthire', [
-            'cart' => $cart,
-                  'serviceData' => $resultnew,
-            //'serviceData' => $serviceData,
-            'companyData' => $companyData,
-            'servicePrice' => $servicePrice,
-            'businessSpec' => $businessSpec,
-            'sports' => $sports,
-            'sport_names' => $sport_names,
-            'businessType' => $businessType,
-            'pageTitle' => "DIRECT HIRE",
-            'activity' => $activity,
-            'programType' => $programType,
-            'ageRange' => $ageRange,
-            'alllanguages' => $languages,
-            'pFocuses' => $pFocuses,
-            'serviceLocation' => $serviceLocation,
-            'sports_select' => $sports_select,
-            'locations' => $locations,
-            'searchDataProfile' => $searchDataProfile,
-        ]);
+
+        if($searchDatauserProfile != ''){
+            return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
+        }else if($searchDatabusiness !=''){
+            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
+        }else{
+            return view('jobpost.instanthire', [
+                'cart' => $cart,
+                'serviceData' => $resultnew,
+                //'serviceData' => $serviceData,
+                'companyData' => $companyData,
+                'servicePrice' => $servicePrice,
+                'businessSpec' => $businessSpec,
+                'sports' => $sports,
+                'sport_names' => $sport_names,
+                'businessType' => $businessType,
+                'pageTitle' => "DIRECT HIRE",
+                'activity' => $activity,
+                'programType' => $programType,
+                'ageRange' => $ageRange,
+                'alllanguages' => $languages,
+                'pFocuses' => $pFocuses,
+                'serviceLocation' => $serviceLocation,
+                'sports_select' => $sports_select,
+                'locations' => $locations,
+                'searchDataProfile' => $searchDataProfile,
+            ]);
+        }
+        
     }
 
     public function getBookingServiceData(Request $request) {
@@ -3378,14 +3399,14 @@ class LessonController extends Controller {
                     foreach ($servicePr as  $pr) {
                         if($i==1){ 
                             $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                         if($pr['adult_weekend_price_diff'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
                         if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
                         }
                         if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
                         }$i++;
                     }
                 }else{
@@ -3394,14 +3415,14 @@ class LessonController extends Controller {
                     foreach ($servicePr as  $pr) {
                         if($i==1){ 
                             $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                         if($pr['adult_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
                         if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
                         }
                         if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
                         }$i++;
                     }
                 }
@@ -3776,14 +3797,14 @@ class LessonController extends Controller {
                     foreach ($servicePr as  $pr) {
                         if($i==1){ 
                             $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                         if($pr['adult_weekend_price_diff'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
                         if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
                         }
                         if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
                         }$i++;
                     }
                 }else{
@@ -3792,14 +3813,14 @@ class LessonController extends Controller {
                     foreach ($servicePr as  $pr) {
                         if($i==1){ 
                             $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                         if($pr['adult_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
                         if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
                         }
                         if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
+                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
                         }$i++;
                     }
                 }
@@ -3990,21 +4011,21 @@ class LessonController extends Controller {
             $stactbox .= '<select id="selprice'.$actid.'" name="selprice'.$actid.'" class="price-select-control" onchange="changeactpr('.$fun_para.')">';
             foreach ($price as $pr) {
                 if($i==1){
-                    $stactbox .= '<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+                    $stactbox .= '<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
 
                     if($pr['adult_cus_weekly_price'] != ''){
                         $stactbox .= '
-                            <option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">
+                            <option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">
                                 Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';
                     }
                     if($pr['child_cus_weekly_price'] != ''){
                         $stactbox .= '    
-                            <option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">
+                            <option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">
                                 Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
                     }   
                     if($pr['infant_cus_weekly_price'] != ''){
                         $stactbox .= '    
-                            <option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">
+                            <option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">
                                 Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
                     }
                     

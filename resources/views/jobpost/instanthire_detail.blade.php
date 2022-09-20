@@ -1150,89 +1150,43 @@
                                     
 
 									if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-
                                         $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
-
                                         $selectval = '';$priceid = '';$i=1;
-
-										
-
                                         if (!empty(@$servicePr)) {
-
                                             foreach ($servicePr as  $pr) {
-
                                                 if($i==1){ 
-
                                                     $priceid =$pr['id'];
-
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Select Price Option</option>'; }
-
+                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                                                 if($pr['adult_weekend_price_diff'] != ''){
-
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-
+                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
                                                 if($pr['child_cus_weekly_price'] != ''){
-
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-
+                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
                                                 }
-
                                                 if($pr['infant_cus_weekly_price'] != ''){
-
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-
+                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
                                                 }$i++;
-
                                             }
-
                                         }
-
                                     }else{
-
 										$selectval = ''; $priceid = ''; $total_price_val='';
-
 										//print_r($servicePr); exit;
-
 										if(!empty(@$servicePr))
-
 										{
-
-											
-
 											$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
-
 											$i=1;
-
-											
-
-												foreach ($servicePr as  $pr) {
-
-													if($i==1){ 
-
-														$priceid =$pr['id'];
-
-														$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
-
-													if($pr['adult_cus_weekly_price'] != ''){
-
-														$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-
-													if($pr['child_cus_weekly_price'] != ''){
-
-														$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-
-													}
-
-													if($pr['infant_cus_weekly_price'] != ''){
-
-														$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-
-													}$i++;
-
+                                            foreach ($servicePr as  $pr) {
+												if($i==1){ 
+													$priceid =$pr['id'];
+													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
+												if($pr['adult_cus_weekly_price'] != ''){
+													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
+												if($pr['child_cus_weekly_price'] != ''){
+													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
 												}
-
-											
-
+												if($pr['infant_cus_weekly_price'] != ''){
+													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
+												}$i++;
+											}
 										}
 
                                     }
@@ -1705,81 +1659,42 @@
                                         }
 
                                         if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-
                                             $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
-
                                             $selectval = '';$priceid = '';$i=1;
-
                                             if(!empty(@$servicePr)){
-
                                                 foreach ($servicePr as  $pr) {
-
                                                     if($i==1){ 
-
                                                         $priceid =$pr['id'];
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Select Price Option</option>'; }
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                                                     if($pr['adult_weekend_price_diff'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
                                                     if($pr['child_cus_weekly_price'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
                                                     }
-
                                                     if($pr['infant_cus_weekly_price'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
                                                     }$i++;
-
                                                 }
-
                                             }
-
                                         }else{
-
                                             $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
-
                                             $selectval = '';$priceid = '';$i=1;
-
                                             if(!empty(@$servicePr)){
-
                                                 foreach ($servicePr as  $pr) {
-
                                                     if($i==1){ 
-
                                                         $priceid =$pr['id'];
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
                                                     if($pr['adult_cus_weekly_price'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
                                                     if($pr['child_cus_weekly_price'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
                                                     }
-
                                                     if($pr['infant_cus_weekly_price'] != ''){
-
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-
+                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
                                                     }$i++;
-
                                                 }
-
                                             }
-
                                         }
-
-                                       
-
                                     ?>
 
 

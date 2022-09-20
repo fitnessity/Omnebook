@@ -8999,13 +8999,15 @@ class UserProfileController extends Controller {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services->service_type == 'classes'){
-                    $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                    $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                    $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                    $businessuser = json_decode(json_encode($businessuser), true);
-                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                    $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                if($business_services != ''){
+                    if($business_services->service_type == 'classes'){
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                    }
                 }
             }
         }
@@ -9054,14 +9056,16 @@ class UserProfileController extends Controller {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services->service_type == 'experience'){
-                    $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                    $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                    $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                    $businessuser = json_decode(json_encode($businessuser), true);
-                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                    $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                } 
+                if($business_services != ''){
+                    if($business_services->service_type == 'experience'){
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                    } 
+                }
             }
         }
        return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
@@ -9107,7 +9111,6 @@ class UserProfileController extends Controller {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-
                 if($business_services != ''){
                     if($business_services->service_type == 'individual'){
                         $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
@@ -10411,7 +10414,7 @@ class UserProfileController extends Controller {
                             'emergency_contact' => $request['emergency_contact'][0],
                             'relationship' => $request['relationship'][0],
                             'gender' => $request['gender'][0],
-                            'birthday' => date('Y-m-d', strtotime($request['birthdate'][0])),
+                            'birthday' => $request['birthdate'][0],
                             'emergency_contact_name' => $request['emergency_name'][0],
                 ]);
             }           
@@ -10426,7 +10429,7 @@ class UserProfileController extends Controller {
                     $cat->emergency_contact = $request['emergency_contact'][$i];
                     $cat->relationship = $request['relationship'][$i];
                     $cat->gender = $request['gender'][$i];
-                    $cat->birthday = date('Y-m-d', strtotime($request['birthdate'][$i]));
+                    $cat->birthday = $request['birthdate'][$i];
                     $cat->emergency_contact_name = $request['emergency_name'][$i];
                     $data = $cat->update();
                 } else {
@@ -10444,7 +10447,7 @@ class UserProfileController extends Controller {
                                 'emergency_contact' => $request['emergency_contact'][$j],
                                 'relationship' => $request['relationship'][$j],
                                 'gender' => $request['gender'][$j],
-                                'birthday' => date('Y-m-d', strtotime($request['birthdate'][$j])),
+                                'birthday' => $request['birthdate'][$j],
                                 'emergency_contact_name' => $request['emergency_name'][$j],
                     ]);
                 }
