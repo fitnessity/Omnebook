@@ -72,13 +72,13 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 				</div>
                 <div class="your-page">
 					<dl>
-                    	<dt>Monday</dt><dd><?php echo date('h:i a', strtotime($mons)).' - '.date('h:i a', strtotime($mone)); ?></dd>
-						<dt>Tuesday</dt><dd><?php echo date('h:i a', strtotime($tues)).' - '.date('h:i a', strtotime($tuee)); ?></dd>
-						<dt>Wednesday</dt><dd><?php echo date('h:i a', strtotime($weds)).' - '.date('h:i a', strtotime($wede)); ?></dd>
-						<dt>Thursday</dt><dd><?php echo date('h:i a', strtotime($thus)).' - '.date('h:i a', strtotime($thue)); ?></dd>
-						<dt>Friday</dt><dd><?php echo date('h:i a', strtotime($fris)).' - '.date('h:i a', strtotime($frie)); ?></dd>
-						<dt>Saturday</dt><dd><?php echo date('h:i a', strtotime($sats)).' - '.date('h:i a', strtotime($sate)); ?></dd>
-						<dt>Sunday</dt><dd><?php echo date('h:i a', strtotime($suns)).' - '.date('h:i a', strtotime($sune)); ?></dd>
+                    	<dt>Monday</dt><dd><?php if($mons != ''){ echo date('h:i a', strtotime($mons)).' - '.date('h:i a', strtotime($mone)); }else{ echo "—" ;} ?></dd>
+                        <dt>Tuesday</dt><dd><?php if($tues != ''){  echo date('h:i a', strtotime($tues)).' - '.date('h:i a', strtotime($tuee));  }else{ echo "—" ;}  ?></dd>
+                        <dt>Wednesday</dt><dd><?php if($weds != ''){  echo date('h:i a', strtotime($weds)).' - '.date('h:i a', strtotime($wede));  }else{ echo "—" ;}  ?></dd>
+                        <dt>Thursday</dt><dd><?php if($thus != ''){ echo date('h:i a', strtotime($thus)).' - '.date('h:i a', strtotime($thue)); }else{ echo "—" ;}  ?></dd>
+                        <dt>Friday</dt><dd><?php if($fris != ''){ echo date('h:i a', strtotime($fris)).' - '.date('h:i a', strtotime($frie)); }else{ echo "—" ;}  ?></dd>
+                        <dt>Saturday</dt><dd><?php if($sats != ''){ echo date('h:i a', strtotime($sats)).' - '.date('h:i a', strtotime($sate)); }else{ echo "—" ;}  ?></dd>
+                        <dt>Sunday</dt><dd><?php if($suns != ''){ echo date('h:i a', strtotime($suns)).' - '.date('h:i a', strtotime($sune));  }else{ echo "—" ;}  ?></dd>
                         <?php if($mons!='' && $tues!='' && $weds!='' && $thus!='' && $fris!='' && $sats!='' && $suns) { $all='Open All Day'; } ?>
                         <dt></dt><dd> <?php echo $all; ?> </dd>
 					</dl>	
@@ -134,8 +134,18 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 					</span>
                     @endif
                     @if ($company->contact_number !='')
+                    @php
+                        $phone_num = $company->contact_number;
+                        if (preg_match('/()-/', $phone_num)){
+                           
+                            $phone_number = $phone_num;
+                        }else{
+                            
+                            $phone_number = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone_num);
+                        }
+                    @endphp
 					<span>
-						<i class="fas fa-phone-alt map-fa"></i><p>{{ $company->contact_number }}</p>
+						<i class="fas fa-phone-alt map-fa"></i><p>{{ $phone_number }}</p>
 					</span>
                     @endif
                     @if ($company->email !='')

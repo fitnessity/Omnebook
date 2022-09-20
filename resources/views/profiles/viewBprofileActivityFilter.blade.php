@@ -358,14 +358,14 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                            foreach ($servicePr as  $pr) {
 	                                                if($i==1){ 
 	                                                    $priceid =$pr['id'];
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
 	                                                if($pr['adult_weekend_price_diff'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
 	                                                if($pr['child_cus_weekly_price'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
 	                                                }
 	                                                if($pr['infant_cus_weekly_price'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
 	                                                }$i++;
 	                                            }
 	                                        }
@@ -376,14 +376,14 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 	                                            foreach ($servicePr as  $pr) {
 	                                                if($i==1){ 
 	                                                    $priceid =$pr['id'];
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
 	                                                if($pr['adult_cus_weekly_price'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
 	                                                if($pr['child_cus_weekly_price'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
 	                                                }
 	                                                if($pr['infant_cus_weekly_price'] != ''){
-	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
+	                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
 	                                                }$i++;
 	                                            }
 	                                        }
@@ -479,9 +479,19 @@ function changeactpr(aid,val,part,div,maid)
 {
 	/*alert(val);*/
 	var n = val.split('~~');
+    var datan = '';
+    var price_title = '';
+    if(n[2] != ''){
+        datan = n[2].split('^');
+        if(datan[1] != ''){
+            //alert(datan[1]);
+            price_title = datan[1];
+            $('#price_title_hidden'+maid+aid).val(datan[1]);
+        }
+    }
 	var actfilparticipant=$('#actfilparticipant').val();
 	var category_title = $('#cate_title'+maid+aid).val();
-    var price_title = $('#price_title_hidden'+maid+aid).val();
+   /* var price_title = $('#price_title_hidden'+maid+aid).val();*/
     var time = $('#time_hidden'+maid+aid).val();
     var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
 	if(actfilparticipant!='')

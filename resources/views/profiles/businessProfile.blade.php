@@ -794,10 +794,25 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 							<div class="col-xs-12" id="slider">
 								<span class="create-post">Videos</span>
                                 @if($compinfo->embed_video != '')
+                                <?php 
+
+                                    function getYoutubeEmbedUrl($url){
+                                        $shortUrlRegex = '/youtu.be\/([a-zA-Z0-9_]+)\??/i';
+                                        $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))(\w+)/i';
+                                        if (preg_match($longUrlRegex, $url, $matches)) {
+                                            $youtube_id = $matches[count($matches) - 1];
+                                        }
+                                        if (preg_match($shortUrlRegex, $url, $matches)) {
+                                            $youtube_id = $matches[count($matches) - 1];
+                                        }
+                                        return 'https://www.youtube.com/embed/' . $youtube_id ;
+                                    }
+                                    $embeded_url = getYoutubeEmbedUrl($compinfo->embed_video);
+                                ?>
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                         <div class="video-tab-iframe">
-                                            <iframe width="100%" height="400px" src="{{$compinfo->embed_video}}" >
+                                            <iframe width="100%" height="400px" src="{{$embeded_url}}" >
                                             </iframe>
                                         </div>
                                     </div>
