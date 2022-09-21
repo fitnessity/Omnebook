@@ -1363,169 +1363,6 @@
                             <!--  <p><a onclick="setschedule();">+Set Your Schedule</a>(Schedule the times this activity will happen)</p> -->
                           </div>
                         </div>
-                        <div class="col-md-3">
-                          <div class="priceselect sp-select">
-                            <label>Is This A Recurring Payment?</label>
-                            <div class="">
-                              <input class="check-price"  data-count="0"  type="checkbox" id="is_recurring00" name="is_recurring_00"  onclick="openmodelbox(0,0);">
-                              <label>Set recurring payment terms</label>
-                              <button style="display:none" id="btn_recurring00" name="btn_recurring_00[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring00" onclick="recurrint_id(0,0);">Launch demo modal</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="modal fade ModelRecurring00" id="ModelRecurring00" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle00" aria-hidden="true">
-                        <div class="modal-dialog editingautopay" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <div class="editingautopay">
-                                    <h5 class="modal-title" id="ModelRecurringTitle00">Editing Autopay/Contract Settings for </h5>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-md-8">
-                                  <div class="Settings-title">
-                                    <h5> Settings </h5>
-                                  </div>
-                                  <div class="setting-box">
-                                    <div class="row set-78">
-                                      <div class="col-md-4">
-                                        <label class="contractsettings">Run Auto Pay</label>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="autopay">
-                                          <input type="radio" id="run_auto_pay00" name="run_auto_pay_00" value="on_set_schedule">
-                                          <label for="on_set_schedule">On a set schedule (recommended)</label><br>
-                                          <input type="radio" id="run_auto_pay00" name="run_auto_pay_00" value="price_opt_run_out">
-                                          <label for="price_opt_run_out">When price option runs out   </label><br> 
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row set-78">
-                                      <div class="col-md-4">
-                                        <label class="contractsettings">How often will customers be charged?</label>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="autopay">
-                                          <input type="radio" id="cust_be_charge00" name="cust_be_charge_00" value="num_of_autopay">
-                                          <label for="Autopays">Set number of autopays</label><br>
-                                          <input type="radio" id="cust_be_charge00" name="cust_be_charge_00" value="month-to-month">
-                                          <label for="Month">Month - to -Month    </label><br>
-                                        </div>
-                                        <div class="customerscharged">
-                                          <label> Every </label>
-                                          <input type="text" class="form-control valid" name="every_time_num_00" id="every_time_num00" placeholder="1">
-                                          <select class="form-control" name="every_time_00" id="00">
-                                            <option value="Weekly" selected="">Weekly</option>
-                                            <option value="On a specific month" >Month </option>
-                                          </select>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row set-78">
-                                      <div class="col-md-4">
-                                        <label class="contractsettings">Number of autopays  </label>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="nuberofautopays">
-                                          <input type="text" class="form-control valid" name="nuberofautopays_00" id="nuberofautopays00" placeholder="12">
-                                        </div>
-                                        <div class="contract">
-                                          <label>  Total duration of contract: </label>
-                                          <p>12 months</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row set-78">
-                                      <div class="col-md-4">
-                                        <label class="contractsettings">What happens after 12 payments?</label>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="autopay">
-                                          <input type="radio" id="happens_aftr_12_pmt00" name="happens_aftr_12_pmt_00" value="contract_expire">
-                                          <label for="contract">Contract Expires</label><br>
-                                          <input type="radio" id="happens_aftr_12_pmt00" name="happens_aftr_12_pmt_00" value="contract_renew">
-                                          <label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> 
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row set-78">
-                                      <div class="col-md-4">
-                                        <label class="contractsettings">When will clients be charged?</label>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="saledate">
-                                          <select class="form-control" name="client_be_charge_on_00" id="client_be_charge_on00">
-                                            <option value="sale date" selected="">On the sale date </option>
-                                            <option value="date">date</option>
-                                          </select>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="Settings-title">
-                                    <h5> Contract Review </h5>
-                                  </div>
-                                  <div class="setting-box">
-                                    <div class="set-border">
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <p id="p_price_title00"></p>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <p>($Price )</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <div class="Settings-title">
-                                          <h5> Revenue Earned </h5>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <p>First Payment:</p>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <p id="p_first_pmt00">$400</p>
-                                      </div>
-                                      <input type="hidden" name="first_pmt_00" id="first_pmt00" value="">
-                                      <input type="hidden" name="recurring_pmt_00" id="recurring_pmt00" value="">
-                                      <div class="col-md-8">
-                                        <p>Recurring Payment: </p>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <p id="p_recurring_pmt00">$400</p>
-                                      </div>
-                                      <input type="hidden" name="total_contract_revenue_00" id="total_contract_revenue00" value="">
-                                      <div class="col-md-8">
-                                        <label>Total Contract Revenue:  </label>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <p id="p_total_contract_revenue00"> $1,200</p>
-                                      </div>
-                                    </div>
-                                    <!-- <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
-                                    </div> -->
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
 
                       <div class="row mt-30">
@@ -1627,6 +1464,13 @@
                               <input type="text" name="weekend_adult_estearn_00" id="weekend_adult_estearn00" placeholder="$" >
                           </div>
                         </div>
+                        <div class="col-md-12">
+                          <div class="priceselect sp-select modelmargin">
+                            <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult00" name="is_recurring_adult_00" value="0" onclick="openmodelbox(0,0,'adult');" >
+                            <label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label>
+                            <button style="display:none" id="btn_recurring_adult00" name="btn_recurring_adult_00[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult00" onclick="recurrint_id(0,0,'adult');">Launch demo modal</button>
+                          </div>
+                        </div>
                       </div>
                       <div class="row">
                         <div class="age-cat">
@@ -1682,6 +1526,13 @@
                           <div class="cus-week-price sp-select">
                               <label>Weekend Estimated Earnings</label>
                               <input type="text" name="weekend_child_estearn_00" id="weekend_child_estearn00" placeholder="$" >
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="priceselect sp-select modelmargin">
+                            <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child00" name="is_recurring_child_00" value="0"  onclick="openmodelbox(0,0,'child');" >
+                            <label>Is This A Recurring Payment? Set the monthly payment terms for Children</label>
+                            <button style="display:none" id="btn_recurring_child00" name="btn_recurring_child_00[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child00" onclick="recurrint_id(0,0,'child');">Launch demo modal</button>
                           </div>
                         </div>
                       </div>
@@ -1741,6 +1592,14 @@
                             <input type="text" name="weekend_infant_estearn_00" id="weekend_infant_estearn00" placeholder="$">
                           </div>
                         </div>
+
+                        <div class="col-md-12">
+                          <div class="priceselect sp-select modelmargin">
+                            <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant00"     name="is_recurring_infant_00" value="0"  onclick="openmodelbox(0,0,'infant');" >
+                            <label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label>
+                            <button style="display:none" id="btn_recurring_infant00" name="btn_recurring_infant_00[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant00" onclick="recurrint_id(0,0,'infant');">Launch demo modal</button>
+                          </div>
+                        </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 col-sm-12">
@@ -1781,6 +1640,949 @@
                               </div>
                           </div>
                       </div>
+
+                                                          <div class="modal fade ModelRecurring_adult00" id="ModelRecurring_adult00" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true">
+
+                                        <div class="modal-dialog editingautopay" role="document">
+
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                                        <span aria-hidden="true">&times;</span>
+
+                                                    </button>
+
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-12">
+
+                                                            <div class="editingautopay">
+
+                                                                <h5 class="modal-title" id="ModelRecurringTitle_adult00">Editing Recurring Payments Contract Settings for ("Adults")  </h5>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-8">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Settings </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <!-- <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Run Auto Pay</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="run_auto_pay_adult00" name="run_auto_pay_adult_00" value="on_set_schedule"  >
+
+                                                                            <label for="on_set_schedule">On a set schedule (recommended)</label><br>
+
+                                                                            <input type="radio" id="run_auto_pay_adult00" name="run_auto_pay_adult_00" value="price_opt_run_out" >
+
+                                                                            <label for="price_opt_run_out">When price option runs out   </label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div> -->
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">How often will customers be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                       <!--  <div class="autopay">
+
+                                                                            <input type="radio" id="cust_be_charge_adult00" name="cust_be_charge_adult_00" value="num_of_autopay" >
+
+                                                                            <label for="Autopays">Set number of autopays</label><br>
+
+                                                                            <input type="radio" id="cust_be_charge_adult00" name="cust_be_charge_adult_00" value="month-to-month" >
+
+                                                                            <label for="Month">Month - to -Month    </label><br> 
+
+                                                                        </div>
+
+                                                                        <div class="customerscharged">
+
+                                                                            <label> Every </label>
+
+                                                                            <input type="text" class="form-control valid" name="every_time_num_adult_00" id="every_time_num_adult00" placeholder="1" value="">
+
+                                                                            <select class="form-control" name="every_time_adult_00" id="every_time_adult00">
+
+                                                                                <option value="Weekly" >Weekly</option>
+
+                                                                                <option value="On a specific month">Month </option>
+
+                                                                            </select>
+
+                                                                        </div> -->
+
+                                                                        <p>Customers will be charged every month for the duration of the contract</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Number of autopays  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="nuberofautopays">
+
+                                                                            <input type="text" class="form-control valid" name="nuberofautopays_adult_00" id="nuberofautopays_adult00" placeholder="12" value="" oninput="getnumberofpmt(0,0,'adult');">
+
+                                                                        </div>
+
+                                                                        <div class="contract">
+
+                                                                            <label>  Total duration of contract: </label>
+
+                                                                            <p id="total_duration_adult00">0 months</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">What happens after 12 payments?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_adult00" name="happens_aftr_12_pmt_adult_00" value="contract_expire">
+
+                                                                            <label for="contract">Contract Expires</label><br>
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_adult00" name="happens_aftr_12_pmt_adult_00" value="contract_renew" >
+
+                                                                            <label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">When will clients be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="saledate">
+                                                                            <input type="hidden" name="client_be_charge_on_adult_00" id="client_be_charge_on_adult_00" value="On the sale date">
+                                                                                <p>On the sale date </p>
+                                                                            <!-- <select class="form-control" name="client_be_charge_on_adult_00" id="client_be_charge_on_adult00">
+
+                                                                                <option value="sale date" >On the sale date </option> -->
+
+                                                                                <!-- <option value="date" >date</option> -->
+
+                                                                            <!-- </select> -->
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-md-4">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Contract Review </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <div class="set-border">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-8">
+
+                                                                            <p id="p_price_title_adult00"></p>
+
+                                                                        </div>
+
+                                                                        <div class="col-md-4">
+
+                                                                            <p id="p1_price_adult00">$0</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+
+                                                                    <div class="col-md-12">
+
+                                                                        <div class="Settings-title">
+
+                                                                            <h5> Revenue Breakdown </h5>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-10">
+
+                                                                        <p  id="trems_payment_adult00">Terms: 12 Monthly Payments</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>First Payment:</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_first_pmt_adult00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="first_pmt_adult_00" id="first_pmt_adult00" value="">
+
+                                                                    <input type="hidden" name="recurring_pmt_adult_00" id="recurring_pmt_adult00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>Recurring Payment: </p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_recurring_pmt_adult00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="total_contract_revenue_adult_00" id="total_contract_revenue_adult00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <label>Total Contract Revenue:  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_total_contract_revenue_adult00"> $0</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <!-- <div class="modal-footer">
+
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                                    <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
+
+                                                                </div> -->
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div> 
+
+                                    
+
+                                    <div class="modal fade ModelRecurring_child00" id="ModelRecurring_child00" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true">
+
+                                        <div class="modal-dialog editingautopay" role="document">
+
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                                        <span aria-hidden="true">&times;</span>
+
+                                                    </button>
+
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-12">
+
+                                                            <div class="editingautopay">
+
+                                                                <h5 class="modal-title" id="ModelRecurringTitle_child00">Editing Recurring Payments Contract Settings for ("Children") </h5>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-8">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Settings </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <!-- <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Run Auto Pay</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="run_auto_pay_child00" name="run_auto_pay_child_00" value="on_set_schedule"  >
+
+                                                                            <label for="on_set_schedule">On a set schedule (recommended)</label><br>
+
+                                                                            <input type="radio" id="run_auto_pay_child00" name="run_auto_pay_child_00" value="price_opt_run_out" >
+
+                                                                            <label for="price_opt_run_out">When price option runs out   </label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div> -->
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">How often will customers be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <!-- <div class="autopay">
+
+                                                                            <input type="radio" id="cust_be_charge_child00" name="cust_be_charge_child_00" value="num_of_autopay">
+
+                                                                            <label for="Autopays">Set number of autopays</label><br>
+
+                                                                            <input type="radio" id="cust_be_charge_child00" name="cust_be_charge_child_00" value="month-to-month">
+
+                                                                            <label for="Month">Month - to -Month    </label><br> 
+
+                                                                        </div>
+
+                                                                        <div class="customerscharged">
+
+                                                                            <label> Every </label>
+
+                                                                            <input type="text" class="form-control valid" name="every_time_num_child_00" id="every_time_num_child00" placeholder="1" value="">
+
+                                                                            <select class="form-control" name="every_time_child_00" id="every_time_child00">
+
+                                                                                <option value="Weekly">Weekly</option>
+
+                                                                                <option value="On a specific month" >Month </option>
+
+                                                                            </select>
+
+                                                                        </div> -->
+
+                                                                        <p>Customers will be charged every month for the duration of the contract</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Number of autopays  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="nuberofautopays">
+
+                                                                            <input type="text" class="form-control valid" name="nuberofautopays_child_00" id="nuberofautopays_child00" placeholder="12" value="" oninput="getnumberofpmt(0,0,'child');">
+
+                                                                        </div>
+
+                                                                        <div class="contract">
+
+                                                                            <label>  Total duration of contract: </label>
+
+                                                                            <p id="total_duration_child00">0 months</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">What happens after 12 payments?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_child00" name="happens_aftr_12_pmt_child_00" value="contract_expire">
+
+                                                                            <label for="contract">Contract Expires</label><br>
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_child00" name="happens_aftr_12_pmt_child_00" value="contract_renew">
+
+                                                                            <label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">When will clients be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="saledate">
+                                                                            <input type="hidden" name="client_be_charge_on_child_00" id="client_be_charge_on_child_00" value="On the sale date">
+                                                                                <p>On the sale date </p>
+                                                                            <!-- <select class="form-control" name="client_be_charge_on_child_00" id="client_be_charge_on_child00">
+
+                                                                                <option value="sale date" >On the sale date </option> -->
+
+                                                                               <!--  <option value="date">date</option> -->
+
+                                                                           <!--  </select> -->
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-md-4">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Contract Review </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <div class="set-border">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-8">
+
+                                                                            <p id="p_price_title_child00"></p>
+
+                                                                        </div>
+
+                                                                        <div class="col-md-4">
+
+                                                                            <p  id="p1_price_child00">$0</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+
+                                                                    <div class="col-md-12">
+
+                                                                        <div class="Settings-title">
+
+                                                                            <h5> Revenue Breakdown </h5>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-10">
+
+                                                                        <p id="trems_payment_child00">Terms: 12 Monthly Payments</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>First Payment:</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_first_pmt_child00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="first_pmt_child_00" id="first_pmt_child00" value="">
+
+                                                                    <input type="hidden" name="recurring_pmt_child_00" id="recurring_pmt_child00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>Recurring Payment: </p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_recurring_pmt_child00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="total_contract_revenue_child_00" id="total_contract_revenue_child00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <label>Total Contract Revenue:  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_total_contract_revenue_child00"> $0</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <!-- <div class="modal-footer">
+
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                                    <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
+
+                                                                </div> -->
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="modal fade ModelRecurring_infant00" id="ModelRecurring_infant00" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true">
+
+                                        <div class="modal-dialog editingautopay" role="document">
+
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                                        <span aria-hidden="true">&times;</span>
+
+                                                    </button>
+
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-12">
+
+                                                            <div class="editingautopay">
+
+                                                                <h5 class="modal-title" id="ModelRecurringTitle_infant00">Editing Recurring Payments Contract Settings for ("Infant")  </h5>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-8">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Settings </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <!-- <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Run Auto Pay</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="run_auto_pay_infant00" name="run_auto_pay_infant_00" value="on_set_schedule"  >
+
+                                                                            <label for="on_set_schedule">On a set schedule (recommended)</label><br>
+
+                                                                            <input type="radio" id="run_auto_pay_infant00" name="run_auto_pay_infant_00" value="price_opt_run_out" >
+
+                                                                            <label for="price_opt_run_out">When price option runs out   </label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div> -->
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">How often will customers be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <!-- <div class="autopay">
+
+                                                                            <input type="radio" id="cust_be_charge_infant00" name="cust_be_charge_infant_00" value="num_of_autopay" >
+
+                                                                            <label for="Autopays">Set number of autopays</label><br>
+
+                                                                            <input type="radio" id="cust_be_charge_infant00" name="cust_be_charge_infant_00" value="month-to-month">
+
+                                                                            <label for="Month">Month - to -Month    </label><br> 
+
+                                                                        </div>
+
+                                                                        <div class="customerscharged">
+
+                                                                            <label> Every </label>
+
+                                                                            <input type="text" class="form-control valid" name="every_time_num_infant_00" id="every_time_num_infant00" placeholder="1" value="">
+
+                                                                            <select class="form-control" name="every_time_infant_00" id="every_time_infant00">
+
+                                                                                <option value="Weekly">Weekly</option>
+
+                                                                                <option value="On a specific month" >Month </option>
+
+                                                                            </select>
+
+                                                                        </div> -->
+
+                                                                        <p>Customers will be charged every month for the duration of the contract</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">Number of autopays  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="nuberofautopays">
+
+                                                                            <input type="text" class="form-control valid" name="nuberofautopays_infant_00" id="nuberofautopays_infant00" placeholder="12" value="" oninput="getnumberofpmt(0,0,'infant');">
+
+                                                                        </div>
+
+                                                                        <div class="contract">
+
+                                                                            <label>  Total duration of contract: </label>
+
+                                                                            <p id="total_duration_infant00">0 months</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">What happens after 12 payments?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="autopay">
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_infant00" name="happens_aftr_12_pmt_infant_00" value="contract_expire">
+
+                                                                            <label for="contract">Contract Expires</label><br>
+
+                                                                            <input type="radio" id="happens_aftr_12_pmt_infant00" name="happens_aftr_12_pmt_infant_00" value="contract_renew" >
+
+                                                                            <label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> 
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row set-78">
+
+                                                                    <div class="col-md-4">
+
+                                                                        <label class="contractsettings">When will clients be charged?</label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <div class="saledate">
+                                                                            <input type="hidden" name="client_be_charge_on_infant_00" id="client_be_charge_on_infant_00" value="On the sale date">
+                                                                                <p>On the sale date </p>
+                                                                            <!-- <select class="form-control" name="client_be_charge_on_infant_00" id="client_be_charge_on_infant00">
+
+                                                                                <option value="sale date" >On the sale date </option> -->
+
+                                                                                <!-- <option value="date">date</option> -->
+
+                                                                            <!-- </select> -->
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-md-4">
+
+                                                            <div class="Settings-title">
+
+                                                                <h5> Contract Review </h5>
+
+                                                            </div>
+
+                                                            <div class="setting-box">
+
+                                                                <div class="set-border">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-8">
+
+                                                                            <p id="p_price_title_infant00"></p>
+
+                                                                        </div>
+
+                                                                        <div class="col-md-4">
+
+                                                                            <p  id="p1_price_infant00">$0</p>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+
+                                                                    <div class="col-md-12">
+
+                                                                        <div class="Settings-title">
+
+                                                                            <h5> Revenue Breakdown </h5>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-10">
+
+                                                                        <p id="trems_payment_infant00">Terms: 12 Monthly Payments</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>First Payment:</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_first_pmt_infant00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="first_pmt_infant_00" id="first_pmt_infant00" value="">
+
+                                                                    <input type="hidden" name="recurring_pmt_infant_00" id="recurring_pmt_infant00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <p>Recurring Payment: </p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_recurring_pmt_infant00">$0</p>
+
+                                                                    </div>
+
+                                                                    <input type="hidden" name="total_contract_revenue_infant_00" id="total_contract_revenue_infant00" value="">
+
+                                                                    <div class="col-md-8">
+
+                                                                        <label>Total Contract Revenue:  </label>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+
+                                                                        <p id="p_total_contract_revenue_infant00"> $0</p>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <!-- <div class="modal-footer">
+
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                                    <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
+
+                                                                </div> -->
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
                     </div>
                   </div>
                   <div  class="row">
@@ -1859,133 +2661,325 @@
     }
 
     function adultchangeestprice(i,j){
+
         var adult_discount = 0;
         var pay_price =  $('#adult_cus_weekly_price'+i+j).val();; 
+
         var adult_discount =  $('#adult_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#adult_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*adult_discount)/100);
+
         $('#adult_estearn'+i+j).attr('readonly', true);
+        if(pay_price == ''){
+            pay_price = 0;
+        }
+        $('#p1_price_adult'+i+j).html('$'+pay_price);
+        $('#p_total_contract_revenue_adult'+i+j).html('$'+pay_price);
+        $('#p_recurring_pmt_adult'+i+j).html('$'+pay_price);
+        $('#p_first_pmt_adult'+i+j).html('$'+pay_price);
+        $('#first_pmt_adult'+i+j).val(pay_price);
+        $('#recurring_pmt_adult'+i+j).val(pay_price);
     }
+
+
 
     function weekendadultchangeestprice(i,j){
+
         var adult_discount = 0;
+
         var pay_price =  $('#adult_weekend_price_diff'+i+j).val();; 
+
         var adult_discount =  $('#adult_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#weekend_adult_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*adult_discount)/100);
+
         $('#weekend_adult_estearn'+i+j).attr('readonly', true);
+
     }
+
+
 
     function adultdischangeestprice(i,j){
+
         var adult_discount = 0;
+
         var pricval = 0;
+
         var week_price =  $('#adult_cus_weekly_price'+i+j).val();
+
         var priceoff = $('#adult_weekend_price_diff'+i+j).val();
+
         var adult_discount =  $('#adult_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#adult_estearn'+i+j).val(week_price - ((week_price * adult_discount)/100 + (week_price*fitnessity_fee)/100));
+
         $('#adult_estearn'+i+j).attr('readonly', true); 
+
         $('#weekend_adult_estearn'+i+j).val(priceoff - ((priceoff * adult_discount)/100 + (priceoff*fitnessity_fee)/100));
+
         $('#weekend_adult_estearn'+i+j).attr('readonly', true);
+
     }
+
+
 
     function childchangeestprice(i,j){
+
         var child_discount = 0;
+
         var pricval = 0;
+
         var pay_price =  $('#child_cus_weekly_price'+i+j).val();
+
         var child_discount =  $('#child_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#child_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*child_discount)/100);
+
         $('#child_estearn'+i+j).attr('readonly', true);
+        if(pay_price == ''){
+            pay_price = 0;
+        }
+        $('#p1_price_child'+i+j).html('$'+pay_price);
+
+        $('#p_total_contract_revenue_child'+i+j).html('$'+pay_price);
+        $('#p_recurring_pmt_child'+i+j).html('$'+pay_price);
+        $('#p_first_pmt_child'+i+j).html('$'+pay_price);
+        $('#first_pmt_child'+i+j).val(pay_price);
+        $('#recurring_pmt_child'+i+j).val(pay_price);
     }
+
+
 
     function  weekendchildchangeestprice(i,j){
+
         var child_discount = 0;
+
         var pricval = 0;
+
         var pay_price =  $('#child_weekend_price_diff'+i+j).val();
+
         var child_discount =  $('#child_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#weekend_child_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*child_discount)/100);
+
         $('#weekend_child_estearn'+i+j).attr('readonly', true);
+
     }
+
+
 
     function childdischangeestprice(i,j){
+
         var child_discount = 0;
+
         var pricval = 0;
+
         var week_price =  $('#child_cus_weekly_price'+i+j).val();
+
         var priceoff = $('#child_weekend_price_diff'+i+j).val();
+
         var child_discount =  $('#child_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#child_estearn'+i+j).val(week_price - ((week_price * child_discount)/100 + (week_price*fitnessity_fee)/100));
+
         $('#child_estearn'+i+j).attr('readonly', true);
+
         $('#weekend_child_estearn'+i+j).val(priceoff - ((priceoff * child_discount)/100 + (priceoff*fitnessity_fee)/100));
+
         $('#weekend_child_estearn'+i+j).attr('readonly', true);
+
     }
+
+
 
     function infantchangeestprice(i,j){
+
         var infant_discount = 0;
+
         var pricval = 0;
+
         var pay_price =  $('#infant_cus_weekly_price'+i+j).val();
+
         var infant_discount =  $('#infant_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#infant_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*infant_discount)/100);
+
         $('#infant_estearn'+i+j).attr('readonly', true);
+        if(pay_price == ''){
+            pay_price = 0;
+        }
+       /* alert(pay_price);*/
+        $('#p1_price_infant'+i+j).html('$'+pay_price);
+
+        $('#p_total_contract_revenue_infant'+i+j).html('$'+pay_price);
+        $('#p_recurring_pmt_infant'+i+j).html('$'+pay_price);
+        $('#p_first_pmt_infant'+i+j).html('$'+pay_price);
+        $('#first_pmt_infant'+i+j).val(pay_price);
+        $('#recurring_pmt_infant'+i+j).val(pay_price);
     }
+
+
 
     function weekendinfantchangeestprice(i,j){
+
         var infant_discount = 0;
+
         var pricval = 0;
+
         var pay_price =  $('#infant_weekend_price_diff'+i+j).val();
+
         var infant_discount =  $('#infant_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#weekend_infant_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*infant_discount)/100);
+
         $('#weekend_infant_estearn'+i+j).attr('readonly', true);
+
     }
+
+
 
     function infantdischangeestprice(i,j){
+
         var infant_discount = 0;
+
         var pricval = 0;
+
         var pay_price =  $('#infant_cus_weekly_price'+i+j).val();
+
         var priceoff = $('#infant_weekend_price_diff'+i+j).val();
+
         var infant_discount =  $('#infant_discount'+i+j).val();
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         $('#infant_estearn'+i+j).val(pay_price - ((pay_price * infant_discount)/100 + (pay_price*fitnessity_fee)/100));
+
         $('#infant_estearn'+i+j).attr('readonly', true);
+
         $('#weekend_infant_estearn'+i+j).val(priceoff - ((priceoff * infant_discount)/100 + (priceoff*fitnessity_fee)/100));
+
         $('#weekend_infant_estearn'+i+j).attr('readonly', true);
+
     }
 
 
-    function openmodelbox(i,j) {
-       var checkBox = document.getElementById("is_recurring"+i+j);
+
+     function openmodelbox(i,j,val) {
+
+       var checkBox = document.getElementById("is_recurring_"+val+i+j);
+
         if (checkBox.checked == true){
-            $('#btn_recurring'+i+j).trigger("click");
-            $('#is_recurring'+i+j).val(1);
+
+            $('#btn_recurring_'+val+i+j).trigger("click");
+
+            $('#is_recurring_'+val+i+j).val(1);
+
         }else{
-            $('#is_recurring'+i+j).val(0);
+
+            $('#is_recurring_'+val+i+j).val(0);
+
         }
+
     }
     function recurrint_id(i,j) {
         $('#btn_recurring'+i+j).attr("data-target","#ModelRecurring"+i+j);
     }
 
     function add_another_price_ages(i){
+
         var fitnessity_fee = '{{$fitnessity_fee}}';
+
         var cnt = $('#ages_count'+i).val();
+
         /*alert(cnt);*/
+
         cnt++;
+
         $('#ages_count'+i).val(cnt);
+
         var ages_data = "";
-         ages_data +='<div id="agesdiv'+i+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-agediv fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option" onclick="remove_agediv('+i+','+cnt+');"></i></div></div><div class="row"><div class="col-md-4"> </div><div class="col-md-5"> </div><div class="col-md-3"><div class="priceselect sp-select"><label>Is This A Recurring Payment?</label><div class=""><input data-count="0" class="check-price" type="checkbox" id="is_recurring'+i+cnt+'" name="is_recurring_'+i+cnt+'" onclick="openmodelbox('+i+','+cnt+');"> <label>Set recurring payment terms</label> <button style="display:none" id="btn_recurring'+i+cnt+'" name="btn_recurring_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+');">Launch demo modal</button></div> </div></div></div><div class="modal fade ModelRecurring'+i+cnt+'" id="ModelRecurring'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle'+i+cnt+'">Editing Autopay/Contract Settings for </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Run Auto Pay</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="run_auto_pay'+i+cnt+'" name="run_auto_pay_'+i+cnt+'" value="on_set_schedule"><label for="on_set_schedule">On a set schedule (recommended)</label><br><input type="radio" id="run_auto_pay'+i+cnt+'" name="run_auto_pay_'+i+cnt+'" value="price_opt_run_out"><label for="price_opt_run_out">When price option runs out   </label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="cust_be_charge'+i+cnt+'" name="cust_be_charge_'+i+cnt+'" value="num_of_autopay"><label for="Autopays">Set number of autopays</label><br><input type="radio" id="cust_be_charge'+i+cnt+'" name="cust_be_charge_'+i+cnt+'" value="month-to-month"><label for="Month">Month - to -Month    </label><br> </div><div class="customerscharged"><label> Every </label><input type="text" class="form-control valid" name="every_time_num_'+i+cnt+'" id="every_time_num'+i+cnt+'" placeholder="1" style="margin-left: 5px;"><select class="form-control" name="every_time_'+i+cnt+'" id="every_time'+i+cnt+'" style="margin-left: 5px;"><option value="Weekly" selected="">Weekly</option><option value="On a specific month" >Month </option></select></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_'+i+cnt+'" id="nuberofautopays'+i+cnt+'" placeholder="12"></div><div class="contract"><label>  Total duration of contract: </label><p>12 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt'+i+cnt+'" name="happens_aftr_12_pmt_'+i+cnt+'" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt'+i+cnt+'" name="happens_aftr_12_pmt_'+i+cnt+'" value="contract_renew"><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><select class="form-control" name="client_be_charge_on_'+i+cnt+'" id="client_be_charge_on'+i+cnt+'"><option value="sale date" selected="">On the sale date </option><option value="date">date</option></select></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title'+i+cnt+'"></p></div><div class="col-md-4"><p>($Price )</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Earned </h5></div></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt'+i+cnt+'">$400</p></div><input type="hidden" name="first_pmt_'+i+cnt+'" id="first_pmt'+i+cnt+'" value=""><input type="hidden" name="recurring_pmt_'+i+cnt+'" id="recurring_pmt'+i+cnt+'" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt'+i+cnt+'">$400</p></div><input type="hidden" name="total_contract_revenue_'+i+cnt+'" id="total_contract_revenue'+i+cnt+'" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue'+i+cnt+'"> $1,200</p></div></div></div></div></div></div></div></div></div><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label> <input type="text" name="price_title_'+i+cnt+'" id="price_title'+i+cnt+'"  class="inputs" placeholder="ex. 30 Minute Section" value="" oninput="getpricetitle('+i+','+cnt+')"> </div> </div> <div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label> <select name="pay_session_type_'+i+cnt+'" id="pay_session_type'+i+cnt+'" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+i+','+cnt+',this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+i+cnt+'" id="pay_session'+i+cnt+'"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+i+cnt+'" id="membership_type'+i+cnt+'" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option> <option value="Semester">Semester (Long Term)</option></select></div> </div></div>  <div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div> <div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label> <p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+i+cnt+'" id="adult_cus_weekly_price'+i+cnt+'" placeholder="$"  onkeyup="adultchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label> <p> ( Saturday & Sunday)</p> <input type="text" name="adult_weekend_price_diff_'+i+cnt+'" id="adult_weekend_price_diff'+i+cnt+'" placeholder="$"  onkeyup="weekendadultchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+i+cnt+'" id="adult_discount'+i+cnt+'" onkeyup="adultdischangeestprice('+i+','+cnt+');"></div> </div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> '+fitnessity_fee+'%</p></div></div><div class="single-equal"> <div class="equal sp-select"> <label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price earn sp-select"> <label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+i+cnt+'" id="adult_estearn'+i+cnt+'" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+i+cnt+'" id="weekend_adult_estearn'+i+cnt+'" placeholder="$"></div></div></div><div class="row"> <div class="age-cat"><div class="cat-age sp-select"><label>Children</label> <p>Ages 2 to 12</p></div> </div><div class="weekly-customer"> <div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p> <input type="text" name="child_cus_weekly_price_'+i+cnt+'" id="child_cus_weekly_price'+i+cnt+'" placeholder="$" onkeyup="childchangeestprice('+i+','+cnt+');"></div>  </div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label> <p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+i+cnt+'" id="child_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendchildchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"> <label>Any Discount?</label><p> (Recommended 10% to 15%)</p> <input type="text" name="child_discount_'+i+cnt+'" id="child_discount'+i+cnt+'"  onkeyup="childdischangeestprice('+i+','+cnt+');"> </div></div> <div class="single-dash"> <div class="desh sp-select"><label>-</label> </div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> '+fitnessity_fee+'%</p></div></div><div class="single-equal"><div class="equal sp-select"> <label>=</label></div> </div> <div class="estimated-earn"><div class="cus-week-price earn sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+i+cnt+'" id="child_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+i+cnt+'" id="weekend_child_estearn'+i+cnt+'" placeholder="$"></div></div></div><div class="row"> <div class="age-cat"><div class="cat-age sp-select"> <label>Infants</label><p>Ages 2 & Under</p> </div> </div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+i+cnt+'" id="infant_cus_weekly_price'+i+cnt+'" placeholder="$" onkeyup="infantchangeestprice('+i+','+cnt+');"> </div> </div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label> <p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+i+cnt+'" id="infant_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendinfantchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+i+cnt+'" id="infant_discount'+i+cnt+'" onkeyup="infantdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div> <div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label> <p> '+fitnessity_fee+'%</p></div> </div><div class="single-equal"><div class="equal sp-select"><label>=</label> </div></div><div class="estimated-earn"><div class="cus-week-price earn sp-select"> <label> Weekday Estimated Earnings</label>  <input type="text" name="infant_estearn_'+i+cnt+'" id="infant_estearn'+i+cnt+'" placeholder="$"> </div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+i+cnt+'" id="weekend_infant_estearn'+i+cnt+'" placeholder="$"></div></div></div><div class="row"></div> <div class="col-md-12 col-sm-12"> <div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"> <div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+i+cnt+'" id="pay_setnum'+i+cnt+'" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div>    </div><div class="col-md-3 col-sm-6 col-xs-12"> <div class="set-num"><label>The Duration</label> <select name="pay_setduration_'+i+cnt+'" id="pay_setduration'+i+cnt+'" class="form-control valid"><option value="">Select Value</option><option selected="" value="Days">Days</option><option value="Months">Months</option><option value="Year">Year</option></select></div></div> <div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div>            </div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+i+cnt+'" id="pay_after'+i+cnt+'" class="pay_after form-control valid"><option value="">Select Value</option><option selected="" value="1">Starts to expire the day of purchase</option><option value="2">Starts to expire when the customer first participates in the activity</option></select></div></div></div>';
+
+        ages_data +='<div id="agesdiv'+i+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-agediv fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option" onclick="remove_agediv('+i+','+cnt+');"></i></div></div><div class="row"><div class="col-md-4"> </div><div class="col-md-5"> </div></div> <div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+i+cnt+'" id="price_title'+i+cnt+'"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle('+i+','+cnt+')"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+i+cnt+'" id="pay_session_type'+i+cnt+'" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+i+','+cnt+',this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+i+cnt+'" id="pay_session'+i+cnt+'"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+i+cnt+'" id="membership_type'+i+cnt+'" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+i+cnt+'" id="adult_cus_weekly_price'+i+cnt+'" placeholder="$"  onkeyup="adultchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+i+cnt+'" id="adult_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendadultchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+i+cnt+'" id="adult_discount'+i+cnt+'" onkeyup="adultdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+i+cnt+'" id="adult_estearn'+i+cnt+'" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+i+cnt+'" id="weekend_adult_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+        var onclickadult ="'adult'";
+
+        ages_data +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+i+cnt+'" name="is_recurring_adult_'+i+cnt+'" value="0" onclick="openmodelbox('+i+','+cnt+','+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+i+cnt+'" name="btn_recurring_adult_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+i+cnt+'" id="child_cus_weekly_price'+i+cnt+'" placeholder="$" onkeyup="childchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+i+cnt+'" id="child_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendchildchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+i+cnt+'" id="child_discount'+i+cnt+'"  onkeyup="childdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+i+cnt+'" id="child_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+i+cnt+'" id="weekend_child_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+        var onclickchild ="'child'";
+
+
+
+       ages_data +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child'+i+cnt+'" name="is_recurring_child_'+i+cnt+'" value="0"  onclick="openmodelbox('+i+','+cnt+','+onclickchild+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Children</label><button style="display:none" id="btn_recurring_child'+i+cnt+'" name="btn_recurring_child_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickchild+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Infants</label><p>Ages 2 & Under</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+i+cnt+'" id="infant_cus_weekly_price'+i+cnt+'" placeholder="$" onkeyup="infantchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+i+cnt+'" id="infant_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendinfantchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+i+cnt+'" id="infant_discount'+i+cnt+'" onkeyup="infantdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="infant_estearn_'+i+cnt+'" id="infant_estearn'+i+cnt+'" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+i+cnt+'" id="weekend_infant_estearn'+i+cnt+'" placeholder="$"></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+
+        var onclickinfant ="'infant'";
+
+        ages_data +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant'+i+cnt+'"     name="is_recurring_infant_'+i+cnt+'" value="0"  onclick="openmodelbox('+i+','+cnt+','+onclickinfant+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label><button style="display:none" id="btn_recurring_infant'+i+cnt+'" name="btn_recurring_infant_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickinfant+');">Launch demo modal</button></div></div></div><div class="row"><div class="col-md-12 col-sm-12"><div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+i+cnt+'" id="pay_setnum'+i+cnt+'" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>The Duration</label><select name="pay_setduration_'+i+cnt+'" id="pay_setduration'+i+cnt+'" class="form-control valid"><option value="">Select Value</option><option selected="">Days</option><option>Months</option><option>Year</option></select></div></div><div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div></div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+i+cnt+'" id="pay_after'+i+cnt+'" class="pay_after form-control valid"><option value="">Select Value</option><option value="1" selected="">Starts to expire the day of purchase</option><option value="2">Starts to expire when the customer first participates in the activity</option></select></div></div></div><div class="modal fade ModelRecurring_adult'+i+cnt+'" id="ModelRecurring_adult'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_adult'+i+cnt+'">Editing Recurring Payments Contract Settings for ("Adults")</h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_adult_'+i+cnt+'" id="nuberofautopays_adult'+i+cnt+'" placeholder="12" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickadult+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_adult'+i+cnt+'">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_adult'+i+cnt+'" name="happens_aftr_12_pmt_adult_'+i+cnt+'" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_adult'+i+cnt+'" name="happens_aftr_12_pmt_adult_'+i+cnt+'" value="contract_renew" ><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_adult_'+i+cnt+'" id="client_be_charge_on_adult_'+i+cnt+'" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_adult'+i+cnt+'"></p></div><div class="col-md-4"><p id="p1_price_adult'+i+cnt+'">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_adult'+i+cnt+'">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_adult'+i+cnt+'">$0</p></div><input type="hidden" name="first_pmt_adult_'+i+cnt+'" id="first_pmt_adult'+i+cnt+'" value=""><input type="hidden" name="recurring_pmt_adult_'+i+cnt+'" id="recurring_pmt_adult'+i+cnt+'" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_adult'+i+cnt+'">$0</p></div><input type="hidden" name="total_contract_revenue_adult_'+i+cnt+'" id="total_contract_revenue_adult'+i+cnt+'" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_adult'+i+cnt+'"> $0</p></div></div></div></div></div></div></div></div></div> <div class="modal fade ModelRecurring_child'+i+cnt+'" id="ModelRecurring_child'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_child'+i+cnt+'">Editing Recurring Payments Contract Settings for ("Children") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_child_'+i+cnt+'" id="nuberofautopays_child'+i+cnt+'" placeholder="12" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickchild+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_child'+i+cnt+'">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_child'+i+cnt+'" name="happens_aftr_12_pmt_child_'+i+cnt+'" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_child'+i+cnt+'" name="happens_aftr_12_pmt_child_'+i+cnt+'" value="contract_renew"><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_child_'+i+cnt+'" id="client_be_charge_on_child_'+i+cnt+'" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_child'+i+cnt+'"></p></div><div class="col-md-4"><p id="p1_price_child'+i+cnt+'">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_child'+i+cnt+'">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_child'+i+cnt+'">$0</p></div><input type="hidden" name="first_pmt_child_'+i+cnt+'" id="first_pmt_child'+i+cnt+'" value=""><input type="hidden" name="recurring_pmt_child_'+i+cnt+'" id="recurring_pmt_child'+i+cnt+'" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_child'+i+cnt+'">$0</p></div><input type="hidden" name="total_contract_revenue_child_'+i+cnt+'" id="total_contract_revenue_child'+i+cnt+'" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_child'+i+cnt+'"> $0</p></div></div></div></div></div></div></div></div></div><div class="modal fade ModelRecurring_infant'+i+cnt+'" id="ModelRecurring_infant'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_infant'+i+cnt+'">Editing Recurring Payments Contract Settings for ("Infant")</h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_infant_'+i+cnt+'" id="nuberofautopays_infant'+i+cnt+'" placeholder="12" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickinfant+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_infant'+i+cnt+'">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_infant'+i+cnt+'" name="happens_aftr_12_pmt_infant_'+i+cnt+'" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_infant'+i+cnt+'" name="happens_aftr_12_pmt_infant_'+i+cnt+'" value="contract_renew" ><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_infant_'+i+cnt+'" id="client_be_charge_on_infant_'+i+cnt+'" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_infant'+i+cnt+'"></p></div><div class="col-md-4"><p id="p1_price_infant'+i+cnt+'">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_infant'+i+cnt+'">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_infant'+i+cnt+'">$0</p></div><input type="hidden" name="first_pmt_infant_'+i+cnt+'" id="first_pmt_infant'+i+cnt+'" value=""><input type="hidden" name="recurring_pmt_infant_'+i+cnt+'" id="recurring_pmt_infant'+i+cnt+'" value=""><div class="col-md-8"><p>Recurring Payment: </p></div>';   
+
+        ages_data +='<div class="col-md-4"><p id="p_recurring_pmt_infant'+i+cnt+'">$0</p></div><input type="hidden" name="total_contract_revenue_infant_'+i+cnt+'" id="total_contract_revenue_infant'+i+cnt+'" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_infant'+i+cnt+'"> $0</p></div></div></div></div></div></div></div></div></div></div>'; 
+
+
+
+        ages_data +='</div>';         
+
         $("#agesmaindiv"+i).append(ages_data);
     }
 
     function getpricetitle(i,j){
+
         var x = document.getElementById("price_title"+i+j).value;
-        document.getElementById("ModelRecurringTitle"+i+j).innerHTML = 'Editing Autopay/Contract Settings for '+x;
-        document.getElementById("p_price_title"+i+j).innerHTML = x;
+
+        document.getElementById("ModelRecurringTitle_adult"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ( '+x +' for "Adults"';
+
+        document.getElementById("ModelRecurringTitle_child"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Children"';
+
+        document.getElementById("ModelRecurringTitle_infant"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Infant"';
+
+        $("#p_price_title_adult"+i+j).html(x);
+
+        $("#p_price_title_child"+i+j).html(x);
+
+        $("#p_price_title_infant"+i+j).html(x);
+
+        $("#p1_price_title_adult"+i+j).html(x);
+
+        $("#p1_price_title_child"+i+j).html(x);
+
+        $("#p1_price_title_infant"+i+j).html(x);
     }
 
+    function getnumberofpmt(i,j,val){
+        var part  = $("#nuberofautopays_"+val+i+j).val();
+        var price = $("#"+val+"_cus_weekly_price"+i+j).val();
+        if(price == ''){
+            price = 0;
+        }
+        var total = part*price;
+        if(total == 0){
+            $("#p_total_contract_revenue_"+val+i+j).html('$'+price);
+            $("#total_contract_revenue_"+val+i+j).val(price);
+            $("#total_duration_"+val+i+j).html(0);
+            $("#trems_payment_"+val+i+j).html('Terms: 0 Monthly Payments');
+        }else{
+            $("#p_total_contract_revenue_"+val+i+j).html('$'+total);
+            $("#total_contract_revenue_"+val+i+j).val(total);
+            $("#total_duration_"+val+i+j).html(part);
+            $("#trems_payment_"+val+i+j).html('Terms: '+part+' Monthly Payments');
+        }
+    }
 </script>
 
 <script type="text/javascript">
@@ -2297,14 +3291,50 @@
     });
 
     $("body").on("click", ".add-another-category-price", function(){
-        var fitnessity_fee = '{{$fitnessity_fee}}';
-        var cnt=$('#recurring_count').val();
-        cnt++;
-        $('#recurring_count').val(cnt);
-        var service_price = "";
-        service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-3"><div class="priceselect sp-select"><label>Category Title (Give a name for this category)</label><input type="text" name="category_title[]" id="category_title"  class="inputs" value="" placeholder="Couples Private Lessons"></div></div><div class="col-md-6"><div class="sp-select-sche"></div></div><div class="col-md-3"><div class="priceselect sp-select"><label>Is This A Recurring Payment?</label><div class=""><input data-count="0" class="check-price" type="checkbox" id="is_recurring'+cnt+'0" name="is_recurring_'+cnt+'0" onclick="openmodelbox('+cnt+',0);"><label>Set recurring payment terms</label><button style="display:none" id="btn_recurring'+cnt+'0" name="btn_recurring_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring'+cnt+'0" onclick="recurrint_id('+cnt+',0);">Launch demo modal</button></div></div></div></div><div class="modal fade ModelRecurring'+cnt+'0" id="ModelRecurring'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle'+cnt+'0">Editing Autopay/Contract Settings for </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Run Auto Pay</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="run_auto_pay'+cnt+'0" name="run_auto_pay_'+cnt+'0" value="on_set_schedule"><label for="on_set_schedule">On a set schedule (recommended)</label><br><input type="radio" id="run_auto_pay'+cnt+'0" name="run_auto_pay_'+cnt+'0" value="price_opt_run_out"><label for="price_opt_run_out">When price option runs out   </label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="cust_be_charge'+cnt+'0" name="cust_be_charge_'+cnt+'0" value="num_of_autopay"><label for="Autopays">Set number of autopays</label><br><input type="radio" id="cust_be_charge'+cnt+'0" name="cust_be_charge_'+cnt+'0" value="month-to-month"><label for="Month">Month - to -Month    </label><br> </div><div class="customerscharged"><label> Every </label><input type="text" class="form-control valid" name="every_time_num_'+cnt+'0" id="every_time_num'+cnt+'0" placeholder="1" style="margin-left: 5px;"><select class="form-control" name="every_time_'+cnt+'0" id="every_time'+cnt+'0" style="margin-left: 5px;"><option value="Weekly" selected="">Weekly</option><option value="On a specific month" >Month </option></select></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_'+cnt+'0" id="nuberofautopays'+cnt+'0" placeholder="12"></div><div class="contract"><label>  Total duration of contract: </label><p>12 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt'+cnt+'0" name="happens_aftr_12_pmt_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt'+cnt+'0" name="happens_aftr_12_pmt_'+cnt+'0" value="contract_renew"><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><select class="form-control" name="client_be_charge_on_'+cnt+'0" id="client_be_charge_on'+cnt+'0"><option value="sale date" selected="">On the sale date </option><option value="date">date</option></select></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title'+cnt+'0"</p></div><div class="col-md-4"><p>($Price )</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Earned </h5></div></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt'+cnt+'0">$400</p></div><input type="hidden" name="first_pmt_'+cnt+'0" id="first_pmt'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_'+cnt+'0" id="recurring_pmt'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt'+cnt+'0">$400</p></div><input type="hidden" name="total_contract_revenue_'+cnt+'0" id="total_contract_revenue'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue'+cnt+'0"> $1,200</p></div></div></div></div></div></div></div> </div></div> <div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="ex. 30 Minute Section" value="" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="adultchangeestprice('+cnt+',0);" value=""></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);" value=""></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);" value=""></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> '+fitnessity_fee+'%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price earn sp-select"><label> Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$" value=""></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$"></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="childchangeestprice('+cnt+',0);" value=""></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);" value=""></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0" onkeyup="childdischangeestprice('+cnt+',0);" value=""></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> '+fitnessity_fee+'%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price earn sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" value=""></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$"></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Infants</label><p>Ages 2 & Under</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+cnt+'0" id="infant_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="infantchangeestprice('+cnt+',0);" value=""></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+cnt+'0" id="infant_weekend_price_diff'+cnt+'0" placeholder="$" value="" onkeyup="weekendinfantchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+cnt+'0" id="infant_discount'+cnt+'0" onkeyup="infantdischangeestprice('+cnt+',0);" value=""> </div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> '+fitnessity_fee+'%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price earn sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="infant_estearn_'+cnt+'0" id="infant_estearn'+cnt+'0" placeholder="$" value=""></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+cnt+'0" id="weekend_infant_estearn'+cnt+'0" placeholder="$"></div></div></div><div class="row"><div class="col-md-12 col-sm-12"><div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+cnt+'0" id="pay_setnum'+cnt+'0" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>The Duration</label><select name="pay_setduration_'+cnt+'0" id="pay_setduration'+cnt+'0" class="form-control valid"><option value="">Select Value</option><option selected="" value="Days">Days</option><option value="Months">Months</option><option value="Year">Year</option></select></div></div><div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div></div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+cnt+'0" id="pay_after'+cnt+'0" class="pay_after form-control valid"><option value="">Select Value</option><option selected="" value="1">Starts to expire the day of purchase</option><option value="2" >Starts to expire when the customer first participates in the activity</option></select></div></div></div></div></div><div  class=""><div class="col-md-12"><div class="addanother"><a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Session </a></div> </div></div></div>';
-            $(".service_price_block").append(service_price);
-    });
+
+    var fitnessity_fee = '{{$fitnessity_fee}}';
+
+    var cnt=$('#recurring_count').val();
+
+    cnt++;
+
+    $('#recurring_count').val(cnt);
+
+    var service_price = "";
+
+    service_price += '';
+
+    service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-3"><div class="priceselect sp-select"><label>Category Title (Give a name for this category)</label><input type="text" name="category_title[]" id="category_title"  class="inputs"></div></div><div class="col-md-6"><div class="sp-select-sche"></div></div></div><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+
+
+
+    var onclickadult ="'adult'";
+
+        service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+cnt+'0" name="is_recurring_adult_'+cnt+'0" value="0" onclick="openmodelbox('+cnt+',0,'+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+cnt+'0" name="btn_recurring_adult_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="childchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0"  onkeyup="childdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+
+
+
+    var onclickchild ="'child'";
+
+
+
+       service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child'+cnt+'0" name="is_recurring_child_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickchild+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Children</label><button style="display:none" id="btn_recurring_child'+cnt+'0" name="btn_recurring_child_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickchild+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Infants</label><p>Ages 2 & Under</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+cnt+'0" id="infant_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="infantchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+cnt+'0" id="infant_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendinfantchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+cnt+'0" id="infant_discount'+cnt+'0" onkeyup="infantdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="infant_estearn_'+cnt+'0" id="infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+cnt+'0" id="weekend_infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+
+    var onclickinfant ="'infant'";
+
+        service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant'+cnt+'0"     name="is_recurring_infant_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickinfant+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label><button style="display:none" id="btn_recurring_infant'+cnt+'0" name="btn_recurring_infant_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickinfant+');">Launch demo modal</button></div></div></div><div class="row"><div class="col-md-12 col-sm-12"><div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+cnt+'0" id="pay_setnum'+cnt+'0" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>The Duration</label><select name="pay_setduration_'+cnt+'0" id="pay_setduration'+cnt+'0" class="form-control valid"><option value="">Select Value</option><option selected="">Days</option><option>Months</option><option>Year</option></select></div></div><div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div></div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+cnt+'0" id="pay_after'+cnt+'0" class="pay_after form-control valid"><option value="">Select Value</option><option value="1" selected="">Starts to expire the day of purchase</option><option value="2">Starts to expire when the customer first participates in the activity</option></select></div></div></div><div class="modal fade ModelRecurring_adult'+cnt+'0" id="ModelRecurring_adult'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_adult'+cnt+'0">Editing Recurring Payments Contract Settings for ("Adults") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_adult_'+cnt+'0" id="nuberofautopays_adult'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickadult+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_adult'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_renew" ><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_adult_'+cnt+'0" id="client_be_charge_on_adult_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_adult'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_adult'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_adult'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_adult_'+cnt+'0" id="first_pmt_adult'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_adult_'+cnt+'0" id="recurring_pmt_adult'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_adult_'+cnt+'0" id="total_contract_revenue_adult'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_adult'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div> <div class="modal fade ModelRecurring_child'+cnt+'0" id="ModelRecurring_child'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_child'+cnt+'0">Editing Recurring Payments Contract Settings for ("Children")  </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_child_'+cnt+'0" id="nuberofautopays_child'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickchild+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_child'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_renew"><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_child_'+cnt+'0" id="client_be_charge_on_child_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_child'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_child'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_child'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_child_'+cnt+'0" id="first_pmt_child'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_child_'+cnt+'0" id="recurring_pmt_child'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_child_'+cnt+'0" id="total_contract_revenue_child'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_child'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div><div class="modal fade ModelRecurring_infant'+cnt+'0" id="ModelRecurring_infant'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_infant'+cnt+'0">Editing Recurring Payments Contract Settings for ("Infant") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_infant_'+cnt+'0" id="nuberofautopays_infant'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickinfant+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_infant'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">What happens after 12 payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_renew" ><label for="renews">Contract Automaitcally Renews Every 12 payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_infant_'+cnt+'0" id="client_be_charge_on_infant_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_infant'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_infant'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_infant'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_infant'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_infant_'+cnt+'0" id="first_pmt_infant'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_infant_'+cnt+'0" id="recurring_pmt_infant'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_infant'+cnt+'0">$0</p></div>';
+
+
+
+                   
+
+    service_price +='<input type="hidden" name="total_contract_revenue_infant_'+cnt+'0" id="total_contract_revenue_infant'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_infant'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div></div>';
+
+     service_price +='<div  class=""><div class="col-md-12"><div class="addanother"><a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Session </a></div> </div></div></div>';
+
+    $(".service_price_block").append(service_price);
+
+});
 
     $("body").on("click", ".remove-category-price ", function(){
         var cnt=$('#recurring_count').val();
