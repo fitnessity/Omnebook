@@ -31,9 +31,9 @@ a{
     transition: all 0.5s ease-in-out;
 }
 .selected{
-    border-style:solid !important;
+  /*  border-style:solid !important;
     border-color:#d9d9d9 !important;
-    border-width:thin !important;
+    border-width:thin !important;*/
     
 }
 .rotateBtn{
@@ -151,3 +151,525 @@ a{
     z-index: 3;
 }
 }
+
+
+/*Instant-Hire Page*/
+.instant-hire{
+    margin-top: 90px;
+}
+.instant-hire .title h3{
+    font-weight: 600;
+    font-size: 22px;
+}
+.instant-section-info img{
+    border-radius: 10px;
+    width: 100%;
+    max-height: 294px;
+}
+.instant-section-info{
+    padding: 20px 0;
+}
+.instant-section-info h4{
+    position: absolute;
+    top: 20px;
+    color: white;
+    padding: 8px;
+    font-size: 17px;
+    font-weight: 500;
+    left: 22px;
+}
+.instant-section-info p{
+    position: absolute;
+    top: 45px;
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+    left: 22px;
+    margin-top: 7px;
+}
+.showall-btn{
+    background: #f91942;
+    border: none;
+    padding: 5px 19px;
+    color: #fff;
+    border-radius: 4px;
+}
+.btn-position{
+    position: absolute;
+    bottom: 42px;
+    left: 24px;
+}
+.showall-btn:hover{
+    background: #2e2e2e;
+}
+.activity-width{
+    width:20%;
+    margin-right: 15px;
+}
+.choose-sport-hire{
+    display: flex;
+}
+.choose-sport-hire .activity-width .special-offer .multiples h2{font-size: 15px;}
+.find-activity{
+    border: 1px solid #ede9e9;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.find-activity img{
+    width: 116px;
+    min-height: 148px;
+    margin-bottom: 0px;
+    border-radius: 10px;
+}
+.activity-data{
+      padding-left: 0px;
+}
+.activity-inner-data{
+    display: inline-block;
+    font-size: 13px;
+}
+.activity-inner-data i{
+    color: #f91942;
+}
+.activity-inner-data span{
+    font-weight: 600;
+}
+.activity-hours{
+    display: inline-block;
+    font-size: 13px;
+}
+.activity-hours span{
+    border: 1px solid black;
+    padding: 2px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+}
+.activity-city{
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+}
+.activity-information{
+    text-align: center;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+.activity-information span{
+    font-size: 14px;
+    font-weight: 500;
+}
+.activity-information p{
+    margin-bottom: 4px;
+}
+.activity-time.red-txt{
+    color: #f91942;
+}
+.mapsb{
+    margin-right: 0px !important;
+}
+.kickboxing-block{
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
+    margin-bottom: 25px;
+    -webkit-border-radius: 5px;
+}
+.kickboxing-block .kickboxing-topimg-content{
+    height: 190px;
+    overflow: hidden;
+    position: relative;
+}
+.kickboxing-block .kickboxing-topimg-content img{
+    width: 100%;
+    min-height: 190px;
+}
+.kickboxing-block .kickboxing-topimg-content .fav-fun-2 {
+    top: 12px;
+    color: #f91942;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 6px 8px;
+    border-radius: 4px;
+    right: 0px;
+}
+.kickboxing-block .kickboxing-topimg-content span {
+    top: 12px;
+    color: #f91942;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 6px 8px;
+    border-radius: 4px;
+    left: 0px;
+}
+.ratset-img .rattxt i{
+    color: #f91942;
+}
+.all-details{
+    text-align: center;
+    margin-bottom: 15px;
+}
+.all-details a:hover{
+    color: #fff
+}
+.all-details p{
+    margin-top: 7px;
+}
+.class-info{
+    padding: 14px 15px 0px 15px;
+}
+.maparea, .maparea iframe{
+    width: 100% !important;
+}
+
+.map-sp{
+    margin-bottom: 15px;
+}
+
+.kickboxing_map {
+  margin-left: 0px !important;
+}
+.find-business{
+    border: 1px solid #e6e6e6;
+    padding: 12px;
+    margin-bottom: 26px;
+	margin-top: 20px;
+}
+.find-business p{
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+}
+.find-business .btn-txt{
+    text-align: center;
+    padding: 11px;
+}
+.btn-txt a:hover{
+    color: #fff;
+}
+.inner-txt{
+    font-weight: normal !important;
+}
+.addbusiness-btn{
+    background: #ea1515;
+    color: #fff;
+    padding: 6px 12px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+    margin: 10px 0;
+    font-family: "Segoe UI",Arial,sans-serif;
+    text-transform: uppercase;
+}
+.addbusiness-btn:hover{color: #fff !important;}
+.modal-inner-txt p{font-size: 18px; text-align: center; padding: 18px; color: #000;}
+.btns-modal{text-align: center;}
+.addbusiness-btn-modal{
+    background: #ea1515;
+    color: #fff;
+    padding: 12px 15px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+    margin: 10px 0;
+    font-family: "Segoe UI",Arial,sans-serif;
+    text-transform: uppercase;
+}
+.addbusiness-btn-modal:hover{color: #fff !important;}
+.addbusiness-btn-black{
+    background: #fff;
+    color: #000;
+    padding: 12px 15px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+    margin: 10px 0;
+    font-family: "Segoe UI",Arial,sans-serif;
+    text-transform: uppercase;
+    border: 1px solid #ede9e9;
+}
+.addbusiness-btn-black:hover{color: #ea1515 !important}
+.addbusiness-btn-black:focus{color: #ea1515 !important;}
+.close-btn-design-part {
+  margin-top: 1 !important;
+  color: white !important;
+  right: 18px !important;
+  position: absolute !important;
+  opacity: 1.2 !important;
+}
+.direc-right {
+  padding: 0px 0px !important;
+}
+
+.direc-right {
+  float: left;
+  width: 100% !important;
+}
+.kickboxing-moredetails .modal-body .kickboximg-big {
+  width: 100%;
+  height: 300px;
+}
+.mykickboxing-activities .subtitle {
+  font-size: 22px;
+	font-weight: 600;
+	color: #000;
+}
+.mykickboxing-activities .activities-calendar{
+    border: 1px solid #ede9e9;
+    padding: 7px 0;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.mykickboxing-activities .choose-calendar-time{
+    border: 1px solid #ede9e9;
+    padding: 7px 0;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+.choose-calendar-time h3{
+    font-size: 20px;
+    margin-top: 7px !important;
+}
+/*.choose-calendar-time label{
+    color: #000;
+    font-size: 15px;
+    width: 100%;
+}*/
+.choose-calendar-time .start-time span{
+    width: 100%;
+    background: #f91942;
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+}
+.start-time span{
+    color: #fff;
+}
+.choose-calendar-time .end-time span{
+    width: 100%;
+    background: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid #ccc;
+}
+.end-time span{
+    color: #000;
+}
+.start-hr{font-size: 12px;}
+.end-hr{font-size: 12px; text-align: center;}
+.membership-opti{padding-left: 0px;}
+.end-time-details{margin-bottom: 0px; font-size: 12px !important;}
+.calendar-time-details{display: inline-flex; margin-bottom: 15px;}
+.calendar-time-details .start-time{margin-right: 15px;}
+.calendar-time-details .end-time{margin-right: 15px;}
+/*.choose-calendar-time .membership-details label{
+    margin-bottom: 15px;
+    margin-top: 15px;   
+}*/
+.price-option{
+    display: grid;
+}
+.price-option label{
+    margin-bottom: 5px !important;
+}
+.total-price label{
+    margin-bottom: 0px !important;
+    width: auto;
+}
+.total-price span{
+    font-weight: 600;
+    color: #000;
+}
+.membership-details{
+    border-left: 1px solid #ede9e9;
+    padding-left: 15px;
+}
+.btn-addtocart {
+  background-color: #ea1515;
+  color: #fff !important;
+  text-transform: uppercase;
+  border-radius: 5px;
+  border: 1px solid #ea1515;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+.btn-cart-modal{
+    text-align: right;  
+    margin-bottom: 15px;
+}
+.widget {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+  background: #fff;
+  border: 1px solid #ede9e9;
+  border-radius: 6px;
+}
+.widget-title {
+  border-bottom: 1px solid #e6ecf5;
+  color: #515365;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 15px 20px;
+  position: relative;
+  text-transform: capitalize;
+  width: 100%;
+}
+.map-info {
+  display: inline-block;
+  padding: 0 20px 0px;
+  width: 100%;
+}
+.map-info span {
+  display: flex;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.map-fa {
+  font-size: 18px;
+  color: #333;
+  margin-right: 25px;
+} 
+.widget img{
+    /*width: 30px;
+    height: 30px;*/
+    /*border-radius: 100%;*/
+    width: 100% !important;
+    height: 90px ;
+}
+.modal-map iframe{
+    padding: 15px;
+}
+
+.mx-sp{
+    margin-top:15px;
+}
+.instructor-details{
+    border: 1px solid #e6ecf5;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.instructor-img img{
+    width: 128px;
+    height: 105px;
+}
+.pepole-color{
+    color: #000;
+}
+.rev-new{
+    padding: 4px !important; 
+}
+.modal-sidebox{
+    padding: 20px 10px;
+    border-radius: 5px;
+    border: 1px solid #e6ecf5;
+}
+.img-modal-left img{
+    width: 121px;
+}
+.kickboxing-moredetails .modal-header .close span{
+    width: auto !important;
+}
+
+.fst-0{
+    margin-top: 35px;
+} 
+
+.fsb-1{
+    margin-bottom: 35px;
+}
+.modal-banner{
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+.modal-banner .bannar-size{
+    width:25%;
+    margin-right: 5px;
+}
+.modal-banner .bannar-size img{
+    width: 100%;
+    height: 300px;
+    display: block;
+}
+.modal-banner.modal-banner-sp{
+    margin-bottom: 25px;
+}
+.modal-banner .bannar-size .showphotos{
+    position: absolute;
+    bottom: 5%;
+    right: 2%;
+}
+.modal-banner .bannar-size .showphotos i{
+    margin-right: 6px;
+    font-size: 13px;
+}
+.service-review-desc{
+    float: none !important;
+}
+.progress-bar-main .progress{
+    height: 13px;
+    margin-bottom: 0px;
+}
+.progress-bar-main{
+    background-color: #f5f5f5;
+    padding: 13px 6px; 
+    border-radius: 8px;
+}
+.progress-bar-main .review-name{
+    width: 35%;
+    display: inline-block;
+    margin-top: -7px;
+}
+.progress-bar-main .review-name label{
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 6px;
+}
+.progress-bar-main .progress-bar-widget{
+    width: 51%;
+    display: inline-block;
+}
+.progress-bar-main .process-number{
+    width: 10%;
+    display: inline-block;
+}
+.progress-bar-main .process-number label{
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 3px;
+    margin-left: 8px;
+}
+.progress-bar-main  .pro-inner{
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+.pr-bt{
+    margin-bottom: 15px !important;
+}
+.leftside-kickboxing.kicks .col-map-show{ width: 20%; }
+.title-show a{
+    font-size: 15px;
+    font-weight: 500;
+    float: right;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.title-show a:focus{
+    color: #000;
+}
+/* END PAGE */

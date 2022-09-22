@@ -14998,7 +14998,7 @@ $(document).ready(function(){
     
 
     $("#btnCreateService").click(function () {
-
+        /*alert('hii');*/
         var service_type = $("#service_type").val();
 
         $("#serviceid").val(0);
@@ -15060,7 +15060,7 @@ $(document).ready(function(){
       success: function (data) {
 
        
-
+       /* alert(data);*/
         location.reload();
 
       }

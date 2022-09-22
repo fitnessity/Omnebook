@@ -10183,11 +10183,11 @@ req-line.thumb-light a {
 }
 
 .selectProduct {
-    font-family: Lato;
+    /*font-family: Lato;
     width: 22.5%;
-    min-height: 460px;
+    min-height: 460px;*/
     /*background-color:#efefef;*/
-    border: 1px solid #efefef;
+   /* border: 1px solid #efefef;
     float: left;
     margin: 10px 8px !important;
     padding: 7px 7px 30px 7px;
@@ -10199,7 +10199,7 @@ req-line.thumb-light a {
     text-align: center;
     -o-transition: -webkit-transform .2s ease-in-out;
     -webkit-transition: -webkit-transform .2s ease-in-out;
-    transition: transform .2s ease-in-out;
+    transition: transform .2s ease-in-out;*/
 }
 
 .selectProduct h3 {
@@ -10243,7 +10243,7 @@ req-line.thumb-light a {
 }
 
 .selectProduct:hover {
-    border: 1px solid #ff717c;
+  /*  border: 1px solid #ff717c;*/
 }
 
 /* rotate and scale product images */
@@ -20302,12 +20302,12 @@ input#zipcode {
   align-items: center;
   justify-content: center;
   display: flex;
-  width: 100px;
+  width: 100%;
   height: 40px;
   border: 1px solid #CCC;
   padding: 0;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .donate-now input[type="radio"] {
   display: none;
@@ -20702,4 +20702,35 @@ span.Zebra_DatePicker_Icon_Wrapper {
     border-radius: 50px;
     min-width: 150px;
     text-decoration: none;
+}
+.mainboxborder{
+	border: 1px solid #ede9e9;
+	padding: 5px;
+	min-height: 667px;
+	border-radius: 5px;
+}
+.details-titles{
+	color: #000;
+	font-size: 27px;
+	font-weight: 600;
+}
+.subtitle.details-sp{
+	margin-top: 25px;
+}
+.date-title{
+	font-size: 20px;
+	font-weight: 600;
+	color: #000;
+	text-align: center;
+}
+.personcategory{
+	display: grid;
+}
+.indetails-btn{
+	display: block ruby;
+	text-align: right;
+}
+.price-cat{
+	border-top: 1px solid black;
+	margin-top: 17px;
 }

@@ -1,2033 +1,1271 @@
+@inject('request', 'Illuminate\Http\Request')
+@extends('layouts.header')
+@section('content')
+
 <?php
+	use App\UserBookingDetail;
+	use App\BusinessServices;
+	use App\BusinessService;
+	use App\BusinessPriceDetails;
+	use App\BusinessServiceReview;
+	use App\BusinessTerms;
+	use App\User;
+	use App\BusinessActivityScheduler;
+	use App\BusinessServicesFavorite;
+	use App\CompanyInformation;
+	use App\BusinessReview;
+	use Carbon\Carbon;
 
-    use App\UserBookingDetail;
+	$sid = $serviceid;
+	$service = BusinessServices::where('id',$serviceid)->first();
+ 	$bookscheduler = BusinessActivityScheduler::where('serviceid', $serviceid)->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+ 	$tduration = '';
+ 	if(@$bookscheduler[0]['set_duration']!=''){
+		$tm=explode(' ',$bookscheduler[0]['set_duration']);
+		$hr=''; $min=''; $sec='';
 
-    use App\BusinessServices;
+		if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+		if($tm[2]!=0){ $min=$tm[2].'min. '; }
+		if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+		if($hr!='' || $min!='' || $sec!='')
+		{ 
+			$tduration = $hr.$min.$sec;
+		} 
+	} 
+	$today = date('Y-m-d');
+	$SpotsLeft = UserBookingDetail::where('sport', @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
+	if( !empty($service['group_size']) ){
+		$SpotsLeftdis = $service['group_size']-$SpotsLeft;
+	}
 
-    use App\BusinessPriceDetails;
+	$businessSp = BusinessService::where('cid', $service['cid'])->first();
+	if(!empty($businessSp)) {
+        $languages = $businessSp['languages'];
+    }     
 
-	use App\BusinessPriceDetailsAges;
-
-    use App\BusinessServiceReview;
-
-    use App\User;
-
-    use App\BusinessActivityScheduler;
-
-    use Carbon\Carbon;
-
+    $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
+    $email = $companylat = $companylon  = $companylogo = '';
+    $comp_data = CompanyInformation::where('id', $service['cid'])->first();
+    // echo $Instructordata;
     
+	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
+	if($comp_data->address != ''){
+		$comp_address = $comp_data->address.', ';
+	}
+	if($comp_data->city != ''){
+		$comp_address .= $comp_data->city.', ';
+	}
+	if($comp_data->state != ''){
+		$comp_address .= $comp_data->state.', ';
+	}
+	if($comp_data->country != ''){
+		$comp_address .= $comp_data->country;
+	}
 
-    //$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
-    $companyactid = 0;
-    $current_act = BusinessServices::where('id', $serviceid)->orderBy('id','desc')->first();
-    if($current_act != ''){
-        $companyactid = $current_act['cid'];
-    }
 
+	$companyname = $comp_data->company_name;
+	$companyid = $comp_data->id;
+	$Phonenumber = $comp_data->contact_number;
+	$companylon = $comp_data->latitude;
+	$companylat = $comp_data->longitude;
+	$companylogo  = $comp_data->logo ;
+	$email = $comp_data->email;
+
+	$BusinessTerms = BusinessTerms::where('cid', $comp_data->id)->first();
+	if(!empty($BusinessTerms)){
+		$cancelation = $BusinessTerms->cancelation;
+		$cleaning = $BusinessTerms->cleaning;
+		$houserules = $BusinessTerms->houserules;
+	}
+
+	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
+	$companyactid = $current_act[0]['cid'];
+	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
+	$address = '';
+	if(!empty($companycity)) { 
+		$address .= $companycity; 
+	}
+    if(!empty($companycountry)) 
+    { 
+    	$address .= ', '.$companycountry; 
+	}
+    if(!empty($companyzip)) {
+     	$address .=', '.$companyzip; 
+ 	} 
     
-
+    
+    $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
+   /* print_r($activities_search);exit();*/
 ?>
 
-<div id="mykickboxing<?php echo $serviceid; ?>" class="mykickboxing ff modal kickboxing-moredetails" tabindex="-1">
-
-    <div class="modal-dialog" role="document">
-
-        <div class="modal-content">
-
-            <div class="modal-header" style="padding:10px 40px 10px 10px; text-align: right;min-height: 30px;">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                    <span aria-hidden="true">&times;</span>
-
-                </button>
-
-                <div class="header-content hide">
-
-                    <div class="addcompare"><a href="#" class="btnaddc">Add To Compare</a> <a href="#" class="inquirylink"><i class="fa fa-question-circle" aria-hidden="true"></i></a></div>
-
-                    <div class="ratset-righthead">                                
-
-                        <div class="ratset-threetxt">
-
-                            <p><i class="fa fa-star" aria-hidden="true"></i> 4.6 (146)</p>
-
-                            <div class="favtxt"><img src="{{ url('public/img/heartplus-icon.png') }}"> Favorite</div>
-
-                            <div class="reviewtxt"><img src="{{ url('public/img/comment-icon.png') }}"> Submit Review</div>
-
-                            <div class="sharetxt"><img src="{{ url('public/img/share-icon.png') }}"> Share</div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="modal-body">
-
-                <?php
-
-                /*if (File::exists(public_path("/uploads/profile_pic/thumb/" . @$service['profile_pic']))) {
-
-                    $profilePic = url('/public/uploads/profile_pic/thumb/' . @$service['profile_pic']);
-
-                } else {
-
-                    $profilePic = '/public/images/service-nofound.jpg';
-
-                }*/
-
-                ?>
-
-                
-
-                <div class="col-md-7">
-
-                    <img src="{{ $profilePic }}" class="kickboximg-big">
-
-                    <h3><?php echo @$service['program_name']; ?></h3>
-
-                    <?php $redlink = str_replace(" ","-",$companyname)."/".$companyid; ?>
-
-                    <p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>
-
-                        <?php
-
-                            if(!empty($companycity)) { echo $companycity; }
-
-                            if(!empty($companycountry)) { echo ', '.$companycountry; }
-
-                            if(!empty($companyzip)) { echo ', '.$companyzip; }
-
-                        ?>
-
-                    </p>
-
-                    <h3 class="subtitle"> About </h3>
-
-                    <p><?php echo @$service['program_desc'] ?></p>
-
-                    <hr />
-
-                    <div class="service-review<?php echo $serviceid; ?>">
-
-                        <div class="row">
-
-                            <div class="col-md-8 pl-0 pr-0"> 
-
-                                <h3 class="subtitle"> 
-
-                                    <div class="row">
-
-                                        <div class="col-md-2 pl-0"> Reviews: </div>
-
-                                        <div class="col-md-10 ">
-
-                                            <p> <a class="activered f-16 font-bold"> By Everyone </a>
-
-                                                <a class="f-16 font-bold"> | By People I know </a>
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                </h3>
-
-                                <div class="service-review-desc">
-
-                                    <?php
-
-                                    $reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-
-                                    $reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
-
-                                    
-
-                                    $reviews_avg=0;
-
-                                    if($reviews_count>0)
-
-                                    { $reviews_avg = round($reviews_sum/$reviews_count,2); }
-
-                                    ?>
-
-                                    
-
-                                    <p> {{$reviews_count}} Reviews </p> 
-
-                                    <div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-4 col-xs-12"> 
-
-                                <!--<a class="btn submit-rev mt-10"> Submit Review </a>-->
-
-                                <div class="rev-follow">
-
-                                    <!--<a href="#" class="rev-follow-txt">100 Followers Reviewed This</a>-->
-
-                                    <a href="#" class="rev-follow-txt">{{$reviews_count}} People Reviewed This</a>
-
-                                    
-
-                                    <div class="users-thumb-list">
-
-                                        <?php 
-
-                                        //DB::enableQueryLog();
-
-                                        $reviews_people = BusinessServiceReview::where('service_id', $serviceid)->orderBy('id','desc')->limit(6)->get(); 
-
-                                        //dd(\DB::getQueryLog());
-
-                                        ?>
-
-                                        @if(!empty($reviews_people))
-
-                                            @foreach($reviews_people as $people)
-
-                                                <?php $userinfo = User::find($people->user_id); ?>
-
-                                                <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" data-toggle="tooltip">
-
-                                                    <!--<img src="{{ url('public//images/newimage/userlist-1.jpg') }}" alt="">  -->
-
-                                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-
-                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-
-                                                    @else
-
-                                                        <?php
-
-                                                        $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-
-                                                        echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
-
-                                                    @endif
-
-                                                </a>
-
-                                            @endforeach
-
-                                        @endif
-
-                                        
-
-                                    </div>
-
-                                </div>
-
-                                    
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    
-
-                    <div class="ser-review-list">
-
-                        <div id="user_ratings_div<?php echo $serviceid; ?>" >
-
-                        <?php
-
-                            $reviews = BusinessServiceReview::where('service_id', $serviceid)->get();
-
-                        ?>
-
-                            @if(!empty($reviews))
-
-                                @foreach($reviews as $review)
-
-                                <?php $userinfo = User::find($review->user_id); ?>
-
-                                <div class="ser-rev-user">
-
-                            
-
-                                    <div class="row">
-
-                                        <div class="col-md-2 pl-0 pr-0">
-
-                                            @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-
-                                            <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-
-                                            @else
-
-                                                <?php
-
-                                                $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-
-                                                echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
-
-                                            @endif
-
-                                        </div>
-
-                                        <div class="col-md-10 pl-0">
-
-                                            <h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
-
-                                            <div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}} </div> </h4> 
-
-                                            <p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
-
-                                        </div>
-
-                                    </div>
-
-                               
-
-                                </div>
-
-                                <div class="rev-dt">
-
-                                    <p class="mb-15"> {{$review->title}} </p>
-
-                                    <p> {{$review->review}} </p>
-
-                                    <?php
-
-                                        if( !empty($review->images) ){
-
-                                            $rimg=explode('|',$review->images);
-
-                                            echo '<div class="listrimage">';
-
-                                            foreach($rimg as $img)
-
-                                            { ?>
-
-                                                <a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
-
-                                                <img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
-
-                                                </a>
-
-                                                <?php
-
-                                            }
-
-                                            echo '</div>';
-
-                                        }
-
-                                    ?>
-
-                                    
-
-                                </div>
-
-                                 <!--<div class="rev-admin">
-
-                                    <h4> Author </h4>
-
-                                    <p> Thank you, Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-
-                                </div>-->
-
-                                @endforeach
-
-                            @endif
-
-                        </div>
-
-                        <div class="ser-rev-take">
-
-                            <div class="rev-post">
-
-                                <div class="comet-avatar">
-
-                                    <!--<img class="rev-take-img" src="https://development.fitnessity.co/public/uploads/profile_pic/thumb/1651248035-y6QXOYchR3w._UX970_TTW__.png"/>-->
-
-                                    @if(Auth::check())
-
-                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-
-                                        <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="{{Auth::user()->firstname}} {{Auth::user()->lastname}}">
-
-                                        @else
-
-                                            <?php
-
-                                            $pf=substr(Auth::user()->firstname, 0, 1).substr(Auth::user()->lastname, 0, 1);
-
-                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
-
-                                        @endif
-
-                                     @else
-
-                                        <?php
-
-                                            $pf='F';
-
-                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
-
-                                    @endif
-
-                                </div>
-
-                            </div>
-
-                            <div class="rev-post-box">
-
-                                <form method="post" enctype="multipart/form-data" name="sreview<?php echo $serviceid; ?>" id="sreview<?php echo $serviceid; ?>" >
-
-                                @csrf
-
-                                <div class="">
-
-                                    <div class="clearfix"></div>
-                                    <input type="hidden" name="serviceid<?php echo $serviceid; ?>" id="serviceid<?php echo $serviceid; ?>" value="<?php echo $serviceid; ?>">
-                                    <input type="hidden" name="rating<?php echo $serviceid; ?>" id="rating<?php echo $serviceid; ?>" value="0">
-                                    <div class="rvw-overall-rate rvw-ex-mrgn">
-                                        <span>Rating</span>
-                                        <div id="stars<?php echo $serviceid; ?>" data-service="<?php echo $serviceid; ?>" class="starrr" style="font-size:22px"></div>
-                                    </div>
-                                    <input type="text" name="rtitle<?php echo $serviceid; ?>" id="rtitle<?php echo $serviceid; ?>" placeholder="Review Title" class="inputs" />
-                                    <textarea placeholder="Write your review" name="review<?php echo $serviceid; ?>" id="review<?php echo $serviceid; ?>"></textarea>
-                                    <input type="file" name="rimg<?php echo $serviceid; ?>[]" id="rimg<?php echo $serviceid; ?>" class="inputs" multiple="multiple" />
-                                    <div class="reviewerro" id="reviewerro<?php echo $serviceid; ?>"> </div>
-                                    <input type="button" onclick="submit_rating('<?php echo $serviceid; ?>')" value="Submit" class="btn rev-submit-btn mt-10">
-                                    <script>
-                                        $('#stars<?php echo $serviceid; ?>').on('starrr:change', function(e, value){
-                                            $('#rating<?php echo $serviceid; ?>').val(value);
-                                        });
-                                    </script>
-                                </div>
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                    </div>
-
-                    <div class="review-blockkick hide">
-
-                        <h5>Add Review & Rate</h5>
-
-                        <div class="ratestar">
-
-                            <div>
-
-                                <span>Quality</span>
-
-                                <?php for($a=0; $a<10; $a++) { ?>
-
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                <?php } ?>
-
-                                <span><img src="{{ url('/public/img/emoji.png') }}"> Excellent</span>
-
-                            </div>
-
-                            <div>
-
-                                <span>Location</span>
-
-                                <?php for($a=0; $a<10; $a++) { ?>
-
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                <?php } ?>
-
-                                <span><img src="{{ url('public/img/emoji.png') }}"> Excellent</span>
-
-                            </div>
-
-                            <div>
-
-                                <span>Space</span>
-
-                                <?php for($a=0; $a<10; $a++) { ?>
-
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                <?php } ?>
-
-                                <span><img src="{{ url('public/img/emoji.png') }}"> Excellent</span>
-
-                            </div>
-
-                            <div>
-
-                                <span>Service</span>
-
-                                <?php for($a=0; $a<10; $a++) { ?>
-
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                <?php } ?>
-
-                                <span><img src="{{ url('public/img/emoji.png') }}"> Excellent</span>
-
-                            </div>
-
-                            <div>
-
-                                <span>Price</span>
-
-                                <?php for($a=0; $a<10; $a++) { ?>
-
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                <?php } ?>
-
-                                <span><img src="{{ url('public/img/emoji.png') }}"> Excellent</span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-5 col-xs-12 right-person">
-
-                    <div class="fromblock">
-
-                        <h3> <a class="active"> View Activities </a> <?php /*?>| <a> View Products </a><?php */?> </h3>
-
-                        <?php /*?><h3>From $150 <span> / person</span></h3><?php */?>
-
-                        <div class="multiselect-block">
-
-                            <?php 
-
-                                $actoffer = BusinessServices::where('cid', $companyactid)->groupBy('sport_activity')->get()->toArray();
-
-                            ?>
-
-                            <select id="actfiloffer<?php echo $serviceid; ?>" name="actfiloffer" class="form-control activityselect1" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Activity Offered</option>
-
-                                <?php
-
-                                    if (!empty($actoffer)) {
-
-                                    foreach ($actoffer as  $off) { ?>
-
-                                        <option><?php echo $off['sport_activity'];?></option>
-
-                                <?php } }  ?>
-
-                                <?php /*?><option>Aerobics</option>
-
-                                <option>Archery</option>
-
-                                <option>Badminton</option>
-
-                                <option>Barre</option>
-
-                                <option>Baseball</option>
-
-                                <option>Basketball</option>
-
-                                <option>Beach Vollyball</option>
-
-                                <option>Bouldering</option>
-
-                                <option>Bungee Jumping</option>
-
-                                <optgroup label="Camps &amp; Clinics">
-
-                                    <option>Day Camp</option>
-
-                                    <option>Sleep Away</option>
-
-                                    <option>Winter Camp</option>
-
-                                </optgroup>
-
-                                <option>Canoeing</option>
-
-                                <optgroup label="Cycling">
-
-                                    <option>Indoor cycling</option>
-
-                                </optgroup>
-
-                                <option>Dance</option>
-
-                                <option>Diving</option>
-
-                                <optgroup label="Field Hockey">
-
-                                    <option>Ice Hockey</option>
-
-                                </optgroup>
-
-                                <option>Football</option>
-
-                                <option>Golf</option>
-
-                                <option>Gymnastics</option>
-
-                                <option>Hang Gliding</option>
-
-                                <option>Hiit</option>
-
-                                <option>Hiking - Backpacking</option>
-
-                                <option>Horseback Riding</option>
-
-                                <option>Ice Skating</option>
-
-                                <option>Kayaking</option>
-
-                                <option>lacrosse</option>
-
-                                <option>Laser Tag</option>
-
-                                <optgroup label="Martial Arts">
-
-                                    <option>Boxing</option>
-
-                                    <option>Jiu-Jitsu</option>
-
-                                    <option>Karate</option>
-
-                                    <option>Kick Boxing</option>
-
-                                    <option>Kung Fu</option>
-
-                                    <option>MMA</option>
-
-                                    <option>Self-Defense</option>
-
-                                    <option>Tai Chi</option>
-
-                                    <option>Wrestling</option>
-
-                                </optgroup>
-
-                                <option>Massage Therapy</option>
-
-                                <option>Nutrition</option>
-
-                                <option>Paint Ball</option>
-
-                                <option>Physical Therapy</option>
-
-                                <option>Pilates</option>
-
-                                <option>Rafting</option>
-
-                                <option>Rapelling</option>
-
-                                <option>Rock Climbing</option>
-
-                                <option>Rowing</option>
-
-                                <option>Running</option>
-
-                                <optgroup label="Sightseeing Tours">
-
-                                    <option>Airplane Tour</option>
-
-                                    <option>ATV Tours</option>
-
-                                    <option>Boat Tours</option>
-
-                                    <option>Bus Tour</option>
-
-                                    <option>Caving Tours</option>
-
-                                    <option>Helicopter Tour</option>
-
-                                </optgroup>
-
-                                <option>Sailing</option>
-
-                                <option>Scuba Diving</option>
-
-                                <option>Sky diving</option>
-
-                                <option>Snow Skiing</option>
-
-                                <option>Snowboarding</option>
-
-                                <option>Strength &amp; Conditioning</option>
-
-                                <option>Surfing</option>
-
-                                <option>Swimming</option>
-
-                                <option>Tennis</option>
-
-                                <option>Tours</option>
-
-                                <option>Vollyball</option>
-
-                                <option>Weight training</option>
-
-                                <option>Windsurfing</option>
-
-                                <option>Yoga</option>
-
-                                <option>Zip-Line</option>
-
-                                <option>Zumba</option><?php */?>
-
-                            </select>
-
-                            <select id="actfillocation<?php echo $serviceid; ?>" name="actfillocation" class="form-control activityselect2" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Location</option>
-
-                                <option value="Online">Online</option>
-
-                                <option value="At Business">At Business Address</option>
-
-                                <option value="On Location">On Location</option>
-
-                            </select>
-
-                            <select id="actfilmtype<?php echo $serviceid; ?>" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Membership Type</option>
-
-                                <option>Drop In</option>
-
-                                <option>Semester</option>
-
-                            </select>
-
-                            <select id="actfilgreatfor<?php echo $serviceid; ?>" name="actfilgreatfor" class="form-control activityselgreatfor" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Great For</option>
-
-                                <option>Individual</option>
-
-                                <option>Kids</option>
-
-                                <option>Teens</option>
-
-                                <option>Adults</option>
-
-                                <option>Family</option>
-
-                                <option>Groups</option>
-
-                                <option>Paralympic</option>
-
-                                <option>Prenatal</option>
-
-                                <option>Any</option>
-
-                            </select>
-
-                            <select id="actfilparticipant<?php echo $serviceid; ?>" name="actfilparticipant" class="form-control activityselect4" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Participant #</option>
-
-                                <?php for($i=1; $i<=100; $i++){
-
-                                    echo '<option value="'.$i.'">'.$i.'</option>';
-
-                                }?>
-
-                            </select>
-
-                            <select id="actfilbtype<?php echo $serviceid; ?>" name="actfilbtype" class="form-control activityselbtype" 
-
-                            onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')" >
-
-                                <option value="">Business Type</option>
-
-                                <option value="individual">Personal Trainer</option>
-
-                                <option value="classes">Gym/Studio</option>
-
-                                <option value="experience">Experience</option>
-
-                            </select>
-
-                            <div class="activityselect3 special-date">
-
-                                <input type="text" name="actfildate" id="actfildate<?php echo $serviceid; ?>" placeholder="Date" class="form-control" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')" autocomplete="off" >
-
-                                <i class="fa fa-calendar"></i>
-
-                            </div>
-
-                            
-
-                            <select id="actfilsType<?php echo $serviceid; ?>" name="actfilsType" class="form-control activityselect5" onchange="actFilter('<?php echo $companyactid; ?>','<?php echo $serviceid; ?>')">
-
-                                <option value="">Service Type</option>
-
-                                <option>Personal Training</option>
-
-                                <option>Coaching</option>
-
-                                <option>Therapy</option>
-
-                                <option>Group Class</option>
-
-                                <option>Seminar</option>
-
-                                <option>Workshop</option>
-
-                                <option>Clinic</option>
-
-                                <option>Camp</option>
-
-                                <option>Team</option>
-
-                                <option>Corporate</option>
-
-                                <option>Tour</option>
-
-                                <option>Adventure</option>
-
-                                <option>Retreat</option>
-
-                                <option>Workshop</option>
-
-                                <option>Seminar</option>
-
-                                <option>Private experience</option>
-
-                            </select>
-
-                            <script>
-
-                                $( function() {
-
-                                    $( "#actfildate<?php echo $serviceid; ?>" ).datepicker( { minDate: 0 } );
-
-                                  } );
-
-                            </script>
-
-                        </div>
-
-                        <div class="kickshow-block" id="statact<?php echo $serviceid; ?>">
-
-                            <div class="topkick intro" id="kickboxing<?php echo $serviceid; ?>">
-
-                                <h5><?php echo @$service['program_name']; 
-
-                                    $reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-
-                                    $reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
-
-                                ?>
-
-                                    <p>{{$reviews_count}} Reviews <span> <i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </span> </p>
-
-                                </h5>
-
-                                <div class="lefthalf">
-
-                                    <div class="divdesc">
-
-                                        <div class="divleftserdes">
-
-                                            <img src="{{$profilePic}}" />
-
-                                        </div>
-
-                                        <div class="divrightserdes">
-
-                                            <p> <b> Description </b> </p>
-
-                                            <p> 
-
-                                                {{ Str::limit($service['program_desc'], 80, $end='...') }}
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="divdesc">
-
-                                        <p class="actsubtitle"> Details: </p>
-
-                                        <?php
-
-                                            //$SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->count();
-
-                                            //$SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->sum('qty');
-
-                                             
-
-                                            /*echo Auth::user()->id;
-
-                                            DB::enableQueryLog();
-
-                                            $sIdsch = !empty(Auth::user()->serviceid) ? Auth::user()->serviceid : "";
-
-                                            $schedule = BusinessActivityScheduler::where('serviceid', $sIdsch)->get()->toArray();
-
-                                            dd(\DB::getQueryLog());
-
-                                            print_r($schedule);*/
-
-                                            //DB::enableQueryLog();
-
-                                            //$startDate= '2022-06-10';
-
-                                            //$endDate= '2022-07-10';
-
-                                            /*$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->whereBetween('starting', [$startDate, $endDate])->limit(1)->orderBy('id', 'ASC')->get()->toArray();*/
-
-                                                
-
-                                            $bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-
-                                            
-
-                                            /*$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->
-
-                                            WhereBetween(DB::raw('DATE_FORMAT(`starting`, "%Y-%m-%d")'), array(
-
-                                            'starting',now()->addMonths(1)->format('Y-m-d')))
-
-                                            ->orderBy('id', 'ASC')->get()->toArray();*/
-
-                                            
-
-                                            //dd(\DB::getQueryLog());
-
-                                            $ser_mem = BusinessPriceDetails::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-
-                                            $currentDateTime = Carbon::now();
-
-                                            $newDateTime = Carbon::parse('2022-06-10')->addMonths(3);
-
-                                      
-
-                                            //print_r($bookscheduler);
-
-                                        ?>
-
-                                        <ul>
-
-                                            <li>
-
-                                                <?php
-
-                                                    //echo date('31-05-Y', strtotime('+6 month'));
-
-                                                    /*echo date('Y-m-d', strtotime( @$bookscheduler[0]['starting'] ));
-
-                                                    echo date('Y-m-d', strtotime("+1 year", strtotime(@$bookscheduler[0]['starting'])));
-
-                                                    echo '<br>';*/
-
-                                                    if(@$bookscheduler[0]['starting']!=''){
-
-                                                        //echo date('l jS \of F Y', strtotime( $bookscheduler[0]['starting'] ));
-
-                                                        echo date('l, F jS,  Y' );  
-
-                                                    } 
-
-                                                   /* if(@$bookscheduler[0]['shift_start']!=''){
-
-                                                        echo '<br>'.date('h:ia', strtotime( $bookscheduler[0]['shift_start'] )); 
-
-                                                    }
-
-                                                    if(@$bookscheduler[0]['shift_end']!=''){
-
-                                                        echo ' - '.date('h:ia', strtotime( $bookscheduler[0]['shift_end'] ));
-
-                                                    }
-
-                                                    if(@$bookscheduler[0]['set_duration']!=''){
-
-                                                        $tm=explode(' ',$bookscheduler[0]['set_duration']);
-
-                                                        $hr=''; $min=''; $sec='';
-
-                                                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-
-                                                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-
-                                                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-
-                                                        if($hr!='' || $min!='' || $sec!='')
-
-                                                        { echo ' /'.$hr.$min.$sec; } 
-
-                                                    } */
-
-                                                ?>
-
-                                            </li>
-
-                                            <li>Service Type: <?php echo @$service['select_service_type']; ?></li>
-
-                                            <li>Activity: <?php echo @$service['sport_activity'] ?></li>
-
-                                            <li>Activity Location: <?php echo @$service['activity_location'] ?></li>
-
-                                            <li>Great For: <?php echo @$service['activity_for'] ?></li>
-
-                                            <li>Age: <?php echo @$service['age_range'] ?></li>
-
-                                            <li>Language: <?php echo @$languages?></li>
-
-                                            <li>Skill Level: <?php echo @$service['difficult_level'] ?></li>
-
-                                            <?php if(@$ser_mem[0]['membership_type']!=''){ ?>
-
-                                                <li>Membership Type: <?php echo @$ser_mem[0]['membership_type'] ?></li>
-
-                                            <?php } ?>
-
-                                            <li>Business Type: <?php
-
-                                                if($service['service_type']=='individual'){ echo 'Personal Training'; }
-
-                                                else { echo ucfirst(@$service['service_type']); } ?></li>
-
-                                            
-
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="righthalf">
-
-                                <?php 
-
-									$servicePr=[]; $bus_schedule=[];
-
-									$servicePrfirst = BusinessPriceDetails::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
-
-									$sercate = BusinessPriceDetailsAges::where('serviceid', $service['id'])->orderBy('id', 'ASC')->get()->toArray();
-
-									$sercatefirst = BusinessPriceDetailsAges::where('serviceid', $service['id'])->orderBy('id', 'ASC')->get()->first();
-
-									//DB::enableQueryLog();
-
-									if(!empty(@$sercatefirst)){
-
-                                    	$servicePr = BusinessPriceDetails::where('serviceid', $service['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
-
-									}
-
-									//dd(\DB::getQueryLog());
-
+<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
+<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
+<link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails" style="padding-top: 78px">
+<!-- The Modal Add Business-->
+   	<div class="container-fluid">
+	   	<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<div class="modal-banner modal-banner-sp">
+					<div class="bannar-size">
+						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+					</div>
+					<div class="bannar-size">
+						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+					</div>
+					<div class="bannar-size">
+						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+					</div>
+					<div class="bannar-size">
+						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+						<button class="showall-btn showphotos"><i class="fas fa-bars"></i>Show all 8 photos</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-7 col-xs-12">
+				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
+				<h3 class="details-titles">{{@$service['program_name']}}</h3>
+				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
+				</p>
+				<h3 class="subtitle details-sp"> Description </h3>
+				<p>{{ @$service['program_desc'] }}</p>
+				<h3 class="subtitle details-sp"> Program Details: </h3>
+				<div class="row">
+					<div class="col-md-5 col-sm-5 col-xs-12">
+						<div class="prdetails">
+							<div>
+								<label>Duration: </label>
+								<span> {{$tduration}}</span>
+							</div>
+							<div>
+								<label>Service Type: </label>
+								<span> {{@$service['select_service_type']}}  </span>
+							</div>
+							<div>
+								<label>Service For: </label>
+								<span> {{@$service['activity_for']}}  </span>
+							</div>
+							<div>
+								<label>Language:</label>
+								<span> {{@$languages}}</span>
+							</div>
+							<div>
+								<label>Instructor:</label>
+								<span>{{@$Instruname}}  </span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-7 col-sm-7 col-xs-12">
+						<div class="prdetails">
+							<div>
+								<label>Spots Left:</label>
+								<span> {{@$SpotsLeftdis}}/{{@$service['group_size']}}</span>
+							</div>
+							<div>
+								<label>Activity: </label>
+								<span>{{@$service['sport_activity']}}</span>
+							</div>
+							<div>
+								<label>  Age: </label>
+								<span>  {{@$service['age_range'] }} </span>
+							</div>
+							<div>
+								<label> Skill Level: </label>
+								<span>{{@$service['difficult_level']}} </span>
+							</div>
+							<div>
+								<label>  Activity Location: </label>
+								<span>{{@$service['activity_location'] }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h3 class="subtitle details-sp"> Check Availability </h3>
+				<div class="mainboxborder">
+					<div class="col-md-12 col-sm-12 col-xs-12 activities-calendar">
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="activityselect3 special-date" onchange="updatedetail({{$serviceid}});">
+								<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" onchange="actFilter" autocomplete="off" >
+								<i class="fa fa-calendar"></i>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updatedetail({{$serviceid}});">
+								<option value="">Participant #</option>
+								<?php for($i=1; $i<=@$service['group_size']; $i++){
+									echo '<option value="'.$i.'">'.$i.'</option>';
+								}?>
+							</select>
+						</div>
+					</div>
+					@php $date = date('l').', '.date('F d,  Y'); @endphp 
+					<div class="col-md-12 col-sm-12 col-xs-12 choose-calendar-time">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<h3 class="date-title">{{$date}}</h3>
+							<label>Step: 1 </label> <span class=""> Select Membership Type</span>
+							<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1">
+								<option value="">Any</option>
+								<option>Drop In</option>
+								<option>Semester</option>
+							</select>
+							
+							<label>Step: 2 </label> <span class="">Select Category</span>
+							<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1">
+								<option value="">Couples Private Lessons</option>
+								<option>Drop In</option>
+								<option>Semester</option>
+							</select>
+							
+							<label>Step: 3 </label> <span class="">Select Price Option</span>
+							<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1">
+								<option value="">30 Minute Private - 01 Session - $65</option>
+								<option>Drop In</option>
+								<option>Semester</option>
+							</select>
+							
+							
+							
+							<!--<div class="calendar-time-details">
+								<div class="start-time">
+									<span>11:00 am</span>
+									<p class="start-hr">1hr.</p>
+									<!--<label class="end-time-details">End Time</label>-->
+									<!--<p class="end-hr">2hr. </p>
+								</div>
+								<div class="end-time">
+									<span>12:23 am</span>
+									<p class="start-hr">2hr. 20min.</p>
+									<!--<label class="end-time-details">End Time</label>
+									<!--<p class="end-hr">3hr. </p>
+								</div>
+								<div class="end-time">
+									<span>6:00 pm</span>
+									<p class="start-hr">1hr.</p>
+									<!--<label class="end-time-details">End Time</label>-->
+									<!--<p class="end-hr">3hr. </p>
+								</div>
+							</div>-->
+							<!--<div class="calendar-time-details">
+								<div class="end-time">
+									<span>7:00 pm</span>
+									<p class="start-hr">1hr. 21min.</p>
+									<!--<label class="end-time-details">End Time</label>-->
+									<!--<p class="end-hr">2hr. 5min </p>
+								</div>
+								<div class="end-time">
+									<span>10:00 pm</span>
+									<p class="start-hr">1hr. 6min</p>
+									<!--<label class="end-time-details">End Time</label>-->
+									<!--<p class="end-hr">3hr. </p>
+								</div>
+								<div class="end-time">
+									<span>12:05 pm</span>
+									<p class="start-hr">1hr.</p>
+									<!--<label class="end-time-details">End Time</label>-->
+									<!--<p class="end-hr">4hr.</p>
+								</div>
+							</div>-->
+							<!--<div>
+								<div class="start-time">
+									<span>12:00 am</span>
+								</div>
+								<div class="end-time">
+									<span>3:00 pm</span>
+								</div>
+							</div>-->
+						</div>
+						<?php 
+							$servicePr = BusinessPriceDetails::where('serviceid', $serviceid)->orderBy('id', 'ASC')->get()->toArray();
+						?>
+						<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
+							<div class="membership-details">
+								<h3 class="date-title">Booking Details</h3>
+								<label>Step: 4 </label> <span class=""> Select Time</span>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a25" name="amount" checked="checked" />
+												<label for="a25" id="a25">11:00 am</label>
+												<p class="end-hr">1/20 Spots Left </p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a50" name="amount" />
+												<label for="a50" id="a50">6:00 pm</label>
+												<p class="end-hr">1/20 Spots Left </p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a51" name="amount" />
+												<label for="a51" id="a51">12:23 am</label>
+												<p class="end-hr">1/20 Spots Left </p>
+										</div>
+									</div>
 									
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a52" name="amount" checked="checked" />
+												<label for="a52" id="a52">7:00 pm</label>
+												<p class="end-hr">1/20 Spots Left </p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a53" name="amount" />
+												<label for="a53" id="a53">10:00 pm</label>
+												<p class="end-hr">1/20 Spots Left. </p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="donate-now">
+											<input type="radio" id="a54" name="amount" />
+												<label for="a54" id="a54">12:05 pm</label>
+												<p class="end-hr">1/20 Spots Left</p>
+										</div>
+									</div>
+								</div>
+								<!--<label>Booking Details</label>
+								<select id="selprice1" name="selprice1" class="price-select-control" onchange="changeactpr('<?php echo $serviceid;?>',this.value,'<?php echo @$service['group_size'] ?>','book','<?php echo $serviceid;?>')">
+									<?php $i=1; $priceid='';
+										if (!empty($servicePr)) { 
+											foreach ($servicePr as  $pr) {
+												if($i==1){ 
+												$priceid =$pr['id'];
+												echo '<option value="'.$pr['pay_session'].'~~'.$pr['pay_price'].'~~'.$pr['id'].'">Select Price Option</option>'; }
+												echo '<option value="'.$pr['pay_session'].'~~'.$pr['pay_price'].'~~'.$pr['id'].'">'.$pr['pay_session'].' Sessions/$'.$pr['pay_price'].'</option>';
+										$i++; }
+										}
+									?>
+								</select>-->
+								<div class="price-cat">
+									<label>Category:</label>
+									<span>Couples Private Lessons</span>
+								</div>
+								<div>
+									<label>Duration:</label>
+									<span>30 Minutes</span>
+								</div>
+								<div>
+									<label>Price Title:</label>
+									<span>30 Minute Session</span>
+								</div>
+								<div>
+									<label>Membership:</label>
+									<span>Semester (Recurring)</span>
+								</div>
+								<div class="personcategory">
+									<span>Adults x 1 </span>
+									<span>Kids x 0</span>
+									<span>Infants x 0</span>
+								</div>
+								<!--<div class="price-option">
+									<label id="paysession{{$serviceid}}">Price Option: {{@$servicePr[0]['pay_session']}} Session</label>
+									<span>Adults x 1 </span>
+									<span>Kids x 0</span>
+									<span>Infants x 0</span>
+								</div>
+								<div class="total-price">
+									<label> Total </label>
+									<span id="totprice{{$serviceid}}">{{@$servicePr[0]['pay_price']}} USD</span>
+								</div>-->
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 col-xs-12">
+						<div class="indetails-btn">
+							<div class="btn-cart-modal">
+								<input type="submit" value="Add To Cart" class="btn btn-black mt-10" >
+							</div>
+							<div class="btn-cart-modal">
+								<input type="submit" value="Book Now" class="btn btn-red mt-10" >
+							</div>
+						</div>
+					</div>
+				</div>
+				<form method="post" action="/addtocart" id="frmcart{{$serviceid}}">
+	                @csrf
+	                <input type="hidden" name="pid" value="{{$serviceid}}" size="2" />
+	                <input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity" size="2" />
+	                <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{@$servicePr[0]['pay_price']}}" class="product-price" size="2" />
+	                <input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePr[0]['pay_session']}}" />
+	                <input type="hidden" name="priceid" value="<?php echo $priceid; ?>" id="priceid{{$serviceid}}{{$serviceid}}" />
+	                <input type="hidden" name="sesdate" value="<?php echo date('Y-m-d'); ?>" id="sesdate{{$serviceid}}{{$serviceid}}" />
+	                @if($SpotsLeft >= $service['group_size'])
+	                    <a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
+					@else
+	                	@if(@$servicePr[0]['pay_price']!='' && @$bookscheduler[0]['starting']!='' )
+	                    	<div class="col-md-12 col-xs-12">
+								<div class="btn-cart-modal">
+									<input type="submit" value="Add to Cart" class="btn btn-addtocart mt-10" onclick="changeqnt('<?php echo $service["id"]; ?>')" >
+								</div>
+							</div>
+	                    @endif
+					@endif
+					
+				</form>
+				<h3 class="subtitle details-sp">Things To Know </h3>
+				
+				<h3 class="subtitle details-sp">Know Before You Go</h3>
+				<p>{{$houserules}}</p>
+				
+				<h3 class="subtitle details-sp">Cancelation Policy</h3>
+				<p>{{$cancelation}}</p>
+				
+				<h3 class="subtitle details-sp">Safety and Cleaning Procedures</h3>
+				<p>{{$cleaning}}</p>
+				
+				<div class="row">
+					<div class="col-md-9">
+						<div class="widget mx-sp">
+							<h4 class="widget-title">Provider: {{$companyname }}</h4>
+							<div class="widget" style="height:300px" id="mapdetails">
+				            	<div class="google-map">
+									<div class="get-img"><!--<img src="/images/newimage/map.jpg" alt="images" class="img-fluid">-->
+				                    	<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;height:300px"></div>
+				                    </div>
+								</div>
+				            </div>
+							<div class="maparea modal-map">
+								<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
+							</div>
 
-                                    $todayday = date("l");
+							<?php   
+								$locations = []; 
+		                        if($companylat != '' || $companylon  != ''){
+		                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+		                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
+		                            array_push($locations, $a);
+								}
+							?>
+							<div class="map-info">
+								<span>
+									<i class="fas fa-map-marker-alt map-fa"></i>
+									<p>{{$comp_address}}</p>
+								</span>
+								<span>
+									<i class="fas fa-phone-alt map-fa"></i>
+									<p>{{$Phonenumber}}</p>
+								</span>
+								<span>
+									<i class="fa fa-envelope map-fa"></i>
+									<p>{{$email}}</p>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
+					<div class="row">
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="instructor-img">
+								<img src="{{url('public/uploads/profile_pic/thumb/1653996182-aerobics.jpg')}}">
+							</div>
+						</div>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="instructor-inner-details">
+								<label>Instructor:</label>
+								<span>Darryl Phipps</span>
+							</div>
+							<div>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+						<h3 class="subtitle">Submit A Review </h3>
+					</div>
+					<div class="col-md-8 col-sm-8 col-xs-12"> 
+						<h3 class="subtitle"> 
+							<div class="row">
+								<div class="col-md-2 col-sm-2"> Reviews: </div>
+								<div class="col-md-10 col-sm-10">
+									<p> <a class="activered f-16 font-bold"> By Everyone </a>
+										<a class="f-16 font-bold pepole-color"> | By People I know </a>
+									</p>
+								</div>
+							</div>
+						</h3>
+						<div class="service-review-desc">
+							<div class="row">
+								<div class="col-md-12">
+								<?php
+									$business_reviews_count = BusinessReview::where('page_id', $companyid)->count();
+									$business_reviews_sum = BusinessReview::where('page_id', $companyid)->sum('rating');
 
-                                    $todaydate = date('m/d/Y');
-
-									if(!empty(@$sercatefirst)){
-
-                                    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-
+									$business_reviews_avg=0;
+									$business_reviews_per=0;
+									if($business_reviews_count>0)
+									{ $business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
+										$business_sum_of_rating = $business_reviews_count*5;
+										$business_totalRating = $business_reviews_avg * $business_reviews_count;
+										$business_reviews_per = ($business_totalRating/$business_sum_of_rating)*100;
 									}
 
-                                    /*  print_r($bus_schedule);*/
-
-                                    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft =0 ;
-
-                                    if(!empty(@$bus_schedule)){
-
-                                        foreach($bus_schedule as $data){
-
-                                            if($data['scheduled_day_or_week'] == 'Days'){
-
-                                                $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-
-                                                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                            }else if($data['scheduled_day_or_week'] == 'Months'){
-
-                                                $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-
-                                                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                            }else if($data['scheduled_day_or_week'] == 'Years'){
-
-                                                $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-
-                                                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                            }else{
-
-                                                $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-
-                                                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                            }  
-
-                                            
-
-                                            if($todaydate <=$expdate){
-
-                                                if(@$data['shift_start']!=''){
-
-                                                    $start = date('h:i a', strtotime( $data['shift_start'] ));
-
-                                                    $timedata .= $start;
-
-                                                }
-
-                                                if(@$data['shift_end']!=''){
-
-                                                    $end = date('h:i a', strtotime( $data['shift_end'] ));
-
-                                                     $timedata .= ' - '.$end;
-
-                                                } 
-
-                                                if(@$data['set_duration']!=''){
-
-                                                    $tm=explode(' ',$data['set_duration']);
-
-                                                    $hr=''; $min=''; $sec='';
-
-                                                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-
-                                                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-
-                                                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-
-                                                    if($hr!='' || $min!='' || $sec!='')
-
-                                                    { $time = $hr.$min.$sec; 
-
-                                                        $timedata .= ' / '.$time;} 
-
-                                                }
-
-                                            }
-
-
-
-                                            $today = date('Y-m-d');
-
-                                            $SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-
-                                            $SpotsLeftdis=0;
-
-                                            if( !empty($data['spots_available']) ){
-
-                                                $spot_avil=$data['spots_available'];
-
-                                                $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-
-                                                $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                    
-
-									if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                                        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
-                                        $selectval = '';$priceid = '';$i=1;
-                                        if (!empty(@$servicePr)) {
-                                            foreach ($servicePr as  $pr) {
-                                                if($i==1){ 
-                                                    $priceid =$pr['id'];
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                                                if($pr['adult_weekend_price_diff'] != ''){
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                                                if($pr['child_cus_weekly_price'] != ''){
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                                                }
-                                                if($pr['infant_cus_weekly_price'] != ''){
-                                                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                                                }$i++;
-                                            }
-                                        }
-                                    }else{
-										$selectval = ''; $priceid = ''; $total_price_val='';
-										//print_r($servicePr); exit;
-										if(!empty(@$servicePr))
-										{
-											$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
-											$i=1;
-                                            foreach ($servicePr as  $pr) {
-												if($i==1){ 
-													$priceid =$pr['id'];
-													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-												if($pr['adult_cus_weekly_price'] != ''){
-													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-												if($pr['child_cus_weekly_price'] != ''){
-													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-												}
-												if($pr['infant_cus_weekly_price'] != ''){
-													$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-												}$i++;
+									$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
+									$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
+									
+									$reviews_avg=0;
+									$reviews_per=0;
+									if($reviews_count>0)
+									{ $reviews_avg = round($reviews_sum/$reviews_count,2); 
+										$sum_of_rating = $reviews_count*5;
+										$totalRating = $reviews_avg * $reviews_count;
+										$reviews_per = ($totalRating/$sum_of_rating)*100;
+									}
+								?>
+	                    
+									<p> {{$reviews_count}} Reviews </p> 
+									<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
+								</div>
+							</div>
+						</div>
+						<div class="progress-bar-main">
+							<div class="pro-inner">
+								<div class="review-name">
+									<label>Review for Activity</label>
+									<label>Review for Business </label>
+								</div>
+								<div class="progress-bar-widget">
+									<div class="progress pr-bt"> 
+										<div class="progress-bar" role="progressbar" aria-valuenow="{{$reviews_avg}}"
+										aria-valuemin="0" aria-valuemax="100" style="width:{{$reviews_per}}%">
+											<span class="sr-only">{{$reviews_per}}% Complete</span>
+										</div>
+									</div>
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" aria-valuenow="{{$business_reviews_avg}}"
+										aria-valuemin="0" aria-valuemax="100" style="width:{{$business_reviews_per}}%">
+											<span class="sr-only">{{$business_reviews_per}}% Complete</span>
+										</div>
+									</div>
+								</div>
+								<div class="process-number">
+									<label>{{$reviews_avg}}</label>
+									<label>{{$business_reviews_avg}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-4 col-sm-4"> 
+						<a class="btn submit-rev mt-10 rev-new" data-toggle="modal" data-target="#busireview"> Submit Review </a>
+						<div class="rev-follow">
+							<a href="#" class="rev-follow-txt">{{$reviews_count}} Followers Reviewed This</a>
+							<div class="users-thumb-list">
+								<?php 
+									$reviews_people = BusinessServiceReview::where('service_id', $serviceid)->orderBy('id','desc')->limit(6)->get(); 
+								?>
+	                            @if(!empty($reviews_people))
+	                                @foreach($reviews_people as $people)
+	                                	<?php $userinfo = User::find($people->user_id); ?>
+	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" data-toggle="tooltip">
+	                                        <!--<img src="{{ url('public//images/newimage/userlist-1.jpg') }}" alt="">  -->
+	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+	                                        @else
+	                                            <?php
+	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+	                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
+	                                        @endif
+	                                    </a>
+	                                @endforeach
+	                            @endif
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 col-sm-12 col-xs-12">	
+						<div class="ser-review-list">
+							<div id="user_ratings_div{{$serviceid}}">
+								<?php
+	    							$reviews = BusinessServiceReview::where('service_id', $serviceid)->get();
+	    						?>
+	                        	@if(!empty($reviews))
+	                                @foreach($reviews as $review)
+	                                <?php $userinfo = User::find($review->user_id); ?>
+								<div class="ser-rev-user">
+										<div class="col-md-2 col-sm-2 col-xs-3 pl-0 pr-0">
+											@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+	                                            <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+	                                        @else
+	                                            <?php
+	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+	                                            echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
+	                                        @endif
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-9 pl-0">
+											<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
+											<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}}  </div> </h4> 
+											<p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
+										</div>
+								</div>
+								<div class="rev-dt">
+									<div class="row">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="mx-sp">
+												<p class="mb-15"> {{$review->title}} </p>
+												<p> {{$review->review}} </p>
+											</div>
+										</div>
+									</div>
+									<?php
+										if( !empty($review->images) ){
+											$rimg=explode('|',$review->images);
+											echo '<div class="listrimage">';
+											foreach($rimg as $img)
+											{ ?>
+	                                        	<a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
+												<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
+	                                            </a>
+	                                            <?php
 											}
+											echo '</div>';
 										}
+									?>                                    
+								</div>
+								<!-- <div class="rev-admin">
+									<h4> Author </h4>
+									<p> Thank you, Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+								</div> -->
+								@endforeach
+	        					@endif
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>	
+				
+	        <div class="col-lg-5 col-sm-12 col-xs-12">
+	            <div class="modal-sidebox">
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="modal-filter-instant morefilter">
+								<p>More Filter<i class="fas fa-filter"></i></p>
+							</div>
+						</div>
+						@php 
+							$actoffer = BusinessServices::where('cid',$companyactid)->groupBy('sport_activity')->get()->toArray();
+						@endphp
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="activityselect3 special-date dropdowns">
+								<input type="text" name="actfildate" id="actfildate{{$serviceid}}" placeholder="Date" class="form-control" onchange="actFilter({{$companyactid}},{{$serviceid}})" autocomplete="off" >
+								<i class="fa fa-calendar"></i>
+							</div>
+							<script>
+								$( function() {
+									$( "#actfildate{{$serviceid}}" ).datepicker( { minDate: 0 } );
+								  } );
+							</script>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="dropdowns">
+								<select id="actfilparticipant{{$serviceid}}" name="actfilparticipant" class="form-control activityselect4" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <option value="">Participant #</option>
+		                            <?php for($i=1; $i<=100; $i++){
+										echo '<option value="'.$i.'">'.$i.'</option>';
+									}?>
+		                        </select>
+		                    </div>
+						</div>
+						<div id="filteroption" style="display: none">
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="dropdowns">
+									<select id="actfiloffer{{$serviceid}}" name="actfiloffer" class="form-control activityselect1" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+	                                	<option value="">Activity Offered</option>
+										@if (!empty($actoffer)) 
+											@foreach ($actoffer as  $off)
+		                               	 		<option>{{$off['sport_activity']}}</option>
+		                               		@endforeach
+	                               		@endif 
+	                            	</select>
+								</div>
+	                        </div>
+	                        <div class="col-md-6 col-sm-6 col-xs-6">
+	                        	<div class="dropdowns">
+		                            <select id="actfillocation{{$serviceid}}" name="actfillocation" class="form-control activityselect2" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                                <option value="">Location</option>
+		                                <option value="Online">Online</option>
+		                                <option value="At Business">At Business Address</option>
+		                                <option value="On Location">On Location</option>
+		                            </select>
+		                        </div>
+	                        </div>
+	                        <div class="col-md-6 col-sm-6 col-xs-6">
+	                        	<div class="dropdowns">
+		                            <select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                                <option value="">Membership Type</option>
+		                                <option>Drop In</option>
+		                                <option>Semester</option>
+		                            </select>
+		                        </div>
+	                        </div>
+	                        <div class="col-md-6 col-sm-6 col-xs-6">
+	                        	<div class="dropdowns">
+		                            <select id="actfilgreatfor{{$serviceid}}" name="actfilgreatfor" class="form-control activityselgreatfor" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                                <option value="">Great For</option>
+		                                <option>Individual</option>
+		                                <option>Kids</option>
+		                                <option>Teens</option>
+		                                <option>Adults</option>
+		                                <option>Family</option>
+		                                <option>Groups</option>
+		                                <option>Paralympic</option>
+		                                <option>Prenatal</option>
+		                                <option>Any</option>
+		                            </select>
+	                            </div>
+	                        </div>
+	                        <div class="col-md-6 col-sm-6 col-xs-6">
+	                        	<div class="dropdowns">
+		                            <select id="actfilbtype{{$serviceid}}" name="actfilbtype" class="form-control activityselbtype" onchange="actFilter({{$companyactid}},{{$serviceid}})" >
+		                                <option value="">Business Type</option>
+		                                <option value="individual">Personal Trainer</option>
+		                                <option value="classes">Gym/Studio</option>
+		                                <option value="experience">Experience</option>
+	                            	</select>
+	                            </div>
+	                        </div>
+	                        <div class="col-md-6 col-sm-6 col-xs-6">
+	                        	<div class="dropdowns">
+		                            <select id="actfilsType{{$serviceid}}" name="actfilsType" class="form-control activityselect5" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                                <option value="">Service Type</option>
+		                                <option>Personal Training</option>
+		                                <option>Coaching</option>
+		                                <option>Therapy</option>
+		                                <option>Group Class</option>
+		                                <option>Seminar</option>
+		                                <option>Workshop</option>
+		                                <option>Clinic</option>
+		                                <option>Camp</option>
+		                                <option>Team</option>
+		                                <option>Corporate</option>
+		                                <option>Tour</option>
+		                                <option>Adventure</option>
+		                                <option>Retreat</option>
+		                                <option>Workshop</option>
+		                                <option>Seminar</option>
+		                                <option>Private experience</option>
+		                            </select>
+		                        </div>
+	                        </div>
+						</div>
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<h3 class="subtitle text-center">Other Activities Offered By This Provider</h3>
+						</div>
+						<div id="filtersearchdata">
+	 						<?php
+							if (!empty($activities_search)) { 
+								$companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
+								$servicetype = [];
+								foreach ($activities_search as  $service) {
+									$company = $price = $businessSp = [];
+									$serviceid = $service['id'];
+			                        $sport_activity = $service['sport_activity'];
+			                        $servicetype[$service['service_type']] = $service['service_type'];
+			                        $companyData = CompanyInformation::where('id',$service['cid'])->first();
+			                        if (isset($companyData)) {
 
-                                    }
-
-                                ?>
-
-                                    <select id="selcatpr<?php echo $serviceid;?>" name="selcatpr<?php echo $serviceid;?>" class="price-select-control" onchange="changeactsession('<?php echo $serviceid;?>','<?php echo $serviceid;?>',this.value,'book')">
-
-                                    	<?php $c=1;  
-
-										if (!empty($sercate)) { 
-
-                                            foreach ($sercate as  $sc) {
-
-												/*if($c==1){ 
-
-													echo '<option value="'.$sc['id'].'"> Select Category </option>';
-
-												}*/
-
-												echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-
-												$c++;
-
-											}
-
+	                                    $companyid = $companyData['id'];
+	                                    $companyname = $companyData['company_name'];
+										$companycity = $companyData['city'];
+										$companycountry = $companyData['country'];
+			                                
+			                        }
+			                       
+			                        if ($service['profile_pic']!="") {
+										if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+			                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+										} else {
+											$profilePic = '/public/images/service-nofound.jpg';
 										}
-
-										?>
-
-                                    </select>
-
-                                    <div class="priceoption" id="pricechng<?php echo $serviceid.$serviceid;?>">
-
-                                        <select id="selprice<?php echo $serviceid;?>" name="selprice<?php echo $serviceid;?>" class="price-select-control" onchange="changeactpr('<?php echo $serviceid;?>',this.value,'<?php echo @$service['group_size'] ?>','book','<?php echo $serviceid;?>')">
-
-                                            <?php echo $selectval; ?>
-
-                                            
-
-                                        </select>
-
-                                    </div>
-
-                                    <label>Booking Details: </label>
-
-                                    <div id="book<?php echo $service["id"].$service["id"]; ?>">
-
-                                        @if(@$sercatefirst['category_title'] != '')<p>Category: <?php echo @$sercatefirst['category_title'];?></p>@endif
-
-                                        <p>{{$timedata}}</p>
-
-                                        <p>Spots Left: {{$Totalspot}}</p><br>
-
-                                       @if(@$servicePrfirst['price_title'] != '')<p>Price Title:  <?php echo @$servicePrfirst['price_title']; ?></p> @endif
-
-                                       <?php if(!empty(@$servicePrfirst)) { ?>
-
-                                        <p>Price Option: <?php echo @$servicePrfirst['pay_session']; ?> Session</p>
-
-                                       <?php } ?>
-
-                                        <p>Participants: <?php echo '1'; ?></p>
-
-                                        <?php /*?><p>Participants: <?php echo @$service['group_size'] ?></p><?php */?>
-
-                                        <?php if( !empty($total_price_val) ){ ?>
-
-                                        	<p>Total: $<?php echo $total_price_val.'/person'; ?></p>
-
-                                        <?php } ?>
-
-                                    </div>
-
-                					<?php if(!empty(@$servicePrfirst)) { ?>
-
-                                    <input type="hidden" name="price_title_hidden" id="price_title_hidden{{$service['id']}}{{$service['id']}}" value="{{@$servicePrfirst['price_title']}}">
-
-                                    <?php } ?>
-                                    <input type="hidden" name="time_hidden" id="time_hidden{{$service['id']}}{{$service['id']}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
-
-                                    <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$service['id']}}{{$service['id']}}" value="{{$Totalspot}}">
-
-
-
-                                    <form method="post" action="/addtocart" id="frmcart<?php echo $service["id"]; ?>">
-
-                                        @csrf
-
-                                        <input type="hidden" name="pid" value="<?php echo @$service["id"]; ?>" size="2" />
-
-                                        
-
-                                        <input type="hidden" name="quantity" id="pricequantity<?php echo $service["id"].$service["id"]; ?>" value="1" class="product-quantity" size="2" />
-
-                                       <input type="hidden" name="price" id="price<?php echo $service["id"].$service["id"]; ?>" value="<?php echo $total_price_val; ?>" class="product-price" size="2" />
-
-                                        <input type="hidden" name="session" id="session<?php echo $service["id"].$service["id"]; ?>" value="<?php echo $pay_session; ?>" />
-
-                                        <input type="hidden" name="priceid" value="<?php echo $priceid; ?>" id="priceid<?php echo $service["id"].$service["id"]; ?>" />
-
-                                        <input type="hidden" name="sesdate" value="<?php echo date('Y-m-d'); ?>" id="sesdate<?php echo $service["id"].$service["id"]; ?>" />
-
-                                        <input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-
-                                        <span id="span<?php echo $service["id"]; ?>" name="span<?php echo $service["id"]; ?>"> </span>
-
-                                        @if($SpotsLeft >= $spot_avil && $spot_avil!=0)
-
-                                            <a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-
-                                        @else
-
-                                          @if( !empty(@$servicePrfirst) )
-
-                                            @if( @$servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='' )
-
-                                                <input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $service["id"]; ?>')" class="btn btn-addtocart mt-10"  id="addtocart{{$service['id']}}{{$service['id']}}"/>
-
-                                            @endif
-
-                                          @endif
-
-                                        @endif
-
-                                    </form>
-
-                                </div>
-
-                            </div>
-
-                            <div class="bottomkick">
-
-                                <div class="viewmore_links">
-
-                                        <a id="viewmore<?php echo $service['id']; ?>" style="display:none">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-
-                                        <a id="viewless<?php echo $service['id']; ?>" style="display:block">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-
-                                </div>
-
-                            </div>
-
-                            <script>
-
-                                $("#viewmore<?php echo $service['id']; ?>").click(function () {
-
-                                    $("#kickboxing<?php echo $service['id']; ?>").addClass("intro");
-
-                                    $("#viewless<?php echo $service['id']; ?>").show();
-
-                                    $("#viewmore<?php echo $service['id']; ?>").hide();
-
-                                });
-
-                                $("#viewless<?php echo $service['id']; ?>").click(function () {
-
-                                    $("#kickboxing<?php echo $service['id']; ?>").removeClass("intro");
-
-                                    $("#viewless<?php echo $service['id']; ?>").hide();
-
-                                    $("#viewmore<?php echo $service['id']; ?>").show();
-
-                                });
-
-                            </script>
-
-                        </div>
-
-                        
-
-                        <div id="actsearch<?php echo $service["id"]; ?>" class="actsearch">
-
-                        <?php
-
-                        //DB::enableQueryLog();
-
-                        $activities_search = BusinessServices::where('cid', $companyid)->where('is_active', '1')->where('id', '!=' , $service['id'])->limit(2)->orderBy('id', 'DESC')->get();
-
-                        //dd(\DB::getQueryLog());
-
-                        
-
-                        if (!empty($activities_search)) { 
-
-                            foreach ($activities_search as  $act) {
-
-                                $servicePrice = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-
-                                $pay_session1=''; $pay_price1=''; $priceid1='';
-
-                                //print_r($servicePrice);
-
-                                if( !empty($servicePrice) )
-
-                                {
-
-                                    if(@$servicePrice[0]['pay_session']!=''){
-
-                                        $pay_session1 = @$servicePrice[0]['pay_session'];
-
-                                    }
-
-                                    if(@$servicePrice[0]['pay_price']!=''){
-
-                                        $pay_price1 = @$servicePrice[0]['pay_price'];
-
-                                    }
-
-                                    if(@$servicePrice[0]['id']!=''){
-
-                                        $priceid1 = @$servicePrice[0]['id'];
-
-                                    }
-
-                                }
-
-                                $bookscheduler='';
-
-                                $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-
-                                $ser_mem = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-
-                        ?>
-
-                            <div class="kickshow-block">
-
-                                <div class="topkick" id="kickboxing<?php echo $service['id'].$act['id']; ?>">
-
-                                    <h5><?php echo @$act['program_name']; 
-
-                                            $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
-
-                                            $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
-
-                                        ?>
-
-                                        <p>{{$reviews_count}} Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>
-
-                                         {{$reviews_avg}} </span></p>
-
-                                    </h5>
-
-                                    <div class="lefthalf">
-
-                                        <div class="divdesc">
-
-                                            <?php
-
-                                                //$SpotsLeft = UserBookingDetail::where('sport', @$act['id'] )->sum('qty');
-
-                                               /* $today = date('Y-m-d');
-
-                                                $SpotsLeft = UserBookingDetail::where('sport', @$act['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-
-                                                $SpotsLeftdis=0;
-
-                                                if( !empty($act['group_size']) )
-
-                                                    $SpotsLeftdis = $act['group_size']-$SpotsLeft;*/
-
-                                            ?>
-
-                                            <p class="actsubtitle"> Details: </p>
-
-                                            <ul>
-
-                                                <li>
-
-                                                    <?php
-
-                                                        if(@$bookscheduler[0]['starting']!=''){
-
-                                                            //echo date('l jS \of F Y', strtotime( $bookscheduler[0]['starting'] ));
-
-                                                            echo date('l, F jS,  Y' );
-
-                                                        } 
-
-                                                       /* if(@$bookscheduler[0]['shift_start']!=''){
-
-                                                            //echo '<br>'.$bookscheduler[0]['shift_start'];
-
-                                                            echo '<br>'.date('h:ia', strtotime( $bookscheduler[0]['shift_start'] )); 
-
-                                                        }
-
-                                                        if(@$bookscheduler[0]['shift_end']!=''){
-
-                                                            //echo ' - '.$bookscheduler[0]['shift_end'];
-
-                                                            echo ' - '.date('h:ia', strtotime( $bookscheduler[0]['shift_end'] )); 
-
-                                                        }
-
-                                                        if(@$bookscheduler[0]['set_duration']!=''){
-
-                                                            $tm=explode(' ',$bookscheduler[0]['set_duration']);
-
-                                                            $hr=''; $min=''; $sec='';
-
-                                                            if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-
-                                                            if($tm[2]!=0){ $min=$tm[2].'min. '; }
-
-                                                            if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-
-                                                            if($hr!='' || $min!='' || $sec!='')
-
-                                                            { echo ' /'.$hr.$min.$sec; } 
-
-                                                        }*/
-
-                                                    ?>
-
-                                                </li>
-
-                                               
-
-                                                <li>Service Type: <?php echo @$act['select_service_type']; ?></li>
-
-                                                <li>Activity: <?php echo @$act['sport_activity'] ?></li>
-
-                                                <li>Activity Location: <?php echo @$act['activity_location'] ?></li>
-
-                                                <li>Great For: <?php echo @$act['activity_for'] ?></li>
-
-                                                <li>Age: <?php echo @$act['age_range'] ?></li>
-
-                                                <li>Language: <?php echo @$languages?></li>
-
-                                                <li>Skill Level: <?php echo @$act['difficult_level'] ?></li>
-
-                                                <?php if(@$ser_mem[0]['membership_type']!=''){ ?>
-
-                                                    <li>Membership Type: <?php echo @$ser_mem[0]['membership_type'] ?></li>
-
-                                                <?php } ?>
-
-                                                <li>Business Type: <?php
-
-                                                    if($act['service_type']=='individual'){ echo 'Personal Training'; }
-
-                                                    else { echo @$act['service_type']; } ?></li>
-
-                                            </ul>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="righthalf">
-
-                                    <?php //echo $act['id'];
-
-                                        
-
-                                        $servicePrfirst = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->first();
-
-                                        $sercate = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->toArray();
-
-                                        $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->first();
-
-                                        $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
-
-                                       /* print_r( $servicePr );exit();*/
-
-                                        $todayday = date("l");
-
-                                        $todaydate = date('m/d/Y');
-
-                                        $bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-
-                                        $start =$end= $time= '';$timedata = $SpotsLeft = 0; $Totalspot = $spot_avil= 0; 
-
-                                        if(!empty($bus_schedule)){
-
-                                            foreach($bus_schedule as $data){
-
-                                                if($data['scheduled_day_or_week'] == 'Days'){
-
-                                                    $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-
-                                                    $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                                }else if($data['scheduled_day_or_week'] == 'Months'){
-
-                                                    $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-
-                                                    $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                                }else if($data['scheduled_day_or_week'] == 'Years'){
-
-                                                    $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-
-                                                    $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                                }else{
-
-                                                    $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-
-                                                    $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-
-                                                }  
-
-                                                
-
-                                                if($todaydate <=$expdate){
-
-                                                     $timedata ='';
-
-                                                    if(@$data['shift_start']!=''){
-
-                                                        $start = date('h:i a', strtotime( $data['shift_start'] ));
-
-
-
-                                                        $timedata .= $start;
-
-                                                    }
-
-                                                    if(@$data['shift_end']!=''){
-
-                                                        $end = date('h:i a', strtotime( $data['shift_end'] ));
-
-                                                         $timedata .= ' - '.$end;
-
-                                                    } 
-
-                                                    if(@$data['set_duration']!=''){
-
-                                                        $tm=explode(' ',$data['set_duration']);
-
-                                                        $hr=''; $min=''; $sec='';
-
-                                                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-
-                                                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-
-                                                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-
-                                                        if($hr!='' || $min!='' || $sec!='')
-
-                                                        { $time = $hr.$min.$sec; 
-
-                                                            $timedata .= ' / '.$time;} 
-
-                                                    }
-
-                                                }
-
-                                                $today = date('Y-m-d');
-
-                                                $SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-
-                                                $SpotsLeftdis=0;
-
-                                                if( !empty($data['spots_available']) ){
-
-                                                    $spot_avil=$data['spots_available'];
-
-                                                    $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-
-                                                    $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-
-                                                }
-
-                                            }
-
-                                        }
-
-                                        if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                                            $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
-                                            $selectval = '';$priceid = '';$i=1;
-                                            if(!empty(@$servicePr)){
-                                                foreach ($servicePr as  $pr) {
-                                                    if($i==1){ 
-                                                        $priceid =$pr['id'];
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                                                    if($pr['adult_weekend_price_diff'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                                                    if($pr['child_cus_weekly_price'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                                                    }
-                                                    if($pr['infant_cus_weekly_price'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                                                    }$i++;
-                                                }
-                                            }
-                                        }else{
-                                            $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
-                                            $selectval = '';$priceid = '';$i=1;
-                                            if(!empty(@$servicePr)){
-                                                foreach ($servicePr as  $pr) {
-                                                    if($i==1){ 
-                                                        $priceid =$pr['id'];
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                                                    if($pr['adult_cus_weekly_price'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-                                                    if($pr['child_cus_weekly_price'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-                                                    }
-                                                    if($pr['infant_cus_weekly_price'] != ''){
-                                                        $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-                                                    }$i++;
-                                                }
-                                            }
-                                        }
-                                    ?>
-
-
-
-                                        <select id="selcatpr<?php echo $act['id'];?>" name="selcatpr<?php echo $act['id'];?>" class="price-select-control" onchange="changeactsession('<?php echo $service['id'];?>','<?php echo $act['id'];?>',this.value,'bookmore')">
-
-                                            <?php $c=1;  
-
-                                            if (!empty(@$sercate)) { 
-
-                                                foreach ($sercate as  $sc) {
-
-                                                   /* if($c==1){ 
-
-                                                        echo '<option value="'.$sc['id'].'"> Select Category </option>';
-
-                                                    }*/
-
-                                                    echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-
-                                                    $c++;
-
-                                                }
-
-                                            }
-
-                                            ?>
-
-                                        </select>
-
-                                        <div id="pricechng<?php echo $service['id'].$act['id'];?>">
-
-                                            <select id="selprice<?php echo $act['id'];?>" name="selprice<?php echo $act['id'];?>" class="price-select-control" onchange="changeactpr('<?php echo $act['id'];?>',this.value,'1','bookmore','<?php echo $service['id'];?>')" >
-
-                                                <?php echo $selectval;?>
-
-                                                ?>
-
-                                            </select>
-
-                                        </div><?php  $start=''; $end=''; $time = ''; ?>
-
-                                        <label>Booking Details:</label>
-
-                                        <div id="bookmore<?php echo $service['id'].$act["id"]; ?>">
-
-                                            @if(@$sercatefirst['category_title'] != '')<p>Category: <?php echo @$sercatefirst['category_title'];?></p>@endif
-
-                                            <p>@if($timedata!=0){{$timedata}} @endif</p>
-
-                                            <p>Spots Left: {{$Totalspot}}</p><br>
-
-                                            @if(@$servicePrfirst['price_title'] != '')<p>Price Title:  <?php echo @$servicePrfirst['price_title']; ?></p> @endif
-
-                                            <p>Price Option: <?php echo @$servicePrfirst['pay_session']; ?> Session</p>
-
-                                            <p>Participants: <?php echo '1'; ?></p>
-
-                                                <?php /*?><p>Participants: <?php echo @$act['group_size'] ?></p><?php */?>
-
-                                            <p>Total: $<?php echo $total_price_val.'/person'; ?></p>
-
-                                        </div>
-
-                                        <input type="hidden" name="price_title_hidden" id="price_title_hidden{{$service['id']}}{{$act['id']}}" value="{{@$servicePrfirst['price_title']}}">
-
-                                        <input type="hidden" name="time_hidden" id="time_hidden{{$service['id']}}{{$act['id']}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
-
-                                        <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$service['id']}}{{$act['id']}}"  value="{{$Totalspot}}" >
-
-                                        <form method="post" action="/addtocart" id="frmcart<?php echo @$act["id"]; ?>">
-
-                                        @csrf
-
-                                        <input type="hidden" name="pid" value="<?php echo @$act["id"]; ?>" />
-
-                                        <input type="hidden" name="quantity" id="pricequantity<?php echo $service['id'].$act["id"]; ?>" value="1" class="product-quantity" />
-
-                                       <input type="hidden" name="price" id="pricebookmore<?php echo $service['id'].$act["id"]; ?>" value="<?php echo $total_price_val; ?>" class="product-price"  />
-
-                                        <input type="hidden" name="session" id="session<?php echo $service['id'].$act["id"]; ?>" value="<?php echo $pay_session1; ?>" />
-
-                                        <input type="hidden" name="priceid" value="<?php echo $priceid1; ?>" id="priceid<?php echo $service["id"].$act["id"]; ?>" />
-
-                                        <input type="hidden" name="sesdate" value="<?php echo date('Y-m-d' ); ?>" id="sesdate<?php echo $service["id"].$act["id"]; ?>" />
-
-                                        <input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$act['id']}}" />
-
-                                      
-
-                                        @if($SpotsLeft >= $spot_avil && $spot_avil!=0)
-
-                                            <?php /*?><input type="button" value="Sold Out" class="btn btn-addtocart mt-10" /><?php */?>
-
-                                             <a href='javascript:void(0)' class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>
-
-                                        @else
-
-                                            @if(@$servicePrfirst['adult_cus_weekly_price'] !='' && @$timedata!='')
-
-                                            <input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $act["id"]; ?>')" class="btn btn-addtocart mt-10"  id="addtocart{{$service['id']}}{{$act['id']}}" />
-
-                                            @endif
-
-                                        @endif
-
-                                        </form>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="bottomkick">
-
-                                    <div class="viewmore_links">
-
-                                        <a id="viewmore<?php echo $service['id'].$act['id']; ?>" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-
-                                        <a id="viewless<?php echo $service['id'].$act['id']; ?>" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                           <script>
-
-                            $("#viewmore<?php echo $service['id'].$act['id']; ?>").click(function () {
-
-                                $("#kickboxing<?php echo $service['id'].$act['id']; ?>").addClass("intro");
-
-                                $("#viewless<?php echo $service['id'].$act['id']; ?>").show();
-
-                                $("#viewmore<?php echo $service['id'].$act['id']; ?>").hide();
-
-                            });
-
-                            $("#viewless<?php echo $service['id'].$act['id']; ?>").click(function () {
-
-                                $("#kickboxing<?php echo $service['id'].$act['id']; ?>").removeClass("intro");
-
-                                $("#viewless<?php echo $service['id'].$act['id']; ?>").hide();
-
-                                $("#viewmore<?php echo $service['id'].$act['id']; ?>").show();
-
-                            });
-
-                            </script>
-
-                       <?php } } ?>
-
-                            
-
-                        </div><!-- actsearch -->
-
-                        
-
-                    </div><!-- fromblock -->
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
+									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
+									
+									$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+									$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+									$reviews_avg=0;
+									if($reviews_count>0)
+									{	
+										$reviews_avg= round($reviews_sum/$reviews_count,2); 
+									}
+									$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+									$service_type='';
+									if($service['service_type']!=''){
+										if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+										else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+										else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+									}
+									$pricearr = [];
+									$price_all = '';
+									$ser_date = '';
+									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+									if(!empty($price_allarray)){
+										foreach ($price_allarray as $key => $value) {
+											$pricearr[] = $value->pay_price;
+										}
+									}
+									if(!empty($pricearr)){
+										$price_all = min($pricearr);
+									}
+									
+	 								$bookscheduler='';
+									$time='';
+									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+									if(@$bookscheduler[0]['set_duration']!=''){
+										$tm=explode(' ',$bookscheduler[0]['set_duration']);
+										$hr=''; $min=''; $sec='';
+										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+										if($tm[2]!=0){ $min=$tm[2].'min. '; }
+										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+										if($hr!='' || $min!='' || $sec!='')
+										{ $time =  $hr.$min.$sec; } 
+									}
+							?>
+								<div class="col-md-12 col-sm-8 col-xs-12 ">
+									<div class="find-activity">
+										<div class="row">
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<div class="img-modal-left">
+													<img src="{{ $profilePic }}" >
+												</div>
+											</div>
+											<div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
+												</div>
+												@if($time != '')
+													<div class="activity-hours">
+														<span>{{$time}}</span>
+													</div>
+												@endif
+												<div class="activity-city">
+													<span>{{$companycity}}, {{$companycountry}}</span>
+													@if(Auth::check())
+													<?php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
+					                                ?>
+														<div class="serv_fav1" ser_id="{{$service['id']}}">
+															<a class="fav-fun-2" id="serfav{{$service['id']}}">
+																<?php
+							                                    	if( !empty($favData) ){ ?>
+							                                        	<i class="fas fa-heart"></i>
+							                                        <?php }
+																	else{ ?>
+							                                    		<i class="far fa-heart"></i>
+							                                     <?php } ?></a>
+						                            	</div>
+						                            @else
+						                            	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+													@endif
+												</div>
+												<div class="activity-information">
+													<span><a 
+						                                <?php if (Auth::check()) { ?> 
+						                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+						                                <?php } else { ?>
+						                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+						                                <?php }?>
+						                                    target="_blank">{{ $service['program_name'] }}</a></span>
+													<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
+													<a class="showall-btn" href="/activity-details/{{$service['id']}}">More Details</a>
+												</div>
+												@if($price_all != '')
+													<div>
+														<span class="activity-time">From ${{$price_all}}/Person</span>
+													</div>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php 
+								
+									}
+								}else{ ?>
+									<div class="col-md-4">
+										<p class="noactivity"> There Is No Activity</p>
+									</div>
+							<?php	} ?>
+						</div>
+					</div>
+	            </div>
+	        </div>	
+		</div>
+   	</div>            
+<!-- end modal -->
+
+<div id="busireview" class="modal modalbusireview" tabindex="-1">
+    <div class="modal-dialog rating-star" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding:10px 40px 10px 10px; text-align: right;min-height: 30px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+			</div>
+            <div class="modal-body">
+            	<div class="rev-post-box">
+                	<form method="post" enctype="multipart/form-data" name="sreview{{$sid}}" id="sreview{{$sid}}" >
+                    @csrf
+							<div class="clearfix"></div>
+							<input type="hidden" name="serviceid{{$sid}}" id="serviceid{{$sid}}" value="{{$sid}}">
+	                        <input type="hidden" name="rating{{$sid}}" id="rating{{$sid}}" value="0">
+                            <div class="rvw-overall-rate rvw-ex-mrgn">
+								<span>Rating</span>
+								<div id="stars{{$sid}}" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
+							</div>
+							<input type="text" name="rtitle{{$sid}}" id="rtitle{{$sid}}" placeholder="Review Title" class="inputs" />
+	                    	<textarea placeholder="Write your review" name="review{{$sid}}" id="review{{$sid}}"></textarea>
+	                        <input type="file" name="rimg{{$sid}}[]" id="rimg{{$sid}}" class="inputs" multiple="multiple" />
+	                        <div class="reviewerro" id="reviewerro{{$sid}}"> </div>
+	                    	<input type="button" onclick="submit_rating({{$sid}})" value="Submit" class="btn rev-submit-btn mt-10">
+	                    	<script>
+							 $('#stars{{$sid}}').on('starrr:change', function(e, value){
+								$('#rating{{$sid}}').val(value);
+							 });
+							</script>
+					</form>
+				</div>
+            </div> <!--body-->
+		</div>
+	</div>
+</div>
 </div>
 
+@include('layouts.footer')
 
 
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+<script>
+$(document).ready(function () {
+	
+	var locations = @json($locations);
+   /* alert(locations);*/
+    var map = ''
+    var infowindow = ''
+    var marker = ''
+    var markers = []
+    var circle = ''
+	$('#map_canvas').empty();
 
+    if (locations.length != 0) {  console.log('!empty');
+        map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom:18,
+            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+        });
+        infowindow = new google.maps.InfoWindow();
+        var bounds = new google.maps.LatLngBounds();
+        var marker, i;
+        var icon = {
+            url: "https://development.fitnessity.co/public/images/hoverout2.png",
+            scaledSize: new google.maps.Size(50, 50),
+			labelOrigin: {x: 25, y: 16}
+        };
+        for (i = 0; i < locations.length; i++) {
+            var labelText = i + 1
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map,
+				icon: icon,
+                title: labelText.toString(),
+                label: {
+                    text: labelText.toString(),
+                    color: '#222222',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            });
+
+            bounds.extend(marker.position);
+
+            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
+            var contents =
+                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
+                    '<div class="img-claimed-business">' +
+                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
+                    '</div></div> </div>' +
+                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
+                    '<div class="content-claimed-business-inner">' +
+                    '<div class="content-left-claimed">' +
+                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
+                    '<ul>' +
+                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
+                    '<li><i class="fa fa-star"></i></li>' +
+                    '<li><i class="fa fa-star"></i></li>' +
+                    '<li class="count">25</li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '<div class="content-right-claimed"></div>' +
+                    '</div>' +
+                    '</div></div></div>' +
+                    '</div>';
+
+            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
+                return function () {
+                    infowindow.setPosition(marker.latLng);
+                    infowindow.setContent(contents);
+                    infowindow.open(map, this);
+                };
+            })(marker, contents, infowindow));
+            markers.push(marker);
+        }
+
+		//nnn commented on 18-05-2022 - its not displaying proper map
+       // map.fitBounds(bounds);
+       // map.panToBounds(bounds);
+		
+		$('.mysrchmap').show()
+    } else {
+        $('#mapdetails').hide()
+        
+		/*console.log('else map');
+        map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: 8,
+            center: new google.maps.LatLng(42.567200, -83.807250),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        $('.mysrchmap').show()*/
+    }
+});
+</script>
+
+<script>
+	$(document).ready(function () {
+		$(document).on('click', '.serv_fav1', function(){
+	        var ser_id = $(this).attr('ser_id');
+	        // var _token = $("input[name='_token']").val();
+	        var _token = $('meta[name="csrf-token"]'). attr('content');
+	        $.ajax({
+	            type: 'POST',
+	            url: '{{route("service_fav")}}',
+	            data: {
+	                _token: _token,
+	                ser_id: ser_id
+	            },
+	            success: function (data) {
+	                if(data.status=='like')
+					{
+						$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+					}
+					else
+					{
+						$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+					}
+	            }
+	        });
+	    });
+
+	    $(document).on('click', '.morefilter', function(){
+	    	if($(filteroption).is(":visible")){
+	    		$('#filteroption').hide();
+	    	}else{
+	    		$('#filteroption').show();
+	    	}
+
+	    });
+	});
+</script>
 
 <script>
 
-/*function changerate(sid) {
-
-    $('#rating').val(value);
-    alert(sid);
-}*/
-
-function actFilter(cid,sid)
-
-{
-
-    var actoffer=$('#actfiloffer'+sid).val();
-
-    var actloc=$('#actfillocation'+sid).val();
-
-    var actfilmtype=$('#actfilmtype'+sid).val();
-
-    var actfilgreatfor=$('#actfilgreatfor'+sid).val();
-
-    var actfilparticipant=$('#actfilparticipant'+sid).val();
-
-    var btype=$('#actfilbtype'+sid).val();
-
-    var actdate=$('#actfildate'+sid).val();
-
-    var actfilsType=$('#actfilsType'+sid).val();
-
-    var _token = $("input[name='_token']").val();
-
-    var serviceid =sid;
-
-    var pr; var qty;
-
-    //alert(actfiloffer);
-
-    $.ajax({
-
-        url: "{{route('act_detail_filter')}}",
-
-        type: 'POST',
-
-        xhrFields: {
-
-            withCredentials: true
-
-        },
-
-        data:{
-
-            _token: _token,
-
-            type: 'POST',
-
-            actoffer:actoffer,
-
-            actloc:actloc,
-
-            actfilmtype:actfilmtype,
-
-            actfilgreatfor:actfilgreatfor,
-
-            actfilparticipant:actfilparticipant,
-
-            btype:btype,
-
-            actdate:actdate,
-
-            actfilsType:actfilsType,
-
-            serviceid:serviceid,
-
-            companyid:cid,
-
-        },
-
-        success: function (response) { 
-
-            /*alert(response);*/
-
-          
-
-            var data = response.split('~~~~~~');
-
-            $('#actsearch'+sid).html(data[0]);
-
-            $('#statact'+sid).html(data[1]);
-
-            //alert($('#price'+sid).val());
-
-            var firstval=$("#selprice"+sid).prop("selectedIndex", 1).val();
-
-            if(actdate!=''){
-
-                var actdt = actdate.split('/');
-
-                $('#sesdate'+sid+sid).val(actdt[2]+'-'+actdt[0]+'-'+actdt[1]);
-
-            }
-
-            
-
-            /*var n = firstval.split('~~');
-
-            if(actfilparticipant!='')
-
-            {
-
-                pr=actfilparticipant*n[1]; 
-
-                qty=actfilparticipant;
-
-            }
-
-            else{ pr=n[1]; qty='1'; }
-
-            var data = '<p>Price Option: '+n[0]+' Session</p><p>Participants: '+qty+'</p><p>Total: $'+pr+'/person</p>';
-
-            $('#book'+sid).html(data);
-
-            $('#pricequantity'+sid).val(qty);
-
-            $('#price'+sid).val(pr);*/
-
-            
-
-        }
-
-    });
-
-}
-
-
-
-/*function changeqnt(aid)
-
-{
-
-    var actfilparticipant=$('#actfilparticipant').val();
-
-    if(actfilparticipant>0){
-
-        $('#pricequantity'+aid).val(actfilparticipant);
-
-    }
-
-    else
-
-    {
-
-        $('#pricequantity'+aid).val('1');
-
-    }
-
-    return false;
-
-}*/
-
-
-
+	function updatedetail(sid){
+		var Participant = $('#actfiloffer_forcart').val();
+		var date = $('#actfildate_forcart').val();
+		$('#pricequantity'+sid+sid).val(Participant)
+		$('#sesdate'+sid+sid).val(date)
+	}
+
+	function actFilter(cid,sid)
+	{   
+		var actdate=$('#actfildate'+sid).val();
+		var actfilparticipant=$('#actfilparticipant'+sid).val();
+		var actoffer=$('#actfiloffer'+sid).val();
+		var actloc=$('#actfillocation'+sid).val();
+		var actfilmtype=$('#actfilmtype'+sid).val();
+		var actfilgreatfor=$('#actfilgreatfor'+sid).val();
+		var btype=$('#actfilbtype'+sid).val();
+		var actfilsType=$('#actfilsType'+sid).val();
+		var _token = $("input[name='_token']").val();
+		var serviceid =sid;
+		var pr; var qty;
+		//alert(actfiloffer);
+		$.ajax({
+			url: "{{route('act_detail_filter')}}",
+			type: 'POST',
+			data:{
+				_token: _token,
+				type: 'POST',
+				actoffer:actoffer,
+				actloc:actloc,
+				actfilmtype:actfilmtype,
+				actfilgreatfor:actfilgreatfor,
+				actfilparticipant:actfilparticipant,
+				btype:btype,
+				actdate:actdate,
+				actfilsType:actfilsType,
+				serviceid:serviceid,
+				companyid:cid,
+			},
+			success: function (response) {
+				/*alert(response);*/
+				if(response != ''){
+					$('#filtersearchdata').html(response);
+				}else{
+					$('#filtersearchdata').html('<div class="col-md-12 col-sm-8 col-xs-12 "><p>No Activity Found.</p></div>');
+				}
+				/*var data = response.split('~~~~');
+				$('#actsearch'+sid).html(data[0]);
+				$('#statact'+sid).html(data[1]);
+				//alert($('#price'+sid).val());
+				var firstval=$("#selprice"+sid).prop("selectedIndex", 1).val();
+				if(actdate!=''){
+					var actdt = actdate.split('/');
+					$('#sesdate'+sid+sid).val(actdt[2]+'-'+actdt[0]+'-'+actdt[1]);
+				}*/		
+			}
+		});
+	}
 </script>
 
+<script>
+	$( function() {
+		$( "#actfildate_forcart" ).datepicker( { minDate: 0 } );
+	} );
+</script>
+<script>
+	$( function() {
+		$( "#actfildate0" ).datepicker( { minDate: 0 } );
+	} );
+</script>
+
+<script type="text/javascript">	
+	function submit_rating(sid)
+	{
+		@if(Auth::check())
+		//var formData = $("#sreview"+sid).serialize();
+		var formData = new FormData();
+		var rating=$('#rating'+sid).val();
+		var review=$('#review'+sid).val();
+		var rtitle=$('#rtitle'+sid).val();
+		var _token = $("input[name='_token']").val();
+		
+		TotalFiles = $('#rimg'+sid)[0].files.length;
+		
+		let rimg = $('#rimg'+sid)[0];
+		for (let i = 0; i < TotalFiles; i++) {
+			formData.append('rimg' + i, rimg.files[i]);
+		}
+		formData.append('TotalFiles', TotalFiles);
+	    formData.append('rtitle', rtitle);
+		formData.append('review', review);
+		formData.append('rating', rating);
+		formData.append('sid', sid);
+		formData.append('_token', _token);
+		
+		if(rating!='' && review!='')
+		{ 
+			$.ajax({
+				url: "{{route('save_business_service_reviews')}}",
+				type: 'POST',
+	            contentType: 'multipart/form-data',
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            data: formData,
+				success: function (response) {
+					$('.progress-bar-main').load(' .progress-bar-main > *')
+					if(response=='submitted')
+					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
+						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
+						$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
+						$('#rating'+sid).val(' ');
+						$('#review'+sid).val(' '); $('#rtitle'+sid).val(' ');
+					}
+					else if(response=='already')
+					{ $('#reviewerro'+sid).show(); 
+						$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
+					else if(response=='addreview')
+					{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
+					
+				}
+			});
+		}
+		else
+		{
+			$('#reviewerro'+sid).show(); 
+			$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
+			$('#rating'+sid).val(' ');
+			$('#review'+sid).val(' ');
+			return false;
+		}
+		@else
+			$('#reviewerro'+sid).show(); 
+			$('#reviewerro'+sid).html('Please login in your account to review this activity');
+			$('#rating'+sid).val(' ');
+			$('#review'+sid).val(' ');
+			return false;
+		@endif	
+	}
+
+	function changeactpr(aid,val,part,div,maid)
+	{
+		var n = val.split('~~');
+		var pr; var qty;
+		var actfilparticipant=$('#actfilparticipant'+maid).val();
+		
+		if(actfilparticipant!='')
+		{
+			pr=actfilparticipant*n[1]; 
+			qty=actfilparticipant;
+		}
+		else{ 
+			qty=1; 
+			if( n[1]!='' ){ pr=qty*n[1]; } else { pr='100'; }
+		}
+		var data = '<p>Price Option: '+n[0]+' Session</p><p>Participants: '+qty+'</p><p>Total: $'+pr+'/person</p>';
+		var book 
+		if(div=='book'){
+			$('#book'+maid+aid).html(data);
+			$('#pricequantity'+maid+aid).val(qty);
+			$('#price'+maid+aid).val(pr);
+			$('#priceid'+maid+aid).val(n[2]);
+			$('#totprice'+maid).html(pr + ' USD');
+			$('#paysession'+maid).html('Price Option: '+ n[0] + ' Session');
+		}
+		else if (div=='bookmore'){
+			console.log(aid);
+			$('#bookmore'+maid+aid).html(data);
+			$('#pricebookmore'+maid+aid).val(pr);
+			$('#priceid'+maid+aid).val(n[2]);
+		}
+		else if (div=='bookajax'){
+			$('#bookajax'+maid+aid).html(data);
+			$('#pricebookajax'+maid+aid).val(pr);
+			$('#pricequantity'+maid+aid).val(qty);
+			$('#priceid'+maid+aid).val(n[2]);
+		}
+	}
+</script>
+
+
+
+
+@endsection

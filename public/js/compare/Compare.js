@@ -264,7 +264,7 @@
 							setHtml += '<tr>';
 							setHtml += '<th>&nbsp;</th>';
 							$.each( value, function( k, v ) {
-								setHtml += '<td style="text-align: center;"><a href="javascript:void(0)" class="btn btn-dark show-compare-detail" data-id="'+v+'" data-toggle="modal" data-target="#mykickboxing'+v+'" style="background:#2e2e2e; color: white; fontsize: 12px; text-align: center;">More Details</a> </td>';
+								setHtml += '<td style="text-align: center;"><a class="showall-btn" href="/activity-details/'+k+'">More Details</a> </td>';
 							});
 							setHtml += '</tr>';
 						}
