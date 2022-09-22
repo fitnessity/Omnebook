@@ -11,6 +11,7 @@ use App\Repositories\SportsRepository;
 use Illuminate\Support\Facades\Log;
 use Auth;
 use File;
+use Config;
 use App\Jobpostquestions;
 use Redirect;
 use App\Miscellaneous;
@@ -1070,7 +1071,10 @@ class LessonController extends Controller {
     
     
     public function getInstanthire(Request $request) {
-      /* print_r($request->all());exit;*/
+       /* if(!empty($request->all())){
+            print_r($request->all());exit;
+        }*/
+       
         if(isset($_GET['action']) && !empty($_GET["action"])) 
         {
             $request->session()->put('selected_location_lng', $request->selected_location_lng);
@@ -1155,8 +1159,33 @@ class LessonController extends Controller {
             $request->session()->put('availability_days', $request->availability_days);
         } else {
             $request->session()->forget('availability_days');
+        } 
+
+        if (isset($request->program_type)) {
+            $request->session()->put('program_type', $request->program_type);
+        } else {
+            $request->session()->forget('program_type');
+        } 
+
+        if (isset($request->service_type)) {
+            $request->session()->put('service_type', $request->service_type);
+        } else {
+            $request->session()->forget('service_type');
         }
-        
+
+        if (isset($request->service_type_two)) {
+            $request->session()->put('service_type_two', $request->service_type_two);
+        } else {
+            $request->session()->forget('service_type_two');
+        }
+
+        if (isset($request->activity_type)) {
+            $activity_for = implode(',', $request->activity_type);
+            $request->session()->put('activity_type', $activity_for);
+        } else {
+            $request->session()->forget('activity_type');
+        }
+               
         $myloc = $request->location;
         $language = $request->language;
         $select_language = $request->language;
@@ -1218,7 +1247,11 @@ class LessonController extends Controller {
         $miles_radius_filter = $request->session()->get('miles_radius_filter') ? $request->session()->get('miles_radius_filter') : 0;
         $professional_type = $request->session()->get('professional_type') ? $request->session()->get('professional_type') : '1';
         $filter_review_star = $request->session()->get('filter_review_star') ? $request->session()->get('filter_review_star') : null;
-
+        /*$program_type = $request->session()->get('program_type') ? $request->session()->get('program_type') : null;
+        $service_type = $request->session()->get('service_type') ? $request->session()->get('service_type') : null;
+        $service_type_two = $request->session()->get('service_type_two') ? $request->session()->get('service_type_two') : null;
+        $activity_for = $request->session()->get('activity_for') ? $request->session()->get('activity_for') : null;
+*/
         $sports = $this->sports->getAlphabetsWiseSportsNames();
         $sport_names = $this->sports->getAllSportsNames();
         $businessType = Miscellaneous::businessType();
@@ -1612,6 +1645,15 @@ class LessonController extends Controller {
             ]);
         }
         
+    }
+
+    public function getInstanthiredetails(Request $request ,$serviceid) {
+      $cart = [];
+      $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
+       return view('jobpost.instanthire_detail', [
+        'cart' => $cart,
+        'serviceid' =>$serviceid
+      ]);
     }
 
     public function getBookingServiceData(Request $request) {
@@ -4616,6 +4658,202 @@ class LessonController extends Controller {
       exit; 
     }
     
-    
+     public function instant_hire_search_filter(Request $request) {
+     /* print_r($request->all());exit();*/
+      $filter_serchdata  = [];
+      $searchDatas = BusinessServices::where('is_active', 1); 
+
+      if($request->programservices  != null) {
+        $search = $request->programservices;
+        $searchDatas->where(function($q) use ($search) {
+          foreach ($search as $data) {
+            $data = ucwords($data);
+            $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+          }
+        });
+      }
+
+      if($request->service_type != null) {
+        $search = $request->service_type;
+        $searchDatas->where(function($q) use ($search) {
+          foreach ($search as $data) {
+            $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
+          }
+        });
+      } 
+
+      if($request->service_type_two != null) {
+        $search = $request->service_type_two;
+        $searchDatas->where(function($q) use ($search) {
+          foreach ($search as $data) {
+            $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+          }
+        });
+      }
+
+      if ($request->activity_for != null) {
+        $search = $request->activity_for;
+        $searchDatas->where(function($q) use ($search) {
+          if(!in_array("any", $search)){
+            foreach ($search as $data) {
+              $data = ucwords($data);
+              $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+            }
+          }
+        });
+      }
+
+        $result = $searchDatas->get()->toArray();
+        $page = $request->page ? $request->page : 1;
+        $perPage = $request->page_size ? $request->page_size : 10;
+        $offset = ($page * $perPage) - $perPage;
+
+        $resultnew = new LengthAwarePaginator(
+        array_slice($result, $offset, $perPage, true), count($result), $perPage, $page, ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+       $filter_serchdata =  $resultnew;
+      /*print_r($filter_serchdata);*/
+      $actbox = '';
+
+      if (!empty($filter_serchdata) && count($filter_serchdata)>0) { 
+        $actbox = '<div class="row">';
+        foreach ($filter_serchdata as  $act) {
+          if($act['profile_pic']!="") {
+            if(File::exists(public_path("/uploads/profile_pic/thumb/" . $act['profile_pic']))) {
+              $profilePic = url('/public/uploads/profile_pic/thumb/'.$act['profile_pic']);
+            } else {
+              $profilePic = '/public/images/service-nofound.jpg';
+            }
+          }else{ 
+            $profilePic = '/public/images/service-nofound.jpg'; 
+          }
+
+          $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companycity = $companycountry = $pay_price  = $bookscheduler = $time='';
+
+          $company = CompanyInformation::where('id',$act['cid'])->first();
+          $companyid = $company->id;
+          $companyname = $company->company_name;
+          $companycity = $company->city;
+          $companycountry = $company->country;
+          $companylogo = $company->logo;
+          $companylat = $company->latitude;
+          $companylon = $company->longitude;
+
+          $redlink = str_replace(" ","-",$companyname)."/".$act['cid'];
+          $service_type='';
+          if($act['service_type'] !=''){
+            if( $act['service_type']=='individual' ) $service_type = 'Personal Training'; 
+            else if( $act['service_type']=='classes' )  $service_type = 'Group Classe'; 
+            else if( $act['service_type']=='experience' ) $service_type = 'Experience'; 
+          }
+
+          $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+          if(@$bookscheduler[0]['set_duration']!=''){
+            $tm=explode(' ',$bookscheduler[0]['set_duration']);
+            $hr=''; $min=''; $sec='';
+            if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+            if($tm[2]!=0){ $min=$tm[2].'min. '; }
+            if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+            if($hr!='' || $min!='' || $sec!='')
+            { $time =  $hr.$min.$sec; } 
+          }
+
+          $pricearr = [];
+          $price_all = '';
+          $price_allarray = BusinessPriceDetails::where('serviceid', $act['id'])->get();
+          if(!empty($price_allarray)){
+            foreach ($price_allarray as $key => $value) {
+              $pricearr[] = $value->pay_price;
+            }
+          }
+          if(!empty($pricearr)){
+            $price_all = min($pricearr);
+          }
+
+          $actbox .= '
+            <div class="col-md-4 col-sm-4 col-map-show">
+              <div class="kickboxing-block">';
+            if(Auth::check()){
+              $loggedId = Auth::user()->id;
+              $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first(); 
+            $actbox .='<div class="kickboxing-topimg-content" ser_id="'.$act['id'].'" >
+                      <img src="'.$profilePic.'" class="productImg">
+                      <div class="serv_fav1" ser_id="'.$act['id'].'">
+                        <a class="fav-fun-2" id="serfav'.$act['id'].'">';
+                        if( !empty($favData)){
+                          $actbox .='<i class="fas fa-heart"></i>';
+                        }else{
+                          $actbox .='<i class="far fa-heart"></i></a>';
+                        }
+            $actbox .='</div>';
+                  if($price_all != ''){
+            $actbox .='<span>From $'.$price_all.'/Person</span>';
+                  }
+            $actbox .='</div>';
+                }else {
+            $actbox .='<div class="kickboxing-topimg-content">
+                    <img src="'.$profilePic.'" class="productImg">
+                      <a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
+                  if($price_all != '') {
+               $actbox .='<span>From $'.$price_all.'/Person</span>';
+                  }
+            $actbox .='</div>';
+                }
+
+            $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
+            $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
+            $reviews_avg=0;
+            if($reviews_count>0)
+            { 
+              $reviews_avg= round($reviews_sum/$reviews_count,2); 
+            }
+
+            $actbox .='<div class="bottom-content">
+                <div class="class-info">
+                  <div class="row">
+                    <div class="col-md-7 ratingtime">
+                      <div class="activity-inner-data">
+                        <i class="fas fa-star"></i>
+                        <span>'.$reviews_avg.' ('.$reviews_count.')</span>
+                      </div>';
+                      if($time != ''){
+                $actbox .='<div class="activity-hours">
+                          <span>'.$time.'</span>
+                        </div>';
+                      }
+            $actbox .='</div>
+                    <div class="col-md-5 country-instant">
+                      <div class="activity-city">
+                        <span>'.$companycity.', '.$companycountry.'</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="activity-information">
+                  <span><a';  
+                  if (Auth::check()) { 
+                    $actbox .='href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"'; 
+                  } else { 
+                    $actbox .='href="'.Config::get('constants.SITE_URL').'/userlogin"'; 
+                  }
+
+                  $actbox .='target="_blank">'.$act["program_name"].'</a></span>
+                    <p>'.$service_type.' | '.$act["sport_activity"] .'</p>
+                </div>
+                <hr>
+                <div class="all-details">
+                  <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                    <p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+                  </div>
+                </div>
+              </div>
+            </div>';
+        }
+        $actbox .='</div><div class="col-md-12 col-xs-12">'.$filter_serchdata->links().'</div>';
+      }
+      return $actbox;
+     /* print_r($filter_serchdata);exit();*/
+    }
     
 }

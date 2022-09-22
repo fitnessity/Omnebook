@@ -1296,7 +1296,6 @@ class UserProfileController extends Controller {
         }
     }
     public function createNewBusinessProfile(Request $request) {
-
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
