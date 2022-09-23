@@ -19721,17 +19721,18 @@ input#zipcode {
 .listrimage{ display: block; margin: 20px 0px; }
 .listrimage img	{ height: 50px; width: 50px; border-radius: 5px; border: 2px solid #ddd; }
 .price-select-control{
-	font-size: 12px;
+	font-size: 14px;
 	display: block;
     width: 100%;
-	padding: 6px 5px;
+	padding: 6px 12px;
 	line-height: 1.42857143;
     color: #555;
     background-color: #fff;
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-	margin-bottom: 5px;
+	margin-bottom: 20px;
+	height: 34px;
 }
 .actsearch{
 	height: 470px;
@@ -20706,7 +20707,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .mainboxborder{
 	border: 1px solid #ede9e9;
 	padding: 5px;
-	min-height: 667px;
+	height: auto;
 	border-radius: 5px;
 }
 .details-titles{
@@ -20727,10 +20728,17 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: grid;
 }
 .indetails-btn{
-	display: block ruby;
-	text-align: right;
+	display: flex;
+	float: right;
 }
 .price-cat{
 	border-top: 1px solid black;
 	margin-top: 17px;
+}
+.instant-detail-booknow{
+	margin-left: 10px;
+	margin-bottom: 0px !important;
+}
+.form-control.activityselect1.instant-detail-membertypre{
+	margin-bottom: 20px;
 }

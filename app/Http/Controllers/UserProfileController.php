@@ -10770,4 +10770,24 @@ class UserProfileController extends Controller {
         /*return Redirect::route('businesspricedetails')->with('catid', $request->catid);*/
         /*return()->route('businesspricedetails',['catid' => $request->catid]);*/
     }
+    public function modelboxsuccess(Request $request){
+        /*print_r($request->all());*/
+        for($x=0;$x=$request->i;$x++){
+            for($y=0;$y=$request->j;$y++){
+                $id= $request->input('priceid_'.$x.$y);
+               /* echo $id;exit;*/
+                $nuberofautopays_adult= $request->input('nuberofautopays_adult_'.$x.$y);
+                $client_be_charge_on_adult= $request->input('client_be_charge_on_adult_'.$x.$y);
+                $first_pmt_adult= $request->input('first_pmt_adult_'.$x.$y);
+                $total_contract_revenue_adult= $request->input('total_contract_revenue_adult_'.$x.$y);
+                $recurring_pmt_adult= $request->input('recurring_pmt_adult_'.$x.$y);
+                /* echo $recurring_pmt_adult;exit;*/
+                BusinessPriceDetails::where('id',$id)->update(['is_recurring_adult'=>1,'recurring_nuberofautopays_adult'=>$nuberofautopays_adult,'recurring_client_be_charge_on_adult'=>$client_be_charge_on_adult,'recurring_client_be_charge_on_adult'=>$client_be_charge_on_adult,'recurring_first_pmt_adult'=>$first_pmt_adult,'recurring_total_contract_revenue_adult'=>$total_contract_revenue_adult,'recurring_recurring_pmt_adult'=>$recurring_pmt_adult]);
+                if($x==$request->i && $y==$request->j){
+                    exit;
+                }
+            }
+        }
+        return 'success';
+    }
 }
