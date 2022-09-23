@@ -195,12 +195,12 @@
                                             <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
                                                 <option value="">Who is participating?</option>
                                                 <?php foreach($family as $fa){ 
-													$age = date_diff(date_create($fa['birthday']), date_create('today'))->y;
+													/*$age = date_diff(date_create($fa['birthday']), date_create('today'))->y;*/
 												?>
                                                 	<option value="<?php echo $fa['id']; ?>" 
                                                     data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
                                                     data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>"
-                                                    data-age="<?php echo $age; ?>" >
+                                                    data-age="<?php /*echo $age;*/ ?>" >
 													<?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
                                             </select>

@@ -67,6 +67,7 @@ Route::post('addbusinessbooking','UserProfileController@addbusinessbooking')->na
 Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
+Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('modelboxsuccess');
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){

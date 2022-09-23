@@ -2216,6 +2216,8 @@
 	.btn-cart{padding: 1px 7px 0px 6px !important;}
 	header .header-right .btn{font-size: 12px;}
 	.btn-style-one{font-size: 12px;}
+	.membership-opti{padding-left: 15px !important;}
+	.priceoption {  margin-bottom: 20px !important;}
 }
 
 @media(max-width: 575px) {
