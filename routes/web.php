@@ -808,6 +808,7 @@ Route::post('/service_fav', 'LessonController@service_fav')->name('service_fav')
 Route::post('/viewActreview', 'LessonController@viewActreview')->name('viewActreview');
 Route::get('submitreview','LessonController@submitreview')->name('submitreview');
 Route::post('/act_detail_filter', 'LessonController@act_detail_filter')->name('act_detail_filter');
+Route::post('/act_detail_filter_for_cart', 'LessonController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/act_detail_filter_business_pages', 'LessonController@act_detail_filter_business_pages')->name('act_detail_filter_business_pages');
 Route::post('getServiceData', 'UserProfileController@getServiceData')->name('getServiceData');
 Route::post('NewService', 'UserProfileController@NewService')->name('NewService');

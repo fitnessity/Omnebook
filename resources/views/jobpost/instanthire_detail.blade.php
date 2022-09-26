@@ -20,7 +20,8 @@
 	$sid = $serviceid;
 	$service = BusinessServices::where('id',$serviceid)->first();
  	$bookscheduler = BusinessActivityScheduler::where('serviceid', $serviceid)->limit(1)->orderBy('id', 'ASC')->get()->toArray();
- 	$tduration = '';
+ 	/*print_r($bookscheduler);*/
+ 	$tduration = 'Not Scheduled Yet';
  	if(@$bookscheduler[0]['set_duration']!=''){
 		$tm=explode(' ',$bookscheduler[0]['set_duration']);
 		$hr=''; $min=''; $sec='';
@@ -28,11 +29,13 @@
 		if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
 		if($tm[2]!=0){ $min=$tm[2].'min. '; }
 		if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+		$tduration = '';
 		if($hr!='' || $min!='' || $sec!='')
 		{ 
 			$tduration = $hr.$min.$sec;
 		} 
 	} 
+	/*echo $tduration;exit;*/
 	$today = date('Y-m-d');
 	$SpotsLeft = UserBookingDetail::where('sport', @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
 	if( !empty($service['group_size']) ){
@@ -98,17 +101,19 @@
 	$servicePr=[]; $bus_schedule=[];
 	$servicePrfirst = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
 	$sercate = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->get()->toArray();
-	$sercatefirst = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->get()->first();
+	$sercatefirst = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
 	//DB::enableQueryLog();
-	if(!empty(@$sercatefirst)){
+	if(@$sercatefirst != ''){
     	$servicePr = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
 	}
 
 	//dd(\DB::getQueryLog());
     $todayday = date("l");
     $todaydate = date('m/d/Y');
+    $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
     	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
+    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->max('spots_available');
 	}
 
     /*  print_r($bus_schedule);*/
@@ -283,6 +288,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="col-lg-7 col-xs-12">
 				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
 				<h3 class="details-titles">{{@$service['program_name']}}</h3>
@@ -348,15 +354,15 @@
 							<div class="activities-calendar">
 								<div class="row">
 									<div class="col-md-6 col-sm-6 col-xs-6">
-										<div class="activityselect3 special-date" onchange="updatedetail({{$serviceid}});">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" onchange="actFilter" autocomplete="off" >
+										<div class="activityselect3 special-date">
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});">
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
 									<div class="col-md-6 col-sm-6 col-xs-6">
-										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updatedetail({{$serviceid}});">
+										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate();">
 											<option value="">Participant #</option>
-											<?php for($i=1; $i<=@$spot_avil; $i++){
+											<?php for($i=1; $i<=@$maxspotValue; $i++){
 												echo '<option value="'.$i.'">'.$i.'</option>';
 											}?>
 										</select>
@@ -365,241 +371,149 @@
 							</div>
 						</div>
 						@php $date = date('l').', '.date('F d,  Y'); @endphp 
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div class="choose-calendar-time">
-								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-12">
-										<h3 class="date-title">{{$date}}</h3>
-										<label>Step: 1 </label> <span class=""> Select Membership Type</span>
-										<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre">
-											<option>Drop In</option>
-											<option>Semester</option>
-										</select>
-										
-										<label>Step: 2 </label> <span class="">Select Category</span>
-										<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book')">
-											<?php $c=1;  
-												if (!empty($sercate)) { 
-													foreach ($sercate as  $sc) {
-														echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-														$c++;
-													}
-												}
-											?>
-										</select>
-										
-										<label>Step: 3 </label> <span class="">Select Price Option</span>
-										<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
-											<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
-												<?php echo $selectval; ?>
+						<div id="updatefilterforcart">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="choose-calendar-time">
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-12">
+											<h3 class="date-title">{{$date}}</h3>
+											<label>Step: 1 </label> <span class=""> Select Membership Type</span>
+											<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre">
+												<option>Drop In</option>
+												<option>Semester</option>
 											</select>
+											
+											<label>Step: 2 </label> <span class="">Select Category</span>
+											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book')">
+												<?php $c=1;  
+													if (!empty($sercate)) { 
+														foreach ($sercate as  $sc) {
+															echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
+															$c++;
+														}
+													}
+												?>
+											</select>
+											
+											<label>Step: 3 </label> <span class="">Select Price Option</span>
+											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
+												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
+													<?php echo $selectval; ?>
+												</select>
+											</div>	
 										</div>
-										
-										
-										
-										<!--<div class="calendar-time-details">
-											<div class="start-time">
-												<span>11:00 am</span>
-												<p class="start-hr">1hr.</p>
-												<label class="end-time-details">End Time</label>-->
-												<!--<p class="end-hr">2hr. </p>
-											</div>
-											<div class="end-time">
-												<span>12:23 am</span>
-												<p class="start-hr">2hr. 20min.</p>
-												<label class="end-time-details">End Time</label>
-												<<p class="end-hr">3hr. </p>
-											</div>
-											<div class="end-time">
-												<span>6:00 pm</span>
-												<p class="start-hr">1hr.</p>
-												<label class="end-time-details">End Time</label>-->
-												<!--<p class="end-hr">3hr. </p>
-											</div>
-										</div>-->
-										<!--<div class="calendar-time-details">
-											<div class="end-time">
-												<span>7:00 pm</span>
-												<p class="start-hr">1hr. 21min.</p>
-												<label class="end-time-details">End Time</label>-->
-												<!--<p class="end-hr">2hr. 5min </p>
-											</div>
-											<div class="end-time">
-												<span>10:00 pm</span>
-												<p class="start-hr">1hr. 6min</p>
-												<label class="end-time-details">End Time</label>-->
-												<!--<p class="end-hr">3hr. </p>
-											</div>
-											<div class="end-time">
-												<span>12:05 pm</span>
-												<p class="start-hr">1hr.</p>
-												<label class="end-time-details">End Time</label>-->
-												<!--<p class="end-hr">4hr.</p>
-											</div>
-										</div>-->
-										<!--<div>
-											<div class="start-time">
-												<span>12:00 am</span>
-											</div>
-											<div class="end-time">
-												<span>3:00 pm</span>
-											</div>
-										</div>-->
-									</div>
-									<?php 
-										$servicePr = BusinessPriceDetails::where('serviceid', $serviceid)->orderBy('id', 'ASC')->get()->toArray();
-									?>
-									<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-										<div class="membership-details">
-											<h3 class="date-title">Booking Details</h3>
-											<label>Step: 4 </label> <span class=""> Select Time</span>
-											<div class="row">
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a25" name="amount" checked="checked" />
-															<label for="a25" id="a25">11:00 am</label>
-															<p class="end-hr">1/20 Spots Left </p>
+										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->get();
+										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->first();?>
+										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
+											<div class="membership-details">
+												<h3 class="date-title">Booking Details</h3>
+												<label>Step: 4 </label> <span class=""> Select Time</span>
+												<div class="row" id="timeschedule">
+													@if(!empty(@$bschedule) ||count(@$bschedule)>0)
+													@foreach(@$bschedule as $bdata)
+													<div class="col-md-6">
+														<div class="donate-now">
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" />
+																<label for="{{$bdata['id']}}">{{$bdata['shift_start']}}</label>
+																<p class="end-hr">1/{{$bdata['spots_available']}} Spots Left </p>
+														</div>
 													</div>
+													@endforeach
+													@endif
 												</div>
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a50" name="amount" />
-															<label for="a50" id="a50">6:00 pm</label>
-															<p class="end-hr">1/20 Spots Left </p>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a51" name="amount" />
-															<label for="a51" id="a51">12:23 am</label>
-															<p class="end-hr">1/20 Spots Left </p>
-													</div>
-												</div>
-												
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a52" name="amount" checked="checked" />
-															<label for="a52" id="a52">7:00 pm</label>
-															<p class="end-hr">1/20 Spots Left </p>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a53" name="amount" />
-															<label for="a53" id="a53">10:00 pm</label>
-															<p class="end-hr">1/20 Spots Left. </p>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="a54" name="amount" />
-															<label for="a54" id="a54">12:05 pm</label>
-															<p class="end-hr">1/20 Spots Left</p>
-													</div>
-												</div>
-											</div>
-											<div id="book<?php echo $service["id"].$service["id"]; ?>">
-												@if(@$sercatefirst['category_title'] != '')
-													<div class="price-cat">
-														<label>Category:</label>
-														<span>{{@$sercatefirst['category_title']}}</span>
-													</div>
-												@endif
-												@if($timedata != '')
-												<div>
-													<label>Duration:</label>
-													<span>{{$timedata}}</span>
-												</div>
-												@endif
-												@if(@$servicePrfirst['price_title'] != '')
+												<div id="book<?php echo $service["id"].$service["id"]; ?>">
+													@if(@$sercatefirst['category_title'] != '')
+														<div class="price-cat">
+															<label>Category:</label>
+															<span>{{@$sercatefirst['category_title']}}</span>
+														</div>
+													@endif
+													@if($timedata != '')
 													<div>
-														<label>Price Title:</label>
-														<span>{{@$servicePrfirst['price_title']}}</span>
+														<label>Duration:</label>
+														<span>{{$timedata}}</span>
 													</div>
-												@endif									@if(@$servicePrfirst['pay_session'] != '')
+													@endif
+													@if(@$servicePrfirst['price_title'] != '')
+														<div>
+															<label>Price Title:</label>
+															<span>{{@$servicePrfirst['price_title']}}</span>
+														</div>
+													@endif									@if(@$servicePrfirst['pay_session'] != '')
+														<div>
+															<label>Price Option:</label>
+															<span>{{@$servicePrfirst['pay_session']}}</span>
+														</div>
+													@endif
+													@if(@$servicePrfirst['membership_type'] != '')
 													<div>
-														<label>Price Option:</label>
-														<span>{{@$servicePrfirst['pay_session']}}</span>
+														<label>Membership:</label>
+														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
 													</div>
-												@endif
-												@if(@$servicePrfirst['membership_type'] != '')
-												<div>
-													<label>Membership:</label>
-													<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
+													@endif
+													
+													<div class="personcategory">
+														<span>Adults x 1 </span>
+														<span>Kids x 0</span>
+														<span>Infants x 0</span>
+													</div>
+													@if(@$total_price_val != '')
+														<div>
+															<label>Total </label>
+															<span id="totalprice">${{@$total_price_val}} USD</span>
+														</div>
+													@endif
 												</div>
-												@endif
-												@if($adultcnt != 0 && $infantcnt != 0 && $childcnt != 0)
-												<div class="personcategory">
-													<span>Adults x {{$adultcnt}} </span>
-													<span>Kids x {{$childcnt}}</span>
-													<span>Infants x {{$infantcnt}}</span>
-												</div>
-												@endif
 											</div>
-											<!--<div class="price-option">
-												<label id="paysession{{$serviceid}}">Price Option: {{@$servicePr[0]['pay_session']}} Session</label>
-												<span>Adults x 1 </span>
-												<span>Kids x 0</span>
-												<span>Infants x 0</span>
-											</div>
-											<div class="total-price">
-												<label> Total </label>
-												<span id="totprice{{$serviceid}}">{{@$servicePr[0]['pay_price']}} USD</span>
-											</div>-->
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-md-12 col-xs-12">
-							<div class="indetails-btn">
-								@if(!empty(@$servicePrfirst))
-									<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
-								@endif
-								<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
-								<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
-
-								<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
-
-								<form method="post" action="/addtocart" id="{{$serviceid}}">
-									@csrf
-									<input type="hidden" name="pid" value="{{$serviceid}}" size="2" />
-									<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity" size="2" />
-								   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
-									<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
-									<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
-									<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
-									<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-									<span id="span{{$service['id']}}" name="span{{$service['id']}}"> </span>
-									@if($SpotsLeft >= $spot_avil && $spot_avil!=0)
-										<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-									@else
-									  @if( !empty(@$servicePrfirst) )
-										@if( @$servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='' )
-												<div class="btn-cart-modal">
-													<input type="submit" value="Add to Cart" onclick="changeqnt('<?php echo $service["id"]; ?>')" class="btn btn-black mt-10"  id="addtocart{{$service['id']}}{{$service['id']}}"/>
-												</div>
-										@endif
-									  @endif
+							<div class="col-md-12 col-xs-12">
+								<div class="indetails-btn">
+									@if(!empty(@$servicePrfirst))
+										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
 									@endif
-								</form>
+									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
+									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
 
-								<div class="btn-cart-modal instant-detail-booknow">
-									<input type="submit" value="Book Now" class="btn btn-red mt-10" >
+									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
+
+									<form method="post" action="/addtocart" id="{{$serviceid}}">
+										@csrf
+										<input type="hidden" name="pid" value="{{$serviceid}}" size="2" />
+										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity" size="2" />
+									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
+										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
+										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
+										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
+										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
+										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
+										@if($SpotsLeft >= $spot_avil && $spot_avil!=0)
+											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
+										@else
+										  @if( !empty(@$servicePrfirst) )
+											@if( @$servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='')
+												<div id="addcartdiv">
+													<div class="btn-cart-modal">
+														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
+													</div>
+													<div class="btn-cart-modal instant-detail-booknow">
+														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
+													</div>
+												</div>
+											@else
+												<div id="addcartdiv">
+													<p class="activity-expired">Activity Expired</p>
+												</div>
+											@endif
+										  @endif
+										@endif
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>  
-					<!-- <div class="col-md-12 col-xs-12">
-						<div class="indetails-btn">
-							<div class="btn-cart-modal">
-								<input type="submit" value="Add To Cart" class="btn btn-black mt-10" >
-							</div>
-							<div class="btn-cart-modal instant-detail-booknow">
-								<input type="submit" value="Book Now" class="btn btn-red mt-10" >
-							</div>
-						</div>
-					</div> -->
 				</div>
 
 				<h3 class="subtitle details-sp">Things To Know </h3>
@@ -1271,12 +1185,36 @@ $(document).ready(function () {
 </script>
 
 <script>
+	function updateparticipate(){
+		var participate= $('#actfiloffer_forcart').val();
+		$('.personcategory').html('<span>Adults x '+participate+' </span><span>Kids x 0</span><span>Infants x 0</span>');
+	}
 
-	function updatedetail(sid){
-		var Participant = $('#actfiloffer_forcart').val();
-		var date = $('#actfildate_forcart').val();
-		$('#pricequantity'+sid+sid).val(Participant)
-		$('#sesdate'+sid+sid).val(date)
+	function updatedetail(cid,sid){
+		var actdate = $('#actfildate_forcart').val();
+		var serviceid =sid;
+		/*$('#pricequantity'+sid+sid).val(Participant)
+		$('#sesdate'+sid+sid).val(date);*/
+		var _token = $("input[name='_token']").val();
+		$.ajax({
+			url: "{{route('act_detail_filter_for_cart')}}",
+			type: 'POST',
+			data:{
+				_token: _token,
+				type: 'POST',
+				actdate:actdate,
+				serviceid:serviceid,
+				companyid:cid,
+			},
+			success: function (response) {
+				if(response != ''){
+					$('#updatefilterforcart').html(response);
+					$('#sesdate'+sid).val(actdate);
+				}else{
+					$('#updatefilterforcart').html('');
+				}
+			}
+		});
 	}
 
 	function actFilter(cid,sid)
@@ -1447,6 +1385,7 @@ $(document).ready(function () {
 		var actfilparticipant=$('#actfilparticipant'+maid).val();
 		var category_title = $('#cate_title'+maid+aid).val();
 	    var time = $('#time_hidden'+maid+aid).val();
+	    var total = $('#price'+maid+aid).val();
 	    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
 		if(actfilparticipant!='')
 		{
@@ -1460,7 +1399,27 @@ $(document).ready(function () {
 		var infantcnt = 0;
 		var childcnt = 0;
 		var adultcnt = 0;
-		var bookdata = '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div><div><label>Duration: </label><span>'+ time +'</span></div><div><label>Price Title: </label><span>'+ price_title+'</span></div><div><label>Price Option: </label><span>'+session+' Session</span></div><div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x '+adultcnt+'</span><span>Kids x '+childcnt+'</span><span>Infants x '+infantcnt+'</span></div></div>';
+		var bookdata ='';
+		if(category_title != ''){
+			bookdata += '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div>';
+		}
+		if(time != ''){
+			bookdata += '<div><label>Duration: </label><span>'+ time +'</span></div>';
+		}
+		if(price_title != ''){
+			bookdata += '<div><label>Price Title: </label><span>'+ price_title+'</span></div>';
+		}
+		if(session != ''){
+			bookdata += '<div><label>Price Option: </label><span>'+session+' Session</span></div>';
+		}
+
+		if(session != ''){
+			bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x '+adultcnt+'</span><span>Kids x 0</span><span>Infants x 0</span></div>';
+		}
+		if(total !=''){
+			bookdata += '<div><label>Total </label><span id="totalprice">$'+total+' USD</span></div>';
+		}
+		bookdata += '</div>';
 
 		if(div=='book'){
 			$('#book'+maid+aid).html(bookdata);
@@ -1483,9 +1442,87 @@ $(document).ready(function () {
 			$('#priceid'+maid+aid).val(id);
 		}
 	}
+
+	function changeactsession(main,aid,val,div)
+	{   
+	   /* alert('hii');*/
+	    var price_title = $('#price_title_hidden'+main+aid).val();
+	    var time = $('#time_hidden'+main+aid).val();
+	    var sportsleft = $('#sportsleft_hidden'+main+aid).val();
+	    var pricequantity = $('#pricequantity'+main+aid).val();
+	    if(div =='book'){
+	        var price = $('#price'+main+aid).val();
+	    }else if (div =='bookmore'){
+	        var price = $('#pricebookmore'+main+aid).val();
+	    }else{
+	        var price = $('#pricebookajax'+main+aid).val();   
+	    }
+
+	    var session = $('#session'+main+aid).val();
+		if(aid != '')
+		{
+			$.ajax({
+				url: "{{route('pricecategory')}}",
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+			    },
+				data:{
+					_token: '{{csrf_token()}}',
+					type: 'POST',
+					actid:aid,
+					catid:val,
+	                sid:main,
+	                div:div,
+				},
+
+				success: function (response) { /*alert(response);*/
+					var dat = response.split('~~~~~~~~');
+					var bookdata='';
+					var catedata='';
+					var timedata='';
+					var cattitle='';
+					var timedata12='';
+					var pricelistdata='';
+					
+					if(dat[0] != ''){
+						pricelistdata = dat[0];
+					}
+					// alert(pricelistdata);
+					var catedata = dat[1].split('****');
+					if(catedata[0] != ''){
+						bookdata = catedata[0];
+					}
+					if(catedata[1] != ''){
+						dt = catedata[1].split('!!~');
+						timedata = dt[0];
+						cdata = dt[1].split('*^');
+						cattitle = cdata[0];
+						setime = cdata[1];
+					}
+					$("#pricechng"+main+aid).html(pricelistdata);
+					if(div =='book'){
+	                    $('#book'+main+aid).html(bookdata);
+	                }else if (div =='bookmore'){
+	                    $('#bookmore'+main+aid).html(bookdata);
+	                }else{
+	                    $('#bookajax'+main+aid).html(bookdata);
+	                }
+
+	                if(cattitle != ''){
+	                    $('#cate_title'+main+aid).val(cattitle);
+	                }
+	                if(timedata == 'no' || timedata == ''){
+	                	$('#timeschedule').html('');
+	            	 	$('#addcartdiv').html('<p class="activity-expired">Activity Expired</p>');
+	            	}else{
+	            		$('#timeschedule').html(setime);
+	            		$('#time_hidden'+main+aid).val(timedata);
+						$('#addcartdiv').html('<div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div>');
+	            	}
+				}
+			});
+		}
+	}
 </script>
-
-
-
-
 @endsection

@@ -40,7 +40,8 @@ class BusinessActivityScheduler extends Model
         'shift_start',
         'shift_end',
         'set_duration',
-        'is_active'
+        'is_active',
+        'end_activity_date'
     ];
     
 }
