@@ -32,6 +32,7 @@
 				<h3>Order Details</h3>
                 <?php $item_price=0; 
 					foreach ($cart['cart_item'] as $item) { 
+                      /*  print_r($item);exit();*/
 						$item_price = $item_price + $item["price"];
 						if ($item['image']!="") {
 							if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
@@ -41,7 +42,8 @@
 							}
 						}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 						
-						$bookscheduler = BusinessActivityScheduler::where('serviceid', $item["code"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+						/*$bookscheduler = BusinessActivityScheduler::where('serviceid', $item["code"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();*/
+                        $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
 						$act = BusinessServices::where('id', $item["code"])->get()->toArray();
 						//DB::enableQueryLog();
 						$ser = BusinessService::where('cid', $act[0]["cid"])->get()->toArray();

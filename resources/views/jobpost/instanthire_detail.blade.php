@@ -360,7 +360,7 @@
 										</div>
 									</div>
 									<div class="col-md-6 col-sm-6 col-xs-6">
-										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate();">
+										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
 											<option value="">Participant #</option>
 											<?php for($i=1; $i<=@$maxspotValue; $i++){
 												echo '<option value="'.$i.'">'.$i.'</option>';
@@ -413,8 +413,8 @@
 													@foreach(@$bschedule as $bdata)
 													<div class="col-md-6">
 														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" />
-																<label for="{{$bdata['id']}}">{{$bdata['shift_start']}}</label>
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}});"/>
+																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
 																<p class="end-hr">1/{{$bdata['spots_available']}} Spots Left </p>
 														</div>
 													</div>
@@ -483,6 +483,7 @@
 										@csrf
 										<input type="hidden" name="pid" value="{{$serviceid}}" size="2" />
 										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity" size="2" />
+									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
 									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
 										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
 										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
@@ -1185,9 +1186,23 @@ $(document).ready(function () {
 </script>
 
 <script>
-	function updateparticipate(){
+
+	function addhiddentime(id) {
+		$('#actscheduleid').val(id);
+	}
+
+	function updateparticipate(cid,sid){
 		var participate= $('#actfiloffer_forcart').val();
 		$('.personcategory').html('<span>Adults x '+participate+' </span><span>Kids x 0</span><span>Infants x 0</span>');
+		var price = 0;
+		price =$('#price'+sid+sid).val();
+		var totalprice  = price*participate;
+		$('#totalprice').html('$'+totalprice+' USD');
+		if(totalprice != 0)
+		{
+			$('#pricetotal'+sid+sid).val(totalprice);
+		}
+		$('#pricequantity'+sid+sid).val(participate);
 	}
 
 	function updatedetail(cid,sid){
@@ -1385,8 +1400,8 @@ $(document).ready(function () {
 		var actfilparticipant=$('#actfilparticipant'+maid).val();
 		var category_title = $('#cate_title'+maid+aid).val();
 	    var time = $('#time_hidden'+maid+aid).val();
-	    var total = $('#price'+maid+aid).val();
 	    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
+
 		if(actfilparticipant!='')
 		{
 			pr=actfilparticipant*pr1; 
@@ -1414,10 +1429,10 @@ $(document).ready(function () {
 		}
 
 		if(session != ''){
-			bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x '+adultcnt+'</span><span>Kids x 0</span><span>Infants x 0</span></div>';
+			bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x 1</span><span>Kids x 0</span><span>Infants x 0</span></div>';
 		}
-		if(total !=''){
-			bookdata += '<div><label>Total </label><span id="totalprice">$'+total+' USD</span></div>';
+		if(pr1 !=''){
+			bookdata += '<div><label>Total </label><span id="totalprice">$'+pr1+' USD</span></div>';
 		}
 		bookdata += '</div>';
 
@@ -1425,22 +1440,24 @@ $(document).ready(function () {
 			$('#book'+maid+aid).html(bookdata);
 			$('#pricequantity'+maid+aid).val(qty);
 			$('#price'+maid+aid).val(pr);
-			$('#priceid'+maid+aid).val(id);
+			$('#pricetotal'+maid+aid).val(pr);
+			$('#priceid'+aid).val(id);
 		}
 
 		else if (div=='bookmore'){
 			console.log(aid);
 			$('#bookmore'+maid+aid).html(bookdata);
 			$('#pricebookmore'+maid+aid).val(pr);
-			$('#priceid'+maid+aid).val(id);
+			$('#priceid'+aid).val(id);
 		}
 
 		else if (div=='bookajax'){
 			$('#bookajax'+maid+aid).html(bookdata);
 			$('#pricebookajax'+maid+aid).val(pr);
 			$('#pricequantity'+maid+aid).val(qty);
-			$('#priceid'+maid+aid).val(id);
+			$('#priceid'+aid).val(id);	
 		}
+		$("#actfiloffer_forcart option:selected").prop("selected", false);
 	}
 
 	function changeactsession(main,aid,val,div)
@@ -1498,7 +1515,9 @@ $(document).ready(function () {
 						timedata = dt[0];
 						cdata = dt[1].split('*^');
 						cattitle = cdata[0];
-						setime = cdata[1];
+						getval = cdata[1].split('^~^');
+						setime = getval[0];
+						id= getval[1];
 					}
 					$("#pricechng"+main+aid).html(pricelistdata);
 					if(div =='book'){
@@ -1520,6 +1539,8 @@ $(document).ready(function () {
 	            		$('#time_hidden'+main+aid).val(timedata);
 						$('#addcartdiv').html('<div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div>');
 	            	}
+	            	$('#actscheduleid'+aid).val(id);
+	            	$("#actfiloffer_forcart option:selected").prop("selected", false);
 				}
 			});
 		}
