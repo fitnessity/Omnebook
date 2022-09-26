@@ -966,12 +966,14 @@ class LessonController extends Controller {
         }
         $pid = isset($request->pid) ? $request->pid : 0;
         $price = isset($request->price) ? $request->price : 0;
+        $pricetotal = isset($request->pricetotal) ? $request->pricetotal : 0;
         $priceid = isset($request->priceid) ? $request->priceid : 0;
+        $actscheduleid = isset($request->actscheduleid) ? $request->actscheduleid : 0;
         $sesdate = isset($request->sesdate) ? $request->sesdate : 0;
         $result = DB::select('select * from business_services where id = "'.$pid.'"');
         if (count($result) > 0) {
             foreach ($result as $item) {
-                $itemArray = array($item->serviceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'quantity'=>$request->quantity, 'price'=>$price, 'priceid'=>$priceid, 'sesdate'=>$sesdate, 'image'=>$item->profile_pic));
+                $itemArray = array($item->serviceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'quantity'=>$request->quantity, 'price'=>$pricetotal, 'priceid'=>$priceid,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate, 'image'=>$item->profile_pic));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($item->serviceid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
@@ -5078,7 +5080,8 @@ class LessonController extends Controller {
         }
         $todayday = date("l");
         $todaydate = date('m/d/Y');
-        $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
+        $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get(); 
+        $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->first();
                                         
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='nodata';
         if(!empty($bus_schedule)){
@@ -5186,7 +5189,7 @@ class LessonController extends Controller {
             $timedata ='no';
         }
        /* echo $timedata12;exit;*/
-       $catdata = $bookdata.'****'.$timedata.'!!~'.$catetitle.'*^'.$timedata12;
+       $catdata = $bookdata.'****'.$timedata.'!!~'.$catetitle.'*^'.$timedata12.'^~^'.$bus_schedulefirst->id;
         echo $stactbox.'~~~~~~~~'.$catdata; 
     }
 
@@ -5391,7 +5394,7 @@ class LessonController extends Controller {
                                                 foreach(@$bschedule as $bdata){
                                                     $actbox .= '<div class="col-md-6">
                                                         <div class="donate-now">
-                                                            <input type="radio" id="'.$bdata['id'].'" name="amount" value="'.$bdata['shift_start'].'" />
+                                                            <input type="radio" id="'.$bdata['id'].'" name="amount" value="'.$bdata['shift_start'].'" onclick="addhiddentime('.$bdata['id'].');"/>
                                                                 <label for="'.$bdata['id'].'">'.$bdata['shift_start'].'</label>
                                                                 <p class="end-hr">1/'.$bdata['spots_available'].' Spots Left </p>
                                                         </div>
