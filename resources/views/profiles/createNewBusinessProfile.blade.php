@@ -5897,8 +5897,9 @@
                                         <?php $j=0;
 
                                             if(isset($business_price_details) && count($business_price_details) > 0) {/*print_r($business_price_details);*/
-
-                                                $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $price_title = $recurring_run_auto_pay_adult  = 
+                                                $j=0;
+                                                foreach($business_price_details as $price){ 
+                                                    $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $price_title = $recurring_run_auto_pay_adult  = 
 
                                                     $is_recurring_adult =
 
@@ -5912,10 +5913,8 @@
 
                                                       $is_recurring_child = $recurring_run_auto_pay_child  = $recurring_cust_be_charge_child = $recurring_every_time_num_child = $recurring_every_time_child = $recurring_nuberofautopays_child = $recurring_happens_aftr_12_pmt_child = $recurring_client_be_charge_on_child = ""; 
 
-                                                    $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = 0 ; $j=0;
-
-                                                foreach($business_price_details as $price){ 
-
+                                                    $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = 0 ;
+                                                $editmodeltextadult = $editmodeltextchild =  $editmodeltextinfant ="";
                                                    /* print_r($price);*/
 
                                                     if(isset($price['pay_chk']) && !empty($price['pay_chk'])) {
@@ -6033,9 +6032,9 @@
                                                     }
 
                                                     if(isset($price['recurring_nuberofautopays_child']) && !empty($price['recurring_nuberofautopays_child'])) {
-
                                                         $recurring_nuberofautopays_child = $price['recurring_nuberofautopays_child'];
-
+                                                        $editmodeltextchild  .= 
+                                                        '( '.$recurring_nuberofautopays_child.' Months contract ';
                                                     }
 
                                                     if(isset($price['recurring_happens_aftr_12_pmt_child']) && !empty($price['recurring_happens_aftr_12_pmt_child'])) {
@@ -6051,155 +6050,124 @@
                                                     }
 
                                                     if(isset($price['recurring_first_pmt_child']) && !empty($price['recurring_first_pmt_child'])) {
-
                                                         $recurring_first_pmt_child = $price['recurring_first_pmt_child'];
-
+                                                        $months = 0;
+                                                        if( $recurring_nuberofautopays_child  != ''){
+                                                            $months=$recurring_nuberofautopays_child;
+                                                        }
+                                                        $editmodeltextchild  .=  '| $'.$recurring_first_pmt_child.' A Month for '.$months.' Months ';
                                                     } 
 
                                                     if(isset($price['recurring_recurring_pmt_child']) && !empty($price['recurring_recurring_pmt_child'])) {
-
                                                         $recurring_recurring_pmt_child = $price['recurring_recurring_pmt_child'];
-
                                                     } 
 
                                                     if(isset($price['recurring_total_contract_revenue_child']) && !empty($price['recurring_total_contract_revenue_child'])) {
 
                                                         $recurring_total_contract_revenue_child = $price['recurring_total_contract_revenue_child'];
-
-
-
-
+                                                        $editmodeltextchild  .= '| Totalling $'.$recurring_total_contract_revenue_child;
 
                                                     }if(isset($price['is_recurring_infant']) && !empty($price['is_recurring_infant'])) {
-
                                                         $is_recurring_infant = $price['is_recurring_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_price_infant']) && !empty($price['recurring_price_infant'])) {
-
                                                         $recurring_price_infant = $price['recurring_price_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_run_auto_pay_infant']) && !empty($price['recurring_run_auto_pay_infant'])) {
-
                                                         $recurring_run_auto_pay_infant = $price['recurring_run_auto_pay_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_cust_be_charge_infant']) && !empty($price['recurring_cust_be_charge_infant'])) {
-
                                                         $recurring_cust_be_charge_infant = $price['recurring_cust_be_charge_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_every_time_num_infant']) && !empty($price['recurring_every_time_num_infant'])) {
-
                                                         $recurring_every_time_num_infant = $price['recurring_every_time_num_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_every_time_infant']) && !empty($price['recurring_every_time_infant'])) {
-
                                                         $recurring_every_time_infant = $price['recurring_every_time_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_nuberofautopays_infant']) && !empty($price['recurring_nuberofautopays_infant'])) {
-
                                                         $recurring_nuberofautopays_infant = $price['recurring_nuberofautopays_infant'];
-
+                                                        $editmodeltextinfant  .= 
+                                                        '( '.$recurring_nuberofautopays_infant.' Months contract ';
                                                     }
 
                                                     if(isset($price['recurring_happens_aftr_12_pmt_infant']) && !empty($price['recurring_happens_aftr_12_pmt_infant'])) {
-
                                                         $recurring_happens_aftr_12_pmt_infant = $price['recurring_happens_aftr_12_pmt_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_client_be_charge_on_infant']) && !empty($price['recurring_client_be_charge_on_infant'])) {
-
                                                         $recurring_client_be_charge_on_infant = $price['recurring_client_be_charge_on_infant'];
-
                                                     }
 
                                                     if(isset($price['recurring_first_pmt_infant']) && !empty($price['recurring_first_pmt_infant'])) {
-
                                                         $recurring_first_pmt_infant = $price['recurring_first_pmt_infant'];
-
+                                                        $months = 0;
+                                                        if( $recurring_nuberofautopays_infant  != ''){
+                                                            $months=$recurring_nuberofautopays_infant;
+                                                        }
+                                                        $editmodeltextinfant  .=  '| $'.$recurring_first_pmt_infant.' A Month for '.$months.' Months ';
                                                     } 
 
                                                     if(isset($price['recurring_recurring_pmt_infant']) && !empty($price['recurring_recurring_pmt_infant'])) {
-
                                                         $recurring_recurring_pmt_infant = $price['recurring_recurring_pmt_infant'];
-
                                                     } 
 
                                                     if(isset($price['recurring_total_contract_revenue_infant']) && !empty($price['recurring_total_contract_revenue_infant'])) {
-
                                                         $recurring_total_contract_revenue_infant = $price['recurring_total_contract_revenue_infant'];
-
+                                                        $editmodeltextinfant  .= '| Totalling $'.$recurring_total_contract_revenue_infant;
                                                     }
 
                                                     if(isset($price['is_recurring_adult']) && !empty($price['is_recurring_adult'])) {
-
                                                         $is_recurring_adult = $price['is_recurring_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_price_adult']) && !empty($price['recurring_price_adult'])) {
-
                                                         $recurring_price_adult = $price['recurring_price_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_run_auto_pay_adult']) && !empty($price['recurring_run_auto_pay_adult'])) {
-
                                                         $recurring_run_auto_pay_adult = $price['recurring_run_auto_pay_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_cust_be_charge_adult']) && !empty($price['recurring_cust_be_charge_adult'])) {
-
                                                         $recurring_cust_be_charge_adult = $price['recurring_cust_be_charge_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_every_time_num_adult']) && !empty($price['recurring_every_time_num_adult'])) {
-
                                                         $recurring_every_time_num_adult = $price['recurring_every_time_num_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_every_time_adult']) && !empty($price['recurring_every_time_adult'])) {
-
                                                         $recurring_every_time_adult = $price['recurring_every_time_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_nuberofautopays_adult']) && !empty($price['recurring_nuberofautopays_adult'])) {
-
                                                         $recurring_nuberofautopays_adult = $price['recurring_nuberofautopays_adult'];
-
+                                                        $editmodeltextadult  .= 
+                                                        '( '.$recurring_nuberofautopays_adult.' Months contract ';
                                                     }
 
                                                     if(isset($price['recurring_happens_aftr_12_pmt_adult']) && !empty($price['recurring_happens_aftr_12_pmt_adult'])) {
-
                                                         $recurring_happens_aftr_12_pmt_adult = $price['recurring_happens_aftr_12_pmt_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_client_be_charge_on_adult']) && !empty($price['recurring_client_be_charge_on_adult'])) {
-
                                                         $recurring_client_be_charge_on_adult = $price['recurring_client_be_charge_on_adult'];
-
                                                     }
 
                                                     if(isset($price['recurring_first_pmt_adult']) && !empty($price['recurring_first_pmt_adult'])) {
-
                                                         $recurring_first_pmt_adult = $price['recurring_first_pmt_adult'];
-
+                                                        $months = 0;
+                                                        if( $recurring_nuberofautopays_adult  != ''){
+                                                            $months=$recurring_nuberofautopays_adult;
+                                                        }
+                                                        $editmodeltextadult  .=  '| $'.$recurring_first_pmt_adult.' A Month for '.$months.' Months ';
                                                     } 
 
                                                     if(isset($price['recurring_recurring_pmt_adult']) && !empty($price['recurring_recurring_pmt_adult'])) {
@@ -6211,7 +6179,7 @@
                                                     if(isset($price['recurring_total_contract_revenue_adult']) && !empty($price['recurring_total_contract_revenue_adult'])) {
 
                                                         $recurring_total_contract_revenue_adult = $price['recurring_total_contract_revenue_adult'];
-
+                                                        $editmodeltextadult  .= '| Totalling $'.$recurring_total_contract_revenue_adult;
                                                     }
 
                                                     /*if(isset($price['recurring_every']) && !empty($price['recurring_every'])) {
@@ -6568,7 +6536,7 @@
 
                                                         <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult{{$i}}{{$j}}" name="is_recurring_adult_{{$i}}{{$j}}" @if($price['is_recurring_adult'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'adult');" >
 
-                                                        <label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label>
+                                                        <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Adults @if($editmodeltextadult != '') {{$editmodeltextadult}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_adult{{$i}}{{$j}}" class="modelbox-edit-link" >Edit</button> )@endif</p>
 
                                                         <button style="display:none" id="btn_recurring_adult{{$i}}{{$j}}" name="btn_recurring_adult_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'adult');">Launch demo modal</button>
 
@@ -6696,7 +6664,7 @@
 
                                                         <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child{{$i}}{{$j}}" name="is_recurring_child_{{$i}}{{$j}}" @if($price['is_recurring_child'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'child');" >
 
-                                                        <label>Is This A Recurring Payment? Set the monthly payment terms for Children</label>
+                                                        <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Children @if($editmodeltextchild != '') {{$editmodeltextchild}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_child{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
 
                                                         <button style="display:none" id="btn_recurring_child{{$i}}{{$j}}" name="btn_recurring_child_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'child');">Launch demo modal</button>
 
@@ -6824,7 +6792,7 @@
 
                                                         <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant{{$i}}{{$j}}" name="is_recurring_infant_{{$i}}{{$j}}" @if($price['is_recurring_infant'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'infant');" >
 
-                                                        <label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label>
+                                                         <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Infants @if($editmodeltextinfant != '') {{$editmodeltextinfant}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_infant{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
 
                                                         <button style="display:none" id="btn_recurring_infant{{$i}}{{$j}}" name="btn_recurring_infant_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'infant');">Launch demo modal</button>
 
@@ -6920,8 +6888,8 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form  method="POST" role="form" enctype="multipart/form-data" id="adultformsumbit{{$i}}{{$j}}">
-                                                        @csrf
+                                                       <!--  <form  method="POST" role="form" enctype="multipart/form-data" id="adultformsumbit{{$i}}{{$j}}">
+                                                        @csrf -->
                                                             <input type="hidden" name="priceid_{{$i}}{{$j}}" value="{{$price->id}}" > 
                                                             <input type="hidden" name="i" value="{{$i}}" >
                                                             <input type="hidden" name="j" value="{{$j}}" >
@@ -7090,14 +7058,14 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </form>
+                                                        <!-- </form> -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div> 
 
                                         
-                                        <script type="text/javascript">
+                                      <!--   <script type="text/javascript">
                                             var i='{{$i}}';
                                             var j='{{$j}}';
                                             $('body').on('click', '#submitFormadult'+i+j, function(){
@@ -7113,7 +7081,7 @@
                                                     },
                                                 });
                                             });
-                                        </script>
+                                        </script> -->
                                         <div class="modal fade ModelRecurring_child{{$i}}{{$j}}" id="ModelRecurring_child{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true">
 
                                             <div class="modal-dialog editingautopay" role="document">

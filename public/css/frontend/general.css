@@ -20742,3 +20742,19 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .form-control.activityselect1.instant-detail-membertypre{
 	margin-bottom: 20px;
 }
+.modelbox-edit-link{
+	background: none;
+	border: none;
+	color: #0060df;
+	text-decoration: underline;
+}
+.recurring-pmt{
+	display: inline-block;
+}
+.activity-expired{
+    color: red;
+}
+
+#addcartdiv{
+    display: inline-flex;
+}
