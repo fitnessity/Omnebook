@@ -1,7 +1,64 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 @section('content')
-
+<style type="text/css">
+	.qty .count {
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 30px;
+    padding: 0 2px
+    ;min-width: 35px;
+    text-align: center;
+}
+.qty .plus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 30px;
+    color: white;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    }
+.qty .minus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+        color: white;
+    height: 30px;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    background-clip: padding-box;
+}
+.bg-darkbtn {
+    background-color: black;!important;
+}
+/*Prevent text selection*/
+span{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+.count {  
+    border: 0;
+    width: 2%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input:disabled{
+    background-color:white;
+}
+   
+</style>
 <?php
 	use App\UserBookingDetail;
 	use App\BusinessServices;
@@ -170,42 +227,16 @@
         }
     }
 	$selectval = $priceid = $total_price_val = '' ;
-	$adultcnt = $childcnt = $infantcnt = 0;
 	if(date('l') == 'Saturday' || date('l') == 'Sunday'){
         $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
         $i=1;
         if (!empty(@$servicePr)) {
             foreach ($servicePr as  $pr) {
                 if($i==1){
-                	$rec = '';
-                 	if(@$servicePrfirst['is_recurring_adult'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-                    $priceid =$pr['id'];
-                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Select Price Option</option>'; }
-                if($pr['adult_weekend_price_diff'] != ''){
-                	$rec = '';
-                	if(@$servicePrfirst['is_recurring_adult'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-                	$adultcnt = 1;
-                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                if($pr['child_cus_weekly_price'] != ''){
-                	$rec = '';
-                	if(@$servicePrfirst['is_recurring_child'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-                	$childcnt = 1;
-                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                }
-                if($pr['infant_cus_weekly_price'] != ''){
-                	$rec = '';
-                	if(@$servicePrfirst['is_recurring_infant'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-                	$infantcnt = 1;
-                    $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                }$i++;
+            		$priceid =$pr['id'];
+            	}
+                $selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
+                $i++;
             }
         }
     }else{
@@ -215,36 +246,11 @@
 			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
 			$i=1;
             foreach ($servicePr as  $pr) {
-				if($i==1){ 
-					$rec = '';
-                 	if(@$servicePrfirst['is_recurring_adult'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-					$priceid =$pr['id'];
-					$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Select Price Option</option>'; }
-				if($pr['adult_cus_weekly_price'] != ''){
-					$rec = '';
-                 	if(@$servicePrfirst['is_recurring_adult'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-					$adultcnt = 1;
-					$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-				if($pr['child_cus_weekly_price'] != ''){
-					$rec = '';
-                	if(@$servicePrfirst['is_recurring_child'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-					$childcnt = 1;
-					$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-				}
-				if($pr['infant_cus_weekly_price'] != ''){
-					$rec = '';
-                	if(@$servicePrfirst['is_recurring_infant'] == 1) {
-                 		$rec = "(Recurring)"; 
-                 	}
-					$infantcnt = 1;
-					$selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'!^'.$pr['price_title'].'^^'.$pr['membership_type'].$rec.'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-				}$i++;
+            	if($i==1){
+            		$priceid =$pr['id'];
+            	}
+				$selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
+				$i++;
 			}
 		}
     }
@@ -300,10 +306,10 @@
 				<div class="row">
 					<div class="col-md-5 col-sm-5 col-xs-12">
 						<div class="prdetails">
-							<div>
+							<!-- <div>
 								<label>Duration: </label>
-								<span> {{$tduration}}</span>
-							</div>
+								<span> </span>
+							</div> -->
 							<div>
 								<label>Service Type: </label>
 								<span> {{@$service['select_service_type']}}  </span>
@@ -324,10 +330,10 @@
 					</div>
 					<div class="col-md-7 col-sm-7 col-xs-12">
 						<div class="prdetails">
-							<div>
+							<!-- <div>
 								<label>Spots Left:</label>
-								<span> {{$Totalspot}}</span>
-							</div>
+								<span> </span>
+							</div> -->
 							<div>
 								<label>Activity: </label>
 								<span>{{@$service['sport_activity']}}</span>
@@ -413,7 +419,7 @@
 													@foreach(@$bschedule as $bdata)
 													<div class="col-md-6">
 														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}});"/>
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});"/>
 																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
 																<p class="end-hr">1/{{$bdata['spots_available']}} Spots Left </p>
 														</div>
@@ -429,7 +435,7 @@
 														</div>
 													@endif
 													@if($timedata != '')
-													<div>
+													<div id="timeduration">
 														<label>Duration:</label>
 														<span>{{$timedata}}</span>
 													</div>
@@ -481,10 +487,20 @@
 
 									<form method="post" action="/addtocart" id="{{$serviceid}}">
 										@csrf
-										<input type="hidden" name="pid" value="{{$serviceid}}" size="2" />
-										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity" size="2" />
-									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
-									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" size="2" />
+										<input type="hidden" name="pid" value="{{$serviceid}}"  />
+										<input type="hidden" name="persontype" id="persontype" value="adult"/>
+										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
+
+										<input type="hidden" name="aduquantity" id="adupricequantity" value="0" class="product-quantity"/>
+										<input type="hidden" name="childquantity" id="childpricequantity" value="0" class="product-quantity"/>
+										<input type="hidden" name="infantquantity" id="infantpricequantity" value="0" class="product-quantity"/>
+
+										<input type="hidden" name="cartaduprice" id="cartaduprice" value="0" class="product-quantity"/>
+										<input type="hidden" name="cartchildprice" id="cartchildprice" value="0" class="product-quantity"/>
+										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="0" class="product-quantity"/>
+
+									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
+									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
 										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
 										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
 										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
@@ -532,17 +548,14 @@
 					<div class="col-md-9">
 						<div class="widget mx-sp">
 							<h4 class="widget-title">Provider: {{$companyname }}</h4>
-							<div class="widget" style="height:300px" id="mapdetails">
-				            	<div class="google-map">
-									<div class="get-img"><!--<img src="/images/newimage/map.jpg" alt="images" class="img-fluid">-->
-				                    	<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;height:300px"></div>
-				                    </div>
+							<div class="widget" style="height:300px">
+								<div class="mysrchmap">
+									<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 								</div>
-				            </div>
-							<div class="maparea modal-map">
-								<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
+								<div class="maparea">
+									<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
+								</div>
 							</div>
-
 							<?php   
 								$locations = []; 
 		                        if($companylat != '' || $companylon  != ''){
@@ -1011,6 +1024,66 @@
    	</div>            
 <!-- end modal -->
 
+
+<div class="modal fade" id="Countermodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal">×</button> --> 
+                <h4 class="modal-title"></h4>                                                            
+            </div>  
+            <div class="modal-body" id="Countermodalbody">
+                <div class="row">
+                  	<div class="col-md-12">
+                  		<div class="col-md-8">
+                  			<p>Adults</p>
+                  			<p>Ages 13 & Up</p>
+                  		</div>
+                  		<div class="col-md-4">
+	                  		<div class="qty mt-5">
+		                        <span class="minus bg-darkbtn adultminus">-</span>
+		                        <input type="number" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
+		                        <span class="plus bg-darkbtn adultplus">+</span>
+		                    </div>
+                  		</div>
+                  	</div>
+                  	<br><br>
+                  	<div class="col-md-12">
+                  		<div class="col-md-8">
+                  			<p>Childern</p>
+                  			<p>Ages 2-12</p>
+                  		</div>
+                  		<div class="col-md-4">
+	                  		<div class="qty mt-5">
+		                        <span class="minus bg-darkbtn childminus">-</span>
+		                        <input type="number" class="count" name="childcnt" id="childcnt" min="0" value="0">
+		                        <span class="plus bg-darkbtn childplus">+</span>
+		                    </div>
+                  		</div>
+                  	</div>
+                  	<br><br>
+                  	<div class="col-md-12">
+                  		<div class="col-md-8">
+                  			<p>Infants</p>
+                  			<p>Under 2</p>
+                  		</div>
+                  		<div class="col-md-4">
+	                  		<div class="qty mt-5">
+		                        <span class="minus bg-darkbtn infantminus">-</span>
+		                        <input type="number" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
+		                        <span class="plus bg-darkbtn infantplus">+</span>
+		                    </div>
+                  		</div>
+                  	</div>
+                </div>
+            </div>            
+            <div class="modal-footer">
+                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary">Save</button>                             
+            </div>
+    	</div>                                                                       
+    </div>                                          
+</div>
+
 <div id="busireview" class="modal modalbusireview" tabindex="-1">
     <div class="modal-dialog rating-star" role="document">
         <div class="modal-content">
@@ -1054,15 +1127,14 @@
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
 <script>
 $(document).ready(function () {
-	
-	var locations = @json($locations);
+    var locations = @json($locations);
    /* alert(locations);*/
     var map = ''
     var infowindow = ''
     var marker = ''
     var markers = []
     var circle = ''
-	$('#map_canvas').empty();
+    $('#map_canvas').empty();
 
     if (locations.length != 0) {  console.log('!empty');
         map = new google.maps.Map(document.getElementById('map_canvas'), {
@@ -1074,16 +1146,16 @@ $(document).ready(function () {
         var bounds = new google.maps.LatLngBounds();
         var marker, i;
         var icon = {
-            url: "https://development.fitnessity.co/public/images/hoverout2.png",
+            url: "https://dev.fitnessity.co/public/images/hoverout2.png",
             scaledSize: new google.maps.Size(50, 50),
-			labelOrigin: {x: 25, y: 16}
+            labelOrigin: {x: 25, y: 16}
         };
         for (i = 0; i < locations.length; i++) {
             var labelText = i + 1
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i][1], locations[i][2]),
                 map: map,
-				icon: icon,
+                icon: icon,
                 title: labelText.toString(),
                 label: {
                     text: labelText.toString(),
@@ -1129,15 +1201,15 @@ $(document).ready(function () {
             markers.push(marker);
         }
 
-		//nnn commented on 18-05-2022 - its not displaying proper map
+        //nnn commented on 18-05-2022 - its not displaying proper map
        // map.fitBounds(bounds);
        // map.panToBounds(bounds);
-		
-		$('.mysrchmap').show()
+        
+        $('.mysrchmap').show()
     } else {
         $('#mapdetails').hide()
         
-		/*console.log('else map');
+        /*console.log('else map');
         map = new google.maps.Map(document.getElementById('map_canvas'), {
             zoom: 8,
             center: new google.maps.LatLng(42.567200, -83.807250),
@@ -1150,6 +1222,39 @@ $(document).ready(function () {
 
 <script>
 	$(document).ready(function () {
+	    $('#adultcnt').prop('readonly', true);
+		$(document).on('click','.adultplus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
+			if ($('#adultcnt').val() <= 0) {
+				$('#adultcnt').val(0);
+			}
+	    });
+
+	    $('#childcnt').prop('readonly', true);
+		$(document).on('click','.childplus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+		});
+    	$(document).on('click','.childminus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
+			if ($('#childcnt').val() <= 0) {
+				$('#childcnt').val(0);
+			}
+	    }); 
+
+	    $('#infantcnt').prop('disabled', true);
+		$(document).on('click','.infantplus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+		});
+    	$(document).on('click','.infantminus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
+			if ($('#infantcnt').val() <= 0) {
+				$('#infantcnt').val(0);
+			}
+	    });
+ 	
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
 	        // var _token = $("input[name='_token']").val();
@@ -1186,9 +1291,75 @@ $(document).ready(function () {
 </script>
 
 <script>
+	function getbookdetails(sid){
+		var aducnt = $('#adultcnt').val();
+		var chilcnt = $('#childcnt').val();
+		var infcnt = $('#infantcnt').val();
+		if(typeof(aducnt) == 'undefined'){
+			aducnt = 0;
+		}
+		if(typeof(chilcnt) == 'undefined'){
+			chilcnt = 0;
+		}
+		if(typeof(infcnt) == 'undefined'){
+			infcnt = 0;
+		}
+		var aduprice = $('#adultprice').val();
+		var childprice = $('#childprice').val();
+		var infantprice = $('#infantprice').val();
+		var totalprice = 0;
+		var totalpriceadult = 0;
+		var totalpricechild = 0;
+		var totalpriceinfant = 0; 
+		if(typeof(aduprice) != "undefined" && aduprice !== null){
+			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+			$('#cartaduprice').val(aduprice);
+		}
 
-	function addhiddentime(id) {
-		$('#actscheduleid').val(id);
+		if(typeof(childprice) != "undefined" && childprice !== null){
+			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
+			$('#cartchildprice').val(childprice);
+		}
+		if(typeof(infantprice) != "undefined" && infantprice !== null){
+			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+			$('#cartinfantprice').val(infantprice);
+		}
+		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+		$('.personcategory').html('<span>Adults x '+aducnt+' </span><span>Kids x  '+chilcnt+'</span><span>Infants x  '+infcnt+'</span>');
+		$('#totalprice').html('$'+totalprice+' USD');
+		$('#adupricequantity').val(aducnt);
+		$('#childpricequantity').val(chilcnt);
+		$('#infantpricequantity').val(infcnt);
+
+		$('#pricetotal'+sid+sid).val(totalprice);
+		$("#Countermodal").modal('hide');
+	}
+
+	function addhiddentime(id,sid) {
+		var actscheduleid = $('#actscheduleid'+sid).val(id);
+		var pricetitleid = $('#selprice'+sid).val();
+		/*alert(pricetitleid);*/
+		var _token = $("input[name='_token']").val();
+		$.ajax({
+			url: "{{route('getmodelbody')}}",
+			type: 'POST',
+			data:{
+				_token: _token,
+				type: 'POST',
+				pricetitleid:pricetitleid,
+				serviceid:sid,
+				actscheduleid:id
+			},
+			success: function (response) {
+				if(response != ''){
+					var data = response.split('~~');
+					$('#Countermodalbody').html(data[0]);
+					$('#book'+sid+sid).html(data[1]);
+				}
+			}
+		});
+		$('#priceid'+sid).val(pricetitleid);
+		$('#Countermodal').modal('show');
 	}
 
 	function updateparticipate(cid,sid){
@@ -1366,13 +1537,14 @@ $(document).ready(function () {
 
 	function changeactpr(aid,val,part,div,maid)
 	{
-		var n = val.split('!^');
+		/*var n = val.split('!^');
 	    var datan = '';
 	    var session = '';
 	    var id = '';
 	    var pr1 = 0;
 	    var price_title = '—';
 	    var memtype_hidden = '';
+	    var persontype = '';
 	    if(n[0] != ''){
 	    	datan1 = n[0].split('~~');
 	    	if(datan1[0] != ''){
@@ -1395,6 +1567,11 @@ $(document).ready(function () {
 	            memtype_hidden = datan[1];
 	            $('#memtype_hidden'+maid+aid).val(datan[1]);
 	        }
+	        if(datan[2] != ''){
+	          	persontype = datan[2];
+	            $('#persontype').val(datan[2]);
+	        }
+	  
 	    }
 		var pr; var qty;
 		var actfilparticipant=$('#actfilparticipant'+maid).val();
@@ -1457,7 +1634,7 @@ $(document).ready(function () {
 			$('#pricequantity'+maid+aid).val(qty);
 			$('#priceid'+aid).val(id);	
 		}
-		$("#actfiloffer_forcart option:selected").prop("selected", false);
+		$("#actfiloffer_forcart option:selected").prop("selected", false);*/
 	}
 
 	function changeactsession(main,aid,val,div)
@@ -1546,4 +1723,6 @@ $(document).ready(function () {
 		}
 	}
 </script>
+
 @endsection
+
