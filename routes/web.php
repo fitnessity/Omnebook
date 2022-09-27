@@ -186,6 +186,7 @@ Route::get('/get-booking-service-data','LessonController@getBookingServiceData')
 Route::post('/savetimes','LessonController@savetime');
 Route::post('/updatecart','LessonController@updatecart');
 Route::post('/samfilter','LessonController@samfilter')->name('samfilter');
+Route::get('/showall-activity','LessonController@showall_activity')->name('showall_activity');
 
 /* 09-june 2020 end */
 Route::get('/allSports', 'HomeController@allSports')->name('list-all-sports');
@@ -809,6 +810,7 @@ Route::post('/viewActreview', 'LessonController@viewActreview')->name('viewActre
 Route::get('submitreview','LessonController@submitreview')->name('submitreview');
 Route::post('/act_detail_filter', 'LessonController@act_detail_filter')->name('act_detail_filter');
 Route::post('/act_detail_filter_for_cart', 'LessonController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+Route::post('/getmodelbody', 'LessonController@getmodelbody')->name('getmodelbody');
 Route::post('/act_detail_filter_business_pages', 'LessonController@act_detail_filter_business_pages')->name('act_detail_filter_business_pages');
 Route::post('getServiceData', 'UserProfileController@getServiceData')->name('getServiceData');
 Route::post('NewService', 'UserProfileController@NewService')->name('NewService');

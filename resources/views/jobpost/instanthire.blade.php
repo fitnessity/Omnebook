@@ -42,7 +42,8 @@
 					<img src="{{ url('public/uploads/discover/thumb/1649648909-tennis 1.jpg')}}" >
 					<h4>Find A Personal Training Session</h4>
 					<p>Book a Private lesson for the activity that interest you.</p>
-					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
+					<!-- <button id="84" class="showall-btn btn-position" type="button">Show all</button> -->
+					<a id="84" class="showall-btn btn-position" href="/showall-activity" >Show all</a>
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4 col-xs-12">
@@ -613,7 +614,7 @@ $(document).ready(function () {
         var bounds = new google.maps.LatLngBounds();
         var marker, i;
         var icon = {
-            url: "https://fitnessity.govindcrankrod.com/public/images/hoverout2.png",
+            url: "https://dev.fitnessity.co/public/images/hoverout2.png",
             scaledSize: new google.maps.Size(50, 50),
             labelOrigin: {x: 25, y: 16}
         };
