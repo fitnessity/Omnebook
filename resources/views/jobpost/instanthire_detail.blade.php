@@ -2,12 +2,11 @@
 @extends('layouts.header')
 @section('content')
 <style type="text/css">
-	.qty .count {
+.qty .count {
     color: #000;
     display: inline-block;
     vertical-align: top;
-    font-size: 25px;
-    font-weight: 700;
+    font-size: 22px;
     line-height: 30px;
     padding: 0 2px
     ;min-width: 35px;
@@ -19,7 +18,7 @@
     vertical-align: top;
     width: 30px;
     height: 30px;
-    color: white;
+    color: #000;
     font: 30px/1 Arial,sans-serif;
     text-align: center;
     border-radius: 50%;
@@ -29,7 +28,7 @@
     display: inline-block;
     vertical-align: top;
     width: 30px;
-        color: white;
+	color: #000;
     height: 30px;
     font: 30px/1 Arial,sans-serif;
     text-align: center;
@@ -37,7 +36,7 @@
     background-clip: padding-box;
 }
 .bg-darkbtn {
-    background-color: black;!important;
+    border: 1px solid #000;
 }
 /*Prevent text selection*/
 span{
@@ -76,29 +75,6 @@ input:disabled{
 
 	$sid = $serviceid;
 	$service = BusinessServices::where('id',$serviceid)->first();
- 	$bookscheduler = BusinessActivityScheduler::where('serviceid', $serviceid)->limit(1)->orderBy('id', 'ASC')->get()->toArray();
- 	/*print_r($bookscheduler);*/
- 	$tduration = 'Not Scheduled Yet';
- 	if(@$bookscheduler[0]['set_duration']!=''){
-		$tm=explode(' ',$bookscheduler[0]['set_duration']);
-		$hr=''; $min=''; $sec='';
-
-		if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-		if($tm[2]!=0){ $min=$tm[2].'min. '; }
-		if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-		$tduration = '';
-		if($hr!='' || $min!='' || $sec!='')
-		{ 
-			$tduration = $hr.$min.$sec;
-		} 
-	} 
-	/*echo $tduration;exit;*/
-	$today = date('Y-m-d');
-	$SpotsLeft = UserBookingDetail::where('sport', @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
-	if( !empty($service['group_size']) ){
-		$SpotsLeftdis = $service['group_size']-$SpotsLeft;
-	}
-
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
         $languages = $businessSp['languages'];
@@ -217,18 +193,35 @@ input:disabled{
             }
 
             $today = date('Y-m-d');
-            $SpotsLeft = UserBookingDetail::where('sport',  @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
+            /*$SpotsLeft = UserBookingDetail::where('sport',  @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
             $SpotsLeftdis=0;
             if( !empty($data['spots_available']) ){
                 $spot_avil=$data['spots_available'];
                 $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
                 $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-            }
+            }*/
         }
     }
 	$selectval = $priceid = $total_price_val = '' ;
+	$adult_cnt =$child_cnt =$infant_cnt =0;
+	$adult_price = $child_price = $infant_price =0;
 	if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
+        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'] + @$servicePrfirst['child_weekend_price_diff'] + @$servicePrfirst['infant_weekend_price_diff'] ;
+        if(@$servicePrfirst['adult_weekend_price_diff'] != ''){
+        	$adult_price = @$servicePrfirst['adult_weekend_price_diff'];
+        	$adult_cnt = 1;
+        }
+
+        if(@$servicePrfirst['child_weekend_price_diff'] != ''){
+        	$child_price = @$servicePrfirst['child_weekend_price_diff'];
+        	$child_cnt = 1;
+        }
+
+        if(@$servicePrfirst['infant_weekend_price_diff'] != ''){
+        	$infant_price = @$servicePrfirst['infant_weekend_price_diff'];
+        	$infant_cnt = 1;
+        }
+       
         $i=1;
         if (!empty(@$servicePr)) {
             foreach ($servicePr as  $pr) {
@@ -243,7 +236,22 @@ input:disabled{
 		/*print_r($servicePr); exit;*/
 		if(!empty(@$servicePr))
 		{
-			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
+
+			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'] + @$servicePrfirst['child_cus_weekly_price'] + @$servicePrfirst['infant_cus_weekly_price'];
+			if(@$servicePrfirst['adult_cus_weekly_price'] != ''){
+				$adult_price = @$servicePrfirst['adult_cus_weekly_price'];
+	        	$adult_cnt = 1;
+	        }
+
+	        if(@$servicePrfirst['child_cus_weekly_price'] != ''){
+	        	$child_price = @$servicePrfirst['child_cus_weekly_price'];
+	        	$child_cnt = 1;
+	        }
+
+	        if(@$servicePrfirst['infant_cus_weekly_price'] != ''){
+	        	$infant_price = @$servicePrfirst['infant_cus_weekly_price'];
+	        	$infant_cnt = 1;
+	        }
 			$i=1;
             foreach ($servicePr as  $pr) {
             	if($i==1){
@@ -254,7 +262,6 @@ input:disabled{
 			}
 		}
     }
-
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
    /* print_r($activities_search);exit();*/
 
@@ -415,7 +422,7 @@ input:disabled{
 												<h3 class="date-title">Booking Details</h3>
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
-													@if(!empty(@$bschedule) ||count(@$bschedule)>0)
+													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
 													<div class="col-md-6">
 														<div class="donate-now">
@@ -425,6 +432,9 @@ input:disabled{
 														</div>
 													</div>
 													@endforeach
+													@else 
+														<p style="text-align:center;">No time option available Select category to view available times</p>
+															
 													@endif
 												</div>
 												<div id="book<?php echo $service["id"].$service["id"]; ?>">
@@ -448,7 +458,7 @@ input:disabled{
 													@endif									@if(@$servicePrfirst['pay_session'] != '')
 														<div>
 															<label>Price Option:</label>
-															<span>{{@$servicePrfirst['pay_session']}}</span>
+															<span>{{@$servicePrfirst['pay_session']}} Session</span>
 														</div>
 													@endif
 													@if(@$servicePrfirst['membership_type'] != '')
@@ -458,10 +468,10 @@ input:disabled{
 													</div>
 													@endif
 													
-													<div class="personcategory">
-														<span>Adults x 1 </span>
-														<span>Kids x 0</span>
-														<span>Infants x 0</span>
+													<div class="personcategory" >
+														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
+														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
+														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
 													</div>
 													@if(@$total_price_val != '')
 														<div>
@@ -491,13 +501,13 @@ input:disabled{
 										<input type="hidden" name="persontype" id="persontype" value="adult"/>
 										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
 
-										<input type="hidden" name="aduquantity" id="adupricequantity" value="0" class="product-quantity"/>
-										<input type="hidden" name="childquantity" id="childpricequantity" value="0" class="product-quantity"/>
-										<input type="hidden" name="infantquantity" id="infantpricequantity" value="0" class="product-quantity"/>
+										<input type="hidden" name="aduquantity" id="adupricequantity" value="{{$adult_cnt}}" class="product-quantity"/>
+										<input type="hidden" name="childquantity" id="childpricequantity" value="{{$child_cnt}}" class="product-quantity"/>
+										<input type="hidden" name="infantquantity" id="infantpricequantity" value="{{$infant_cnt}}" class="product-quantity"/>
 
-										<input type="hidden" name="cartaduprice" id="cartaduprice" value="0" class="product-quantity"/>
-										<input type="hidden" name="cartchildprice" id="cartchildprice" value="0" class="product-quantity"/>
-										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="0" class="product-quantity"/>
+										<input type="hidden" name="cartaduprice" id="cartaduprice" value="{{$adult_price}}" class="product-quantity"/>
+										<input type="hidden" name="cartchildprice" id="cartchildprice" value="{{$child_price}}" class="product-quantity"/>
+										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="{{$infant_price}}" class="product-quantity"/>
 
 									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
 									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
@@ -521,7 +531,7 @@ input:disabled{
 												</div>
 											@else
 												<div id="addcartdiv">
-													<p class="activity-expired">Activity Expired</p>
+													<!-- <p class="activity-expired">Activity Expired OR Not Scheduled </p> -->
 												</div>
 											@endif
 										  @endif
@@ -1026,59 +1036,68 @@ input:disabled{
 
 
 <div class="modal fade" id="Countermodal">
-    <div class="modal-dialog">
+    <div class="modal-dialog counter-modal-size">
         <div class="modal-content">
-            <div class="modal-header">
-                <!-- <button type="button" class="close" data-dismiss="modal">×</button> --> 
-                <h4 class="modal-title"></h4>                                                            
-            </div>  
-            <div class="modal-body" id="Countermodalbody">
+           <div class="modal-header"> 
+				<div class="closebtn">
+					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>  
+            <div class="modal-body conuter-body" id="Countermodalbody">
                 <div class="row">
                   	<div class="col-md-12">
-                  		<div class="col-md-8">
-                  			<p>Adults</p>
-                  			<p>Ages 13 & Up</p>
-                  		</div>
-                  		<div class="col-md-4">
-	                  		<div class="qty mt-5">
-		                        <span class="minus bg-darkbtn adultminus">-</span>
-		                        <input type="number" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
-		                        <span class="plus bg-darkbtn adultplus">+</span>
-		                    </div>
-                  		</div>
+						<div class="row">
+							<div class="col-md-8">
+								<p>Adults</p>
+								<p>Ages 13 & Up</p>
+							</div>
+							<div class="col-md-4">
+								<div class="qty mt-5">
+									<span class="minus bg-darkbtn adultminus">-</span>
+									<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
+									<span class="plus bg-darkbtn adultplus">+</span>
+								</div>
+							</div>
+						</div>
                   	</div>
-                  	<br><br>
+                  	
                   	<div class="col-md-12">
-                  		<div class="col-md-8">
-                  			<p>Childern</p>
-                  			<p>Ages 2-12</p>
-                  		</div>
-                  		<div class="col-md-4">
-	                  		<div class="qty mt-5">
-		                        <span class="minus bg-darkbtn childminus">-</span>
-		                        <input type="number" class="count" name="childcnt" id="childcnt" min="0" value="0">
-		                        <span class="plus bg-darkbtn childplus">+</span>
-		                    </div>
-                  		</div>
+						<div class="row">
+							<div class="col-md-8">
+								<p>Childern</p>
+								<p>Ages 2-12</p>
+							</div>
+							<div class="col-md-4">
+								<div class="qty mt-5">
+									<span class="minus bg-darkbtn childminus">-</span>
+									<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0">
+									<span class="plus bg-darkbtn childplus">+</span>
+								</div>
+							</div>
+						</div>
                   	</div>
-                  	<br><br>
+                  	
                   	<div class="col-md-12">
-                  		<div class="col-md-8">
-                  			<p>Infants</p>
-                  			<p>Under 2</p>
-                  		</div>
-                  		<div class="col-md-4">
-	                  		<div class="qty mt-5">
-		                        <span class="minus bg-darkbtn infantminus">-</span>
-		                        <input type="number" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
-		                        <span class="plus bg-darkbtn infantplus">+</span>
-		                    </div>
-                  		</div>
+						<div class="row">
+							<div class="col-md-8">
+								<p>Infants</p>
+								<p>Under 2</p>
+							</div>
+							<div class="col-md-4">
+								<div class="qty mt-5">
+									<span class="minus bg-darkbtn infantminus">-</span>
+									<input type="text" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
+									<span class="plus bg-darkbtn infantplus">+</span>
+								</div>
+							</div>
+						</div>
                   	</div>
                 </div>
             </div>            
-            <div class="modal-footer">
-                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary">Save</button>                             
+            <div class="modal-footer conuter-body">
+                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
             </div>
     	</div>                                                                       
     </div>                                          
@@ -1313,19 +1332,46 @@ $(document).ready(function () {
 		var totalpriceinfant = 0; 
 		if(typeof(aduprice) != "undefined" && aduprice !== null){
 			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
-			$('#cartaduprice').val(aduprice);
+			if(aducnt != 0){
+				$('#cartaduprice').val(aduprice);
+				$('#cartaduprice').val(0);
+			}
 		}
 
 		if(typeof(childprice) != "undefined" && childprice !== null){
 			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
-			$('#cartchildprice').val(childprice);
+			if(chilcnt != 0){
+				$('#cartchildprice').val(childprice);
+			}else{
+				$('#cartchildprice').val(0);
+			}
 		}
 		if(typeof(infantprice) != "undefined" && infantprice !== null){
 			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
-			$('#cartinfantprice').val(infantprice);
+			if(infcnt != 0){
+				$('#cartinfantprice').val(infantprice);
+				$('#cartinfantprice').val(0);
+			}
 		}
+
+		var adult = '';
+		var child = '';
+		var infant = '';
+		if(aducnt != 0){
+			adult = '<span>Adults x '+aducnt+' = $'+totalpriceadult+'</span>';
+		}
+
+		if(chilcnt != 0){
+			child = '<span>Kids x  '+chilcnt+' = $'+totalpricechild+'</span>';
+		}
+
+		if(infcnt != 0){
+			infant = '<span>Infants x  '+infcnt+' = $'+totalpriceinfant+'</span>';
+		}
+		
+		
 		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-		$('.personcategory').html('<span>Adults x '+aducnt+' </span><span>Kids x  '+chilcnt+'</span><span>Infants x  '+infcnt+'</span>');
+		$('.personcategory').html(adult+child+infant);
 		$('#totalprice').html('$'+totalprice+' USD');
 		$('#adupricequantity').val(aducnt);
 		$('#childpricequantity').val(chilcnt);
@@ -1687,6 +1733,7 @@ $(document).ready(function () {
 					if(catedata[0] != ''){
 						bookdata = catedata[0];
 					}
+					/*alert(catedata[1]);*/
 					if(catedata[1] != ''){
 						dt = catedata[1].split('!!~');
 						timedata = dt[0];
@@ -1709,9 +1756,10 @@ $(document).ready(function () {
 	                    $('#cate_title'+main+aid).val(cattitle);
 	                }
 	                if(timedata == 'no' || timedata == ''){
-	                	$('#timeschedule').html('');
-	            	 	$('#addcartdiv').html('<p class="activity-expired">Activity Expired</p>');
+	            	 	$('#addcartdiv').html('');
+	            	 	$('#timeschedule').html(setime);
 	            	}else{
+	            		
 	            		$('#timeschedule').html(setime);
 	            		$('#time_hidden'+main+aid).val(timedata);
 						$('#addcartdiv').html('<div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div>');

@@ -20758,3 +20758,208 @@ span.Zebra_DatePicker_Icon_Wrapper {
 #addcartdiv{
     display: inline-flex;
 }
+.modal-dialog.counter-modal-size{
+	width: 550px;
+	margin: 30px auto;
+}
+.counter-txt{
+	text-align: right;
+}
+.counter-titles{
+	margin-bottom: 15px;
+}
+.minus.bg-darkbtn.adultminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 7px;
+	left: 8px;
+}
+.minus.bg-darkbtn.adultminus {
+	position: relative;
+}
+.minus.bg-darkbtn.childminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.minus.bg-darkbtn.childminus {
+	position: relative;
+}
+.minus.bg-darkbtn.infantminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.minus.bg-darkbtn.infantminus{
+	position: relative;
+}
+
+.plus.bg-darkbtn.adultplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 7px;
+	left: 8px;
+}
+.plus.bg-darkbtn.adultplus {
+	position: relative;
+}
+.plus.bg-darkbtn.childplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.plus.bg-darkbtn.childplus {
+	position: relative;
+}
+.plus.bg-darkbtn.infantplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.plus.bg-darkbtn.infantplus {
+	position: relative;
+}
+.cart-title{
+	margin-bottom: 30px;
+}
+.cart-title h5{
+	text-align: center;
+	font-size: 21px;
+	font-weight: 500;
+}
+.bookedcard h5{
+	text-align: center;
+	font-size: 16px;
+	font-weight: 400;
+	margin-bottom: 16px;
+}
+.bookedcard{
+	border: 1px solid #dcdcdc;
+	border-radius: 4px;
+	box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
+	padding: 15px;
+	margin-bottom: 20px;
+}
+.userblock-card{
+	padding: 0 10px 0 9px;
+	position: relative;
+	text-align: center;
+}
+.userblock-card > .login_links {
+  cursor: pointer;
+}
+.userblock-card > .login_links > img {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+}
+.bookedcard .img-title span{
+	font-size: 18px;
+	font-weight: 600;
+}
+.bookedcard .border-center{
+	border: 1px solid #000;
+	margin: 25px;
+}
+.bookedcard .cart-items span{
+	font-size: 18px;
+	font-weight: 500;
+}
+.bookedcard .cart-total{
+	margin-top: 15px;
+}
+.cart-itme-img img{
+	width: 100%;
+	box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
+}
+.kick-adul h5{
+	font-size: 19px;
+	font-weight: 500;
+	margin-bottom: 15px;
+}
+.kick-adul h4{
+	font-size: 15px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+.kick-adul .cart-details{
+	display: grid;
+}
+.cart-btns-continues{
+	display: flex;
+	float: right;
+}
+.cart-border{
+	border-bottom: 1px solid #000;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+.cart-sub-title span{
+	font-size: 20px;
+	font-weight: 500;
+}
+.cart-sub-title .cart-view{
+	text-decoration: underline;
+	font-size: 15px;
+	color: #0034ff;
+}
+.claimed{
+	display: inline-block;
+}
+.claimed{
+	display: inline-block;
+}
+.claimed span{
+	color: red;
+	font-size: 9px;
+}
+.kickboxing-slider .owl-nav .owl-prev {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	background: #c72321;
+	opacity: 1;
+	border-radius: 50px;
+	top: 45%;
+	position: absolute;
+	left: -34px;
+	font-size: 21px;
+	color: #fff;
+}
+.kickboxing-slider .owl-nav .owl-next {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	background: #c72321;
+	opacity: 1;
+	border-radius: 50px;
+	top: 45%;
+	position: absolute;
+	right: -34px;
+	font-size: 21px;
+	color: #fff;
+}
+.cart-sub-title{
+	margin-bottom: 15px;
+}
+.btn-cart-info{
+	margin-left: 50px;
+	margin-right: -20px;
+}
+.counter-age-heading{
+	font-size: 18px;
+}
+.modal-header {
+  padding: 15px !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+.conuter-body{
+	padding: 0px 30px 0px 30px;
+}
+.cart-sub-title .cart-view:hover{
+	color: #0034ff;
+}

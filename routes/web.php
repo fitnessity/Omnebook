@@ -677,6 +677,7 @@ Route::any('/activity-details/{serviceid}', 'LessonController@getInstanthiredeta
 //});
 Route::get('/instant-hire-search', 'LessonController@getInstanthireSearch');
 Route::any('/addtocart', 'LessonController@addToCart');
+Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
 Route::any('/removetocart', 'LessonController@removeToCart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 Route::get('/directhire/viewprofile/{user_id}', 'LessonController@directhireViewProfile');

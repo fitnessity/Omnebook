@@ -16,7 +16,7 @@
     }else{
         $username = '';
     }
-  
+    /*echo"<pre>";print_r($cart['cart_item']);*//*exit();*/
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -33,7 +33,7 @@
                 <?php $item_price=0; 
 					foreach ($cart['cart_item'] as $item) { 
                       /*  print_r($item);exit();*/
-						$item_price = $item_price + $item["price"];
+						$item_price = $item_price + $item["totalprice"];
 						if ($item['image']!="") {
 							if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
 								$profilePic = url('/public/uploads/profile_pic/thumb/' . $item['image']);
@@ -57,9 +57,9 @@
 						//dd(\DB::getQueryLog());
 						$serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
 						//print_r($ser[0]);
-						$service_fee= ($item["price"] * 7)/100;
-						$tax= ($item["price"] * 8.875)/100;
-						$total_amount = $item["price"] + $service_fee + $tax;
+						$service_fee= ($item["totalprice"] * 7)/100;
+						$tax= ($item["totalprice"] * 8.875)/100;
+						$total_amount = $item["totalprice"] + $service_fee + $tax;
 						$iprice = number_format($total_amount,0, '.', '');
 						//echo $total_amount.'---'.$iprice.'---'.$item["price"];
 						
@@ -67,7 +67,7 @@
             		<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
                     <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
                     <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
-                    <input type="hidden" name="itemqty[]" value="<?= $item["quantity"]; ?>" />
+                   <!--  <input type="hidden" name="itemqty[]" value="" /> -->
                     <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
                     <div class="row">
                         <div class="col-lg-3">	
@@ -111,8 +111,10 @@
 											{ echo '<div class="info-display"><label>Duration:</label><span>'.$hr.$min.$sec.'</span></label></div>'; } 
 										} ?>
                                         <div class="info-display">
-                                            <label>Participant #: </label>
-                                            <span><?php echo $item["quantity"]; ?></label>
+                                            <label>Participant : </label>
+                                            <span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult : {{$item['adult']['quantity']}} @endif @endif</span> 
+                                            <span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children : {{$item['child']['quantity']}} @endif @endif</span>
+                                            <span>@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant : {{$item['infant']['quantity'] }} @endif @endif</span></label>
                                         </div>
                                         <div class="info-display">
                                             <label>Price Option: </label>
@@ -171,7 +173,7 @@
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="price-section">
-                                        <h4><?= "$ " . number_format($item["price"], 2); ?></h4>
+                                        <h4><?= "$ " . number_format($item["totalprice"], 2); ?></h4>
                                     </div>
                                     <div class="invite-share">
                                     	<!--
@@ -192,30 +194,30 @@
                                     	<?php
 											$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
 											
-											for($i=0; $i<$item["quantity"]; $i++)
-											{ ?>
-                                            <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
+											/*for($i=0; $i<$item["quantity"]; $i++)*/
+											/*{*/ ?>
+                                            <!-- <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php /*echo $i;*/ ?>')">
                                                 <option value="">Who is participating?</option>
                                                 <?php foreach($family as $fa){ 
 													/*$age = date_diff(date_create($fa['birthday']), date_create('today'))->y;*/
 												?>
-                                                	<option value="<?php echo $fa['id']; ?>" 
-                                                    data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
-                                                    data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>"
+                                                	<option value="<?php /*echo $fa['id'];*/ ?>" 
+                                                    data-name="<?php /*echo $fa['first_name'].' '.$fa['last_name'];*/ ?>"
+                                                    data-cnt="<?php /*echo $i;*/ ?>" data-act="<?php /*echo $item["code"];*/ ?>"
                                                     data-age="<?php /*echo $age;*/ ?>" >
-													<?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
+													<?php /*echo $fa['first_name'].' '.$fa['last_name'];*/ ?></option>
                                                 <?php } ?>
-                                            </select>
-                                        <?php } ?>
+                                            </select> -->
+                                        <?php/* }*/ ?>
 
                                     </div>
                                     
                                     <div class="mtp-15 info-details">
                                     	<?php
-											for($i=0; $i<$item["quantity"]; $i++)
-											{ ?>
-                                        		<p id='part<?php echo $i.$item["code"]; ?>'></p>
-                                        <?php } ?>
+											/*for($i=0; $i<$item["quantity"]; $i++)
+											{*/ ?>
+                                        		<p id='part<?php /*echo $i.$item["code"];*/ ?>'></p>
+                                        <?php /*}*/ ?>
                                     </div>
                                     <?php } ?>
                                 </div>

@@ -30,6 +30,7 @@ use App\BusinessServices;
 use App\BusinessService;
 use App\BusinessPriceDetails;
 use App\UserBookingDetail;
+use App\BusinessCompanyDetail;
 use App\Fit_Cart;
 use App\Sports;
 use App\Payment;
@@ -973,64 +974,47 @@ class LessonController extends Controller {
         $result = DB::select('select * from business_services where id = "'.$pid.'"');
         $infantarray = $childarray = $adultarray=[];
         if($request->aduquantity != 0){
-            $adultarray = array('quantity'=>$request->aduquantity, 'price'=>$request->cartaduprice, 'priceid'=>$priceid);
+            $adultarray = array('quantity'=>$request->aduquantity, 'price'=>$request->cartaduprice);
         }
         if($request->childquantity != 0){
-            $childarray = array('quantity'=>$request->childquantity, 'price'=>$request->cartchildprice, 'priceid'=>$priceid);
+            $childarray = array('quantity'=>$request->childquantity, 'price'=>$request->cartchildprice);
         }
         if($request->infantquantity != 0){
-            $infantarray = array('quantity'=>$request->infantquantity, 'price'=>$request->cartinfantprice, 'priceid'=>$priceid);
+            $infantarray = array('quantity'=>$request->infantquantity, 'price'=>$request->cartinfantprice);
         }
         if (count($result) > 0) {
             foreach ($result as $item) {
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=>$item->profile_pic,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal));
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=>$item->profile_pic,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid));
                 if(!empty($cart_item["cart_item"])) {
-                   /* print_r($cart_item["cart_item"]);exit;*/
-                    if(in_array($item->pid, array_keys($cart_item["cart_item"]))) {
+                    if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
-                            if($item->pid == $k) {
+                            if($request->pid == $k) {
                                 $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
-
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
+                                $cart_item["cart_item"][$k]["priceid"] = $request->priceid;
+                                $cart_item["cart_item"][$k]['adult']["price"] = $request->cartaduprice;
+                                $cart_item["cart_item"][$k]['child']["price"] = $request->cartchildprice;
+                                $cart_item["cart_item"][$k]['infant']["price"] = $request->cartinfantprice;
 
-                                if(empty($cart_item["cart_item"][$k]['adult']["price"])) {
-                                    $cart_item["cart_item"][$k]['adult']["price"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['adult']["price"] += $request->pricetotal;
-
-                                if(empty($cart_item["cart_item"][$k]['child']["price"])) {
-                                    $cart_item["cart_item"][$k]['child']["price"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['child']["price"] += $request->pricetotal;
-
-                                if(empty($cart_item["cart_item"][$k]['infant']["price"])) {
-                                    $cart_item["cart_item"][$k]['infant']["price"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['infant']["price"] += $request->pricetotal;
-
-                                $cart_item["cart_item"][$k]['adult']["priceid"] = $priceid;
-                                $cart_item["cart_item"][$k]['child']["priceid"] = $priceid;
-                                $cart_item["cart_item"][$k]['infant']["priceid"] = $priceid;
-
-                                if(empty($cart_item["cart_item"][$k]['adult']["quantity"])) {
+                               /* if(empty($cart_item["cart_item"][$k]['adult']["quantity"])) {
                                     $cart_item["cart_item"][$k]['adult']["quantity"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['adult']["quantity"] += $request->aduquantity;
+                                }*/
+                                $cart_item["cart_item"][$k]['adult']["quantity"] = $request->aduquantity;
 
-                                if(empty($cart_item["cart_item"][$k]['child']["quantity"])) {
+                                /*if(empty($cart_item["cart_item"][$k]['child']["quantity"])) {
                                     $cart_item["cart_item"][$k]['child']["quantity"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['child']["quantity"] += $request->childquantity;
+                                }*/
+                                $cart_item["cart_item"][$k]['child']["quantity"] = $request->childquantity;
 
-                                if(empty($cart_item["cart_item"][$k]['infant']["quantity"])) {
+                                /*if(empty($cart_item["cart_item"][$k]['infant']["quantity"])) {
                                     $cart_item["cart_item"][$k]['infant']["quantity"] = 0;
-                                }
-                                $cart_item["cart_item"][$k]['infant']["quantity"] += $request->infantquantity;
+                                }*/
+                                $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
                             }
                         }
                     } else {
-                        $cart_item["cart_item"] = array_merge($cart_item["cart_item"], $itemArray);
+                        $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
                     }
                 }else {
                     $cart_item["cart_item"] = $itemArray;
@@ -1042,9 +1026,23 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        /*print_r($cart_item['cart_item']);exit; 
-        print_r($itemArray);exit;*/
-        return redirect('/activity-details/'.$pid); 
+        /*print_r($cart_item['cart_item']);exit;*/ 
+        return redirect('/success-cart/'.$pid); 
+    }
+
+    public function successcart($pid)
+    {   
+        $total_quantity=0;
+        $cart_item = [];
+        if (session()->has('cart_item')) {
+            $cart_item = session()->get('cart_item');
+        }
+        $sdata = BusinessServices::where('id',$pid)->first();
+        $ser = BusinessService::where('cid', $sdata->cid)->first();
+        $companyData = CompanyInformation::where('id',$sdata->cid)->first();
+        $discovermore = BusinessServices::where('cid',$sdata->cid)->limit(4)->get();
+       
+        return view('jobpost.success_cart',compact('pid','cart_item','companyData','sdata','discovermore','ser'));
     }
     
     public function removeToCart(Request $request) {
@@ -5041,11 +5039,28 @@ class LessonController extends Controller {
         }else{
             $fun_para="'".$actid."',this.value,'".$qty."','bookajax','".$sid."'";
         }
+
+        $adult_cnt =$child_cnt =$infant_cnt =0;
+        $adult_price = $child_price = $infant_price =0;
+
         if (!empty($price)) { 
             $stactbox .= '<select id="selprice'.$actid.'" name="selprice'.$actid.'" class="price-select-control" onchange="changeactpr('.$fun_para.')">';
-            $adultcnt = $childcnt = $infantcnt = 0;
            if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
+                $total_price_val =  @$pricedatafirst['adult_weekend_price_diff'] + @$pricedatafirst['child_weekend_price_diff'] + @$pricedatafirst['infant_weekend_price_diff'] ;
+                if(@$pricedatafirst['adult_weekend_price_diff'] != ''){
+                    $adult_price = @$pricedatafirst['adult_weekend_price_diff'];
+                    $adult_cnt = 1;
+                }
+
+                if(@$pricedatafirst['child_weekend_price_diff'] != ''){
+                    $child_price = @$pricedatafirst['child_weekend_price_diff'];
+                    $child_cnt = 1;
+                }
+
+                if(@$pricedatafirst['infant_weekend_price_diff'] != ''){
+                    $infant_price = @$pricedatafirst['infant_weekend_price_diff'];
+                    $infant_cnt = 1;
+                }
                 $i=1;
                 if (!empty(@$price)) {
                     foreach ($price as  $pr) {
@@ -5058,7 +5073,21 @@ class LessonController extends Controller {
                 /*print_r($price); exit;*/
                 if(!empty(@$price))
                 {
-                    $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
+                    $total_price_val =  @$pricedatafirst['adult_cus_weekly_price']+@$pricedatafirst['child_cus_weekly_price'] + @$pricedatafirst['infant_cus_weekly_price'];
+                    if(@$pricedatafirst['adult_cus_weekly_price'] != ''){
+                        $adult_price = @$pricedatafirst['adult_cus_weekly_price'];
+                        $adult_cnt = 1;
+                    }
+
+                    if(@$pricedatafirst['child_cus_weekly_price'] != ''){
+                        $child_price = @$pricedatafirst['child_cus_weekly_price'];
+                        $child_cnt = 1;
+                    }
+
+                    if(@$pricedatafirst['infant_cus_weekly_price'] != ''){
+                        $infant_price = @$pricedatafirst['infant_cus_weekly_price'];
+                        $infant_cnt = 1;
+                    }
                     $i=1;
                     foreach ($price as  $pr) {
                         $priceid =$pr['id'];
@@ -5074,7 +5103,7 @@ class LessonController extends Controller {
         $todaydate = date('m/d/Y');
         $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get(); 
                                         
-        $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='nodata';
+        $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='';
         if(!empty($bus_schedule)){           
             foreach($bus_schedule as $data){
                 if($data['scheduled_day_or_week'] == 'Days'){
@@ -5155,9 +5184,9 @@ class LessonController extends Controller {
             </div>';
         }
         $bookdata .= '<div class="personcategory">
-            <span>Adults x 1 </span>
-            <span>Kids x 0</span>
-            <span>Infants x 0</span>
+            <span>Adults x '.$adult_cnt.' </span>
+            <span>Kids x '.$child_cnt.' </span>
+            <span>Infants x '.$infant_cnt.' </span>
         </div>';
         
         if(@$total_price_val != ''){
@@ -5171,10 +5200,9 @@ class LessonController extends Controller {
             $timedata ='no';
         }
 
-        $busche = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',$todaydate )->get();
-        $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',$todaydate )->first();
+        $busche = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('Y-m-d') )->get();
+        $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('Y-m-d') )->first();
         if(!empty($busche) && count($busche)>0){
-            $timedata12 = ''; 
             foreach($busche as $bdt){
                 $timedata12 .='<div class="col-md-6">
                     <div class="donate-now">
@@ -5184,9 +5212,11 @@ class LessonController extends Controller {
                     </div>
                 </div>';
             }
+        }else{
+            $timedata12 .='<p style="text-align:center">No time option available Select category to view available times</p>';
         }
         
-       /* echo $timedata12;exit;*/
+      /*  echo $timedata12;exit;*/
        $catdata = $bookdata.'****'.$timedata.'!!~'.$catetitle.'*^'.$timedata12.'^~^'.@$bus_schedulefirst->id;
         echo $stactbox.'~~~~~~~~'.$catdata; 
     }
@@ -5536,52 +5566,67 @@ class LessonController extends Controller {
 
         $stactbox.='<div class="row">';
             if ($total_price_val_adult != '') {
-                $stactbox.='<div class="col-md-12">
-                        <div class="col-md-8">
-                            <p>Adults</p>
-                            <p>Ages 13 & Up</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="qty mt-5">
-                                <span class="minus bg-darkbtn adultminus">-</span>
-                                <input type="number" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
-                                <span class="plus bg-darkbtn adultplus">+</span>
-                            </div>
-                        </div>
+                $stactbox.='<div class="col-lg-12">
+						<h4 class="modal-title" style="text-align: center; color: #333; line-height: inherit; font-weight: 600;margin-bottom: 40px; margin-top: 20px;">Select The Number of Participants</h4>
+					</div><div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="counter-titles">
+									<p class="counter-age-heading">Adults</p>
+									<p>Ages 13 & Up</p>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="qty mt-5 counter-txt">
+									<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+									<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
+									<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+								</div>
+							</div>
+						</div>
                     </div>
                     <input type="hidden" name="adultprice" id="adultprice" value="'.$total_price_val_adult.'" >';
             }
             if ($total_price_val_child!= '' ) {
-                $stactbox.='<br><br>
-                    <div class="col-md-12">
-                        <div class="col-md-8">
-                            <p>Childern</p>
-                            <p>Ages 2-12</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="qty mt-5">
-                                <span class="minus bg-darkbtn childminus">-</span>
-                                <input type="number" class="count" name="childcnt" id="childcnt" min="0" value="0">
-                                <span class="plus bg-darkbtn childplus">+</span>
-                            </div>
-                        </div>
+                $stactbox.='
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="counter-titles">
+									<p class="counter-age-heading">Childern</p>
+									<p>Ages 2-12</p>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="qty mt-5 counter-txt">
+									<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
+									<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0">
+									<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+								</div>
+							</div>
+						</div>
                     </div>
                     <input type="hidden" name="childprice" id="childprice" value="'.$total_price_val_child.'" >';
             }
             if($total_price_val_infant != '' ) {
-                $stactbox.='<br><br>
-                    <div class="col-md-12">
-                        <div class="col-md-8">
-                            <p>Infants</p>
-                            <p>Under 2</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="qty mt-5">
-                                <span class="minus bg-darkbtn infantminus">-</span>
-                                <input type="number" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
-                                <span class="plus bg-darkbtn infantplus">+</span>
-                            </div>
-                        </div>
+                $stactbox.='
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="counter-titles">
+									<p class="counter-age-heading">Infants</p>
+									<p>Under 2</p>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="qty mt-5 counter-txt">
+									<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
+									<input type="text" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
+									<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i>
+                            </span>
+								</div>
+							</div>
+						</div>
                     </div>
                     <input type="hidden" name="infantprice" id="infantprice" value="'.$total_price_val_infant.'" >';
             }
@@ -5650,7 +5695,7 @@ class LessonController extends Controller {
         }
         
         $bookdata .='<div class="personcategory">
-            <span>Adults x 1 </span>
+            <span>Adults x 0 </span>
             <span>Kids x 0</span>
             <span>Infants x 0</span>
         </div>';
