@@ -1183,7 +1183,7 @@
     }
 	.button{display: none;}
 	.top-search {
-		width: 73% !important;
+		display: none;
 	}
 	#frmsearchCategory{position: relative;width: 100%;}
 	#frmsearchCategory .direct-hire-sidebar{height: calc(46vh);}
@@ -1274,6 +1274,7 @@
 	.discount label{position: relative;}
 	.cat-age label { color: #f53b49;  font-size: 17px;}
 	.top-area ul.setting-area{padding-left: 0px !important;}
+	
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2218,6 +2219,9 @@
 	.btn-style-one{font-size: 12px;}
 	.membership-opti{padding-left: 15px !important;}
 	.priceoption {  margin-bottom: 20px !important;}
+	.modal-dialog.counter-modal-size { width: 410px;}
+	.cart-btns-continues{float: none;}
+	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
 }
 
 @media(max-width: 575px) {
@@ -2432,6 +2436,7 @@
 	.btn-cart > span{top: 2px;}
 	header .header-right .btn{font-size: 14px;}
 	.btn-style-one{font-size: 14px;}
+	.modal-dialog.counter-modal-size {  width: 354px;}
 }
 
 @media(max-width: 376px) {
