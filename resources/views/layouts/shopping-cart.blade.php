@@ -38,9 +38,9 @@
 							if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
 								$profilePic = url('/public/uploads/profile_pic/thumb/' . $item['image']);
 							} else {
-								$profilePic = '/public/images/service-nofound.jpg';
+								$profilePic = url('/public/images/service-nofound.jpg');
 							}
-						}else{ $profilePic = '/public/images/service-nofound.jpg'; }
+						}else{ $profilePic = url('/public/images/service-nofound.jpg'); }
 						
 						/*$bookscheduler = BusinessActivityScheduler::where('serviceid', $item["code"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();*/
                         $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
@@ -67,7 +67,7 @@
             		<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
                     <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
                     <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
-                   <!--  <input type="hidden" name="itemqty[]" value="" /> -->
+                    <input type="hidden" name="itemqty[]" value="1" />
                     <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
                     <div class="row">
                         <div class="col-lg-3">	

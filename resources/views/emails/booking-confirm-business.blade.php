@@ -4,174 +4,126 @@
 
 <?php
 
-
-
 use Carbon\Carbon;
-
 use App\BusinessPriceDetails;
-
 use App\BusinessService;
-
 use App\BusinessActivityScheduler;
-
 use App\UserBookingDetail;
 
-
-
 	$dt = Carbon::now();
-
-
-
+	$url = env('APP_URL');
+	$adu_qtystatus = $child_qtystatus = $infant_qtystatus = 0;
 	$cart = session()->get('cart_item');
-
 	foreach ($cart as $key => $value) {
-
 		foreach ($value as $key => $cartval) {
-
 			if($cartval['code']== @$BookingDetail['user_booking_detail']['sport']){
-
 				$priceid = $cartval['priceid'];
-
-				$quantity = $cartval['quantity'];
-
+				$totalpaid = $cartval['totalprice'];
+				if(!empty($cartval['adult'])){
+					if($cartval['adult']['quantity'] != '' && $cartval['adult']['quantity'] !=0){
+						$adu_qtystatus = 1;
+					}
+				}
+				if(!empty($cartval['child'])){
+					if($cartval['child']['quantity'] != '' && $cartval['child']['quantity'] !=0){
+						$child_qtystatus = 1; 
+					}
+					
+				}
+				if(!empty($cartval['infant'])){
+					if($cartval['infant']['quantity'] != '' && $cartval['infant']['quantity'] !=0){
+						$infant_qtystatus = 1;
+					}
+				}
 			}
-
 		}
-
 	}
-
-
-
+	$qty = str_replace(str_split('{""}'), ' ',@$BookingDetail['user_booking_detail']['qty']);
+		
 	$Datebooked = date("m-d-Y", strtotime(@$BookingDetail['user_booking_detail']['bookedtime'])); 
-
 	$Datebooked = str_replace('-', '/', $Datebooked);  
 
-
-
 	$scheduleddata = json_decode(@$BookingDetail['user_booking_detail']['booking_detail'],true);
-
 	$sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
 
 	$sc_date = str_replace('-', '/', $sc_date);  
 
+	$servicedata = BusinessActivityScheduler::where('id',@$BookingDetail['user_booking_detail']['act_schedule_id'])->first();
 
-
-	$servicedata = BusinessActivityScheduler::where('serviceid',@$BookingDetail['user_booking_detail']['sport'])->first();
-
-
-
-	$BusinessPriceDetails = BusinessPriceDetails::where(['id'=>$priceid,'serviceid' =>@$BookingDetail['user_booking_detail']['sport']])->first();
-
-
+	$BusinessPriceDetails = BusinessPriceDetails::where('id',$priceid)->first();
+	
+	$adu_est_earn = $child_est_earn = $infant_est_earn = 0;
+	if(date('l',strtotime($sc_date)) == 'Saturday' || date('l',strtotime($sc_date)) == 'Sunday'){
+		if($adu_qtystatus != 0){
+			$adu_est_earn = @$BusinessPriceDetails->weekend_infant_estearn;
+		}
+		if($child_qtystatus != 0){
+			$child_est_earn = @$BusinessPriceDetails->weekend_infant_estearn;
+		}
+		if($infant_qtystatus != 0){
+			$infant_est_earn = @$BusinessPriceDetails->weekend_infant_estearn;
+		}
+	}else{
+		if($adu_qtystatus != 0){
+			$adu_est_earn = @$BusinessPriceDetails->adult_estearn;
+		}
+		if($child_qtystatus != 0){
+			$child_est_earn = @$BusinessPriceDetails->child_estearn;
+		}
+		if($infant_qtystatus != 0){
+			$infant_est_earn = @$BusinessPriceDetails->infant_estearn;
+		}
+	}
+	$totalest_earn = $adu_est_earn + $child_est_earn + $infant_est_earn;
 
 	if(@$BookingDetail['businessservices']['service_type']=='individual')
-
 	{ 
-
 		$b_type = 'Personal Training'; 
-
 	}else { 
-
 		$b_type =ucfirst(@$BookingDetail['businessservices']['service_type']); 
-
 	}
 
-
-
 	$language_name = BusinessService::where('cid',@$BookingDetail['businessservices']['cid'])->first(); 
-
 	$language = @$language_name->languages;
 
-
-
 	$today = date('Y-m-d');
-
     $SpotsLeftdis = 0;
-
-    $SpotsLeft = UserBookingDetail::where('sport', @$BookingDetail['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
-
-
-
+    $SpotsLeft = UserBookingDetail::where(['sport'=>@$BookingDetail['user_booking_detail']['sport'],'act_schedule_id'=>$servicedata->id])->whereDate('bookedtime', '=', $today)->sum('qty');
     if( @$BookingDetail['businessservices']['group_size'] != ''){
-
         $SpotsLeftdis = @$BookingDetail['businessservices']['group_size'] - $SpotsLeft;
-
     }
-
-
 
 ?>
 
 <body width="100%" style="margin: 0; padding: 0 !important; background-color:#ede9e6; margin:0 auto!important; padding:0!important; height:100%!important; width:100%!important; font-family:Poppins,Arial,sans-serif">
-
-
-
     <center role="article" aria-roledescription="email" lang="en" style="width: 100%;">
-
         <div style="background-color:#ede9e6;">
-
                  <table height="100%" width="100%" cellpadding="0" cellspacing="0" border="0">
-
                 <tr>
-
                     <td valign="top" align="left"  style="padding:35px 10px">
-
                         <div style="max-width: 680px; margin: 0 auto;">
-
-
-
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="    font-family: Arial,sans-serif; text-align: center;  color: rgba(255,255,255,.5);  font-family: sans-serif;  font-size: 12px;  line-height: 18px; ">
-
                                 <tr>
-
                                     <td style="padding:0 0 10px 0;">
-
                                         <!--<webversion style="text-decoration: underline; font-weight: bold; color: black;">View in web browser</webversion>-->
-
                                     </td>
-
                                 </tr>
-
                             </table>
-
                              <table height="100%" width="100%" cellpadding="0" cellspacing="0" border="0">
-
-                               
-
                                 <tr>
-
                                     <td  style="padding:21px 0px 0px;  background: #fff;">
-
                                         <!-- Email Body : BEGIN -->
-
                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-
                                             <!-- Email Header : BEGIN -->
-
                                             <tr>
-
                                                 <td style="padding: 0  0 18px 0; text-align: center">
-
-												 
-
                                                 </td>
-
                                             </tr>
-
                                             <!-- Email Header : END -->
-
-
-
-                                           
-
                                             <!-- Background Image with Text : BEGIN -->
-
                                             <tr>
-
                                                 <td style="padding:0px 0px 0px">
-
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-
                                                         <tr>
 
                                                             <!-- Bulletproof Background Images c/o https://backgrounds.cm -->
@@ -552,7 +504,7 @@ use App\UserBookingDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">${{@$BookingDetail['user_booking_detail']['price']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">${{@$totalpaid}}</h2>
 
 																			</td>
 
@@ -680,7 +632,7 @@ use App\UserBookingDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$BookingDetail['user_booking_detail']['qty']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$qty}}</h2>
 
 																			</td>
 
@@ -856,7 +808,7 @@ use App\UserBookingDetail;
 
 												<td><h2 style="padding: 0px 0; text-align: center; font-size:14px; font-weight: normal; 
 
-												margin-bottom: 15px;">To date, You have received {{@$BookingDetail['user_booking_detail']['qty']}} bookings and a have made a total of ${{@$BusinessPriceDetails['pay_estearn']}} from Fitnessity!.</h2></td>
+												margin-bottom: 15px;">To date, You have received 1 bookings and a have made a total of ${{@$totalest_earn}} from Fitnessity!.</h2></td>
 
 											</tr>
 

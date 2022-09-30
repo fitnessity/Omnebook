@@ -1125,8 +1125,9 @@ class UserProfileController extends Controller {
 		$pmethod = $stripe->paymentMethods->all(['customer' => $userdata['stripe_customer_id'], 'type' => 'card']);
 		/*print_r($pmethod);
 		exit;*/
-        //dd($request->all()); exit;
+       /* dd($request->all()); exit;*/
         $listItems = []; 
+        $proid = []; 
 		//print_r($request->all());
         if(isset($request->itemname)) {
             $itemcount = count($request->itemname);
@@ -1135,19 +1136,19 @@ class UserProfileController extends Controller {
                 $pr=$request->itemprice[$i] / $request->itemqty[$i];
 				$total = $total + $pr;
                 if(isset($request->itemname[$i])) {
-                    
                     $product = \Stripe\Product::create([
-                      'id' => $request->itemid[$i],
-                      'name' => $request->itemname[$i],
-					  'description' => $request->itemname[$i],
+                      /*  'id' => $request->itemid[$i],*/
+                        'name' => $request->itemname[$i],
+                        'description' => $request->itemname[$i],
                      // 'description' => $request->itemtype[$i],
                     ]);
-                  //  echo $request->itempriceid[$i];
+
+                    // echo $request->itempriceid[$i];
                     $price = \Stripe\Price::create([
                       'product' => $product->id,
                       'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
                       'currency' => 'usd',
-                    ]);
+                    ]);   
                     //print_r($price);
                     $listItem['price'] = $price->id;
                     $listItem['quantity'] = $request->itemqty[$i];
@@ -1156,10 +1157,17 @@ class UserProfileController extends Controller {
                     //echo $request->itemid[$i];
                     //print_r($product);
                 }
+                if(isset($request->itemid[$i])) {
+                    $proidary = $request->itemid[$i];
+                    $proid[] = $proidary;
+                }
+
             }
         }
-        //print_r($listItems);
-       // exit;
+        $prodata = json_encode($proid); 
+        /*print_r($listItems);
+         print_r($proid);
+       exit;*/
         $intent = \Stripe\PaymentIntent::create([
 		  	'amount' => $total,
 		  	'currency' => 'usd',
@@ -1175,6 +1183,7 @@ class UserProfileController extends Controller {
             'payment_method_types' => [
               'card',
             ],
+            "metadata" => ["pro_id" => $prodata],
             'mode' => 'payment',
             'success_url' => config('constants.STRIPE_SUCCESS_URL'),
             'cancel_url' => config('constants.STRIPE_CANCEL_URL'),
