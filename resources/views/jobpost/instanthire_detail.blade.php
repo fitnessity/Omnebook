@@ -372,14 +372,11 @@ input:disabled{
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-6">
+									<!-- <div class="col-md-6 col-sm-6 col-xs-6">
 										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
 											<option value="">Participant #</option>
-											<?php for($i=1; $i<=@$maxspotValue; $i++){
-												echo '<option value="'.$i.'">'.$i.'</option>';
-											}?>
 										</select>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
@@ -422,13 +419,18 @@ input:disabled{
 												<h3 class="date-title">Booking Details</h3>
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
+													<?php $SpotsLeftdis = 0;?>
 													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
+													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', $today)->count();
+													if( $bdata['spots_available'] != ''){
+        												$SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
+        											} ?>
 													<div class="col-md-6">
 														<div class="donate-now">
 															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});"/>
 																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
-																<p class="end-hr">1/{{$bdata['spots_available']}} Spots Left </p>
+																<p class="end-hr">{{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left </p>
 														</div>
 													</div>
 													@endforeach
@@ -569,11 +571,16 @@ input:disabled{
 							<?php   
 								$locations = []; 
 		                        if($companylat != '' || $companylon  != ''){
-		                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-		                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+		                          //  $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+		                    		//$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+									//$lat = 40.777671;
+									//$long = -73.9839877;
+									$lat = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+									$long = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
 		                            array_push($locations, $a);
 								}
+								
 							?>
 							<div class="map-info">
 								<span>
@@ -1046,55 +1053,6 @@ input:disabled{
 				</div>
 			</div>  
             <div class="modal-body conuter-body" id="Countermodalbody">
-                <div class="row">
-                  	<div class="col-md-12">
-						<div class="row">
-							<div class="col-md-8">
-								<p>Adults</p>
-								<p>Ages 13 & Up</p>
-							</div>
-							<div class="col-md-4">
-								<div class="qty mt-5">
-									<span class="minus bg-darkbtn adultminus">-</span>
-									<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0">
-									<span class="plus bg-darkbtn adultplus">+</span>
-								</div>
-							</div>
-						</div>
-                  	</div>
-                  	
-                  	<div class="col-md-12">
-						<div class="row">
-							<div class="col-md-8">
-								<p>Childern</p>
-								<p>Ages 2-12</p>
-							</div>
-							<div class="col-md-4">
-								<div class="qty mt-5">
-									<span class="minus bg-darkbtn childminus">-</span>
-									<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0">
-									<span class="plus bg-darkbtn childplus">+</span>
-								</div>
-							</div>
-						</div>
-                  	</div>
-                  	
-                  	<div class="col-md-12">
-						<div class="row">
-							<div class="col-md-8">
-								<p>Infants</p>
-								<p>Under 2</p>
-							</div>
-							<div class="col-md-4">
-								<div class="qty mt-5">
-									<span class="minus bg-darkbtn infantminus">-</span>
-									<input type="text" class="count" name="infantcnt" id="infantcnt" value="0"  size="2" min="0" max="4">
-									<span class="plus bg-darkbtn infantplus">+</span>
-								</div>
-							</div>
-						</div>
-                  	</div>
-                </div>
             </div>            
             <div class="modal-footer conuter-body">
                 <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
@@ -1330,15 +1288,17 @@ $(document).ready(function () {
 		var totalpriceadult = 0;
 		var totalpricechild = 0;
 		var totalpriceinfant = 0; 
-		if(typeof(aduprice) != "undefined" && aduprice !== null){
+		if(typeof(aduprice) != "undefined" && aduprice != null){
 			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
 			if(aducnt != 0){
 				$('#cartaduprice').val(aduprice);
+			}else{
 				$('#cartaduprice').val(0);
 			}
+
 		}
 
-		if(typeof(childprice) != "undefined" && childprice !== null){
+		if(typeof(childprice) != "undefined" && childprice != null){
 			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
 			if(chilcnt != 0){
 				$('#cartchildprice').val(childprice);
@@ -1346,10 +1306,11 @@ $(document).ready(function () {
 				$('#cartchildprice').val(0);
 			}
 		}
-		if(typeof(infantprice) != "undefined" && infantprice !== null){
+		if(typeof(infantprice) != "undefined" && infantprice != null){
 			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
 			if(infcnt != 0){
 				$('#cartinfantprice').val(infantprice);
+			}else{
 				$('#cartinfantprice').val(0);
 			}
 		}

@@ -271,7 +271,7 @@
 										<div class="col-md-2">
 											<label># Spots Available</label>
 											<div class="sp-bottom">
-												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" @if(count($business_activity)==0) value="1" @endif>
+												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" @if(count($business_activity)==0) value="1" @endif  required="required">
 											</div>
 										</div>
 									</div>
