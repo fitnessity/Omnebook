@@ -614,7 +614,7 @@ $(document).ready(function () {
         var bounds = new google.maps.LatLngBounds();
         var marker, i;
         var icon = {
-            url: "https://dev.fitnessity.co/public/images/hoverout2.png",
+            url: "{{url('/public/images/hoverout2.png')}}",
             scaledSize: new google.maps.Size(50, 50),
             labelOrigin: {x: 25, y: 16}
         };
