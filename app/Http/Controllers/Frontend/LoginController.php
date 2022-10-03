@@ -58,6 +58,14 @@ class LoginController extends Controller {
         } else {            
             if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' => 1])) {
                 session_start();
+
+                /* $cart = [];
+                if ($request->session()->has('cart_item')) {
+                    $cart = $request->session()->get('cart_item');
+                }
+
+                print_r($cart );exit();*/
+
 				$user = Auth::user();
 				User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
                 $_SESSION["myses"] = $request->user();

@@ -1113,16 +1113,19 @@ class UserProfileController extends Controller {
 					],
 				  ]*/
 			]);
+            $stripe_customer_id = $customer->id;
 			if(!empty($customer)){
 				User::where(['id' => $loggedinUser->id])->update(['stripe_customer_id' => $customer->id]);
 			}
-		}
+		}else{
+             $stripe_customer_id = $userdata['stripe_customer_id'];
+        }
 		/*$intent = \Stripe\PaymentIntent::create([
 		  'amount' => 1200,
 		  'currency' => 'usd',
 		  'customer' => $userdata['stripe_customer_id'],
 		]);*/
-		$pmethod = $stripe->paymentMethods->all(['customer' => $userdata['stripe_customer_id'], 'type' => 'card']);
+		$pmethod = $stripe->paymentMethods->all(['customer' => $stripe_customer_id, 'type' => 'card']);
 		/*print_r($pmethod);
 		exit;*/
        /* dd($request->all()); exit;*/
@@ -1168,13 +1171,15 @@ class UserProfileController extends Controller {
         /*print_r($listItems);
          print_r($proid);
        exit;*/
-        $intent = \Stripe\PaymentIntent::create([
+
+        /*$intent = \Stripe\PaymentIntent::create([
 		  	'amount' => $total,
 		  	'currency' => 'usd',
-		  	'customer' => $userdata['stripe_customer_id'],
+		  	'customer' => $stripe_customer_id,
 		  	'off_session' => true,
     		'confirm' => true,
-		]);
+		]);*/
+
         $checkout_session = \Stripe\Checkout\Session::create([
             'line_items' => [
               # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -7212,7 +7217,7 @@ class UserProfileController extends Controller {
         // print_r("profile called");
         //update user's lat long
         //$this->users->updatelatlong();
-       session()->forget('cart_item');
+       /*session()->forget('cart_item');*/
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
@@ -10741,14 +10746,29 @@ class UserProfileController extends Controller {
     }
 
     public function addbusinessschedule (Request $request){
-        print_r($request->all());
-      /*  exit;*/
+        // print_r($request->all());
+        //   exit;
         $shift_start = $request->duration_cnt;
-        echo $shift_start;/* exit;*/
+        // echo $shift_start; exit;
         if($shift_start >= 0) {
             BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();
             for($i=0; $i <= $shift_start; $i++) { 
                 if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
+
+                    if($request->until == 'days'){
+                        $daynum = '+'.$request->scheduled.' days';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else if($request->until == 'month'){
+                        $daynum = '+'.$request->scheduled.' month';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else if($request->until == 'years'){
+                        $daynum = '+'.$request->scheduled.' years';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else{
+                        $daynum = '+'.$request->scheduled.' week';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }
+
                     $activitySchedulerData = [
                         "cid" => $request->cid,
                         "category_id" => $request->catid,
@@ -10763,6 +10783,7 @@ class UserProfileController extends Controller {
                         "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
                         "scheduled_day_or_week" => $request->until, 
                         "scheduled_day_or_week_num" => $request->scheduled,
+                        "end_activity_date" => $expdate,
                         "is_active" => 1,
                         "schedule_until" => '',
                         "sales_tax" => '',
