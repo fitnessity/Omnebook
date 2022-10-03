@@ -103,8 +103,8 @@ input:disabled{
 	$companyname = $comp_data->company_name;
 	$companyid = $comp_data->id;
 	$Phonenumber = $comp_data->contact_number;
-	$companylon = $comp_data->latitude;
-	$companylat = $comp_data->longitude;
+	$companylon = $comp_data->longitude;
+	$companylat = $comp_data->latitude;
 	$companylogo  = $comp_data->logo ;
 	$email = $comp_data->email;
 
@@ -262,6 +262,19 @@ input:disabled{
 			}
 		}
     }
+
+	$mbox =''; 
+    if (!empty(@$servicePr)) {
+    	foreach ($servicePr as  $pr) {
+            $mem_ary [] =  $pr['membership_type'];
+        }
+        $mem_ary = array_unique($mem_ary);
+        foreach ($mem_ary as  $pr) {
+            $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
+        }
+    }
+
+
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
    /* print_r($activities_search);exit();*/
 
@@ -368,7 +381,7 @@ input:disabled{
 								<div class="row">
 									<div class="col-md-6 col-sm-6 col-xs-6">
 										<div class="activityselect3 special-date">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});">
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" value="{{date('M-d-Y')}}">
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
@@ -387,14 +400,9 @@ input:disabled{
 									<div class="row">
 										<div class="col-md-6 col-sm-6 col-xs-12">
 											<h3 class="date-title">{{$date}}</h3>
-											<label>Step: 1 </label> <span class=""> Select Membership Type</span>
-											<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre">
-												<option>Drop In</option>
-												<option>Semester</option>
-											</select>
-											
-											<label>Step: 2 </label> <span class="">Select Category</span>
-											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book')">
+									
+											<label>Step: 1 </label> <span class="">Select Category</span>
+											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book','simple')">
 												<?php $c=1;  
 													if (!empty($sercate)) { 
 														foreach ($sercate as  $sc) {
@@ -405,6 +413,11 @@ input:disabled{
 												?>
 											</select>
 											
+											<label>Step: 2 </label> <span class=""> Select Membership Type</span>
+											<div id="memberoption">
+												<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember({{$serviceid}});">												<?php echo $mbox; ?>
+												</select>
+											</div>
 											<label>Step: 3 </label> <span class="">Select Price Option</span>
 											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
 												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
@@ -422,7 +435,7 @@ input:disabled{
 													<?php $SpotsLeftdis = 0;?>
 													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
-													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', $today)->count();
+													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
 													if( $bdata['spots_available'] != ''){
         												$SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
         											} ?>
@@ -435,52 +448,61 @@ input:disabled{
 													</div>
 													@endforeach
 													@else 
-														<p style="text-align:center;">No time option available Select category to view available times</p>
+														<p class="notimeoption">No time option available Select category to view available times</p>
 															
 													@endif
 												</div>
 												<div id="book<?php echo $service["id"].$service["id"]; ?>">
-													@if(@$sercatefirst['category_title'] != '')
-														<div class="price-cat">
-															<label>Category:</label>
+													
+													<div class="price-cat">
+														<label>Category:</label>
+														@if(@$sercatefirst['category_title'] != '')
 															<span>{{@$sercatefirst['category_title']}}</span>
-														</div>
-													@endif
-													@if($timedata != '')
+														@endif
+													</div>
+													
+													
 													<div id="timeduration">
 														<label>Duration:</label>
-														<span>{{$timedata}}</span>
+														@if($timedata != '')
+															<span>{{$timedata}}</span>
+														@endif
 													</div>
-													@endif
-													@if(@$servicePrfirst['price_title'] != '')
-														<div>
-															<label>Price Title:</label>
+													
+													<div>
+														<label>Price Title:</label>
+														@if(@$servicePrfirst['price_title'] != '')
 															<span>{{@$servicePrfirst['price_title']}}</span>
-														</div>
-													@endif									@if(@$servicePrfirst['pay_session'] != '')
-														<div>
-															<label>Price Option:</label>
-															<span>{{@$servicePrfirst['pay_session']}} Session</span>
-														</div>
-													@endif
-													@if(@$servicePrfirst['membership_type'] != '')
+														@endif	
+													</div>
+														
+													<div>
+														<label>Price Option:</label>
+														@if(@$servicePrfirst['pay_session'] != '')
+														<span>{{@$servicePrfirst['pay_session']}} Session</span>@endif
+													</div>
+													
+													
 													<div>
 														<label>Membership:</label>
+														@if(@$servicePrfirst['membership_type'] != '')
 														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
+														@endif
 													</div>
-													@endif
 													
 													<div class="personcategory" >
 														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
 														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
 														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
 													</div>
-													@if(@$total_price_val != '')
-														<div>
-															<label>Total </label>
-															<span id="totalprice">${{@$total_price_val}} USD</span>
-														</div>
-													@endif
+													
+													<div>
+														<label>Total </label>
+														@if(@$total_price_val != '')
+															<span id="totalprice">
+														${{@$total_price_val}} USD</span>
+														@endif
+													</div>
 												</div>
 											</div>
 										</div>
@@ -492,7 +514,7 @@ input:disabled{
 									@if(!empty(@$servicePrfirst))
 										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
 									@endif
-									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != 0 ) value="{{$timedata}}" @endif>
+									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != '' ) value="{{$timedata}}" @endif>
 									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
 
 									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
@@ -521,8 +543,8 @@ input:disabled{
 										@if($SpotsLeft >= $spot_avil && $spot_avil!=0)
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else
-										  @if( !empty(@$servicePrfirst) )
-											@if( @$servicePrfirst['adult_cus_weekly_price']!='' && @$timedata!='')
+										    @if(@$total_price_val != '') 
+                                                @if( @$total_price_val !='' && $timedata != '')
 												<div id="addcartdiv">
 													<div class="btn-cart-modal">
 														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
@@ -531,12 +553,8 @@ input:disabled{
 														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
 													</div>
 												</div>
-											@else
-												<div id="addcartdiv">
-													<!-- <p class="activity-expired">Activity Expired OR Not Scheduled </p> -->
-												</div>
-											@endif
-										  @endif
+												@endif
+										  	@endif
 										@endif
 									</form>
 								</div>
@@ -575,8 +593,8 @@ input:disabled{
 		                    		//$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 									//$lat = 40.777671;
 									//$long = -73.9839877;
-									$lat = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-									$long = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+									$lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+									$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
 		                            array_push($locations, $a);
 								}
@@ -619,7 +637,7 @@ input:disabled{
 					</div>
 				</div>
 				
-				<div class="row">
+				<div class="row" id="user_ratings_div{{$serviceid}}">
 					<div class="col-md-12 col-xs-12">
 						<h3 class="subtitle">Submit A Review </h3>
 					</div>
@@ -724,7 +742,7 @@ input:disabled{
 					</div>
 					<div class="col-md-12 col-sm-12 col-xs-12">	
 						<div class="ser-review-list">
-							<div id="user_ratings_div{{$serviceid}}">
+							<div>
 								<?php
 	    							$reviews = BusinessServiceReview::where('service_id', $serviceid)->get();
 	    						?>
@@ -1064,7 +1082,7 @@ input:disabled{
 <div id="busireview" class="modal modalbusireview" tabindex="-1">
     <div class="modal-dialog rating-star" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="padding:10px 40px 10px 10px; text-align: right;min-height: 30px;">
+            <div class="modal-header" style="padding:10px 36px 10px 11px!important; text-align: right;min-height: 40px;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1075,10 +1093,10 @@ input:disabled{
                     @csrf
 							<div class="clearfix"></div>
 							<input type="hidden" name="serviceid{{$sid}}" id="serviceid{{$sid}}" value="{{$sid}}">
-	                        <input type="hidden" name="rating{{$sid}}" id="rating{{$sid}}" value="0">
+	                        <input type="hidden" name="rating" id="rating" value="0">
                             <div class="rvw-overall-rate rvw-ex-mrgn">
 								<span>Rating</span>
-								<div id="stars{{$sid}}" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
+								<div id="stars" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
 							</div>
 							<input type="text" name="rtitle{{$sid}}" id="rtitle{{$sid}}" placeholder="Review Title" class="inputs" />
 	                    	<textarea placeholder="Write your review" name="review{{$sid}}" id="review{{$sid}}"></textarea>
@@ -1086,8 +1104,8 @@ input:disabled{
 	                        <div class="reviewerro" id="reviewerro{{$sid}}"> </div>
 	                    	<input type="button" onclick="submit_rating({{$sid}})" value="Submit" class="btn rev-submit-btn mt-10">
 	                    	<script>
-							 $('#stars{{$sid}}').on('starrr:change', function(e, value){
-								$('#rating{{$sid}}').val(value);
+							 $('#stars').on('starrr:change', function(e, value){
+								$('#rating').val(value);
 							 });
 							</script>
 					</form>
@@ -1269,9 +1287,13 @@ $(document).ready(function () {
 
 <script>
 	function getbookdetails(sid){
+		$('#errordiv').html('');
 		var aducnt = $('#adultcnt').val();
 		var chilcnt = $('#childcnt').val();
 		var infcnt = $('#infantcnt').val();
+		var maxlengthval = $('#maxlengthval').val() ;
+		maxlengthval = parseInt(maxlengthval);
+		
 		if(typeof(aducnt) == 'undefined'){
 			aducnt = 0;
 		}
@@ -1281,70 +1303,80 @@ $(document).ready(function () {
 		if(typeof(infcnt) == 'undefined'){
 			infcnt = 0;
 		}
-		var aduprice = $('#adultprice').val();
-		var childprice = $('#childprice').val();
-		var infantprice = $('#infantprice').val();
-		var totalprice = 0;
-		var totalpriceadult = 0;
-		var totalpricechild = 0;
-		var totalpriceinfant = 0; 
-		if(typeof(aduprice) != "undefined" && aduprice != null){
-			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+		
+		var totalcnt = parseInt(aducnt) + parseInt(chilcnt) + parseInt(infcnt);
+	
+		if(aducnt ==0 && chilcnt==0 && infcnt==0){
+			$('#errordiv').html('Please Select another Category or Activity.');
+		}else if(totalcnt > maxlengthval){
+			$('#errordiv').html('Sports left only '+maxlengthval);
+		}else{
+			var aduprice = $('#adultprice').val();
+			var childprice = $('#childprice').val();
+			var infantprice = $('#infantprice').val();
+			var totalprice = 0;
+			var totalpriceadult = 0;
+			var totalpricechild = 0;
+			var totalpriceinfant = 0; 
+			if(typeof(aduprice) != "undefined" && aduprice != null){
+				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+				if(aducnt != 0){
+					$('#cartaduprice').val(aduprice);
+				}else{
+					$('#cartaduprice').val(0);
+				}
+			}
+
+			if(typeof(childprice) != "undefined" && childprice != null){
+				totalpricechild = parseInt(chilcnt)*parseInt(childprice);
+				if(chilcnt != 0){
+					$('#cartchildprice').val(childprice);
+				}else{
+					$('#cartchildprice').val(0);
+				}
+			}
+			if(typeof(infantprice) != "undefined" && infantprice != null){
+				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+				if(infcnt != 0){
+					$('#cartinfantprice').val(infantprice);
+				}else{
+					$('#cartinfantprice').val(0);
+				}
+			}
+
+			var adult = '';
+			var child = '';
+			var infant = '';
 			if(aducnt != 0){
-				$('#cartaduprice').val(aduprice);
-			}else{
-				$('#cartaduprice').val(0);
+				adult = '<span>Adults x '+aducnt+' = $'+totalpriceadult+'</span>';
 			}
 
-		}
-
-		if(typeof(childprice) != "undefined" && childprice != null){
-			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
 			if(chilcnt != 0){
-				$('#cartchildprice').val(childprice);
-			}else{
-				$('#cartchildprice').val(0);
+				child = '<span>Kids x  '+chilcnt+' = $'+totalpricechild+'</span>';
 			}
-		}
-		if(typeof(infantprice) != "undefined" && infantprice != null){
-			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+
 			if(infcnt != 0){
-				$('#cartinfantprice').val(infantprice);
-			}else{
-				$('#cartinfantprice').val(0);
+				infant = '<span>Infants x  '+infcnt+' = $'+totalpriceinfant+'</span>';
 			}
-		}
+			
+			
+			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+			$('.personcategory').html(adult+child+infant);
+			$('#totalprice').html('$'+totalprice+' USD');
+			$('#adupricequantity').val(aducnt);
+			$('#childpricequantity').val(chilcnt);
+			$('#infantpricequantity').val(infcnt);
 
-		var adult = '';
-		var child = '';
-		var infant = '';
-		if(aducnt != 0){
-			adult = '<span>Adults x '+aducnt+' = $'+totalpriceadult+'</span>';
-		}
-
-		if(chilcnt != 0){
-			child = '<span>Kids x  '+chilcnt+' = $'+totalpricechild+'</span>';
-		}
-
-		if(infcnt != 0){
-			infant = '<span>Infants x  '+infcnt+' = $'+totalpriceinfant+'</span>';
+			$('#pricetotal'+sid+sid).val(totalprice);
+			$("#Countermodal").modal('hide');
 		}
 		
-		
-		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-		$('.personcategory').html(adult+child+infant);
-		$('#totalprice').html('$'+totalprice+' USD');
-		$('#adupricequantity').val(aducnt);
-		$('#childpricequantity').val(chilcnt);
-		$('#infantpricequantity').val(infcnt);
-
-		$('#pricetotal'+sid+sid).val(totalprice);
-		$("#Countermodal").modal('hide');
 	}
 
 	function addhiddentime(id,sid) {
 		var actscheduleid = $('#actscheduleid'+sid).val(id);
 		var pricetitleid = $('#selprice'+sid).val();
+		var sesdate = $('#sesdate'+sid).val();
 		/*alert(pricetitleid);*/
 		var _token = $("input[name='_token']").val();
 		$.ajax({
@@ -1355,7 +1387,8 @@ $(document).ready(function () {
 				type: 'POST',
 				pricetitleid:pricetitleid,
 				serviceid:sid,
-				actscheduleid:id
+				actscheduleid:id,
+				dateval:sesdate
 			},
 			success: function (response) {
 				if(response != ''){
@@ -1479,7 +1512,7 @@ $(document).ready(function () {
 		@if(Auth::check())
 		//var formData = $("#sreview"+sid).serialize();
 		var formData = new FormData();
-		var rating=$('#rating'+sid).val();
+		var rating=$('#rating').val();
 		var review=$('#review'+sid).val();
 		var rtitle=$('#rtitle'+sid).val();
 		var _token = $("input[name='_token']").val();
@@ -1513,8 +1546,8 @@ $(document).ready(function () {
 					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
 						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
 						$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
-						$('#rating'+sid).val(' ');
-						$('#review'+sid).val(' '); $('#rtitle'+sid).val(' ');
+						$('#rating').val(' ');
+						$('#review').val(' '); $('#rtitle'+sid).val(' ');
 					}
 					else if(response=='already')
 					{ $('#reviewerro'+sid).show(); 
@@ -1529,15 +1562,15 @@ $(document).ready(function () {
 		{
 			$('#reviewerro'+sid).show(); 
 			$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
-			$('#rating'+sid).val(' ');
-			$('#review'+sid).val(' ');
+			$('#rating').val(' ');
+			$('#review').val(' ');
 			return false;
 		}
 		@else
 			$('#reviewerro'+sid).show(); 
 			$('#reviewerro'+sid).html('Please login in your account to review this activity');
-			$('#rating'+sid).val(' ');
-			$('#review'+sid).val(' ');
+			$('#rating').val(' ');
+			$('#review').val(' ');
 			return false;
 		@endif	
 	}
@@ -1644,10 +1677,36 @@ $(document).ready(function () {
 		$("#actfiloffer_forcart option:selected").prop("selected", false);*/
 	}
 
-	function changeactsession(main,aid,val,div)
+	function chngemember(sid) {
+		var actfilmtype = $('#actfilmtype'+sid).val();
+		var catid = $('#selcatpr'+sid).val();
+		$.ajax({
+			url: "{{route('pricemember')}}",
+			type: 'POST',
+			xhrFields: {
+				withCredentials: true
+		    },
+			data:{
+				_token: '{{csrf_token()}}',
+				type: 'POST',
+				mtype:actfilmtype,
+                sid:sid,
+                catid:catid,
+			},
+
+			success: function (response) { /*alert(response);*/
+				$("#pricechng"+sid+sid).html(response);
+				var selval = $("#selprice"+sid).val();
+				$("#priceid"+sid).val(selval);
+			}
+		});
+	}
+
+	function changeactsession(main,aid,val,div,simple)
 	{   
 	   /* alert('hii');*/
 	    var price_title = $('#price_title_hidden'+main+aid).val();
+	    var sesdate = $('#sesdate'+aid).val();
 	    var time = $('#time_hidden'+main+aid).val();
 	    var sportsleft = $('#sportsleft_hidden'+main+aid).val();
 	    var pricequantity = $('#pricequantity'+main+aid).val();
@@ -1675,6 +1734,8 @@ $(document).ready(function () {
 					catid:val,
 	                sid:main,
 	                div:div,
+	                filtertype:simple,
+	                sesdate:sesdate,
 				},
 
 				success: function (response) { /*alert(response);*/
@@ -1685,9 +1746,12 @@ $(document).ready(function () {
 					var cattitle='';
 					var timedata12='';
 					var pricelistdata='';
+					var memberoption='';
 					
 					if(dat[0] != ''){
-						pricelistdata = dat[0];
+						box = dat[0].split('^^');
+						pricelistdata = box[0];
+						memberoption = box[1];
 					}
 					// alert(pricelistdata);
 					var catedata = dat[1].split('****');
@@ -1705,6 +1769,7 @@ $(document).ready(function () {
 						id= getval[1];
 					}
 					$("#pricechng"+main+aid).html(pricelistdata);
+					$("#memberoption").html(memberoption);
 					if(div =='book'){
 	                    $('#book'+main+aid).html(bookdata);
 	                }else if (div =='bookmore'){
@@ -1732,6 +1797,7 @@ $(document).ready(function () {
 		}
 	}
 </script>
+<script src="/public/js/ratings.js"></script>
 
 @endsection
 

@@ -173,6 +173,11 @@ Route::group(['middleware' => ['auth']], function()
 	Route::post('/invite','ZoomController@invite')->name('invite');
 });
 
+
+
+
+Route::any('/activites/','ActivityController@activity')->name('activity');
+
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
 Route::get('/cart','LessonController@getcart');
@@ -853,3 +858,4 @@ Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashbo
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
 Route::any('/instant-hire/addbusiness-customer', 'LessonController@addbusinesscustomer')->name('addbusiness-customer');
 Route::post('pricecategory', 'LessonController@pricecategory')->name('pricecategory');
+Route::post('pricemember', 'LessonController@pricemember')->name('pricemember');

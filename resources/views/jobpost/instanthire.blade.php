@@ -497,7 +497,7 @@
                         <!-- Modal body -->
 
                         <div class="modal-body" style="padding: 0px;">
-							<div class="row contentPop">
+                        	<div class="row contentPop">
 								<div class="col-lg-12 theme-black-bgcolor">
 								   <h4 class="modal-title" style="text-align: center; color: white; line-height: inherit; padding: 6px;">COMPARE WITH SIMILAR ITEMS</h4>
 								</div>
@@ -557,6 +557,26 @@
 		</div>
 	</div>		
 </section>                        
+
+<div class="modal fade compare-model11" id="actreview">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="text-align: right;">
+            	<button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" id="closeActreview" >×</button>
+            </div>
+
+            <div class="modal-body" style="padding: 0px;">
+				<div class="row">
+					<div class="col-lg-12">
+                    	<div id="actreviewBody" class="service-review actreviewBody">
+                        	
+                        </div>
+            		</div>
+				</div>
+			</div>     
+		</div>
+	</div>
+</div>
 
 <!-- The Modal Add Business-->
     <div class="modal fade compare-model" id="addbusiness">
@@ -697,6 +717,25 @@ $(document).ready(function () {
         $(".mykickboxing").modal('hide');
     });
 });
+
+function viewActreview(aid)
+{
+	var _token = $("input[name='_token']").val();
+	$.ajax({
+		type: 'POST',
+		url: '{{route("viewActreview")}}',
+		data: {
+			_token: _token,
+			aid: aid
+		},
+
+		success: function (data) {
+			$('#actreviewBody').html(data);
+			$("#actreview").modal('show');
+		}
+	});
+}
+
 $(document).ready(function () {
 	$("#closeActreview").click(function(){
     	$("#actreview").modal('hide');

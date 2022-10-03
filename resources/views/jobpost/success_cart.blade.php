@@ -11,13 +11,21 @@ use App\BusinessServicesFavorite;
 
 $total_quantity=0;
  $item_price=0;
-if(!empty($cart_item["cart_item"])) {
-    foreach($cart_item['cart_item'] as $item){
-        $total_quantity = count($cart_item["cart_item"]);
+if(!empty($cart["cart_item"])) {
+    foreach($cart['cart_item'] as $item){
+        $total_quantity = count($cart["cart_item"]);
         $item_price = $item_price + $item["totalprice"];
     }
-    $cartdata = $cart_item['cart_item'][$pid];
-    $totalprice = $cart_item['cart_item'][$pid]['totalprice'];
+    $cartdata = $cart['cart_item'][$pid];
+    $totalprice = $cart['cart_item'][$pid]['totalprice'];
+    if ($cart['cart_item'][$pid]['image']!="") {
+    	if (File::exists(public_path("/uploads/profile_pic/thumb/" . $cart['cart_item'][$pid]['image']))) {
+    			$profilePic = url('/public/uploads/profile_pic/thumb/' . $cart['cart_item'][$pid]['image']);
+    	} else {
+    			$profilePic = url('/public/images/service-nofound.jpg');
+    	}
+    }else{ $profilePic = url('/public/images/service-nofound.jpg'); }
+
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
     $timecart = $tot_dura= '';
     if(@$bookschedulercart->shift_end !=''){
@@ -55,7 +63,7 @@ if(!empty($cart_item["cart_item"])) {
 						<div class="col-md-2">
 							<div class="userblock-card">
 								<div class="login_links">
-									<img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1650612371-20.jpg" alt="Fitnessity">
+									<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$companyData->logo)}}">
 								</div>
 							</div>
 						</div>
@@ -81,7 +89,7 @@ if(!empty($cart_item["cart_item"])) {
 				<div class="row">
 					<div class="col-md-4">
 						<div class="cart-itme-img">
-							<img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1663594462-tennis-origins-e1444901660593.webp">
+							<img src="{{$profilePic}}">
 						</div>
 					</div>
 					<div class="col-md-8">
@@ -138,34 +146,34 @@ if(!empty($cart_item["cart_item"])) {
 		<section class="ptb-65 plr-60 float-left w-100 discover_activities" id="counter">
 			<div class="container-fluid">
 				<div class="cart-sub-title">
-					<span>View Other Activities Provided by {{@$companyData->company_name}} (4 items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
+					<span>View Other Activities Provided by {{@$companyData->company_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
 				</div>
-				<div class="owl-slider kickboxing-slider">
-					<div id="carousel-slider" class="owl-carousel">
-						<?php
-	            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= $profilePic ="";
-							$companycity = $companycountry = $pay_price  = "";
-              if (isset($discovermore)) {
-                  $servicetype = [];
-                  foreach ($discovermore as $loop => $service) {
-	                  $company = $price = $businessSp = [];
+				<?php if (isset($discovermore) && count($discovermore)>0) { ?>
+					<div class="owl-slider kickboxing-slider cart-slider">
+						<div id="carousel-slider" class="owl-carousel">
+							<?php
+								$companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= $profilePic ="";
+								$companycity = $companycountry = $pay_price  = "";
+									$servicetype = [];
+									foreach ($discovermore as $loop => $service) {
+										$company = $price = $businessSp = [];
 										$serviceid = $service['id'];
-                    $sport_activity = $service['sport_activity'];
-                    $servicetype[$service['service_type']] = $service['service_type'];
-                    $area = !empty($service['area']) ? $service['area'] : 'Location';
+										$sport_activity = $service['sport_activity'];
+										$servicetype[$service['service_type']] = $service['service_type'];
+										$area = !empty($service['area']) ? $service['area'] : 'Location';
 
-                    $companyid = $companyData->id;
-                    $companyaddress = $companyData->address;
-                    $companyname = $companyData->company_name;
+										$companyid = $companyData->id;
+										$companyaddress = $companyData->address;
+										$companyname = $companyData->company_name;
 										$companycity = $companyData->city;
 										$companycountry = $companyData->country;
 										$companylogo = $companyData->logo;
 										$companylat = $companyData->latitude;
 										$companylon = $companyData->longitude;
-											
-                    if ($service['profile_pic']!="") {
+													
+										if ($service['profile_pic']!="") {
 											if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-						            $profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+												$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
 											} else {
 												$profilePic = '/public/images/service-nofound.jpg';
 											}
@@ -195,109 +203,114 @@ if(!empty($cart_item["cart_item"])) {
 										if(!empty($pricearr)){
 											$price_all = min($pricearr);
 										}        
-            ?>
-            <div class="item">
-							<div class="kickboxing-block">
-								@if(Auth::check())
-									<?php
-                 	 	$loggedId = Auth::user()->id;
-                  	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-                  ?>
-									<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-										<img src="{{ $profilePic }}" class="productImg">
-										<div class="serv_fav1" ser_id="{{$service['id']}}">
-											<a class="fav-fun-2" id="serfav{{$service['id']}}">
-												<?php
-                        	if( !empty($favData) ){ ?>
-                            <i class="fas fa-heart"></i>
-                            <?php }
-													else{ ?>
-                        		<i class="far fa-heart"></i>
-                         <?php } ?></a>
-                		</div>
-			              @if($price_all != '')
-											<span>From ${{$price_all}}/Person</span>
-										@endif
-									</div>
-								@else
-									<div class="kickboxing-topimg-content">
-										<img src="{{ $profilePic }}" class="productImg">
-                    <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-                    @if($price_all != '')	
-                      <span>From ${{$price_all}}/Person</span>
-                    @endif
-                  </div>
-								@endif
-								<?php
-									$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-									$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-									$reviews_avg=0;
-									if($reviews_count>0)
-									{	
-										$reviews_avg= round($reviews_sum/$reviews_count,2); 
-									}
-								?>
-								<div class="bottom-content">
-									<div class="class-info">
-										 <div class="row"> 
-											<div class="col-md-7 ratingtime"> 
-												<div class="activity-inner-data">
-													<i class="fas fa-star"></i>
-													<span>{{$reviews_avg}} ({{$reviews_count}})</span>
-												</div>
-												@if($time != '')
-													<div class="activity-hours">
-														<span>{{$time}}</span>
-													</div>
-												@endif
-
-												<div class="claimed">
-													<span>@if($companyData->is_verified == 1)
-																	CLAIMED
-																@else
-																	UNCLAIMED
-																@endif</span>
-												</div>
+							?>
+								<div class="item">
+								<div class="kickboxing-block">
+									@if(Auth::check())
+										<?php
+											$loggedId = Auth::user()->id;
+											$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+										?>
+										<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+											<img src="{{ $profilePic }}" class="productImg">
+											<div class="serv_fav1" ser_id="{{$service['id']}}">
+												<a class="fav-fun-2" id="serfav{{$service['id']}}">
+													<?php
+													if( !empty($favData) ){ ?>
+														<i class="fas fa-heart"></i>
+														<?php }
+														else{ ?>
+													<i class="far fa-heart"></i>
+											 <?php } ?></a>
+											</div>
+											@if($price_all != '')
+												<span>From ${{$price_all}}/Person</span>
+											@endif
 										</div>
-											<div class="col-md-5 country-instant">
-												<div class="activity-city">
-													<span>{{$companycity}}, {{$companycountry}}</span>
+									@else
+										<div class="kickboxing-topimg-content">
+											<img src="{{ $profilePic }}" class="productImg">
+											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+											@if($price_all != '')	
+											  <span>From ${{$price_all}}/Person</span>
+											@endif
+										</div>
+									@endif
+									<?php
+										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+										$reviews_avg=0;
+										if($reviews_count>0)
+										{	
+											$reviews_avg= round($reviews_sum/$reviews_count,2); 
+										}
+									?>
+									<div class="bottom-content">
+										<div class="class-info">
+											 <div class="row"> 
+												<div class="col-md-7 ratingtime"> 
+													<div class="activity-inner-data">
+														<i class="fas fa-star"></i>
+														<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+													</div>
+													@if($time != '')
+														<div class="activity-hours">
+															<span>{{$time}}</span>
+														</div>
+													@endif
+
+													<div class="claimed">
+														<span>@if($companyData->is_verified == 1)
+																		CLAIMED
+																	@else
+																		UNCLAIMED
+																	@endif</span>
+													</div>
+											</div>
+												<div class="col-md-5 country-instant">
+													<div class="activity-city">
+														<span>{{$companycity}}, {{$companycountry}}</span>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<?php
-										$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-										$service_type='';
-										if($service['service_type']!=''){
-											if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-											else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-											else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-										}
-									?>
-									<div class="activity-information">
-										<span><a 
-                      <?php if (Auth::check()) { ?> 
-                          href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-                      <?php } else { ?>
-                          href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-                      <?php }?>
-                          target="_blank">{{ $service['program_name'] }}</a>
-                 		</span>
-										<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
-									</div>
-									<hr>
-									<div class="all-details">
-										<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+											<?php
+												$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+												$service_type='';
+												if($service['service_type']!=''){
+													if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+													else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+													else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+												}
+											?>
+											<div class="activity-information">
+												<span><a 
+													  <?php if (Auth::check()) { ?> 
+														  href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+													  <?php } else { ?>
+														  href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+													  <?php }?>
+														  target="_blank">{{ $service['program_name'] }}</a>
+												</span>
+												<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+											</div>
+											<hr>
+											<div class="all-details">
+												<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+											</div>
+										</div>
 									</div>
 								</div>
-							</div>
+									<?php } ?>
 						</div>
-						<?php
-              }
-          	} ?>
 					</div>
-				</div>
+				
+				<?php
+					}else{ ?>
+					<div class="kickboxing-slider cart-slider">
+						<label class="text-center success-cart">This provider has no other services at this time.</label>
+					</div>
+				<?php } ?>
 			</div>
 		</section>
 	</div>

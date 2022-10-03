@@ -10335,14 +10335,13 @@ req-line.thumb-light a {
 .addToCompare {
     cursor: pointer;
     color: #000;
-    font-family: "Segoe UI",Arial,sans-serif;
     font-weight: bold;
 	text-transform: uppercase;
+	font-size: 14px;
 }
 
 .addToCompare:hover {
     color: #f53b49;
-    font-family: 'Lato';
     font-weight: bold
 }
 .cmprBtn {
@@ -11547,9 +11546,8 @@ button.common-btn {
     display: none;
 }
 
-.review-follow a:hover,
-a:focus {
-    color: #fff;
+.review-follow a:hover, a:focus {
+    color: #000;
     text-decoration: none;
 }
 
@@ -16539,7 +16537,7 @@ div#CreateCompanyModal #preview img.header_img {
 
 .kickboxing_map {
     margin-left: -15px;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 }
 
 .kickboxing_map.mapskick {
@@ -20962,4 +20960,101 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .cart-sub-title .cart-view:hover{
 	color: #0034ff;
+}
+.activity-information span a:focus{color: #000;}
+
+#target-1 {
+  background:none;
+  width:100%;
+  height:70px;
+  display:none;
+}
+
+.hide
+{
+  display:none;
+}
+
+/*  added this - not working  */
+
+.hide-1-yes
+{
+  display:none;
+}
+.btn-hide-show{
+	background: none;
+	border: none;
+}
+.activity-width .special-offer .multiples h2 {
+  font-size: 15px;
+}
+.points-cards-home-text{
+	display: flex;
+}
+.partcipate-model{
+	text-align: center; 
+	color: #333; 
+	line-height: inherit; 
+	font-weight: 600;
+	margin-bottom: 15px; 
+	margin-top: 20px;
+}
+.partcipate-model-error{
+	text-align: center;
+    color: red;
+	margin-bottom:15px;
+}
+
+.kickboxing-slider-activites .owl-nav .owl-prev{
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	opacity: 1;
+	border-radius: 50px;
+	top: -10%;
+	position: absolute;
+	font-size: 21px;
+	color: #000;
+	right: 30px;
+}
+.kickboxing-slider-activites .owl-nav .owl-next {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  opacity: 1;
+  border-radius: 50px;
+  top: -10%;
+  position: absolute;
+  right: 0px;
+  font-size: 21px;
+  color: #000;
+}
+.nav-sliders-activites{
+	margin: 11px 0px;
+	float: right;
+	margin-right: 65px;
+}
+.nav-sliders-activites a{
+	color: #016afb;
+	text-decoration: underline;
+}
+.align-self-center{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.cart-slider{
+	height: 415px;
+}
+.notimeoption{
+	text-align: center;
+	padding: 65px 30px;
+}
+.kickboxing-slider.cart-slider .success-cart{
+	width: 100%;
+	padding: 150px 0px;
+}
+.filter-img{
+	margin-right: 10px;
+	margin-top: -7px;
 }
