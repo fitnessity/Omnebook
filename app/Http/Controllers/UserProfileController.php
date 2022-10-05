@@ -1113,20 +1113,24 @@ class UserProfileController extends Controller {
 					],
 				  ]*/
 			]);
+            $stripe_customer_id = $customer->id;
 			if(!empty($customer)){
 				User::where(['id' => $loggedinUser->id])->update(['stripe_customer_id' => $customer->id]);
 			}
-		}
+		}else{
+             $stripe_customer_id = $userdata['stripe_customer_id'];
+        }
 		/*$intent = \Stripe\PaymentIntent::create([
 		  'amount' => 1200,
 		  'currency' => 'usd',
 		  'customer' => $userdata['stripe_customer_id'],
 		]);*/
-		$pmethod = $stripe->paymentMethods->all(['customer' => $userdata['stripe_customer_id'], 'type' => 'card']);
+		$pmethod = $stripe->paymentMethods->all(['customer' => $stripe_customer_id, 'type' => 'card']);
 		/*print_r($pmethod);
 		exit;*/
-        //dd($request->all()); exit;
+       /* dd($request->all()); exit;*/
         $listItems = []; 
+        $proid = []; 
 		//print_r($request->all());
         if(isset($request->itemname)) {
             $itemcount = count($request->itemname);
@@ -1135,19 +1139,19 @@ class UserProfileController extends Controller {
                 $pr=$request->itemprice[$i] / $request->itemqty[$i];
 				$total = $total + $pr;
                 if(isset($request->itemname[$i])) {
-                    
                     $product = \Stripe\Product::create([
-                      'id' => $request->itemid[$i],
-                      'name' => $request->itemname[$i],
-					  'description' => $request->itemname[$i],
+                      /*  'id' => $request->itemid[$i],*/
+                        'name' => $request->itemname[$i],
+                        'description' => $request->itemname[$i],
                      // 'description' => $request->itemtype[$i],
                     ]);
-                  //  echo $request->itempriceid[$i];
+
+                    // echo $request->itempriceid[$i];
                     $price = \Stripe\Price::create([
                       'product' => $product->id,
                       'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
                       'currency' => 'usd',
-                    ]);
+                    ]);   
                     //print_r($price);
                     $listItem['price'] = $price->id;
                     $listItem['quantity'] = $request->itemqty[$i];
@@ -1156,17 +1160,26 @@ class UserProfileController extends Controller {
                     //echo $request->itemid[$i];
                     //print_r($product);
                 }
+                if(isset($request->itemid[$i])) {
+                    $proidary = $request->itemid[$i];
+                    $proid[] = $proidary;
+                }
+
             }
         }
-        //print_r($listItems);
-       // exit;
-        $intent = \Stripe\PaymentIntent::create([
+        $prodata = json_encode($proid); 
+        /*print_r($listItems);
+         print_r($proid);
+       exit;*/
+
+        /*$intent = \Stripe\PaymentIntent::create([
 		  	'amount' => $total,
 		  	'currency' => 'usd',
-		  	'customer' => $userdata['stripe_customer_id'],
+		  	'customer' => $stripe_customer_id,
 		  	'off_session' => true,
     		'confirm' => true,
-		]);
+		]);*/
+
         $checkout_session = \Stripe\Checkout\Session::create([
             'line_items' => [
               # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -1175,6 +1188,7 @@ class UserProfileController extends Controller {
             'payment_method_types' => [
               'card',
             ],
+            "metadata" => ["pro_id" => $prodata],
             'mode' => 'payment',
             'success_url' => config('constants.STRIPE_SUCCESS_URL'),
             'cancel_url' => config('constants.STRIPE_CANCEL_URL'),
@@ -7203,7 +7217,7 @@ class UserProfileController extends Controller {
         // print_r("profile called");
         //update user's lat long
         //$this->users->updatelatlong();
-       session()->forget('cart_item');
+       /*session()->forget('cart_item');*/
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
@@ -10732,14 +10746,29 @@ class UserProfileController extends Controller {
     }
 
     public function addbusinessschedule (Request $request){
-        print_r($request->all());
-      /*  exit;*/
+        // print_r($request->all());
+        //   exit;
         $shift_start = $request->duration_cnt;
-        echo $shift_start;/* exit;*/
+        // echo $shift_start; exit;
         if($shift_start >= 0) {
             BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();
             for($i=0; $i <= $shift_start; $i++) { 
                 if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
+
+                    if($request->until == 'days'){
+                        $daynum = '+'.$request->scheduled.' days';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else if($request->until == 'month'){
+                        $daynum = '+'.$request->scheduled.' month';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else if($request->until == 'years'){
+                        $daynum = '+'.$request->scheduled.' years';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }else{
+                        $daynum = '+'.$request->scheduled.' week';
+                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
+                    }
+
                     $activitySchedulerData = [
                         "cid" => $request->cid,
                         "category_id" => $request->catid,
@@ -10754,6 +10783,7 @@ class UserProfileController extends Controller {
                         "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
                         "scheduled_day_or_week" => $request->until, 
                         "scheduled_day_or_week_num" => $request->scheduled,
+                        "end_activity_date" => $expdate,
                         "is_active" => 1,
                         "schedule_until" => '',
                         "sales_tax" => '',
@@ -10769,5 +10799,25 @@ class UserProfileController extends Controller {
         return redirect()->route('businesspricedetails', [$request->catid]);
         /*return Redirect::route('businesspricedetails')->with('catid', $request->catid);*/
         /*return()->route('businesspricedetails',['catid' => $request->catid]);*/
+    }
+    public function modelboxsuccess(Request $request){
+        /*print_r($request->all());*/
+        for($x=0;$x=$request->i;$x++){
+            for($y=0;$y=$request->j;$y++){
+                $id= $request->input('priceid_'.$x.$y);
+               /* echo $id;exit;*/
+                $nuberofautopays_adult= $request->input('nuberofautopays_adult_'.$x.$y);
+                $client_be_charge_on_adult= $request->input('client_be_charge_on_adult_'.$x.$y);
+                $first_pmt_adult= $request->input('first_pmt_adult_'.$x.$y);
+                $total_contract_revenue_adult= $request->input('total_contract_revenue_adult_'.$x.$y);
+                $recurring_pmt_adult= $request->input('recurring_pmt_adult_'.$x.$y);
+                /* echo $recurring_pmt_adult;exit;*/
+                BusinessPriceDetails::where('id',$id)->update(['is_recurring_adult'=>1,'recurring_nuberofautopays_adult'=>$nuberofautopays_adult,'recurring_client_be_charge_on_adult'=>$client_be_charge_on_adult,'recurring_client_be_charge_on_adult'=>$client_be_charge_on_adult,'recurring_first_pmt_adult'=>$first_pmt_adult,'recurring_total_contract_revenue_adult'=>$total_contract_revenue_adult,'recurring_recurring_pmt_adult'=>$recurring_pmt_adult]);
+                if($x==$request->i && $y==$request->j){
+                    exit;
+                }
+            }
+        }
+        return 'success';
     }
 }

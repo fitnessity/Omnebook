@@ -857,7 +857,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
 
     <div class="about-services-title">
 
-        <h1 style="background: unset;">GET CONNECTED TO ACTIVITIES YOU LOVE OR EXPLORE A NEW ONE</h1>
+        <h1 style="background: unset;">GET CONNECTED TO ACTIVITIES YOU LOVE OR EXPLORE A NEW ONE</h1> 
         <hr style="margin-top: -50px;margin-bottom: 30px;border: 0;border-top: 4px solid #f53b49;width:50%; margin-left:25% !important; margin-right:25% !important;">
         <p style="color: black;margin-top: -20px;padding-bottom: 20px;">Find activities with local experts & businesses near you: Book 1:1 lessons, group classes, and active experiences on one site.</p>
 
