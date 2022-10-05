@@ -12,6 +12,7 @@
 	use App\BusinessActivityScheduler;
     use App\User;
     use App\AddrCities;    
+    use App\CompanyInformation;    
     $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);
 ?>
 
@@ -71,6 +72,8 @@
 			$date = strtotime("+8 hours", $date);
 			
 		?>
+
+		@if(count($todayservicedata)>0)
 		<div class="fst-0 fsb-1">
 			<div class="row">
 				<div class="col-md-10">
@@ -96,17 +99,12 @@
 		                        $sport_activity = $service['sport_activity'];
 		                        $servicetype[$service['service_type']] = $service['service_type'];
 		                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-		                        if (isset($companyData)) {
-		                            if (isset($companyData[$service['cid']]) && !empty($companyData[$service['cid']])) {
-		                                $company = $companyData[$service['cid']];
-		                                $company = isset($company[0]) ? $company[0] : [];
-		                                if(!empty($company)) {
-		                                    $companyid = $company['id'];
-		                                    $companyname = $company['company_name'];
-											$companycity = $company['city'];
-											$companycountry = $company['country'];
-		                                }
-		                            }
+		                        $company = CompanyInformation::where('id',$service['cid'])->first();
+		                        if ($company!= '') {
+	                                $companyid = $company->id;
+	                                $companyname = $company->company_name;
+									$companycity = $company->city;
+									$companycountry = $company->country;
 		                        }
 
 		                        if ($service['profile_pic']!="") {
@@ -137,23 +135,39 @@
 								$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
 								if(!empty($price_allarray)){
 									foreach ($price_allarray as $key => $value) {
-										$pricearr[] = $value->pay_price;
+										if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+											$pricearr[] = $value->adult_weekend_price_diff;
+										}else{
+											$pricearr[] = $value->adult_cus_weekly_price;
+										}
 									}
 								}
 								if(!empty($pricearr)){
 									$price_all = min($pricearr);
 								}
+
+								$bookscheduler='';
+								$time='';
 								
- 								$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
- 								if(!empty($bookscheduler)) {
-						            foreach ($bookscheduler  as $key => $value) {
-						              if($value['starting'] == date('Y-m-d') || $value['starting'] == date('Y/m/d')){
-						                $ser_date = $value['shift_start']; 
-						              }
-						            }
-						        }
-								$time = '';
+ 								$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->orderby('id','desc')->first();
+ 								if(@$bookscheduler['set_duration']!=''){
+									$tm=explode(' ',$bookscheduler['set_duration']);
+									$hr=''; $min=''; $sec='';
+									if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+									if($tm[2]!=0){ $min=$tm[2].'min. '; }
+									if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+									if($hr!='' || $min!='' || $sec!='')
+									{ $time =  $hr.$min.$sec; } 
+								}
+ 								/*echo $bookscheduler;exit;*/
+
+					            if(@$bookscheduler['end_activity_date'] >= date('Y-m-d') &&  date("H:i:s") < $bookscheduler['shift_start'] ){ 
+					                $ser_date = @$bookscheduler['shift_start']; 
+					             }
+						            
+								$starttime = '';
 								$curr = date("H:i:s");
+								/*echo $curr;*/
 								$time1 = new DateTime($curr);
 							    $time2 = new DateTime($ser_date);
 							    $time_diff = $time1->diff($time2);
@@ -161,12 +175,12 @@
 							    $minutes = $time_diff->i;
 							    $seconds = $time_diff->s;
 								if($hours != ''){
-									$time .= $hours.' hr';
+									$starttime .= $hours.' hr';
 								}
 								if($minutes != ''){
-									$time .= ' '.$minutes.' min';
+									$starttime .= ' '.$minutes.' min';
 								}if($seconds != ''){
-									$time .= ' '.$seconds.' sec';
+									$starttime .= ' '.$seconds.' sec';
 								}
                 	?>
 					<div class="col-md-4">
@@ -180,15 +194,20 @@
 										<i class="fas fa-star"></i>
 										<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
 									</div>
+									@if($time != '')
+										<div class="activity-hours">
+											<span>{{$time}}</span>
+										</div>
+									@endif
 									<div class="activity-city">
 										<span>{{$companycity}}, {{$companycountry}}</span>
 									@if(Auth::check())
 									<?php
 	                                	$loggedId = Auth::user()->id;
-	                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->orderby('id','desc')->first();                   
 	                                ?>
-										<div class="serv_fav1" ser_id="{{$service['id']}}">
-											<a class="fav-fun-2" id="serfav{{$service['id']}}">
+										<div class="serv_fav1" ser_id="{{$service['id']}}" data-id="serfavstarts">
+											<a class="fav-fun-2" id="serfavstarts{{$service['id']}}">
 												<?php
 			                                    	if( !empty($favData) ){ ?>
 			                                        	<i class="fas fa-heart"></i>
@@ -210,8 +229,7 @@
 			                                <?php }?>
 			                                    target="_blank">{{ $service['program_name'] }}</a></span>
 										<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-										<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-										<!-- #mykickboxing17 -->
+										<a c class="showall-btn" href="/activity-details/{{$service['id']}}">More Details</a>
 									</div>
 									<div class="row">
 										<div class="col-md-6 col-sm-6 col-xs-6">
@@ -223,12 +241,8 @@
 										</div>
 										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="activity-time-main">
-												<span>Starts in {{$time}}</span>
+												<span>Starts in {{$starttime}}</span>
 											</div>
-											<?php /*@if($price_all != '')	
-												<span>From ${{$price_all}}/Person</span>
-											@endif
-											<span class="activity-time">Starts in {{$time}}</span>*/?>
 										</div>
 									</div>
 								</div>
@@ -239,13 +253,10 @@
 							} 
 							$i++;
 						}
-					}else{ ?>
-						<div class="col-md-4">
-							<p class="noactivity"> There Is No Activity</p>
-						</div>
-				<?php	} ?>
+					}?>
 			</div>
 		</div>
+		@endif
 		<div class="row">
 			<div class="col-md-12">
 				<div class="direc-right distance-block map-sp">
@@ -258,6 +269,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -266,7 +278,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -277,435 +289,164 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-slider" class="owl-carousel">
+								<?php
+					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+									$companycity = $companycountry = $pay_price  = "";
+					                if (isset($thismonthactivity)) {
+					                    $servicetype = [];
+					                    
+					                    foreach ($thismonthactivity as $loop => $service) {
+					                        $company = $price = $businessSp = [];
+											$serviceid = $service['id'];
+					                        $sport_activity = $service['sport_activity'];
+					                        $servicetype[$service['service_type']] = $service['service_type'];
+					                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+					                        $company = CompanyInformation::where('id', $service['cid'])->first();
+			                                if($company != '') {
+			                                    $companyid = $company->id;
+			                                    $companyaddress = $company->address;
+			                                    $companyname = $company->company_name;
+												$companycity = $company->city;
+												$companycountry = $company->country;
+												$companylogo = $company->logo;
+												$companylat = $company->latitude;
+												$companylon = $company->longitude;
+			                                }
+					                            
+			                                if ($service['profile_pic']!="") {
+												if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+					                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+												} else {
+													$profilePic = url('/public/images/service-nofound.jpg');
+												}
+											}else{ 
+												$profilePic = url('/public/images/service-nofound.jpg'); 
+											}
+
+											$bookscheduler='';
+											$time='';
+											$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+											if(@$bookscheduler[0]['set_duration']!=''){
+												$tm=explode(' ',$bookscheduler[0]['set_duration']);
+												$hr=''; $min=''; $sec='';
+												if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+												if($tm[2]!=0){ $min=$tm[2].'min. '; }
+												if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+												if($hr!='' || $min!='' || $sec!='')
+												{ $time =  $hr.$min.$sec; } 
+											}
+											$pricearr = [];
+											$price_all = '';
+											$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+											if(!empty($price_allarray)){
+												
+												foreach ($price_allarray as $key => $value) {
+													if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+														$pricearr[] = $value->adult_weekend_price_diff;
+													}else{
+														$pricearr[] = $value->adult_cus_weekly_price;
+													}
+												}
+
+											}
+											if(!empty($pricearr)){
+												$price_all = min($pricearr);
+											}
+		                    	?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" data-id = "serfavmonth" ser_id="{{$service['id']}}" >
+															<a class="fav-fun-2" id="serfavmonth{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
+								<?php
+		                    		}
+		                		} ?>
 								</div>
 							</div>
 						</div>
@@ -721,110 +462,9 @@
 					<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 				</div>
 			</div> -->
-
-			<!--preview panel-->
-            <div class="w3-container w3-center">
-                <div class="w3-row w3-card-4 w3-round-large w3-border comparePanle w3-margin-top">
-                    <div class="w3-row">
-                        <div class="w3-col l12 m12 s12 w3-margin-top">
-                            <h4 style="text-transform: uppercase; font-weight: bold; margin-bottom: 30px;">
-                                Added for Comparison
-                                <span title="Close" class="closeItems" style="float:right; padding-right:15px; cursor: pointer;color:#ea1515">
-                                <i class="fas fa-times-circle"></i> </span>
-                            </h4>                            
-                        </div>
-                    </div>
-                    <div class=" titleMargin w3-container comparePan">
-                        <button type="button" class="btn btn-primary notActive cmprBtn addtcmpr-btn" data-toggle="modal" data-target="#myModal">Compare</button>
-                    </div>
-                </div>
-            </div>
-
-            <!--end of preview panel-->
-			<!-- The Modal Add Business-->
-            <div class="modal fade compare-model" id="addbusiness">
-                <div class="modal-dialog modal-lg business">
-                    <div class="modal-content">
-						<div class="modal-header" style="text-align: right;"> 
-						  	<div class="closebtn">
-								<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">×</span>
-								</button>
-							</div>
-						</div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-							<div class="row contentPop">
-								<div class="col-lg-12">
-								   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">ADD BUSINESS</h4>
-								</div>
-                                <div class="col-lg-12">
-                                    <div class="modal-inner-txt">
-                                    	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
-                                    </div>
-                                </div>
-								<div class="col-lg-12 btns-modal">
-									<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
-									<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
-								</div>
-							 </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-			<!-- end modal -->
-
-            <!-- The Modal -->
-            <div class="modal fade compare-model" id="myModal">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-						<div class="modal-header" style="text-align: right;">
-						  <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" data-dismiss="modal">×</button>
-						</div>
-
-                        <!-- Modal body -->
-
-                        <div class="modal-body" style="padding: 0px;">
-							<div class="row contentPop">
-								<div class="col-lg-12 theme-black-bgcolor">
-								   <h4 class="modal-title" style="text-align: center; color: white; line-height: inherit; padding: 6px;">COMPARE WITH SIMILAR ITEMS</h4>
-								</div>
-                                <div class="col-lg-12" style="padding-left: 0;padding-right: 0;">
-                                    <div class="comparetable compare-records-div">
-                                    </div>
-                                </div>
-							</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- comparision popup-->
-
-            <!--end of comparision popup-->
-
-            <!--  warning model  -->
-
-
-            <div id="WarningModal" class="w3-modal">
-                <div class="w3-modal-content warningModal">
-                    <header class="w3-container w3-teal" style="background-color:#f53b49 !important;">
-                        <h3>
-                            <span>&#x26a0;</span> You cannot compare more then 3 Activity
-                            <button id="warningModalClose" onclick="document.getElementById('id01').style.display='none'" class="w3-btn w3-hexagonBlue w3-margin-bottom" style="float:right;background-color:#f53b49 !important;">X</button>
-                        </h3>
-                    </header>
-                    <div class="w3-container">
-                        <h4>Maximum of Three products are allowed for comparision</h4>
-                    </div>
-                </div>
-            </div>
-
-            <!--  end of warning model  -->
-
         </div>
-			
+
+		@if(count($mostpopularactivity) > 0)	
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -833,7 +473,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($mostpopularactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -844,443 +484,174 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-slidertwo" class="owl-carousel">
+									<?php
+						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+						                if (isset($mostpopularactivity)) {
+						                    $servicetype = [];
+						                    
+						                    foreach ($mostpopularactivity as $loop => $service) {
+						                        $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+						                        $sport_activity = $service['sport_activity'];
+						                        $servicetype[$service['service_type']] = $service['service_type'];
+						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+						                        $company = CompanyInformation::where('id', $service['cid'])->first();
+				                                if($company != '') {
+				                                    $companyid = $company->id;
+				                                    $companyaddress = $company->address;
+				                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+				                                }
+						                            
+				                                if ($service['profile_pic']!="") {
+													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+													} else {
+														$profilePic = url('/public/images/service-nofound.jpg');
+													}
+												}else{ 
+													$profilePic = url('/public/images/service-nofound.jpg'); 
+												}
+
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
+													}
+
+												}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
+			                    	?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavpopular">
+															<a class="fav-fun-2" id="serfavpopular{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
+									<?php
+		                    		}
+			                		} ?>
+		                	    </div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		@endif
 		
+		@if(count($Trainers_coachesacitvity) > 0)
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -1289,7 +660,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($Trainers_coachesacitvity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1300,435 +671,164 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-sliderthree" class="owl-carousel">
+									<?php
+						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+						                if (isset($Trainers_coachesacitvity)) {
+						                    $servicetype = [];
+						                    foreach ($Trainers_coachesacitvity as $loop => $service) {
+						                        $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+						                        $sport_activity = $service['sport_activity'];
+						                        $servicetype[$service['service_type']] = $service['service_type'];
+						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+						                        $company = CompanyInformation::where('id', $service['cid'])->first();
+				                                if($company != '') {
+				                                    $companyid = $company->id;
+				                                    $companyaddress = $company->address;
+				                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+				                                }
+						                            
+				                                if ($service['profile_pic']!="") {
+													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+													} else {
+														$profilePic = url('/public/images/service-nofound.jpg');
+													}
+												}else{ 
+													$profilePic = url('/public/images/service-nofound.jpg'); 
+												}
+
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
+													}
+
+												}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
+				                    ?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavTrainer">
+															<a class="fav-fun-2" id="serfavTrainer{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
+									<?php
+										}
+									}
+									?>
 								</div>
 							</div>
 						</div>
@@ -1736,7 +836,9 @@
 				</div>
 			</div>
 		</div>
-		
+		@endif
+
+		@if(count($Ways_To_Workout) > 0)
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -1745,7 +847,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($Ways_To_Workout)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1756,435 +858,164 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-sliderfour" class="owl-carousel">
+									<?php
+						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+						                if (isset($Ways_To_Workout)) {
+						                    $servicetype = [];
+						                    foreach ($Ways_To_Workout as $loop => $service) {
+						                        $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+						                        $sport_activity = $service['sport_activity'];
+						                        $servicetype[$service['service_type']] = $service['service_type'];
+						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+						                        $company = CompanyInformation::where('id', $service['cid'])->first();
+				                                if($company != '') {
+				                                    $companyid = $company->id;
+				                                    $companyaddress = $company->address;
+				                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+				                                }
+						                            
+				                                if ($service['profile_pic']!="") {
+													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+													} else {
+														$profilePic = url('/public/images/service-nofound.jpg');
+													}
+												}else{ 
+													$profilePic = url('/public/images/service-nofound.jpg'); 
+												}
+
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
+													}
+
+												}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
+				                    ?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" ser_id="{{$service['id']}}"  data-id = "serfavWorkout">
+															<a class="fav-fun-2" id="serfavWorkout{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
+									<?php
+										}
+									}
+									?>
 								</div>
 							</div>
 						</div>
@@ -2192,7 +1023,9 @@
 				</div>
 			</div>
 		</div>
-		
+		@endif
+
+		@if(count($Fun_Activities) > 0)
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -2201,7 +1034,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($Fun_Activities)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -2212,435 +1045,163 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-sliderfive" class="owl-carousel">
+									<?php
+						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+						                if (isset($Fun_Activities)) {
+						                    $servicetype = [];
+						                    foreach ($Fun_Activities as $loop => $service) {
+						                        $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+						                        $sport_activity = $service['sport_activity'];
+						                        $servicetype[$service['service_type']] = $service['service_type'];
+						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+						                        $company = CompanyInformation::where('id', $service['cid'])->first();
+				                                if($company != '') {
+				                                    $companyid = $company->id;
+				                                    $companyaddress = $company->address;
+				                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+				                                }
+						                            
+				                                if ($service['profile_pic']!="") {
+													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+													} else {
+														$profilePic = url('/public/images/service-nofound.jpg');
+													}
+												}else{ 
+													$profilePic = url('/public/images/service-nofound.jpg'); 
+												}
+
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
+													}
+
+												}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
+				                    ?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" ser_id="{{$service['id']}}"  data-id = "serfavfun">
+															<a class="fav-fun-2" id="serfavfun{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
+									<?php
+			                    		}
+			                		} ?>
 								</div>
 							</div>
 						</div>
@@ -2648,7 +1209,9 @@
 				</div>
 			</div>
 		</div>
-		
+		@endif
+
+		@if(count($allactivities) > 0)
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
@@ -2657,446 +1220,174 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label>50 Results </label>
+					<label>{{count($allactivities) }} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
-			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
+		
 			<div class="col-md-12 leftside-kickboxing" id="activitylistsix">
 				<div class="row">
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitessix">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-slidersix" class="owl-carousel">
+								<?php
+					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+									$companycity = $companycountry = $pay_price  = "";
+					                if (isset($allactivities)) {
+					                    $servicetype = [];
+					                    foreach ($allactivities as $loop => $service) {
+					                        $company = $price = $businessSp = [];
+											$serviceid = $service['id'];
+					                        $sport_activity = $service['sport_activity'];
+					                        $servicetype[$service['service_type']] = $service['service_type'];
+					                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+					                        $company = CompanyInformation::where('id', $service['cid'])->first();
+			                                if($company != '') {
+			                                    $companyid = $company->id;
+			                                    $companyaddress = $company->address;
+			                                    $companyname = $company->company_name;
+												$companycity = $company->city;
+												$companycountry = $company->country;
+												$companylogo = $company->logo;
+												$companylat = $company->latitude;
+												$companylon = $company->longitude;
+			                                }
+					                            
+			                                if ($service['profile_pic']!="") {
+												if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+					                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+												} else {
+													$profilePic = url('/public/images/service-nofound.jpg');
+												}
+											}else{ 
+												$profilePic = url('/public/images/service-nofound.jpg'); 
+											}
+
+											$bookscheduler='';
+											$time='';
+											$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+											if(@$bookscheduler[0]['set_duration']!=''){
+												$tm=explode(' ',$bookscheduler[0]['set_duration']);
+												$hr=''; $min=''; $sec='';
+												if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+												if($tm[2]!=0){ $min=$tm[2].'min. '; }
+												if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+												if($hr!='' || $min!='' || $sec!='')
+												{ $time =  $hr.$min.$sec; } 
+											}
+											$pricearr = [];
+											$price_all = '';
+											$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+											if(!empty($price_allarray)){
+												
+												foreach ($price_allarray as $key => $value) {
+													if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+														$pricearr[] = $value->adult_weekend_price_diff;
+													}else{
+														$pricearr[] = $value->adult_cus_weekly_price;
+													}
+												}
+
+											}
+											if(!empty($pricearr)){
+												$price_all = min($pricearr);
+											}
+			                    ?>
 									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+					                                	$loggedId = Auth::user()->id;
+					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+	                                				@endphp
+	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}" class="productImg">
+														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavall">
+															<a class="fav-fun-2" id="serfavall{{$service['id']}}">
+						                                    	@if( !empty($favData) )
+						                                        	<i class="fas fa-heart"></i>
+																@else
+						                                    		<i class="far fa-heart"></i>
+						                                    	@endif
+						                                     </a>
+							                            </div>
+							                            @if($price_all != '')
+														<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+	                                			@else
+		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<img src="{{ $profilePic }}">
+						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                                @if($price_all != '')	
+						                                <span>From ${{$price_all}}/Person</span>
+						                                @endif
+						                            </div>
+	                                			@endif
+	                                			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
 															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
+															<div class="col-md-5 country-instant">
+																<div class="activity-city">
+																	<span>{{$companycity}}, {{$companycountry}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+														}
+													@endphp
 													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                @else 
+							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
 													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info">
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>4.6(146)</span>
-															</div>
-															<div class="activity-hours">
-																<span>45 min</span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, USA</span>
-															</div>
-														</div>
-													</div>
-												</div>
-													<div class="activity-information">
-														<span>Learn How To Do Astanga Yogo In Central Park</span>
-														<p>Group Class | Yoga</p>
-													</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-													<p class="addToCompare" id="compid110" title="Add to Compare">COMPARE SIMILAR +</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									
+								<?php
+		                    		}
+		                		} ?>
 								</div>
 							</div>
 						</div>
@@ -3104,6 +1395,7 @@
 				</div>
 			</div>
 		</div>
+		@endif
 		
 		<div class="row align-self-center">
 			<div class="col-md-6 col-xs-12">
@@ -3125,7 +1417,128 @@
 			</div>
 		</div>
 	</div>		
-</section>                        
+</section>      
+
+<!--preview panel-->
+<div class="w3-container w3-center">
+    <div class="w3-row w3-card-4 w3-round-large w3-border comparePanle w3-margin-top">
+        <div class="w3-row">
+            <div class="w3-col l12 m12 s12 w3-margin-top">
+                <h4 style="text-transform: uppercase; font-weight: bold; margin-bottom: 30px;">
+                    Added for Comparison
+                    <span title="Close" class="closeItems" style="float:right; padding-right:15px; cursor: pointer;color:#ea1515">
+                    <i class="fas fa-times-circle"></i> </span>
+                </h4>                            
+            </div>
+        </div>
+        <div class=" titleMargin w3-container comparePan">
+            <button type="button" class="btn btn-primary notActive cmprBtn addtcmpr-btn" data-toggle="modal" data-target="#myModal">Compare</button>
+        </div>
+    </div>
+</div>
+
+<!--end of preview panel-->
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="addbusiness">
+    <div class="modal-dialog modal-lg business">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+				<div class="row contentPop">
+					<div class="col-lg-12">
+					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">ADD BUSINESS</h4>
+					</div>
+                    <div class="col-lg-12">
+                        <div class="modal-inner-txt">
+                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
+                        </div>
+                    </div>
+					<div class="col-lg-12 btns-modal">
+						<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+						<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+
+<!-- The Modal -->
+<div class="modal fade compare-model" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;">
+			  <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" data-dismiss="modal">×</button>
+			</div>
+
+            <!-- Modal body -->
+
+            <div class="modal-body" style="padding: 0px;">
+				<div class="row contentPop">
+					<div class="col-lg-12 theme-black-bgcolor">
+					   <h4 class="modal-title" style="text-align: center; color: white; line-height: inherit; padding: 6px;">COMPARE WITH SIMILAR ITEMS</h4>
+					</div>
+                    <div class="col-lg-12" style="padding-left: 0;padding-right: 0;">
+                        <div class="comparetable compare-records-div">
+                        </div>
+                    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- comparision popup-->
+
+<!--end of comparision popup-->
+
+<!--  warning model  -->
+
+
+<div id="WarningModal" class="w3-modal">
+    <div class="w3-modal-content warningModal">
+        <header class="w3-container w3-teal" style="background-color:#f53b49 !important;">
+            <h3>
+                <span>&#x26a0;</span> You cannot compare more then 3 Activity
+                <button id="warningModalClose" onclick="document.getElementById('id01').style.display='none'" class="w3-btn w3-hexagonBlue w3-margin-bottom" style="float:right;background-color:#f53b49 !important;">X</button>
+            </h3>
+        </header>
+        <div class="w3-container">
+            <h4>Maximum of Three products are allowed for comparision</h4>
+        </div>
+    </div>
+</div>
+
+<!--  end of warning model  -->
+
+<div class="modal fade compare-model11" id="actreview">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="text-align: right;">
+            	<button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" id="closeActreview" >×</button>
+            </div>
+
+            <div class="modal-body" style="padding: 0px;">
+				<div class="row">
+					<div class="col-lg-12">
+                    	<div id="actreviewBody" class="service-review actreviewBody">
+                        	
+                        </div>
+            		</div>
+				</div>
+			</div>     
+		</div>
+	</div>
+</div>                  
 
 <!-- The Modal Add Business-->
     <div class="modal fade compare-model" id="addbusiness">
@@ -3162,6 +1575,64 @@
 
 @include('layouts.footer')
 	
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(document).on('click', '.serv_fav1', function(){
+	        var ser_id = $(this).attr('ser_id');
+	        var id = $(this).attr('data-id');
+	        var _token = $('meta[name="csrf-token"]'). attr('content');
+	        $.ajax({
+	            type: 'POST',
+	            url: '{{route("service_fav")}}',
+	            data: {
+	                _token: _token,
+	                ser_id: ser_id
+	            },
+	            success: function (data) {
+	                if(data.status=='like')
+					{
+						$('#'+id+ser_id).html('<i class="fas fa-heart"></i>');
+					}
+					else
+					{
+						$('#'+id+ser_id).html('<i class="far fa-heart"></i>');
+					}
+	            }
+	        });
+	    });
+
+	    $("#closeActreview").click(function(){
+	    	$("#actreview").modal('hide');
+			return false;
+	    });
+	
+	    $(document).on('click', '.show-compare-detail', function () {
+			$('.compare-model').modal('hide');
+			let itemID = $(this).data('id');
+			$('#mykickboxing'+itemID).modal('show');
+		});
+
+		$("#milesnew").on("change", function() {
+	        var distance = $(this).val();
+	        var zipcode = '562398';
+	        var country = 'india';
+	        var searchString = "new delhi";
+	        
+	        if(zipcode != '' || country != '') {
+	        	searchString = zipcode + '&amp;' + country;
+	        } else {
+	        	searchString = ($("#exp_city").val() != "") ? $("#exp_city").val() : "new delhi";
+	        }
+	    });
+    
+	    $(".mapsb .switch .slider").click(function () {
+	        $(".kickboxing_map").toggleClass("mapskick");
+	        $(".leftside-kickboxing").toggleClass("kicks");
+	    });
+
+	});
+
+</script>
 <script>
 $(document).ready(function () {
     var locations = @json($locations);
@@ -3256,8 +1727,6 @@ $(document).ready(function () {
     }
 });
 </script>
-
-
 <script>
 
 $(document).ready(function () {
@@ -3266,141 +1735,95 @@ $(document).ready(function () {
         $(".mykickboxing").modal('hide');
     });
 });
-$(document).ready(function () {
-	$("#closeActreview").click(function(){
-    	$("#actreview").modal('hide');
-		return false;
-    });
-	
-    $(document).on('click', '.show-compare-detail', function () {
-		$('.compare-model').modal('hide');
-		let itemID = $(this).data('id');
-		$('#mykickboxing'+itemID).modal('show');
+
+function viewActreview(aid)
+{
+	var _token = $("input[name='_token']").val();
+	$.ajax({
+		type: 'POST',
+		url: '{{route("viewActreview")}}',
+		data: {
+			_token: _token,
+			aid: aid
+		},
+
+		success: function (data) {
+			$('#actreviewBody').html(data);
+			$("#actreview").modal('show');
+		}
 	});
-    
-	$("#milesnew").on("change", function() {
-        var distance = $(this).val();
-        var zipcode = '562398';
-        var country = 'india';
-        var searchString = "new delhi";
-        
-        if(zipcode != '' || country != '') {
-        	searchString = zipcode + '&amp;' + country;
-        } else {
-        	searchString = ($("#exp_city").val() != "") ? $("#exp_city").val() : "new delhi";
-        }
-        /*
-        var mapURL = "https://maps.google.com/maps?width=400&amp;height=300&amp;hl=en&amp;t=&amp;ie=UTF8&amp;iwloc=B&amp;output=embed";
-        mapURL += "&amp;q=" + searchString;
-        mapURL += "&amp;z=" + distance;
-
-        var frame = '<iframe id="gmap_iframe" src="' + mapURL + '" style="border:0;" allowfullscreen="" loading="lazy"></iframe>';
-        $(".maparea").html(frame);
-        */
-    });
-    
-    $(".mapsb .switch .slider").click(function () {
-        $(".kickboxing_map").toggleClass("mapskick");
-        $(".leftside-kickboxing").toggleClass("kicks");
-    });
-
-    $(document).on('click', '.serv_fav1', function(){
-        var ser_id = $(this).attr('ser_id');
-        // var _token = $("input[name='_token']").val();
-        var _token = $('meta[name="csrf-token"]'). attr('content');
-        $.ajax({
-            type: 'POST',
-            url: '{{route("service_fav")}}',
-            data: {
-                _token: _token,
-                ser_id: ser_id
-            },
-            success: function (data) {
-                if(data.status=='like')
-				{
-					$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
-				}
-				else
-				{
-					$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
-				}
-            }
-        });
-    });
-});
+}
 
 </script>
 
 
-
 <script type="text/javascript">	
 	function submit_rating(sid)
-{
-	@if(Auth::check())
-	//var formData = $("#sreview"+sid).serialize();
-	var formData = new FormData();
-	var rating=$('#rating'+sid).val();
-	var review=$('#review'+sid).val();
-	var rtitle=$('#rtitle'+sid).val();
-	var _token = $("input[name='_token']").val();
-	
-	TotalFiles = $('#rimg'+sid)[0].files.length;
-	
-	let rimg = $('#rimg'+sid)[0];
-	for (let i = 0; i < TotalFiles; i++) {
-		formData.append('rimg' + i, rimg.files[i]);
-	}
-	formData.append('TotalFiles', TotalFiles);
-    formData.append('rtitle', rtitle);
-	formData.append('review', review);
-	formData.append('rating', rating);
-	formData.append('sid', sid);
-	formData.append('_token', _token);
-	
-	if(rating!='' && review!='')
-	{ 
-		$.ajax({
-			url: "{{route('save_business_service_reviews')}}",
-			type: 'POST',
-            contentType: 'multipart/form-data',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: formData,
-			success: function (response) {
-				if(response=='submitted')
-				{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
-					//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
-					$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
-					$('#rating'+sid).val(' ');
-					$('#review'+sid).val(' '); $('#rtitle'+sid).val(' ');
-				}
-				else if(response=='already')
-				{ $('#reviewerro'+sid).show(); 
-					$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
-				else if(response=='addreview')
-				{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
-				
-			}
-		});
-	}
-	else
 	{
-		$('#reviewerro'+sid).show(); 
-		$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
-		$('#rating'+sid).val(' ');
-		$('#review'+sid).val(' ');
-		return false;
+		@if(Auth::check())
+		//var formData = $("#sreview"+sid).serialize();
+		var formData = new FormData();
+		var rating=$('#rating'+sid).val();
+		var review=$('#review'+sid).val();
+		var rtitle=$('#rtitle'+sid).val();
+		var _token = $("input[name='_token']").val();
+		
+		TotalFiles = $('#rimg'+sid)[0].files.length;
+		
+		let rimg = $('#rimg'+sid)[0];
+		for (let i = 0; i < TotalFiles; i++) {
+			formData.append('rimg' + i, rimg.files[i]);
+		}
+		formData.append('TotalFiles', TotalFiles);
+	    formData.append('rtitle', rtitle);
+		formData.append('review', review);
+		formData.append('rating', rating);
+		formData.append('sid', sid);
+		formData.append('_token', _token);
+		
+		if(rating!='' && review!='')
+		{ 
+			$.ajax({
+				url: "{{route('save_business_service_reviews')}}",
+				type: 'POST',
+	            contentType: 'multipart/form-data',
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            data: formData,
+				success: function (response) {
+					if(response=='submitted')
+					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
+						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
+						$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
+						$('#rating'+sid).val(' ');
+						$('#review'+sid).val(' '); $('#rtitle'+sid).val(' ');
+					}
+					else if(response=='already')
+					{ $('#reviewerro'+sid).show(); 
+						$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
+					else if(response=='addreview')
+					{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
+					
+				}
+			});
+		}
+		else
+		{
+			$('#reviewerro'+sid).show(); 
+			$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
+			$('#rating'+sid).val(' ');
+			$('#review'+sid).val(' ');
+			return false;
+		}
+		@else
+			$('#reviewerro'+sid).show(); 
+			$('#reviewerro'+sid).html('Please login in your account to review this activity');
+			$('#rating'+sid).val(' ');
+			$('#review'+sid).val(' ');
+			return false;
+		@endif	
 	}
-	@else
-		$('#reviewerro'+sid).show(); 
-		$('#reviewerro'+sid).html('Please login in your account to review this activity');
-		$('#rating'+sid).val(' ');
-		$('#review'+sid).val(' ');
-		return false;
-	@endif
-	
-}
 </script>
 <script type="text/javascript">
 	function changeactpr(aid,val,part,div,maid)

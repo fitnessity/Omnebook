@@ -176,7 +176,7 @@ Route::group(['middleware' => ['auth']], function()
 
 
 
-Route::any('/activites/','ActivityController@activity')->name('activity');
+Route::get('/activities/{filtervalue?}','ActivityController@activity')->name('activity');
 
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
