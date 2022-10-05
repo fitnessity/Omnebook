@@ -8,19 +8,21 @@ use App\BusinessService;
 use App\UserBookingDetail;
 use App\BusinessActivityScheduler;
 use App\BusinessTerms;
-
+	
+	$url = env('APP_URL');
 	$dt = Carbon::now();
 	$cart = session()->get('cart_item');
-	/*print_r($cart);exit();*/
 	foreach ($cart as $key => $value) {
 		foreach ($value as $key => $cartval) {
 			if($cartval['code']== @$BookingDetail['user_booking_detail']['sport']){
 				$priceid = $cartval['priceid'];
-				$quantity = $cartval['quantity'];
+				$totalpaid = $cartval['totalprice'];
 			}
 		}
 	}	
 
+	$qty = str_replace(str_split('{""}'), ' ',@$BookingDetail['user_booking_detail']['qty']);
+	
 	$Datebooked = date("m-d-Y", strtotime(@$BookingDetail['user_booking_detail']['bookedtime'])); 
 	$Datebooked = str_replace('-', '/', $Datebooked);  
 
@@ -28,9 +30,10 @@ use App\BusinessTerms;
 	$sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
 	$sc_date = str_replace('-', '/', $sc_date);  
 
-	$servicedata = BusinessActivityScheduler::where('serviceid',@$BookingDetail['user_booking_detail']['sport'])->first();
+	$servicedata = BusinessActivityScheduler::where('id',@$BookingDetail['user_booking_detail']['act_schedule_id'])->first();
 
-	$BusinessPriceDetails = BusinessPriceDetails::where(['id'=>$priceid,'serviceid' =>@$BookingDetail['user_booking_detail']['sport']])->first();
+	/*$BusinessPriceDetails = BusinessPriceDetails::where(['id'=>$priceid,'serviceid' =>@$BookingDetail['user_booking_detail']['sport']])->first();*/
+	$BusinessPriceDetails = BusinessPriceDetails::where('id',$priceid)->first();
 
 	if(@$BookingDetail['businessservices']['service_type']=='individual')
 	{ 
@@ -44,17 +47,17 @@ use App\BusinessTerms;
 
 	$today = date('Y-m-d');
     $SpotsLeftdis = 0;
-    $SpotsLeft = UserBookingDetail::where('sport', @$BookingDetail['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
-
-    if( @$BookingDetail['businessservices']['group_size'] != ''){
-        $SpotsLeftdis = @$BookingDetail['businessservices']['group_size'] - $SpotsLeft;
+    $SpotsLeft = UserBookingDetail::where(['sport'=>@$BookingDetail['businessservices']['id'],'act_schedule_id'=>$servicedata->id])->whereDate('bookedtime', '=', $today)->count();
+  
+    if( @$servicedata->spots_available != ''){
+        $SpotsLeftdis = @$servicedata->spots_available  - $SpotsLeft;
     }
 
-	$country = '';
-    if(@$BookingDetail['businessuser']['country'] == 'usa' || @$BookingDetail['businessuser']['country'] == 'USA' || @$BookingDetail['businessuser']['country'] == 'United states' )
-    {
+	/*$country = '';*/
+    /*if(@$BookingDetail['businessuser']['country'] == 'usa' || @$BookingDetail['businessuser']['country'] == 'USA' || @$BookingDetail['businessuser']['country'] == 'United states' )
+    {*/
     	$country = "United States";
-    }
+    /*}*/
 
 	$homerule = '';
 	$cancelrule = '';
@@ -130,7 +133,8 @@ use App\BusinessTerms;
 											<!-- Banner Image with Text : BEGIN -->
                                             <tr>
                                                <!-- <td style="text-align: left; padding: 15px 15px 40px;">-->
-												<td style="text-align: center; background-image: url('https://development.fitnessity.co/public/images/bg-1.png'); background-size: cover !important; padding: 15px 15px 98px;;">
+                                               	<?php $url1 = $url.'/public/images/bg-1.png'; ?>
+												<td style="text-align: center; background-image: url({{$url1}}); background-size: cover !important; padding: 15px 15px 98px;;">
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
                                                             <td>
@@ -142,7 +146,8 @@ use App\BusinessTerms;
 																		<tr><td style="font-size: 13px;text-align: left;"></td></tr>
 																		<tr>
 																			<td style="text-align: center; padding: 25px 0px 15px 0px;">
-																				<img src="https://development.fitnessity.co/public/images/logo1.png" width="225"  alt="logo" border="0" style="height: auto;">
+																				<img src="'.$url.
+																				'/public/images/logo1.png" width="225"  alt="logo" border="0" style="height: auto;">
                                                                             </td>
 																		</tr>
 																		<tr><td style="font-size: 28px; font-weight: 600; text-align: center;">BOOKING CONFIRMATION</td></tr>
@@ -198,7 +203,7 @@ use App\BusinessTerms;
                                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                                             <tr>
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px; text-align: left; height: 243px;">
-																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="https://development.fitnessity.co/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
+																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="'.$url.'/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
 																15px;"> ACTIVITY INFO  </h2>
 																	<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 																		<tr>
@@ -223,7 +228,7 @@ use App\BusinessTerms;
 																			</td>
 																			<td>
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{ @$SpotsLeftdis}}/
-																				 {{@$BookingDetail['businessservices']['group_size']}}</h2>
+																				 {{@$servicedata->spots_available}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -300,7 +305,7 @@ use App\BusinessTerms;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Total Paid:  </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">${{@$BookingDetail['user_booking_detail']['price']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">${{@$totalpaid}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -364,7 +369,7 @@ use App\BusinessTerms;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Participants: </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$BusinessPriceDetails['membership_type']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$qty}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -380,7 +385,7 @@ use App\BusinessTerms;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Membership Type:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">Drop In</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$BusinessPriceDetails['membership_type']}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -431,7 +436,7 @@ use App\BusinessTerms;
                                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0!important; border-collapse:collapse!important;  table-layout:fixed!important;   margin:0 auto!important">
                                                             <tr>
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px 0px;; text-align: left; height: 243px;">
-																<h2 style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="https://development.fitnessity.co/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
+																<h2 style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="'.$url.'/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
 																15px;">PROVIDER BUSINESS INFO  </h2>
                                                                 <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Company Name: {{ @$BookingDetail['businessuser']['company_name'] }}</h2>
 																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Email: {{ @$BookingDetail['businessuser']['email'] }} </h2>
@@ -589,7 +594,7 @@ use App\BusinessTerms;
 	                                            </tr>
 	                                       	@endif
 											<tr>
-												<td><h2 style="padding: 0px 0; text-align: center; font-size:14px; font-weight: normal; margin-bottom: 15px;">To date, You have booked {{@$BookingDetail['user_booking_detail']['qty']}} activities and posted a total of {{@$BookingDetail['user_booking_detail']['qty']}} reviews on Fitnessity! <a style="color: red; text-decoration: underline;"  href="https://development.fitnessity.co/instant-hire">Book More</a></h2></td>
+												<td><h2 style="padding: 0px 0; text-align: center; font-size:14px; font-weight: normal; margin-bottom: 15px;">To date, You have booked 1 activities and posted a total of 1 reviews on Fitnessity! <a style="color: red; text-decoration: underline;"  href="'.$url.'/instant-hire">Book More</a></h2></td>
 											</tr>
 											
 											 <!-- Follow us: START -->

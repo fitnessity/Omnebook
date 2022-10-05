@@ -271,7 +271,7 @@
 										<div class="col-md-2">
 											<label># Spots Available</label>
 											<div class="sp-bottom">
-												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" @if(count($business_activity)==0) value="1" @endif>
+												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" @if(count($business_activity)==0) value="1" @endif  required="required">
 											</div>
 										</div>
 									</div>
@@ -323,13 +323,13 @@
 	                        $end= date('h:i a', strtotime( $data['shift_end'] )); 
 	                        $day = $data['activity_days'];
 	                        $day = substr($day , 0, -1); 
-	                        if($data['scheduled_day_or_week'] == 'Days'){
+	                        if($data['scheduled_day_or_week'] == 'days'){
 	                        	$daynum = '+'.$data['scheduled_day_or_week_num'].' days';
 	                        	$expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-	                        }else if($data['scheduled_day_or_week'] == 'Months'){
+	                        }else if($data['scheduled_day_or_week'] == 'month'){
 								$daynum = '+'.$data['scheduled_day_or_week_num'].' month';
 								$expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-	                        }else if($data['scheduled_day_or_week'] == 'Years'){
+	                        }else if($data['scheduled_day_or_week'] == 'years'){
 	                        	$daynum = '+'.$data['scheduled_day_or_week_num'].' years';
 								$expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
 	                        }else{
