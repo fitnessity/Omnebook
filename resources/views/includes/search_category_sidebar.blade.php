@@ -27,8 +27,8 @@
 		}
 ?>
 
-<form method="post" action="/instant-hire" id="frmsearch">
-@csrf
+<!-- <form method="post" action="/activities" id="frmsearch"> -->
+<!-- @csrf -->
 <div class="row">
     <div class="col-md-12">
 		<div class="choose-sport-hire">
@@ -310,8 +310,7 @@
 		</div> -->
 	</div>
 </div>
-
-</form>
+<!-- </form> -->
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script>
 
@@ -346,6 +345,7 @@
 	   
 	    var service_typearr = [];
 	    var service_type = '{{ $service_type }}';
+	/*    alert(service_type);*/
 	    if(service_type != ''){
 	    	service_type = service_type.split(',');
 		    $.each(service_type, function( index, value ) {
@@ -436,6 +436,7 @@
 		var programservices=$('#programservices').val();
 		var service_type=$('#service_type').val();
 		var service_type_two=$('#servicetypetwo').val();
+			/*alert(service_type);*/
 
 		if(activity_for == '' || activity_for == null){
 			activity_for = 'no';
@@ -459,7 +460,7 @@
 		alert(activity_for);*/
 		if(sessionprogramfor != activity_for || sessionprogram_type != programservices  || sessionservice_type != service_type  || sessionservice_type_two != service_type_two) 
 		{
-			document.getElementById('frmsearch').submit(); 
+			window.location = '/activities/btype='+service_type;
 		}
 	}
 

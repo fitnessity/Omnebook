@@ -130,6 +130,7 @@ use App\UserBookingDetail;
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages;
+                                            
                                         @endphp
                                         @if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d'))
                                             <div class="col-md-4 col-sm-6 ">
@@ -146,7 +147,9 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions
+                                                            
+                                                            </span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
@@ -167,7 +170,8 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{$BusinessPriceDetails['pay_price']}}</span>
+                                                            <?php /*?><span>${{$BusinessPriceDetails['pay_price']}}</span><?php */?>
+                                                            <span>${{$data->amount}} </span>
                                                         </p>
                                                         
                                                         <p>
@@ -200,7 +204,13 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>PARTICIPANTS:</span>
-                                                            <span>{{$book_details['user_booking_detail']['qty']}}</span>
+                                                            <span>
+                                                            <?php $a = json_decode($book_details['user_booking_detail']['qty']);
+																if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+																if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+																if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+															?>
+                                                            </span>
                                                         </p>
                                                         <p>
                                                             <span>SKILL LEVEL:</span>

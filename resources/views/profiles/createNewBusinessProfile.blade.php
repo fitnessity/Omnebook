@@ -4949,415 +4949,451 @@
                                         </div>
 
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-6  service_type">
-
                                     <br>
-
                                     <div class="row">
-
                                         <div class="form-group col-md-12">
-
                                             <label>Select Service Type You Offer</label>
-
                                             <select name="frm_servicetype[]" id="categSType" multiple>
-
                                                 <option value="Personal Training">Personal Training</option>
-
                                                 <option value="Coaching">Coaching</option>
-
                                                 <option value="Therapy">Therapy</option>
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#categSType'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
                                         <div class="form-group col-md-12">
-
                                             <label>Location of Activity</label>
-
                                             <select name="frm_servicelocation[]" id="frm_servicelocation" multiple>
-
                                                 <option value="Online">Online</option>
-
                                                 <option value="At Business">At Business</option>
-
                                                 <option value="On Location">On Location</option>
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_servicelocation'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
                                         <div class="form-group col-md-12">
-
                                             <label>Activity Great For</label>
-
                                             <select name="frm_programfor[]" id="frm_programfor" multiple>
-
-                                               <?php /*?> <option>Individual</option><?php */?>
-
                                                 <option value="Kids">Kids</option>
-
                                                 <option value="Teens">Teens</option>
-
                                                 <option value="Adults">Adults</option>
-
                                                 <option value="Family">Family</option>
-
                                                 <option value="Groups">Groups</option>
-
                                                 <option value="Paralympic">Paralympic</option>
-
                                                 <option value="Prenatal">Prenatal</option>
-
                                                 <option value="Any">Any</option>
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_programfor'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
                                         <div class="form-group col-md-12">
-
                                             <label>Age Range</label>
-
                                             <select name="frm_agerange[]" id="frm_agerange" multiple>
-
                                                 <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
-
                                                 <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
-
                                                 <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
-
                                                 <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
-
                                                 <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
-
                                                 <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
-
                                                 <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
-
                                                 <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
-
                                                 <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
-
                                                 <option value="Any">Any</option>
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_agerange'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
-                                        <!-- <div class="form-group col-md-12">
-
+                                        <div class="form-group col-md-12">
                                             <label>Number of slots Available for Booking</label>
-
                                             <select name="frm_numberofpeople[]" id="frm_numberofpeople">
-
                                                 <option>1</option>
-
                                                 <option>2</option>
-
                                                 <option>3</option>
-
                                                 <option>4</option>
-
                                                 <option>5</option>
-
                                                 <option>6</option>
-
                                                 <option>7</option>
-
                                                 <option>8</option>
-
                                                 <option>9</option>
-
                                                 <option>10</option>
-
                                                 <option>15</option>
-
                                                 <option>20</option>
-
                                                 <option>25</option>
-
                                                 <option>30</option>
-
                                                 <option>35</option>
-
                                                 <option>40</option>
-
                                                 <option>45</option>
-
                                                 <option>50</option>
-
                                                 <option>55</option>
-
                                                 <option>60</option>
-
                                                 <option>65</option>
-
                                                 <option>70</option>
-
                                                 <option>75</option>
-
                                                 <option>80</option>
-
                                                 <option>85</option>
-
                                                 <option>90</option>
-
                                                 <option>95</option>
-
                                                 <option>100</option>
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_numberofpeople'
-
                                                 });
-
-
-
                                             </script>
-
-                                        </div> -->
-
+                                        </div>
                                         <div class="form-group col-md-12">
-
                                             <label>Difficulty Level</label>
-
                                             <select name="frm_experience_level[]" id="frm_experience_level" multiple>
-
                                                 <option>Easy</option>
-
                                                 <option>Medium</option>
-
                                                 <option>Hard</option>
-
                                                 <option>Any</option>
-
-                                                
-
                                             </select>
-
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_experience_level'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
                                         <div class="form-group col-md-12">
-
                                             <label>Activity Experience</label>
-
                                             <select name="frm_servicefocuses[]" id="frm_servicefocuses" multiple>
-
                                                 <option value="Have Fun"> Have Fun</option>
-
                                                 <option value="Adventurous">Adventurous</option>
-
                                                 <option value="Thrilling">Thrilling</option>
-
-                                               <?php /*?> <option value="Dangerous">Dangerous </option><?php */?>
-
                                                 <option value="Physically Challenging">Physically Challenging </option>
-
                                                 <option value="Mentally Challenging">Mentally Challenging </option>
-
                                                 <option value="Peaceful">Peaceful</option>
-
                                                 <option value="Calm">Calm</option>
-
                                                 <option value="Gain Focus">Gain Focus</option>
-
                                                 <option value="Learning a skill">Learning a skill</option>
-
                                                 <option value="To accomplish a goal">To accomplish a goal</option>
-
                                                 <option value="Gain Discipline">Gain Discipline</option>
-
                                                 <option value="Gain Confidence">Gain Confidence</option>
-
                                                 <option value="Better hand-eye coordination">Better hand-eye coordination</option>
-
                                                 <option value="Get a toned body">Get a toned body</option>
-
                                                 <option value="Get better nutrition habits">Get better nutrition habits</option>
-
                                                 <option value="Release Pain">Release Pain</option>
-
                                                 <option value="Relax">Relax</option>
-
                                                 <option value="Body Alignment">Body Alignment</option>
-
                                                 <option value="Strength and Conditioning">Strength and Conditioning </option>
-
                                                 <option value="Athletic Conditioning">Athletic Conditioning</option>
-
                                                 <option value="Better Technique">Better Technique</option>
-
                                                 <option value="Weight Loss Help">Weight Loss Help</option>
-
                                                 <option value="Competition training and prep">Competition training and prep</option>
-
                                                 <option value="Gain better cardio">Gain better cardio</option>
-
                                             </select>
 
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#frm_servicefocuses'
-
                                                 });
-
                                             </script>
-
                                         </div>
 
                                         <div class="form-group col-md-12">
-
                                             <label>Personality & Habits of Instructor</label>
-
                                             <select name="frm_teachingstyle[]" id="teaching" multiple>
-
                                                 <option value="An educator">An Educator</option>
-
                                                 <option value="A teacher">A Teacher</option>
-
                                                 <option value="A lot of energy">A lot of energy</option>
-
                                                 <option value="A drill sergeant">A drill sergeant</option>
-
                                                 <option value="Inspiring">Inspiring</option>
-
                                                 <option value="Motivational">Motivational</option>
-
                                                 <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
-
                                                 <option value="Tough and Firm">Tough and Firm</option>
-
                                                 <option value="Gentle">Gentle</option>
-
                                                 <option value="Intense">Intense</option>
-
                                                 <option value="Likes to talk">Likes to talk</option>
-
                                                 <option value="Punctual">An entertainer</option>
-
                                                 <option value="Organized">Stern</option>
-
                                                 <option value="Stern">Friendly & outgoing</option>
-
                                                 <option value="Tells jokes and funny">Tells jokes and funny</option>
-
                                                 <option value="Loves to talk">Loves to talk about the details</option>
-
                                                 <option value="Very Organized">Very Organized</option>
-
                                                 <option value="Punctual">Punctual</option>
-
                                                 <option value="On Time">On Time</option>
 
                                             </select>
 
                                             <script>
-
                                                 var p = new SlimSelect({
-
                                                     select: '#teaching'
-
                                                 });
-
                                             </script>
-
                                         </div>
-
-                                    </div><!-- row -->
-
+                                    </div>
                                 </div>
+                                <!-- <div class="row service_type" >
+                                    <div class="col-md-12">
+                                        <div class="step-one">
+                                            <h3>Step 2: Booking Settings</h3>
+                                            <p>Provide more details to get booked</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">  
+                                        <div class="instantl-book map-sp">
+                                            <div class="">
+                                                <label class="switch" for="instant">
+                                                    <input type="checkbox" name="instant" id="instant" checked="">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="booking-title">
+                                            <label>INSTANT BOOKING:</label>
+                                            <p>Allow customers to book you instantly (Recommeded to get more bookings)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-1">  
+                                        <div class="instantl-book map-sp">
+                                            <div class="">
+                                                <label class="switch" for="request">
+                                                    <input type="checkbox" name="request" id="request" checked="">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="booking-title">
+                                            <label>REQUEST BOOKING:</label>
+                                            <p>Customers can request a booking, but you want to confirm first.(Less booking frequency with this option) </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-5">
+                                        <div class="participant-req">
+                                            <p>What is the minimum participant requirement for each booking?</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="sp-bottom">
+                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="1" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-5">
+                                        <div class="">
+                                            <p>What is the latest a customer can book before your activity starts?</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="sp-bottom">
+                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="1" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="sp-bottom">
+                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="Hour(s)+" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Select Service Type</label>
+                                            <select name="frm_servicetype[]" id="categSType" multiple>
+                                                <option value="Personal Training">Personal Training</option>
+                                                <option value="Coaching">Coaching</option>
+                                                <option value="Therapy">Therapy</option>
+                                            </select>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#categSType'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Location of Activity ?</label>
+                                            <select name="frm_servicelocation[]" id="frm_servicelocation" multiple>
+                                                <option value="Online">Online</option>
+                                                <option value="At Business">At Business</option>
+                                                <option value="On Location">On Location</option>
+                                            </select>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#frm_servicelocation'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Activity Great For ?</label>
+                                            <select name="frm_programfor[]" id="frm_programfor" multiple>
+                                                <option value="Kids">Kids</option>
+                                                <option value="Teens">Teens</option>
+                                                <option value="Adults">Adults</option>
+                                                <option value="Family">Family</option>
+                                                <option value="Groups">Groups</option>
+                                                <option value="Paralympic">Paralympic</option>
+                                                <option value="Prenatal">Prenatal</option>
+                                                <option value="Any">Any</option>
+                                            </select>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#frm_programfor'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>What age is this for?</label>
+                                            <select name="frm_agerange[]" id="frm_agerange" multiple>
+                                                <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
+                                                <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
+                                                <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
+                                                <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
+                                                <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
+                                                <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
+                                                <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
+                                                <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
+                                                <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
+                                                <option value="Any">Any</option>
+                                            </select>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#frm_agerange'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Difficulty Levels?</label>
+                                            <select name="frm_experience_level[]" id="frm_experience_level" multiple>
+                                                <option>Easy</option>
+                                                <option>Medium</option>
+                                                <option>Hard</option>
+                                                <option>Any</option>
+                                            </select>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#frm_experience_level'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Customers Experience for this Activity?</label>
+                                            <select name="frm_servicefocuses[]" id="frm_servicefocuses" multiple>
+                                                <option value="Have Fun"> Have Fun</option>
+                                                <option value="Adventurous">Adventurous</option>
+                                                <option value="Thrilling">Thrilling</option>
+                                                <option value="Physically Challenging">Physically Challenging </option>
+                                                <option value="Mentally Challenging">Mentally Challenging </option>
+                                                <option value="Peaceful">Peaceful</option>
+                                                <option value="Calm">Calm</option>
+                                                <option value="Gain Focus">Gain Focus</option>
+                                                <option value="Learning a skill">Learning a skill</option>
+                                                <option value="To accomplish a goal">To accomplish a goal</option>
+                                                <option value="Gain Discipline">Gain Discipline</option>
+                                                <option value="Gain Confidence">Gain Confidence</option>
+                                                <option value="Better hand-eye coordination">Better hand-eye coordination</option>
+                                                <option value="Get a toned body">Get a toned body</option>
+                                                <option value="Get better nutrition habits">Get better nutrition habits</option>
+                                                <option value="Release Pain">Release Pain</option>
+                                                <option value="Relax">Relax</option>
+                                                <option value="Body Alignment">Body Alignment</option>
+                                                <option value="Strength and Conditioning">Strength and Conditioning </option>
+                                                <option value="Athletic Conditioning">Athletic Conditioning</option>
+                                                <option value="Better Technique">Better Technique</option>
+                                                <option value="Weight Loss Help">Weight Loss Help</option>
+                                                <option value="Competition training and prep">Competition training and prep</option>
+                                                <option value="Gain better cardio">Gain better cardio</option>
+                                            </select>
 
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#frm_servicefocuses'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="priceselect sp-select">
+                                            <label>Personality & Habits of Instructor?</label>
+                                            <select name="frm_teachingstyle[]" id="teaching" multiple>
+                                                <option value="An educator">An Educator</option>
+                                                <option value="A teacher">A Teacher</option>
+                                                <option value="A lot of energy">A lot of energy</option>
+                                                <option value="A drill sergeant">A drill sergeant</option>
+                                                <option value="Inspiring">Inspiring</option>
+                                                <option value="Motivational">Motivational</option>
+                                                <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
+                                                <option value="Tough and Firm">Tough and Firm</option>
+                                                <option value="Gentle">Gentle</option>
+                                                <option value="Intense">Intense</option>
+                                                <option value="Likes to talk">Likes to talk</option>
+                                                <option value="Punctual">An entertainer</option>
+                                                <option value="Organized">Stern</option>
+                                                <option value="Stern">Friendly & outgoing</option>
+                                                <option value="Tells jokes and funny">Tells jokes and funny</option>
+                                                <option value="Loves to talk">Loves to talk about the details</option>
+                                                <option value="Very Organized">Very Organized</option>
+                                                <option value="Punctual">Punctual</option>
+                                                <option value="On Time">On Time</option>
+                                            </select>
+
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#teaching'
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div> -->
                             </div>
-
                         </div>
 
                         <div class="col-md-12">
-
                             <br/>
-
                             <div class="row">
-
                                 <div class="col-md-6">
-
                                     <button type="button" class="btn-bck" id="backindividual3"><i class="fa fa-arrow-left"></i> Back</button>
-
                                 </div>
 
                                 <div class="col-md-6 text-right">
-
                                     <button type="button" class="btn-nxt" id="nextindividual3">Continue <i class="fa fa-arrow-right"></i></button>
-
                                 </div>
-
                             </div>
-
                             <br>
-
                         </div>
-
                     </section>
-
                 </div>
 
 
