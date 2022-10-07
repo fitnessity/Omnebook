@@ -166,7 +166,7 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{$BusinessPriceDetails['pay_price']}}</span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -199,7 +199,11 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>PARTICIPANTS:</span>
-                                                            <span>{{$book_details['user_booking_detail']['qty']}}</span>
+                                                            <span><?php $a = json_decode($book_details['user_booking_detail']['qty']);
+                                                                if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+                                                            ?></span>
                                                         </p>
                                                         <p>
                                                             <span>SKILL LEVEL:</span>
@@ -364,7 +368,7 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{$BusinessPriceDetails['pay_price']}}</span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -397,7 +401,11 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>PARTICIPANTS:</span>
-                                                            <span>{{$book_details['user_booking_detail']['qty']}}</span>
+                                                            <span><?php $a = json_decode($book_details['user_booking_detail']['qty']);
+                                                                if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+                                                            ?></span>
                                                         </p>
                                                         <p>
                                                             <span>SKILL LEVEL:</span>
@@ -563,7 +571,7 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{$BusinessPriceDetails['pay_price']}}</span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -596,7 +604,11 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>PARTICIPANTS:</span>
-                                                            <span>{{$book_details['user_booking_detail']['qty']}}</span>
+                                                            <span><?php $a = json_decode($book_details['user_booking_detail']['qty']);
+                                                                if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+                                                            ?></span>
                                                         </p>
                                                         <p>
                                                             <span>SKILL LEVEL:</span>
