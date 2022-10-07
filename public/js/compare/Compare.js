@@ -160,6 +160,8 @@
 							setHtml += '<tr>';
 							setHtml += '<th><h3>Reviews</h3></th>';
 							$.each( value, function( k, v ) {
+								alert(k);
+								alert(v);
 								setHtml += '<td><p style="color: #ff3459;">'+((v!='')?v:'-')+'</p></td>';
 							});
 							setHtml += '</tr>';

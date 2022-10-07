@@ -475,6 +475,7 @@ if(isset($cart["cart_item"])){
 							@endif
                             </ul>
 							<!--<a href="{{route('pricedetails')}}" class="btn btn-list-business business-sp">Price detail</a>-->
+						
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>
 							<input type="button" value="Book an Activity" class="btn-style-one" onclick="location.href='/instant-hire'">

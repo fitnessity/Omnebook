@@ -67,6 +67,7 @@ Route::post('addbusinessbooking','UserProfileController@addbusinessbooking')->na
 Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
+Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('modelboxsuccess');
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){
@@ -172,6 +173,11 @@ Route::group(['middleware' => ['auth']], function()
 	Route::post('/invite','ZoomController@invite')->name('invite');
 });
 
+
+
+
+Route::any('/activites/','ActivityController@activity')->name('activity');
+
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
 Route::get('/cart','LessonController@getcart');
@@ -185,6 +191,7 @@ Route::get('/get-booking-service-data','LessonController@getBookingServiceData')
 Route::post('/savetimes','LessonController@savetime');
 Route::post('/updatecart','LessonController@updatecart');
 Route::post('/samfilter','LessonController@samfilter')->name('samfilter');
+Route::get('/showall-activity','LessonController@showall_activity')->name('showall_activity');
 
 /* 09-june 2020 end */
 Route::get('/allSports', 'HomeController@allSports')->name('list-all-sports');
@@ -675,6 +682,7 @@ Route::any('/activity-details/{serviceid}', 'LessonController@getInstanthiredeta
 //});
 Route::get('/instant-hire-search', 'LessonController@getInstanthireSearch');
 Route::any('/addtocart', 'LessonController@addToCart');
+Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
 Route::any('/removetocart', 'LessonController@removeToCart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 Route::get('/directhire/viewprofile/{user_id}', 'LessonController@directhireViewProfile');
@@ -807,6 +815,8 @@ Route::post('/service_fav', 'LessonController@service_fav')->name('service_fav')
 Route::post('/viewActreview', 'LessonController@viewActreview')->name('viewActreview');
 Route::get('submitreview','LessonController@submitreview')->name('submitreview');
 Route::post('/act_detail_filter', 'LessonController@act_detail_filter')->name('act_detail_filter');
+Route::post('/act_detail_filter_for_cart', 'LessonController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+Route::post('/getmodelbody', 'LessonController@getmodelbody')->name('getmodelbody');
 Route::post('/act_detail_filter_business_pages', 'LessonController@act_detail_filter_business_pages')->name('act_detail_filter_business_pages');
 Route::post('getServiceData', 'UserProfileController@getServiceData')->name('getServiceData');
 Route::post('NewService', 'UserProfileController@NewService')->name('NewService');
@@ -848,3 +858,4 @@ Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashbo
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
 Route::any('/instant-hire/addbusiness-customer', 'LessonController@addbusinesscustomer')->name('addbusiness-customer');
 Route::post('pricecategory', 'LessonController@pricecategory')->name('pricecategory');
+Route::post('pricemember', 'LessonController@pricemember')->name('pricemember');

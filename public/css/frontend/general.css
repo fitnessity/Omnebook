@@ -10335,14 +10335,13 @@ req-line.thumb-light a {
 .addToCompare {
     cursor: pointer;
     color: #000;
-    font-family: "Segoe UI",Arial,sans-serif;
     font-weight: bold;
 	text-transform: uppercase;
+	font-size: 14px;
 }
 
 .addToCompare:hover {
     color: #f53b49;
-    font-family: 'Lato';
     font-weight: bold
 }
 .cmprBtn {
@@ -11547,9 +11546,8 @@ button.common-btn {
     display: none;
 }
 
-.review-follow a:hover,
-a:focus {
-    color: #fff;
+.review-follow a:hover, a:focus {
+    color: #000;
     text-decoration: none;
 }
 
@@ -16539,7 +16537,7 @@ div#CreateCompanyModal #preview img.header_img {
 
 .kickboxing_map {
     margin-left: -15px;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 }
 
 .kickboxing_map.mapskick {
@@ -19721,17 +19719,18 @@ input#zipcode {
 .listrimage{ display: block; margin: 20px 0px; }
 .listrimage img	{ height: 50px; width: 50px; border-radius: 5px; border: 2px solid #ddd; }
 .price-select-control{
-	font-size: 12px;
+	font-size: 14px;
 	display: block;
     width: 100%;
-	padding: 6px 5px;
+	padding: 6px 12px;
 	line-height: 1.42857143;
     color: #555;
     background-color: #fff;
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-	margin-bottom: 5px;
+	margin-bottom: 20px;
+	height: 34px;
 }
 .actsearch{
 	height: 470px;
@@ -20706,7 +20705,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .mainboxborder{
 	border: 1px solid #ede9e9;
 	padding: 5px;
-	min-height: 667px;
+	height: auto;
 	border-radius: 5px;
 }
 .details-titles{
@@ -20727,10 +20726,335 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: grid;
 }
 .indetails-btn{
-	display: block ruby;
-	text-align: right;
+	display: flex;
+	float: right;
 }
 .price-cat{
 	border-top: 1px solid black;
 	margin-top: 17px;
+}
+.instant-detail-booknow{
+	margin-left: 10px;
+	margin-bottom: 0px !important;
+}
+.form-control.activityselect1.instant-detail-membertypre{
+	margin-bottom: 20px;
+}
+.modelbox-edit-link{
+	background: none;
+	border: none;
+	color: #0060df;
+	text-decoration: underline;
+}
+.recurring-pmt{
+	display: inline-block;
+}
+.activity-expired{
+    color: red;
+}
+
+#addcartdiv{
+    display: inline-flex;
+}
+.modal-dialog.counter-modal-size{
+	width: 550px;
+	margin: 30px auto;
+}
+.counter-txt{
+	text-align: right;
+}
+.counter-titles{
+	margin-bottom: 15px;
+}
+.minus.bg-darkbtn.adultminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 7px;
+	left: 8px;
+}
+.minus.bg-darkbtn.adultminus {
+	position: relative;
+}
+.minus.bg-darkbtn.childminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.minus.bg-darkbtn.childminus {
+	position: relative;
+}
+.minus.bg-darkbtn.infantminus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.minus.bg-darkbtn.infantminus{
+	position: relative;
+}
+
+.plus.bg-darkbtn.adultplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 7px;
+	left: 8px;
+}
+.plus.bg-darkbtn.adultplus {
+	position: relative;
+}
+.plus.bg-darkbtn.childplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.plus.bg-darkbtn.childplus {
+	position: relative;
+}
+.plus.bg-darkbtn.infantplus i{
+	font-size: 15px;
+	position: absolute;
+	top: 8px;
+	left: 9px;
+}
+.plus.bg-darkbtn.infantplus {
+	position: relative;
+}
+.cart-title{
+	margin-bottom: 30px;
+}
+.cart-title h5{
+	text-align: center;
+	font-size: 21px;
+	font-weight: 500;
+}
+.bookedcard h5{
+	text-align: center;
+	font-size: 16px;
+	font-weight: 400;
+	margin-bottom: 16px;
+}
+.bookedcard{
+	border: 1px solid #dcdcdc;
+	border-radius: 4px;
+	box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
+	padding: 15px;
+	margin-bottom: 20px;
+}
+.userblock-card{
+	padding: 0 10px 0 9px;
+	position: relative;
+	text-align: center;
+}
+.userblock-card > .login_links {
+  cursor: pointer;
+}
+.userblock-card > .login_links > img {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+}
+.bookedcard .img-title span{
+	font-size: 18px;
+	font-weight: 600;
+}
+.bookedcard .border-center{
+	border: 1px solid #000;
+	margin: 25px;
+}
+.bookedcard .cart-items span{
+	font-size: 18px;
+	font-weight: 500;
+}
+.bookedcard .cart-total{
+	margin-top: 15px;
+}
+.cart-itme-img img{
+	width: 100%;
+	box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
+}
+.kick-adul h5{
+	font-size: 19px;
+	font-weight: 500;
+	margin-bottom: 15px;
+}
+.kick-adul h4{
+	font-size: 15px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+.kick-adul .cart-details{
+	display: grid;
+}
+.cart-btns-continues{
+	display: flex;
+	float: right;
+}
+.cart-border{
+	border-bottom: 1px solid #000;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+.cart-sub-title span{
+	font-size: 20px;
+	font-weight: 500;
+}
+.cart-sub-title .cart-view{
+	text-decoration: underline;
+	font-size: 15px;
+	color: #0034ff;
+}
+.claimed{
+	display: inline-block;
+}
+.claimed{
+	display: inline-block;
+}
+.claimed span{
+	color: red;
+	font-size: 9px;
+}
+.kickboxing-slider .owl-nav .owl-prev {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	background: #c72321;
+	opacity: 1;
+	border-radius: 50px;
+	top: 45%;
+	position: absolute;
+	left: -34px;
+	font-size: 21px;
+	color: #fff;
+}
+.kickboxing-slider .owl-nav .owl-next {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	background: #c72321;
+	opacity: 1;
+	border-radius: 50px;
+	top: 45%;
+	position: absolute;
+	right: -34px;
+	font-size: 21px;
+	color: #fff;
+}
+.cart-sub-title{
+	margin-bottom: 15px;
+}
+.btn-cart-info{
+	margin-left: 50px;
+	margin-right: -20px;
+}
+.counter-age-heading{
+	font-size: 18px;
+}
+.modal-header {
+  padding: 15px !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+.conuter-body{
+	padding: 0px 30px 0px 30px;
+}
+.cart-sub-title .cart-view:hover{
+	color: #0034ff;
+}
+.activity-information span a:focus{color: #000;}
+
+#target-1 {
+  background:none;
+  width:100%;
+  height:70px;
+  display:none;
+}
+
+.hide
+{
+  display:none;
+}
+
+/*  added this - not working  */
+
+.hide-1-yes
+{
+  display:none;
+}
+.btn-hide-show{
+	background: none;
+	border: none;
+}
+.activity-width .special-offer .multiples h2 {
+  font-size: 15px;
+}
+.points-cards-home-text{
+	display: flex;
+}
+.partcipate-model{
+	text-align: center; 
+	color: #333; 
+	line-height: inherit; 
+	font-weight: 600;
+	margin-bottom: 15px; 
+	margin-top: 20px;
+}
+.partcipate-model-error{
+	text-align: center;
+    color: red;
+	margin-bottom:15px;
+}
+
+.kickboxing-slider-activites .owl-nav .owl-prev{
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	opacity: 1;
+	border-radius: 50px;
+	top: -10%;
+	position: absolute;
+	font-size: 21px;
+	color: #000;
+	right: 30px;
+}
+.kickboxing-slider-activites .owl-nav .owl-next {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  opacity: 1;
+  border-radius: 50px;
+  top: -10%;
+  position: absolute;
+  right: 0px;
+  font-size: 21px;
+  color: #000;
+}
+.nav-sliders-activites{
+	margin: 11px 0px;
+	float: right;
+	margin-right: 65px;
+}
+.nav-sliders-activites a{
+	color: #016afb;
+	text-decoration: underline;
+}
+.align-self-center{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.cart-slider{
+	height: 415px;
+}
+.notimeoption{
+	text-align: center;
+	padding: 65px 30px;
+}
+.kickboxing-slider.cart-slider .success-cart{
+	width: 100%;
+	padding: 150px 0px;
+}
+.filter-img{
+	margin-right: 10px;
+	margin-top: -7px;
 }
