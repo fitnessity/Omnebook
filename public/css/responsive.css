@@ -71,7 +71,8 @@
     .bepart_easy_content ul li {
         padding-right: 25% !important;
     }
-		.find-activity img {  width: 130px !important;  min-height: 141px !important; }
+	.find-activity img {  width: 130px !important;  min-height: 141px !important; }
+	.instant-hire{ margin-top: 70px !important;}
 }
 
 /*MEDIA QUEREIS START FROM HERE*/
@@ -1620,6 +1621,7 @@
 	.ord-summary{
 		min-height: 1005px;
 	}
+	.instant-hire{ margin-top: 70px !important;}
 }
 @media screen and (min-width:1200px) and (max-width:2500px){
 	.table-responsive{overflow-x: hidden;}

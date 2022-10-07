@@ -176,7 +176,14 @@ Route::group(['middleware' => ['auth']], function()
 
 
 
-Route::get('/activities/{filtervalue?}','ActivityController@activity')->name('activity');
+Route::get('/instant-hire/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
+Route::any('/activity-details/{serviceid}', 'ActivityController@getInstanthiredetails');
+Route::get('/activities/','ActivityController@activity')->name('activity');
+Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
+Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
+Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
+Route::get('/showall-activity','ActivityController@showall_activity')->name('showall_activity');
 
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
@@ -191,7 +198,6 @@ Route::get('/get-booking-service-data','LessonController@getBookingServiceData')
 Route::post('/savetimes','LessonController@savetime');
 Route::post('/updatecart','LessonController@updatecart');
 Route::post('/samfilter','LessonController@samfilter')->name('samfilter');
-Route::get('/showall-activity','LessonController@showall_activity')->name('showall_activity');
 
 /* 09-june 2020 end */
 Route::get('/allSports', 'HomeController@allSports')->name('list-all-sports');
@@ -677,8 +683,7 @@ Route::any('/direct-hire', 'LessonController@getDirecthire');
 
 //Route::middleware(['basicAuth'])->group(function () {
 Route::any('/instant_hire_search_filter', 'LessonController@instant_hire_search_filter')->name('instant_hire_search_filter');
-Route::any('/instant-hire', 'LessonController@getInstanthire')->name('instant-hire');
-Route::any('/activity-details/{serviceid}', 'LessonController@getInstanthiredetails');
+Route::any('/instant-hire1', 'LessonController@getInstanthire')->name('instant-hire');
 //});
 Route::get('/instant-hire-search', 'LessonController@getInstanthireSearch');
 Route::any('/addtocart', 'LessonController@addToCart');
@@ -694,7 +699,7 @@ Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 Route::any('/instant-hire/cart-payment', 'LessonController@cartpaymentinstant');
 Route::any('/instant-hire/confirm-payment', 'LessonController@confirmpaymentinstant');
-Route::get('/instant-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetailInstant');
+
 
 //booking status and details
 Route::get('/viewBooking/{booking_id}', 'LessonController@viewBooking');
@@ -814,9 +819,6 @@ Route::post('/followProfile', 'UserProfileController@followProfile')->name('foll
 Route::post('/service_fav', 'LessonController@service_fav')->name('service_fav');
 Route::post('/viewActreview', 'LessonController@viewActreview')->name('viewActreview');
 Route::get('submitreview','LessonController@submitreview')->name('submitreview');
-Route::post('/act_detail_filter', 'LessonController@act_detail_filter')->name('act_detail_filter');
-Route::post('/act_detail_filter_for_cart', 'LessonController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
-Route::post('/getmodelbody', 'LessonController@getmodelbody')->name('getmodelbody');
 Route::post('/act_detail_filter_business_pages', 'LessonController@act_detail_filter_business_pages')->name('act_detail_filter_business_pages');
 Route::post('getServiceData', 'UserProfileController@getServiceData')->name('getServiceData');
 Route::post('NewService', 'UserProfileController@NewService')->name('NewService');

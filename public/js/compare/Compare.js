@@ -92,7 +92,7 @@
 			var professional_ids_str = professional_ids.join(",");
 			var sethtml ='';
 			$.ajax({
-				url:'instant-hire/getCompareProfessionalDetail/'+professional_ids_str,
+				url:'/getCompareProfessionalDetails/'+professional_ids_str,
 				type:'GET',
 				dataType: 'json',
 				beforeSend: function () {

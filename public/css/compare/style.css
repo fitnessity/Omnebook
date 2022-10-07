@@ -155,7 +155,10 @@ a{
 
 /*Instant-Hire Page*/
 .instant-hire{
-    margin-top: 90px;
+    margin-top: 80px;
+}
+.instant-hire-activites{
+    margin-top: 50px;
 }
 .instant-hire .title h3{
     font-weight: 600;

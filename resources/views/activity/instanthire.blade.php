@@ -25,6 +25,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
@@ -149,7 +150,8 @@
 								$bookscheduler='';
 								$time='';
 								
- 								$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->orderby('id','desc')->first();
+ 								$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->orderby('id','asc')->first();
+ 								/*print_r($bookscheduler);*/
  								if(@$bookscheduler['set_duration']!=''){
 									$tm=explode(' ',$bookscheduler['set_duration']);
 									$hr=''; $min=''; $sec='';
@@ -167,21 +169,36 @@
 						            
 								$starttime = '';
 								$curr = date("H:i:s");
-								/*echo $curr;*/
 								$time1 = new DateTime($curr);
 							    $time2 = new DateTime($ser_date);
 							    $time_diff = $time1->diff($time2);
 							   	$hours = $time_diff->h;
 							    $minutes = $time_diff->i;
 							    $seconds = $time_diff->s;
+							  
 								if($hours != ''){
 									$starttime .= $hours.' hr';
 								}
 								if($minutes != ''){
 									$starttime .= ' '.$minutes.' min';
-								}if($seconds != ''){
-									$starttime .= ' '.$seconds.' sec';
 								}
+
+								$startmin =0;
+								$startsec =0;
+								if($minutes != ''){
+									$startmin = $minutes;
+								}
+								if($seconds != ''){
+									$startsec = $seconds;
+								}
+
+								if($seconds != 0){
+									$coundownt = $startmin * $startsec;
+								}else{
+									$coundownt = $startmin;
+								}
+								
+								
                 	?>
 					<div class="col-md-4">
 						<div class="find-activity">
@@ -243,12 +260,61 @@
 											<div class="activity-time-main">
 												<span>Starts in {{$starttime}}</span>
 											</div>
+											<!-- <div id="clockdiv">
+											  <div>
+											    <span class="minutes{{$service['id']}}"></span>
+											    <div class="smalltext{{$service['id']}}">Minutes</div>
+											  </div>
+											  <div>
+											    <span class="seconds{{$service['id']}}"></span>
+											    <div class="smalltext{{$service['id']}}">Seconds</div>
+											  </div>
+											</div> -->
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
+					<script type="text/javascript">
+						function getTimeRemaining(endtime) {
+						 	var t = Date.parse(endtime) - Date.parse(new Date());
+						  	var seconds = Math.floor((t / 1000) % 60);
+						  	var minutes = Math.floor((t / 1000 / 60) % 60);
+						  	var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+						  	var days = Math.floor(t / (1000 * 60 * 60 * 24));
+						  	return {
+							    'total': t,
+							    'minutes': minutes,
+							    'seconds': seconds
+						  	};
+						}
+
+						function initializeClock(id, endtime) {
+							var clock = document.getElementById(id);
+							var minutesSpan = clock.querySelector('.minutes'+'{{$service['id']}}');
+							var secondsSpan = clock.querySelector('.seconds'+'{{$service['id']}}');
+
+						  	function updateClock() {
+						    	var t = getTimeRemaining(endtime);
+						    	/*alert(t);*/
+						    	minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+						    	secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+						    	if (t.total <= 0) {
+						      		clearInterval(timeinterval);
+						    	}
+						  	}
+
+						  	updateClock();
+						  	var timeinterval = setInterval(updateClock, 1000);
+						}
+						var dt ='{{$coundownt}}';
+						console.log(dt);
+						var deadline = new Date(Date.parse(new Date()) + parseInt(dt));
+						initializeClock('clockdiv', deadline);
+					</script>
 				<?php 
 							} 
 							$i++;
@@ -257,7 +323,7 @@
 			</div>
 		</div>
 		@endif
-		<div class="row">
+		<?php /*?><div class="row">
 			<div class="col-md-12">
 				<div class="direc-right distance-block map-sp">
 					<div class="mapsb">Show Maps
@@ -268,7 +334,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div><?php */?>
 
 		<div class="row">
 			<div class="col-md-6">
@@ -1738,7 +1804,7 @@ $(document).ready(function () {
 
 function viewActreview(aid)
 {
-	var _token = $("input[name='_token']").val();
+	var _token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		type: 'POST',
 		url: '{{route("viewActreview")}}',
