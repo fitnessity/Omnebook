@@ -9,6 +9,8 @@
 	 $service_type_two = '';
 	 $activity_type = '';
 	 $membership_type = '';
+	 $activity_location = '';
+	 $age_range  = '';
 
         if(Session::has('program_type')){ 
 			$program_type = Session::get('program_type'); 
@@ -29,9 +31,17 @@
 			$membership_type = Session::get('membership_type'); 
 			/*echo $activity_type;exit();*/
 		}
+		if(Session::has('activity_location')){ 
+			$activity_location = Session::get('activity_location'); 
+			/*echo $activity_type;exit();*/
+		}
+		if(Session::has('age_range')){ 
+			$age_range  = Session::get('age_range'); 
+			/*echo $age_range;exit();*/
+		}
 ?>
 
-<!-- <form method="post" action="/activities" id="frmsearch"> -->
+<!-- <form method="post" action="/" id="frmsearch"> -->
 <!-- @csrf -->
 <input type="text" name="session">
 <div class="row">
@@ -232,7 +242,7 @@
 							</div>
 						</div>
 						
-						<div class="activity-width">
+						<!-- <div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Activity</h2>
@@ -248,23 +258,13 @@
 									</script>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Location</h2>
-									<select id="search_by_location" multiple name="location[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
-										<option>Search By Location</option>
-										<option>Search By Location</option>
-										<option>Search By Location</option>
-										<option>Search By Location</option>
-									</select>
-									<script type="text/javascript">
-										var categ = new SlimSelect({
-											select: '#search_by_location'
-										});
-									</script>
+									<input id="pac-input" type="text" class="location-control myfilter" name="location" placeholder="search by country, city, state, zip" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif" />
 								</div>
 							</div>
 						</div>
@@ -273,7 +273,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Location of Activity</h2>
-									<select id="activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+									<select id="activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
 										@foreach (@$serviceLocation as $slkey => $slval)
 						                    <option value='{{$slval}}'>{{$slval}}</option>
 					                    @endforeach
@@ -291,7 +291,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Age Range</h2>
-									<select id="age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+									<select id="age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
 										<option>Baby (0 to 12 months)</option>
 					                    <option>Toddler (1 to 3 yrs.)</option>
 					                    <option>Preschool (4 to 5 yrs.)</option>
@@ -377,6 +377,53 @@
 		    });
 		    serviceSelect3.set(service_type_twoarr);
 	    }
+
+	    var membership_typearr = [];
+	    var membership_type = '{{ $membership_type }}';
+	    if(membership_type != ''){
+	    	membership_type = membership_type.split(',');
+		    $.each(membership_type, function( index, value ) {
+		        membership_typearr.push(value);
+		    });
+		    const serviceSelect5 = new SlimSelect({
+		        select: '#membership_type'
+		    });
+		    serviceSelect5.set(membership_typearr);
+	    }
+
+	    var activity_locationarr = [];
+	    var activity_location = '{{ $activity_location }}';
+	    if(activity_location != ''){
+	    	activity_location = activity_location.split(',');
+		    $.each(activity_location, function( index, value ) {
+		        activity_locationarr.push(value);
+		    });
+		    const serviceSelect3 = new SlimSelect({
+		        select: '#activity_location'
+		    });
+		    serviceSelect3.set(activity_locationarr);
+	    }
+
+	    var age_rangearr = [];
+	    var age_range = '{{ $age_range }}';
+	    if(age_range != ''){
+	    	age_range = age_range.split(',');
+		    $.each(age_range, function( index, value ) {
+		        age_rangearr.push(value);
+		    });
+		    const serviceSelect6 = new SlimSelect({
+		        select: '#age_range'
+		    });
+		    serviceSelect6.set(age_rangearr);
+	    }
+
+
+	    if(membership_type != '' || age_range != '' || activity_location != '' ){
+	    	$('#target-1').show(500);
+		    $('.show-1-yes').hide(0);
+		    $('.hide-1-yes').show(0);
+	    }
+	    
 	   
 	   $(".ss-value-delete").click(function(){
 	   		/*alert('hii');*/
@@ -385,6 +432,9 @@
 			var programservices=$('#programservices').val();
 			var service_type=$('#service_type').val();
 			var service_type_two=$('#servicetypetwo').val();
+			var membership_type=$('#membership_type').val();
+			var activity_location=$('#activity_location').val();
+			var age_range=$('#age_range').val();
 
 	   		var locationval = '';
 			if(service_type !=  null && service_type != ''){
@@ -411,9 +461,21 @@
 				locationval += 'memtype='+membership_type+'~';
 			}
 
+			if(activity_location != null &&  activity_location != ''){
+				activity_location = activity_location.toString().replace(/ /g, "%20");
+				locationval += 'actloctype='+activity_location+'~';
+			}
+
+			if(age_range != null &&  age_range != ''){
+				age_range = age_range.toString().replace(/ /g, "%20");
+				locationval += 'agerange='+age_range+'~';
+			}
+
 			var name = '{{ env('APP_URL') }}';
 			var url = window.location.href;
-			var urldynamic = name+'activities/'+locationval;
+			var urldynamic = name+'instant-hire/'+locationval;
+			/*alert(url);
+		alert(urldynamic);*/
 			if(url != urldynamic){
 				window.location = urldynamic;
 			}
@@ -431,13 +493,17 @@
 		var sessionservice_type= '{{ $service_type }}';
 		var sessionservice_type_two = '{{ $service_type_two }}';
 		var sessionmembership_type = '{{ $membership_type }}';
+		var sessionactivity_location = '{{ $activity_location }}';
+		var sessionage_range = '{{ $age_range }}';
 
 		var activity_for=$('#activity_for').val();
 		var programservices=$('#programservices').val();
 		var service_type=$('#service_type').val();
 		var service_type_two=$('#servicetypetwo').val();
 		var membership_type=$('#membership_type').val();
-
+		var activity_location=$('#activity_location').val();
+		var age_range=$('#age_range').val();
+		/*alert(age_range);*/
 		if(activity_for == '' || activity_for == null){
 			activity_for = 'no';
 		}
@@ -452,6 +518,12 @@
 		}
 		if(membership_type == '' || membership_type == null){
 			membership_type = 'no';
+		}
+		if(activity_location == '' || activity_location == null){
+			activity_location = 'no';
+		}
+		if(age_range == '' || age_range == null){
+			age_range = 'no';
 		}
 
 		if(sessionprogramfor == ''){
@@ -488,11 +560,28 @@
 				service_type_two = sessionservice_type_two;
 			}
 		}
+
 		if(sessionmembership_type == ''){
 			sessionmembership_type = 'no';
 		}else{
 			if(membership_type == 'no'){
 				membership_type = sessionmembership_type;
+			}
+		}
+
+		if(sessionactivity_location == ''){
+			sessionactivity_location = 'no';
+		}else{
+			if(activity_location == 'no'){
+				activity_location = sessionactivity_location;
+			}
+		}
+
+		if(sessionage_range == ''){
+			sessionage_range = 'no';
+		}else{
+			if(age_range == 'no'){
+				age_range = sessionage_range;
 			}
 		}
 
@@ -504,9 +593,8 @@
 		alert(service_type);*/
 		/*alert(sessionservice_type_two);
 		alert(service_type_two);
-		alert(sessionprogramfor);
-		alert(activity_for);*/
-
+		alert(sessionprogramfor);*/
+	
 		var locationval = '';
 
 		if(service_type != 'no'){
@@ -533,14 +621,24 @@
 			membership_type = membership_type.toString().replace(/ /g, "%20");
 			locationval += 'memtype='+membership_type+'~';
 		}
-		/*alert(membership_type);*/
+
+		if(activity_location != 'no'){
+			activity_location = activity_location.toString().replace(/ /g, "%20");
+			locationval += 'actloctype='+activity_location+'~';
+		}
+
+		if(age_range != 'no'){
+			age_range = age_range.toString().replace(/ /g, "%20");
+			locationval += 'agerange='+age_range+'~';
+		}
+		/*alert(activity_location);*/
 
 		/*if(programservices != 'no'){
 			locationval += 'ptype='+programservices+'~';
 		}*/
 		var name = '{{ env('APP_URL') }}';
 		var url = window.location.href;
-		var urldynamic = name+'activities/'+locationval;
+		var urldynamic = name+'instant-hire/'+locationval;
 		/*alert(url);
 		alert(urldynamic);*/
 		if(url != urldynamic){

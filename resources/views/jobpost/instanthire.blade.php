@@ -23,6 +23,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
@@ -224,6 +225,12 @@
 											<div class="activity-time-main">
 												<span>Starts in {{$time}}</span>
 											</div>
+											<div id="timer">
+												<div id="days"></div>
+												<div id="hours"></div>
+												<div id="minutes"></div>
+												<div id="seconds"></div>
+											</div>
 											<?php /*@if($price_all != '')	
 												<span>From ${{$price_all}}/Person</span>
 											@endif
@@ -234,6 +241,39 @@
 							</div>
 						</div>
 					</div>
+
+					<script type="text/javascript">
+						function makeTimer() {
+
+						//		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");	
+							var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");
+							console.log(endTime);
+					    		alert(endtime);
+								endTime = (Date.parse(endTime) / 1000);
+
+								var now = new Date();
+								now = (Date.parse(now) / 1000);
+
+								var timeLeft = endTime - now;
+
+								var days = Math.floor(timeLeft / 86400); 
+								var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+								var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+								var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+					  
+								if (hours < "10") { hours = "0" + hours; }
+								if (minutes < "10") { minutes = "0" + minutes; }
+								if (seconds < "10") { seconds = "0" + seconds; }
+
+								$("#days").html(days + "<span>Days</span>");
+								$("#hours").html(hours + "<span>Hours</span>");
+								$("#minutes").html(minutes + "<span>Minutes</span>");
+								$("#seconds").html(seconds + "<span>Seconds</span>");		
+
+						}
+
+						setInterval(function() { makeTimer(); }, 1000);
+					</script>
 				<?php 
 							} 
 							$i++;
@@ -707,6 +747,7 @@ $(document).ready(function () {
     }
 });
 </script>
+
 
 
 <script>

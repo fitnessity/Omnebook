@@ -20084,13 +20084,13 @@ input#zipcode {
 	line-height: 1;
 }
 .activity-time-main span{
-	font-size: 12px;
+	font-size: 11px;
 }
 .dollar-person{
 	line-height: 1;
 }
 .dollar-person span{
-	font-size: 12px;
+	font-size: 11px;
 }
 .location-find input{
 	border-top-right-radius: 30px;
@@ -21057,4 +21057,24 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .filter-img{
 	margin-right: 10px;
 	margin-top: -7px;
+}
+.activity-information span a{
+	width: 100%;
+	display: inline-block;	
+}
+.instant-banner{
+	position: relative;
+}
+.instant-banner img{
+	width: 100%;
+	max-height: 414px;
+}
+.instant-banner h4{
+	position: absolute;  
+	font-size: 32px;
+	top: 165px;
+	font-weight: 600;
+	color: white;
+	width: 30%;
+	left: 45px;
 }
