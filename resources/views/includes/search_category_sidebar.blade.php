@@ -8,12 +8,12 @@
 	 $service_type = '';
 	 $service_type_two = '';
 	 $activity_type = '';
+	 $membership_type = '';
 
         if(Session::has('program_type')){ 
 			$program_type = Session::get('program_type'); 
 			/*print_r($program_type);exit();*/
 		}
-
 
         if(Session::has('service_type')){ 
 			$service_type = Session::get('service_type');
@@ -23,12 +23,17 @@
 		}
 		if(Session::has('activity_type')){ 
 			$activity_type = Session::get('activity_type'); 
-			print_r($activity_type);exit();
+			/*echo $activity_type;exit();*/
+		}
+		if(Session::has('membership_type')){ 
+			$membership_type = Session::get('membership_type'); 
+			/*echo $activity_type;exit();*/
 		}
 ?>
 
 <!-- <form method="post" action="/activities" id="frmsearch"> -->
 <!-- @csrf -->
+<input type="text" name="session">
 <div class="row">
     <div class="col-md-12">
 		<div class="choose-sport-hire">
@@ -206,19 +211,17 @@
 		
 		</div>
 		
-		<!-- <div class="activity-width-one">  
+		<div class="activity-width-one">  
 			<div id="target-1">
-			 
 				<div id="show-hide-container-1">
 					<div class="points-cards-home-text"><a id="promo-step-2"></a>
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Membership Type</h2>
-									<select id="membership_type" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
-										<option>Individual</option>
-										<option>Kids</option>
-										<option>Teens</option>
+									<select id="membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+										<option>Drop In</option>
+                    					<option>Semester</option>
 									</select>
 									<script type="text/javascript">
 										var categ = new SlimSelect({
@@ -233,7 +236,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Activity</h2>
-									<select id="search_by_activity" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+									<select id="search_by_activity" multiple name="[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
 										<option>Search By Activity</option>
 										<option>Search By Activity</option>
 										<option>Search By Activity</option>
@@ -251,7 +254,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Location</h2>
-									<select id="search_by_location" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+									<select id="search_by_location" multiple name="location[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
 										<option>Search By Location</option>
 										<option>Search By Location</option>
 										<option>Search By Location</option>
@@ -270,15 +273,14 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Location of Activity</h2>
-									<select id="location_of_activity" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
-										<option>Location of Activity</option>
-										<option>Location of Activity</option>
-										<option>Location of Activity</option>
-										<option>Location of Activity</option>
+									<select id="activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+										@foreach (@$serviceLocation as $slkey => $slval)
+						                    <option value='{{$slval}}'>{{$slval}}</option>
+					                    @endforeach
 									</select>
 									<script type="text/javascript">
 										var categ = new SlimSelect({
-											select: '#location_of_activity'
+											select: '#activity_location'
 										});
 									</script>
 								</div>
@@ -289,11 +291,17 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Age Range</h2>
-									<select id="age_range" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
-										<option>Age Range</option>
-										<option>Age Range</option>
-										<option>Age Range</option>
-										<option>Age Range</option>
+									<select id="age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
+										<option>Baby (0 to 12 months)</option>
+					                    <option>Toddler (1 to 3 yrs.)</option>
+					                    <option>Preschool (4 to 5 yrs.)</option>
+					                    <option>Grade School (6 to 12 yrs.)</option>
+					                    <option>Teen (13 to 17 yrs.)</option>
+					                    <option>Young Adult (18 to 21 yrs.)</option>
+					                    <option>Older Adult (21 to 39 yrs.)</option>
+					                    <option>Middle Age (40 to 59 yrs.) </option>
+					                    <option>Senior Adult (60 +)</option>
+					                    <option>Any</option>
 									</select>
 									<script type="text/javascript">
 										var categ = new SlimSelect({
@@ -307,7 +315,7 @@
 					</div>	
 				</div>
 			</div>
-		</div> -->
+		</div>
 	</div>
 </div>
 <!-- </form> -->
@@ -345,7 +353,7 @@
 	   
 	    var service_typearr = [];
 	    var service_type = '{{ $service_type }}';
-	/*    alert(service_type);*/
+	    /*alert(service_type);*/
 	    if(service_type != ''){
 	    	service_type = service_type.split(',');
 		    $.each(service_type, function( index, value ) {
@@ -370,48 +378,51 @@
 		    serviceSelect3.set(service_type_twoarr);
 	    }
 	   
+	   $(".ss-value-delete").click(function(){
+	   		/*alert('hii');*/
+
+	   		var activity_for=$('#activity_for').val();
+			var programservices=$('#programservices').val();
+			var service_type=$('#service_type').val();
+			var service_type_two=$('#servicetypetwo').val();
+
+	   		var locationval = '';
+			if(service_type !=  null && service_type != ''){
+				service_type = service_type.toString().replace(/ /g, "%20");
+				locationval += 'btype='+service_type+'~';
+			}
+			if(programservices != null && programservices != ''){
+				programservices = programservices.toString().replace(/ /g, "%20");
+				locationval += 'ptype='+programservices+'~';
+			}
+
+			if(service_type_two  != null &&  service_type_two != ''){
+				service_type_two = service_type_two.toString().replace(/ /g, "%20");
+				locationval += 'stype='+service_type_two+'~';
+			}
+
+			if(activity_for  != null &&  activity_for != ''){
+				activity_for = activity_for.toString().replace(/ /g, "%20");
+				locationval += 'gfor='+activity_for+'~';
+			}
+
+			if(membership_type != null &&  membership_type != ''){
+				membership_type = membership_type.toString().replace(/ /g, "%20");
+				locationval += 'memtype='+membership_type+'~';
+			}
+
+			var name = '{{ env('APP_URL') }}';
+			var url = window.location.href;
+			var urldynamic = name+'activities/'+locationval;
+			if(url != urldynamic){
+				window.location = urldynamic;
+			}
+	   });
        
     });
 </script>
 
 <script>
-	/*function actFilter()
-	{   
-		var sessionprogramfor = '{{ $activity_type }}';
-		alert(sessionprogramfor);
-		var programservices=$('#programservices').val();
-
-		var service_type=$('#service_type').val();
-		var service_type_two=$('#servicetypetwo').val();
-		var activity_for=$('#activity_for').val();
-		var _token = $('meta[name="csrf-token"]').attr('content');
-		alert(activity_for);
-		if(sessionprogramfor != activity_for){
-			$.ajax({
-				// url: "{{route('instant_hire_search_filter')}}",
-				url: "{{url('/instant-hire')}}",
-				type: 'POST',
-				data:{
-					_token: _token,
-					type: 'POST',
-					programservices:programservices,
-					service_type:service_type,
-					service_type_two:service_type_two,
-					activity_for:activity_for,
-				},
-				success: function (response) {
-
-					// /alert(response);
-					// if(response != ''){
-					// 	$('#activitylist').html(response);
-					// }else{
-					// 	$('#activitylist').html('<div class="col-md-4 col-sm-4 col-map-show"><p>No Activity Found.</p></div>');
-					// }		
-				}
-			});
-		}
-	}*/
-
 
 	function actFilter()
 	{  /*alert('hii');*/
@@ -419,24 +430,13 @@
 		var sessionprogram_type = '{{ $program_type }}';
 		var sessionservice_type= '{{ $service_type }}';
 		var sessionservice_type_two = '{{ $service_type_two }}';
+		var sessionmembership_type = '{{ $membership_type }}';
 
-		if(sessionprogramfor == ''){
-			sessionprogramfor = 'no';
-		}
-		if(sessionprogram_type == ''){
-			sessionprogram_type = 'no';
-		}
-		if(sessionservice_type == ''){
-			sessionservice_type = 'no';
-		}
-		if(sessionservice_type_two == ''){
-			sessionservice_type_two = 'no';
-		}
 		var activity_for=$('#activity_for').val();
 		var programservices=$('#programservices').val();
 		var service_type=$('#service_type').val();
 		var service_type_two=$('#servicetypetwo').val();
-			/*alert(service_type);*/
+		var membership_type=$('#membership_type').val();
 
 		if(activity_for == '' || activity_for == null){
 			activity_for = 'no';
@@ -450,17 +450,101 @@
 		if(service_type_two == '' || service_type_two == null){
 			service_type_two = 'no';
 		}
+		if(membership_type == '' || membership_type == null){
+			membership_type = 'no';
+		}
+
+		if(sessionprogramfor == ''){
+			sessionprogramfor = 'no';
+		}
+		else{
+			if(activity_for == 'no'){
+				activity_for = sessionprogramfor;
+			}
+		}
+
+		if(sessionprogram_type == ''){
+			sessionprogram_type = 'no';
+		}
+		else{
+			if(programservices == 'no'){
+				programservices = sessionprogram_type;
+			}
+		}
+
+		if(sessionservice_type == ''){
+			sessionservice_type = 'no';
+		}
+		else{
+			if(service_type == 'no'){
+				service_type = sessionservice_type;
+			}
+		}
+
+		if(sessionservice_type_two == ''){
+			sessionservice_type_two = 'no';
+		}else{
+			if(service_type_two == 'no'){
+				service_type_two = sessionservice_type_two;
+			}
+		}
+		if(sessionmembership_type == ''){
+			sessionmembership_type = 'no';
+		}else{
+			if(membership_type == 'no'){
+				membership_type = sessionmembership_type;
+			}
+		}
+
+		
+
 		/*alert(sessionprogram_type);
 		alert(programservices);
 		alert(sessionservice_type);
-		alert(service_type);
-		alert(sessionservice_type_two);
+		alert(service_type);*/
+		/*alert(sessionservice_type_two);
 		alert(service_type_two);
 		alert(sessionprogramfor);
 		alert(activity_for);*/
-		if(sessionprogramfor != activity_for || sessionprogram_type != programservices  || sessionservice_type != service_type  || sessionservice_type_two != service_type_two) 
-		{
-			window.location = '/activities/btype='+service_type;
+
+		var locationval = '';
+
+		if(service_type != 'no'){
+			service_type = service_type.toString().replace(/ /g, "%20");
+			locationval += 'btype='+service_type+'~';
+		}
+
+		if(programservices != 'no'){
+			programservices = programservices.toString().replace(/ /g, "%20");
+			locationval += 'ptype='+programservices+'~';
+		}
+
+		if(service_type_two != 'no'){
+			service_type_two = service_type_two.toString().replace(/ /g, "%20");
+			locationval += 'stype='+service_type_two+'~';
+		}
+
+		if(activity_for != 'no'){
+			activity_for = activity_for.toString().replace(/ /g, "%20");
+			locationval += 'gfor='+activity_for+'~';
+		}
+
+		if(membership_type != 'no'){
+			membership_type = membership_type.toString().replace(/ /g, "%20");
+			locationval += 'memtype='+membership_type+'~';
+		}
+		/*alert(membership_type);*/
+
+		/*if(programservices != 'no'){
+			locationval += 'ptype='+programservices+'~';
+		}*/
+		var name = '{{ env('APP_URL') }}';
+		var url = window.location.href;
+		var urldynamic = name+'activities/'+locationval;
+		/*alert(url);
+		alert(urldynamic);*/
+		if(url != urldynamic){
+			window.location = urldynamic;
 		}
 	}
 

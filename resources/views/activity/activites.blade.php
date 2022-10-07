@@ -1234,7 +1234,7 @@
 								<?php
 					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 									$companycity = $companycountry = $pay_price  = "";
-					                if (isset($allactivities)) {
+					                if (isset($allactivities) && count($allactivities) > 0) {
 					                    $servicetype = [];
 					                    foreach ($allactivities as $loop => $service) {
 					                        $company = $price = $businessSp = [];
