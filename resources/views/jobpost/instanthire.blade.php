@@ -42,7 +42,8 @@
 					<img src="{{ url('public/uploads/discover/thumb/1649648909-tennis 1.jpg')}}" >
 					<h4>Find A Personal Training Session</h4>
 					<p>Book a Private lesson for the activity that interest you.</p>
-					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
+					<!-- <button id="84" class="showall-btn btn-position" type="button">Show all</button> -->
+					<a id="84" class="showall-btn btn-position" href="/showall-activity" >Show all</a>
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4 col-xs-12">
@@ -428,7 +429,7 @@
 					<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 				</div>
 				<div class="maparea">
-					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+					<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
 				</div>
 			</div>
 
@@ -496,7 +497,7 @@
                         <!-- Modal body -->
 
                         <div class="modal-body" style="padding: 0px;">
-							<div class="row contentPop">
+                        	<div class="row contentPop">
 								<div class="col-lg-12 theme-black-bgcolor">
 								   <h4 class="modal-title" style="text-align: center; color: white; line-height: inherit; padding: 6px;">COMPARE WITH SIMILAR ITEMS</h4>
 								</div>
@@ -557,6 +558,26 @@
 	</div>		
 </section>                        
 
+<div class="modal fade compare-model11" id="actreview">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="text-align: right;">
+            	<button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" id="closeActreview" >×</button>
+            </div>
+
+            <div class="modal-body" style="padding: 0px;">
+				<div class="row">
+					<div class="col-lg-12">
+                    	<div id="actreviewBody" class="service-review actreviewBody">
+                        	
+                        </div>
+            		</div>
+				</div>
+			</div>     
+		</div>
+	</div>
+</div>
+
 <!-- The Modal Add Business-->
     <div class="modal fade compare-model" id="addbusiness">
         <div class="modal-dialog modal-lg business">
@@ -613,7 +634,7 @@ $(document).ready(function () {
         var bounds = new google.maps.LatLngBounds();
         var marker, i;
         var icon = {
-            url: "https://fitnessity.govindcrankrod.com/public/images/hoverout2.png",
+            url: "{{url('/public/images/hoverout2.png')}}",
             scaledSize: new google.maps.Size(50, 50),
             labelOrigin: {x: 25, y: 16}
         };
@@ -696,6 +717,25 @@ $(document).ready(function () {
         $(".mykickboxing").modal('hide');
     });
 });
+
+function viewActreview(aid)
+{
+	var _token = $("input[name='_token']").val();
+	$.ajax({
+		type: 'POST',
+		url: '{{route("viewActreview")}}',
+		data: {
+			_token: _token,
+			aid: aid
+		},
+
+		success: function (data) {
+			$('#actreviewBody').html(data);
+			$("#actreview").modal('show');
+		}
+	});
+}
+
 $(document).ready(function () {
 	$("#closeActreview").click(function(){
     	$("#actreview").modal('hide');
