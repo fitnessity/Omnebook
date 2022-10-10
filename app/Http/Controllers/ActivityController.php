@@ -25,6 +25,7 @@ use App\BusinessServiceReview;
 use App\CompanyInformation;
 use App\BusinessPriceDetailsAges;
 use App\UserBookingDetail;
+use App\ActivtyGetStartedFast;
 use DateTime;
 
 class ActivityController extends Controller {
@@ -38,562 +39,631 @@ class ActivityController extends Controller {
 
 	public function instanthireindex(Request $request,$filtervalue = null)
 	{
-		/*if($filtervalue != ''){
-			echo $filtervalue; exit;
-		}*/
+		// if($filtervalue != ''){
+		// 	echo $filtervalue; exit;
+		// }
 
-		$all_activities = BusinessServices::where('business_services.is_active', 1);
 
-		$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('m'));
+		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience'){
+			if($filtervalue == 'classes' ){
+				$name = 'Gym/Studio';
+				$getstarteddata =  ActivtyGetStartedFast::where('id',2)->first();
+			}else if($filtervalue == 'personal_trainer' ){
+				$name = 'Personal Training';
+				$filtervalue = 'individual';
+				$getstarteddata =  ActivtyGetStartedFast::where('id',1)->first();
+			}else{
+				$name = 'Experience';
+				$getstarteddata =  ActivtyGetStartedFast::where('id',3)->first();
+			}
+			$all_activities = BusinessServices::where('business_services.is_active', 1)->where('service_type',$filtervalue);
 
-		$most_popularactivity = BusinessServices::where('business_services.is_active', 1)->join('user_booking_details', 'business_services.id', '=', 'user_booking_details.sport')->select('business_services.*','user_booking_details.sport')->groupby('business_services.id')->orderby('user_booking_details.created_at','desc');
+			$todayservicedata = [];
 
-		$Trainers_coaches_acitvity = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'individual']);
+			$nxtact = BusinessServices::where('business_services.is_active', 1)->where('service_type',$filtervalue);
+			
+	        $nxtacty = $nxtact->get();
+	        if (isset($nxtacty)) {
+	        	foreach ($nxtacty as $service) {
+	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
+	        		if(!empty($bookscheduler)) {
+	        			foreach ($bookscheduler  as $key => $value) {
+			            	$curr = date("H:i");
+	        				$time1 = strtotime($curr);
+							$time2 = strtotime($value['shift_start']);
+							$difference = abs($time2 - $time1) / 3600;
 
-		$Fun_Activities = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'experience']);
+			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+			              		$todayservicedata[] = $service; 
+			            	}
+			            }
+	          		}
+	          	}
+	          	$todayservicedata = array_unique($todayservicedata);
+	        }
+			
 
-		$Ways_To_Work_out = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'classes']);
+			$allactivities = $all_activities->get();
+			/*print_r($allactivities);exit();*/
+			$serviceLocation = Miscellaneous::serviceLocation();
 
-		$todayservicedata = [];
+			/*print_r($todayservicedata);exit;*/
+			$thismonthactivity = [];
+			$mostpopularactivity =  [];
+			$Trainers_coachesacitvity  = [];
+			$Fun_Activities  = [];
+			$Ways_To_Workout = [];
+			return view('activity.showall_activity',[
+				'allactivities'=>$allactivities,
+				'thismonthactivity'=>$thismonthactivity,
+				'mostpopularactivity'=>$mostpopularactivity,
+				'Fun_Activities'=>$Fun_Activities,
+				'Ways_To_Workout'=>$Ways_To_Workout,
+				'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
+				'todayservicedata'=>$todayservicedata,
+				'serviceLocation'=>$serviceLocation,
+				'name'=>$name,
+				'getstarteddata'=>$getstarteddata,
+			]);    
 
-		$nxtact = BusinessServices::where('business_services.is_active', 1);
+		}else{
+
+			$all_activities = BusinessServices::where('business_services.is_active', 1);
+
+			$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('m'));
+
+			$most_popularactivity = BusinessServices::where('business_services.is_active', 1)->join('user_booking_details', 'business_services.id', '=', 'user_booking_details.sport')->select('business_services.*','user_booking_details.sport')->groupby('business_services.id')->orderby('user_booking_details.created_at','desc');
+
+			$Trainers_coaches_acitvity = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'individual']);
+
+			$Fun_Activities = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'experience']);
+
+			$Ways_To_Work_out = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'classes']);
+
+			$todayservicedata = [];
+
+			$nxtact = BusinessServices::where('business_services.is_active', 1);
 		
-		if($filtervalue != ''){
-			if(str_contains($filtervalue, 'btype')){
-				$service_type = substr($filtervalue, strpos($filtervalue, "btype=") +6);
-				$service_type = explode('~',$service_type );
-				$request->session()->put('service_type', $service_type[0]);
-				$search = explode(",",$service_type[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('service_type');
-        	}
-
-
-        	if(str_contains($filtervalue, 'ptype')){
-				$program_type = substr($filtervalue, strpos($filtervalue, "ptype=") +6);
-				$program_type = explode('~',$program_type );
-				$request->session()->put('program_type', $program_type[0]);
-				$search = explode(",",$program_type[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	              /*  $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });*/
-	                $this_nthactivity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('program_type');
-        	}
-
-        	if(str_contains($filtervalue, 'stype')){
-				$service_type_two = substr($filtervalue, strpos($filtervalue, "stype=") +6);
-				$service_type_two = explode('~',$service_type_two );
-				$request->session()->put('service_type_two', $service_type_two[0]);
-				$search = explode(",",$service_type_two[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('service_type_two');
-        	}
-
-        	if(str_contains($filtervalue, 'gfor')){
-				$Great_for = substr($filtervalue, strpos($filtervalue, "gfor=") +5);
-				$Great_for = explode('~',$Great_for );
-				$request->session()->put('activity_type', $Great_for[0]);
-				$search = explode(",",$Great_for[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+			if($filtervalue != ''){
+				if(str_contains($filtervalue, 'btype')){
+					$service_type = substr($filtervalue, strpos($filtervalue, "btype=") +6);
+					$service_type = explode('~',$service_type );
+					$request->session()->put('service_type', $service_type[0]);
+					$search = explode(",",$service_type[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $nxtact->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $this_nthactivity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $this_nthactivity ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $most_popularactivity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $most_popularactivity ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $Fun_Activities ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $Fun_Activities ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
+		                });
+		                $Ways_To_Work_out ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
-		                }
-		            });
-	            }
-			}else {
-            	$request->session()->forget('activity_type');
-        	}
-
-        	if(str_contains($filtervalue, 'memtype')){
-				$memtype = substr($filtervalue, strpos($filtervalue, "memtype=") +8);
-				$memtype = explode('~',$memtype );
-				$request->session()->put('membership_type', $memtype[0]);
-				$search = explode(",",$memtype[0]);
-	            if(!empty($search)){
-	                $all_activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('membership_type');
-        	}
-
-        	if(str_contains($filtervalue, 'actloctype')){
-				$actloctype = substr($filtervalue, strpos($filtervalue, "actloctype=") +11);
-				$actloctype = explode('~',$actloctype );
-				$request->session()->put('activity_location', $actloctype[0]);
-				$search = explode(",",$actloctype[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-                if(!in_array("any", $search)){
-                    foreach ($search as $data) {
-                        if(strpos($data,'_')!= ''){
-                            $data = ucwords(str_replace('_',' ', $data));
-                        }
-                        else{
-                            $data = ucwords($data);
-                        }
-                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-                    }
-                }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $this_nthactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('activity_location');
-        	}
-
-        	if(str_contains($filtervalue, 'agerange')){
-				$age_range = substr($filtervalue, strpos($filtervalue, "agerange=") +9);
-				$age_range = explode('~',$age_range );
-				$request->session()->put('age_range', $age_range[0]);
-				$search = explode(",",$age_range[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $this_nthactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('age_range');
-        	}
-
-        	/*exit;*/
-		}else {
-            $request->session()->forget('service_type');
-            $request->session()->forget('program_type');
-            $request->session()->forget('service_type_two');
-            $request->session()->forget('activity_type');
-            $request->session()->forget('membership_type');
-            $request->session()->forget('activity_location');
-            $request->session()->forget('age_range');
-        }	
-
-        $nxtacty = $nxtact->get();
-        if (isset($nxtacty)) {
-        	foreach ($nxtacty as $service) {
-        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
-        		if(!empty($bookscheduler)) {
-        			foreach ($bookscheduler  as $key => $value) {
-        				/*
-						$difference = ($time1 - $time2) / 3600;
-
-		            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8  && $curr <= $value['shift_start']){		
-		              		$todayservi= $service;
-
-		              		$todayservi['businessservices']  = array_unique($todayservi); 
-		              		$todayservicact['actdata'] = array("actid"=>$value['id']);
-		              		$todayservicedata[] = array_merge($todayservi,$todayservicact); 
-		            	}*/
-        				$curr = date("H:i");
-        				$time1 = strtotime($curr);
-						$time2 = strtotime($value['shift_start']);
-						$difference = abs($time2 - $time1) / 3600;
-
-		            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
-		              		$todayservicedata[] = $service; 
-		            	}
+		                });
 		            }
-          		}
-          	}
-          	$todayservicedata = array_unique($todayservicedata);
-        }
+				}else {
+	            	$request->session()->forget('service_type');
+	        	}
 
 
-		
+	        	if(str_contains($filtervalue, 'ptype')){
+					$program_type = substr($filtervalue, strpos($filtervalue, "ptype=") +6);
+					$program_type = explode('~',$program_type );
+					$request->session()->put('program_type', $program_type[0]);
+					$search = explode(",",$program_type[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		              /*  $nxtact->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });*/
+		                $this_nthactivity->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $most_popularactivity->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Trainers_coaches_acitvity->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Fun_Activities->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Ways_To_Work_out->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		            }
+				}else {
+	            	$request->session()->forget('program_type');
+	        	}
 
-		$allactivities = $all_activities->limit(10)->get();
-		/*print_r($allactivities);exit();*/
-		$thismonthactivity = $this_nthactivity->limit(10)->get();
-		$mostpopularactivity = $most_popularactivity->limit(10)->get();
-		$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
-		$Fun_Activities  = $Fun_Activities->limit(10)->get();
-		$Ways_To_Workout = $Ways_To_Work_out->limit(10)->get();
+	        	if(str_contains($filtervalue, 'stype')){
+					$service_type_two = substr($filtervalue, strpos($filtervalue, "stype=") +6);
+					$service_type_two = explode('~',$service_type_two );
+					$request->session()->put('service_type_two', $service_type_two[0]);
+					$search = explode(",",$service_type_two[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $nxtact->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $this_nthactivity ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $most_popularactivity ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Fun_Activities ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Ways_To_Work_out ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		            }
+				}else {
+	            	$request->session()->forget('service_type_two');
+	        	}
 
-		$serviceLocation = Miscellaneous::serviceLocation();
+	        	if(str_contains($filtervalue, 'gfor')){
+					$Great_for = substr($filtervalue, strpos($filtervalue, "gfor=") +5);
+					$Great_for = explode('~',$Great_for );
+					$request->session()->put('activity_type', $Great_for[0]);
+					$search = explode(",",$Great_for[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $nxtact->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $this_nthactivity ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $most_popularactivity ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $Fun_Activities ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		                $Ways_To_Work_out ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
+		            }
+				}else {
+	            	$request->session()->forget('activity_type');
+	        	}
 
-		/*print_r($todayservicedata);exit;*/
-		return view('activity.instanthire',[
-			'allactivities'=>$allactivities,
-			'thismonthactivity'=>$thismonthactivity,
-			'mostpopularactivity'=>$mostpopularactivity,
-			'Fun_Activities'=>$Fun_Activities,
-			'Ways_To_Workout'=>$Ways_To_Workout,
-			'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
-			'todayservicedata'=>$todayservicedata,
-			'serviceLocation'=>$serviceLocation,
-		]);
+	        	if(str_contains($filtervalue, 'memtype')){
+					$memtype = substr($filtervalue, strpos($filtervalue, "memtype=") +8);
+					$memtype = explode('~',$memtype );
+					$request->session()->put('membership_type', $memtype[0]);
+					$search = explode(",",$memtype[0]);
+		            if(!empty($search)){
+		                $all_activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $nxtact->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $this_nthactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $most_popularactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Trainers_coaches_acitvity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Fun_Activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $Ways_To_Work_out->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		            }
+				}else {
+	            	$request->session()->forget('membership_type');
+	        	}
+
+	        	if(str_contains($filtervalue, 'actloctype')){
+					$actloctype = substr($filtervalue, strpos($filtervalue, "actloctype=") +11);
+					$actloctype = explode('~',$actloctype );
+					$request->session()->put('activity_location', $actloctype[0]);
+					$search = explode(",",$actloctype[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
+	                if(!in_array("any", $search)){
+	                    foreach ($search as $data) {
+	                        if(strpos($data,'_')!= ''){
+	                            $data = ucwords(str_replace('_',' ', $data));
+	                        }
+	                        else{
+	                            $data = ucwords($data);
+	                        }
+	                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+	                    }
+	                }
+		                });
+		                $nxtact->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $this_nthactivity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $most_popularactivity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Trainers_coaches_acitvity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Fun_Activities->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Ways_To_Work_out->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		            }
+				}else {
+	            	$request->session()->forget('activity_location');
+	        	}
+
+	        	if(str_contains($filtervalue, 'agerange')){
+					$age_range = substr($filtervalue, strpos($filtervalue, "agerange=") +9);
+					$age_range = explode('~',$age_range );
+					$request->session()->put('age_range', $age_range[0]);
+					$search = explode(",",$age_range[0]);
+		            if(!empty($search)){
+		                $all_activities->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $nxtact->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $this_nthactivity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $most_popularactivity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Trainers_coaches_acitvity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Fun_Activities->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		                $Ways_To_Work_out->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+		            }
+				}else {
+	            	$request->session()->forget('age_range');
+	        	}
+
+	        	/*exit;*/
+			}else {
+	            $request->session()->forget('service_type');
+	            $request->session()->forget('program_type');
+	            $request->session()->forget('service_type_two');
+	            $request->session()->forget('activity_type');
+	            $request->session()->forget('membership_type');
+	            $request->session()->forget('activity_location');
+	            $request->session()->forget('age_range');
+	        }	
+
+	        $nxtacty = $nxtact->get();
+	        if (isset($nxtacty)) {
+	        	foreach ($nxtacty as $service) {
+	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
+	        		if(!empty($bookscheduler)) {
+	        			foreach ($bookscheduler  as $key => $value) {
+	        				/*
+							$difference = ($time1 - $time2) / 3600;
+
+			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8  && $curr <= $value['shift_start']){		
+			              		$todayservi= $service;
+
+			              		$todayservi['businessservices']  = array_unique($todayservi); 
+			              		$todayservicact['actdata'] = array("actid"=>$value['id']);
+			              		$todayservicedata[] = array_merge($todayservi,$todayservicact); 
+			            	}*/
+	        				$curr = date("H:i");
+	        				$time1 = strtotime($curr);
+							$time2 = strtotime($value['shift_start']);
+							$difference = abs($time2 - $time1) / 3600;
+
+			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+			              		$todayservicedata[] = $service; 
+			            	}
+			            }
+	          		}
+	          	}
+	          	$todayservicedata = array_unique($todayservicedata);
+	        }
+
+			$allactivities = $all_activities->limit(10)->get();
+			/*print_r($allactivities);exit();*/
+			$thismonthactivity = $this_nthactivity->limit(10)->get();
+			$mostpopularactivity = $most_popularactivity->limit(10)->get();
+			$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
+			$Fun_Activities  = $Fun_Activities->limit(10)->get();
+			$Ways_To_Workout = $Ways_To_Work_out->limit(10)->get();
+
+			$serviceLocation = Miscellaneous::serviceLocation();
+			$getstarteddata =  ActivtyGetStartedFast::orderby('id','asc')->get();
+			/*print_r($todayservicedata);exit;*/
+			return view('activity.instanthire',[
+				'allactivities'=>$allactivities,
+				'thismonthactivity'=>$thismonthactivity,
+				'mostpopularactivity'=>$mostpopularactivity,
+				'Fun_Activities'=>$Fun_Activities,
+				'Ways_To_Workout'=>$Ways_To_Workout,
+				'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
+				'todayservicedata'=>$todayservicedata,
+				'serviceLocation'=>$serviceLocation,
+				'getstarteddata'=>$getstarteddata,
+			]);
+		}
+	}
+
+	public function loadMoreData(Request $request)
+	{
+		print_r($request->all());exit;
 	}
 
 	public function activity (Request $request)
@@ -601,546 +671,6 @@ class ActivityController extends Controller {
 		
 		return view('activity.activity');
 	}
-
-	public function showall_activity(Request $request,$filtervalue = null){
-		$all_activities = BusinessServices::where('business_services.is_active', 1);
-
-		$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('m'));
-
-		$most_popularactivity = BusinessServices::where('business_services.is_active', 1)->join('user_booking_details', 'business_services.id', '=', 'user_booking_details.sport')->select('business_services.*','user_booking_details.sport')->groupby('business_services.id')->orderby('user_booking_details.created_at','desc');
-
-		$Trainers_coaches_acitvity = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'individual']);
-
-		$Fun_Activities = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'experience']);
-
-		$Ways_To_Work_out = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'classes']);
-
-		$todayservicedata = [];
-
-		$nxtact = BusinessServices::where('business_services.is_active', 1);
-		
-		if($filtervalue != ''){
-			if(str_contains($filtervalue, 'btype')){
-				$service_type = substr($filtervalue, strpos($filtervalue, "btype=") +6);
-				$service_type = explode('~',$service_type );
-				$request->session()->put('service_type', $service_type[0]);
-				$search = explode(",",$service_type[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('service_type');
-        	}
-
-
-        	if(str_contains($filtervalue, 'ptype')){
-				$program_type = substr($filtervalue, strpos($filtervalue, "ptype=") +6);
-				$program_type = explode('~',$program_type );
-				$request->session()->put('program_type', $program_type[0]);
-				$search = explode(",",$program_type[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	              /*  $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });*/
-	                $this_nthactivity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('program_type');
-        	}
-
-        	if(str_contains($filtervalue, 'stype')){
-				$service_type_two = substr($filtervalue, strpos($filtervalue, "stype=") +6);
-				$service_type_two = explode('~',$service_type_two );
-				$request->session()->put('service_type_two', $service_type_two[0]);
-				$search = explode(",",$service_type_two[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('service_type_two');
-        	}
-
-        	if(str_contains($filtervalue, 'gfor')){
-				$Great_for = substr($filtervalue, strpos($filtervalue, "gfor=") +5);
-				$Great_for = explode('~',$Great_for );
-				$request->session()->put('activity_type', $Great_for[0]);
-				$search = explode(",",$Great_for[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $this_nthactivity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $most_popularactivity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $Trainers_coaches_acitvity ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $Fun_Activities ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	                $Ways_To_Work_out ->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        $data = ucwords($data);
-		                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-		            });
-	            }
-			}else {
-            	$request->session()->forget('activity_type');
-        	}
-
-        	if(str_contains($filtervalue, 'memtype')){
-				$memtype = substr($filtervalue, strpos($filtervalue, "memtype=") +8);
-				$memtype = explode('~',$memtype );
-				$request->session()->put('membership_type', $memtype[0]);
-				$search = explode(",",$memtype[0]);
-	            if(!empty($search)){
-	                $all_activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $nxtact->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $this_nthactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $most_popularactivity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Trainers_coaches_acitvity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Fun_Activities->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	                $Ways_To_Work_out->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
-	                    foreach ($search as $data) {
-	                        $data = ucwords($data);
-	                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
-	                    }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('membership_type');
-        	}
-
-        	if(str_contains($filtervalue, 'actloctype')){
-				$actloctype = substr($filtervalue, strpos($filtervalue, "actloctype=") +11);
-				$actloctype = explode('~',$actloctype );
-				$request->session()->put('activity_location', $actloctype[0]);
-				$search = explode(",",$actloctype[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-                if(!in_array("any", $search)){
-                    foreach ($search as $data) {
-                        if(strpos($data,'_')!= ''){
-                            $data = ucwords(str_replace('_',' ', $data));
-                        }
-                        else{
-                            $data = ucwords($data);
-                        }
-                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-                    }
-                }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $this_nthactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('activity_location');
-        	}
-
-        	if(str_contains($filtervalue, 'agerange')){
-				$age_range = substr($filtervalue, strpos($filtervalue, "agerange=") +9);
-				$age_range = explode('~',$age_range );
-				$request->session()->put('age_range', $age_range[0]);
-				$search = explode(",",$age_range[0]);
-	            if(!empty($search)){
-	                $all_activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $nxtact->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $this_nthactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $most_popularactivity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Trainers_coaches_acitvity->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Fun_Activities->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	                $Ways_To_Work_out->where(function($q) use ($search) {
-		                if(!in_array("any", $search)){
-		                    foreach ($search as $data) {
-		                        if(strpos($data,'_')!= ''){
-		                            $data = ucwords(str_replace('_',' ', $data));
-		                        }
-		                        else{
-		                            $data = ucwords($data);
-		                        }
-		                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
-		                    }
-		                }
-	                });
-	            }
-			}else {
-            	$request->session()->forget('age_range');
-        	}
-
-        	/*exit;*/
-		}else {
-            $request->session()->forget('service_type');
-            $request->session()->forget('program_type');
-            $request->session()->forget('service_type_two');
-            $request->session()->forget('activity_type');
-            $request->session()->forget('membership_type');
-            $request->session()->forget('activity_location');
-            $request->session()->forget('age_range');
-        }	
-
-        $nxtacty = $nxtact->get();
-        if (isset($nxtacty)) {
-        	foreach ($nxtacty as $service) {
-        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
-        		if(!empty($bookscheduler)) {
-        			foreach ($bookscheduler  as $key => $value) {
-		            	if($value['end_activity_date'] >= date('Y-m-d') &&  date("H:i:s") < $value['shift_start'] ){
-		              		$todayservicedata[] = $service; 
-		            	}
-		            }
-          		}
-          	}
-          	$todayservicedata = array_unique($todayservicedata);
-        }
-		
-
-		$allactivities = $all_activities->limit(10)->get();
-		/*print_r($allactivities);exit();*/
-		$thismonthactivity = $this_nthactivity->limit(10)->get();
-		$mostpopularactivity = $most_popularactivity->limit(10)->get();
-		$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
-		$Fun_Activities  = $Fun_Activities->limit(10)->get();
-		$Ways_To_Workout = $Ways_To_Work_out->limit(10)->get();
-
-		$serviceLocation = Miscellaneous::serviceLocation();
-
-		/*print_r($todayservicedata);exit;*/
-		return view('activity.showall_activity',[
-			'allactivities'=>$allactivities,
-			'thismonthactivity'=>$thismonthactivity,
-			'mostpopularactivity'=>$mostpopularactivity,
-			'Fun_Activities'=>$Fun_Activities,
-			'Ways_To_Workout'=>$Ways_To_Workout,
-			'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
-			'todayservicedata'=>$todayservicedata,
-			'serviceLocation'=>$serviceLocation,
-		]);
-        
-    }
-
 
 	public function getInstanthiredetails(Request $request ,$serviceid) {
       	$cart = [];
@@ -1379,7 +909,6 @@ class ActivityController extends Controller {
         $return['data'] = $data;
         return json_encode($return);
     }
-
 
     public function act_detail_filter(Request $request){
         $actoffer = $request->actoffer;
@@ -2097,7 +1626,7 @@ class ActivityController extends Controller {
         echo $actbox;
     }
 
-     public function getmodelbody(Request $request){
+    public function getmodelbody(Request $request){
         /*print_r($request->all());*/
         $dateformate = date('Y-m-d',strtotime($request->dateval));
         $pricedata= $actscheduledata= $stactbox = $categorydata =$total_price_val= '';
@@ -2263,4 +1792,10 @@ class ActivityController extends Controller {
 
         echo $stactbox.'~~'.$bookdata;
     }
+
+     /*public function activitiestype($activitiestype){
+     	echo $activitiestype;
+     	exit;
+
+     }*/
 }

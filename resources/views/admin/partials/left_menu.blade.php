@@ -55,12 +55,19 @@
             <i class="fa fa-sliders"></i> <span>Manage Post</span>  
           </a>
         </li>
-        <li class="{{ $request->segment(2) == 'slider' ? 'active' : '' }}">
+        <li class="{{ $request->segment(2) == 'inquiry' ? 'active' : '' }}">
           <a href="/admin/inquiry">
             <i class="fa fa-sliders"></i> <span>Inquiry</span>  
           </a>
         </li>
-        <li class="{{ $request->segment(2) == 'slider' ? 'active' : '' }}">
+
+        <li class="{{ $request->segment(2) == 'activity-get-started-fast' ? 'active' : '' }}">
+          <a href="/admin/activity-get-started-fast">
+            <i class="fa fa-sliders"></i> <span>activity get Get Started Fast</span>  
+          </a>
+        </li>
+        
+        <li class="{{ $request->segment(2) == 'contact-us' ? 'active' : '' }}">
           <a href="/admin/contact-us">
             <i class="fa fa-sliders"></i> <span>Contact Us</span>  
           </a>

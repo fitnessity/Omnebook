@@ -127,7 +127,7 @@ class GetstartedController extends Controller
         $getstarted = Getstarted::where('id',$id)->first();
          
        $input = $request->all();
-
+       print_r($request->all());exit();
         /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {

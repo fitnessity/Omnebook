@@ -422,7 +422,8 @@ if(isset($cart["cart_item"])){
 					<div class="top-area">
                     <?php if( !request()->is('/') ) { ?>
                         <div class="top-search">
-                            <form method="get" action="/instant-hire">
+                            <!-- <form method="get" action="/instant-hire"> -->
+                            <form method="get" action="/activities">
                                 <input type="text" name="site_search" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off">
                                 <div id="suggesstion-box"></div>
                                 <button id="serchbtn" ><i class="fa fa-search"></i></button>
@@ -478,7 +479,7 @@ if(isset($cart["cart_item"])){
 						
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>
-							<input type="button" value="Book an Activity" class="btn-style-one" onclick="location.href='/instant-hire'">
+							<input type="button" value="Book an Activity" class="btn-style-one" onclick="location.href='/activities'">
 							<a class="btn-cart">
 								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">0</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
@@ -518,7 +519,7 @@ if(isset($cart["cart_item"])){
                                                     </li>
                                                     <li class="lp-per-pro"> <span> Personal Profile </span> </li>
                                                     <li class="border-1">
-                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/instant-hire')}}">Book An Activity </a> </button> 
+                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
                                                     </li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
@@ -612,7 +613,7 @@ if(isset($cart["cart_item"])){
                         	@endif
                             
 							<script>
-                                $(".btn-cart").attr("href","/instant-hire/cart-payment");
+                                $(".btn-cart").attr("href","/activities/cart-payment");
                                 $("#cart-item").html('<?=$total_quantity?>');
                             </script>
                     	</div>

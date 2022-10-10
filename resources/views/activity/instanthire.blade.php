@@ -13,7 +13,7 @@
     use App\User;
     use App\AddrCities;    
     use App\CompanyInformation;    
-    $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);
+  /*  $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);*/
 ?>
 
 
@@ -40,31 +40,23 @@
 					<h3>Get Started Fast</h3>
 				</div>
 			</div>
+			@foreach($getstarteddata as $getdatafast)
 			<div class="col-md-4 col-sm-4 col-xs-12">
 				<div class="instant-section-info">
-					<img src="{{ url('public/uploads/discover/thumb/1649648909-tennis 1.jpg')}}" >
-					<h4>Find A Personal Training Session</h4>
-					<p>Book a Private lesson for the activity that interest you.</p>
-					<!-- <button id="84" class="showall-btn btn-position" type="button">Show all</button> -->
-					<a id="84" class="showall-btn btn-position" href="/showall-activity" >Show all</a>
+					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
+					<h4>{{$getdatafast['title']}}</h4>
+					<p>{{$getdatafast['small_text']}}</p>
+					@if($getdatafast['id'] == 1)
+						<a class="showall-btn btn-position" href="/activities/personal_trainer" >Show all</a>
+					@elseif($getdatafast['id'] == 2)
+						<a class="showall-btn btn-position" href="/activities/classes" >Show all</a>
+					@else
+						<a class="showall-btn btn-position" href="/activities/experience" >Show all</a>
+					@endif
 				</div>
 			</div>
-			<div class="col-md-4 col-sm-4 col-xs-12">
-				<div class="instant-section-info">
-					<img  src="{{ url('public/uploads/discover/thumb/1649648481-yoga classes.jpg') }}">
-					<h4>Find Ways to Workout</h4>
-					<p>Book classes, seminars, workshops, camps, and more</p>
-					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
-				</div>
-			</div>	
-			<div class="col-md-4 col-sm-4 col-xs-12">
-				<div class="instant-section-info">
-					<img src="{{ url('public/uploads/discover/thumb/1649648221-snow ski.jpg')}}">
-					<h4>Stay Active With Fun Things To Do</h4>
-					<p>Turn your weekend of vacation into an adventure</p>
-					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
-				</div>
-			</div>	
+	
+			@endforeach
 		</div>
 		@include('includes.search_category_sidebar')
 		<?php 
@@ -82,7 +74,7 @@
 						<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 					</div>
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-2"> 
 					<div class="title-show">
 						<a href="{{route('show-all-list')}}">Show All</a>
 					</div>
@@ -203,39 +195,45 @@
 					<div class="col-md-4">
 						<div class="find-activity">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-4 col-sm-4">
 									<img src="{{ $profilePic }}" >
 								</div>
-								<div class="col-md-8 activity-data">
-									<div class="activity-inner-data">
-										<i class="fas fa-star"></i>
-										<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
-									</div>
-									@if($time != '')
-										<div class="activity-hours">
-											<span>{{$time}}</span>
+								<div class="col-md-8 col-sm-8 activity-data">
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="activity-inner-data">
+												<i class="fas fa-star"></i>
+												<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
+											</div>
+											@if($time != '')
+												<div class="activity-hours">
+													<span>{{$time}}</span>
+												</div>
+											@endif
 										</div>
-									@endif
-									<div class="activity-city">
-										<span>{{$companycity}}, {{$companycountry}}</span>
-									@if(Auth::check())
-									<?php
-	                                	$loggedId = Auth::user()->id;
-	                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->orderby('id','desc')->first();                   
-	                                ?>
-										<div class="serv_fav1" ser_id="{{$service['id']}}" data-id="serfavstarts">
-											<a class="fav-fun-2" id="serfavstarts{{$service['id']}}">
-												<?php
-			                                    	if( !empty($favData) ){ ?>
-			                                        	<i class="fas fa-heart"></i>
-			                                        <?php }
-													else{ ?>
-			                                    		<i class="far fa-heart"></i>
-			                                     <?php } ?></a>
-		                            	</div>
-		                            @else
-		                            	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-									@endif
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="activity-city">
+												<span>{{$companycity}}, {{$companycountry}}</span>
+											@if(Auth::check())
+											<?php
+												$loggedId = Auth::user()->id;
+												$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->orderby('id','desc')->first();                   
+											?>
+												<div class="serv_fav1" ser_id="{{$service['id']}}" data-id="serfavstarts">
+													<a class="fav-fun-2" id="serfavstarts{{$service['id']}}">
+														<?php
+															if( !empty($favData) ){ ?>
+																<i class="fas fa-heart"></i>
+															<?php }
+															else{ ?>
+																<i class="far fa-heart"></i>
+														 <?php } ?></a>
+												</div>
+											@else
+												<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+											@endif
+											</div>
+										</div>
 									</div>
 									<div class="activity-information">
 										<span><a 
@@ -337,12 +335,12 @@
 		</div><?php */?>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>See New Activities Listed This Month </h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
@@ -463,7 +461,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -474,7 +472,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -532,12 +530,12 @@
 
 		@if(count($mostpopularactivity) > 0)	
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Most Popular Activities	</h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($mostpopularactivity)}} Results </label>
 					<a href="#">Show All </a>
@@ -658,7 +656,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -669,7 +667,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -719,12 +717,12 @@
 		
 		@if(count($Trainers_coachesacitvity) > 0)
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Trainers & Coaches </h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
 					<a href="#">Show All </a>
@@ -844,7 +842,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -855,7 +853,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -906,12 +904,12 @@
 
 		@if(count($Ways_To_Workout) > 0)
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Ways To Workout</h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Ways_To_Workout)}} Results </label>
 					<a href="#">Show All </a>
@@ -1031,7 +1029,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -1042,7 +1040,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -1093,12 +1091,12 @@
 
 		@if(count($Fun_Activities) > 0)
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Fun Activities & Things To Do</h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Fun_Activities)}} Results </label>
 					<a href="#">Show All </a>
@@ -1218,7 +1216,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -1229,7 +1227,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -1279,12 +1277,12 @@
 
 		@if(count($allactivities) > 0)
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="title">
 					<h3>See All Activities	</h3>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($allactivities) }} Results </label>
 					<a href="#">Show All </a>
@@ -1404,7 +1402,7 @@
 												<div class="bottom-content">
 													<div class="class-info">
 														<div class="row">
-															<div class="col-md-7 ratingtime">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
 																<div class="activity-inner-data">
 																	<i class="fas fa-star"></i>
 																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -1415,7 +1413,7 @@
 																	</div>
 																@endif
 															</div>
-															<div class="col-md-5 country-instant">
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
 																	<span>{{$companycity}}, {{$companycountry}}</span>
 																</div>
@@ -1518,7 +1516,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-				<div class="row contentPop">
+				<div class="row contentPop"> 
 					<div class="col-lg-12">
 					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">ADD BUSINESS</h4>
 					</div>
@@ -1699,100 +1697,9 @@
 	});
 
 </script>
-<script>
-$(document).ready(function () {
-    var locations = @json($locations);
-   /* alert(locations);*/
-    var map = ''
-    var infowindow = ''
-    var marker = ''
-    var markers = []
-    var circle = ''
-    $('#map_canvas').empty();
 
-    if (locations.length != 0) {  console.log('!empty');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom:18,
-            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-        });
-        infowindow = new google.maps.InfoWindow();
-        var bounds = new google.maps.LatLngBounds();
-        var marker, i;
-        var icon = {
-            url: "{{url('/public/images/hoverout2.png')}}",
-            scaledSize: new google.maps.Size(50, 50),
-            labelOrigin: {x: 25, y: 16}
-        };
-        for (i = 0; i < locations.length; i++) {
-            var labelText = i + 1
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-                icon: icon,
-                title: labelText.toString(),
-                label: {
-                    text: labelText.toString(),
-                    color: '#222222',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                }
-            });
 
-            bounds.extend(marker.position);
 
-            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
-            var contents =
-                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
-                    '<div class="img-claimed-business">' +
-                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
-                    '</div></div> </div>' +
-                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
-                    '<div class="content-claimed-business-inner">' +
-                    '<div class="content-left-claimed">' +
-                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
-                    '<ul>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li class="count">25</li>' +
-                    '</ul>' +
-                    '</div>' +
-                    '<div class="content-right-claimed"></div>' +
-                    '</div>' +
-                    '</div></div></div>' +
-                    '</div>';
-
-            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
-                return function () {
-                    infowindow.setPosition(marker.latLng);
-                    infowindow.setContent(contents);
-                    infowindow.open(map, this);
-                };
-            })(marker, contents, infowindow));
-            markers.push(marker);
-        }
-
-        //nnn commented on 18-05-2022 - its not displaying proper map
-       // map.fitBounds(bounds);
-       // map.panToBounds(bounds);
-        
-        $('.mysrchmap').show()
-    } else {
-        $('#mapdetails').hide()
-        
-        /*console.log('else map');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom: 8,
-            center: new google.maps.LatLng(42.567200, -83.807250),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        $('.mysrchmap').show()*/
-    }
-});
-</script>
 <script>
 
 $(document).ready(function () {

@@ -880,7 +880,7 @@
     }
 
     header .header-right {
-        padding: 0px 0px 0 0;
+        padding: 5px 0px 0 0;
     }
 
     header .header-right .without_signin {
@@ -1091,7 +1091,7 @@
     }
 
     .discover_activities {
-        padding-top: 60px;
+        padding-top: 20px;
     }
 
     .activities_box:last-child {
@@ -1183,9 +1183,7 @@
         padding: 10px 20px;
     }
 	.button{display: none;}
-	.top-search {
-		display: none;
-	}
+	
 	#frmsearchCategory{position: relative;width: 100%;}
 	#frmsearchCategory .direct-hire-sidebar{height: calc(46vh);}
 	.leftside-kickboxing.kicks .kickboxing-block1{width: 47%;}
@@ -1275,7 +1273,10 @@
 	.discount label{position: relative;}
 	.cat-age label { color: #f53b49;  font-size: 17px;}
 	.top-area ul.setting-area{padding-left: 0px !important;}
-	
+	.selectProduct { width: 100%;}
+	.find-activity img{width: 197px !important;}
+	.activity-time-main{float: right;}
+	.top-search {  width: 65% !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2040,7 +2041,7 @@
 	.leftside-kickboxing .col-md-12{margin-left:0px;}
 	div#map_canvas{width: 100% !important;}
 	.kickboxing_map{margin-left: 0px; margin-bottom: 20px;}
-	.selectProduct{margin: 25px 0px !important;}
+	.selectProduct{margin: 25px 0px !important;width: 99%;}
 	header{position: relative; }
 	.img-title-home{line-height: 1;}
 	.mapsb{margin-right: 0px;}
@@ -2224,6 +2225,10 @@
 	.modal-dialog.counter-modal-size { width: 410px;}
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
+	.top-search{display: none !important;}
+	.points-cards-home-text {  display: block;}
+	.activity-time-main{float: right;}
+	.find-activity img{margin-bottom: 15px !important;}
 }
 
 @media(max-width: 575px) {
@@ -2545,5 +2550,6 @@
 	.header-right a{margin-top: 5px;}
 	header .header-right .btn{margin-bottom: 5px;}
 	.pstyle{margin-left: 17px;}
+	
 }
 /*MEDIA QUEREIS EDN HERE

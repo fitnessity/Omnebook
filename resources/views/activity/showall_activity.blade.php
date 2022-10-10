@@ -13,7 +13,7 @@
     use App\User;
     use App\AddrCities;    
     use App\CompanyInformation;    
-    $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);
+   
 ?>
 
 
@@ -32,8 +32,8 @@
 
 <section class="instant-hire" >
 	<div class="instant-banner">
-		<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648909-tennis 1.jpg">
-		<h4>Find A Personal Training Session</h4>
+		<img src="{{url('/public/uploads/discover/thumb/'.@$getstarteddata->image) }}">
+		<h4>{{@$getstarteddata->title}}</h4>
 	</div>
 </section>
 
@@ -71,7 +71,7 @@
 				</div>
 			</div>	
 		</div><?php */?>
-		@include('includes.search_category_sidebar')
+		
 		<?php 
 			$start_date = date('Y/m/d');  
 			$date = strtotime($start_date);
@@ -233,7 +233,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="activity-information">
+									<div class="activity-information"> 
 										<span><a 
 			                                <?php if (Auth::check()) { ?> 
 			                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -263,14 +263,232 @@
 						</div>
 					</div>
 				<?php 
-							} 
-							$i++;
-						}
-					}?>
+						} 
+						$i++;
+					}
+				}?>
 			</div>
 		</div>
 		@endif
-		<div class="row">
+		
+	<section class="direc-hire" >
+		<div class="">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="title">
+						<h3>{{$name}} Activities</h3>
+					</div>
+				</div>
+				<div class="col-md-6">
+                <?php if (isset($allactivities) && count($allactivities) > 0) { ?>
+					<div class="direc-right distance-block map-sp">
+						<div class="mapsb">Show Maps
+							<label class="switch" for="maps">
+								<input type="checkbox" name="maps" id="maps">
+								<span class="slider round"></span>
+							</label>
+						</div>
+					</div>
+                <?php } ?>
+				</div>
+				<div class="col-md-8 leftside-kickboxing kicks">
+					<div class="row" id="activitylist">
+						<?php
+			                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+							$companycity = $companycountry = $pay_price  = "";
+							$locations = []; 
+			                if (isset($allactivities) && count($allactivities) > 0) {
+			                    $servicetype = [];
+			                    foreach ($allactivities as $loop => $service) {
+			                        $company = $price = $businessSp = [];
+									$serviceid = $service['id'];
+			                        $sport_activity = $service['sport_activity'];
+			                        $servicetype[$service['service_type']] = $service['service_type'];
+			                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+			                        $company = CompanyInformation::where('id', $service['cid'])->first();
+	                                if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
+										$companycity = $company->city;
+										$companycountry = $company->country;
+										$companylogo = $company->logo;
+										$companylat = $company->latitude;
+										$companylon = $company->longitude;
+	                                }
+			                            
+	                                if ($service['profile_pic']!="") {
+										if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+			                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+										} else {
+											$profilePic = url('/public/images/service-nofound.jpg');
+										}
+									}else{ 
+										$profilePic = url('/public/images/service-nofound.jpg'); 
+									}
+
+									$bookscheduler='';
+									$time='';
+									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+									if(@$bookscheduler[0]['set_duration']!=''){
+										$tm=explode(' ',$bookscheduler[0]['set_duration']);
+										$hr=''; $min=''; $sec='';
+										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+										if($tm[2]!=0){ $min=$tm[2].'min. '; }
+										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+										if($hr!='' || $min!='' || $sec!='')
+										{ $time =  $hr.$min.$sec; } 
+									}
+									$pricearr = [];
+									$price_all = '';
+									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+									if(!empty($price_allarray)){
+										
+										foreach ($price_allarray as $key => $value) {
+											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+												$pricearr[] = $value->adult_weekend_price_diff;
+											}else{
+												$pricearr[] = $value->adult_cus_weekly_price;
+											}
+										}
+
+									}
+									if(!empty($pricearr)){
+										$price_all = min($pricearr);
+									}
+	                    ?>
+						<div class="col-md-4 col-sm-4 col-map-show limitload">
+							<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+								<div class="kickboxing-block">
+									@if(Auth::check())
+										@php
+		                                	$loggedId = Auth::user()->id;
+		                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                        				@endphp
+                        				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+											<img src="{{ $profilePic }}" class="productImg">
+											<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavall">
+												<a class="fav-fun-2" id="serfavall{{$service['id']}}">
+			                                    	@if( !empty($favData) )
+			                                        	<i class="fas fa-heart"></i>
+													@else
+			                                    		<i class="far fa-heart"></i>
+			                                    	@endif
+			                                     </a>
+				                            </div>
+										</div>
+                        			@else
+                            			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+											<img src="{{ $profilePic }}">
+			                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+			                                @if($price_all != '')	
+			                                <span>From ${{$price_all}}/Person</span>
+			                                @endif
+			                            </div>
+                        			@endif
+                        			@php
+										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+										$reviews_avg=0;
+										if($reviews_count>0)
+										{	
+											$reviews_avg= round($reviews_sum/$reviews_count,2); 
+										}
+									@endphp
+									
+									<div class="bottom-content">
+										<div class="class-info">
+											<div class="row">
+												<div class="col-md-7 ratingtime">
+													<div class="activity-inner-data">
+														<i class="fas fa-star"></i>
+														<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+													</div>
+													@if($time != '')
+														<div class="activity-hours">
+															<span>{{$time}}</span>
+														</div>
+													@endif
+												</div>
+												<div class="col-md-5 country-instant">
+													<div class="activity-city">
+														<span>{{$companycity}}, {{$companycountry}}</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										@php
+											$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+											$service_type='';
+											if($service['service_type']!=''){
+												if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+												else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+												else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+											}
+										@endphp
+										<div class="activity-information activites-height">
+											<span><a 
+												@if (Auth::check())  
+				                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+				                                @else 
+				                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+				                                @endif
+				                                    target="_blank">{{ $service['program_name'] }}</a>
+											</span>
+											<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+										</div>
+										<hr>
+										<div class="all-details">
+											<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
+											<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+											<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php
+	                        if($companylat != '' || $companylon  != ''){
+	                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+	                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+	                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
+	                            array_push($locations, $a);
+							}
+						?>
+						<?php
+                    		}
+                		}else{
+                		?> 
+                		<div class="col-md-4 col-sm-4 col-map-show limitload"><p>There is no activity found</p></div>
+                		<?php } ?>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_map mapskick">
+					<div class="mysrchmap" style="display:none;height: 100%;min-height: 300px;">
+						<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
+					</div>
+					<div class="maparea">
+						<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
+					</div>
+				</div>
+				<div class="pagenation" style="display:none">
+	                <a href="#" class="active">1</a>
+	                <a href="#">2</a>
+	            </div>
+	        </div>
+	        @if(count($allactivities)>0)
+			<div class="row align-self-center">
+				<div class="col-md-6">
+					<div class="text-center ptb-65">
+					<button id="load_more_button" class="showall-btn" type="button" onclick="loadMoreData('{{$name}}');">Load More</button>
+					</div>
+				</div>
+			</div>
+			@endif
+		</div>
+	</section>
+		<!--<div class="row">
 			<div class="col-md-12">
 				<div class="direc-right distance-block map-sp">
 					<div class="mapsb">Show Maps
@@ -281,10 +499,10 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>-->
 
 		
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>New Trainers & Coaches</h3>
@@ -605,9 +823,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div>-->
 		
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>Most Popular Trainers & Coaches</h3>
@@ -928,9 +1146,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div>-->
 		
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>Most Book Activities with Trainers & Coaches</h3>
@@ -1251,9 +1469,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div>-->
 		
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>Find fun things to do with Trainers & Coaches</h3>
@@ -1574,9 +1792,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div>-->
 
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>See all activities</h3>
@@ -1897,17 +2115,16 @@
 					</div>
 				</div>
 			</div>
-        </div>
+        </div>-->
 		
-		<div class="row align-self-center">
+		<!--<div class="row align-self-center">
 			<div class="col-md-6">
 				<div class="text-center">
 				<button id="" class="showall-btn" type="button">Load More</button>
 				</div>
 			</div> 
-		</div>
+		</div>-->
 
-		
 		
 		<div class="row align-self-center">
 			<div class="col-md-6 col-xs-12">
@@ -2089,6 +2306,7 @@
 	
 <script type="text/javascript">
 	$(document).ready(function () {
+
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
 	        var id = $(this).attr('data-id');
@@ -2145,6 +2363,9 @@
 	});
 
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+
 <script>
 $(document).ready(function () {
     var locations = @json($locations);
@@ -2241,31 +2462,7 @@ $(document).ready(function () {
 </script>
 <script>
 
-$(document).ready(function () {
-    // Close modal on button click
-    $(".btn-addtocart").click(function () {
-        $(".mykickboxing").modal('hide');
-    });
-});
-
-function viewActreview(aid)
-{
-	var _token = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		type: 'POST',
-		url: '{{route("viewActreview")}}',
-		data: {
-			_token: _token,
-			aid: aid
-		},
-
-		success: function (data) {
-			$('#actreviewBody').html(data);
-			$("#actreview").modal('show');
-		}
-	});
-}
-
+	
 </script>
 
 
@@ -2337,6 +2534,7 @@ function viewActreview(aid)
 		@endif	
 	}
 </script>
+
 <script type="text/javascript">
 	function changeactpr(aid,val,part,div,maid)
 	{
@@ -2376,197 +2574,217 @@ function viewActreview(aid)
 			$('#priceid'+maid+aid).val(n[2]);
 		}
 	}
+
+	function loadMoreData(name){ 
+		var _token = $('meta[name="csrf-token"]').attr('content');
+		$.ajax({
+			url: "{{route('load-data')}}",
+			type: 'POST',
+			data:{
+				_token: _token,
+				name:name,
+			},
+			success: function (response) {
+				if(response != ''){
+				}
+			}
+		});
+	}
+
 </script>
 
-
 <script>
-jQuery("#carousel-slidertwo").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slidertwo").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
+
 <script>
-jQuery("#carousel-sliderthree").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderthree").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
+
 <script>
-jQuery("#carousel-sliderfour").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderfour").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
+
 <script>
-jQuery("#carousel-sliderfive").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderfive").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
+
 <script>
-jQuery("#carousel-slidersix").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slidersix").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 @endsection

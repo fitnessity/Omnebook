@@ -176,15 +176,16 @@ Route::group(['middleware' => ['auth']], function()
 
 
 
-Route::get('/instant-hire/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
+Route::get('/activities/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
 Route::any('/activity-details/{serviceid}', 'ActivityController@getInstanthiredetails');
 Route::get('/activities/','ActivityController@activity')->name('activity');
 Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
 Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
-Route::get('/showall-activity','ActivityController@showall_activity')->name('showall_activity');
-
+Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
+/*Route::get('/showall-activity','ActivityController@showall_activity')->name('showall_activity');
+*/
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
 Route::get('/cart','LessonController@getcart');
@@ -432,6 +433,10 @@ Route::group(array('prefix' => 'admin'), function(){
         Route::get('/getstarted/edit/{id}', 'Admin\GetstartedController@edit');
         Route::post('/getstarted/update/{id}', 'Admin\GetstartedController@update')->name('update-getstarted'); 
         Route::get('/getstarted/delete/{id}', 'Admin\GetstartedController@delete');
+        Route::get('/activity-get-started-fast', 'Admin\activityGetStartedFastController@index')->name('activityGetStartedFast');
+        Route::get('/activity-get-started-fast/edit/{id}', 'Admin\activityGetStartedFastController@edit');
+        Route::post('/activity-get-started-fast/update/{id}', 'Admin\activityGetStartedFastController@update')->name('update-activitygetstartedfast');
+
         /*** book an activity end ****/
     /*Advertisment end */
 });
