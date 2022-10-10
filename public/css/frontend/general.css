@@ -10951,13 +10951,15 @@ ul.tab_topic li:hover a {
 .toppadding40 {
     padding-top: 40px !important;
 }
-
+.compare-model .contentPop{ margin-left: 0%; width: 100%; }
 .comparetable {
     margin-bottom: 100px;
 }
-
+.comparetable th{ background-color: #2e2e2e; color: #fff; padding-left: 12px; width: 20%; }
+.comparetable th h3{ font-size: 16px; font-weight: bold; }
 .comparetable td {
     border-right: 1px solid #dddddd;
+	max-width: 22%;
 }
 
 .comparetable td {
@@ -21077,4 +21079,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: white;
 	width: 30%;
 	left: 45px;
+}
+.bottom-content{
+	height: 236px;
 }

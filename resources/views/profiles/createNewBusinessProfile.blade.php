@@ -5018,7 +5018,7 @@
                                                 });
                                             </script>
                                         </div>
-                                        <div class="form-group col-md-12">
+                                       <!--  <div class="form-group col-md-12">
                                             <label>Number of slots Available for Booking</label>
                                             <select name="frm_numberofpeople[]" id="frm_numberofpeople">
                                                 <option>1</option>
@@ -5055,7 +5055,7 @@
                                                     select: '#frm_numberofpeople'
                                                 });
                                             </script>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group col-md-12">
                                             <label>Difficulty Level</label>
                                             <select name="frm_experience_level[]" id="frm_experience_level" multiple>

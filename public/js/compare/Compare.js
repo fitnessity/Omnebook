@@ -8,6 +8,11 @@
     $(document).on('click', '.closeItems', function () {
         list = [];
         $(".comparePanle").hide();
+        /*$(".comparePanle").load(location.href+" .comparePanle>*","");
+        $('.addToCompare').removeClass('active-link');
+        $('.addToCompare').html('+ Add to Compare');
+        $('.addToCompare').attr('title', 'Add to Compare');*/
+		
         location.reload();
     });
 
@@ -323,6 +328,10 @@
 		
         $(".comparePanle").hide();
         location.reload();
+        /*$(".comparePanle").load(location.href+" .comparePanle>*","");
+        $('.addToCompare').removeClass('active-link');
+        $('.addToCompare').html('+ Add to Compare');
+        $('.addToCompare').attr('title', 'Add to Compare');*/
 		
 		//$(".compare-model").modal('hide');
 	});

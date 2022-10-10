@@ -3,42 +3,62 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/js/select/select.css" />
- <?php		
-	 $program_type = '';
-	 $service_type = '';
-	 $service_type_two = '';
-	 $activity_type = '';
-	 $membership_type = '';
-	 $activity_location = '';
-	 $age_range  = '';
+<?php		
+	$program_type = '';
+	$service_type = '';
+	$service_type_two = '';
+	$activity_type = '';
+	$membership_type = '';
+	$activity_location = '';
+	$age_range  = '';
+	$City = '';
+	$State = '';
+	$Country = '';
 
-        if(Session::has('program_type')){ 
-			$program_type = Session::get('program_type'); 
-			/*print_r($program_type);exit();*/
-		}
+    if(Session::has('program_type')){ 
+		$program_type = Session::get('program_type'); 
+		/*print_r($program_type);exit();*/
+	}
 
-        if(Session::has('service_type')){ 
-			$service_type = Session::get('service_type');
-		}
-		if(Session::has('service_type_two')){ 
-			$service_type_two = Session::get('service_type_two'); 
-		}
-		if(Session::has('activity_type')){ 
-			$activity_type = Session::get('activity_type'); 
-			/*echo $activity_type;exit();*/
-		}
-		if(Session::has('membership_type')){ 
-			$membership_type = Session::get('membership_type'); 
-			/*echo $activity_type;exit();*/
-		}
-		if(Session::has('activity_location')){ 
-			$activity_location = Session::get('activity_location'); 
-			/*echo $activity_type;exit();*/
-		}
-		if(Session::has('age_range')){ 
-			$age_range  = Session::get('age_range'); 
-			/*echo $age_range;exit();*/
-		}
+    if(Session::has('service_type')){ 
+		$service_type = Session::get('service_type');
+	}
+
+	if(Session::has('service_type_two')){ 
+		$service_type_two = Session::get('service_type_two'); 
+	}
+
+	if(Session::has('activity_type')){ 
+		$activity_type = Session::get('activity_type'); 
+		/*echo $activity_type;exit();*/
+	}
+
+	if(Session::has('membership_type')){ 
+		$membership_type = Session::get('membership_type'); 
+		/*echo $activity_type;exit();*/
+	}
+
+	if(Session::has('activity_location')){ 
+		$activity_location = Session::get('activity_location'); 
+		/*echo $activity_type;exit();*/
+	}
+
+	if(Session::has('age_range')){ 
+		$age_range  = Session::get('age_range'); 
+		/*echo $age_range;exit();*/
+	}
+
+	if(Session::has('City')){ 
+		$City  = Session::get('age_range'); 
+	}
+
+	if(Session::has('State')){ 
+		$State  = Session::get('age_range'); 
+	}
+
+	if(Session::has('Country')){ 
+		$Country  = Session::get('age_range'); 
+	}
 ?>
 
 <!-- <form method="post" action="/" id="frmsearch"> -->
@@ -47,7 +67,6 @@
 <div class="row">
     <div class="col-md-12">
 		<div class="choose-sport-hire">
-
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
@@ -218,7 +237,6 @@
 			
 			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
 			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
-		
 		</div>
 		
 		<div class="activity-width-one">  
@@ -264,11 +282,17 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Location</h2>
-									<input id="pac-input" type="text" class="location-control myfilter" name="location" placeholder="search by country, city, state, zip" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif" />
+									<!-- <input id="pac-input" type="text" class="location-control myfilter" name="location" placeholder="search by country, city, state, zip" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif" /> -->
+									<input type="text" class="form-control myfilter" autocomplete="nope" name="Address" id="b_address" placeholder="search by country, city, state, zip"  value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif">
 								</div>
 							</div>
 						</div>
-						
+
+						<input type="hidden" class="form-control" name="City" id="b_city" value="{{ $City }}">
+						<input type="hidden" class="form-control" name="City" id="country" value="{{ $Country }}">
+						<input type="hidden" class="form-control" name="State" id="b_state"  maxlength="50" value="{{ $State }}">
+						<div id="map" style="display: none;"></div>
+
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
@@ -286,7 +310,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
@@ -310,8 +334,7 @@
 									</script>
 								</div>
 							</div>
-						</div>
-						
+						</div>	
 					</div>	
 				</div>
 			</div>
@@ -320,7 +343,7 @@
 </div>
 <!-- </form> -->
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script> -->
 
 <script>
     $(document).ready(function() {
@@ -473,7 +496,7 @@
 
 			var name = '{{ env('APP_URL') }}';
 			var url = window.location.href;
-			var urldynamic = name+'instant-hire/'+locationval;
+			var urldynamic = name+'activities/'+locationval;
 			/*alert(url);
 		alert(urldynamic);*/
 			if(url != urldynamic){
@@ -638,15 +661,92 @@
 		}*/
 		var name = '{{ env('APP_URL') }}';
 		var url = window.location.href;
-		var urldynamic = name+'instant-hire/'+locationval;
+		var urldynamic = name+'activities/'+locationval;
 		/*alert(url);
 		alert(urldynamic);*/
 		if(url != urldynamic){
 			window.location = urldynamic;
 		}
 	}
-
 </script>
+
+<script type="text/javascript">
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('b_address');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+              
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                	$('#country').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state').val(place.address_components[i].long_name);
+                }
+            }
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+
 <script>
 $('.show-1-yes').click(function() {
     $('#target-1').show(500);

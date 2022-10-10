@@ -501,6 +501,9 @@ input:disabled{
 														@if(@$total_price_val != '')
 															<span id="totalprice">
 														${{@$total_price_val}} USD</span>
+														@else
+															<span id="totalprice">
+														$0 USD</span>
 														@endif
 													</div>
 												</div>
@@ -541,7 +544,7 @@ input:disabled{
 										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
 										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
 										<?php $SpotsLeftdis = 0;
-											$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+											$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
 											if( @$bschedulefirst->spots_available != ''){
 												$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
 											} ?>
