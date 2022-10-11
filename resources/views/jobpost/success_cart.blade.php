@@ -63,7 +63,16 @@ if(!empty($cart["cart_item"])) {
 						<div class="col-md-2">
 							<div class="userblock-card">
 								<div class="login_links">
-									<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$companyData->logo)}}">
+									<?php 
+										if(@$companyData->logo != ''){
+	    								if (File::exists(public_path("/uploads/profile_pic/thumb/" . $companyData->logo))) {
+	    									$profilePic = url('/public/uploads/profile_pic/thumb/' . $companyData->logo);
+	    								} else {
+	    									$profilePic = url('/public/images/service-nofound.jpg');
+	    								}
+	    							}else{ $profilePic = url('/public/images/service-nofound.jpg'); }
+	    					?>
+									<img src="{{$profilePic}}">
 								</div>
 							</div>
 						</div>
@@ -119,10 +128,10 @@ if(!empty($cart["cart_item"])) {
 					<div class="col-md-7 col-sm-12">
 						<div class="cart-btns-continues">
 							<div class="btn-cart-modal">
-								<a type="submit" href="/instant-hire" class="btn btn-black mt-10" >Continue Shopping</a>
+								<a type="submit" href="/activities" class="btn btn-black mt-10" >Continue Shopping</a>
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
-								<a type="submit" href="/instant-hire/cart-payment" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								<a type="submit" href="/payments/card" class="btn btn-red mt-10" >View Cart & Checkout</a>
 							</div>
 						</div>
 					</div>

@@ -3,6 +3,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/js/select/select.css" />
+
 <?php		
 	$program_type = '';
 	$service_type = '';
@@ -60,14 +61,16 @@
 		$Country  = Session::get('age_range'); 
 	}
 ?>
-
 <!-- <form method="post" action="/" id="frmsearch"> -->
 <!-- @csrf -->
 <input type="text" name="session">
 <div class="row">
     <div class="col-md-12">
+    	
+        
 		<div class="choose-sport-hire">
 			<div class="activity-width">
+            	
 				<div class="special-offer">
 					<div class="multiples">
 						<h2>Select Activity</h2>
@@ -238,8 +241,12 @@
 			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
 			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
 		</div>
+        <div>
+        	
+        </div>
 		
-		<div class="activity-width-one">  
+		<div class="activity-width-one">
+        	
 			<div id="target-1">
 				<div id="show-hide-container-1">
 					<div class="points-cards-home-text"><a id="promo-step-2"></a>
@@ -263,26 +270,8 @@
 						<!-- <div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
-									<h2>Search By Activity</h2>
-									<select id="search_by_activity" multiple name="[]" class="myfilter"  multiple="multiple"  onclick="actFilter()">
-										<option>Search By Activity</option>
-										<option>Search By Activity</option>
-										<option>Search By Activity</option>
-									</select>
-									<script type="text/javascript">
-										var categ = new SlimSelect({
-											select: '#search_by_activity'
-										});
-									</script>
-								</div>
-							</div>
-						</div> -->
-						
-						<div class="activity-width">
-							<div class="special-offer">
-								<div class="multiples">
 									<h2>Search By Location</h2>
-									<!-- <input id="pac-input" type="text" class="location-control myfilter" name="location" placeholder="search by country, city, state, zip" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif" /> -->
+								
 									<input type="text" class="form-control myfilter" autocomplete="nope" name="Address" id="b_address" placeholder="search by country, city, state, zip"  value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif">
 								</div>
 							</div>
@@ -291,8 +280,22 @@
 						<input type="hidden" class="form-control" name="City" id="b_city" value="{{ $City }}">
 						<input type="hidden" class="form-control" name="City" id="country" value="{{ $Country }}">
 						<input type="hidden" class="form-control" name="State" id="b_state"  maxlength="50" value="{{ $State }}">
-						<div id="map" style="display: none;"></div>
-
+						<div id="map11" style="display: none;"></div> -->
+						
+						<div class="activity-width">
+							<div class="special-offer">
+								<div class="multiples">
+									<h2>Search By Location</h2>
+                                    <input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off" />
+                                </div> 
+                                <div id="map" style="display: none; position: relative; overflow: hidden;"></div>
+                                <input type="hidden"  name="City" id="b_city1"  placeholder="City" maxlength="50" value="">
+                                <input type="hidden"  name="State" id="b_state1"  placeholder="State" maxlength="50" value="">
+                                <input type="hidden"  name="ZipCode" id="b_zipcode1"  placeholder="Zip Code" value="" maxlength="20">
+                                <input type="hidden" name="lon" id="lon1" value="">
+                                <input type="hidden" name="lat" id="lat1" value="">
+                         </div> 
+                     </div> 
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
@@ -344,6 +347,8 @@
 <!-- </form> -->
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script> -->
+
+
 
 <script>
     $(document).ready(function() {
@@ -508,7 +513,6 @@
 </script>
 
 <script>
-
 	function actFilter()
 	{  /*alert('hii');*/
 		var sessionprogramfor = '{{ $activity_type }}';
@@ -607,16 +611,6 @@
 				age_range = sessionage_range;
 			}
 		}
-
-		
-
-		/*alert(sessionprogram_type);
-		alert(programservices);
-		alert(sessionservice_type);
-		alert(service_type);*/
-		/*alert(sessionservice_type_two);
-		alert(service_type_two);
-		alert(sessionprogramfor);*/
 	
 		var locationval = '';
 
@@ -669,15 +663,28 @@
 		}
 	}
 </script>
-
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 <script type="text/javascript">
+	$('#instant-hire').scroll(function(){ 
+		//Set new top to autocomplete dropdown
+		newTop = $('#b_address1').offset().top + $('#b_address1').outerHeight();
+		alert(newTop);
+		$('.pac-container').css('top', newTop + 'px');
+	});
+	
+	$(document).ready(function () {
+		$("#autocomplete").parent()
+		.css({position: "relative"})
+		.append(".pac-container");
+	});
+	
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -33.8688, lng: 151.2195},
             zoom: 13
         });
 
-        var input = document.getElementById('b_address');
+        var input = document.getElementById('b_address1');
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
@@ -730,22 +737,21 @@
 
             // Location details
             for (var i = 0; i < place.address_components.length; i++) {
-              
+              //alert(place.address_components[i].types[0]);
                 if(place.address_components[i].types[0] == 'locality'){
-                    $('#b_city').val(place.address_components[i].long_name);
+                    $('#b_city1').val(place.address_components[i].long_name);
                 }
                 if(place.address_components[i].types[0] == 'country'){
-                	$('#country').val(place.address_components[i].long_name);
+                	$('#country1').val(place.address_components[i].long_name);
                 }
                 if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                  $('#b_state').val(place.address_components[i].long_name);
+                  $('#b_state1').val(place.address_components[i].long_name);
                 }
             }
         });
     }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 
 <script>
 $('.show-1-yes').click(function() {

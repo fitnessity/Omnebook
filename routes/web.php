@@ -702,7 +702,7 @@ Route::post('/savedirecthirerequest', 'LessonController@postSaveDirecthireReques
 Route::any('/direct-hire/cart-payment', 'LessonController@cartpayment');
 Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
-Route::any('/instant-hire/cart-payment', 'LessonController@cartpaymentinstant');
+Route::any('/payments/card', 'LessonController@cartpaymentinstant');
 Route::any('/instant-hire/confirm-payment', 'LessonController@confirmpaymentinstant');
 
 

@@ -16,7 +16,8 @@
     }else{
         $username = '';
     }
-    /*echo"<pre>";print_r($cart['cart_item']);*//*exit();*/
+  /*  echo"<pre>";print_r($cart['cart_item']);*/ /*exit();*/
+
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -33,6 +34,13 @@
                 <?php $item_price=0; 
     				foreach ($cart['cart_item'] as $item) { 
                       /*  print_r($item);exit();*/
+                        if(!empty($item['adult']))
+                            $totalquantity = $item['adult']['quantity'];
+                        if(!empty($item['child']))
+                            $totalquantity += $item['child']['quantity'];
+                        if(!empty($item['infant']))
+                            $totalquantity += $item['infant']['quantity'];
+                       /*echo $totalquantity;*/
     					$item_price = $item_price + $item["totalprice"];
     					if ($item['image']!="") {
     						if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
@@ -49,11 +57,11 @@
     					$ser = BusinessService::where('cid', $act[0]["cid"])->get()->toArray();
     					$company = CompanyInformation::where('id', $act[0]["cid"])->get()->toArray();
                         $BusinessTerms = BusinessTerms::where('cid',$act[0]["cid"])->first();
-                        $termcondfaqtext = $BusinessTerms->termcondfaqtext;
-                        $contracttermstext = $BusinessTerms->contracttermstext;
-                        $liabilitytext = $BusinessTerms->liabilitytext;
-                        $covidtext = $BusinessTerms->covidtext;
-                        $refundpolicytext = $BusinessTerms->refundpolicytext;
+                        $termcondfaqtext = @$BusinessTerms->termcondfaqtext;
+                        $contracttermstext = @$BusinessTerms->contracttermstext;
+                        $liabilitytext = @$BusinessTerms->liabilitytext;
+                        $covidtext = @$BusinessTerms->covidtext;
+                        $refundpolicytext = @$BusinessTerms->refundpolicytext;
     					//dd(\DB::getQueryLog());
     					$serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
     					//print_r($ser[0]);
@@ -193,7 +201,7 @@
                                     	<?php
     										$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
     										
-    										/*for($i=0; $i<$item["quantity"]; $i++)*/
+    										/*for($i=0; $i<$totalquantity ; $i++)*/
     										/*{*/ ?>
                                             <!-- <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php /*echo $i;*/ ?>')">
                                                 <option value="">Who is participating?</option>
@@ -223,19 +231,21 @@
     						</div>
     						<div class="row">
                                 <div class="col-md-12 divmargin cart-terms-dis">
-                                	<h4> Terms: </h4>
-                                    @if($termcondfaqtext != '')
-                                        <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act[0]['cid']}}">Terms, Conditions, FAQ</a> | @endif 
-                                    
-                                    @if($liabilitytext != '')
-                                        <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{$act[0]['cid']}}">Liability Waiver</a> | @endif 
-                                    @if($covidtext != '')
-                                        <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{$act[0]['cid']}}">Covid - 19 Protocols</a> |
+                                    @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
+                                    	<h4> Terms: </h4>
+                                        @if($termcondfaqtext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act[0]['cid']}}">Terms, Conditions, FAQ</a> | @endif 
+                                        
+                                        @if($liabilitytext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{$act[0]['cid']}}">Liability Waiver</a> | @endif 
+                                        @if($covidtext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{$act[0]['cid']}}">Covid - 19 Protocols</a> |
+                                        @endif
+                                        @if($contracttermstext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{$act[0]['cid']}}">Contract Terms</a> | @endif 
+                                        @if($refundpolicytext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{$act[0]['cid']}}">Refund Policy</a> @endif 
                                     @endif
-                                    @if($contracttermstext != '')
-                                        <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{$act[0]['cid']}}">Contract Terms</a> | @endif 
-                                    @if($refundpolicytext != '')
-                                        <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{$act[0]['cid']}}">Refund Policy</a> @endif 
                                 </div>
                             </div>
                         </div>

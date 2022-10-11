@@ -613,7 +613,7 @@ if(isset($cart["cart_item"])){
                         	@endif
                             
 							<script>
-                                $(".btn-cart").attr("href","/activities/cart-payment");
+                                $(".btn-cart").attr("href","/payments/card");
                                 $("#cart-item").html('<?=$total_quantity?>');
                             </script>
                     	</div>

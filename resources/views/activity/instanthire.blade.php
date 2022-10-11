@@ -15,9 +15,6 @@
     use App\CompanyInformation;    
   /*  $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);*/
 ?>
-
-
-
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
@@ -59,7 +56,7 @@
 			@endforeach
 		</div>
 		@include('includes.search_category_sidebar')
-		<?php 
+		<?php
 			$start_date = date('Y/m/d');  
 			$date = strtotime($start_date);
 			$date = strtotime("+8 hours", $date);
@@ -75,9 +72,9 @@
 					</div>
 				</div>
 				<div class="col-md-2"> 
-					<div class="title-show">
+					<!--<div class="title-show">
 						<a href="{{route('show-all-list')}}">Show All</a>
-					</div>
+					</div>-->
 				</div>
 				<?php
 	                $companyid = $companyname = $serviceid = "";
@@ -275,7 +272,7 @@
 						</div>
 					</div>
 
-					<script type="text/javascript">
+					<!-- <script type="text/javascript">
 						function getTimeRemaining(endtime) {
 						 	var t = Date.parse(endtime) - Date.parse(new Date());
 						  	var seconds = Math.floor((t / 1000) % 60);
@@ -312,7 +309,7 @@
 						console.log(dt);
 						var deadline = new Date(Date.parse(new Date()) + parseInt(dt));
 						initializeClock('clockdiv', deadline);
-					</script>
+					</script> -->
 				<?php 
 							} 
 							$i++;
@@ -343,7 +340,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($thismonthactivity)}} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/thismonth" >Show all</a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -538,7 +535,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($mostpopularactivity)}} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/most_popular">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -725,7 +722,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/trainers_coaches">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -912,7 +909,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Ways_To_Workout)}} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/ways_to_workout">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -1099,7 +1096,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Fun_Activities)}} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/active_wth_fun_things_to_do">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -1285,7 +1282,7 @@
 			<div class="col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($allactivities) }} Results </label>
-					<a href="#">Show All </a>
+					<a href="/activities/all">Show All </a>
 				</div>
 			</div>
 		
@@ -1562,11 +1559,8 @@
 </div>
 
 <!-- comparision popup-->
-
 <!--end of comparision popup-->
-
 <!--  warning model  -->
-
 
 <div id="WarningModal" class="w3-modal">
     <div class="w3-modal-content warningModal">
@@ -1641,6 +1635,7 @@
 	
 <script type="text/javascript">
 	$(document).ready(function () {
+
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
 	        var id = $(this).attr('data-id');
@@ -1695,11 +1690,7 @@
 	    });
 
 	});
-
 </script>
-
-
-
 <script>
 
 $(document).ready(function () {
@@ -1726,10 +1717,7 @@ function viewActreview(aid)
 		}
 	});
 }
-
 </script>
-
-
 <script type="text/javascript">	
 	function submit_rating(sid)
 	{
@@ -1798,6 +1786,7 @@ function viewActreview(aid)
 		@endif	
 	}
 </script>
+
 <script type="text/javascript">
 	function changeactpr(aid,val,part,div,maid)
 	{
@@ -1840,231 +1829,231 @@ function viewActreview(aid)
 </script>
 
 <script>
-jQuery("#carousel-slider").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slider").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 <script>
-jQuery("#carousel-slidertwo").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slidertwo").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 <script>
-jQuery("#carousel-sliderthree").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderthree").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 <script>
-jQuery("#carousel-sliderfour").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderfour").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 <script>
-jQuery("#carousel-sliderfive").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-sliderfive").owlCarousel({
+	  autoplay: true,
+	  rewind: true,
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 <script>
-jQuery("#carousel-slidersix").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slidersix").owlCarousel({
+	  autoplay: true,
+	  rewind: true,
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
 
-    600: {
-      items: 3
-    },
+	    600: {
+	      items: 3
+	    },
 
-    1024: {
-      items: 3
-    },
-	
-	1200: {
-      items: 5
-    },
-	
-    1366: {
-      items: 5
-    },
-  },
-});
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
 </script>
 @endsection

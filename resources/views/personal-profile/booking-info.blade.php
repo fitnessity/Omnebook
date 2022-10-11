@@ -236,7 +236,7 @@ use App\UserBookingDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <!--<a href="#">Reschedule</a>-->
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
