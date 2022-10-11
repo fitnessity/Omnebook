@@ -21,7 +21,7 @@ class UserBookingRecurringPaymentDetails extends Model
     public $timestamps = false;
     protected $table = 'user_booking_recurring_payment_details';
 	protected $fillable = [
-        'user_id', 'pmt_number', 'Amount','stripe_intent_id','user_order_details_id','status',
+        'user_id', 'pmt_number', 'Amount','stripe_intent_id','user_order_details_id','status','person_type'
     ];
 
 

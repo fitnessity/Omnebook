@@ -1076,12 +1076,12 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        return redirect('/instant-hire/cart-payment'); 
+        return redirect('/payments/card'); 
     }
     
     public function emptyCart(Request $request) {
         $request->session()->forget('cart_item');
-        return redirect('/instant-hire/cart-payment'); 
+        return redirect('/payments/card'); 
     }
     
     public function getInstanthireSearch(Request $request) {
@@ -2790,8 +2790,21 @@ class LessonController extends Controller {
                             'infant'=>$infantqnt); 
                         $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
                             'infant'=>$infantprice);
+                        $adupmt_num = $childpmt_num = $infantpmt_num = 0;
+                        if($aduqnt != 0){
+                            $adupmt_num = 1;
+                        }
+                        if($childqnt != 0){
+                            $childpmt_num = 1;
+                        }
+                        if($infantqnt != 0){
+                            $infantpmt_num = 1;
+                        }
+                        $payment_number_c = array( 'adult'=>$adupmt_num ,'child' => $childpmt_num,
+                            'infant'=> $infantpmt_num);
                         $encodeqty = json_encode($qty_c);
                         $encodeprice = json_encode($price_c);
+                        $encodepayment_number = json_encode($payment_number_c);
 
                     }
                 /*}*/
@@ -2818,6 +2831,7 @@ class LessonController extends Controller {
                             'sessiondate' => $sesdate,
                     )),
                     'act_schedule_id' =>$act_schedule_id,
+                    'payment_number' =>$encodepayment_number,
                 );
                 /*print_r($act);exit();*/
                 $status = UserBookingDetail::create($act);
