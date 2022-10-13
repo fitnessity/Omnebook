@@ -2,6 +2,8 @@
 @section('content')
 @include('layouts.userHeader')
 
+
+
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
         <div class="col-md-2" style="background: black;">
@@ -780,8 +782,44 @@
 					</table>
 				</div>
 			</div>
+				
+			<div class="row">
+				<div class="col-md-3">
+					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+						<input name="plan" class="payment-radio" type="radio" checked>
+						<span class="plan-details">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="cart-num">
+										<span>XXXX 4023</span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="cart-name">
+										<span>Visa</span>
+									</div>
+								</div>
+							</div>
+						</span>
+					</label>
+				</div>
+				<div class="col-md-3">
+					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+						<input name="plan" class="payment-radio" type="radio">
+						<span class="hidden-visually">Pro - $50 per month, 5 team members, 500 GB per month, 5 concurrent builds</span>
+						<span class="plan-details">
+							<span>XXXX 5986</span>
+							<span>Mastercard</span>
+							
+						</span>
+					</label>
+				</div>
+			</div>
+			
 		</div>
+		
 	</div>
+	
 </div>
 
 				

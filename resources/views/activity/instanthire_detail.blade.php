@@ -74,6 +74,7 @@ input:disabled{
 	use Carbon\Carbon;
 
 	$sid = $serviceid;
+	/*echo $sid;exit();*/
 	$service = BusinessServices::where('id',$serviceid)->first();
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
@@ -145,63 +146,50 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->max('spots_available');
+    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',$todaydate )->get();
+    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',$todaydate )->max('spots_available');
 	}
 
-    /*  print_r($bus_schedule);*/
+ 
     $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft =0 ;
+    $i=0;
     if(!empty(@$bus_schedule)){
         foreach($bus_schedule as $data){
-            if($data['scheduled_day_or_week'] == 'Days'){
-                $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-            }else if($data['scheduled_day_or_week'] == 'Months'){
-                $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-            }else if($data['scheduled_day_or_week'] == 'Years'){
-                $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-            }else{
-                $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-                $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-            }  
+        	if($i==0){
+	            
+	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
+	            $date_now = new DateTime();
+	            $expdate = new DateTime($expdate);
+	             
+	            if($date_now <= $expdate){
+	            
+	                if(@$data['shift_start']!=''){
+	                    $start = date('h:i a', strtotime( $data['shift_start'] ));
+	                    $timedata .= $start;
+	                }
+	                if(@$data['shift_end']!=''){
+	                    $end = date('h:i a', strtotime( $data['shift_end'] ));
+	                    $timedata .= ' - '.$end;
+	                } 
 
-            if($todaydate <=$expdate){
-                if(@$data['shift_start']!=''){
-                    $start = date('h:i a', strtotime( $data['shift_start'] ));
-                    $timedata .= $start;
-                }
-                if(@$data['shift_end']!=''){
-                    $end = date('h:i a', strtotime( $data['shift_end'] ));
-                    $timedata .= ' - '.$end;
-                } 
-
-                if(@$data['set_duration']!=''){
-                    $tm=explode(' ',$data['set_duration']);
-                    $hr=''; $min=''; $sec='';
-                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                    if($hr!='' || $min!='' || $sec!='')
-                    { 
-                    	$time = $hr.$min.$sec; 
-                        $timedata .= ' / '.$time;
-                    } 
-                }
-
-            }
-
-            $today = date('Y-m-d');
-            /*$SpotsLeft = UserBookingDetail::where('sport',  @$serviceid )->whereDate('created_at', '=', $today)->sum('qty');
-            $SpotsLeftdis=0;
-            if( !empty($data['spots_available']) ){
-                $spot_avil=$data['spots_available'];
-                $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-                $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-            }*/
+	                if(@$data['set_duration']!=''){
+	                    $tm=explode(' ',$data['set_duration']);
+	                    $hr=''; $min=''; $sec='';
+	                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+	                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
+	                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+	                    if($hr!='' || $min!='' || $sec!='')
+	                    { 
+	                    	$time = $hr.$min.$sec; 
+	                        $timedata .= ' / '.$time;
+	                    } 
+	                  
+	                }
+	            }
+           	}$i++;
         }
     }
+ 
 	$selectval = $priceid = $total_price_val = '' ;
 	$adult_cnt =$child_cnt =$infant_cnt =0;
 	$adult_price = $child_price = $infant_price =0;
@@ -425,8 +413,8 @@ input:disabled{
 												</select>
 											</div>	
 										</div>
-										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->first();?>
+										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
+										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();?>
 										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
 											<div class="membership-details">
 												<h3 class="date-title">Booking Details</h3>
@@ -550,6 +538,7 @@ input:disabled{
 											} ?>
 
 										<div id="cartadd">
+									
 										@if($SpotsLefthidden >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else

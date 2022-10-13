@@ -24,11 +24,6 @@
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 <script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-
-
 <section class="instant-hire" >
 	<div class="container-fluid">
 		<div class="row">
@@ -232,7 +227,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="activity-information">
+									<div class="activity-information ">
 										<span><a 
 			                                <?php if (Auth::check()) { ?> 
 			                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -332,12 +327,12 @@
 		</div><?php */?>
 
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>See New Activities Listed This Month </h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="/activities/thismonth" >Show all</a>
@@ -485,7 +480,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -527,12 +522,12 @@
 
 		@if(count($mostpopularactivity) > 0)	
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Most Popular Activities	</h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($mostpopularactivity)}} Results </label>
 					<a href="/activities/most_popular">Show All </a>
@@ -544,7 +539,7 @@
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitestwo">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-slidertwo" class="owl-carousel">
+								<div id="popular-activities" class="owl-carousel">
 									<?php
 						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
@@ -680,7 +675,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -714,12 +709,12 @@
 		
 		@if(count($Trainers_coachesacitvity) > 0)
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Trainers & Coaches </h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
 					<a href="/activities/trainers_coaches">Show All </a>
@@ -731,7 +726,7 @@
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitesthree">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderthree" class="owl-carousel">
+								<div id="find-trainers" class="owl-carousel">
 									<?php
 						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
@@ -866,7 +861,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -901,12 +896,12 @@
 
 		@if(count($Ways_To_Workout) > 0)
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Ways To Workout</h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Ways_To_Workout)}} Results </label>
 					<a href="/activities/ways_to_workout">Show All </a>
@@ -918,7 +913,7 @@
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitesfour">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderfour" class="owl-carousel">
+								<div id="ways-to-workout" class="owl-carousel">
 									<?php
 						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
@@ -1053,7 +1048,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -1088,12 +1083,12 @@
 
 		@if(count($Fun_Activities) > 0)
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>Find Fun Activities & Things To Do</h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Fun_Activities)}} Results </label>
 					<a href="/activities/active_wth_fun_things_to_do">Show All </a>
@@ -1105,7 +1100,7 @@
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitesfive">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderfive" class="owl-carousel">
+								<div id="all-activities" class="owl-carousel">
 									<?php
 						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
@@ -1240,7 +1235,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -1274,12 +1269,12 @@
 
 		@if(count($allactivities) > 0)
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
 					<h3>See All Activities	</h3>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($allactivities) }} Results </label>
 					<a href="/activities/all">Show All </a>
@@ -1291,7 +1286,7 @@
 					<div class="ptb-65 float-left w-100 discover_activities" id="activitessix">
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-slidersix" class="owl-carousel">
+								<div id="trainers-coaches" class="owl-carousel">
 								<?php
 					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 									$companycity = $companycountry = $pay_price  = "";
@@ -1426,7 +1421,7 @@
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
-													<div class="activity-information">
+													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
 							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -1867,7 +1862,7 @@ function viewActreview(aid)
 	});
 </script>
 <script>
-	jQuery("#carousel-slidertwo").owlCarousel({
+	jQuery("#popular-activities").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
@@ -1905,7 +1900,7 @@ function viewActreview(aid)
 	});
 </script>
 <script>
-	jQuery("#carousel-sliderthree").owlCarousel({
+	jQuery("#find-trainers").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
@@ -1943,7 +1938,7 @@ function viewActreview(aid)
 	});
 </script>
 <script>
-	jQuery("#carousel-sliderfour").owlCarousel({
+	jQuery("#ways-to-workout").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
@@ -1981,7 +1976,7 @@ function viewActreview(aid)
 	});
 </script>
 <script>
-	jQuery("#carousel-sliderfive").owlCarousel({
+	jQuery("#all-activities").owlCarousel({
 	  autoplay: true,
 	  rewind: true,
 	  margin: 20,
@@ -2019,7 +2014,7 @@ function viewActreview(aid)
 	});
 </script>
 <script>
-	jQuery("#carousel-slidersix").owlCarousel({
+	jQuery("#trainers-coaches").owlCarousel({
 	  autoplay: true,
 	  rewind: true,
 	  margin: 20,

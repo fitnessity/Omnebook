@@ -1080,124 +1080,7 @@ class UserProfileController extends Controller {
         }
         return redirect()->route('profile-viewProfile')->with('success', 'Post created succesfully!');
     }
-    public function createCheckoutSession(Request $request) {
-       /*session()->forget('cart_item');*/
-      /* $cart = session()->get('cart_item');
-        print_r($cart);exit();*/
-		$loggedinUser = Auth::user();
-		$customer='';
-		$userdata = User::where('id',$loggedinUser->id)->first();
-		\Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-		$stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-		if(empty($userdata['stripe_customer_id'])) {
-			$customer = \Stripe\Customer::create(
-			[
-				'name' => $userdata['firstname'].' '.$userdata['lastname'],
-				'email'=> $userdata['email'],
-				/*'address' =>[
-						"city": $userdata['city'],
-						"country": $userdata['country'],
-						"line1": $userdata['address'],
-						"line2": $userdata['country'],
-						"postal_code": $userdata['zipcode'],
-						"state": $userdata['state'],
-					],
-				'shipping' =>[
-					'address' =>[
-						"city": $userdata['city'],
-						"country": $userdata['country'],
-						"line1": $userdata['address'],
-						"line2": $userdata['country'],
-						"postal_code": $userdata['zipcode'],
-						"state": $userdata['state'],
-					],
-				  ]*/
-			]);
-            $stripe_customer_id = $customer->id;
-			if(!empty($customer)){
-				User::where(['id' => $loggedinUser->id])->update(['stripe_customer_id' => $customer->id]);
-			}
-		}else{
-             $stripe_customer_id = $userdata['stripe_customer_id'];
-        }
-		/*$intent = \Stripe\PaymentIntent::create([
-		  'amount' => 1200,
-		  'currency' => 'usd',
-		  'customer' => $userdata['stripe_customer_id'],
-		]);*/
-		$pmethod = $stripe->paymentMethods->all(['customer' => $stripe_customer_id, 'type' => 'card']);
-		/*print_r($pmethod);
-		exit;*/
-       /* dd($request->all()); exit;*/
-        $listItems = []; 
-        $proid = []; 
-		//print_r($request->all());
-        if(isset($request->itemname)) {
-            $itemcount = count($request->itemname);
-            $pr=''; $total=0;
-            for($i=0; $i < $itemcount; $i++) {
-                $pr=$request->itemprice[$i] / $request->itemqty[$i];
-				$total = $total + $pr;
-                if(isset($request->itemname[$i])) {
-                    $product = \Stripe\Product::create([
-                      /*  'id' => $request->itemid[$i],*/
-                        'name' => $request->itemname[$i],
-                        'description' => $request->itemname[$i],
-                     // 'description' => $request->itemtype[$i],
-                    ]);
-
-                    // echo $request->itempriceid[$i];
-                    $price = \Stripe\Price::create([
-                      'product' => $product->id,
-                      'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
-                      'currency' => 'usd',
-                    ]);   
-                    //print_r($price);
-                    $listItem['price'] = $price->id;
-                    $listItem['quantity'] = $request->itemqty[$i];
-                    $listItems[] = $listItem;
-                    
-                    //echo $request->itemid[$i];
-                    //print_r($product);
-                }
-                if(isset($request->itemid[$i])) {
-                    $proidary = $request->itemid[$i];
-                    $proid[] = $proidary;
-                }
-
-            }
-        }
-        $prodata = json_encode($proid); 
-        /*print_r($listItems);
-         print_r($proid);
-       exit;*/
-
-        /*$intent = \Stripe\PaymentIntent::create([
-		  	'amount' => $total,
-		  	'currency' => 'usd',
-		  	'customer' => $stripe_customer_id,
-		  	'off_session' => true,
-    		'confirm' => true,
-		]);*/
-
-        $checkout_session = \Stripe\Checkout\Session::create([
-            'line_items' => [
-              # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-              $listItems
-            ],
-            'payment_method_types' => [
-              'card',
-            ],
-            "metadata" => ["pro_id" => $prodata],
-            'mode' => 'payment',
-            'success_url' => config('constants.STRIPE_SUCCESS_URL'),
-            'cancel_url' => config('constants.STRIPE_CANCEL_URL'),
-        ]);
-      /*  print_r($listItems);exit();*/
-        $request->session()->put('stripepayid', $checkout_session->id);
-        return redirect($checkout_session->url);
-
-    }
+  
 
     public static function inquirySubmit(Request $request)
     {
@@ -9865,16 +9748,18 @@ class UserProfileController extends Controller {
     }
     
     public function paymentdelete(Request $request) {
-        /*print_r($request->all());exit;*/
+        print_r($request->all());
         $user = User::where('id', Auth::user()->id)->first();
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $stripe->customers->deleteSource(
+        $stripval = $stripe->customers->deleteSource(
             $user->stripe_customer_id,
             $request->cardid,
             []
         );
-        DB::delete('DELETE FROM users_payment_info WHERE card_stripe_id = "' . $request->cardid . '"');
-        return Redirect::back()->with('success', 'Family Member Delete.');
+        echo $stripval;
+       /* DB::delete('DELETE FROM users_payment_info WHERE card_stripe_id = "' . $request->cardid . '"');*/
+        /*return Redirect::back()->with('success', 'Card Deleted Successfully.');*/
     }
     
     public function paymentsave(Request $request) {
@@ -9921,8 +9806,19 @@ class UserProfileController extends Controller {
     public function paymentinfo(Request $request) {
         $cardInfo = [];
         $user = User::where('id', Auth::user()->id)->first();
-        $savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);
-        if (count($savedEvents) > 0) {
+        /*$savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);*/
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $savedEvents = $stripe->customers->allSources(
+                $user->stripe_customer_id,
+                ['object' => 'card' ,'limit' => 30]
+            );
+
+        $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            
+        $cardInfo = $savedEvents['data'];
+        /*print_r($cardInfo);*/
+        /*if (count($savedEvents) > 0) {
             foreach ($savedEvents as $event) {
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                 $carddetails = $stripe->customers->retrieveSource(
@@ -9932,16 +9828,8 @@ class UserProfileController extends Controller {
                 );
 
                 $cardInfo[] = $carddetails;
-                /*$card['id'] = $event->id;
-                $card['owner'] = $event->card_owner;
-                $card['cvv'] = $event->card_cvv;
-                $card['cardnumber'] = $event->card_number;
-                $card['month'] = $event->card_exp_month;
-                $card['year'] = $event->card_exp_year;
-                $card['type'] = $event->card_type;
-                $cardInfo[] = $card;*/
             }
-        }
+        }*/
         /*print_r($cardInfo);exit;*/
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;

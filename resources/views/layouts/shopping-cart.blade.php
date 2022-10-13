@@ -25,8 +25,8 @@
 <div id="shopping-cart">
 	<?php
     if (!empty($cart['cart_item'])) { ?>
-    <form action="{{route('create-checkout-session')}}" method="POST">
-    @csrf
+    <form action="{{route('create-checkout-session')}}" method="POST" class="validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
+        @csrf
     	<!--<div class="container">-->
     	<div class="row">
     		<div class="col-sm-6 col-md-7 col-lg-7 ord-details">
@@ -201,21 +201,33 @@
                                     	<?php
     										$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
     										
-    										/*for($i=0; $i<$totalquantity ; $i++)*/
-    										/*{*/ ?>
-                                            <!-- <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php /*echo $i;*/ ?>')">
+    										for($i=0; $i<$totalquantity ; $i++)
+    										{ ?>
+                                            <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
                                                 <option value="">Who is participating?</option>
                                                 <?php foreach($family as $fa){ 
-    												/*$age = date_diff(date_create($fa['birthday']), date_create('today'))->y;*/
-    											?>
-                                                	<option value="<?php /*echo $fa['id'];*/ ?>" 
-                                                    data-name="<?php /*echo $fa['first_name'].' '.$fa['last_name'];*/ ?>"
-                                                    data-cnt="<?php /*echo $i;*/ ?>" data-act="<?php /*echo $item["code"];*/ ?>"
-                                                    data-age="<?php /*echo $age;*/ ?>" >
-    												<?php /*echo $fa['first_name'].' '.$fa['last_name'];*/ ?></option>
+                                                    /*$curr = date("m-d-Y");
+                                                    $time1 = date("m-d-Y");
+                                                    $t2= $fa['birthday'];
+                                                    echo $curr ;
+                                                    echo $t2;
+                                                    $time2 = date('m-d-Y', strtotime($t2));
+                                                     echo $time2;exit();
+                                                    $age = date_diff($time2 - $time1) ;*/
+
+                                                   /* $date_now = date_create();
+                                                    $birthday = new DateTime($fa['birthday']);
+                                                    $age = $date_now->diff($birthday)->y;*/
+    												/*$age = date_diff($birthday,  $date_now)->y;*/
+                                                   /* echo $age;  */  											?>   
+                                                	<option value="<?php echo $fa['id']; ?>" 
+                                                        data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
+                                                        data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>"
+                                                        data-age="<?php /*echo $age;*/ ?>" >
+                                                        <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
-                                            </select> -->
-                                        <?php/* }*/ ?>
+                                            </select> 
+                                        <?php } ?>
 
                                     </div>
                                     
@@ -401,7 +413,7 @@
 
     			<?php } ?>
         			<div class="btn-ord-txt">
-                    	<a href="/instant-hire" class="post-btn-red">Add Activity or Product + </a>
+                    	<a href="/activities" class="post-btn-red">Add Activity or Product + </a>
     			    </div>
     		</div>
             <?php
@@ -456,60 +468,93 @@
                             <div id="error_check" style="display: none;"><p class="alertcolor font-14 pl-25">Please select Terms & Conditions</p></div>
                             
                         </div>
-                        
     				</div>
     				 
     				<div class="col-md-12">
-    					<!-- <div class="payment-sec">
-    						<label>PAYMENT SELECTION</label>
-    						<div class="sacecard-title">SAVE CARDS 
-                                <a href="#" class="edit-cart"> Edit</a> 
-                            </div>
-    						<div class="row">
-    							<div class="col-md-6">
-    								<div class="choose-carts">
-    									<img src="{{ url('public/images/newimage/cartvisa.jpg')}}" alt="">
-    								</div>
-    							</div>
-    							<div class="col-md-6">
-    								<div class="choose-carts">
-    									<img src="{{ url('/public/images/newimage/cartmaster.jpg')}}" alt="">
-    								</div>
-    							</div>
-    						</div>
+    					<div class="payment-sec">
+                            @if(!empty($cardInfo)) 
+        						<label>PAYMENT SELECTION</label>
+        						<div class="sacecard-title">SAVE CARDS 
+                                    <a href="/personal-profile/payment-info" class="edit-cart"> Edit</a> 
+                                </div>
+        						<div class="row">
+                                    @foreach($cardInfo as $card) 
+                                        @php $brandname = strtolower($card['brand']); @endphp
+                                        <div class="col-md-6">
+                                            <label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+                                                <input name="cardinfo" class="payment-radio" type="radio" value ="{{$card['id']}}">
+                                                <span class="plan-details">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="cart-name">
+                                                                <span>{{$brandname}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="cart-num">
+                                                                <span>XXXX XXXX XXXX {{$card['last4']}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+        						</div>
+                            @endif
     						<div class="sacecard-title">OTHER PAYMENT METHODS </div>
     						<button class="card-btns">Credit / Debit Card</button>
-    						<button class="card-btns">Paypal</button>
-    						<button class="card-btns">Venmo</button>
-    						<div class="row">
-    							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-    								<div id="card-number-field" class="card-no">
-    									<label for="cardNumber">Card Number</label>
-    									<input required="" type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control"> 
-    								</div>
-    							</div>
-    							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-    								<div id="" class="card-no">
-    									<label for="owner">Name On Card</label>
-                                        <input required type="text" name="owner" id="owner" placeholder="ENTER YOUR NAME HERE" class="form-control">
-    								</div>
-    							</div>
-    						</div>
-    						<div class="row">
-    							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-    								<div id="expiration-date" class="card-no">
-    									<label for="owner">Expiry Date</label>
-                                        <input required type="text" name="owner" id="owner" placeholder="MM/YY" class="form-control">
-    								</div>
-    							</div>
-    							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-    								<div id="" class="card-no">
-    									<label for="cvv">CVV</label>
-                                        <input required type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control">
-    								</div>
-    							</div>
-    						</div>
-    					</div> -->
+    						<!-- <button class="card-btns">Paypal</button>
+    						<button class="card-btns">Venmo</button> -->
+                            <div > 
+        						<div class="row" >
+        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  required">
+        								<div id="card-number-field" class="card-no ">
+        									<label for="cardNumber">Card Number</label>
+        									<input  type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control card-num" > 
+        								</div>
+        							</div>
+        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 required" >
+        								<div id="" class="card-no">
+        									<label for="owner">Name On Card</label>
+                                            <input type="text" name="owner" id="owner" placeholder="ENTER YOUR NAME HERE" class="form-control">
+        								</div>
+        							</div>
+        						</div>
+        						<div class="row">
+        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
+        								<div id="expiration-date" class="card-no">
+        									<label for="owner">Exp Month</label>
+                                            <input type="text" name="month" id="month" placeholder="MM" class="form-control card-expiry-month">
+        								</div>
+        							</div>
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
+                                        <div id="expiration-date" class="card-no">
+                                            <label for="owner">Exp Year</label>
+                                            <input  type="text" name="year" id="year" placeholder="YYYY" class="form-control card-expiry-year">
+                                        </div>
+                                    </div>
+        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 cvc required">
+        								<div id="" class="card-no">
+        									<label for="cvv">CVV</label>
+                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
+        								</div>
+        							</div>
+                                    <div class="col-md-12">
+                                        <div class="save-pmt-checkbox">
+                                            <input type="checkbox" id="save_card" name="save_card" value="1">
+                                            <label>Save for future payments</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class='form-row row'>
+                                        <div class='col-md-12 hide error form-group'>
+                                            <div class='alert-danger alert'>Fix the errors before you begin.</div>
+                                        </div>
+                                    </div>
+        						</div>
+                            </div>
+    					</div>
                         <div class="btn-ord-txt">
                             <button class="post-btn-red" type="submit" id="checkout-button">Check Out</button>
                         </div>
@@ -705,6 +750,72 @@
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
 
 <!-- <script src="{{ url('public/js/creditcard.js') }}"></script> -->
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  
+<script type="text/javascript">
+$(function() {
+    var $form = $(".validation");
+    $('form.validation').bind('submit', function(e) {
+        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
+        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+       
+        if(save_cardRadio == null) {
+            $('#save_card').val(0);
+        }else{
+             $('#save_card').val(1);
+        }
+
+        if(cardinfoRadio == null) {
+            var $form  = $(".validation"),
+                inputVal = ['input[type=email]', 'input[type=password]',
+                                 'input[type=text]', 'input[type=file]',
+                                 'textarea'].join(', '),
+                $inputs       = $form.find('.required').find(inputVal),
+                $errorStatus = $form.find('div.error'),
+                valid         = true;
+                $errorStatus.addClass('hide');
+         
+            $('.has-error').removeClass('has-error');
+            $inputs.each(function(i, el) {
+                var $input = $(el);
+                if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorStatus.removeClass('hide');
+                    e.preventDefault();
+                }
+            });
+            alert($form.data('stripe-publishable-key'));
+          
+            if (!$form.data('cc-on-file')) {
+                e.preventDefault();
+                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                Stripe.createToken({
+                    number: $('.card-num').val(),
+                    cvc: $('.card-cvc').val(),
+                    exp_month: $('.card-expiry-month').val(),
+                    exp_year: $('.card-expiry-year').val()
+                }, stripeHandleResponse);
+            }
+        }
+    });
+  
+    function stripeHandleResponse(status, response) {
+        if (response.error) {
+            $('.error')
+                .removeClass('hide')
+                .find('.alert')
+                .text(response.error.message);
+        } else {
+            var token = response['id'];
+            $form.find('input[type=text]').empty();
+            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+            $form.get(0).submit();
+        }
+    }
+});
+</script>
+
 <script>
     $( document ).ready(function() {
         $('#checkout-button').click(function(){

@@ -55,7 +55,7 @@ Route::get('business/booking','UserProfileController@bookingBusinessProfile')->n
 
 Route::get('businessjumps/{bstep?}/{cid?}','UserProfileController@businessJumps')->name('businessjumps');
 Route::post('addbstep','UserProfileController@addbstep')->name('addbstep');
-Route::post('create-checkout-session','UserProfileController@createCheckoutSession')->name('create-checkout-session');
+
 Route::post('addbusinesscompanydetail','UserProfileController@addbusinesscompanydetail')->name('addbusinesscompanydetail');
 Route::match(['get','post'],'addbusinessexperience','UserProfileController@addbusinessexperience')->name('addbusinessexperience');
 Route::post('addbusinessspecification','UserProfileController@addbusinessspecification')->name('addbusinessspecification');
@@ -703,8 +703,11 @@ Route::any('/direct-hire/cart-payment', 'LessonController@cartpayment');
 Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 Route::any('/payments/card', 'LessonController@cartpaymentinstant');
-Route::any('/instant-hire/confirm-payment', 'LessonController@confirmpaymentinstant');
 
+
+
+Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
+Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 
 //booking status and details
 Route::get('/viewBooking/{booking_id}', 'LessonController@viewBooking');

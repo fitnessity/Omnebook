@@ -128,7 +128,7 @@ class ActivityController extends Controller {
 				 'cart' => $cart
 			]);    
 		}else{
-			
+			/*DB::enableQueryLog();*/
 			$all_activities = BusinessServices::where('business_services.is_active', 1);
 
 			$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('m'));
@@ -192,7 +192,6 @@ class ActivityController extends Controller {
 	            	$request->session()->forget('service_type');
 	        	}
 
-
 	        	if(str_contains($filtervalue, 'ptype')){
 					$program_type = substr($filtervalue, strpos($filtervalue, "ptype=") +6);
 					$program_type = explode('~',$program_type );
@@ -205,12 +204,12 @@ class ActivityController extends Controller {
 		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
 		                    }
 		                });
-		              /*  $nxtact->where(function($q) use ($search) {
+		                $nxtact->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
 		                        $data = ucwords($data);
 		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
 		                    }
-		                });*/
+		                });
 		                $this_nthactivity->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
 		                        $data = ucwords($data);
@@ -744,7 +743,7 @@ class ActivityController extends Controller {
 	        	}else {
 	            	$request->session()->forget('address');
 	        	}
-/*$allactivities = $all_activities->get();
+				/*$allactivities = $all_activities->get();
 	        	dd(DB::getQueryLog());*/
 	        	/*exit;*/
 			}else {
@@ -768,8 +767,8 @@ class ActivityController extends Controller {
 	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
 	        		if(!empty($bookscheduler)) {
 	        			foreach ($bookscheduler  as $key => $value) {
-	        				/*
-							$difference = ($time1 - $time2) / 3600;
+	        				
+							/*$difference = ($time1 - $time2) / 3600;
 
 			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8  && $curr <= $value['shift_start']){		
 			              		$todayservi= $service;
@@ -793,6 +792,7 @@ class ActivityController extends Controller {
 	        }
 
 			$allactivities = $all_activities->limit(10)->get();
+			/*dd(DB::getQueryLog());*/
 			/*print_r($allactivities);exit();*/
 			$thismonthactivity = $this_nthactivity->limit(10)->get();
 			$mostpopularactivity = $most_popularactivity->limit(10)->get();
@@ -1112,8 +1112,6 @@ class ActivityController extends Controller {
             select('business_services.*','business_activity_scheduler.spots_available')->
             Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->groupBy('business_services.id');
             /*dd(DB::getQueryLog());*/
-            //$searchData->Where('group_size', $actfilparticipant);
-            //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
 
         }
 
@@ -1273,60 +1271,60 @@ class ActivityController extends Controller {
                     }
                 }else{
                     $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
-                                        <div class="find-activity">
-                                            <div class="row">
-                                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="img-modal-left">
-                                                        <img src="'.$profilePic.'" >
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
-                                                    <div class="activity-inner-data">
-                                                        <i class="fas fa-star"></i>
-                                                        <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
-                                                    </div>';
-                                                    if($time != ''){
-                                                        $actbox .= '<div class="activity-hours">
-                                                            <span>'.$time.'</span>
-                                                        </div>';
-                                                    }
-                                                    $actbox .= '<div class="activity-city">
-                                                        <span>'.$companycity.', '.$companycountry.'</span>';
-                                                    if(Auth::check()){
-                                                        $loggedId = Auth::user()->id;
-                                                        $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
-                                                        $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
-                                                            <a class="fav-fun-2" id="serfav'.$act["id"].'">';
-                                                        if( !empty($favData) ){ 
-                                                            $actbox .= '<i class="fas fa-heart"></i>';
-                                                        }else{ 
-                                                            $actbox .= '<i class="far fa-heart"></i>';
-                                                        } 
-                                                        $actbox .= '</a></div> '; 
-                                                    }else{
-                                                        $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
-                                                    }
-                                                    $actbox .= '</div>
-                                                        <div class="activity-information">
-                                                        <span><a';
-                                                        if (Auth::check()) { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
-                                                        }else { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
-                                                        }
-                                                        $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
-                                                            <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
-                                                            <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
-                                                        </div>';
-                                                        if($price_all != ''){
-                                                            $actbox .= '<div>
-                                                                <span class="activity-time">From $'.$price_all.'/Person</span>
-                                                            </div>';
-                                                        }
-                                                $actbox .= '</div>
+                                    <div class="find-activity">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <div class="img-modal-left">
+                                                    <img src="'.$profilePic.'" >
                                                 </div>
                                             </div>
-                                        </div>';
+                                            <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+                                                <div class="activity-inner-data">
+                                                    <i class="fas fa-star"></i>
+                                                    <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
+                                                </div>';
+                                                if($time != ''){
+                                                    $actbox .= '<div class="activity-hours">
+                                                        <span>'.$time.'</span>
+                                                    </div>';
+                                                }
+                                                $actbox .= '<div class="activity-city">
+                                                    <span>'.$companycity.', '.$companycountry.'</span>';
+                                                if(Auth::check()){
+                                                    $loggedId = Auth::user()->id;
+                                                    $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
+                                                    $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
+                                                        <a class="fav-fun-2" id="serfav'.$act["id"].'">';
+                                                    if( !empty($favData) ){ 
+                                                        $actbox .= '<i class="fas fa-heart"></i>';
+                                                    }else{ 
+                                                        $actbox .= '<i class="far fa-heart"></i>';
+                                                    } 
+                                                    $actbox .= '</a></div> '; 
+                                                }else{
+                                                    $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
+                                                }
+                                                $actbox .= '</div>
+                                                    <div class="activity-information">
+                                                    <span><a';
+                                                    if (Auth::check()) { 
+                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
+                                                    }else { 
+                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
+                                                    }
+                                                    $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
+                                                        <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
+                                                        <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                                                    </div>';
+                                                    if($price_all != ''){
+                                                        $actbox .= '<div>
+                                                            <span class="activity-time">From $'.$price_all.'/Person</span>
+                                                        </div>';
+                                                    }
+                                            $actbox .= '</div>
+                                            </div>
+                                        </div>
+                                    </div>';
                 }
             }
         }
@@ -1664,37 +1662,20 @@ class ActivityController extends Controller {
                                             $actbox .= '</select>
                                         </div>  
                                     </div>';
-                                    $SpotsLeftdis = 0;
-                                    $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get();
-                                    $bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->first();
+                                    
                                     $actbox .= '<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
                                         <div class="membership-details">
                                             <h3 class="date-title">Booking Details</h3>
                                             <label>Step: 4 </label> <span class=""> Select Time</span>
-                                            <div class="row" id="timeschedule">';
+                                            <div class="row" id="timeschedule">
 
-                                            if(!empty(@$bschedule) ||count(@$bschedule)>0){
-                                                foreach(@$bschedule as $bdata){
-                                                    $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d'))->count();
-                                                    if( $bdata['spots_available'] != ''){
-                                                        $SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
-                                                    }
-                                                    $actbox .= '<div class="col-md-6">
-                                                        <div class="donate-now">
-                                                            <input type="radio" id="'.$bdata['id'].'" name="amount" value="'.$bdata['shift_start'].'" onclick="addhiddentime('.$bdata['id'].','.$serviceid.');"/>
-                                                                <label for="'.$bdata['id'].'">'.$bdata['shift_start'].'</label>
-                                                                <p class="end-hr">'.$SpotsLeftdis.'/'.$bdata['spots_available'].' Spots Left </p>
-                                                        </div>
-                                                    </div>';
-                                                }
-                                            }else{
-                                                $actbox .= '<p class="notimeoption">No time option available Select category to view available times</p>';
-                                            }
+                                            	<p class="notimeoption">No time option available Select category to view available times</p></div>';
+                                            
 
                                             if(@$servicePrfirst['is_recurring_adult'] == 1){
                                                 $reccuringval = ' (Recurring)';
                                             }
-                                            $actbox .= '</div>
+                                            $actbox .= '
                                             <div id="book'.$serviceid.$serviceid.'">';
                                             
                                                 $actbox .= '<div class="price-cat">
@@ -1744,39 +1725,39 @@ class ActivityController extends Controller {
                             </div>
                         </div>
                         <div class="col-md-12 col-xs-12">
-                                <div class="indetails-btn">';
-                                    $actbox .= '<input type="hidden" name="price_title_hidden" id="price_title_hidden'.$serviceid.$serviceid.'" value="">';
-                                    
-                                    $actbox .= '<input type="hidden" name="time_hidden" id="time_hidden'.$serviceid.$serviceid.'" value="" >';
-                                    
-                                    $actbox .= '<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$serviceid.$serviceid.'" value="">';
-                                   
-                                    $actbox .= '<input type="hidden" name="memtype_hidden" id="memtype_hidden'.$serviceid.$serviceid.'"  value="">';
-                                    
-                                    $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
-                                     
-                                        <input type="hidden" name="pid" value="'.$serviceid.'"  />
-                                        <input type="hidden" name="persontype" id="persontype" value="adult"/>
-                                        <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$serviceid.'" value="1" class="product-quantity"/>
+                            <div class="indetails-btn">';
+                                $actbox .= '<input type="hidden" name="price_title_hidden" id="price_title_hidden'.$serviceid.$serviceid.'" value="">';
+                                
+                                $actbox .= '<input type="hidden" name="time_hidden" id="time_hidden'.$serviceid.$serviceid.'" value="" >';
+                                
+                                $actbox .= '<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$serviceid.$serviceid.'" value="">';
+                               
+                                $actbox .= '<input type="hidden" name="memtype_hidden" id="memtype_hidden'.$serviceid.$serviceid.'"  value="">';
+                                
+                                $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
+                                 
+                                    <input type="hidden" name="pid" value="'.$serviceid.'"  />
+                                    <input type="hidden" name="persontype" id="persontype" value="adult"/>
+                                    <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$serviceid.'" value="1" class="product-quantity"/>
 
-                                        <input type="hidden" name="aduquantity" id="adupricequantity" value="" class="product-quantity"/>
-                                        <input type="hidden" name="childquantity" id="childpricequantity" value="" class="product-quantity"/>
-                                        <input type="hidden" name="infantquantity" id="infantpricequantity" value="" class="product-quantity"/>
+                                    <input type="hidden" name="aduquantity" id="adupricequantity" value="" class="product-quantity"/>
+                                    <input type="hidden" name="childquantity" id="childpricequantity" value="" class="product-quantity"/>
+                                    <input type="hidden" name="infantquantity" id="infantpricequantity" value="" class="product-quantity"/>
 
-                                        <input type="hidden" name="cartaduprice" id="cartaduprice" value="" class="product-quantity"/>
-                                        <input type="hidden" name="cartchildprice" id="cartchildprice" value="" class="product-quantity"/>
-                                        <input type="hidden" name="cartinfantprice" id="cartinfantprice" value="" class="product-quantity"/>
+                                    <input type="hidden" name="cartaduprice" id="cartaduprice" value="" class="product-quantity"/>
+                                    <input type="hidden" name="cartchildprice" id="cartchildprice" value="" class="product-quantity"/>
+                                    <input type="hidden" name="cartinfantprice" id="cartinfantprice" value="" class="product-quantity"/>
 
-                                       <input type="hidden" name="pricetotal" id="pricetotal'.$serviceid.''.$serviceid.'" value="" class="product-price"/>
-                                       <input type="hidden" name="price" id="price'.$serviceid.''.$serviceid.'" value="" class="product-price" />
-                                        <input type="hidden" name="session" id="session'.$serviceid.'" value="" />
-                                        <input type="hidden" name="priceid" value="'.$priceid.'" id="priceid'.$serviceid.'" />
-                                        <input type="hidden" name="actscheduleid" value="" id="actscheduleid'.$serviceid.'" />
-                                        <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.'" />
-                                        <input type="hidden" name="cate_title" value="" id="cate_title'.$serviceid.$serviceid.'" />';
-                                     $actbox .= '</form>
-                                </div>
-                            </div>';
+                                   <input type="hidden" name="pricetotal" id="pricetotal'.$serviceid.''.$serviceid.'" value="" class="product-price"/>
+                                   <input type="hidden" name="price" id="price'.$serviceid.''.$serviceid.'" value="" class="product-price" />
+                                    <input type="hidden" name="session" id="session'.$serviceid.'" value="" />
+                                    <input type="hidden" name="priceid" value="'.$priceid.'" id="priceid'.$serviceid.'" />
+                                    <input type="hidden" name="actscheduleid" value="" id="actscheduleid'.$serviceid.'" />
+                                    <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.'" />
+                                    <input type="hidden" name="cate_title" value="" id="cate_title'.$serviceid.$serviceid.'" />';
+                                 $actbox .= '</form>
+                            </div>
+                        </div>';
         }
 
 
