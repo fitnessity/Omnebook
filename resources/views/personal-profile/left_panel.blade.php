@@ -14,7 +14,7 @@
                                     <span>User Profile</span>
                                 </a>
                             </li>
-                            <?php /*?>
+                            <?php ?>
                             <li class=" {{ (request()->is('personal-profile/payment-info*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info">
                                     <img src="{{ url('public/img/menu-icon2.svg') }}" alt="">
@@ -27,7 +27,7 @@
                                     <img src="{{ url('public/img/menu-icon3.svg') }}" alt="">
                                     <span>Calendar</span>
                                 </a>
-                            </li> <?php */?>
+                            </li> <?php ?>
 
                             <li class=" {{ (request()->is('personal-profile/add-family*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family">

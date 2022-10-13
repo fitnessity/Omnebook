@@ -21083,3 +21083,148 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .bottom-content{
 	height: 236px;
 }
+
+
+/* cart design */
+
+.pay-card {
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  position: relative;
+  width: 100%;
+  &:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.payment-radio {
+  font-size: inherit;
+  margin: 0;
+  position: absolute;
+  right: calc(var(--card-padding) + var(--radio-border-width));
+  top: calc(var(--card-padding) + var(--radio-border-width));
+}
+
+@supports(-webkit-appearance: none) or (-moz-appearance: none) { 
+  .payment-radio {
+	  display: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #fff;
+    border: var(--radio-border-width) solid var(--color-gray);
+    border-radius: 50%;
+    cursor: pointer;
+    height: var(--radio-size);
+    outline: none;
+    transition: 
+      background 0.2s ease-out,
+      border-color 0.2s ease-out;
+    width: var(--radio-size); 
+	
+    &::after {
+      border: var(--radio-border-width) solid #fff;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+      display: block;
+      height: 0.75rem;
+      left: 25%;
+      position: absolute;
+      top: 50%;
+      transform: 
+        rotate(45deg)
+        translate(-50%, -50%);
+      width: 0.375rem;
+    }
+
+    &:checked {
+      background: var(--color-green);
+      border-color: var(--color-green);
+    }
+  }
+  
+  .pay-card:hover .payment-radio {
+    border-color: var(--color-dark-gray);
+    
+    &:checked {
+      border-color: var(--color-green);
+    }
+  }
+}
+
+.plan-details {
+  border: var(--radio-border-width) solid var(--color-gray);
+  border-radius: var(--card-radius);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-padding);
+  transition: border-color 0.2s ease-out;
+  height: 100px;
+  margin: auto;
+	align-content: center;
+	display: grid;
+}
+
+.pay-card:hover .plan-details {
+  border-color: var(--color-dark-gray);
+}
+
+.payment-radio:checked ~ .plan-details {
+  border-color: #f00;
+}
+
+.payment-radio:focus ~ .plan-details {
+  box-shadow: 0 0 0 2px var(--color-dark-gray);
+}
+
+.payment-radio:disabled ~ .plan-details {
+  color: var(--color-dark-gray);
+  cursor: default;
+}
+
+.payment-radio:disabled ~ .plan-details .plan-type {
+  color: var(--color-dark-gray);
+}
+
+.pay-card:hover .payment-radio:disabled ~ .plan-details {
+  border-color: var(--color-gray);
+  box-shadow: none;
+}
+
+.pay-card:hover .payment-radio:disabled {
+    border-color: var(--color-gray);
+  }
+
+.hidden-visually {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+:root {
+  --card-line-height: 1.2em;
+  --card-padding: 1em;
+  --card-radius: 0.5em;
+  --color-green: #558309;
+  --color-gray: #e2ebf6;
+  --color-dark-gray: #c4d1e1;
+  --radio-border-width: 2px;
+  --radio-size: 1.5em;
+}
+.plan-details img{
+	max-width: 60px;
+}
+.cart-name span{
+	float: left
+	font-size: 13px;
+}
+.cart-num span{
+	font-size: 10px;
+}
+/* cart design */

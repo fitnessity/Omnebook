@@ -173,7 +173,7 @@ a{ cursor:pointer; }
 	float: left;
 	margin-top: 0px;
 	text-align: left;
-	width: 31% !important;
+	width: 30% !important;
 }
 .top-search form {
 	display: inline-block;
@@ -466,7 +466,9 @@ span.status::after {
 	padding: 30px 20px 20px;
 	box-shadow: 0px 5px 11px 0px rgba(0, 0, 0, .35);
 	border-radius: 6px;
-	min-height: 995px;
+	//min-height: 995px;
+	height: 100%;
+	display: flow-root;
 }
 .ord-summary h3{
 	font-weight: 700;
@@ -659,6 +661,10 @@ span.status::after {
 .card-no input:focus{
 	border-color: #fff !important;
 	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 0 8px rgba(249, 249, 249, 0.6) !important;
+}
+
+.save-pmt-checkbox{
+    margin: 15px 15px 11px 0px;
 }
 
 @media screen and (max-width: 400px){

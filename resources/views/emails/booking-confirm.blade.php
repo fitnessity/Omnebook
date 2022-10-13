@@ -63,9 +63,9 @@ use App\BusinessTerms;
 	$cancelrule = '';
 	$cleanrule = '';
     $BusinessTerms = BusinessTerms::where('cid',@$BookingDetail['businessservices']['cid'])->first();
-    $homerule =  $BusinessTerms->houserules;
-    $cancelrule =  $BusinessTerms->cancelation;
-    $cleanrule =  $BusinessTerms->cleaning;
+    $homerule =  @$BusinessTerms->houserules;
+    $cancelrule =  @$BusinessTerms->cancelation;
+    $cleanrule =  @$BusinessTerms->cleaning;
 
     $meetup_location = '';
     $included_items = [];

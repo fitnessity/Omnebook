@@ -1277,6 +1277,9 @@
 	.find-activity img{width: 197px !important;}
 	.activity-time-main{float: right;}
 	.top-search {  width: 65% !important;}
+	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%;}
+	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%;}
+	.find-activity img{max-height: 145px !important;} 
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2229,6 +2232,10 @@
 	.points-cards-home-text {  display: block;}
 	.activity-time-main{float: right;}
 	.find-activity img{margin-bottom: 15px !important;}
+	.nav-sliders-activites{float: left;}
+	.instant-banner h4{top: 51%; width: 80%; left: 95px;}
+	.instant-banner img{max-height: 300px;}
+	.instant-hire-activites {  margin-top: 15px !important;}
 }
 
 @media(max-width: 575px) {
@@ -2546,7 +2553,7 @@
 	.instant-section-info p {  right: 22px;  margin-top: 24px !important;}
 	.header-right{display: grid !important;}
 	.btn-list-business.business-sp {  margin-right: 0px;}
-	.btn-cart > span{right: 60px !important;}
+	.btn-cart > span{right: 65px !important;} 
 	.header-right a{margin-top: 5px;}
 	header .header-right .btn{margin-bottom: 5px;}
 	.pstyle{margin-left: 17px;}

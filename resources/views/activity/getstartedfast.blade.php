@@ -194,12 +194,12 @@
 					<div class="col-md-4">
 						<div class="find-activity">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-4 col-sm-4">
 									<img src="{{ $profilePic }}" >
 								</div>
-								<div class="col-md-8 activity-data">
+								<div class="col-md-8 col-sm-8 activity-data">
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="activity-inner-data">
 												<i class="fas fa-star"></i>
 												<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
@@ -210,7 +210,7 @@
 												</div>
 											@endif
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="activity-city">
 												<span>{{$companycity}}, {{$companycountry}}</span>
 											@if(Auth::check())
@@ -400,7 +400,7 @@
 									<div class="bottom-content">
 										<div class="class-info">
 											<div class="row">
-												<div class="col-md-7 ratingtime">
+												<div class="col-md-7 col-xs-7 ratingtime">
 													<div class="activity-inner-data">
 														<i class="fas fa-star"></i>
 														<span>{{$reviews_avg}} ({{$reviews_count}})</span>
@@ -411,7 +411,7 @@
 														</div>
 													@endif
 												</div>
-												<div class="col-md-5 country-instant">
+												<div class="col-md-5 col-xs-5 country-instant">
 													<div class="activity-city">
 														<span>{{$companycity}}, {{$companycountry}}</span>
 													</div>

@@ -44,11 +44,10 @@ class StripeCron extends Command
      */
     public function handle()
     {   
-        $pmtdata = UserBookingStatus::where('pmt_type',1)->get();
-        /*print_r($pmtdata);exit();*/
+        $pmtdata = UserBookingStatus::where('pmt_type',1)->orderBy('id' ,'desc')->get();
+       /* print_r($pmtdata);*//*exit();*/
         if(!empty($pmtdata)){
             foreach($pmtdata as $data){
-            /* echo $data['user_id'];*/
                 $userdata = User::where('id',$data['user_id'])->first();
                 /*echo $userdata;exit();*/
                 if($userdata != ''){
@@ -66,6 +65,10 @@ class StripeCron extends Command
                         $a = json_decode($details['qty']);
                         $pmt_num_person = json_decode($details['payment_number']);
                         if( !empty($a->adult) ){
+                            $tot_price = 0;
+                            $service_fee = 0;
+                            $tax = 0;
+                            $total_amount = 0;
                             $tot_price = $a->adult * $pricedetails->recurring_recurring_pmt_adult;
                             $service_fee= ($tot_price * 7)/100;
                             $tax= ($tot_price * 8.875)/100;
@@ -78,7 +81,6 @@ class StripeCron extends Command
                                     $recudata = UserBookingRecurringPaymentDetails::where(['user_order_details_id'=>$details['id'],'person_type'=>'Adult'])->orderBy('created_at', 'desc')->first(); 
                                     $month =date('Y-m-d', strtotime($recudata['created_at']. '+1 month' ));
                                 }
-
                                 if($today == $month){
                                     try {
                                         $pmtintent = \Stripe\PaymentIntent::create([
@@ -97,7 +99,7 @@ class StripeCron extends Command
                                         UserBookingDetail::where('id',$details['id'])->update(['payment_number'=>$pmt_data ]);
                                     } catch (\Stripe\Exception\CardException $e) {
                                              // Error code will be authentication_required if authentication is needed
-                                            /* 'Error code is:' . $e->getError()->code;*/
+                                             // 'Error code is:' . $e->getError()->code;
                                             $payment_intent_id = $e->getError()->payment_intent->id;
                                             $pmt_num = $pmt_num_person->child; 
                                             $status = 'Fail';
@@ -107,7 +109,7 @@ class StripeCron extends Command
                                     $rec_pmt_data =[
                                         "user_id" => $data['user_id'],
                                         "pmt_number" =>  $pmt_num,
-                                        "Amount" => $total_amount,
+                                        "Amount" => $total_amount/100,
                                         "stripe_intent_id" => $payment_intent_id,
                                         "user_order_details_id" => $details['id'],
                                         "status" => $status,
@@ -119,25 +121,23 @@ class StripeCron extends Command
                         } 
 
                         if( !empty($a->child) ){
-
+                            $tot_price = 0;
+                            $service_fee = 0;
+                            $tax = 0;
+                            $total_amount = 0;
                             $tot_price = $a->adult * $pricedetails->recurring_recurring_pmt_child;
                             $service_fee= ($tot_price * 7)/100;
                             $tax= ($tot_price * 8.875)/100;
-                            $total_amount =($pricedetails->recurring_recurring_pmt_child + $service_fee + $tax)*100;
+                            $total_amount =(  $tot_price + $service_fee + $tax)*100;
                             if( $pmt_num_person->child < $pricedetails->recurring_nuberofautopays_child){
                                 $today =date('Y-m-d');
                                 if($pmt_num_person->child == 1){
-                                    /*echo "cre";*/
                                     $month =date('Y-m-d', strtotime($data['created_at']. '+1 month' ));
                                 }else{
-                                   /* echo "rec";*/
                                     $recudata = UserBookingRecurringPaymentDetails::where(['user_order_details_id'=>$details['id'],'person_type'=>'Child'])->orderBy('created_at', 'desc')->first(); 
                                     $month =date('Y-m-d', strtotime($recudata['created_at']. '+1 month' ));
                                 }
-                                 /*echo $pmt_num_person->child."-";
-                                 echo $data['id']."-";
-                                echo $month;
-                                echo $today;exit();*/
+                              
                                 if($today == $month){
                                     try {
                                         $pmtintent = \Stripe\PaymentIntent::create([
@@ -156,7 +156,7 @@ class StripeCron extends Command
                                         UserBookingDetail::where('id',$details['id'])->update(['payment_number'=>$pmt_data ]);
                                     } catch (\Stripe\Exception\CardException $e) {
                                              // Error code will be authentication_required if authentication is needed
-                                            /* 'Error code is:' . $e->getError()->code;*/
+                                             // 'Error code is:' . $e->getError()->code;
                                             $payment_intent_id = $e->getError()->payment_intent->id;
                                             $pmt_num = $details['payment_number']; 
                                             $status = 'Fail';
@@ -166,7 +166,7 @@ class StripeCron extends Command
                                     $rec_pmt_data =[
                                         "user_id" => $data['user_id'],
                                         "pmt_number" =>  $pmt_num,
-                                        "Amount" => $total_amount,
+                                        "Amount" => $total_amount/100,
                                         "stripe_intent_id" => $payment_intent_id,
                                         "user_order_details_id" => $details['id'],
                                         "status" => $status,
@@ -178,10 +178,14 @@ class StripeCron extends Command
                         }
 
                         if( !empty($a->infant) ){
+                            $tot_price = 0;
+                            $service_fee = 0;
+                            $tax = 0;
+                            $total_amount = 0;
                             $tot_price = $a->adult * $pricedetails->recurring_recurring_pmt_infant;
                             $service_fee= ($tot_price * 7)/100;
                             $tax= ($tot_price * 8.875)/100;
-                            $total_amount =($pricedetails->recurring_recurring_pmt_infant + $service_fee + $tax)*100;
+                            $total_amount =($tot_price + $service_fee + $tax)*100;
                             if( $pmt_num_person->infant < $pricedetails->recurring_nuberofautopays_infant){
                                 $today =date('Y-m-d');
                                 if($pmt_num_person->infant == 1){
@@ -190,7 +194,7 @@ class StripeCron extends Command
                                     $recudata = UserBookingRecurringPaymentDetails::where(['user_order_details_id'=>$details['id'],'person_type'=>'Infant'])->orderBy('created_at', 'desc')->first(); 
                                     $month =date('Y-m-d', strtotime($recudata['created_at']. '+1 month' ));
                                 }
-
+                            
                                 if($today == $month){
                                     try {
                                         $pmtintent = \Stripe\PaymentIntent::create([
@@ -209,7 +213,7 @@ class StripeCron extends Command
                                         UserBookingDetail::where('id',$details['id'])->update(['payment_number'=>$pmt_data ]);
                                     } catch (\Stripe\Exception\CardException $e) {
                                              // Error code will be authentication_required if authentication is needed
-                                            /* 'Error code is:' . $e->getError()->code;*/
+                                             // 'Error code is:' . $e->getError()->code;
                                             $payment_intent_id = $e->getError()->payment_intent->id;
                                             $pmt_num = $details['payment_number']; 
                                             $status = 'Fail';
@@ -219,7 +223,7 @@ class StripeCron extends Command
                                     $rec_pmt_data =[
                                         "user_id" => $data['user_id'],
                                         "pmt_number" =>  $pmt_num,
-                                        "Amount" => $total_amount,
+                                        "Amount" => $total_amount/100,
                                         "stripe_intent_id" => $payment_intent_id,
                                         "user_order_details_id" => $details['id'],
                                         "status" => $status,
@@ -228,7 +232,8 @@ class StripeCron extends Command
                                     UserBookingRecurringPaymentDetails::create($rec_pmt_data); 
                                 } 
                             }  
-                        }                     
+                        }  
+                                    
                     }
                 }
             }

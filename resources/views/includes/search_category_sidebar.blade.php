@@ -15,6 +15,8 @@
 	$City = '';
 	$State = '';
 	$Country = '';
+	$zip_code = '';
+	$address = '';
 
     if(Session::has('program_type')){ 
 		$program_type = Session::get('program_type'); 
@@ -49,16 +51,22 @@
 		/*echo $age_range;exit();*/
 	}
 
-	if(Session::has('City')){ 
-		$City  = Session::get('age_range'); 
+	if(Session::has('city')){ 
+		$City  = Session::get('city'); 
 	}
 
-	if(Session::has('State')){ 
-		$State  = Session::get('age_range'); 
+	if(Session::has('state')){ 
+		$State  = Session::get('state'); 
 	}
 
-	if(Session::has('Country')){ 
-		$Country  = Session::get('age_range'); 
+	if(Session::has('country')){ 
+		$Country  = Session::get('country'); 
+	}
+	if(Session::has('address')){ 
+		$address  = Session::get('address'); 
+	}
+	if(Session::has('zip_code')){ 
+		$zip_code  = Session::get('zip_code'); 
 	}
 ?>
 <!-- <form method="post" action="/" id="frmsearch"> -->
@@ -70,7 +78,6 @@
         
 		<div class="choose-sport-hire">
 			<div class="activity-width">
-            	
 				<div class="special-offer">
 					<div class="multiples">
 						<h2>Select Activity</h2>
@@ -267,33 +274,17 @@
 							</div>
 						</div>
 						
-						<!-- <div class="activity-width">
-							<div class="special-offer">
-								<div class="multiples">
-									<h2>Search By Location</h2>
-								
-									<input type="text" class="form-control myfilter" autocomplete="nope" name="Address" id="b_address" placeholder="search by country, city, state, zip"  value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif">
-								</div>
-							</div>
-						</div>
-
-						<input type="hidden" class="form-control" name="City" id="b_city" value="{{ $City }}">
-						<input type="hidden" class="form-control" name="City" id="country" value="{{ $Country }}">
-						<input type="hidden" class="form-control" name="State" id="b_state"  maxlength="50" value="{{ $State }}">
-						<div id="map11" style="display: none;"></div> -->
-						
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Location</h2>
-                                    <input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off" />
+                                    <input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{$address}}" />
                                 </div> 
                                 <div id="map" style="display: none; position: relative; overflow: hidden;"></div>
-                                <input type="hidden"  name="City" id="b_city1"  placeholder="City" maxlength="50" value="">
-                                <input type="hidden"  name="State" id="b_state1"  placeholder="State" maxlength="50" value="">
-                                <input type="hidden"  name="ZipCode" id="b_zipcode1"  placeholder="Zip Code" value="" maxlength="20">
-                                <input type="hidden" name="lon" id="lon1" value="">
-                                <input type="hidden" name="lat" id="lat1" value="">
+                                <input type="hidden"  name="City" id="b_city1" value="{{$City}}">
+                                <input type="hidden"  name="State" id="b_state1" value="{{$State}}">
+                                <input type="hidden"  name="Country" id="country1" value="{{$Country}}">
+                                <input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}">
                          </div> 
                      </div> 
 						<div class="activity-width">
@@ -445,8 +436,8 @@
 		    serviceSelect6.set(age_rangearr);
 	    }
 
-
-	    if(membership_type != '' || age_range != '' || activity_location != '' ){
+	    var address =  $('#b_address1').val();
+	    if(membership_type != '' || age_range != '' || activity_location != '' || address != ''){
 	    	$('#target-1').show(500);
 		    $('.show-1-yes').hide(0);
 		    $('.hide-1-yes').show(0);
@@ -530,6 +521,12 @@
 		var membership_type=$('#membership_type').val();
 		var activity_location=$('#activity_location').val();
 		var age_range=$('#age_range').val();
+		var address =  $('#b_address1').val();
+		var city =  $('#b_city1').val();
+        var country =  $('#country1').val();
+        var state =  $('#b_state1').val();
+        var zipcode =  $('#b_zipcode1').val();
+
 		/*alert(age_range);*/
 		if(activity_for == '' || activity_for == null){
 			activity_for = 'no';
@@ -648,6 +645,32 @@
 			age_range = age_range.toString().replace(/ /g, "%20");
 			locationval += 'agerange='+age_range+'~';
 		}
+
+		if(city != ''){
+			city = city.toString().replace(/ /g, "%20");
+			locationval += 'city='+city+'~';
+		}
+
+		if(state != ''){
+			state = state.toString().replace(/ /g, "%20");
+			locationval += 'state='+state+'~';
+		}
+
+		if(country != ''){
+			country = country.toString().replace(/ /g, "%20");
+			locationval += 'country='+country+'~';
+		}
+
+		if(zipcode != ''){
+			zipcode = zipcode.toString().replace(/ /g, "%20");
+			locationval += 'zip_code='+zipcode+'~';
+		}
+
+		if(address != ''){
+			address = address.toString().replace(/ /g, "%20");
+			locationval += 'address='+address+'~';
+		}
+
 		/*alert(activity_location);*/
 
 		/*if(programservices != 'no'){
@@ -747,7 +770,92 @@
                 if(place.address_components[i].types[0] == 'administrative_area_level_1'){
                   $('#b_state1').val(place.address_components[i].long_name);
                 }
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode1').val(place.address_components[i].long_name);
+                }
             }
+            var address =  $('#b_address1').val();
+            var city =  $('#b_city1').val();
+            var country =  $('#country1').val();
+            var state =  $('#b_state1').val();
+            var zipcode =  $('#b_zipcode1').val();
+            var locationval = '';
+
+            var activity_for=$('#activity_for').val();
+			var programservices=$('#programservices').val();
+			var service_type=$('#service_type').val();
+			var service_type_two=$('#servicetypetwo').val();
+			var membership_type=$('#membership_type').val();
+			var activity_location=$('#activity_location').val();
+			var age_range=$('#age_range').val();
+
+	   		var locationval = '';
+			if(service_type !=  null && service_type != ''){
+				service_type = service_type.toString().replace(/ /g, "%20");
+				locationval += 'btype='+service_type+'~';
+			}
+			if(programservices != null && programservices != ''){
+				programservices = programservices.toString().replace(/ /g, "%20");
+				locationval += 'ptype='+programservices+'~';
+			}
+
+			if(service_type_two  != null &&  service_type_two != ''){
+				service_type_two = service_type_two.toString().replace(/ /g, "%20");
+				locationval += 'stype='+service_type_two+'~';
+			}
+
+			if(activity_for  != null &&  activity_for != ''){
+				activity_for = activity_for.toString().replace(/ /g, "%20");
+				locationval += 'gfor='+activity_for+'~';
+			}
+
+			if(membership_type != null &&  membership_type != ''){
+				membership_type = membership_type.toString().replace(/ /g, "%20");
+				locationval += 'memtype='+membership_type+'~';
+			}
+
+			if(activity_location != null &&  activity_location != ''){
+				activity_location = activity_location.toString().replace(/ /g, "%20");
+				locationval += 'actloctype='+activity_location+'~';
+			}
+
+			if(age_range != null &&  age_range != ''){
+				age_range = age_range.toString().replace(/ /g, "%20");
+				locationval += 'agerange='+age_range+'~';
+			}
+
+	        if(city != ''){
+				city = city.toString().replace(/ /g, "%20");
+				locationval += 'city='+city+'~';
+			}
+
+			if(state != ''){
+				state = state.toString().replace(/ /g, "%20");
+				locationval += 'state='+state+'~';
+			}
+
+			if(country != ''){
+				country = country.toString().replace(/ /g, "%20");
+				locationval += 'country='+country+'~';
+			}
+
+			if(zipcode != ''){
+				zipcode = zipcode.toString().replace(/ /g, "%20");
+				locationval += 'zip_code='+zipcode+'~';
+			}
+			if(address != ''){
+				address = address.toString().replace(/ /g, "%20");
+				locationval += 'address='+address+'~';
+			}
+			
+			var name = '{{ env('APP_URL') }}';
+			var url = window.location.href;
+			var urldynamic = name+'activities/'+locationval;
+			/*alert(url);
+			alert(urldynamic);*/
+			if(url != urldynamic){
+				window.location = urldynamic;
+			}
         });
     }
 </script>

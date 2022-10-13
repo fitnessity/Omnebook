@@ -2687,198 +2687,40 @@ class LessonController extends Controller {
     
     public function cartpaymentinstant(Request $request) {
         $cart = [];
+         $cardInfo = [];
+        if(Auth::user()){
+             $user = User::where('id', Auth::user()->id)->first();
+             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $savedEvents = $stripe->customers->allSources(
+                $user->stripe_customer_id,
+                ['object' => 'card' ,'limit' => 30]
+            );
+
+        $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            
+       $cardInfo = $savedEvents['data'];
+           /* $savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);
+            if (count($savedEvents) > 0) {
+                foreach ($savedEvents as $event) {
+                    $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+                    $carddetails = $stripe->customers->retrieveSource(
+                        $user->stripe_customer_id,
+                        $event->card_stripe_id,
+                        []
+                    );
+                    $cardInfo[] = $carddetails;
+                }
+            }*/
+        }else{
+            $cardInfo = [];
+        }
+       
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
         return view('jobpost.cart-payment-instant',[
-               'cart' => $cart
+                'cart' => $cart,
+                'cardInfo' => $cardInfo,
         ]);
-    }
-
-    public function confirmpaymentinstant(Request $request) {
-          
-        $payid=$request->session()->get('stripepayid');
-        $charge_id=$request->session()->get('stripechargeid');
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $list = \Stripe\Checkout\Session::retrieve(
-            $payid,
-            []
-        );
-        $stripe = new \Stripe\StripeClient(
-            config('constants.STRIPE_KEY')
-        );
-        $payment_intent = $stripe->paymentIntents->retrieve(
-          $list->payment_intent,
-          []
-        );
-
-        $data = json_decode( json_encode( $list),true);
-    
-        $amount= ($data["amount_total"]/100);
-        $date = new DateTime("now", new DateTimeZone('America/New_York') );
-        $oid = $date->format('YmdHis');
-        $digits = 3;
-        $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
-        $orderid= 'FS_'.$oid.$rand;
-    
-        $lastid='';
-        if($data['payment_status']=='paid')
-        {
-            $orderdata = array(
-                'user_id' => Auth::user()->id,
-                'status' => 'confirmed',
-                'currency_code' => $data["currency"],
-                'stripe_id' => $data["id"],
-                'stripe_status' => $data["status"],
-                'amount' => $amount,
-                'order_id' => $orderid,
-                'bookedtime' =>$date->format('Y-m-d'),
-            ); 
-            $status = UserBookingStatus::create($orderdata);
-            $lastid=$status->id;
-            $line_items = \Stripe\Checkout\Session::allLineItems($payid, []);
-            $customer_array =json_decode($line_items->toJSON(),true);
-            $businessuser =[];
-            /*print_r($line_items); */
-            $cart = session()->get('cart_item');
-            $cartnew = [];
-                
-            $cnt=0;
-            foreach($cart['cart_item'] as $c)
-            {
-                $cartnew[$cnt]['name']= $c['name'];
-                $cartnew[$cnt]['code']= $c['code'];
-                $cartnew[$cnt]['priceid']= $c['priceid'];
-                $cartnew[$cnt]['sesdate']= $c['sesdate'];
-                $cartnew[$cnt]['adult']= $c['adult'];
-                $cartnew[$cnt]['child']= $c['child'];
-                $cartnew[$cnt]['infant']= $c['infant'];
-                $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
-                $cnt++;
-            }   
-            /*print_r($cart['cart_item']); echo '<br><br>';*/
-            $metadata = json_decode($data['metadata']['pro_id']);
-           /* print_r($metadata);*/
-            $aduprice = $childprice = $infantprice = 0;
-            $aduqnt = $childqnt = $infantqnt = 0;
-            
-            for($i=0;$i<count($line_items);$i++)
-            {
-                $priceid=0; $sesdate= $encodeqty ='' ;
-                $aduqnt = $childqnt = $infantqnt =0; 
-                /*foreach($cartnew as $c)
-                { 
-                    print_r($c);*/
-                    /* print_r($cartnew);*/
-                    if ($metadata[$i] == $cartnew[$i]['code'])
-                    {   
-                        $priceid = $cartnew[$i]['priceid'];
-                        $sesdate = $cartnew[$i]['sesdate'];
-                        $pidval = $cartnew[$i]['code'];
-                        $act_schedule_id = $cartnew[$i]['actscheduleid'];
-                        if(!empty($cartnew[$i]['adult'])){
-                            $aduqnt = $cartnew[$i]['adult']['quantity'];
-                            $aduprice = $cartnew[$i]['adult']['price'];
-                        }
-                        if(!empty($cartnew[$i]['child'])){
-                            $childqnt = $cartnew[$i]['child']['quantity'];
-                            $childprice= $cartnew[$i]['child']['price'];
-                        }
-                        if(!empty($cartnew[$i]['infant'])){
-                            $infantqnt = $cartnew[$i]['infant']['quantity'];
-                            $infantprice = $cartnew[$i]['infant']['price'];
-                        }
-                        $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,
-                            'infant'=>$infantqnt); 
-                        $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
-                            'infant'=>$infantprice);
-                        $adupmt_num = $childpmt_num = $infantpmt_num = 0;
-                        if($aduqnt != 0){
-                            $adupmt_num = 1;
-                        }
-                        if($childqnt != 0){
-                            $childpmt_num = 1;
-                        }
-                        if($infantqnt != 0){
-                            $infantpmt_num = 1;
-                        }
-                        $payment_number_c = array( 'adult'=>$adupmt_num ,'child' => $childpmt_num,
-                            'infant'=> $infantpmt_num);
-                        $encodeqty = json_encode($qty_c);
-                        $encodeprice = json_encode($price_c);
-                        $encodepayment_number = json_encode($payment_number_c);
-
-                    }
-                /*}*/
-    
-                //$activitylocation = BusinessServices::where('id',$line_items->data[$i]->price->product)->first();
-
-                $activitylocation = BusinessServices::where('id',$pidval)->first();
-                    //$priceid=$cart['cart_item'][$i]['priceid'];
-                $transfer_amount = round((($line_items->data[$i]->price->unit_amount - $line_items->data[$i]->price->metadata->service_fee) *0.85)/1.08875);
-                
-                $uamount = ($line_items->data[$i]->price->unit_amount/100);
-                $act = array(
-                    'booking_id' => $lastid,
-                    'sport' => $pidval,
-                    'price' => $encodeprice,
-                    'qty' =>$encodeqty ,
-                    'priceid' => $priceid,
-                    'bookedtime' =>$date->format('Y-m-d'),
-                    'booking_detail' => json_encode(array(
-                            'activitytype' => $activitylocation->service_type,
-                            'numberofpersons' => $line_items->data[$i]->quantity,
-                            'activitylocation' => $activitylocation->activity_location,
-                            'whoistraining' => 'me',
-                            'sessiondate' => $sesdate,
-                    )),
-                    'act_schedule_id' =>$act_schedule_id,
-                    'payment_number' =>$encodepayment_number,
-                );
-                /*print_r($act);exit();*/
-                $status = UserBookingDetail::create($act);
-                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
-                $businessuser['businessuser'] = CompanyInformation::where('id', $activitylocation->cid)->first();
-                $businessuser = json_decode(json_encode($businessuser), true); 
-                $BusinessServices['businessservices'] = BusinessServices::where('id',$activitylocation->id)->first();
-                $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                $BookingDetail = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                /*echo "<pre>";print_r($BookingDetail);exit;*/
-                $user = User::where('id', $businessuser['businessuser']['user_id'])->first();
-                
-                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                // Create a Transfer to a connected account (later):
-                /*  $transfer = \Stripe\Transfer::create([
-                  'amount' => $transfer_amount,
-                  'currency' => 'usd',
-                  'source_transaction' => $payment_intent->charges->data[0]->id,
-                  'destination' => $user->stripe_connect_id,
-                ]);*/
-                MailService::sendEmailBookingConfirmnew($BookingDetail);
-            }
-             
-          session()->forget('stripepayid');
-          session()->forget('stripechargeid');
-          session()->forget('cart_item');
-        }
-
-        
-        // Create a second Transfer to another connected account (later):
-/*
-        $transfer = \Stripe\Transfer::create([
-          'amount' => 15,
-          'currency' => 'usd',
-          'destination' => 'acct_1LPvWR2RDRHCydET',
-          'transfer_group' => 'test_order_10',
-        ]);
-*/
-          //print_r($data);
-          //echo '<br>';
-          //echo '<br>'.$data['amount_subtotal'];
-          //print_r($customer_array); exit;
-          //print_r($customer_array);
-          //print_r($line_items->data[0]->toArray());
-          //echo $line_items->data[0]->id;
-          //print_r($request->session()->get('checkout_session')); exit;
-      return view('jobpost.confirm-payment-instant');
     }
 
     public function payment($token) {
