@@ -856,7 +856,7 @@ input:disabled{
 	                        </div>
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <select id="actfilmtype" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyactid}},{{$serviceid}})">
 		                                <option value="">Membership Type</option>
 		                                <option>Drop In</option>
 		                                <option>Semester</option>
@@ -955,7 +955,7 @@ input:disabled{
 									$service_type='';
 									if($service['service_type']!=''){
 										if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-										else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+										else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 										else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 									}
 									$pricearr = [];
@@ -964,7 +964,11 @@ input:disabled{
 									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
 									if(!empty($price_allarray)){
 										foreach ($price_allarray as $key => $value) {
-											$pricearr[] = $value->pay_price;
+											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+												$pricearr[] = $value->adult_weekend_price_diff;
+											}else{
+												$pricearr[] = $value->adult_cus_weekly_price;
+											}
 										}
 									}
 									if(!empty($pricearr)){
@@ -1454,7 +1458,7 @@ $(document).ready(function () {
 		var actfilparticipant=$('#actfilparticipant'+sid).val();
 		var actoffer=$('#actfiloffer'+sid).val();
 		var actloc=$('#actfillocation'+sid).val();
-		var actfilmtype=$('#actfilmtype'+sid).val();
+		var actfilmtype=$('#actfilmtype').val();
 		var actfilgreatfor=$('#actfilgreatfor'+sid).val();
 		var btype=$('#actfilbtype'+sid).val();
 		var actfilsType=$('#actfilsType'+sid).val();

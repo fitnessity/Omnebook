@@ -161,7 +161,7 @@
         <div class="container">
             <h1>{{$content}}<br></h1>
             <!--<h1>FIND SPORTS, WELLNESS &amp; ADVENTUROUS ACTIVITIES<br></h1>-->
-            <form id="searchform" method="get" action="/instant-hire">
+            <form id="searchform" method="get" action="/activities/">
                 <div class="row cstm-bnner">
                     <div class="col-sm-12">
                         <ul>
@@ -173,9 +173,15 @@
                             <li>
                                 <div id="suggestions" class="location-find">
                                     <img src="{{ asset('public/images/location-search.png') }}" alt="">
-                                    <input autocomplete="off" id="pac-input1" name="location" type="text" placeholder="Search by City, State, Country" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif">
+                                    <!-- <input autocomplete="off" id="pac-input1" name="location" type="text" placeholder="Search by City, State, Country" value="@if(isset($selected_location) && $selected_location != NULL){{$selected_location }}@endif"> -->
+                                    <input type="text" name="address" id="b_address1" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{@$address}}" />
                                 </div>
+                                <div id="map" style="display: none; position: relative; overflow: hidden;"></div>
                                 <div id="suggesstion-box-search-location"></div>
+                                <input type="hidden"  name="City" id="b_city1" value="{{@$City}}">
+                                <input type="hidden"  name="State" id="b_state1" value="{{@$State}}">
+                                <input type="hidden"  name="Country" id="country1" value="{{@$Country}}">
+                                <input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{@$zip_code}}">
                             </li>
                            <!-- <li>
                                 <img src="{{ asset('public/images/envlope-icon.png') }}" alt="">
@@ -275,7 +281,7 @@
                 @endforeach
                 <li>&nbsp;</li>
                 <li>&nbsp;</li>
-                <li><a href="/instant-hire">View All Activities</a></li>
+                <li><a href="/activities">View All Activities</a></li>
             </ul>
         </div>
 
@@ -310,14 +316,14 @@
                                     </div>
                                     <div class="cat-detail">
                                         <h1>{{$data->sport_name}}</h1>
-                                         <form action="{{route('instant-hire')}}" method="POST">
+                                         <!-- <form action="{{route('instanthireindex')}}" method="POST">
                                             @csrf
                                             <input type="hidden" name="label" value="{{$data->sport_name}}">
                                             <button type="submit" class="getstarted">
                                                  Get Started
                                             </button>
-                                        </form>
-                                        <!-- <a href="/instant-hire?label={{$data->sport_name}}&location=&zipcode=">Get Started</a> -->
+                                        </form> -->
+                                        <a href="/activities/activity_type={{$data->sport_name}}" class="getstarted">Get Started</a>
                                     </div>
                                 </span>
                             </div>
@@ -342,7 +348,7 @@
     <div class="cat-container">
         <div class="about-services-title" style="margin-bottom:3%">
             <h1>ONLINE CLASSES & ACTIVITIES</h1>
-            <h3>Book your class now and start with the Training Instantly. <a href="{{ Config::get('constants.SITE_URL') }}/instant-hire" class="all_links">View All Trainings</a></h3>
+            <h3>Book your class now and start with the Training Instantly. <a href="{{ Config::get('constants.SITE_URL') }}/activities" class="all_links">View All Trainings</a></h3>
         </div>
         <div class="online_classes_wrap frame" id="cyclepages">
             <ul>
@@ -350,7 +356,7 @@
                 <li>
                     <div class="online_classes_box">
                         <div class="imageclasses">
-                            <a href="/instant-hire"><img src="{{ asset('public/uploads/online/thumb/'."$online->image") }}" alt=""></a>
+                            <a href="/activities"><img src="{{ asset('public/uploads/online/thumb/'."$online->image") }}" alt=""></a>
                             <span class="live_img"><img src="{{ asset('public/images/liveimg.png') }}" alt=""></span>
                         </div>
                         <div class="classes_title">
@@ -371,7 +377,7 @@
                                 <span class="dtxt1">{{$online->timings}}</span>
                             </div>
                             <div class="book_wrap">
-                                <a href="/instant-hire"><span>${{$online->price}}</span><span>BOOK NOW</span></a>
+                                <a href="/activities"><span>${{$online->price}}</span><span>BOOK NOW</span></a>
                             </div>
                         </div>
                     </div>
@@ -446,7 +452,7 @@
     <div class="cat-container">
         <div class="about-services-title" style="margin-bottom:3%">
             <h1>RECOMMENDED CLASSESS & ACTIVITIES</h1>
-            <h3>Book your class now and start with the Training Instantly. <a href="{{ Config::get('constants.SITE_URL') }}/instant-hire" class="all_links">View All Trainings</a></h3>
+            <h3>Book your class now and start with the Training Instantly. <a href="{{ Config::get('constants.SITE_URL') }}/activities" class="all_links">View All Trainings</a></h3>
         </div>
         <div class="online_classes_wrap frame" id="cyclepages1">
             <ul>
@@ -496,7 +502,7 @@
                         <li>
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="/instant-hire"><img src="{{ $profilePic }}" alt=""></a>
+                                    <a href="/activities"><img src="{{ $profilePic }}" alt=""></a>
                                 </div>
                                 <div class="classes_title">
                                     <h3>{{ $service['program_name'] }}<span>-{{ $service['sport_activity'] }}</span></h3>
@@ -514,7 +520,7 @@
                                         <span class="dtxt">TIMINGS</span>
                                         <span class="dtxt1"><?= $service['mon_shift_start'] ?> - <?= $service['mon_shift_end'] ?></span>
                                     </div>
-                                    <form method="post" action="/instant-hire?action=add&pid=1">
+                                    <form method="post" action="/activities?action=add&pid=1">
                                     <div class="book_wrap" style="cursor: pointer">
                                         <span>
                                             $<?=$pay_price?><br/>
@@ -586,10 +592,10 @@
                     ?>
                     <div class="item">
                         <div class="activities_img">
-                            <a href="/instant-hire"><img style="height:300px" src="{{ asset('public/uploads/discover/thumb/'.$discover->image) }}" alt=""></a>
+                            <a href="/activities"><img style="height:300px" src="{{ asset('public/uploads/discover/thumb/'.$discover->image) }}" alt=""></a>
                         </div>
                         <div class="activites_content">
-                            <h3><a href="/instant-hire">{{$discover->title}}</a></h3>
+                            <h3><a href="/activities">{{$discover->title}}</a></h3>
                             <p>{{$discover->description}}</p>
                         </div>
                     </div>
@@ -787,6 +793,97 @@
         });
     });
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script type="text/javascript">
+    $('#instant-hire').scroll(function(){ 
+        //Set new top to autocomplete dropdown
+        newTop = $('#b_address1').offset().top + $('#b_address1').outerHeight();
+        alert(newTop);
+        $('.pac-container').css('top', newTop + 'px');
+    });
+    
+    $(document).ready(function () {
+        $("#autocomplete").parent()
+        .css({position: "relative"})
+        .append(".pac-container");
+    });
+    
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('b_address1');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+              //alert(place.address_components[i].types[0]);
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                    $('#country1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode1').val(place.address_components[i].long_name);
+                }
+            }
+        });
+    }
+</script>
 
 <script>
     //google.maps.event.addDomListener(window, 'load', initialize);
@@ -846,7 +943,10 @@
         });
     });
     $(document).on('click', '.searchclicklocation', function(){
-        $("#pac-input1").val($(this).attr('data-num'));
+        var address = $(this).attr('data-num');
+        /*address = address.toString().replace(/ /g, "%20");*/
+       /* alert(address);*/
+        $("#pac-input1").val(address);
         $("#suggesstion-box-search-location").hide();
     });
 </script>

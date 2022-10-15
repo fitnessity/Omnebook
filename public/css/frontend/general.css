@@ -10960,6 +10960,7 @@ ul.tab_topic li:hover a {
 .comparetable td {
     border-right: 1px solid #dddddd;
 	max-width: 22%;
+	width: 22%;
 }
 
 .comparetable td {

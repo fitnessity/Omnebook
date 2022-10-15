@@ -111,7 +111,7 @@
 								$service_type='';
 								if($service['service_type']!=''){
 									if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-									else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+									else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 									else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 								}
 								$pricearr = [];
@@ -326,6 +326,7 @@
 			</div>
 		</div><?php */?>
 
+		@if(count($thismonthactivity) > 0)	
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
@@ -476,7 +477,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
@@ -519,6 +520,7 @@
 				</div>
 			</div> -->
         </div>
+        @endif
 
 		@if(count($mostpopularactivity) > 0)	
 		<div class="row">
@@ -857,7 +859,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
@@ -1044,7 +1046,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
@@ -1231,7 +1233,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp
@@ -1417,7 +1419,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 														}
 													@endphp

@@ -120,7 +120,7 @@
 								<option>Boxing</option>
 								<option>Jiu-Jitsu</option>
 								<option>Karate</option>
-								<option>Kick Boxing</option>
+								<option>Kickboxing</option>
 								<option>Kung Fu</option>
 								<option>MMA</option>
 								<option>Self-Defense</option>
@@ -779,8 +779,7 @@
             var country =  $('#country1').val();
             var state =  $('#b_state1').val();
             var zipcode =  $('#b_zipcode1').val();
-            var locationval = '';
-
+     
             var activity_for=$('#activity_for').val();
 			var programservices=$('#programservices').val();
 			var service_type=$('#service_type').val();
