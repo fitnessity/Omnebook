@@ -210,7 +210,7 @@ class HomeController extends Controller
 					else if(@$exp[1]=='business_profile')
 						$url= "/businessprofile/".$exp[2];	
 					else
-						$url= "/instant-hire?site_search=".$row;
+						$url= "/activities/activity_type=".$row;
 					$output .= '<li class="searchclick" onClick="selectSearch(\''.$url.'\');" data-num="'.trim($exp[0]).'">'.$exp[0].'</li>';
 				}
 			}

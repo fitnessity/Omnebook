@@ -423,8 +423,8 @@ if(isset($cart["cart_item"])){
                     <?php if( !request()->is('/') ) { ?>
                         <div class="top-search">
                             <!-- <form method="get" action="/instant-hire"> -->
-                            <form method="get" action="/activities">
-                                <input type="text" name="site_search" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off">
+                            <form method="get" action="/activities/">
+                                <input type="text" name="label" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off" value="">
                                 <div id="suggesstion-box"></div>
                                 <button id="serchbtn" ><i class="fa fa-search"></i></button>
                             </form>

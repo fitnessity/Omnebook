@@ -176,9 +176,9 @@ Route::group(['middleware' => ['auth']], function()
 
 
 
-Route::get('/activities/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
+Route::any('/activities/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
 Route::any('/activity-details/{serviceid}', 'ActivityController@getInstanthiredetails');
-Route::get('/activities/','ActivityController@activity')->name('activity');
+/*Route::get('/activities/','ActivityController@activity')->name('activity');*/
 Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
 Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');

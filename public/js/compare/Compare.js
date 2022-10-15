@@ -67,7 +67,7 @@
     /*function to be executed when compare button is clicked*/
 	
     $(document).on('click', '.cmprBtn', function () { //alert('call');
-	
+		
 			var imagtd = "";
             var bookinglink = "";
             var nametd = "";
@@ -90,6 +90,7 @@
 			$(".compare-records-div").append('<table>');
 			var setHtml = '<table>';
 			var professional_ids = new Array();
+			 
 			for (var i = 0; i < list.length; i++) {
 				product = $('.selectProduct[data-id="' + list[i] + '"]');
 				professional_ids[i] = $(product).data('id');
