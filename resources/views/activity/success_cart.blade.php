@@ -20,11 +20,11 @@ if(!empty($cart["cart_item"])) {
     $totalprice = $cart['cart_item'][$pid]['totalprice'];
     if ($cart['cart_item'][$pid]['image']!="") {
     	if (File::exists(public_path("/uploads/profile_pic/thumb/" . $cart['cart_item'][$pid]['image']))) {
-    			$profilePic = url('/public/uploads/profile_pic/thumb/' . $cart['cart_item'][$pid]['image']);
+    			$profilePicact = url('/public/uploads/profile_pic/thumb/' . $cart['cart_item'][$pid]['image']);
     	} else {
-    			$profilePic = url('/public/images/service-nofound.jpg');
+    			$profilePicact = url('/public/images/service-nofound.jpg');
     	}
-    }else{ $profilePic = url('/public/images/service-nofound.jpg'); }
+    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
     $timecart = $tot_dura= '';
@@ -98,7 +98,7 @@ if(!empty($cart["cart_item"])) {
 				<div class="row">
 					<div class="col-md-4">
 						<div class="cart-itme-img">
-							<img src="{{$profilePic}}">
+							<img src="{{$profilePicact}}">
 						</div>
 					</div>
 					<div class="col-md-8">

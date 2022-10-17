@@ -9,6 +9,7 @@ use App\BusinessPriceDetails;
 use App\BusinessService;
 use App\BusinessActivityScheduler;
 use App\UserBookingDetail;
+use App\UserFamilyDetail;
 
 	$dt = Carbon::now();
 	$url = env('APP_URL');
@@ -696,7 +697,20 @@ use App\UserBookingDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{ @$BookingDetail['user']['firstname'] }} {{ @$BookingDetail['user']['lastname']}} </h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> 
+
+																<?php  $a = json_decode(@$BookingDetail['user_booking_detail']['participate'],true); 
+																    if(!empty($a)){
+																        foreach($a as $data){
+																            if($data['from'] == 'family'){
+																                $family = UserFamilyDetail::where('id',$data['id'])->first();
+																                echo @$family->first_name.' '.@$family->last_name."<br>";
+																            }else{ ?>
+																                {{ @$BookingDetail['user']['firstname'] }} {{ @$BookingDetail['user']['lastname']}}
+																            <?php echo "<br>"; } 
+																        } 
+																    } ?>
+																</h2>
 
 																			</td>
 

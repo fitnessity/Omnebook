@@ -416,7 +416,7 @@ if(isset($cart["cart_item"])){
         		<div class="menu_nav">
                 
 					<div class="logo-header">
-                    <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo.png') }}"> </a>
+                    <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
 					</div>
                 
 					<div class="top-area">

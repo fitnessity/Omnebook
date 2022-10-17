@@ -234,7 +234,7 @@
             </div>
             <div class="col-xs-4 col-lg-4">
                 <div class="count_up">
-                    <p class="counter_count">{{$count_online}}</p>
+                    <p class="counter_count">{{$count_activity}}</p>
                     <h3>ACTIVITIES</h3>
                 </div>
             </div>

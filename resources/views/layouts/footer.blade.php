@@ -52,7 +52,7 @@
                         ->where('content_alias', 'footer_content')->get(); ?>
                 @foreach($footer_fitnessity as $footercon)
                     <div class="footer-logo">
-                        <img src="/public/images/fitnessity_logo.png" style="width:250px">
+                        <img src="/public/images/fitnessity_logo1.png" style="width:250px">
                         <p style="text-align: justify; padding: 5px 50px 5px 0px">
                             {!!$footercon->content!!}
                         </p>

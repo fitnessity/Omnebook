@@ -22,6 +22,7 @@ use App\BusinessService;
 use App\BusinessActivityScheduler;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
+use App\UserFamilyDetail;
 ?>
 <div class="page-wrapper inner_top" id="wrapper">
     <div class="page-container">
@@ -226,7 +227,18 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span> {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}</span>
+                                                            <span> <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
+                                                                    if(!empty($a)){
+                                                                        foreach($a as $data){
+                                                                            if($data['from'] == 'family'){
+                                                                                $family = UserFamilyDetail::where('id',$data['id'])->first();
+                                                                                echo @$family->first_name.' '.@$family->last_name."<br>";
+                                                                            }else{ ?>
+                                                                                 {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}
+                                                                            <?php echo "<br>"; } 
+                                                                        } 
+                                                                    }
+                                                                ?></span>
                                                         </p>
                                                         <p>
                                                             <span>COMPANY:</span>
@@ -428,7 +440,20 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span> {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}</span>
+                                                            <span>
+                                                                <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
+                                                                    if(!empty($a)){
+                                                                        foreach($a as $data){
+                                                                            if($data['from'] == 'family'){
+                                                                                $family = UserFamilyDetail::where('id',$data['id'])->first();
+                                                                                echo @$family->first_name.' '.@$family->last_name."<br>";
+                                                                            }else{ ?>
+                                                                                 {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}
+                                                                            <?php echo "<br>"; } 
+                                                                        } 
+                                                                    }
+                                                                ?>
+                                                            </span>
                                                         </p>
                                                         <p>
                                                             <span>COMPANY:</span>
@@ -631,7 +656,20 @@ use App\UserBookingDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span> {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}</span>
+                                                            <span>
+                                                                <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
+                                                                    if(!empty($a)){
+                                                                        foreach($a as $data){
+                                                                            if($data['from'] == 'family'){
+                                                                                $family = UserFamilyDetail::where('id',$data['id'])->first();
+                                                                                echo @$family->first_name.' '.@$family->last_name."<br>";
+                                                                            }else{ ?>
+                                                                                 {{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname']}}
+                                                                            <?php echo "<br>"; } 
+                                                                        } 
+                                                                    }
+                                                                ?>
+                                                            </span>
                                                         </p>
                                                         <p>
                                                             <span>COMPANY:</span>

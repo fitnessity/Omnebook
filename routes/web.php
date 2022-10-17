@@ -691,10 +691,6 @@ Route::any('/instant_hire_search_filter', 'LessonController@instant_hire_search_
 Route::any('/instant-hire1', 'LessonController@getInstanthire')->name('instant-hire');
 //});
 Route::get('/instant-hire-search', 'LessonController@getInstanthireSearch');
-Route::any('/addtocart', 'LessonController@addToCart');
-Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
-Route::any('/removetocart', 'LessonController@removeToCart');
-Route::any('/emptycart', 'LessonController@emptyCart');
 Route::get('/directhire/viewprofile/{user_id}', 'LessonController@directhireViewProfile');
 Route::get('/directhire/bookprofile/{user_id}', 'LessonController@directhireBookProfile');
 Route::get('/searchProfile/{selected_sport}', 'LessonController@postSearchProfile');
@@ -706,8 +702,13 @@ Route::any('/payments/card', 'LessonController@cartpaymentinstant');
 
 
 
+Route::post('/form_participate', 'PaymentController@form_participate')->name('form_participate');
 Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
+Route::any('/addtocart', 'PaymentController@addToCart');
+Route::any('/success-cart/{pid}', 'PaymentController@successcart')->name('successcart');
+Route::any('/removetocart', 'PaymentController@removeToCart');
+Route::any('/emptycart', 'PaymentController@emptyCart');
 
 //booking status and details
 Route::get('/viewBooking/{booking_id}', 'LessonController@viewBooking');
