@@ -21229,3 +21229,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 10px;
 }
 /* cart design */
+
+.ui-datepicker .ui-datepicker-title select {
+  font-size: 14px;
+  color: #000;
+}

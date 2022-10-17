@@ -998,7 +998,6 @@ class ActivityController extends Controller {
 
 	public function activity (Request $request)
 	{
-		
 		return view('activity.activity');
 	}
 
@@ -1749,7 +1748,7 @@ class ActivityController extends Controller {
                                     }
 
                                     $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
-                                     
+                                     	<input name="_token" type="hidden" value="'.csrf_token().'">
                                         <input type="hidden" name="pid" value="'.$serviceid.'"  />
                                         <input type="hidden" name="persontype" id="persontype" value="adult"/>
                                         <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$serviceid.'" value="1" class="product-quantity"/>
@@ -1896,7 +1895,7 @@ class ActivityController extends Controller {
                                 $actbox .= '<input type="hidden" name="memtype_hidden" id="memtype_hidden'.$serviceid.$serviceid.'"  value="">';
                                 
                                 $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
-                                 
+                                 	<input name="_token" type="hidden" value="'.csrf_token().'">
                                     <input type="hidden" name="pid" value="'.$serviceid.'"  />
                                     <input type="hidden" name="persontype" id="persontype" value="adult"/>
                                     <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$serviceid.'" value="1" class="product-quantity"/>
@@ -2095,6 +2094,5 @@ class ActivityController extends Controller {
      /*public function activitiestype($activitiestype){
      	echo $activitiestype;
      	exit;
-
      }*/
 }

@@ -16,7 +16,7 @@
     }else{
         $username = '';
     }
-  /*  echo"<pre>";print_r($cart['cart_item']);*/ /*exit();*/
+   /* echo"<pre>";*//* print_r($cart['cart_item']); *//*exit();*/
 
 ?>
 
@@ -76,6 +76,7 @@
                     <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
                     <input type="hidden" name="itemqty[]" value="1" />
                     <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
+                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
                     <div class="row">
                         <div class="col-lg-3">	
                             <div class="ord-img"> 
@@ -204,16 +205,8 @@
     										for($i=0; $i<$totalquantity ; $i++)
     										{ ?>
                                             <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
-                                                <option value="">Who is participating?</option>
+                                                <option value="" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" >Who is participating?</option>
                                                 <?php foreach($family as $fa){ 
-                                                    /*$curr = date("m-d-Y");
-                                                    $time1 = date("m-d-Y");
-                                                    $t2= $fa['birthday'];
-                                                    echo $curr ;
-                                                    echo $t2;
-                                                    $time2 = date('m-d-Y', strtotime($t2));
-                                                     echo $time2;exit();
-                                                    $age = date_diff($time2 - $time1) ;*/
 
                                                    /* $date_now = date_create();
                                                     $birthday = new DateTime($fa['birthday']);
@@ -223,22 +216,30 @@
                                                 	<option value="<?php echo $fa['id']; ?>" 
                                                         data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
                                                         data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>"
-                                                        data-age="<?php /*echo $age;*/ ?>" >
+                                                        data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif>
                                                         <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
                                             </select> 
                                         <?php } ?>
 
                                     </div>
-                                    
+                                    <?php 
+                                        $participatearray = [];
+                                    ?>
                                     <div class="mtp-15 info-details">
                                     	<?php
-    										/*for($i=0; $i<$item["quantity"]; $i++)
-    										{*/ ?>
-                                        		<p id='part<?php /*echo $i.$item["code"];*/ ?>'></p>
-                                        <?php /*}*/ ?>
+    										for($i=0; $i<$totalquantity; $i++)
+    										{ 
+                                                $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
+                                        		<p id='part<?php echo $i.$item["code"]; ?>'>
+                                                    participant#{{$i+1}}:  @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
+                                                </p>
+                                        <?php 
+                                            } 
+                                        ?>
                                     </div>
-                                    <?php } ?>
+                                    <?php } 
+                                    ?>
                                 </div>
     						</div>
     						<div class="row">
@@ -278,11 +279,27 @@
     						var name = $(this).find(':selected').data('name');
     						var cnt = $(this).find(':selected').data('cnt');
     						var act = $(this).find(':selected').data('act');
-    						var age = $(this).find(':selected').data('age');
-    							var value = $(this).children("option:selected").val();
+    						/*var age = $(this).find(':selected').data('age');*/
+    						var value = $(this).children("option:selected").val();
     						var counter = cnt+1;
-    						var txt= 'participant#'+counter+': '+name+' ('+age+')';
+    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+                            var txt= 'participant#'+counter+': '+name;
     						$('#part'+cnt+act).text(txt);
+                           
+                            var _token = $('meta[name="csrf-token"]'). attr('content');
+                            $.ajax({
+                                type: 'POST',
+                                url: '{{route("form_participate")}}',
+                                data: {
+                                    _token: _token,
+                                    act: act,
+                                    familyid: value,
+                                    counter: cnt,
+                                },
+                                success: function (data) {
+                                    $(".info-details").load(location.href + " .info-details>*","");
+                                }
+                            });
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
@@ -573,7 +590,7 @@
                 </div>
                 <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
                 <div class="btn-ord-txt">
-                    <a href="/instant-hire" class="post-btn-red">Add Activity or Product + </a>
+                    <a href="/activities" class="post-btn-red">Add Activity or Product + </a>
                 </div>
             </div>
             <div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
@@ -784,9 +801,7 @@ $(function() {
                     $errorStatus.removeClass('hide');
                     e.preventDefault();
                 }
-            });
-            alert($form.data('stripe-publishable-key'));
-          
+            });      
             if (!$form.data('cc-on-file')) {
                 e.preventDefault();
                 Stripe.setPublishableKey($form.data('stripe-publishable-key'));

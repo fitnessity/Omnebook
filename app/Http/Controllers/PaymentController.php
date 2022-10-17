@@ -11,6 +11,7 @@ use App\Repositories\BookingRepository;
 use App\Repositories\SportsRepository;
 use Illuminate\Support\Facades\Log;
 use Auth;
+use Session;
 use File;
 use Config;
 use App\Jobpostquestions;
@@ -61,8 +62,7 @@ class PaymentController extends Controller {
         $this->users = $users;
         $this->professionals = $professionals;
         $this->sports = $sports;
-        $this->arr = [];
-            
+        $this->arr = [];        
     }
 
     public function confirmpaymentinstant(Request $request) {
@@ -124,6 +124,7 @@ class PaymentController extends Controller {
                 $cartnew[$cnt]['child']= $c['child'];
                 $cartnew[$cnt]['infant']= $c['infant'];
                 $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
+                $cartnew[$cnt]['participate']= $c['participate'];
                 $cnt++;
             }   
            
@@ -131,7 +132,7 @@ class PaymentController extends Controller {
             $metadatalistItems = json_decode($data['metadata']['listItems']);
             $aduprice = $childprice = $infantprice = 0;
             $aduqnt = $childqnt = $infantqnt = 0;
-            
+           /* print_r($cartnew);*/
             for($i=0;$i<count($metadatapro);$i++)
             {
                 $priceid=0; $sesdate= $encodeqty ='' ;
@@ -139,6 +140,7 @@ class PaymentController extends Controller {
                 
                 if ($metadatapro[$i] == $cartnew[$i]['code'])
                 {   
+                  /*  print_r($cartnew[$i]['participate']);*/
                     $priceid = $cartnew[$i]['priceid'];
                     $sesdate = $cartnew[$i]['sesdate'];
                     $pidval = $cartnew[$i]['code'];
@@ -156,6 +158,11 @@ class PaymentController extends Controller {
                         $infantqnt = $cartnew[$i]['infant']['quantity'];
                         $infantprice = $cartnew[$i]['infant']['price'];
                     }
+                    $participate = [];
+                    if(!empty($cartnew[$i]['participate'])){
+                        $participate = $cartnew[$i]['participate'];
+                    }
+                    
                     $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,
                         'infant'=>$infantqnt); 
                     $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
@@ -175,9 +182,10 @@ class PaymentController extends Controller {
                     $encodeqty = json_encode($qty_c);
                     $encodeprice = json_encode($price_c);
                     $encodepayment_number = json_encode($payment_number_c);
+                    $encodeparticipate = json_encode($participate);
 
                 }
-               
+              /* echo $encodeparticipate;exit();*/
                 $activitylocation = BusinessServices::where('id',$pidval)->first();
                 /*$transfer_amount = round((($line_items->data[$i]->price->unit_amount - $line_items->data[$i]->price->metadata->service_fee) *0.85)/1.08875);*/
                 
@@ -198,6 +206,7 @@ class PaymentController extends Controller {
                     )),
                     'act_schedule_id' =>$act_schedule_id,
                     'payment_number' =>$encodepayment_number,
+                    'participate' =>$encodeparticipate,
                 );
                 $status = UserBookingDetail::create($act);
                 $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
@@ -401,4 +410,160 @@ class PaymentController extends Controller {
         $request->session()->put('stripepayid', $pmtintent->id);
         return redirect('/instant-hire/confirm-payment');
     }
+
+    public function form_participate(Request $request){
+      /*  print_r($request->all());*/
+        $cart_item = [];
+        if ($request->session()->has('cart_item')) {
+            $cart_item = $request->session()->get('cart_item');
+        }
+        if(in_array($request->act, array_keys($cart_item["cart_item"]))) {
+            foreach($cart_item["cart_item"] as $k => $v) {
+                if($request->act == $k) {
+                    if($request->familyid == ''){
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = Auth::user()->id;
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'user';
+                    }else{
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = $request->familyid;
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'family';
+                    }
+                }
+            }
+        }
+        $request->session()->put('cart_item', $cart_item);
+    }  
+
+    public function addToCart(Request $request) {
+        $cart_item = [];
+        if ($request->session()->has('cart_item')) {
+            $cart_item = $request->session()->get('cart_item');
+        }
+        $pid = isset($request->pid) ? $request->pid : 0;
+        $price = isset($request->price) ? $request->price : 0;
+        $pricetotal = isset($request->pricetotal) ? $request->pricetotal : 0;
+        $priceid = isset($request->priceid) ? $request->priceid : 0;
+        $actscheduleid = isset($request->actscheduleid) ? $request->actscheduleid : 0;
+        $sesdate = isset($request->sesdate) ? $request->sesdate : 0;
+        $result = DB::select('select * from business_services where id = "'.$pid.'"');
+        $infantarray = $childarray = $adultarray= $totparticipate = [];
+        $tot_qty = 0;
+        if($request->aduquantity != 0){
+            $adultarray = array('quantity'=>$request->aduquantity, 'price'=>$request->cartaduprice);
+            $tot_qty += $request->aduquantity;
+        }
+        if($request->childquantity != 0){
+            $childarray = array('quantity'=>$request->childquantity, 'price'=>$request->cartchildprice);
+            $tot_qty += $request->childquantity;
+        }
+        if($request->infantquantity != 0){
+            $infantarray = array('quantity'=>$request->infantquantity, 'price'=>$request->cartinfantprice);
+            $tot_qty += $request->infantquantity;
+        }
+
+        for ($i=0; $i < $tot_qty; $i++) { 
+            $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
+        }
+       
+        if (count($result) > 0) {
+            foreach ($result as $item) {
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=>$item->profile_pic,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
+                if(!empty($cart_item["cart_item"])) {
+                    if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
+                        foreach($cart_item["cart_item"] as $k => $v) {
+                            if($request->pid == $k) {
+                                $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
+                                $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
+                                $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
+                                $cart_item["cart_item"][$k]["priceid"] = $request->priceid;
+                                $cart_item["cart_item"][$k]['adult']["price"] = $request->cartaduprice;
+                                $cart_item["cart_item"][$k]['child']["price"] = $request->cartchildprice;
+                                $cart_item["cart_item"][$k]['infant']["price"] = $request->cartinfantprice;
+                                $cart_item["cart_item"][$k]["participate"] = $totparticipate;
+
+                               /* if(empty($cart_item["cart_item"][$k]['adult']["quantity"])) {
+                                    $cart_item["cart_item"][$k]['adult']["quantity"] = 0;
+                                }*/
+                                $cart_item["cart_item"][$k]['adult']["quantity"] = $request->aduquantity;
+
+                                /*if(empty($cart_item["cart_item"][$k]['child']["quantity"])) {
+                                    $cart_item["cart_item"][$k]['child']["quantity"] = 0;
+                                }*/
+                                $cart_item["cart_item"][$k]['child']["quantity"] = $request->childquantity;
+
+                                /*if(empty($cart_item["cart_item"][$k]['infant']["quantity"])) {
+                                    $cart_item["cart_item"][$k]['infant']["quantity"] = 0;
+                                }*/
+                                $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
+                            }
+                        }
+                    } else {
+                        $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                    }
+                }else {
+                    $cart_item["cart_item"] = $itemArray;
+                }
+            }
+        }
+        if (isset($cart_item)) {
+            $request->session()->put('cart_item', $cart_item);
+        } else {
+            $request->session()->forget('cart_item');
+        }
+        /*print_r($cart_item['cart_item']);exit;*/ 
+        return redirect('/success-cart/'.$pid); 
+    }
+
+    public function successcart($pid)
+    {   
+        $total_quantity=0;
+        $cart_item = [];
+        if (session()->has('cart_item')) {
+            $cart_item = session()->get('cart_item');
+        }
+        $sdata = BusinessServices::where('id',$pid)->first();
+        $ser = BusinessService::where('cid', $sdata->cid)->first();
+        $companyData = CompanyInformation::where('id',$sdata->cid)->first();
+        $discovermore = BusinessServices::where('cid',$sdata->cid)->where('id','!=',$pid)->limit(4)->get();
+
+        return view('activity.success_cart',[
+            'pid'=> $pid,
+            'cart'=> $cart_item,
+            'companyData'=> $companyData,
+            'sdata'=> $sdata,
+            'discovermore'=> $discovermore,
+            'ser'=> $ser
+        ]);
+    }
+    
+    public function removeToCart(Request $request) {
+
+        $cart_item = [];
+        if ($request->session()->has('cart_item')) {
+            $cart_item = $request->session()->get('cart_item');
+        }
+        //echo "<pre>";print_r($cart_item);
+        if(!empty($cart_item["cart_item"])) {
+            foreach($cart_item["cart_item"] as $k => $v) {
+                //echo $v['code'].'----'.$_GET['code'].'....<br/>';
+                if($_GET["code"] == $v['code']) {
+                    unset($cart_item["cart_item"][$k]);
+                }
+                //if(empty($cart_item["cart_item"]))
+                //unset($cart_item["cart_item"]);
+                
+            }
+        }
+        
+        if (isset($cart_item)) {
+            $request->session()->put('cart_item', $cart_item);
+        } else {
+            $request->session()->forget('cart_item');
+        }
+        return redirect('/payments/card'); 
+    }
+    
+    public function emptyCart(Request $request) {
+        $request->session()->forget('cart_item');
+        return redirect('/payments/card'); 
+    } 
 }

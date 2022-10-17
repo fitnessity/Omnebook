@@ -104,8 +104,11 @@ class HomeController extends Controller {
         $discovers = Discover::limit(6)->get();
 
         $count_trainer = Trainer::count();
-        $count_online = Online::count();
-        $count_business = BusinessClaim::count();
+        //$count_online = Online::count();
+
+        $count_activity = BusinessServices::where('is_active',1)->count();
+        $count_business = CompanyInformation::where('is_verified',1)->count();
+        //$count_business = BusinessClaim::count();
         $count_userbooking = UserBookingDetail::count();
 		
 		$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');
@@ -130,7 +133,7 @@ class HomeController extends Controller {
             'persons' => $persons,
             'discovers' => $discovers,
             'count_trainer' => $count_trainer,
-            'count_online' => $count_online,
+            'count_activity' => $count_activity,
             'count_business' => $count_business,
             'count_userbooking' => $count_userbooking,
             'bepart_data' => $bepart_data,

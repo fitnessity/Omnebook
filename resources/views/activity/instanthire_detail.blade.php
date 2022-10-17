@@ -817,7 +817,11 @@ input:disabled{
 							</div>
 							<script>
 								$( function() {
-									$( "#actfildate{{$serviceid}}" ).datepicker( { minDate: 0 } );
+									$( "#actfildate{{$serviceid}}" ).datepicker( { 
+										minDate: 0,
+										changeMonth: true,
+										changeYear:true,
+							        	yearRange: "1960:2060"} );
 								  } );
 							</script>
 						</div>
@@ -1506,12 +1510,22 @@ $(document).ready(function () {
 
 <script>
 	$( function() {
-		$( "#actfildate_forcart" ).datepicker( { minDate: 0 } );
+		$( "#actfildate_forcart" ).datepicker( { 
+			minDate: 0,
+			changeMonth: true,
+			changeYear:true,
+        	yearRange: "1960:2060"
+		} );
 	} );
 </script>
 <script>
 	$( function() {
-		$( "#actfildate0" ).datepicker( { minDate: 0 } );
+		$( "#actfildate0" ).datepicker( {
+		 	minDate: 0 
+			changeMonth: true,
+			changeYear:true,
+        	yearRange: "1960:2060"
+        } );
 	} );
 </script>
 
