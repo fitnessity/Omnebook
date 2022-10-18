@@ -160,9 +160,10 @@ input:disabled{
 	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
 	            $date_now = new DateTime();
 	            $expdate = new DateTime($expdate);
-	             
-	            if($date_now <= $expdate){
-	            
+	            /*echo $data['end_activity_date'];
+	             print_r($date_now);
+	            	print_r($expdate);*/
+	            if($date_now <= $date_now){
 	                if(@$data['shift_start']!=''){
 	                    $start = date('h:i a', strtotime( $data['shift_start'] ));
 	                    $timedata .= $start;
@@ -185,11 +186,12 @@ input:disabled{
 	                    } 
 	                  
 	                }
+	               
 	            }
            	}$i++;
         }
     }
- 
+ 	/* echo $timedata;exit();*/
 	$selectval = $priceid = $total_price_val = '' ;
 	$adult_cnt =$child_cnt =$infant_cnt =0;
 	$adult_price = $child_price = $infant_price =0;
@@ -414,13 +416,14 @@ input:disabled{
 											</div>	
 										</div>
 										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();?>
+										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
+										?>
 										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
 											<div class="membership-details">
 												<h3 class="date-title">Booking Details</h3>
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
-													<?php $SpotsLeftdis = 0;?>
+													<?php $SpotsLeftdis = 0; $i=1;?>
 													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
 													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
@@ -429,11 +432,12 @@ input:disabled{
         											} ?>
 													<div class="col-md-6">
 														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});"/>
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" @if($i==1) checked @endif/>
 																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
 																<p class="end-hr">{{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left </p>
 														</div>
 													</div>
+													<?php $i++;?>
 													@endforeach
 													@else 
 														<p class="notimeoption">No time option available Select category to view available times</p>
@@ -535,14 +539,17 @@ input:disabled{
 											$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
 											if( @$bschedulefirst->spots_available != ''){
 												$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
-											} ?>
+											} 
+											/*print_r($bschedulefirst);*/
+											/*echo $timedata;*/
+											?>
 
 										<div id="cartadd">
 									
 										@if($SpotsLefthidden >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else
-                                             @if( @$total_price_val !='' && $timedata != '')
+                                            @if( @$total_price_val !='' && $timedata != '')
 												<div id="addcartdiv">
 													<div class="btn-cart-modal">
 														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>

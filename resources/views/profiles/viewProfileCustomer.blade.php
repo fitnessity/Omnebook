@@ -45,8 +45,12 @@ use App\PostCommentLike;
 $loggedinUser = Auth::user();
 $customerName = $loggedinUser->firstname . ' ' . $loggedinUser->lastname;
 
-$totFollowing = UserFollow::where('follower_id', Auth::user()->id)->count();
-$totFollowers = UserFollow::where('user_id', Auth::user()->id)->count();
+/*$totFollowing = UserFollow::where('follower_id', Auth::user()->id)->count();
+$totFollowers = UserFollow::where('user_id', Auth::user()->id)->count();*/
+
+$totFollowing = UserFollow::where('user_id', Auth::user()->id)->count();
+$totFollowers = UserFollow::where('follower_id', Auth::user()->id)->count();
+
                                 
 $profilePicture = $loggedinUser->profile_pic;
 $coverPicture = $loggedinUser->cover_photo;

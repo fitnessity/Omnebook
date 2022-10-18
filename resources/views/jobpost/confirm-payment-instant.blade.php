@@ -18,7 +18,7 @@
         <h2>Congratulation!</h2> 
         <p>Your booking is confirmed. Check your account for further details.</p>
         <p>Looking to find another active activity you love or to find a new one, get started by clicking below.</p>
-        <a href="/instant-hire" class="btn btn-web-btn">Book Another Activity</a>        
+        <a href="/activities" class="btn btn-web-btn">Book Another Activity</a>        
     </div>
 </div>
 @include('layouts.footer')

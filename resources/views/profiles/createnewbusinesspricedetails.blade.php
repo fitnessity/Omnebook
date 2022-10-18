@@ -138,8 +138,10 @@
 
 		            ?>		
 		            	<div id="dayduration{{$i}}">
+		            		<div class="col-md-12"><i class="remove-activity fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right;margin-right: 20px;" title="Remove activity"></i></div>
 			                <div class="daycircle" id="editscheduler">
-		                    	<input type="hidden" name="activity_days[]" class="activity_days" width="800" value="<?=$activity_days?>" />
+			                	<input type="hidden" name="id[]" id="id" value="{{$activity['id']}}" />
+		                    	<input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" width="800" value="<?=$activity_days?>" />
 								<div class="row weekdays">
 									<div class="col-md-11" style="display: flex;">
 										<div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys <?=(str_contains($activity_days, 'Monday')) ? 'day_circle_fill' : '' ?>">
@@ -165,7 +167,6 @@
 		                                    <p>Su</p>
 	                                    </div>
 									</div>
-									<div class="col-md-1"><i class="remove-activity fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right;margin-right: 20px;" title="Remove activity"></i></div>
 								</div>
 								<div class="row">
 									<div class="col-md-2">
@@ -207,8 +208,10 @@
 	                        }
 	                    }else{ ?>
 	                    	<div id="dayduration0">
+	                    		<div class="col-md-12"><i class="remove-activity fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right;margin-right: 20px;" title="Remove activity"></i></div>
 	                    		<div class="daycircle" style="display:none;">
-									<input type="hidden" name="activity_days[]" class="activity_days" width="800" value="" />
+	                    			<input type="hidden" name="id[]" id="id" value="" />
+									<input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" width="800" value="" />
 									<div class="row weekdays">
 										<div class="col-md-11" style="display: flex;">
 											<div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys">
@@ -239,7 +242,6 @@
 												<p>Su</p>
 											</div>
 										</div>
-										<div class="col-md-1"><i class="remove-activity fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right;margin-right: 20px;" title="Remove activity"></i></div>
 									</div>
 									<div class="row">
 										<div class="col-md-2">
@@ -417,7 +419,6 @@
 			/*alert($("#frm_class_meets").val());*/
         	/*if($("#frm_class_meets").val() == 'Weekly')
     		{*/
-
             	activity_days = "";     
       			$(this).find(".weekdays").each( function() {
         			$.each( $(this).find('.day_circle'), function( key, value ) {
@@ -540,7 +541,9 @@
 		    shift_start = parent.querySelector('#shift_start').value='';
 		    shift_end = parent.querySelector('#shift_end').value='';
 		    set_duration = parent.querySelector('#set_duration').value='';
-		     sport_avail = parent.querySelector('#sport_avail').value='';
+		    sport_avail = parent.querySelector('#sport_avail').value='';
+		    id = parent.querySelector('#id').value='';
+		    activity_days = parent.querySelector('#activity_days').value='';
 		    $("#dayduration"+cnt).find('div.timezone-round').removeClass("day_circle_fill");
 		});
 
@@ -551,7 +554,7 @@
 	       else{ cnt1 = cnt-1; }
 	       //alert(cnt+'--'+cnt1);
 	       $('#duration_cnt').val(cnt1);
-	       $(this).parent().parent().parent().parent().remove();
+	       $(this).parent().parent().remove();
 	    });
     
 	});
