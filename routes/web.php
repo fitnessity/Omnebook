@@ -174,8 +174,8 @@ Route::group(['middleware' => ['auth']], function()
 });
 
 
-
-
+Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
+Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
 Route::any('/activities/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
 Route::any('/activity-details/{serviceid}', 'ActivityController@getInstanthiredetails');
 /*Route::get('/activities/','ActivityController@activity')->name('activity');*/
@@ -868,5 +868,4 @@ Route::get('financial-dashboard','UserProfileController@financial_dashboard')->n
 Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashboard');
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
 Route::any('/instant-hire/addbusiness-customer', 'LessonController@addbusinesscustomer')->name('addbusiness-customer');
-Route::post('pricecategory', 'LessonController@pricecategory')->name('pricecategory');
-Route::post('pricemember', 'LessonController@pricemember')->name('pricemember');
+

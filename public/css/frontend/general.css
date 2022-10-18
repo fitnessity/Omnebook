@@ -21234,3 +21234,29 @@ span.Zebra_DatePicker_Icon_Wrapper {
   font-size: 14px;
   color: #000;
 }
+.ui-widget-header {
+  border: 1px solid #eb1515 !important;
+  background: #f6a828 url("") 50% 50% repeat-x !important;
+    background-color: rgb(246, 168, 40);
+  color: #ffffff !important;
+  font-weight: bold !important;
+  background-color: #eb1515 !important;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active{
+	color: #000 !important;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight{
+	border: 1px solid #eb1515 !important;
+	background: #ff6d6d url("") 50% top repeat-x !important;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, ui-state-focus, .ui-widget-content .ui-state-focus, ui-widget-header .ui-state-focus, ui-button:hover, .ui-button:focus{
+	border: 1px solid #eb1515 !important;
+	background: #fcc7c7 url("") 50% 50% repeat-x !important;
+	font-weight: bold;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover{
+	border: 1px solid #eb1515 !important;
+	font-weight: bold !important;
+}

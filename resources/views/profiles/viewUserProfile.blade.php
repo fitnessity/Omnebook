@@ -95,12 +95,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             $totalwid = count($viewgallery);
             $width = 100/$totalwid;
             ?>
-			<!-- <div class="4img-slider">
-				<div class="con-width"> -->
-				<?php foreach (array_slice($viewgallery, 0, 4) as $pic) { ?>
-					<!-- <div class="one" style="width:{{$width}}%">
-						<img style="padding:0; margin:0;"  width="{{$width}}%" height="300" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
-					</div>   -->  
+            <!-- <div class="4img-slider">
+                <div class="con-width"> -->
+                <?php foreach (array_slice($viewgallery, 0, 4) as $pic) { ?>
+                    <!-- <div class="one" style="width:{{$width}}%">
+                        <img style="padding:0; margin:0;"  width="{{$width}}%" height="300" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
+                    </div>   -->  
                 <?php } ?>
                 <!--  </div>
             </div> -->
@@ -116,13 +116,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     <!-- </a>
 </div> -->
 @if (count($errors) > 0)
-	<div class="alert alert-danger">
-		<ul>
-        	@foreach ($errors->all() as $error)
-				<li>{{ $error }}</li>
-			@endforeach
-		</ul>
-	</div>
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 @endif
 @if(session()->has('success'))
     <div class="alert alert-success fade in alert-dismissible show">
@@ -131,11 +131,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         </button> {{ session()->get('success') }}
     </div>
 @elseif(session()->has('error'))
-	<div class="alert alert-danger fade in alert-dismissible show">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
-			<span aria-hidden="true" style="font-size:20px">×</span>
-		</button> {{ session()->get('error') }}
-	</div>
+    <div class="alert alert-danger fade in alert-dismissible show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
+            <span aria-hidden="true" style="font-size:20px">×</span>
+        </button> {{ session()->get('error') }}
+    </div>
 @endif
 <section class="banner-below-sec">
     <div class="container">
@@ -145,24 +145,24 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                     @if(File::exists(public_path("/uploads/profile_pic/thumb/".$UserProfileDetail['profile_pic'])))
                     <img src="{{ url('/public/uploads/profile_pic/thumb/'.$UserProfileDetail['profile_pic']) }}" alt="images" class="img-fluid">
                     @else
-                    	<?php
-                    	$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
-						echo '<div class="profile-pic-text"><p>'.$pf.'</p></div>'; ?>
+                        <?php
+                        $pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+                        echo '<div class="profile-pic-text"><p>'.$pf.'</p></div>'; ?>
                     @endif
                     
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="get_started" role="dialog">
-					{!! Form::open(array('url'=>url('/profile/inquirySubmit'),'method'=>'POST','class'=>'get_started')) !!}
+                    {!! Form::open(array('url'=>url('/profile/inquirySubmit'),'method'=>'POST','class'=>'get_started')) !!}
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="modal-dialog modal-lg">
                         <!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-body login-pad">
+                        <div class="modal-content">
+                            <div class="modal-body login-pad">
                                 <div class="pop-title employe-title"><h3>Inquiry Box </h3></div> 
                                 <button type="button" class="close modal-close" data-dismiss="modal">
-                                	<img src="/public/images/close.jpg" height="70" width="34">
-                            	</button>                              
+                                    <img src="/public/images/close.jpg" height="70" width="34">
+                                </button>                              
                                 <div class="signup">
                                     <div class="emplouyee-form">
                                         <input class="" type="text" name="name" id="name" class="form-control" placeholder="Name">
@@ -193,8 +193,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                     <div class="url-copy">  
                         <div>
                             <p>
-								<a class="colorgrey" href="<?php echo config('app.url'); ?>/userprofile/{{$loggedinUser->username}}">
-									<?php echo config('app.url'); ?>/userprofile/{{$loggedinUser->username}} </a> </p>
+                                <a class="colorgrey" href="<?php echo config('app.url'); ?>/userprofile/{{$loggedinUser->username}}">
+                                    <?php echo config('app.url'); ?>/userprofile/{{$loggedinUser->username}} </a> </p>
                             <!-- <button onclick="myFunction()" style="background: white;border: none; margin-left: 10px;">Copy URL</button>-->
                        </div>
                        
@@ -205,38 +205,38 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             <div class="col-lg-4 col-md-2 top-1">
                 <div class="reatingbox"><!-- <h5><i class="fa fa-star rating-pro"></i><span>5.0 </span>(100) </h5> --> <div>
                 
-				<ul class="profile-controls" id="profileControls">
-                	<?php
-						$userfollowing = UserFollow::where('user_id',$loggedinUserorignal->id)->where('follower_id',$loggedinUser->id)->first(); ?>
-					<!-- <li><div class=""><i class="fa fa-star"></i></div></li>
-					<li><a href="#" title="Add friend" data-toggle="tooltip"><i class="fa fa-user-plus"></i></a></li>-->
+                <ul class="profile-controls" id="profileControls">
+                    <?php
+                        $userfollowing = UserFollow::where('user_id',$loggedinUserorignal->id)->where('follower_id',$loggedinUser->id)->first(); ?>
+                    <!-- <li><div class=""><i class="fa fa-star"></i></div></li>
+                    <li><a href="#" title="Add friend" data-toggle="tooltip"><i class="fa fa-user-plus"></i></a></li>-->
                     <?php if($userfollowing) { ?>
-                    	<li> <p class="following-tag"> Following </p> </li>
+                        <li> <p class="following-tag"> Following </p> </li>
                     <?php } else { ?>    
-					<li><a href="javascript:void(0);" class="followProfile" title="Follow" profileid="{{$loggedinUser->id}}" userid="{{$loggedinUserorignal->id}}" ><i class="fa fa-star"></i></a></li>
+                    <li><a href="javascript:void(0);" class="followProfile" title="Follow" profileid="{{$loggedinUser->id}}" userid="{{$loggedinUserorignal->id}}" ><i class="fa fa-star"></i></a></li>
                     <?php } ?>
-					<!--<li><a class="send-mesg" href="#" title="Send Message" data-toggle="tooltip"><i class="fa fa-comment"></i></a></li>-->
-					<?php /*?><li class="shareicons ">
-						<!--<i class="fa fa-share-alt"></i>Share-->
-						<div class="middle-1">
-						  <div class="sm-container">
-							<span class="show-btn">
-								<i class="fa fa-share-alt"></i>
-								<label>Share</label>
-							</span>
-							<div class="sm-menu">
-							  <a href="#"><i class="fab fa-facebook-f fa-color"></i></a>
-							  <a href="#"><i class="fab fa-twitter fa-color"></i></a>
-							</div>
-						  </div>
-						</div>	
-					</li><?php */?>
-				</ul>
+                    <!--<li><a class="send-mesg" href="#" title="Send Message" data-toggle="tooltip"><i class="fa fa-comment"></i></a></li>-->
+                    <?php /*?><li class="shareicons ">
+                        <!--<i class="fa fa-share-alt"></i>Share-->
+                        <div class="middle-1">
+                          <div class="sm-container">
+                            <span class="show-btn">
+                                <i class="fa fa-share-alt"></i>
+                                <label>Share</label>
+                            </span>
+                            <div class="sm-menu">
+                              <a href="#"><i class="fab fa-facebook-f fa-color"></i></a>
+                              <a href="#"><i class="fab fa-twitter fa-color"></i></a>
+                            </div>
+                          </div>
+                        </div>  
+                    </li><?php */?>
+                </ul>
                 <!--<a><img src="/public/images/newimage/share.png" alt="icon">Share</a>-->
-			</div>
-			<div class="social">
-			</div>
-		</div>
+            </div>
+            <div class="social">
+            </div>
+        </div>
 
     </div>
 </section>
@@ -268,11 +268,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                                             <figure>
                                                                 <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                               	</a>
+                                                                </a>
                                                             </figure>
                                                             <figure>
                                                                 <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                              	</a>
+                                                                </a>
                                                             </figure>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -346,7 +346,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         <div class="row">
             <div class="col-sm-12 col-md-3 col-lg-3">
                 <div class="widget">            
-                	<h4 class="widget-title">Profile Intro</h4>
+                    <h4 class="widget-title">Profile Intro</h4>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="wid-sp">
@@ -364,8 +364,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                             </div>
                         </div>
                     </div>
-                	<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="wid-sp">
                                 <div class="pro-intro">
                                     <b> Member Since: </b> &nbsp; <p> <?php echo date('m/y', strtotime($UserProfileDetail['created_at']) ); ?></p>
@@ -379,8 +379,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                 </div>
                                 @endif
                             </div>
-                    	</div>
-                	</div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <?php 
@@ -391,10 +391,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                             @if($UserProfileDetail['country'] != '')
                             <div class="wid-sp img-bot">
                                 <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" class="img-fluid" width="25" height="15">
-                        		{{ $country }}
-                        	</div>
+                                {{ $country }}
+                            </div>
                             @endif
-                        	<div class="border-wid-sp"><div class="border-wid"></div></div>
+                            <div class="border-wid-sp"><div class="border-wid"></div></div>
                             @if( $UserProfileDetail['favorit_activity'] != '')
                             <div class="wid-sp">
                                 <h4 class="widget-dt">Favorite Activities To Do</h4> &nbsp;
@@ -410,258 +410,258 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     <label>View List</label>
                                 </div>
                             </div><?php */?>
-                    	</div>
-                	</div>  
-          		</div>  
-            	<!-- calender-->
+                        </div>
+                    </div>  
+                </div>  
+                <!-- calender-->
                 <?php /*?>
-            	<div class="widget-calender">
-            		<h4 class="widget-title">BOOKING REMINDER
-						<a class="post-btn-booking text-center" href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info">View Bookings</a>    
-					</h4>
+                <div class="widget-calender">
+                    <h4 class="widget-title">BOOKING REMINDER
+                        <a class="post-btn-booking text-center" href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info">View Bookings</a>    
+                    </h4>
                     <div class="calender-sp"><div id="myDate" name="myDate"></div></div>
-					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item active">
-							<a class="nav-link" data-toggle="tab" href="#tabs-11" role="tab">Todays Activities: 3</a>
-						</li>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item active">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-11" role="tab">Todays Activities: 3</a>
+                        </li>
                         <li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="#tabs-22" role="tab">Upcoming Activities: 10</a>
-						</li>
-					</ul>
+                            <a class="nav-link" data-toggle="tab" href="#tabs-22" role="tab">Upcoming Activities: 10</a>
+                        </li>
+                    </ul>
                     
-                	<div class="tab-content">
-						<div class="tab-pane active" id="tabs-11" role="tabpanel">
-							<div class="row">
-								<div class="col-sm-12 col-md-6 col-lg-6 ">
-									<div class="calendar-tab-content">
-										<h5>Kickboxing For Adults</h5>
-										<p>Valor Mixed Martial Arts</p><p>New York, United States</p>
-									</div>
-								</div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-11" role="tabpanel">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 col-lg-6 ">
+                                    <div class="calendar-tab-content">
+                                        <h5>Kickboxing For Adults</h5>
+                                        <p>Valor Mixed Martial Arts</p><p>New York, United States</p>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12 col-md-6 col-lg-6">
-									<div class="calendar-tab-content-right">
-										<h5>Nov. 11,2021</h5>
-										<p>9:00am - 10:00am(1h)</p><p>Spots(4/20)<a href="#">Invite Friend</a></p>
-									</div>
-								</div>
-							</div>
+                                    <div class="calendar-tab-content-right">
+                                        <h5>Nov. 11,2021</h5>
+                                        <p>9:00am - 10:00am(1h)</p><p>Spots(4/20)<a href="#">Invite Friend</a></p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="calendar-content-border"></div>
-                            	<div class="row">
-									<div class="col-sm-12 col-md-6 col-lg-6">
-										<div class="calendar-tab-content">
-											<h5>Mini Ninjas MArtial Arts</h5>
-											<p>Adams Fitness Center</p><p>New York, United States</p>
-										</div>
-									</div>                              
-									<div class="col-sm-12 col-md-6 col-lg-6">
-										<div class="calendar-tab-content-right">
-											<h5>Nov. 11,2021</h5>
-											<p>11:00am - 11:30am(30m)</p><p>Spots(10/20)<a href="#">Invite Friend</a></p>
-										</div>
-									</div>
-								</div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <div class="calendar-tab-content">
+                                            <h5>Mini Ninjas MArtial Arts</h5>
+                                            <p>Adams Fitness Center</p><p>New York, United States</p>
+                                        </div>
+                                    </div>                              
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <div class="calendar-tab-content-right">
+                                            <h5>Nov. 11,2021</h5>
+                                            <p>11:00am - 11:30am(30m)</p><p>Spots(10/20)<a href="#">Invite Friend</a></p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="calendar-content-border"></div>
                                 <div class="row">
-									<div class="col-sm-12 col-md-6 col-lg-6">
-										<div class="calendar-tab-content">
-											<h5>Vinyasa Yoga</h5>
-											<p>Yoga Works</p><p>New York, United States</p>
-										</div>
-									</div>
-									<div class="col-sm-12 col-md-6 col-lg-6">
-										<div class="calendar-tab-content-right">
-											<h5>Nov. 11,2021</h5>
-											<p>2:00pm - 3:00am(1h)</p><p>Spots(15/20)<a href="#">Invite Friend</a></p>
-										</div>
-									</div>
-								</div>
-							</div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <div class="calendar-tab-content">
+                                            <h5>Vinyasa Yoga</h5>
+                                            <p>Yoga Works</p><p>New York, United States</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <div class="calendar-tab-content-right">
+                                            <h5>Nov. 11,2021</h5>
+                                            <p>2:00pm - 3:00am(1h)</p><p>Spots(15/20)<a href="#">Invite Friend</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="tab-pane" id="tabs-22" role="tabpanel">
-								<p>Second Panel</p>
-							</div>
-						</div>
-           			</div><!-- calender end --><?php */?>
+                                <p>Second Panel</p>
+                            </div>
+                        </div>
+                    </div><!-- calender end --><?php */?>
             
-            		<div class="row">
-            			<div class="col-sm-12 col-md-12 col-lg-12">
-                			<div class="box-red">
-								<h1 class="red-box-font">VERIFICATION</h1>
-								<div class="veri-icon-new-1">
-									<span>
-                                    	<a href="{{'tel:'.$UserProfileDetail['phone_number']}}" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
-									</span>
-									<span>
-                                    	<a href="{{'mailto:'.$UserProfileDetail['email']}}" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-									</span>
-									<?php /*?> <span>
-                                    	<a href="#" title="link"  class=""><i class="fa fa-link" aria-hidden="true"></i></a>
-									</span>  
-									 <span>
-                                    	<a href="{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
-									</span> <?php */?>
-								</div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="box-red">
+                                <h1 class="red-box-font">VERIFICATION</h1>
+                                <div class="veri-icon-new-1">
+                                    <span>
+                                        <a href="{{'tel:'.$UserProfileDetail['phone_number']}}" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
+                                    </span>
+                                    <span>
+                                        <a href="{{'mailto:'.$UserProfileDetail['email']}}" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    </span>
+                                    <?php /*?> <span>
+                                        <a href="#" title="link"  class=""><i class="fa fa-link" aria-hidden="true"></i></a>
+                                    </span>  
+                                     <span>
+                                        <a href="{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+                                    </span> <?php */?>
+                                </div>
                                 <!--<img src="/public/img/verification.png" />-->
-							</div>
-               			</div>
-          			</div>
+                            </div>
+                        </div>
+                    </div>
             
-            		<?php /*?><div class="widget">
-            			<h4 class="widget-title">User Badges <a class="see-all" href="#" title="">See All</a></h4>
+                    <?php /*?><div class="widget">
+                        <h4 class="widget-title">User Badges <a class="see-all" href="#" title="">See All</a></h4>
                         <ul class="badgez-widget">
-							<li>
-                            	<a href="#" title="Male User" data-toggle="tooltip">
-                                <img src="/images/badges/badge2.png" alt="fitnessity"></a>
-							</li>
                             <li>
-                            	<a href="#" title="Earned $5000+" data-toggle="tooltip">
+                                <a href="#" title="Male User" data-toggle="tooltip">
+                                <img src="/images/badges/badge2.png" alt="fitnessity"></a>
+                            </li>
+                            <li>
+                                <a href="#" title="Earned $5000+" data-toggle="tooltip">
                                 <img src="/images/badges/badge12.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="10 Years old User" data-toggle="tooltip">
+                                <a href="#" title="10 Years old User" data-toggle="tooltip">
                                 <img src="/images/badges/year10.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="Page Admin" data-toggle="tooltip">
+                                <a href="#" title="Page Admin" data-toggle="tooltip">
                                 <img src="/images/badges/badge1.png" alt="fitnessity"></a>
-							</li>
+                            </li>
                             <li>
-                            	<a href="#" title="100+ Refferal" data-toggle="tooltip">
+                                <a href="#" title="100+ Refferal" data-toggle="tooltip">
                                 <img src="/images/badges/badge8.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="Tranding Posts" data-toggle="tooltip">
+                                <a href="#" title="Tranding Posts" data-toggle="tooltip">
                                 <img src="/images/badges/badge21.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="1000+ Subscribers" data-toggle="tooltip">
+                                <a href="#" title="1000+ Subscribers" data-toggle="tooltip">
                                 <img src="/images/badges/badge3.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="fitness Shirt winner" data-toggle="tooltip">
+                                <a href="#" title="fitness Shirt winner" data-toggle="tooltip">
                                 <img src="/images/badges/badge20.png" alt="fitnessity"></a>
                             </li>
                             <li>
-                            	<a href="#" title="500+ Followers" data-toggle="tooltip">
+                                <a href="#" title="500+ Followers" data-toggle="tooltip">
                                 <img src="/images/badges/badge10.png" alt="fitnessity"></a>
                             </li>
-						</ul>
-					</div><?php */?>
-            	</div>
-            	<div class="col-sm-12 col-md-9 col-lg-9">
-            		<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12">
-							<div class="profile-section">
-								<div class="row flex-column-reverse flex-md-row">
-									<div class="col-sm-12 col-md-12 col-lg-9">
-										<ul class="nav nav-tabs" role="">
-                                        	<li class="active">
-												<a class="nav-link" data-toggle="tab" href="#timeline" role="tab">Timeline</a>
-											</li>
+                        </ul>
+                    </div><?php */?>
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="profile-section">
+                                <div class="row flex-column-reverse flex-md-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-9">
+                                        <ul class="nav nav-tabs" role="">
+                                            <li class="active">
+                                                <a class="nav-link" data-toggle="tab" href="#timeline" role="tab">Timeline</a>
+                                            </li>
                                             <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#about" role="tab">About</a>
-											</li>
+                                                <a class="nav-link" data-toggle="tab" href="#about" role="tab">About</a>
+                                            </li>
                                             <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#photos" role="tab">Photos</a>
-											</li>
+                                                <a class="nav-link" data-toggle="tab" href="#photos" role="tab">Photos</a>
+                                            </li>
                                             <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#videos" role="tab">Videos</a>
-											</li>
+                                                <a class="nav-link" data-toggle="tab" href="#videos" role="tab">Videos</a>
+                                            </li>
                                             
-                                        	<?php /*?>
-                                        	<li>
-                                            	<a class="nav-link" href="#about" role="tab">About</a>
-											</li>
+                                            <?php /*?>
                                             <li>
-                                            	<a class="nav-link" href="#photos" role="tab">Photos</a>
-											</li>
+                                                <a class="nav-link" href="#about" role="tab">About</a>
+                                            </li>
                                             <li>
-                                            	<a class="nav-link" href="#videos" role="tab">Videos</a>
-											</li>
-											<li>
-												<a class="nav-link" href="#timeline">Timeline</a>
-											</li>
+                                                <a class="nav-link" href="#photos" role="tab">Photos</a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="#videos" role="tab">Videos</a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="#timeline">Timeline</a>
+                                            </li>
                                             
                                             <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Saved</a>
-											</li><?php */?>
-										</ul>
-									</div>
+                                                <a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Saved</a>
+                                            </li><?php */?>
+                                        </ul>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-3 followdiv">
                                    
-										<ol class="folw-detail">
-											<!-- <li><span>Posts</span><ins>101</ins></li> -->
-											<li><span>Followers</span><ins><?php echo $totFollowers; ?></ins></li>
-											<li><span>Following</span><ins><?php echo $totFollowing; ?></ins></li>
-										</ol>
-									</div>
-								</div>
-							</div>
-						</div>
+                                        <ol class="folw-detail">
+                                            <!-- <li><span>Posts</span><ins>101</ins></li> -->
+                                            <li><span>Followers</span><ins><?php echo $totFollowers; ?></ins></li>
+                                            <li><span>Following</span><ins><?php echo $totFollowing; ?></ins></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-sm-12 col-md-8 col-lg-8">
-                        	<div class="tab-content">
-								<div class="tab-pane active" id="timeline" role="tabpanel">
-                                	<?php /*?><div class="central-meta postbox">
-										<form method="post" action="{{route('profilePost')}}" enctype="multipart/form-data" id="profilepostfrm">
-                                        	@csrf
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="timeline" role="tabpanel">
+                                    <?php /*?><div class="central-meta postbox">
+                                        <form method="post" action="{{route('profilePost')}}" enctype="multipart/form-data" id="profilepostfrm">
+                                            @csrf
                                             <span class="create-post">Post Your Experiences</span>
-											<div class="post-img figure">
-                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-												<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="Fitnessity">
+                                            <div class="post-img figure">
+                                                <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
+                                                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="Fitnessity">
                                                 <?php }else{ 
-												$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
-													echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
-												?>
+                                                $pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+                                                    echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                ?>
                                                 
                                                 <?php } ?>
-											</div>
+                                            </div>
                                             <div class="newpst-input">
-												<textarea rows="4" id="post_text" name="post_text" placeholder="Share some of your experiences with activites you booked!" data-emojiable="true" ></textarea>
-												<span class="error" id="err_post_sign"></span>
-											</div>
+                                                <textarea rows="4" id="post_text" name="post_text" placeholder="Share some of your experiences with activites you booked!" data-emojiable="true" ></textarea>
+                                                <span class="error" id="err_post_sign"></span>
+                                            </div>
                                             <div class="postImage"></div>
-											<div class="attachments">
-												<ul>
-                                                	<li>
-                                                    	<span class="add-loc"><i class="fa fa-location-dot"></i></span>
-													</li>
+                                            <div class="attachments">
+                                                <ul>
                                                     <li>
-                                                    	<label for="music_post"><i class="fa fa-music"></i> </label>
-														<input id="music_post" name="music_post" type="file"/>
-													</li>
-                                                    <li>
-                                                    	<label for="image_post"><i class="fa fa-image"></i></label>
-														<input id="image_post" type="file" name="image_post[]" multiple />
-														<span class="error" id="err_image_sign"></span>
-													</li>
-                                                    <li>
-                                                    	<label for="video"><i class="fas fa-video"></i></label>
-														<input id="video" name="video" type="file"/>
-													</li>
-                                                    <li class="checkwebcam">
-														<label for="file-input" onclick="return showWebCam()" id="webCamButton"><i class="fa fa-camera"></i></label>
-														<!-- <input id="file-input" type="file" onclick="return showWebCam()" id="webCamButton"/> -->
-													</li>
-                                                    <li class="emojili"><div class="emojilidiv"> </div></li>
-													<li class="preview-btn">
-                                                    	<button class="post-btn-preview preview" type="button" data-ripple="">Preview</button>
+                                                        <span class="add-loc"><i class="fa fa-location-dot"></i></span>
                                                     </li>
-												</ul>
+                                                    <li>
+                                                        <label for="music_post"><i class="fa fa-music"></i> </label>
+                                                        <input id="music_post" name="music_post" type="file"/>
+                                                    </li>
+                                                    <li>
+                                                        <label for="image_post"><i class="fa fa-image"></i></label>
+                                                        <input id="image_post" type="file" name="image_post[]" multiple />
+                                                        <span class="error" id="err_image_sign"></span>
+                                                    </li>
+                                                    <li>
+                                                        <label for="video"><i class="fas fa-video"></i></label>
+                                                        <input id="video" name="video" type="file"/>
+                                                    </li>
+                                                    <li class="checkwebcam">
+                                                        <label for="file-input" onclick="return showWebCam()" id="webCamButton"><i class="fa fa-camera"></i></label>
+                                                        <!-- <input id="file-input" type="file" onclick="return showWebCam()" id="webCamButton"/> -->
+                                                    </li>
+                                                    <li class="emojili"><div class="emojilidiv"> </div></li>
+                                                    <li class="preview-btn">
+                                                        <button class="post-btn-preview preview" type="button" data-ripple="">Preview</button>
+                                                    </li>
+                                                </ul>
                                                 <div id="results" class="selfieresult"></div>
                                                 <input type="hidden" name="selfieimg" id="selfieimg" class="image-tag">
-												<button class="post-btn profilepostbtn" type="button" data-ripple="">Post</button>
-											</div>
-										</form>
-    									</div>
+                                                <button class="post-btn profilepostbtn" type="button" data-ripple="">Post</button>
+                                            </div>
+                                        </form>
+                                        </div>
                                         <div id="cameradiv" style="display:none" class="central-meta postbox">
-    										<div class="col-md-12 login_wrapper">
-    											<div class="row justify-content-md-center">
-    												<div class="col-md-12" style="display: contents;">
-    													<div id="my_camera"></div>
-    													<button type="button" class="btn theme-red-bgcolor theme-round-btn" value="Click" onClick="take_snapshot()">Capture</button>
-    												</div>
-    											</div>
-    										</div>  
-    									</div><?php */
+                                            <div class="col-md-12 login_wrapper">
+                                                <div class="row justify-content-md-center">
+                                                    <div class="col-md-12" style="display: contents;">
+                                                        <div id="my_camera"></div>
+                                                        <button type="button" class="btn theme-red-bgcolor theme-round-btn" value="Click" onClick="take_snapshot()">Capture</button>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </div><?php */
                                     ?>
                                     
                                     @if(count($profile_posts) == 0 && $totFollowing == 0)
@@ -706,302 +706,302 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                         </div>
                                     @endif
 
-            						<div class="loadMore">
-                                    	<?php $p=1; ?>
-										@foreach($profile_posts as $profile_post)
-											<?php $userData = User::where('id',$profile_post->user_id)->first(); ?>
-											<div class="central-meta item">
-												<div class="user-post">
-                                                	<?php if($p==1){ ?>
+                                    <div class="loadMore">
+                                        <?php $p=1; ?>
+                                        @foreach($profile_posts as $profile_post)
+                                            <?php $userData = User::where('id',$profile_post->user_id)->first(); ?>
+                                            <div class="central-meta item">
+                                                <div class="user-post">
+                                                    <?php if($p==1){ ?>
                                                         
                                                     <?php } ?>
-													<div class="friend-info">
+                                                    <div class="friend-info">
                                                     <?php
-                                                    	if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData->profile_pic )))
-														{ ?>
-														<figure>
-                                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$userData->profile_pic) }}" alt="pic">
+                                                        if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData->profile_pic )))
+                                                        { ?>
+                                                        <figure>
+                                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userData->profile_pic) }}" alt="pic">
                                                         </figure>
-													<?php } else { 
-														$pf=substr($userData->firstname, 0, 1).substr($userData->lastname, 0, 1);
-													?>
-                                                    		<figure><div class="admin-img-text">
+                                                    <?php } else { 
+                                                        $pf=substr($userData->firstname, 0, 1).substr($userData->lastname, 0, 1);
+                                                    ?>
+                                                            <figure><div class="admin-img-text">
                                                             <?php echo '<p>'.$pf.'</p>'; ?>
                                                             </div>
                                                             </figure>
                                                     <?php } ?>
-														<div class="friend-name">
-														<?php
-															$postreport = PostReport::where('user_id',Auth::user()->id)->where('post_id',$profile_post->id)->first(); 
-															$postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',$profile_post->id)->get();
-															$postsaveCount = $postsave->count();
-														?>
+                                                        <div class="friend-name">
+                                                        <?php
+                                                            $postreport = PostReport::where('user_id',Auth::user()->id)->where('post_id',$profile_post->id)->first(); 
+                                                            $postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',$profile_post->id)->get();
+                                                            $postsaveCount = $postsave->count();
+                                                        ?>
                                                         <?php /*?><div class="more">
-															<div class="more-post-optns">
-                                                            	<i class="fa fa-ellipsis-h"></i>
-																<ul>
-                                                                	@if($loggedinUser->id == $profile_post->user_id)
-																		<li><a id="{{$profile_post->id}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+                                                            <div class="more-post-optns">
+                                                                <i class="fa fa-ellipsis-h"></i>
+                                                                <ul>
+                                                                    @if($loggedinUser->id == $profile_post->user_id)
+                                                                        <li><a id="{{$profile_post->id}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
                                                                         <li><a href="{{route('delPost',$profile_post->id)}}"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                                     @endif
-																	@if(($loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
-																		<li><a href="{{route('savePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
+                                                                    @if(($loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
+                                                                        <li><a href="{{route('savePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
                                                                     @elseif ($postsave->count() > 0)
-                                                                    	<li><a href="{{route('RemovesavePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
-																	@endif
+                                                                        <li><a href="{{route('RemovesavePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
+                                                                    @endif
                                                                     @if(empty($postreport))
-																		<li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
-																	@elseif($postreport->report_post==1)
-																		<li class="bad-report"><a is_report="0" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Un Report Post</a></li>
-                        											@elseif($postreport->report_post==0)
-																		<li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
-																	@endif
-                        											
-																</ul>
-															</div><!-- more-post-optns -->
-														</div><?php */?>
+                                                                        <li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
+                                                                    @elseif($postreport->report_post==1)
+                                                                        <li class="bad-report"><a is_report="0" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Un Report Post</a></li>
+                                                                    @elseif($postreport->report_post==0)
+                                                                        <li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
+                                                                    @endif
+                                                                    
+                                                                </ul>
+                                                            </div><!-- more-post-optns -->
+                                                        </div><?php */?>
                                                         <ins><a href="#" title="">{{ucfirst($userData->firstname)}} {{ucfirst($userData->lastname)}} </a> Post Album</ins>
                                                         <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($profile_post->created_at))}}</span>
-													</div><!-- friend-info -->
-													<div class="post-meta">
-														<input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$profile_post->post_text}}" disabled="">
-														<?php 
-															$userid = $profile_post->user_id;
-															$count = count(explode("|",$profile_post->images));
-															$countimg = $count-5;
-															$getimages = explode("|",$profile_post->images);
-														?> 
-														<figure>
-                                                        	<!-- video post -->
-															@if(isset($profile_post->video))
-																<div class="img-bunch">
-																	<div class="row">
-																		<div class="col-lg-12 col-md-12 col-sm-12">
-																			<figure>
-																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																					<video controls class="thumb"  style="width: 100%;">
-																						<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post->video}}" type="video/mp4">
-																					</video>
-																				</a>
-																			</figure>
-																		</div>
-																	</div>
-																</div>
-															@elseif(isset($profile_post->music))   
-																<div class="img-bunch">
-																	<div class="row">
-																		<div class="col-lg-12 col-md-12 col-sm-12">
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<audio src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/music/{{$profile_post->music}}" controls></audio>
-																				</a>
-																			</figure>
-																		</div>
-																	</div>
-																</div>
-                                                                <!-- more than 4 images -->
-															@elseif(isset($getimages[4]) && !empty($getimages[4]))
-																<div class="img-bunch">
-																	<div class="row">
-																		<div class="col-lg-6 col-md-6 col-sm-6">
-																			@if(isset($getimages[0]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[1]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-																		</div>
-                                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-																			@if(isset($getimages[2]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[3]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[4]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="">
-                                                                                   	</a>
-                                                                                    <div class="more-photos">
-																						<span>+{{$countimg}}</span>
-																					</div>
-																				</figure>
-																			@endif
-																		</div>
-																	</div>
-																</div>
-            													<!-- 4 images -->
-															@elseif(isset($getimages[3]) && !empty($getimages[3]))
-																<div class="img-bunch">
-																	<div class="row">                   
-																		<div class="col-lg-12 col-md-12 col-sm-12">
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                    </div><!-- friend-info -->
+                                                    <div class="post-meta">
+                                                        <input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$profile_post->post_text}}" disabled="">
+                                                        <?php 
+                                                            $userid = $profile_post->user_id;
+                                                            $count = count(explode("|",$profile_post->images));
+                                                            $countimg = $count-5;
+                                                            $getimages = explode("|",$profile_post->images);
+                                                        ?> 
+                                                        <figure>
+                                                            <!-- video post -->
+                                                            @if(isset($profile_post->video))
+                                                                <div class="img-bunch">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <video controls class="thumb"  style="width: 100%;">
+                                                                                        <source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post->video}}" type="video/mp4">
+                                                                                    </video>
                                                                                 </a>
-																			</figure>
-																		</div>
-																	</div>
+                                                                            </figure>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @elseif(isset($profile_post->music))   
+                                                                <div class="img-bunch">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <audio src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/music/{{$profile_post->music}}" controls></audio>
+                                                                                </a>
+                                                                            </figure>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- more than 4 images -->
+                                                            @elseif(isset($getimages[4]) && !empty($getimages[4]))
+                                                                <div class="img-bunch">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                            @if(isset($getimages[0]))
+                                                                                <figure>
+                                                                                    <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            @endif
+                                                                            @if(isset($getimages[1]))
+                                                                                <figure>
+                                                                                    <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                            @if(isset($getimages[2]))
+                                                                                <figure>
+                                                                                    <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            @endif
+                                                                            @if(isset($getimages[3]))
+                                                                                <figure>
+                                                                                    <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            @endif
+                                                                            @if(isset($getimages[4]))
+                                                                                <figure>
+                                                                                    <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="">
+                                                                                    </a>
+                                                                                    <div class="more-photos">
+                                                                                        <span>+{{$countimg}}</span>
+                                                                                    </div>
+                                                                                </figure>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- 4 images -->
+                                                            @elseif(isset($getimages[3]) && !empty($getimages[3]))
+                                                                <div class="img-bunch">
+                                                                    <div class="row">                   
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                                                </a>
+                                                                            </figure>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="row">   
-																		<div class="col-lg-4 col-md-4 col-sm-4"> 
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" height="170">
-																				</a>
-																			</figure>   
-																		</div> 
                                                                         <div class="col-lg-4 col-md-4 col-sm-4"> 
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" height="170">
-																				</a>
-																			</figure>    
-																		</div> 
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" height="170">
+                                                                                </a>
+                                                                            </figure>   
+                                                                        </div> 
+                                                                        <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" height="170">
+                                                                                </a>
+                                                                            </figure>    
+                                                                        </div> 
                                                                         <div class="col-lg-4 col-md-4 col-sm-4">  
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="" height="170">
-																				</a>
-																			</figure>   
-																		</div> 
-																	</div>
-            														<!-- 3 images -->
-																	@elseif(isset($getimages[2]) && !empty($getimages[2]))
-																		<div class="img-bunch">
-																			<div class="row">
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="" width="100" height="335">
-																						</a>
-																					</figure>
-																				</div>
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" width="100" height="165">
-																						</a>
-																					</figure>
-																					<figure>
-                                                                                    	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" width="100" height="165">
-																						</a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-            														@elseif(isset($getimages[1]) && !empty($getimages[1]))
-																		<div class="img-bunch-two">
-																			<div class="row">
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-                                                                                    	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                        </a>
-																					</figure>
-																				</div>
+                                                                            <figure>
+                                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="" height="170">
+                                                                                </a>
+                                                                            </figure>   
+                                                                        </div> 
+                                                                    </div>
+                                                                    <!-- 3 images -->
+                                                                    @elseif(isset($getimages[2]) && !empty($getimages[2]))
+                                                                        <div class="img-bunch">
+                                                                            <div class="row">
                                                                                 <div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="" width="100" height="335">
                                                                                         </a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-            															<!-- 1 images -->
-																	@elseif(isset($getimages[0]) && !empty($getimages[0]))
-																		<div class="img-bunch">
-																			<div class="row">
-																				<div class="col-lg-12 col-md-12 col-sm-12">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                                                    </figure>
+                                                                                </div>
+                                                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" width="100" height="165">
                                                                                         </a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-																	@endif
+                                                                                    </figure>
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" width="100" height="165">
+                                                                                        </a>
+                                                                                    </figure>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif(isset($getimages[1]) && !empty($getimages[1]))
+                                                                        <div class="img-bunch-two">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                                                        </a>
+                                                                                    </figure>
+                                                                                </div>
+                                                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
+                                                                                        </a>
+                                                                                    </figure>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- 1 images -->
+                                                                    @elseif(isset($getimages[0]) && !empty($getimages[0]))
+                                                                        <div class="img-bunch">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                                    <figure>
+                                                                                        <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
+                                                                                        </a>
+                                                                                    </figure>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
                                                                    
                                                                     <?php
-																		$profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count();
+                                                                        $profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count();
                                                                         $likemore = $profile_posts_like-2;
                                                                         $loginuser_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id',$loggedinUserorignal->id)->first();
                                                                         $seconduser_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->first();
                         
                                                                         $profile_posts_comment = PostComment::where('post_id',$profile_post->id)->count();
-																		$postsaved = ProfileSave::where('profile_id',$profile_post->id)->where('user_id',$loggedinUser->id)->first();
-																		$activethumblike=''; $savedpost='';
-																		if( !empty($postsaved) ){ $savedpost='activesavedpost'; }																		
-																	?>
-																	<ul class="like-dislike" id="ulike-dislike<?php echo $profile_post->id; ?>">
-																		<li><a class="savepost <?php echo $savedpost; ?>" href="javascript:void(0);" title="Save to Pin Post" id="savepost{{$profile_post['id']}}" postid="{{$profile_post['id']}}">
-                                                                        	<i class="thumbtrack fas fa-thumbtack"></i>
+                                                                        $postsaved = ProfileSave::where('profile_id',$profile_post->id)->where('user_id',$loggedinUser->id)->first();
+                                                                        $activethumblike=''; $savedpost='';
+                                                                        if( !empty($postsaved) ){ $savedpost='activesavedpost'; }                                                                       
+                                                                    ?>
+                                                                    <ul class="like-dislike" id="ulike-dislike<?php echo $profile_post->id; ?>">
+                                                                        <li><a class="savepost <?php echo $savedpost; ?>" href="javascript:void(0);" title="Save to Pin Post" id="savepost{{$profile_post['id']}}" postid="{{$profile_post['id']}}">
+                                                                            <i class="thumbtrack fas fa-thumbtack"></i>
                                                                             </a>
                                                                         </li>                                                                         
                                                                         @if(!empty($loginuser_like))
-                                                                         	<?php $activethumblike='activethumblike'; ?>
+                                                                            <?php $activethumblike='activethumblike'; ?>
                                                                         @endif
                                                                         <li><a href="javascript:void(0);" title="Like Post" class="<?php echo $activethumblike; ?>"><i id="{{$profile_post->id}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li>
                                                                         <li><a href="javascript:void(0);" title="dislike Post"><i id="{{$profile_post->id}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
-																	</ul>
-																</figure>   
+                                                                    </ul>
+                                                                </figure>   
                                                                 <div class="we-video-info">
-																	
+                                                                    
                                                                     <ul>
-                                                                    	<li>
-                                                                        	<span class="views" title="views">
-																				<i class="eyeview fas fa-eye"></i>
-																				<ins>1.2k</ins>
-																			</span>
-																		</li>
-																		<li>
-                                                                        	<div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post->id}}">{{$profile_posts_like}}</span></div>
-																		</li>
-																		<li>
-                                                                        	<span class="comment{{$profile_post->id}}" title="Comments">
-																				<i class="commentdots fas fa-comment-dots"></i>
-																				<ins>{{$profile_posts_comment}}</ins>
-																			</span>
-																		</li>
-																		
-																	</ul>
+                                                                        <li>
+                                                                            <span class="views" title="views">
+                                                                                <i class="eyeview fas fa-eye"></i>
+                                                                                <ins>1.2k</ins>
+                                                                            </span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post->id}}">{{$profile_posts_like}}</span></div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <span class="comment{{$profile_post->id}}" title="Comments">
+                                                                                <i class="commentdots fas fa-comment-dots"></i>
+                                                                                <ins>{{$profile_posts_comment}}</ins>
+                                                                            </span>
+                                                                        </li>
+                                                                        
+                                                                    </ul>
                                                                     <div class="users-thumb-list" id="users-thumb-list<?php echo $profile_post->id; ?>">
                                                                     <?php
                                                                     $profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count(); ?>
-                                                                    	@if($profile_posts_like>0)
-																			@if(!empty($loginuser_like))
-                                                                            	<a data-toggle="tooltip" title="" href="#">
-                                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUserorignal->profile_pic ))){ ?>
-                                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUserorignal->profile_pic) }}" height="32" width="32">
+                                                                        @if($profile_posts_like>0)
+                                                                            @if(!empty($loginuser_like))
+                                                                                <a data-toggle="tooltip" title="" href="#">
+                                                                                <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUserorignal->profile_pic ))){ ?>
+                                                                                    <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUserorignal->profile_pic) }}" height="32" width="32">
                                                                                 <?php }else{ 
                                                                                         $pf=substr($loggedinUserorignal->firstname, 0, 1).substr($loggedinUserorignal->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                                                                     } ?> 
                                                                                 </a>
-																			@endif
-																			<?php 
+                                                                            @endif
+                                                                            <?php 
                                                                                 $profile_posts_all = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get(); ?>
                                                                                 @if(isset($profile_posts_all[0]) && $profile_posts_all[0]->user_id != $loggedinUserorignal->id)
-																					<?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
+                                                                                    <?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
                                                                                     <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$seconduser->profile_pic ))){ ?>
                                                                                         <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic) }}" height="32" width="32">  
@@ -1012,9 +1012,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                     </a>
                                                                                 @endif
                                                                                 @if(isset($profile_posts_all[1]))
-																					<?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
+                                                                                    <?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$thirduser->profile_pic ))){ ?>
+                                                                                        <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$thirduser->profile_pic ))){ ?>
                                                                                         <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$thirduser->profile_pic) }}" height="32" width="32"> 
                                                                                      <?php }else{ 
                                                                                         $pf=substr($thirduser->firstname, 0, 1).substr($thirduser->lastname, 0, 1);
@@ -1023,31 +1023,31 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                     </a>
                                                                                 @endif
                                                                                 @if(isset($profile_posts_all[2]))
-																					<?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
+                                                                                    <?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$fourthuser->profile_pic ))){ ?>
-                                                                                        	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">  
+                                                                                        <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$fourthuser->profile_pic ))){ ?>
+                                                                                            <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">  
                                                                                         <?php }else{ 
-																							$pf=substr($fourthuser->firstname, 0, 1).substr($fourthuser->lastname, 0, 1);
-																							echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
-                                                                                    	} ?> 
+                                                                                            $pf=substr($fourthuser->firstname, 0, 1).substr($fourthuser->lastname, 0, 1);
+                                                                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                                                        } ?> 
                                                                                     </a>
                                                                                 @endif
                                                                                 @if(isset($profile_posts_all[3]))
-																					<?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
+                                                                                    <?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
                                                                                     <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$fifthuser->profile_pic ))){ ?>
                                                                                         <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fifthuser->profile_pic) }}" height="32" width="32"> 
                                                                                     <?php }else{ 
-																							$pf=substr($fifthuser->firstname, 0, 1).substr($fifthuser->lastname, 0, 1);
-																							echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
-                                                                                    	} ?> 
+                                                                                            $pf=substr($fifthuser->firstname, 0, 1).substr($fifthuser->lastname, 0, 1);
+                                                                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                                                        } ?> 
                                                                                     </a>
                                                                                 @endif
                                                                                 <span>
                                                                                     <strong>
                                                                                         @if(!empty($loginuser_like))
-                                                                                        	You,
+                                                                                            You,
                                                                                         @endif
                                                                                     </strong>
                                                                                     @if(!empty($seconduser_like))
@@ -1060,11 +1060,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                     Liked
                                                                                 </span>
                                                                             
-                                                                    	@endif
+                                                                        @endif
                                                                     </div>
                                                                     </div>
                                                                 </div>
-																
+                                                                
                                                                 <div class="coment-area" style="display: block;">
                                                                     <ul class="we-comet">
                                                                         <?php 
@@ -1074,9 +1074,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         @if(count($comments) > 0)
                                                                             @foreach($comments as $comment)
                                                                                 <?php
-																				//print_r($comment);
+                                                                                //print_r($comment);
                                                                                 $username = User::find($comment->user_id);
-																				$cmntlike = PostCommentLike::where('comment_id', $comment->id)->count();
+                                                                                $cmntlike = PostCommentLike::where('comment_id', $comment->id)->count();
                                                                                 ?>
                                                                                 <li class="commentappendremove">
                                                                                     <div class="comet-avatar">
@@ -1093,9 +1093,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                         <p>{{$comment->comment}}</p>
                                                                                         <div class="inline-itms" id="commentlikediv<?php echo $comment->id; ?>">
                                                                                         <?php
-																							$cmntUlike = PostCommentLike::where('comment_id',$comment->id)->where('user_id',Auth::user()->id)->count();
-																							
-																						?>
+                                                                                            $cmntUlike = PostCommentLike::where('comment_id',$comment->id)->where('user_id',Auth::user()->id)->count();
+                                                                                            
+                                                                                        ?>
                                                                                             <span>{{$comment->created_at->diffForHumans()}}</span>
                                                                                             <?php /*?><a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a><?php */?>
                                                                                             <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
@@ -1113,12 +1113,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         @endif
                                                                         <li class="post-comment">
                                                                             <div class="comet-avatar 11">
-                                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUserorignal->profile_pic ))){ ?>
-                                                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUserorignal->profile_pic) }}" alt="pic">
+                                                                                <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUserorignal->profile_pic ))){ ?>
+                                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUserorignal->profile_pic) }}" alt="pic">
                                                                                 <?php }else{ 
-																					$pf=substr($loggedinUserorignal->firstname, 0, 1).substr($loggedinUserorignal->lastname, 0, 1);
-																					echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
-																				} ?>
+                                                                                    $pf=substr($loggedinUserorignal->firstname, 0, 1).substr($loggedinUserorignal->lastname, 0, 1);
+                                                                                    echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                                                } ?>
                                                                             </div>
                                                                             <div class="post-comt-box">
                                                                                 <form method="post" id="commentfrm">
@@ -1155,70 +1155,70 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @endforeach
                                                 <!-- append page scroll result -->
                                                 <div class="content-dash" id="scroll_pagination"></div>
-											</div>
-                            				
+                                            </div>
+                                            
                                 </div><!-- timeline tab -->
                                 <div class="tab-pane" id="about" role="tabpanel">
-                                	<div class="desc-text" id="mydesc">
+                                    <div class="desc-text" id="mydesc">
                                         <?php $gender = array('' => 'Select Gender', 'Male' => 'Male', 'Female' => 'Female'); ?>
                                             <p>@if(isset($UserProfileDetail['business_info'])) {!! nl2br(@$UserProfileDetail['business_info']) !!} @else - @endif</p>
                                             <p>@if(isset($UserProfileDetail['intro'])) {!! nl2br(@$UserProfileDetail['intro']) !!} @endif</p>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="photos" role="tabpanel">
-                                	<div class="desc-text" id="mydesc">
-                                    	<?php 
-											if (!empty($images)) 
-											{
-												foreach($images as $data)
-												{
-													$img_part = explode("|",$data->images);
-													$imgCount = count($img_part);
-													for ($i=0; $i <$imgCount ; $i++) 
+                                    <div class="desc-text" id="mydesc">
+                                        <?php 
+                                            if (!empty($images)) 
+                                            {
+                                                foreach($images as $data)
+                                                {
+                                                    $img_part = explode("|",$data->images);
+                                                    $imgCount = count($img_part);
+                                                    for ($i=0; $i <$imgCount ; $i++) 
                                                     { ?>
-                                                    	<div class="col-sm-3 col-md-4 col-lg-4">
-															<div class="photo-tab-imgs">
-																<img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
-															</div>
-														</div>
-													<?php 
-													}
-												}
-											}
-										?>
+                                                        <div class="col-sm-3 col-md-4 col-lg-4">
+                                                            <div class="photo-tab-imgs">
+                                                                <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                            </div>
+                                                        </div>
+                                                    <?php 
+                                                    }
+                                                }
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="videos" role="tabpanel">
-                                	<div class="video-box">
-                                    	<div class="row">
-											<?php 
-												if (!empty($videos)) 
-												{
-													foreach($videos as $data)
-													{ ?>
-                                                       	<div class="col-sm-4 col-md-6 col-lg-6">
-															<div class="video-tab-iframe">
-																<iframe src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/video/{{$data->video}}" frameborder="0" allowfullscreen></iframe>
-															</div>
-														</div>
+                                    <div class="video-box">
+                                        <div class="row">
+                                            <?php 
+                                                if (!empty($videos)) 
+                                                {
+                                                    foreach($videos as $data)
+                                                    { ?>
+                                                        <div class="col-sm-4 col-md-6 col-lg-6">
+                                                            <div class="video-tab-iframe">
+                                                                <iframe src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/video/{{$data->video}}" frameborder="0" allowfullscreen></iframe>
+                                                            </div>
+                                                        </div>
                                                     <?php 
-													}
-												}
-											?>
-										</div>
-									</div>
+                                                    }
+                                                }
+                                            ?>
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                        	</div> <!-- tab content -->
+                            </div> <!-- tab content -->
                             </div><!-- col-md-8 -->
-                         	<div class="col-sm-12 col-md-4 col-lg-4">
-								@include('profiles.userProfileViewRightpanel')
-                    		</div>
-							
-						</div>
-					</div>
-				<!--</div>--> <!-- comment by nnn -->
-			</section>
+                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                @include('profiles.userProfileViewRightpanel')
+                            </div>
+                            
+                        </div>
+                    </div>
+                <!--</div>--> <!-- comment by nnn -->
+            </section>
 
 @include('layouts.footer')
 
@@ -1242,377 +1242,377 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 <script type="text/javascript"> 
-	
-	function take_snapshot() {
-		Webcam.snap( function(data_uri) {
-			$(".image-tag").val(data_uri);
-				document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/><button style="margin-top:2%;; background-color:white; color:#bd2025;" onclick="myFunction()"> Click to verify </p>';
-		} );
-	}
-	function showWebCam() 
-	{
-		//$("#webCamButton").hide();
-		$("#cameradiv").show();
-		Webcam.set({
-			 width: 650,
-			 height: 400,
-			 image_format: 'jpeg',
-			 jpeg_quality: 90
-		 });
-		 Webcam.attach( '#my_camera' );
-	}
-	function myFunction() {
-		alert("Image verified!");
-	}
-	$(document).ready(function(){ 
-		function detectWebcam(callback) {
-			let md = navigator.mediaDevices;
-			if (!md || !md.enumerateDevices) return callback(false);
-				md.enumerateDevices().then(devices => {
-					callback(devices.some(device => 'videoinput' === device.kind));
-				})
-			}
-			detectWebcam(function(hasWebcam) {
-				var checkwebcam = (hasWebcam ? 'yes' : 'no');
-				if(checkwebcam == 'no'){
-					//$('.checkwebcam').css("display","none");
-				}
-			}) 
-			$(document).on('click', '.sharefb', function(){ 
-				var id = $(this).attr("id");
-                $.ajax({
-					url: "{{route('postDetail')}}",
-                     xhrFields: {
-                            withCredentials: true
-                        },
-					type: 'get',
-					data:{
-						id:id,
-					},
-					success: function (response) {
-					}
-				});
-			});
-            $(document).on('click', '.editpopup', function(){
-				var id = $(this).attr("id");
-				$.ajax({
-					url: "{{route('editpost')}}",
-                     xhrFields: {
-                            withCredentials: true
-                        },
-					type: 'get',
-					data:{
-						id:id,
-					},
-					success: function (response) {
-						$('#edit_image').html(response.html);
-						$('.post_textemoji').html(response.data_textarea);
-						$('#someid').attr('name', 'value'); 
-						$('#edit_post').modal('show');
-					}
-				});
-			});
-		});
-		
-		$('.preview').click(function () {
-			//var imgsrc = $('.').attr('src');
-			//$('.postText').text($('#post_text').val());
-			$('.postText').html($('.newpst-input .emoji-wysiwyg-editor').html());
-			var img_array = [];
-			var video = $('#videourl').val();
-			var music = $('#musicurl').val();
-			var sources = $(".postimgarray").map(function() {
-				img_array.push(this.src);
-			}).get();  
-			var imgcount = img_array.length-5;
-			var totimgcount = img_array.length;
-			var html = '<div class="row" ><div class="col-lg-6 col-md-6 col-sm-6">';
-			/* video preview */                
-			if(String(video) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><video width="320" height="240" src='+video+' controls>Your browser does not support the video tag.</video></a></figure>';
-			}
-			/* music preview*/
-			if(String(music) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><audio src="'+music+'" controls></audio></a></figure>';
-			}
-			/* Image preview */
-			if(String(img_array[0]) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[0]+' alt="" width="100" height ="210"></a></figure>'
-			}
-			if(String(img_array[1]) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[1]+' alt="" width="100" height ="210"></a></figure>'
-			}
-			html += '</div>';
-			html += '<div class="col-lg-6 col-md-6 col-sm-6">';
-			if(String(img_array[2]) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[2]+' alt="" width="100" height ="140"></a></figure>'
+    
+    function take_snapshot() {
+        Webcam.snap( function(data_uri) {
+            $(".image-tag").val(data_uri);
+                document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/><button style="margin-top:2%;; background-color:white; color:#bd2025;" onclick="myFunction()"> Click to verify </p>';
+        } );
+    }
+    function showWebCam() 
+    {
+        //$("#webCamButton").hide();
+        $("#cameradiv").show();
+        Webcam.set({
+             width: 650,
+             height: 400,
+             image_format: 'jpeg',
+             jpeg_quality: 90
+         });
+         Webcam.attach( '#my_camera' );
+    }
+    function myFunction() {
+        alert("Image verified!");
+    }
+    $(document).ready(function(){ 
+        function detectWebcam(callback) {
+            let md = navigator.mediaDevices;
+            if (!md || !md.enumerateDevices) return callback(false);
+                md.enumerateDevices().then(devices => {
+                    callback(devices.some(device => 'videoinput' === device.kind));
+                })
             }
-			if(String(img_array[3]) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[3]+' alt="" width="100" height ="140"></a></figure>'
-			}
-			if(String(img_array[4]) != 'undefined'){
-				html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[4]+' alt="" width="100" height ="140"></a><div class="more-photos"><span>+ '+imgcount+'</span></div></figure>'
-			}
-			html += '</div>';
-			html += '</div>';
-            $('#add_image').html(html);
-				$('#previewmodel').modal('show');
+            detectWebcam(function(hasWebcam) {
+                var checkwebcam = (hasWebcam ? 'yes' : 'no');
+                if(checkwebcam == 'no'){
+                    //$('.checkwebcam').css("display","none");
+                }
+            }) 
+            $(document).on('click', '.sharefb', function(){ 
+                var id = $(this).attr("id");
+                $.ajax({
+                    url: "{{route('postDetail')}}",
+                     xhrFields: {
+                            withCredentials: true
+                        },
+                    type: 'get',
+                    data:{
+                        id:id,
+                    },
+                    success: function (response) {
+                    }
+                });
             });
-		</script>
+            $(document).on('click', '.editpopup', function(){
+                var id = $(this).attr("id");
+                $.ajax({
+                    url: "{{route('editpost')}}",
+                     xhrFields: {
+                            withCredentials: true
+                        },
+                    type: 'get',
+                    data:{
+                        id:id,
+                    },
+                    success: function (response) {
+                        $('#edit_image').html(response.html);
+                        $('.post_textemoji').html(response.data_textarea);
+                        $('#someid').attr('name', 'value'); 
+                        $('#edit_post').modal('show');
+                    }
+                });
+            });
+        });
+        
+        $('.preview').click(function () {
+            //var imgsrc = $('.').attr('src');
+            //$('.postText').text($('#post_text').val());
+            $('.postText').html($('.newpst-input .emoji-wysiwyg-editor').html());
+            var img_array = [];
+            var video = $('#videourl').val();
+            var music = $('#musicurl').val();
+            var sources = $(".postimgarray").map(function() {
+                img_array.push(this.src);
+            }).get();  
+            var imgcount = img_array.length-5;
+            var totimgcount = img_array.length;
+            var html = '<div class="row" ><div class="col-lg-6 col-md-6 col-sm-6">';
+            /* video preview */                
+            if(String(video) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><video width="320" height="240" src='+video+' controls>Your browser does not support the video tag.</video></a></figure>';
+            }
+            /* music preview*/
+            if(String(music) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><audio src="'+music+'" controls></audio></a></figure>';
+            }
+            /* Image preview */
+            if(String(img_array[0]) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[0]+' alt="" width="100" height ="210"></a></figure>'
+            }
+            if(String(img_array[1]) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[1]+' alt="" width="100" height ="210"></a></figure>'
+            }
+            html += '</div>';
+            html += '<div class="col-lg-6 col-md-6 col-sm-6">';
+            if(String(img_array[2]) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[2]+' alt="" width="100" height ="140"></a></figure>'
+            }
+            if(String(img_array[3]) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[3]+' alt="" width="100" height ="140"></a></figure>'
+            }
+            if(String(img_array[4]) != 'undefined'){
+                html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[4]+' alt="" width="100" height ="140"></a><div class="more-photos"><span>+ '+imgcount+'</span></div></figure>'
+            }
+            html += '</div>';
+            html += '</div>';
+            $('#add_image').html(html);
+                $('#previewmodel').modal('show');
+            });
+        </script>
 
 <script>
-	$(document).ready(function(){
-		$('a.share').shares();
-	});
+    $(document).ready(function(){
+        $('a.share').shares();
+    });
 </script>
 <script>
-	$(function() {
-		// Initializes and creates emoji set from sprite sheet
-		window.emojiPicker = new EmojiPicker({
-			emojiable_selector: '[data-emojiable=true]',
-			assetsPath: '../public/emoji/lib/img/',
-			popupButtonClasses: 'fas fa-smile'
-		});
-		// Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
-		// You may want to delay this step if you have dynamically created input fields that appear later in the loading process
-		// It can be called as many times as necessary; previously converted input fields will not be converted again
-		window.emojiPicker.discover();
-	});
+    $(function() {
+        // Initializes and creates emoji set from sprite sheet
+        window.emojiPicker = new EmojiPicker({
+            emojiable_selector: '[data-emojiable=true]',
+            assetsPath: '../public/emoji/lib/img/',
+            popupButtonClasses: 'fas fa-smile'
+        });
+        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+        // It can be called as many times as necessary; previously converted input fields will not be converted again
+        window.emojiPicker.discover();
+    });
 </script>
 <script>
-	// Google Analytics
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-49610253-3', 'auto');
+    // Google Analytics
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-49610253-3', 'auto');
     ga('send', 'pageview');
 </script>
 <!--  <script type="text/javascript">
-	var _gaq = _gaq || [];
+    var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-36251023-1']);
-	_gaq.push(['_setDomainName', 'axc']);
-	_gaq.push(['_trackPageview']);
-	(function() {
-    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
+    _gaq.push(['_setDomainName', 'axc']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
 </script> -->
 
 <script type="text/javascript">
-	function readURL(input) {
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function (e) {
-				$('.blah').attr('src', e.target.result);
-				var html = '<img src="' + e.target.result + '">';
-				$('.uploadedpic').html(html);
-			};
-			profile_pic_var = input.files[0];
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
-	//window.onload = gallery;
-	//when we load your gallery in browser then gallery function is loaded
-	function gallery() {
-		// gallery is the name of function
-		//var allimages = document.images;
-		var allimages = $("img.gallarychangeimg");
-		for (var i = 0; i < allimages.length; i++) {
-			//if(allimages[i].id.indexOf("small") > -1){
-			allimages[i].onclick = imgChanger;
-			//in above line we are adding a listener to all the thumbs stored inside the allimages array on onclick event.
-			//}
-		}
-	}
-	//declaring the imgChanger function
-	function imgChanger() {
-		//changing the src attribute value of the large image.
-		document.getElementById('myPicturechange').src = this.id;
-	}
-	$(document).ready(function () {
-		$("#profile_pic").change(function (e) {
-			var img = e.target.files[0];
-			if (!pixelarity.open(img, false, function (res, faces) {
-				//console.log(faces);
-				$("#result").attr("src", res);
-				$("#croped_img").val(res);
-				$(".face").remove();
-				for (var i = 0; i < faces.length; i++) {
-					$("body").append("<div class='face' style='height: " + faces[i].height + "px; width: " + faces[i].width + "px; top: " + ($("#result").offset().top + faces[i].y) + "px; left: " + ($("#result").offset().left + faces[i].x) + "px;'>");
-				}
-			}, "jpg", 0.7, true)) {
-				alert("Whoops! That is not an image!");
-			}
-		});
-	});
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.blah').attr('src', e.target.result);
+                var html = '<img src="' + e.target.result + '">';
+                $('.uploadedpic').html(html);
+            };
+            profile_pic_var = input.files[0];
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    //window.onload = gallery;
+    //when we load your gallery in browser then gallery function is loaded
+    function gallery() {
+        // gallery is the name of function
+        //var allimages = document.images;
+        var allimages = $("img.gallarychangeimg");
+        for (var i = 0; i < allimages.length; i++) {
+            //if(allimages[i].id.indexOf("small") > -1){
+            allimages[i].onclick = imgChanger;
+            //in above line we are adding a listener to all the thumbs stored inside the allimages array on onclick event.
+            //}
+        }
+    }
+    //declaring the imgChanger function
+    function imgChanger() {
+        //changing the src attribute value of the large image.
+        document.getElementById('myPicturechange').src = this.id;
+    }
+    $(document).ready(function () {
+        $("#profile_pic").change(function (e) {
+            var img = e.target.files[0];
+            if (!pixelarity.open(img, false, function (res, faces) {
+                //console.log(faces);
+                $("#result").attr("src", res);
+                $("#croped_img").val(res);
+                $(".face").remove();
+                for (var i = 0; i < faces.length; i++) {
+                    $("body").append("<div class='face' style='height: " + faces[i].height + "px; width: " + faces[i].width + "px; top: " + ($("#result").offset().top + faces[i].y) + "px; left: " + ($("#result").offset().left + faces[i].x) + "px;'>");
+                }
+            }, "jpg", 0.7, true)) {
+                alert("Whoops! That is not an image!");
+            }
+        });
+    });
 
 </script>
 <script>
-	function initialize1(q) {
-		console.log(q.value);
-		var input = q;
-		console.log(input.value);
-		var s = input.value;
-		// var streetaddress= input.substr(0, input.indexOf(',')); 
-    	var autocomplete = new google.maps.places.Autocomplete(input);
-		//  if(s != ''){
-			//     var streetaddress= s.substr(0, s.indexOf(','));
+    function initialize1(q) {
+        console.log(q.value);
+        var input = q;
+        console.log(input.value);
+        var s = input.value;
+        // var streetaddress= input.substr(0, input.indexOf(',')); 
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        //  if(s != ''){
+            //     var streetaddress= s.substr(0, s.indexOf(','));
             //     input.value = streetaddress
-		// }
-		$('.pac-container').css('z-index', '999999999');
-			autocomplete.addListener('place_changed', function () {
-				var place = autocomplete.getPlace();
+        // }
+        $('.pac-container').css('z-index', '999999999');
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
                 lat = place.geometry.location.lat();
-				long = place.geometry.location.lng();
-				for (var i = 0; i < place.address_components.length; i++) {
-					for (var j = 0; j < place.address_components[i].types.length; j++) {
-						if (place.address_components[i].types[j] == "postal_code") {
-							$('#frm_zipcode').val(place.address_components[i].long_name);
-						}
-						if (place.address_components[i].types[j] == "locality") {
-							$('#frm_city').val(place.address_components[i].long_name);
-							// document.getElementById('b_address').value = place.address_components[i].short_name;
-							//document.getElementById('b_city').value = place.address_components[i].short_name;
-						}
-						if (place.address_components[i].types[j] == "country") {
-							$('#frm_country_dd').val(place.address_components[i].short_name);
-						}
-						if (place.address_components[i].types[j] == "administrative_area_level_1") {
-							$('#frm_state').val(place.address_components[i].long_name);
-						}
-					}
-				}
-			});
-		}
+                long = place.geometry.location.lng();
+                for (var i = 0; i < place.address_components.length; i++) {
+                    for (var j = 0; j < place.address_components[i].types.length; j++) {
+                        if (place.address_components[i].types[j] == "postal_code") {
+                            $('#frm_zipcode').val(place.address_components[i].long_name);
+                        }
+                        if (place.address_components[i].types[j] == "locality") {
+                            $('#frm_city').val(place.address_components[i].long_name);
+                            // document.getElementById('b_address').value = place.address_components[i].short_name;
+                            //document.getElementById('b_city').value = place.address_components[i].short_name;
+                        }
+                        if (place.address_components[i].types[j] == "country") {
+                            $('#frm_country_dd').val(place.address_components[i].short_name);
+                        }
+                        if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                            $('#frm_state').val(place.address_components[i].long_name);
+                        }
+                    }
+                }
+            });
+        }
 </script>
 <script>
-	function readURLCOVER(input) {
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			
-			reader.onload = function(e) {
-			$('#thumb-2').attr('src', e.target.result);
-			}
-			
-			reader.readAsDataURL(input.files[0]); //  convert to base64 string
-		}
-	}
-	/* page load scroll*/
-	var page =0;
-	var cnfload = true;
-	
-	//for mobile and web scroll
-	var addition_constant = 0;
-	$(document.body).on('touchmove', onScroll); // for mobile
-	$(window).on('scroll', onScroll);
-	
-	function onScroll() {
-	  var addition = ($(window).scrollTop() + window.innerHeight);
-	  //var footerHeight = $('#footer').height();
-	  var scrollHeight = (document.body.scrollHeight - 1);
-	  //scrollHeight = scrollHeight-footerHeight;
-	  if (addition > scrollHeight && addition_constant < addition) {
-	
-		addition_constant = addition;
-	
-		cnfload = false;
-		page++;
-		//alert(page);
-		load_data(page);
-	  }
-	}
-	
-	function load_data(page){
-		$('.loader').show();
-		var userid = '<?php echo $loggedinUser->id; ?>';
-		$.ajax({
-			url: "{{url('/loadmorepost')}}",
+    function readURLCOVER(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+            $('#thumb-2').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]); //  convert to base64 string
+        }
+    }
+    /* page load scroll*/
+    var page =0;
+    var cnfload = true;
+    
+    //for mobile and web scroll
+    var addition_constant = 0;
+    $(document.body).on('touchmove', onScroll); // for mobile
+    $(window).on('scroll', onScroll);
+    
+    function onScroll() {
+      var addition = ($(window).scrollTop() + window.innerHeight);
+      //var footerHeight = $('#footer').height();
+      var scrollHeight = (document.body.scrollHeight - 1);
+      //scrollHeight = scrollHeight-footerHeight;
+      if (addition > scrollHeight && addition_constant < addition) {
+    
+        addition_constant = addition;
+    
+        cnfload = false;
+        page++;
+        //alert(page);
+        load_data(page);
+      }
+    }
+    
+    function load_data(page){
+        $('.loader').show();
+        var userid = '<?php echo $loggedinUser->id; ?>';
+        $.ajax({
+            url: "{{url('/loadmorepost')}}",
              xhrFields: {
                             withCredentials: true
                         },
-			type: 'get',
-			data:{
-				page:page,
-				userid:userid,
-			},  
-			success: function (data) {
-				if(data.success=='success'){
-					$('#scroll_pagination').append(data.html);
-					cnfload = true;
-				}
-			}
-		});
-	}
-	//load_data(page);
+            type: 'get',
+            data:{
+                page:page,
+                userid:userid,
+            },  
+            success: function (data) {
+                if(data.success=='success'){
+                    $('#scroll_pagination').append(data.html);
+                    cnfload = true;
+                }
+            }
+        });
+    }
+    //load_data(page);
 
 $('#image_post').on("change", previewImages);
 $('#video').on("change", previewVideo);
 function previewVideo(){
     var $preview = $('.postImage').empty(); 
     $preview.append('<input type="hidden" id="videourl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
-	let file = event.target.files[0];
-	let blobURL = URL.createObjectURL(file);
-	document.querySelector("video").src = blobURL;
-	$('#videourl').val(blobURL);
+    let file = event.target.files[0];
+    let blobURL = URL.createObjectURL(file);
+    document.querySelector("video").src = blobURL;
+    $('#videourl').val(blobURL);
 }
 $('#music_post').on("change", previewMusic);
 function previewMusic(){
     var $preview = $('.postImage').empty(); 
     $preview.append('<input type="hidden" id="musicurl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
-	let file = event.target.files[0];
-	let blobURL = URL.createObjectURL(file);
-	document.querySelector("video").src = blobURL;
-	$('#musicurl').val(blobURL);
+    let file = event.target.files[0];
+    let blobURL = URL.createObjectURL(file);
+    document.querySelector("video").src = blobURL;
+    $('#musicurl').val(blobURL);
 }
 
 function previewImages() {
-	var $preview = $('.postImage').empty(); 
-	if (this.files) $.each(this.files, readAndPreview);
-	function readAndPreview(i, file) {
-    	if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
-      		return alert(file.name +" is not an image");
-    	} // else...
-    	var reader = new FileReader();
-    	$(reader).on("load", function() {
-        	$preview.append($('<img>', {src:this.result, height:100, width:100, class:'postimgarray'}));
-    	});
-		reader.readAsDataURL(file);
-  	}
+    var $preview = $('.postImage').empty(); 
+    if (this.files) $.each(this.files, readAndPreview);
+    function readAndPreview(i, file) {
+        if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+            return alert(file.name +" is not an image");
+        } // else...
+        var reader = new FileReader();
+        $(reader).on("load", function() {
+            $preview.append($('<img>', {src:this.result, height:100, width:100, class:'postimgarray'}));
+        });
+        reader.readAsDataURL(file);
+    }
 }
 
 $(document).on('click', '.editpic', function(){
-	//$('.editpic').click(function () {
-	var imgname = $(this).attr('imgname');
-	var id = $(this).attr('id');
-	var foldernm = '<?php echo $loggedinUser->id;  ?>';
-	$('#imgId').val(id);
-	$('#imgname').val(imgname);
-	$(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
+    //$('.editpic').click(function () {
+    var imgname = $(this).attr('imgname');
+    var id = $(this).attr('id');
+    var foldernm = '<?php echo $loggedinUser->id;  ?>';
+    $('#imgId').val(id);
+    $('#imgname').val(imgname);
+    $(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
 });
 
 $(document).on('click', '.reportPost', function(){
-	//$('.reportPost').click(function () {
-	var _token = $("input[name='_token']").val();
+    //$('.reportPost').click(function () {
+    var _token = $("input[name='_token']").val();
     var postId =$(this).attr('id');
-	var is_report = $(this).attr('is_report');
+    var is_report = $(this).attr('is_report');
     $.ajax({
-		url: "{{url('/reportPost')}}" + "/"+postId,
+        url: "{{url('/reportPost')}}" + "/"+postId,
          xhrFields: {
                             withCredentials: true
                         },
-		type: 'post',
-		data:{
-			_token:_token,
-			is_report:is_report
-		},
-		success: function (data) {
-			if(data.success=='success'){
-				$('#likecount'+postId).html(data.count);
-			}
-		}
-	}); 
+        type: 'post',
+        data:{
+            _token:_token,
+            is_report:is_report
+        },
+        success: function (data) {
+            if(data.success=='success'){
+                $('#likecount'+postId).html(data.count);
+            }
+        }
+    }); 
 });
 
 $(document).on('click', '.showcomments', function(){
@@ -1620,231 +1620,231 @@ $(document).on('click', '.showcomments', function(){
     var postId =$(this).attr('id');
     $('.commentappendremove').html("");
     $.ajax({
-		url: "{{url('/showcomments')}}" + "/"+postId,
+        url: "{{url('/showcomments')}}" + "/"+postId,
          xhrFields: {
                             withCredentials: true
                         },
-		type: 'get',
-		data:{
-			commentdisplay:commentdisplay
-		},
-		success: function (data) {
-			if(data.success=='success'){
-				//$('#likecount'+postId).html(data.count);
-				$('.commentappend'+postId).html(data.html);
-				var commentsum = parseInt(commentdisplay)+parseInt(5);
-				$('#commentdisplay').val(commentsum);
-			}
-		}
-	}); 
+        type: 'get',
+        data:{
+            commentdisplay:commentdisplay
+        },
+        success: function (data) {
+            if(data.success=='success'){
+                //$('#likecount'+postId).html(data.count);
+                $('.commentappend'+postId).html(data.html);
+                var commentsum = parseInt(commentdisplay)+parseInt(5);
+                $('#commentdisplay').val(commentsum);
+            }
+        }
+    }); 
 });
 
 $(document).on('click', '.thumblike', function(){
-	//$('html, body').stop();
-	var _token = $("input[name='_token']").val();
-	var postId =$(this).attr('id');
-	var is_like = $(this).attr('is_like');
+    //$('html, body').stop();
+    var _token = $("input[name='_token']").val();
+    var postId =$(this).attr('id');
+    var is_like = $(this).attr('is_like');
     $.ajax({
-		url: "{{url('/like-post')}}" + "/"+postId,
+        url: "{{url('/like-post')}}" + "/"+postId,
          xhrFields: {
             withCredentials: true
         },
-		type: 'post',
-		data:{
-			_token:_token,
-			is_like:is_like
-		},
-		success: function (data) {
-			if(data.success=='success'){
-				$("#users-thumb-list"+postId).load(" #users-thumb-list"+postId+" > *");
-				$("#ulike-dislike"+postId).load(" #ulike-dislike"+postId+" > *");
-				$('#likecount'+postId).html(data.count);
-			}
-		}
-	});
+        type: 'post',
+        data:{
+            _token:_token,
+            is_like:is_like
+        },
+        success: function (data) {
+            if(data.success=='success'){
+                $("#users-thumb-list"+postId).load(" #users-thumb-list"+postId+" > *");
+                $("#ulike-dislike"+postId).load(" #ulike-dislike"+postId+" > *");
+                $('#likecount'+postId).html(data.count);
+            }
+        }
+    });
 });
 $(document).on('click', '.commentlike', function(){
-	var _token = $("input[name='_token']").val();
-	var comId =$(this).attr('id');
-	var postId =$(this).attr('post-id');
-	alert(comId);
-	$.ajax({
-		url: "{{url('/like-comment')}}" + "/"+comId,
+    var _token = $("input[name='_token']").val();
+    var comId =$(this).attr('id');
+    var postId =$(this).attr('post-id');
+    alert(comId);
+    $.ajax({
+        url: "{{url('/like-comment')}}" + "/"+comId,
          xhrFields: {
             withCredentials: true
         },
-		type: 'post',
-		data:{
-			_token:_token,
-			postId:postId
-		},
-		success: function (data) {
-			if(data.success=='success'){
-				$('#comlikecounter'+comId).html(data.count);
-				if(data.status=='like')
-				{ $('#comlikei'+comId).css("color", "#f91942"); }
-				if(data.status=='unlike')
-				{ $('#comlikei'+comId).css("color", "#000000"); $('#comlikei'+comId).removeClass("commentLiked"); }
-			}
-		}
-	});
+        type: 'post',
+        data:{
+            _token:_token,
+            postId:postId
+        },
+        success: function (data) {
+            if(data.success=='success'){
+                $('#comlikecounter'+comId).html(data.count);
+                if(data.status=='like')
+                { $('#comlikei'+comId).css("color", "#f91942"); }
+                if(data.status=='unlike')
+                { $('#comlikei'+comId).css("color", "#000000"); $('#comlikei'+comId).removeClass("commentLiked"); }
+            }
+        }
+    });
 });
 
 $("#coverphoto").change(function() {
-	readURLCOVER(this);
+    readURLCOVER(this);
 });
 
 
 </script>
 <script>
 $(document).ready(function () {
-	$('.delimg').click(function () {
-		$.ajax({
-			url: "{{url('/delete-image-user?myindex=')}}" + $(this).attr('myindex'),
+    $('.delimg').click(function () {
+        $.ajax({
+            url: "{{url('/delete-image-user?myindex=')}}" + $(this).attr('myindex'),
              xhrFields: {
                 withCredentials: true
             },
-			type: 'get',
-			beforeSend: function () {
-				$('.loader').show();
-			},
-			complete: function () {
-				$('.loader').hide();
-			},
-			success: function (response) {
-				//if(response.status ==200){
-				window.location.reload()
-				$(this).parent().remove();
-				//}
-			}
-		});
-	});
+            type: 'get',
+            beforeSend: function () {
+                $('.loader').show();
+            },
+            complete: function () {
+                $('.loader').hide();
+            },
+            success: function (response) {
+                //if(response.status ==200){
+                window.location.reload()
+                $(this).parent().remove();
+                //}
+            }
+        });
+    });
 
-	$('.delPhoto').click(function () {
-		var txt;
-		var r = confirm("Are you sure, you want to delete?");
-		if (r == true) {
-			$.ajax({
-				url: "{{url('/delete-image-gallery?delId=')}}" + $(this).attr('delId'),
+    $('.delPhoto').click(function () {
+        var txt;
+        var r = confirm("Are you sure, you want to delete?");
+        if (r == true) {
+            $.ajax({
+                url: "{{url('/delete-image-gallery?delId=')}}" + $(this).attr('delId'),
                  xhrFields: {
                     withCredentials: true
                 },
-				type: 'get',
-				beforeSend: function () { $('.loader').show(); },
-				complete: function () { $('.loader').hide(); },
-				success: function (response) {
-					//if(response.status ==200){
-					window.location.reload();
-					$(this).parent().remove();
-					//}
-				}
-			});
-		}
-	});
+                type: 'get',
+                beforeSend: function () { $('.loader').show(); },
+                complete: function () { $('.loader').hide(); },
+                success: function (response) {
+                    //if(response.status ==200){
+                    window.location.reload();
+                    $(this).parent().remove();
+                    //}
+                }
+            });
+        }
+    });
 
-	$('.selectPhoto').click(function () {
-		var txt;
-		var r = confirm("Are you sure, you want to set cover photo?");
-		if (r == true) {
-			$.ajax({
-				url: "{{url('/set-cover-photo?selectId=')}}" + $(this).attr('selectId'),
+    $('.selectPhoto').click(function () {
+        var txt;
+        var r = confirm("Are you sure, you want to set cover photo?");
+        if (r == true) {
+            $.ajax({
+                url: "{{url('/set-cover-photo?selectId=')}}" + $(this).attr('selectId'),
                  xhrFields: {
                     withCredentials: true
                 },
-				type: 'get',
-				beforeSend: function () { $('.loader').show(); },
-				complete: function () { $('.loader').hide(); },
-				success: function (response) {
-					//if(response.status ==200){
-					window.location.reload();
-					$(this).parent().remove();
-					//}
-				}
-			});
-		}
-	});
+                type: 'get',
+                beforeSend: function () { $('.loader').show(); },
+                complete: function () { $('.loader').hide(); },
+                success: function (response) {
+                    //if(response.status ==200){
+                    window.location.reload();
+                    $(this).parent().remove();
+                    //}
+                }
+            });
+        }
+    });
                     
-	$('.unselectPhoto').click(function () {
-		var txt;
-		var r = confirm("Are you sure, you want to unset cover photo?");
-		if (r == true) {
-			$.ajax({
-				url: "{{url('/unset-cover-photo?selectId=')}}" + $(this).attr('selectId'),
+    $('.unselectPhoto').click(function () {
+        var txt;
+        var r = confirm("Are you sure, you want to unset cover photo?");
+        if (r == true) {
+            $.ajax({
+                url: "{{url('/unset-cover-photo?selectId=')}}" + $(this).attr('selectId'),
                 xhrFields: {
                     withCredentials: true
                 },
-				type: 'get',
-				beforeSend: function () { $('.loader').show(); },
-				complete: function () { $('.loader').hide(); },
-				success: function (response) {
-					//if(response.status ==200){
-					window.location.reload();
-					$(this).parent().remove();
-					//}
-				}
-			});
-		}
-	});
+                type: 'get',
+                beforeSend: function () { $('.loader').show(); },
+                complete: function () { $('.loader').hide(); },
+                success: function (response) {
+                    //if(response.status ==200){
+                    window.location.reload();
+                    $(this).parent().remove();
+                    //}
+                }
+            });
+        }
+    });
 
-	//Loads the html to each slider. Write in the "div id="slide-content-x" what you want to show in each slide
-	$('#carousel-text').html($('#slide-content-0').html());
-	//Handles the carousel thumbnails
-	$('[id^=carousel-selector-]').click(function () {
-		var id = this.id.substr(this.id.lastIndexOf("-") + 1);
-		var id = parseInt(id);
-		$('#myCarousel').carousel(id);
-	});
-	// When the carousel slides, auto update the text
-	$('#myCarousel').on('slid.bs.carousel', function (e) {
-		var id = $('.item.active').data('slide-number');
-		$('#carousel-text').html($('#slide-content-' + id).html());
-	});
+    //Loads the html to each slider. Write in the "div id="slide-content-x" what you want to show in each slide
+    $('#carousel-text').html($('#slide-content-0').html());
+    //Handles the carousel thumbnails
+    $('[id^=carousel-selector-]').click(function () {
+        var id = this.id.substr(this.id.lastIndexOf("-") + 1);
+        var id = parseInt(id);
+        $('#myCarousel').carousel(id);
+    });
+    // When the carousel slides, auto update the text
+    $('#myCarousel').on('slid.bs.carousel', function (e) {
+        var id = $('.item.active').data('slide-number');
+        $('#carousel-text').html($('#slide-content-' + id).html());
+    });
 
-	$('.coemail').attr('href', "{{'mailto:'.$UserProfileDetail['email']}}");
-	$('.cophone').attr('href', "{{'tel:'.$UserProfileDetail['phone_number']}}");
-	$('.coaddress').attr('href', "{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}");
-	$('.prfl-nme').html('');
-	if (window.location.href.split('?').pop() == 'companyCreate=1') {
-		$('#create_company_btn').click()
-	}
+    $('.coemail').attr('href', "{{'mailto:'.$UserProfileDetail['email']}}");
+    $('.cophone').attr('href', "{{'tel:'.$UserProfileDetail['phone_number']}}");
+    $('.coaddress').attr('href', "{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}");
+    $('.prfl-nme').html('');
+    if (window.location.href.split('?').pop() == 'companyCreate=1') {
+        $('#create_company_btn').click()
+    }
 
-	$("#resetPassword").click(function () {
-		formdata = new FormData();
-		var token = '{{csrf_token()}}';
-		var email = '{{Auth::user()->email}}';
-		formdata.append("_token", token);
-		formdata.append("email", email);
-		$.ajax({
-			url: '/password/email',
+    $("#resetPassword").click(function () {
+        formdata = new FormData();
+        var token = '{{csrf_token()}}';
+        var email = '{{Auth::user()->email}}';
+        formdata.append("_token", token);
+        formdata.append("email", email);
+        $.ajax({
+            url: '/password/email',
              xhrFields: {
                 withCredentials: true
             },
-			type: 'POST',
-			dataType: 'json',
-			data: formdata,
-			processData: false,
-			contentType: false,
-			beforeSend: function () {
-				// $('#submit_profiledetail').prop('disabled', true);
-			},
-			complete: function () {
-				// $('#submit_profiledetail').prop('disabled', false);
-			},
-			success: function (response) {
-				showSystemMessages('#systemMessage_detail', response.type, response.msg);
-			}
-		});
-	});
-	$('#datepicker-on-change').Zebra_DatePicker({
-		default_position: 'below',
-		container: $('.datepicker-position')
-	});
-	$('#frm1_birthday').Zebra_DatePicker({
-		default_position: 'below',
-		direction: -1,
-		format: 'm-d-Y',
-		container: $('#datepicker-position')
-	});
+            type: 'POST',
+            dataType: 'json',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                // $('#submit_profiledetail').prop('disabled', true);
+            },
+            complete: function () {
+                // $('#submit_profiledetail').prop('disabled', false);
+            },
+            success: function (response) {
+                showSystemMessages('#systemMessage_detail', response.type, response.msg);
+            }
+        });
+    });
+    $('#datepicker-on-change').Zebra_DatePicker({
+        default_position: 'below',
+        container: $('.datepicker-position')
+    });
+    $('#frm1_birthday').Zebra_DatePicker({
+        default_position: 'below',
+        direction: -1,
+        format: 'm-d-Y',
+        container: $('#datepicker-position')
+    });
 });
 
                 $(function () {
@@ -2112,27 +2112,27 @@ $( document ).ready(function() {
         var ret = true;
         $(document).on('click', '.profilepostbtn', function () {
         
-			var post_text = $('#post_text').val();
-			var image_post = $('#image_post').val();
-			var video_post = $('#video').val();
-			var music_post = $('#music_post').val();
-			var selfieimg = $('#selfieimg').val();
-			
-			var ret = true;
-			$('#err_image_sign').html('');
-			$('#err_post_sign').html('');
-			 
-			if(post_text == '' && image_post == '' && video_post == '' && music_post == '' && selfieimg=="")
-			{
-				$('#err_post_sign').html('Please add your post data!!!');
-				$('#post_text').focus();
-				ret=false;
-				return false;	
-			}
-			if(ret == true){
-				$('#profilepostfrm').submit();
-			}       
-		});
+            var post_text = $('#post_text').val();
+            var image_post = $('#image_post').val();
+            var video_post = $('#video').val();
+            var music_post = $('#music_post').val();
+            var selfieimg = $('#selfieimg').val();
+            
+            var ret = true;
+            $('#err_image_sign').html('');
+            $('#err_post_sign').html('');
+             
+            if(post_text == '' && image_post == '' && video_post == '' && music_post == '' && selfieimg=="")
+            {
+                $('#err_post_sign').html('Please add your post data!!!');
+                $('#post_text').focus();
+                ret=false;
+                return false;   
+            }
+            if(ret == true){
+                $('#profilepostfrm').submit();
+            }       
+        });
 
     $(document).on('click', '.postcomment', function () {
         var postId =$(this).attr('id');
@@ -2158,7 +2158,7 @@ $( document ).ready(function() {
                 },          
                 success: function (data) {
                     $('.commentappend'+postId).append(data.html);
-					$('#comment'+postId).val('');
+                    $('#comment'+postId).val('');
                      $(".comment"+postId).load(" .comment"+postId+" > *");
                 }
             });
@@ -2182,34 +2182,34 @@ $(".followback").click(function(){
           userid:userid
         },
         success: function(data) {
-			if(data.type=='success'){ $("#myfollowers").load(" #myfollowers > *"); 
+            if(data.type=='success'){ $("#myfollowers").load(" #myfollowers > *"); 
                 $(".followdiv").load(" .followdiv > *");
             }
         }
     });
 });
 $(document).on('click', '.savepost', function(){ 
-	var _token = $("input[name='_token']").val();
-	var postId =$(this).attr('postid');
-	$.ajax({
-		url: "{{url('/profilesavePost')}}",
+    var _token = $("input[name='_token']").val();
+    var postId =$(this).attr('postid');
+    $.ajax({
+        url: "{{url('/profilesavePost')}}",
          xhrFields: {
             withCredentials: true
         },
-		type: 'post',
-		data:{
-			_token:_token,
-			postid:postId,
-		},
-		success: function (data) {
-			if(data.success=='success'){ 
-				$('#savepost'+postId).addClass("activesavedpost");
-			}
-			else if(data.success=='delsave'){ 
-				$('#savepost'+postId).removeClass("activesavedpost");
-			}
-		}
-	});
+        type: 'post',
+        data:{
+            _token:_token,
+            postid:postId,
+        },
+        success: function (data) {
+            if(data.success=='success'){ 
+                $('#savepost'+postId).addClass("activesavedpost");
+            }
+            else if(data.success=='delsave'){ 
+                $('#savepost'+postId).removeClass("activesavedpost");
+            }
+        }
+    });
 });
 $(".followProfile").click(function(){
     var _token = $("input[name='_token']").val();
@@ -2228,7 +2228,7 @@ $(".followProfile").click(function(){
           userid:userid
         },
         success: function(data) { 
-			if(data.type=='success'){ 
+            if(data.type=='success'){ 
                 $("#profileControls").load(" #profileControls > *"); 
                 $(".followdiv").load(" .followdiv > *"); 
                 $("#myfollowers").load(" #myfollowers > *"); 
@@ -2259,23 +2259,23 @@ $("#myDate").datepicker({
 
 <script>
 $("#myDate").datepicker({ 
-	// an array of excluded dates
-	disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
-	// an array of pre-selected dates
-	daterange = [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")
-	// appearance options
-	showButtonPanel:true,  
-	showWeek: true,
-	firstDay: 1
+    // an array of excluded dates
+    disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
+    // an array of pre-selected dates
+    daterange = [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")
+    // appearance options
+    showButtonPanel:true,  
+    showWeek: true,
+    firstDay: 1
 });
 });
 </script>
 
 <script>
-	var r = $("#myDate").datepicker({ 
-	// OPTIONS HERE
-	});
-	r.getDateRange()
+    var r = $("#myDate").datepicker({ 
+    // OPTIONS HERE
+    });
+    r.getDateRange()
 </script>
 <script>
 document.querySelector('.show-btn').addEventListener('click', function() {
