@@ -171,6 +171,8 @@ Route::group(['middleware' => ['auth']], function()
 	Route::get('/oncall/{mid}','ZoomController@oncall')->name('oncall');
 	Route::post('/store','ZoomController@store')->name('store');
 	Route::post('/invite','ZoomController@invite')->name('invite');
+    Route::any('/addcustomerbusiness', 'BusinessController@addbusinesscustomer')->name('addbusinesscustomer');
+    Route::post('/add_business_customer', 'BusinessController@add_business_customer')->name('add_business_customer');
 });
 
 
@@ -236,6 +238,10 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/profile/editprofiledetail', 'Admin\AdminUserProfileController@viewProfile');
     Route::post('/profile/editprofiledetail', 'Admin\AdminUserProfileController@editProfileDetail');
     Route::post('/profile/editProfilePicture', 'Admin\AdminUserProfileController@editProfilePicture');
+
+    //Home tracker
+    Route::get('/hometracker', 'Admin\HomeTrackerController@index')->name('hometracker');
+    Route::post('/update-hometracker', 'Admin\HomeTrackerController@update')->name('update-hometracker');
 
 
     //cms
@@ -705,10 +711,10 @@ Route::any('/payments/card', 'LessonController@cartpaymentinstant');
 Route::post('/form_participate', 'PaymentController@form_participate')->name('form_participate');
 Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
-Route::any('/addtocart', 'PaymentController@addToCart');
-Route::any('/success-cart/{pid}', 'PaymentController@successcart')->name('successcart');
-Route::any('/removetocart', 'PaymentController@removeToCart');
-Route::any('/emptycart', 'PaymentController@emptyCart');
+Route::any('/addtocart', 'LessonController@addToCart');
+Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
+Route::any('/removetocart', 'LessonController@removeToCart');
+Route::any('/emptycart', 'LessonController@emptyCart');
 
 //booking status and details
 Route::get('/viewBooking/{booking_id}', 'LessonController@viewBooking');
@@ -867,5 +873,5 @@ Route::get('view-customer','UserProfileController@view_customer')->name('view-cu
 Route::get('financial-dashboard','UserProfileController@financial_dashboard')->name('financial-dashboard');
 Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashboard');
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
-Route::any('/instant-hire/addbusiness-customer', 'LessonController@addbusinesscustomer')->name('addbusiness-customer');
+
 

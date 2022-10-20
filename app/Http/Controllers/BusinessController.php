@@ -1155,5 +1155,78 @@ class BusinessController extends Controller
 			exit;
 		}
 	}
-	
+
+    public function addbusinesscustomer() {
+        return view('business.addbusinesscustomer');
+    }
+
+    public function add_business_customer(Request $request)
+    {
+        $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
+        if($comdata != ''){
+            $var = "matched";
+        } else{
+            $data['lat'] = $request->lat;
+            $data['lon'] = $request->lon;
+
+            $companyData = [
+                "user_id" => null,
+                "is_verified" => 0,
+                "status"=>1,
+                "business_added_by_cust_name" =>$request->business_added_by_cust_name,
+                "first_name" => $request->Firstnameb,
+                "last_name" => '',
+                "email" => $request->Emailb,
+                "contact_number" => '',
+                "logo" =>'',
+                "company_name" => $request->Companyname,
+                "address" => $request->Address,
+                "state" => $request->State,
+                "country" => $request->Country,
+                "zip_code" => $request->ZipCode,
+                "city" => $request->City,
+                "ein_number" => '',
+                "establishment_year" => '',
+                "business_user_tag" => '',
+                "about_company" => $request->Aboutcompany,
+                "short_description" => '',
+                "embed_video" => '',
+                "latitude" => $data['lat'],
+                "longitude" => $data['lon'],
+                'dba_business_name' => $request->Companyname,
+                'additional_address' => $request->additional_address,
+                'neighborhood' => $request->neighborhood,
+                'business_phone' => $request->business_phone,
+                'business_email' => $request->business_email,
+                'business_website' => $request->business_website,
+                'business_type' => $request->business_type,
+            ];
+            $data = CompanyInformation::create($companyData);
+            $businessData = [
+                "cid" => $data->id,
+                "userid" => null,
+                "Companyname" => $request->Companyname,
+                "Address" => $request->Address,
+                "City" => $request->City,
+                "State" => $request->State,
+                "ZipCode" => $request->ZipCode,
+                "Country" => $request->Country,
+                "EINnumber" => '',
+                "Businessusername" => '',
+                "Profilepic" => '',
+                "Firstnameb" => $request->Firstnameb,
+                "Lastnameb" => '',
+                "Emailb" => $request->Emailb,
+                "Phonenumber" => '',
+                "Aboutcompany" => $request->Aboutcompany,
+                "Shortdescription" => '',
+                "EmbedVideo" => '',
+                "showstep" => 2            
+            ];
+            BusinessCompanyDetail::create($businessData);
+            $var = "added";
+        }
+
+        return $var;
+    }
 }

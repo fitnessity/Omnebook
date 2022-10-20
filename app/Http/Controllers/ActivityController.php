@@ -787,25 +787,25 @@ class ActivityController extends Controller {
 					$request->session()->put('country', $country[0]);
 					$search = $country[0];
 					$all_activities->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$this_nthactivity->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$most_popularactivity->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$Trainers_coaches_acitvity->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$Fun_Activities->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 	            }else {
 	            	$request->session()->forget('country');
@@ -818,25 +818,25 @@ class ActivityController extends Controller {
 					$request->session()->put('state', $state[0]);
 					$search = $state[0];
 					$all_activities->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$this_nthactivity->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$most_popularactivity->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$Trainers_coaches_acitvity->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$Fun_Activities->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 	            }else {
 	            	$request->session()->forget('state');
@@ -848,25 +848,25 @@ class ActivityController extends Controller {
 					$request->session()->put('zip_code', $zip_code[0]);
 					$search = $zip_code[0];
 					$all_activities->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$this_nthactivity->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$most_popularactivity->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$Trainers_coaches_acitvity->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$Fun_Activities->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
 	            }else {
 	            	$request->session()->forget('zip_code');
@@ -878,25 +878,25 @@ class ActivityController extends Controller {
 					$request->session()->put('city', $city[0]);
 					$search = $city[0];
 					$all_activities->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$this_nthactivity->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$most_popularactivity->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$Trainers_coaches_acitvity->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$Fun_Activities->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
-	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 	            }else {
 	            	$request->session()->forget('city');
@@ -1333,7 +1333,7 @@ class ActivityController extends Controller {
                 $service_type='';
                 if($act['service_type']!=''){
                     if( $act['service_type']=='individual' ) {$service_type = 'Personal Training'; }
-                    else if( $act['service_type']=='classes' ) { $service_type = 'Group Classe';} 
+                    else if( $act['service_type']=='classes' ) { $service_type = 'Group Class';} 
                     else if( $act['service_type']=='experience' ) { $service_type = 'Experience'; }
                 }
                 $pricearr = [];
@@ -1496,8 +1496,8 @@ class ActivityController extends Controller {
         $companyid = $request->companyid;
         $searchData = [];
         if(!empty($actdate)){
-            $searchData = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
-            $searchDatafirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
+            $searchData = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('m/d/Y',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
+            $searchDatafirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('m/d/Y',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
         }
        /* print_r($searchData);*/
         $actbox = '';
@@ -1506,10 +1506,11 @@ class ActivityController extends Controller {
         $servicePrfirst= $sercatefirst = $priceid = $total_price_val = '';
         $sercate = $servicePr = [];
         $adultcnt = $childcnt = $infantcnt = 0;
+       
         if($searchDatafirst != ''){
             $servicePrfirst = BusinessPriceDetails::where('category_id',$searchDatafirst->category_id)->orderBy('id', 'ASC')->first();
-            $sercate = BusinessPriceDetailsAges::where('id',$searchDatafirst->category_id)->orderBy('id', 'ASC')->get()->toArray();
-            $sercatefirst = BusinessPriceDetailsAges::where('id',$searchDatafirst->category_id)->orderBy('id', 'ASC')->first();
+            $sercate = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->get()->toArray();
+            $sercatefirst = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
             if($sercatefirst  != ''){
                 $servicePr = BusinessPriceDetails::orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
             }
@@ -1597,31 +1598,40 @@ class ActivityController extends Controller {
             $si=1;
             foreach($searchData as $data){
                 if($si == 1){
-                    if(@$data['shift_start']!=''){
-                        $start = date('h:i a', strtotime( $data['shift_start'] ));
-                        $timedata .= $start;
-                    }
-                    if(@$data['shift_end']!=''){
-                        $end = date('h:i a', strtotime( $data['shift_end'] ));
-                        $timedata .= ' - '.$end;
-                    } 
+                	$SpotsLeftdis = 0; 
+	        		$SpotsLeft = 0; 
+					$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=',  date('Y-m-d',strtotime($actdate)) )->count();
+					if( $data['spots_available'] != ''){
+						$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+					} 
 
-                    if(@$data['set_duration']!=''){
-                        $tm=explode(' ',$data['set_duration']);
-                        $hr=''; $min=''; $sec='';
-                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                        if($hr!='' || $min!='' || $sec!='')
-                        { 
-                            $time = $hr.$min.$sec; 
-                            $timedata .= ' / '.$time;
-                        } 
-                    }
+                	if($SpotsLeftdis != 0){
+	                    if(@$data['shift_start']!=''){
+	                        $start = date('h:i a', strtotime( $data['shift_start'] ));
+	                        $timedata .= $start;
+	                    }
+	                    if(@$data['shift_end']!=''){
+	                        $end = date('h:i a', strtotime( $data['shift_end'] ));
+	                        $timedata .= ' - '.$end;
+	                    } 
+
+	                    if(@$data['set_duration']!=''){
+	                        $tm=explode(' ',$data['set_duration']);
+	                        $hr=''; $min=''; $sec='';
+	                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+	                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
+	                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+	                        if($hr!='' || $min!='' || $sec!='')
+	                        { 
+	                            $time = $hr.$min.$sec; 
+	                            $timedata .= ' / '.$time;
+	                        } 
+	                    }
                     
-                    $today = date('Y-m-d');
+                    	$today = date('Y-m-d');
+                    	$si++;
+                    }
                 }
-                $si++;
             }
            
             $actbox = '<div class="col-md-12 col-sm-12 col-xs-12">
@@ -1656,8 +1666,10 @@ class ActivityController extends Controller {
                                         </div>  
                                     </div>';
                                     $SpotsLeftdis = 0;
-                                    $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get();
-                                    $bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->first();
+                                   
+                                    $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('m/d/Y',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
+            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('m/d/Y',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
+                                   
                                     $actbox .= '<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
                                         <div class="membership-details">
                                             <h3 class="date-title">Booking Details</h3>
@@ -1666,7 +1678,8 @@ class ActivityController extends Controller {
                                             $i=1;
                                             if(!empty(@$bschedule) ||count(@$bschedule)>0){
                                                 foreach(@$bschedule as $bdata){
-                                                    $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d'))->count();
+                                                	$SpotsLeftdis = 0; 
+                                                    $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d',strtotime($actdate)))->count();
                                                     if( $bdata['spots_available'] != ''){
                                                         $SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
                                                     }
@@ -1674,7 +1687,10 @@ class ActivityController extends Controller {
                                                         <div class="donate-now">
                                                             <input type="radio" id="'.$bdata['id'].'" name="amount" value="'.$bdata['shift_start'].'" onclick="addhiddentime('.$bdata['id'].','.$serviceid.');"';
                                                             if( $i==1){
-                                                            	$actbox .= 'checked';
+                                                            	if($SpotsLeftdis != 0){
+                                                            		$actbox .= 'checked';
+                                                            		$i++;
+                                                            	}
                                                             }
                                                             $actbox .= '/>
                                                                 <label for="'.$bdata['id'].'">'.$bdata['shift_start'].'</label>
@@ -1776,12 +1792,12 @@ class ActivityController extends Controller {
                                         <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.'" />
                                         <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$serviceid.$serviceid.'" />
                                         <div id="cartadd">';
-                                        $SpotsLeftdis = 0;
-											$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
-											if( @$bschedulefirst->spots_available != ''){
-												$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
-											} 
-                                        if($SpotsLefthidden >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0){
+                                        /*$SpotsLeftdis = 0;
+										$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+										if( @$bschedulefirst->spots_available != ''){
+											$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
+										} */
+                                        if($SpotsLeft >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0){
                                            $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>';
                                         }else{
                                             if(@$total_price_val !='' && $timedata != '') {
@@ -1805,13 +1821,7 @@ class ActivityController extends Controller {
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <h3 class="date-title">'.$date.'</h3>
-                                        <label>Step: 1 </label> <span class=""> Select Membership Type</span>
-                                        <select id="actfilmtype'.$serviceid.'" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre">
-                                            <option>Drop In</option>
-                                            <option>Semester</option>
-                                        </select>
-                                        
-                                        <label>Step: 2 </label> <span class="">Select Category</span>
+                                        <label>Step: 1 </label> <span class="">Select Category</span>
                                         <select id="selcatpr'.$serviceid.'" name="selcatpr'.$serviceid.'" class="price-select-control" onchange="changeactsession('.$changeactsession_para.')">';
                                             $c=1;  
                                                 if (!empty($sercate)) { 
@@ -1821,7 +1831,13 @@ class ActivityController extends Controller {
                                                     }
                                                 }
                                         $actbox .= '</select>
-                                        
+                                        <label>Step: 2 </label> <span class=""> Select Membership Type</span>
+										<div id="memberoption">
+											<select id="actfilmtype'.$serviceid.'" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember('.$serviceid.');">';										
+											$actbox .= $mbox; 
+											$actbox .= '</select>
+										</div>
+                                      
                                         <label>Step: 3 </label> <span class="">Select Price Option</span>
                                         <div class="priceoption" id="pricechng'.$serviceid.''.$serviceid.'">
                                             <select id="selprice'.$serviceid.'" name="selprice'.$serviceid.'" class="price-select-control" onchange="changeactpr('.$changeactpr_para.')">';
@@ -2192,39 +2208,46 @@ class ActivityController extends Controller {
         }
 
 
-        $todayday = date("l");
+        $todayday = date("l" ,strtotime($sesdate));
         $todaydate = date('m/d/Y' ,strtotime($sesdate));
         $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get(); 
                                         
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='';
         if(!empty($bus_schedule)){           
             foreach($bus_schedule as $data){
+            	$SpotsLeftdis = 0; 
+        		$SpotsLeft = 0; 
+				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+				if( $data['spots_available'] != ''){
+					$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+				} 
             	$expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
 	            $date_now = new DateTime();
 	            $expdate = new DateTime($expdate);
-
-                if($date_now <= $date_now){
-                    $timedata ='';
-                    if(@$data['shift_start']!=''){
-                        $start = date('h:i a', strtotime( $data['shift_start'] ));
-                        $timedata .= $start;
-                    }
-                    if(@$data['shift_end']!=''){
-                        $end = date('h:i a', strtotime( $data['shift_end'] ));
-                         $timedata .= ' - '.$end;
-                    } 
-                    if(@$data['set_duration']!=''){
-                        $tm=explode(' ',$data['set_duration']);
-                        $hr=''; $min=''; $sec='';
-                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                        if($hr!='' || $min!='' || $sec!='')
-                        { $time = $hr.$min.$sec; 
-                            $timedata .= ' / '.$time;} 
-                    }
-                    $today = date('Y-m-d');
-                }
+ 				if($SpotsLeftdis != 0){
+	                if($date_now <= $date_now){
+	                    $timedata ='';
+	                    if(@$data['shift_start']!=''){
+	                        $start = date('h:i a', strtotime( $data['shift_start'] ));
+	                        $timedata .= $start;
+	                    }
+	                    if(@$data['shift_end']!=''){
+	                        $end = date('h:i a', strtotime( $data['shift_end'] ));
+	                         $timedata .= ' - '.$end;
+	                    } 
+	                    if(@$data['set_duration']!=''){
+	                        $tm=explode(' ',$data['set_duration']);
+	                        $hr=''; $min=''; $sec='';
+	                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+	                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
+	                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+	                        if($hr!='' || $min!='' || $sec!='')
+	                        { $time = $hr.$min.$sec; 
+	                            $timedata .= ' / '.$time;} 
+	                    }
+	                    $today = date('Y-m-d');
+	                }
+	            }
             }
         }
         $bookdata ='';
@@ -2279,13 +2302,14 @@ class ActivityController extends Controller {
 
         $SpotsLeftdis = 0;
 
-        $busche = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('m/d/Y') )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-        $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('m/d/Y') )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
+        $busche = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('Y-m-d' ,strtotime($sesdate)) )->whereRaw('FIND_IN_SET("'.date("l" ,strtotime($sesdate) ).'",activity_days)')->get();
+        $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('Y-m-d' ,strtotime($sesdate))  )->whereRaw('FIND_IN_SET("'.date("l" ,strtotime($sesdate)).'",activity_days)')->first();
         /*echo $catid;exit;*/
         $i=1;
         if(!empty($busche) && count($busche)>0){
             foreach($busche as $bdt){
-                $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdt['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+            	$SpotsLeftdis = 0;
+                $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdt['id'])->whereDate('bookedtime', '=', date('Y-m-d' ,strtotime($sesdate)) )->count();
                 if( $bdt['spots_available'] != ''){
                     $SpotsLeftdis = $bdt['spots_available'] - $SpotsLeft;
                 } 
@@ -2293,14 +2317,16 @@ class ActivityController extends Controller {
                     <div class="donate-now">
                         <input type="radio" id="'.$bdt['id'].'" name="amount" value="'.$bdt['shift_start'].'" onclick="addhiddentime('.$bdt['id'].','.$bdt['serviceid'].');"';
                         if( $i==1){
-                        	$timedata12 .='checked';
+                        	if($SpotsLeftdis != 0) {
+                        		$timedata12 .='checked';
+                        		$i++;
+                        	}
                         }
                         $timedata12 .='/>
                         <label for="'.$bdt['id'].'" >'.$bdt['shift_start'].'</label>
                         <p class="end-hr">'.$SpotsLeftdis.'/'.$bdt['spots_available'].' Spots Left </p>
                     </div>
                 </div>';
-                $i++;
             }
         }else{
             $timedata12 .='<p class="notimeoption">No time option available Select category to view available times</p>';

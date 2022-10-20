@@ -40,6 +40,11 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>  
           </a>
         </li>
+        <li class="{{ $request->segment(2) == 'managetracker' ? 'active' : '' }}">
+          <a href="/admin/hometracker">
+            <i class="fa fa-usd"></i> <span>Manage Home Tracker</span>  
+          </a>
+        </li>
         <li class="{{ $request->segment(2) == 'fees' ? 'active' : '' }}">
           <a href="/admin/fees">
             <i class="fa fa-usd"></i> <span>Fees</span>  

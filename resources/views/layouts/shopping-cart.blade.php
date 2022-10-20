@@ -16,8 +16,8 @@
     }else{
         $username = '';
     }
-   /* echo"<pre>";*//* print_r($cart['cart_item']); *//*exit();*/
-
+   /* echo"<pre>";*/  /*print_r($cart['cart_item']);*/ /*exit();*/
+    $ajaxname = '';
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -228,6 +228,7 @@
                                     ?>
                                     <div class="mtp-15 info-details">
                                     	<?php
+                                            $ajaxname = Auth::user()->firstname.' '.Auth::user()->lastname;
     										for($i=0; $i<$totalquantity; $i++)
     										{ 
                                                 $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
@@ -283,6 +284,10 @@
     						var value = $(this).children("option:selected").val();
     						var counter = cnt+1;
     						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+                            if(name == undefined){
+                                name = '{{$ajaxname}}';
+                            }
+                            
                             var txt= 'participant#'+counter+': '+name;
     						$('#part'+cnt+act).text(txt);
                            

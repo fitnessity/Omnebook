@@ -12893,7 +12893,7 @@ $(document).ready(function(){
 
     $('#quick_business_left').text(150-parseInt($("#about_company").val().length));
 
-    $('#company_desc_left').text(500-parseInt($("#short_description").val().length));
+    $('#company_desc_left').text(1000-parseInt($("#short_description").val().length));
 
     $('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
 
@@ -12933,7 +12933,7 @@ $(document).ready(function(){
 
         //$('#display_count_business').text(this.value.length);
 
-        $('#company_desc_left').text(500-parseInt(this.value.length));
+        $('#company_desc_left').text(1000-parseInt(this.value.length));
 
     });
 

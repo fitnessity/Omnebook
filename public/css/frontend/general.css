@@ -10959,8 +10959,7 @@ ul.tab_topic li:hover a {
 .comparetable th h3{ font-size: 16px; font-weight: bold; }
 .comparetable td {
     border-right: 1px solid #dddddd;
-	max-width: 22%;
-	width: 22%;
+	
 }
 
 .comparetable td {
@@ -13695,6 +13694,7 @@ div#CreateCompanyModal #preview img.header_img {
 
 #myModal .comparetable td {
     background: #fff !important;
+	width: 20%;
 }
 
 #myModal .comparetable td.bg_color {
@@ -21259,4 +21259,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover{
 	border: 1px solid #eb1515 !important;
 	font-weight: bold !important;
+}
+.modal.fade.compare-model.in{
+	overflow-x: hidden;
+	overflow-y: auto;
 }
