@@ -48,6 +48,8 @@ class CompanyInformation extends Model {
         'business_website',
         "stripe_connect_id",
         "charges_enabled",
+        "business_added_by_cust_name",
+        "is_verified",
     ];
 
     public function employmenthistory() {

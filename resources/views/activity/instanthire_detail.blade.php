@@ -74,7 +74,6 @@ input:disabled{
 	use Carbon\Carbon;
 
 	$sid = $serviceid;
-	/*echo $sid;exit();*/
 	$service = BusinessServices::where('id',$serviceid)->first();
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
@@ -84,7 +83,6 @@ input:disabled{
     $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
     $email = $companylat = $companylon  = $companylogo = '';
     $comp_data = CompanyInformation::where('id', $service['cid'])->first();
-    // echo $Instructordata;
     
 	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
 	if($comp_data->address != ''){
@@ -146,52 +144,57 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',$todaydate )->get();
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',$todaydate )->max('spots_available');
+    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->get();
+    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 
- 
-    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft =0 ;
+    // print_r($bus_schedule);
+    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft = $SpotsLeftdis = 0 ;
     $i=0;
     if(!empty(@$bus_schedule)){
         foreach($bus_schedule as $data){
         	if($i==0){
-	            
+        		$SpotsLeftdis = 0; 
+        		$SpotsLeft = 0; 
+				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+				if( $data['spots_available'] != ''){
+					$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+				} 
+				
 	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
 	            $date_now = new DateTime();
 	            $expdate = new DateTime($expdate);
-	            /*echo $data['end_activity_date'];
-	             print_r($date_now);
-	            	print_r($expdate);*/
-	            if($date_now <= $date_now){
-	                if(@$data['shift_start']!=''){
-	                    $start = date('h:i a', strtotime( $data['shift_start'] ));
-	                    $timedata .= $start;
-	                }
-	                if(@$data['shift_end']!=''){
-	                    $end = date('h:i a', strtotime( $data['shift_end'] ));
-	                    $timedata .= ' - '.$end;
-	                } 
+	            if($SpotsLeftdis != 0){
+	            	if($date_now <= $date_now){
+		                if(@$data['shift_start']!=''){
+		                    $start = date('h:i a', strtotime( $data['shift_start'] ));
+		                    $timedata .= $start;
+		                }
+		                if(@$data['shift_end']!=''){
+		                    $end = date('h:i a', strtotime( $data['shift_end'] ));
+		                    $timedata .= ' - '.$end;
+		                } 
 
-	                if(@$data['set_duration']!=''){
-	                    $tm=explode(' ',$data['set_duration']);
-	                    $hr=''; $min=''; $sec='';
-	                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-	                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-	                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-	                    if($hr!='' || $min!='' || $sec!='')
-	                    { 
-	                    	$time = $hr.$min.$sec; 
-	                        $timedata .= ' / '.$time;
-	                    } 
-	                  
-	                }
-	               
+		                if(@$data['set_duration']!=''){
+		                    $tm=explode(' ',$data['set_duration']);
+		                    $hr=''; $min=''; $sec='';
+		                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+		                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
+		                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+		                    if($hr!='' || $min!='' || $sec!='')
+		                    { 
+		                    	$time = $hr.$min.$sec; 
+		                        $timedata .= ' / '.$time;
+		                    } 
+		                  
+		                }
+		            }
+		            $i++;
 	            }
-           	}$i++;
+           	}
         }
     }
- 	/* echo $timedata;exit();*/
+ 	/*echo $timedata;exit();*/
 	$selectval = $priceid = $total_price_val = '' ;
 	$adult_cnt =$child_cnt =$infant_cnt =0;
 	$adult_price = $child_price = $infant_price =0;
@@ -266,9 +269,7 @@ input:disabled{
 
 
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
-   /* print_r($activities_search);exit();*/
 
-  /* echo $selectval ;exit();*/
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
@@ -415,29 +416,30 @@ input:disabled{
 												</select>
 											</div>	
 										</div>
-										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',$todaydate )->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
+										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
+										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
 										?>
 										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
 											<div class="membership-details">
 												<h3 class="date-title">Booking Details</h3>
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
-													<?php $SpotsLeftdis = 0; $i=1;?>
+													<?php $i=1;?>
 													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
+													<?php $SpotsLeftdis = 0; ?>
 													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
 													if( $bdata['spots_available'] != ''){
         												$SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
         											} ?>
 													<div class="col-md-6">
 														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" @if($i==1) checked @endif/>
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
+															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif/>
 																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
 																<p class="end-hr">{{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left </p>
 														</div>
 													</div>
-													<?php $i++;?>
 													@endforeach
 													@else 
 														<p class="notimeoption">No time option available Select category to view available times</p>
@@ -535,18 +537,10 @@ input:disabled{
 										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
 										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
 										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-										<?php $SpotsLeftdis = 0;
-											$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
-											if( @$bschedulefirst->spots_available != ''){
-												$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
-											} 
-											/*print_r($bschedulefirst);*/
-											/*echo $timedata;*/
-											?>
-
+										
 										<div id="cartadd">
 									
-										@if($SpotsLefthidden >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
+										@if($SpotsLeft >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else
                                             @if( @$total_price_val !='' && $timedata != '')
@@ -731,7 +725,6 @@ input:disabled{
 	                                @foreach($reviews_people as $people)
 	                                	<?php $userinfo = User::find($people->user_id); ?>
 	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" data-toggle="tooltip">
-	                                        <!--<img src="{{ url('public//images/newimage/userlist-1.jpg') }}" alt="">  -->
 	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
 	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
 	                                        @else
@@ -832,16 +825,6 @@ input:disabled{
 								  } );
 							</script>
 						</div>
-						<!-- <div class="col-md-6 col-sm-6 col-xs-6">
-							<div class="dropdowns">
-								<select id="actfilparticipant{{$serviceid}}" name="actfilparticipant" class="form-control activityselect4" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-		                            <option value="">Participant #</option>
-		                            <?php /*for($i=1; $i<=100; $i++){
-										echo '<option value="'.$i.'">'.$i.'</option>';
-									}*/ ?>
-		                        </select>
-		                    </div>
-						</div> -->
 						<div class="col-md-6 col-sm-6 col-xs-6">
 							<div class="dropdowns">
 								<select id="actfiloffer{{$serviceid}}" name="actfiloffer" class="form-control activityselect1" onchange="actFilter({{$companyactid}},{{$serviceid}})">
@@ -1325,8 +1308,9 @@ $(document).ready(function () {
 			$('#errordiv').html('Please Select participate');
 			$('#cartadd').html('');
 		}else if(maxlengthval == 0){
+			$('#cartadd').html('<div id="cartadd"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a></div>');
 			$('#errordiv').html('Please Select another Category or Activity.');
-			$('#cartadd').html('');
+			
 		}else if(totalcnt > maxlengthval){
 			$('#errordiv').html('Sports left only '+maxlengthval);
 			$('#cartadd').html('<div id="addcartdiv"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>');
@@ -1528,7 +1512,7 @@ $(document).ready(function () {
 <script>
 	$( function() {
 		$( "#actfildate0" ).datepicker( {
-		 	minDate: 0 
+		 	minDate: 0,
 			changeMonth: true,
 			changeYear:true,
         	yearRange: "1960:2060"

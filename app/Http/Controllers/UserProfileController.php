@@ -1535,7 +1535,7 @@ class UserProfileController extends Controller {
        /* dd($request->all());*/
         global $cid;
         $cid = $request->cid;
-        $request->Country = 'US';
+        $request->Country = 'United States';
         $this->validate($request, [
             'Companyname' => 'required',
 
@@ -1610,8 +1610,6 @@ class UserProfileController extends Controller {
 			'business_website' => $request->business_website,
 			'business_type' => $request->business_type,
         ];
-        
-
                 
         /* Table - company_informations */
        /* $company_details = CompanyInformation::where('id', $request->cid)->where('user_id', Auth::user()->id)->get();
@@ -1628,7 +1626,6 @@ class UserProfileController extends Controller {
         else {
             CompanyInformation::where('id', $cid)->where('user_id', Auth::user()->id)->update($companyData);
         }
-        
         
         $businessData = [
             "cid" => $cid,
@@ -8864,11 +8861,11 @@ class UserProfileController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->first();
+                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
                 if($business_services != ''){
                     if($business_services->service_type == 'classes'){
                         $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
@@ -8921,11 +8918,11 @@ class UserProfileController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->first();
+                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
                 if($business_services != ''){
                     if($business_services->service_type == 'experience'){
                         $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
@@ -8976,9 +8973,9 @@ class UserProfileController extends Controller {
         }
         
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
+            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
                 if($business_services != ''){

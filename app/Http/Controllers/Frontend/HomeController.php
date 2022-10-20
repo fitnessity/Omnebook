@@ -39,6 +39,7 @@ use App\CompanyInformation;
 use App\BusinessPriceDetails;
 use App\BusinessService;
 use App\BusinessCompanyDetail;
+use App\HomeTracker;
 use View;
 
 class HomeController extends Controller {
@@ -103,16 +104,24 @@ class HomeController extends Controller {
         $persons = Person::limit(9)->get();
         $discovers = Discover::limit(6)->get();
 
-        $count_trainer = Trainer::count();
+        /*$count_trainer = Trainer::count();*/
         //$count_online = Online::count();
 
-        $count_activity = BusinessServices::where('is_active',1)->count();
-        $count_business = CompanyInformation::where('is_verified',1)->count();
+        /*$count_activity = BusinessServices::where('is_active',1)->count();
+        $count_business = CompanyInformation::where('is_verified',1)->count();*/
         //$count_business = BusinessClaim::count();
-        $count_userbooking = UserBookingDetail::count();
+       /* $count_userbooking = UserBookingDetail::count();*/
 		
-		$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');
-        
+		/*$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');*/
+
+        $hometracker = HomeTracker::where('id',1)->first();
+
+        $count_trainer = $hometracker->trainers;
+        $count_location = $hometracker->locations;
+        $count_activity = $hometracker->activities;
+        $count_business = $hometracker->businesses;
+        $count_userbooking = $hometracker->bookings;
+       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');

@@ -13,7 +13,7 @@
     use App\User;
     use App\AddrCities;    
     use App\CompanyInformation;    
-  /*  $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);*/
+  
 ?>
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
@@ -1520,7 +1520,7 @@
                         </div>
                     </div>
 					<div class="col-lg-12 btns-modal">
-						<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+						<a href="{{url('/addcustomerbusiness')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
 						<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
 					</div>
 				 </div>
@@ -1647,11 +1647,63 @@
 	            success: function (data) {
 	                if(data.status=='like')
 					{
-						$('#'+id+ser_id).html('<i class="fas fa-heart"></i>');
+						if($('#serfavstarts'+ser_id).length){
+							$('#serfavstarts'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+					
+						if($('#serfavmonth'+ser_id).length){
+							$('#serfavmonth'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+
+						if($('#serfavpopular'+ser_id).length){
+							$('#serfavpopular'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+
+						if($('#serfavTrainer'+ser_id).length){
+							$('#serfavTrainer'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+
+						if($('#serfavWorkout'+ser_id).length){
+							$('#serfavWorkout'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+
+						if($('#serfavfun'+ser_id).length){
+							$('#serfavfun'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
+
+						if($('#serfavall'+ser_id).length){
+							$('#serfavall'+ser_id).html('<i class="fas fa-heart"></i>');
+						}
 					}
 					else
 					{
-						$('#'+id+ser_id).html('<i class="far fa-heart"></i>');
+						if($('#serfavstarts'+ser_id).length){
+							$('#serfavstarts'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavmonth'+ser_id).length){
+							$('#serfavmonth'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavpopular'+ser_id).length){
+							$('#serfavpopular'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavTrainer'+ser_id).length){
+							$('#serfavTrainer'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavWorkout'+ser_id).length){
+							$('#serfavWorkout'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavfun'+ser_id).length){
+							$('#serfavfun'+ser_id).html('<i class="far fa-heart"></i>');
+						}
+
+						if($('#serfavall'+ser_id).length){
+							$('#serfavall'+ser_id).html('<i class="far fa-heart"></i>');
+						}
 					}
 	            }
 	        });
@@ -1715,7 +1767,7 @@ function viewActreview(aid)
 	});
 }
 </script>
-<script type="text/javascript">	
+<!-- <script type="text/javascript">	
 	function submit_rating(sid)
 	{
 		@if(Auth::check())
@@ -1782,9 +1834,9 @@ function viewActreview(aid)
 			return false;
 		@endif	
 	}
-</script>
+</script> -->
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	function changeactpr(aid,val,part,div,maid)
 	{
 		var n = val.split('~~');
@@ -1823,7 +1875,7 @@ function viewActreview(aid)
 			$('#priceid'+maid+aid).val(n[2]);
 		}
 	}
-</script>
+</script> -->
 
 <script>
 	jQuery("#carousel-slider").owlCarousel({
