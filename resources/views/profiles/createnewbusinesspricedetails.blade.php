@@ -37,7 +37,7 @@
 <div class="p-0 col-md-12 inner_top padding-0">
 	<div class="row">
 	 	<div class="col-md-2" style="background: black;">
-        	 @include('business.businessSidebar')
+        	 @include('business.businessSidebarforprice')
         </div>
         <div class="col-md-10">
         	<h3>SCHEDULE YOUR PROGRAM</h3>

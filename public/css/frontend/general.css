@@ -10953,7 +10953,7 @@ ul.tab_topic li:hover a {
 }
 .compare-model .contentPop{ margin-left: 0%; width: 100%; }
 .comparetable {
-    margin-bottom: 100px;
+   /* margin-bottom: 100px;*/
 }
 .comparetable th{ background-color: #2e2e2e; color: #fff; padding-left: 12px; width: 20%; }
 .comparetable th h3{ font-size: 16px; font-weight: bold; }

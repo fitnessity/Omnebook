@@ -97,6 +97,7 @@ class BusinessServices extends Model
 		'days_plan_desc',
 		'days_plan_img',
 		'is_active',
+		'instructor_id',
     ];
     
     public function businesscompanydetail() {

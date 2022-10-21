@@ -164,8 +164,8 @@ use App\UserFamilyDetail;
                                             <tr>
 
                                                <!-- <td style="text-align: left; padding: 15px 15px 40px;">-->
-
-												<td style="text-align: center; background-image: url('https://development.fitnessity.co/public/images/bg-1.png'); background-size: cover !important; padding: 15px 15px 98px;;">
+												<?php $url1 = $url.'/public/images/bg-1.png'; ?>
+												<td style="text-align: center; background-image: url({{$url1}}); background-size: cover !important; padding: 15px 15px 98px;;">
 
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
 
@@ -189,7 +189,7 @@ use App\UserFamilyDetail;
 
 																			<td style="text-align: center; padding: 25px 0px 15px 0px;">
 
-																				<img src="https://development.fitnessity.co/public/images/BUSSINESSLOGO.png" width="290"  alt="logo" border="0" style="height: auto;">
+																				<img src="{{$url}}/public/images/BUSSINESSLOGO.png" width="290"  alt="logo" border="0" style="height: auto;">
 
                                                                             </td>
 
@@ -307,7 +307,7 @@ use App\UserFamilyDetail;
 
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px; text-align: left; height: 243px;">
 
-																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="https://development.fitnessity.co/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:15px;">ACTIVITY INFO</h2>
+																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="{{$url}}/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:15px;">ACTIVITY INFO</h2>
 
 																	<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 

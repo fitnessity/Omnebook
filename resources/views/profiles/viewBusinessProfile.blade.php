@@ -335,953 +335,951 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         	<div class="col-sm-12 col-md-3 col-lg-3">
             	@include('profiles.viewbusinessProfileLeftPanel')
             </div>
+		
 			
             <div class="col-sm-12 col-md-9 col-lg-9">
 				<div class="row">
 					<div class="col-sm-12 col-md-12 col-lg-12">
-					<div class="profile-section">
-					<div class="row flex-column-reverse flex-md-row">
-						<div class="col-sm-12 col-md-12 col-lg-10">
-						<ul class="nav nav-tabs" role="tablist">
-                        	<li class="nav-item">
-								<a class="nav-link" href="#about">About</a>
-							</li>
-                            <li class="nav-item">
-								<a class="nav-link" href="#amenities">Amenities</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#photos">Photos</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#video">Videos</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#timeline">Timeline</a>
-							</li>
-                            <li class="nav-item">
-								<a class="nav-link" href="#experience">Experience</a>
-							</li>
-                            <li class="nav-item">
-								<a class="nav-link" href="#things">Things to Know</a>
-							</li>
-                            <li class="nav-item">
-								<a class="nav-link" href="#reviews">Reviews</a>
-							</li>
-						</ul>
-					</div>
-					<div class="col-sm-12 col-md-12 col-lg-2 followdiv">
-						<ol class="folw-detail">
-                        	<?php 
-							$totpost = PagePost::where('user_id', $compinfo->user_id)->where('page_id', request()->id)->count(); 
-							$totFollowers = PageLike::where('pageid', request()->id)->count();
-                            $totFollowings = PageLike::where('follower_id', $loggedinUserId)->count();
-							?>
-							<li><span>Posts</span><ins><?php echo $totpost; ?></ins></li>
-							<li><span>Followers</span><ins>{{$totFollowers}}</ins></li>
-                            <li><span>Following</span><ins>{{$totFollowings}}</ins></li>
-						</ol>
-					</div>
-				</div>
-			</div>
-		</div>
-										
-		<div class="col-sm-12 col-md-8 col-lg-8">
-        	<div class="" id="about">
-            	<div class="desc-text" id="mydesc">
-					<div id="main_area" style="padding:0">
-						<div class="row">
-							<div class="col-xs-12" id="slider">
-								<span class="create-post">About</span>
-                                @if(isset($compinfo->short_description))
-                                    <p> {{$compinfo->short_description}} </p>
-                                @endif
-							</div>
-						</div>
-					</div>
-				</div>
-			</div><!-- about -->
-            
-            <div class="" id="amenities">
-            	<div class="desc-text" id="mydesc">
-					<div id="main_area" style="padding:0">
-						<div class="row">
-							<div class="col-xs-12" id="slider">
-								<span class="create-post">Listing Amenities</span>
-								<?php
-                                    $amenities = BusinessService::where('cid', $compinfo['id'])->get();
-                                    if( !empty( $amenities) )
-                                    { 
-                                        foreach($amenities as $ame)
-                                        {
-                                            $dis= explode(',', $ame['serBusinessoff1']); ?>
-                                            <div class="row">
-                                                <?php
-                                                foreach($dis as $data)
-                                                { ?>
-                                                    <div class="col-sm-12 col-md-4"><p><?php echo $data; ?></p></div>
-                                                <?php } ?>
-                                            </div>
-                                <?php  }} ?>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div><!-- amenities -->
-            <div class="" id="photos">
-				<div class="desc-text" id="mydesc">
-					<div id="main_area" style="padding:0">
-						<div class="row">
-							<div class="col-xs-12" id="slider">
-								<span class="create-post">Photos</span>
-								<div class="" id="carousel-bounding-box">
-									<div class="carousel slide round5px" id="myCarousel" data-ride="carousel">
-										<div class="carousel-inner">
-                                        <?php
-											if (!empty($photos)) 
-											{ $j=0;
-												foreach($photos as $key=>$data)
-												{
-													$img_part = explode("|",$data->images);
-													$imgCount = count($img_part);
-													for ($i=0; $i <$imgCount ; $i++) 
-                                                    {
-														if($j==0) { $j++; ?>
-															<div class="active item" data-slide-number="{{ $data['id'] }}">
-														<?php } else { ?>
-                                                        	<div class="item" data-slide-number="{{ $data['id'] }}">
-														<?php } ?>
-                                                        	<img src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" style="width:100%;">
-                                                        </div><?php }
-													$j++;
-												}
-											} ?>
-											</div>
-										</div><!--/Slider-->
-										<div id="slider-thumbs">
-											<ul class="hide-bullets">
-												<?php
-													foreach($photos as $data) { 
-														$img_part = explode("|",$data->images);
-														$imgCount = count($img_part);
-														for ($i=0; $i <$imgCount ; $i++) 
-                                                        { ?>
-															<li>
-                                                            	<img class="short-cru-img" src="/public/uploads/gallery/{{$data->user_id}}/{{$img_part[$i]}}" id="<?= $data['id'] ?>" />
-															</li>
-														<?php } 
-													} ?> 
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-           		
-                <div class="" id="video">
-					<div class="desc-text" id="mydesc">
-						<div id="main_area" style="padding:0">
-							<div class="row">
-								<div class="col-xs-12" id="slider">
-									<span class="create-post">Videos</span>
-                                     @if($compinfo->embed_video != '')
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="video-tab-iframe">
-                                                <iframe width="100%" height="400px" src="{{$compinfo->embed_video}}" >
-                                                </iframe>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif
-									<?php 
-										if (!empty($videos)) 
-										{
-											foreach($videos as $data)
-											{ ?>
-                                            	<!-- <div class="row">
-													<div class="col-sm-12 col-md-12 col-lg-12">
-														<div class="video-tab-iframe">
-															<video width="100%" height="400px" controls>
-                                                              <source src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/video/{{$data->video}}" type="video/mp4">
-                                                              <source src="movie.ogg" type="video/ogg">
-                                                              Your browser does not support the video tag.
-                                                            </video>
-														</div>
-													</div>
-												</div> -->
-                                                <?php 
-											}
-										}
-									?>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="" id="timeline" >
-                    <div class="desc-text" id="mydesc">
-                        <span class="create-post">Timeline
-                            @if($page_posts->count() != 0 ) 
-                            <a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
-                        @endif
-                        </span>
-                         @if($page_posts->count() == 0 ) 
-                        <div class="central-meta item">
-                            <div class="user-post">
-                                <div class="friend-info">
-                                    <figure>
-                                            @if($compinfo['logo'] != '')
-                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
-                                            @else
-                                                <?php
-                                                echo '<div class="company-img-text">';
-                                                $pf=substr($compinfo->company_name, 0, 1);
-                                                echo '<p>'.$pf.'</p></div>';
-                                                ?>
-                                            @endif
-                                        </figure>
-                                    <div class="friend-name">
-                                        <ins><a href="#" title="">{{ucfirst($customerfname)}} {{ucfirst($customerlname)}}</a> Post Album</ins>
-                                    </div>
-                                    <div class="post-meta">
-                                       <p class="postText"></p>
-                                        <figure>
-                                            <div class="img-bunch" id="add_image">
-                                                <div class="row" >
-                                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                                        <div class="default-img-profile">
-                                                            <img src="{{url('/public/images/newimage/fitness-img-1.jpg')}}">
-                                                            <label> Joined </label>
-                                                            <label class="lstyle">  Fitnessity for Business </label>
-                                                           <span class="spanstyle"><?php 
-                                                            $date=date_create($compinfo->created_at); echo date_format($date,"d/m/Y"); ?></span>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div> <!-- row -->
-                                            </div><!-- img-bunch -->
-                                        </figure>  
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-        			    <div class="loadMore"> <?php $p=1; ?>
-                        @foreach($page_posts as $page_post)
-                        <?php
-                        	$PageData = CompanyInformation::where('id',$page_post->page_id)->first();
-                        ?>
-							<div class="central-meta item" id="listpostid<?php echo $page_post['id']; ?>">
-								<div class="user-post">
-                                	<?php if($p==1){ ?>
-                                    	
-									<?php } ?>
-									<div class="friend-info">
-                                    	<figure>
-                                            @if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo['logo'])))
-                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
-                                            @else
-                                                <?php
-                                                echo '<div class="company-img-text">';
-                                                $pf=substr($compinfo->company_name, 0, 1);
-                                                echo '<p>'.$pf.'</p></div>';
-                                                ?>
-                                            @endif
-										</figure>
-										<div class="friend-name">
-											<?php /*?><div class="more">
-												<div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
-													<ul>
-														@if($loggedinUserId == $page_post['user_id'])
-                                                        	<li><a id="{{$page_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
-                                                            <li><a href="javascript:void(0);" class="delpagepost" postid="{{$page_post['id']}}" posttype="post" ><i class="fa fa-trash"></i>Delete Post</a></li>
-                                                        @endif
-                                                        
-														<!--<li class="bad-report"><i class="fa fa-flag"></i>Report Post</li>
-														<li><i class="fa fa-address-card"></i>Boost This Post</li>
-                                                        <li><i class="fa fa-clock-o"></i>Schedule Post</li>
-                                                        <li><i class="fab fa-wpexplorer"></i>Select as featured</li>
-                                                        <li><i class="fa fa-bell-slash"></i>Turn off Notifications</li>-->
-													</ul>
-												</div>
-											</div><?php */?>
-											<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
-											<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
-										</div>
-										<div class="post-meta">
-                                        <?php if( !empty($page_post->post_text) ){ ?>
-                                            <input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$page_post->post_text}}" disabled="">
-                                        <?php } ?>
-											<!-- <p  data-emojiable="true" data-emoji-input="image">
-												{{$page_post->post_text}}
-											</p> -->
-                                            <?php
-												$userid = $page_post->user_id;
-												$count = count(explode("|",$page_post->images));
-												$countimg = $count-5;
-												$getimages = explode("|",$page_post->images);
-                                            ?> 
-											<figure>
-												@if(isset($page_post->video))
-													<div class="img-bunch">
-														<div class="row">
-															<div class="col-lg-12 col-md-12 col-sm-12">
-																<figure>
-																	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																	<video controls class="thumb"  style="width: 100%;">
-																		<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$page_post->video}}" type="video/mp4">
-																	</video>
-																	</a>
-																</figure>
-															</div>
-														</div>
-													</div>
-												@elseif(isset($profile_post->music))   
-													<div class="img-bunch">
-														<div class="row">
-															<div class="col-lg-12 col-md-12 col-sm-12">
-																<figure>
-                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																		<audio src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/music/{{$page_post->music}}" controls></audio>
-																	</a>
-																</figure>
-															</div>
-														</div>
-													</div>
-												<!-- more than 4 images -->
-												@elseif(isset($getimages[4]) && !empty($getimages[4]))
-                                                	<div class="img-bunch">
-														<div class="row">
-															<div class="col-lg-6 col-md-6 col-sm-6">
-																@if(isset($getimages[0]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg4">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[1]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg4">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-															</div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-6">
-																@if(isset($getimages[2]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg4">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[3]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="groupimg4">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
-                                                                        </a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[4]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="groupimg4">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
-																		</a>
-                                                                        <div class="more-photos">
-																			<span>+{{$countimg}}</span>
-																		</div>
-																	</figure>
-																@endif
-															</div>
-														</div>
-													</div>
-            										<!-- 4 images -->
-                                                    @elseif(isset($getimages[3]) && !empty($getimages[3]))
-														<div class="img-bunch">
-															<div class="row">                   
-																<div class="col-lg-12 col-md-12 col-sm-12">
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg3">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																</div>
-															</div>
-                                                            <div class="row">   
-																<div class="col-lg-4 col-md-4 col-sm-4"> 
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg3">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
-																		</a>
-																	</figure>   
-																</div> 
-                                                                <div class="col-lg-4 col-md-4 col-sm-4"> 
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg3">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
-																		</a>
-																	</figure>    
-																</div> 
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">  
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="groupimg3">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
-																		</a>
-																	</figure>   
-																</div> 
-															</div>
-														</div>
-            											<!-- 3 images -->
-													@elseif(isset($getimages[2]) && !empty($getimages[2]))
-                                                    	<div class="img-bunch">
-															<div class="row">
-																<div class="col-lg-6 col-md-6 col-sm-6">
-																	<figure>
-																		<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg2">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
-																		</a>
-																	</figure>
-																</div>
-																<div class="col-lg-6 col-md-6 col-sm-6">
-																	<figure>
-																		<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg2">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
-																		</a>
-																	</figure>
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg2">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
-																		</a>
-																	</figure>
-																</div>
-															</div>
-														</div>
-													@elseif(isset($getimages[1]) && !empty($getimages[1]))
-														<div class="img-bunch-two">
-															<div class="row">
-																<div class="col-lg-6 col-md-6 col-sm-6">
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg1">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																</div>
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-																	<figure>
-																		<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg1">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																</div>
-															</div>
-														</div>
-														<!-- 1 images -->
-													@elseif(isset($getimages[0]) && !empty($getimages[0]))
-														<div class="img-bunch">
-															<div class="row">
-																<div class="col-lg-12 col-md-12 col-sm-12">
-																	<figure>
-																		<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg0">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
-                                                                        </a>
-																	</figure>
-																</div>
-															</div>
-														</div>
-													@endif
-                                                    <?php  
-														
-														$page_posts_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->count();
-														
-														$likemore = $page_posts_like-2;
-														//echo $loggedinUserorignal->id.'---'; exit;
-														
-														$loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUserId)->first();
-																												
-														$seconduser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUserId)->first();
-                                                        $total_comment='';
-														$total_comment = PagePostComments::where('post_id',$page_post['id'])->count();$postsaved="";
-														
-														$postsaved = PagePostSave::where('post_id',$page_post['id'])->where('user_id',$loggedinUserId)->first();
-														$activethumblike=''; $savedpost='';
-														if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
-													?>
-                                                    <ul class="like-dislike" id="ulike-dislike<?php echo $page_post['id']; ?>">
-                                                    <?php $loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUserId)->first(); ?>
-                                                    	@if(!empty($loginuser_like))
-															<?php $activethumblike='activethumblike'; ?>
-														@endif
-                                                        <li><a id="savepost{{$page_post['id']}}" class="bg-purple savepost <?php echo $savedpost; ?>" href="javascript:void(0);" title="Save to Pin Post" postid="{{$page_post['id']}}" pageid="{{ request()->page_id }}">
-															<i class="thumbtrack fas fa-thumbtack"></i></a>
-														</li>
-                                                       <?php /*?> <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$page_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li><?php */?>
-                                                        <li><a class="thumbup thumblike <?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post" id="like-thumb<?php echo $page_post['id']; ?>" postid="{{$page_post['id']}}" is_like="1" posttype="pagepost" ><i class="fas fa-thumbs-up"></i></a></li>
-                                                        <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$page_post['id']}}" postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
-													</ul>
-											</figure>
-											<div class="we-video-info">
-												<ul>
-													<li>
-														<span class="views" title="views">
-                                                            <i class="eyeview fas fa-eye"></i>
-															<ins>1.2k</ins>
-														</span>
-													</li>
-													<li>
-														<div class="likes heart" title="Like/Dislike">
-                                                        	<i class="fas fa-heart"></i>
-                                                        	<span id="likecount{{$page_post['id']}}">{{$page_posts_like}}</span>
-                                                        </div>
-													</li>
-													<li>
-														<span class="comment{{$page_post->id}}" title="Comments">
-															<i class="commentdots fas fa-comment-dots"></i>
-															<ins>{{ $total_comment}}</ins>
-														</span>
-													</li>
-													<?php /*?><li>
-														<span>
-															<a class="share-pst" href="javascript:void(0);" onclick="fbPost()" title="Share">
-																<i class="sharealt fas fa-share-alt"></i>
-															</a>
-															<ins>20</ins>
-														</span>	
-													</li><?php */?>
-												</ul>
-												<div class="users-thumb-list" id="users-thumb-list<?php echo $page_post['id']; ?>">
-													<?php
-                                                    	$page_posts_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->count(); ?>
-                                                        @if($page_posts_like>0)
-															@if(!empty($loginuser_like))
-																<a data-toggle="tooltip" title="" href="#">
-                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$profilePicture) }}" height="32" width="32">  
-                                                                </a>
-                                                            @endif
-                                                   			<?php 
-																$profile_posts_all = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUserId)->limit(4)->get();?>
-                                                                @if(isset($profile_posts_all[0]))
-																	<?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
-                                                                	<a data-toggle="tooltip" title="" href="#">
-																		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic) }}" height="32" width="32">  
-																	</a>
-																@endif
-                                                                @if(isset($profile_posts_all[1]))
-																	<?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
-                                                                    <a data-toggle="tooltip" title="" href="#">
-																		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$thirduser->profile_pic) }}" height="32" width="32">  
-																	</a>
-																@endif
-                                                                @if(isset($profile_posts_all[2]))
-																	<?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
-                                                                    <a data-toggle="tooltip" title="" href="#">
-																		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">  
-																	</a>
-																@endif
-                                                                @if(isset($profile_posts_all[3]))
-																	<?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
-                                                                    <a data-toggle="tooltip" title="" href="#">
-																		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fifthuser->profile_pic) }}" height="32" width="32">  
-																	</a>
-																@endif
-                                                                <span>
-                                                                	<strong>
-                                                                    	@if(!empty($loginuser_like))
-                                                                        	You
-																		@endif
-																	</strong>
-                                                                    @if(!empty($seconduser_like))
-																		<?php $secondusername = User::where('id',$seconduser_like->user_id)->first(); ?>,<b>{{$secondusername->username}}</b>
-                                                                    @endif
-            														@if($page_posts_like>2)
-                                                                    	And <a href="#" title="">{{$likemore}}+ More</a> 
-																	@endif
-                                                                    	Liked
-																</span>
-														@endif
-												</div>
-											</div>
-										</div>
-										<div class="coment-area" style="display: block;">
-											<ul class="we-comet">
-                                            	<?php 
-												$comments = PagePostComments::where('post_id',$page_post['id'])->limit(2)->get();
-                                                $allcomments = PagePostComments::where('post_id',$page_post['id'])->get();
-                                                ?>
-                                                @if(count($comments) > 0)
-                                                	@foreach($comments as $comment)
-                                                    	<?php
-                                                        	$username = User::find($comment->user_id);
-															$cmntlike = PagePostCommentsLike::where('comment_id', $comment->id)->count();
-															$cmntUlike = PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',$loggedinUserId)->count();
-                                                        ?>
-                                                        <li class="commentappendremove">
-                                                            <div class="comet-avatar">
-                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$username->profile_pic ))){ ?>
-                                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="Fitnessity">
-                                                                <?php }else{ 
-																	$pf=substr($username->firstname, 0, 1).substr($username->lastname, 0, 1);
-																	echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
-																} ?>
-                                                            </div>
-                                                            <div class="we-comment">
-                                                                <h5><a href="javascript:void(0);" title="">{{$username->firstname}} {{$username->lastname}}</a></h5>
-                                                                <p>{{$comment->comment}}</p>
-                                                                <div class="inline-itms">
-                                                                    <span>{{$comment->created_at->diffForHumans()}}</span>
-                                                                    <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$page_post['id']}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                	@endforeach
-                                                @endif
-                                                <li class="commentappend{{$page_post['id']}}"></li>
-                                                @if(count($allcomments) > 2)
-                                                	<input type="hidden" name="commentdisplay" id="commentdisplay" value="5">
-													<li>
-                                                    	<a id="{{$page_post['id']}}" href="javascript:void(0);" title="" class="showcomments showmore underline">more comments+</a>
-                                                   	</li>
-                                                @endif
-												<li class="post-comment">
-                                                	<div class="comet-avatar">
-
-                                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo->user_id )))
-                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo->user_id) }}" alt="fitnessity" >
-                                                @else
-                                                    <?php
-                                                    echo '<div class="company-img-text">';
-                                                    $pf=substr($customerfname, 0, 1).substr($customerlname, 0, 1);
-                                                    echo '<p>'.$pf.'</p></div>';
-                                                    ?>
-                                                @endif
-													</div>
-                                                    <div class="post-comt-box">
-                                                    	<form method="post" id="commentfrm">
-															<textarea placeholder="Post your comment" name="comment" id="comment{{$page_post['id']}}"></textarea>
-                                                            <span class="error" id="err_comment{{$page_post['id']}}"></span>
-															<div class="add-smiles">
-                                                            	<span class="em em-expressionless" title="add icon"></span>
-																<div class="smiles-bunch">
-                                                                	<i class="em em---1"></i>
-                                                                    <i class="em em-smiley"></i>
-																	<i class="em em-anguished"></i>
-																	<i class="em em-laughing"></i>
-																	<i class="em em-angry"></i>
-																	<i class="em em-astonished"></i>
-																	<i class="em em-blush"></i>
-                                                                    <i class="em em-disappointed"></i>
-																	<i class="em em-worried"></i>
-																	<i class="em em-kissing_heart"></i>
-																	<i class="em em-rage"></i>
-																	<i class="em em-stuck_out_tongue"></i>
-																</div>
-															</div>
-                                                            <button id="{{$page_post['id']}}" class="postcomment theme-red-bgcolor" type="button">Post</button>
-														</form> 
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div><!-- album post -->
-                            <?php $p++; ?>
-                        @endforeach
-						<div class="content-dash" id="scroll_pagination"></div>
-                    </div>
-				</div><!-- Timeline -->
-                
-				<div class="profileexp" id="experience">
-                	<div class="desc-text" id="mydesc">
-						<div id="main_area" style="padding:0">
-							<div class="row">
-								<div class="col-xs-12" id="slider">
-									<span class="create-post">Experience</span>
-                                    <ul class="nav nav-tabs" id="expTab" role="tablist">
-										<li class="nav-item active">
-											<a class="nav-link " id="emp_history-tab" data-toggle="tab" href="#emp_history" role="tab" aria-controls="emp_history" aria-selected="true">Employment History</a>
-										</li>
-  										<li class="nav-item">
-											<a class="nav-link" id="edu-tab" data-toggle="tab" href="#edu" role="tab" aria-controls="edu" aria-selected="false">Education</a>
+						<div class="profile-section">
+							<div class="row flex-column-reverse flex-md-row">
+								<div class="col-sm-12 col-md-12 col-lg-10">
+									<ul class="nav nav-tabs" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link" href="#about">About</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" id="certi-tab" data-toggle="tab" href="#certi" role="tab" aria-controls="certi" aria-selected="false">Certifications</a>
+											<a class="nav-link" href="#amenities">Amenities</a>
 										</li>
-                                        <li class="nav-item">
-											<a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="false">Skills, Acheivement, Awards</a>
+										<li class="nav-item">
+											<a class="nav-link" href="#photos">Photos</a>
 										</li>
-                                        <?php /*?><li class="nav-item">
-											<a class="nav-link" id="details-tab" data-toggle="tab" href="#detailstab" role="tab" aria-controls="detailstab" aria-selected="false">Details</a>
-										</li><?php */?>
+										<li class="nav-item">
+											<a class="nav-link" href="#video">Videos</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#timeline">Timeline</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#experience">Experience</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#things">Things to Know</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#reviews">Reviews</a>
+										</li>
 									</ul>
-                                    <div class="tab-content" id="expTabContent">
-										<div class="tab-pane fade active in" id="emp_history" role="tabpanel" aria-labelledby="emp_history-tab">
-                                        <?php
-										 $business_exp = BusinessExperience::where('cid', $compinfo['id'])->get();
-										if( !empty( $business_exp) )
-										{ $i=1;
-											foreach($business_exp as $bexp)
-											{ 
-                                                $business_name=json_decode($bexp['frm_organisationname']);
-                                                $position=json_decode($bexp['frm_position']);
-                                                $servicestart=json_decode($bexp['frm_servicestart']);
-                                                $serviceend=json_decode($bexp['frm_serviceend']);
-											?>
-                                            <?php for($i=0; $i<count($business_name); $i++){ ?>
-												<div class="row border-bottom">
-                                                	<div class="col-md-7">
-                                                        <ul>
-                                                            <li>
-                                                                <p> <?php echo $business_name[$i]; ?></p>
-                                                                <p> <?php echo $position[$i]; ?> </p>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-md-5 exp_date">
-                                                    	<p> <?php 
-                                                            echo date("F jS, Y", strtotime($servicestart[$i])); 
-                                                            if($serviceend[$i]!=null){
-                                                                echo date("F jS, Y", strtotime($serviceend[$i])); 
-                                                            }
-                                                        ?>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-											<?php $i++; }
-										}
+								</div>
+								<div class="col-sm-12 col-md-12 col-lg-2 followdiv">
+									<ol class="folw-detail">
+										<?php 
+										$totpost = PagePost::where('user_id', $compinfo->user_id)->where('page_id', request()->id)->count(); 
+										$totFollowers = PageLike::where('pageid', request()->id)->count();
+										$totFollowings = PageLike::where('follower_id', $loggedinUserId)->count();
 										?>
-                                        
-                                        </div>
-                                      	<div class="tab-pane fade" id="edu" role="tabpanel" aria-labelledby="edu-tab">
-                                        <?php
-											if( !empty( $business_exp) )
-											{
-												foreach($business_exp as $bexp)
-												{
-                                                    $course=json_decode($bexp['frm_course']);
-                                                    $university=json_decode($bexp['frm_university']);
-                                                    $passing_year=json_decode($bexp['frm_passingyear']);
-                                                    
-												?>
-                                                <?php for($i=0; $i<count($course); $i++){ ?>
-                                                <ul>
-                                                    <li> <b> Degree - Course : </b> <?php echo $course[$i]?> </li>
-                                                    <li> <b> University - School : </b> <?php echo $university[$i]; ?> </li>
-                                                    <li> <b> Year Graduated : </b> <?php echo $passing_year[$i]; ?> </li>
-                                                </ul><br>
-											<?php } } }
-                                        ?>
-                                        </div>
-                                      	<div class="tab-pane fade" id="certi" role="tabpanel" aria-labelledby="certi-tab">
-                                        <?php
-											if( !empty( $business_exp) )
-											{
-												foreach($business_exp as $bexp)
-												{
-                                                    $certification=json_decode($bexp['certification']);
-                                                    $passing_date=json_decode($bexp['frm_passingdate']);
-												?>
-                                                <?php for($i=0; $i<count($certification); $i++){ ?>
-												<ul>
-                                                    <li> <b> Name of Certification : </b> <?php echo $certification[$i]; ?> </li>
-                                                    <li> <b> Completion Date : </b> <?php echo $passing_date[$i]; ?> </li>
-                                                </ul><br>
-                                            <?php } } }
-                                        ?>
-                                        </div>
-                                        <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
-                                        <?php
-											if( !empty( $business_exp) )
-											{
-												foreach($business_exp as $bexp)
-												{
-                                                    $skill=json_decode($bexp['skill_type']);
-                                                    $skill_completion=json_decode($bexp['skillcompletion']);
-                                                    $skilldetail=json_decode($bexp['frm_skilldetail']);
-												?>
-												<?php for($i=0; $i<count($skill); $i++){ ?>
-                                                <ul>
-                                                    <li> <b> Skill Type : </b> <?php echo $skill[$i];?> </li>
-                                                    <li> <b> Completion Date : </b> <?php echo $skill_completion[$i]; ?> </li>
-                                                    <li> <b> Skill Detail : </b> <?php echo $skilldetail[$i]; ?> </li>
-                                                </ul><br>
-
-                                            <?php } } }
-                                        ?>
-                                        </div>
-                                        <?php /*?><div class="tab-pane fade" id="detailstab" role="tabpanel" aria-labelledby="details-tab">
-                                        <?php
-											if( !empty( $business_exp) )
-											{
-												foreach($business_exp as $bexp)
-												{
-												?>
-													<p> <?php echo $bexp->frm_skilldetail; ?> </p>
-											<?php } }
-										?>
-                                        </div><?php */?>
-                                    </div>
-                                    
-                                    
-                                </div>
-							</div>
-						</div>
-					</div>
-				</div>
-                
-                <div class="thingstoknow" id="things">
-                	<div class="desc-text" id="mydesc">
-						<div id="main_area" style="padding:0">
-							<div class="row">
-								<div class="col-xs-12" id="slider">
-									<span class="create-post">Things To Know</span>
-                                    @if( !empty($business_term['houserules']) )
-                                        <h3> House Rules </h3>
-                                        <p>{{ $business_term['houserules'] }}</p>
-                                    @endif
-                                    @if( !empty($business_term['cancelation']) )
-                                        <h3> Cancelation Policy </h3>
-                                        <p>{{ $business_term['cancelation'] }}</p>
-                                    @endif
-                                    @if( !empty($business_term['cleaning']) )
-                                        <h3> Safety and Cleaning Procedures </h3>
-                                        <p>{{ $business_term['cleaning'] }}</p>
-                                    @endif
+										<li><span>Posts</span><ins><?php echo $totpost; ?></ins></li>
+										<li><span>Followers</span><ins>{{$totFollowers}}</ins></li>
+										<li><span>Following</span><ins>{{$totFollowings}}</ins></li>
+									</ol>
 								</div>
 							</div>
 						</div>
 					</div>
-                </div>
-                <div class="busreview" id="reviews">
-                	<div class="desc-text" id="mydesc">
-						<div id="main_area" style="padding:0">
-							<div class="row">
-								<div class="col-xs-12" id="slider">
-									<span class="create-post">Reviews</span>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-8"> 
-                                            <h3 class="subtitle"> 
-                                                <div class="row">
-                                                    <div class="col-md-12 col-lg-2"> Reviews: </div>
-                                                    <div class="col-md-12 col-lg-10">
-                                                        <p> <a class="activered f-16 font-bold"> By Everyone  </a>
-                                                            <a class="f-16 font-bold"> | By People I know </a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </h3>
-                                            <div class="service-review-desc">
-                                            	<?php
-												$reviews_count = BusinessReview::where('page_id', request()->id)->count();
-												$reviews_sum = BusinessReview::where('page_id', request()->id)->sum('rating');
-												
-												$reviews_avg=0;
-												if($reviews_count>0)
-												{ $reviews_avg = round($reviews_sum/$reviews_count,2); }
-												?>                  
-                                                <p> {{$reviews_count}} Reviews </p> 
-                                                <div class="rattxt activered">
-                                                	<i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}}
-                                                </div>
-                                            </div>
-                                        </div>
-                            			<div class="col-md-6 col-lg-4"> 
-                            				<a class="btn submit-rev mt-10" data-toggle="modal" data-target="#busireview"> Submit Review </a>
-                                			<div class="rev-follow">
-                                            <?php
-                                            	$reviews_people = BusinessReview::where('page_id', request()->id)->orderBy('id','desc')->limit(6)->get(); 
-											?>
-                                    			<!--<a href="#" class="rev-follow-txt">100 Followers Reviewed This</a>-->
-                                    			<a href="#" class="rev-follow-txt">{{$reviews_count}} People Reviewed This</a>
-                                    			<div class="users-thumb-list">
-                                                	@if(!empty($reviews_people))
-                                            			@foreach($reviews_people as $people)
-                                                        	<?php $userinfo = User::find($people->user_id); ?>
-                                                            <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" target="_blank" title="Purvi Patel" data-toggle="tooltip">
-                                                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-                                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-                                                            @else
-                                                                <?php
-                                                                $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-                                                                echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
-                                                            @endif
-                                                            </a>
-                                                    	@endforeach
-                                       				@endif               
-                                    			</div>
-											</div>
-                            			</div>
-									</div><!--row-->
-                                    <div class="ser-review-list">
-                    					<div id="user_ratings_div">
-                                        	<?php
-												$reviews = BusinessReview::where('page_id', request()->id)->get(); ?>
-                                            @if(!empty($reviews))
-                                				@foreach($reviews as $review)
-                                                	<?php $userinfo = User::find($review->user_id); ?>
-                                                    <div class="ser-rev-user">
-                                                        <div class="row">
-                                                            <div class="col-md-2 pr-0">
-                                                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-                                                                <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-                                                                @else
-                                                                    <?php
-                                                                    $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-                                                                    echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-md-10 pl-0">
-                                                            	<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
-                                            						<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}} </div> </h4> 
-                                                                <p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rev-dt">
-                                                        <p class="mb-15"> {{$review->title}} </p>
-                                    					<p> {{$review->review}} </p>
-                                                        <?php
-															if( !empty($review->images) ){
-																$rimg=explode('|',$review->images);
-																echo '<div class="listrimage">';
-																foreach($rimg as $img)
-																{ ?>
-																	<a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
-																	<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
-																	</a>
-																	<?php
-																}
-																echo '</div>';
-															}
-														?>
-                                                    </div>
-                                                @endforeach
-                        					@endif
+					
+					<div class="col-sm-12 col-md-8 col-lg-8">
+						<div class="" id="about">
+							<div class="desc-text" id="mydesc">
+								<div id="main_area" style="padding:0">
+									<div class="row">
+										<div class="col-xs-12" id="slider">
+											<span class="create-post">About</span>
+											@if(isset($compinfo->short_description))
+												<p> {{$compinfo->short_description}} </p>
+											@endif
 										</div>
 									</div>
-                                   
-                                    
-                                    
+								</div>
+							</div>
+						</div><!-- about -->
+						
+						<div class="" id="amenities">
+							<div class="desc-text" id="mydesc">
+								<div id="main_area" style="padding:0">
+									<div class="row">
+										<div class="col-xs-12" id="slider">
+											<span class="create-post">Listing Amenities</span>
+											<?php
+												$amenities = BusinessService::where('cid', $compinfo['id'])->get();
+												if( !empty( $amenities) )
+												{ 
+													foreach($amenities as $ame)
+													{
+														$dis= explode(',', $ame['serBusinessoff1']); ?>
+														<div class="row">
+															<?php
+															foreach($dis as $data)
+															{ ?>
+																<div class="col-sm-12 col-md-4"><p><?php echo $data; ?></p></div>
+															<?php } ?>
+														</div>
+											<?php  }} ?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div><!-- amenities -->
+						<div class="" id="photos">
+							<div class="desc-text" id="mydesc">
+								<div id="main_area" style="padding:0">
+									<div class="row">
+										<div class="col-xs-12" id="slider">
+											<span class="create-post">Photos</span>
+											<div class="" id="carousel-bounding-box">
+												<div class="carousel slide round5px" id="myCarousel" data-ride="carousel">
+													<div class="carousel-inner">
+													<?php
+														if (!empty($photos)) 
+														{ $j=0;
+															foreach($photos as $key=>$data)
+															{
+																$img_part = explode("|",$data->images);
+																$imgCount = count($img_part);
+																for ($i=0; $i <$imgCount ; $i++) 
+																{
+																	if($j==0) { $j++; ?>
+																		<div class="active item" data-slide-number="{{ $data['id'] }}">
+																	<?php } else { ?>
+																		<div class="item" data-slide-number="{{ $data['id'] }}">
+																	<?php } ?>
+																		<img src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" style="width:100%;">
+																	</div><?php }
+																$j++;
+															}
+														} ?>
+														</div>
+													</div><!--/Slider-->
+													<div id="slider-thumbs">
+														<ul class="hide-bullets">
+															<?php
+																foreach($photos as $data) { 
+																	$img_part = explode("|",$data->images);
+																	$imgCount = count($img_part);
+																	for ($i=0; $i <$imgCount ; $i++) 
+																	{ ?>
+																		<li>
+																			<img class="short-cru-img" src="/public/uploads/gallery/{{$data->user_id}}/{{$img_part[$i]}}" id="<?= $data['id'] ?>" />
+																		</li>
+																	<?php } 
+																} ?> 
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="" id="video">
+								<div class="desc-text" id="mydesc">
+									<div id="main_area" style="padding:0">
+										<div class="row">
+											<div class="col-xs-12" id="slider">
+												<span class="create-post">Videos</span>
+												 @if($compinfo->embed_video != '')
+												<div class="row">
+													<div class="col-sm-12 col-md-12 col-lg-12">
+														<div class="video-tab-iframe">
+															<iframe width="100%" height="400px" src="{{$compinfo->embed_video}}" >
+															</iframe>
+														</div>
+													</div>
+												</div>
+												@endif
+												<?php 
+													if (!empty($videos)) 
+													{
+														foreach($videos as $data)
+														{ ?>
+															<!-- <div class="row">
+																<div class="col-sm-12 col-md-12 col-lg-12">
+																	<div class="video-tab-iframe">
+																		<video width="100%" height="400px" controls>
+																		  <source src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/video/{{$data->video}}" type="video/mp4">
+																		  <source src="movie.ogg" type="video/ogg">
+																		  Your browser does not support the video tag.
+																		</video>
+																	</div>
+																</div>
+															</div> -->
+															<?php 
+														}
+													}
+												?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="" id="timeline" >
+								<div class="desc-text" id="mydesc">
+									<span class="create-post">Timeline
+										@if($page_posts->count() != 0 ) 
+										<a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
+									@endif
+									</span>
+									 @if($page_posts->count() == 0 ) 
+									<div class="central-meta item">
+										<div class="user-post">
+											<div class="friend-info">
+												<figure>
+													@if($compinfo['logo'] != '')
+													<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
+													@else
+													<?php
+														echo '<div class="company-img-text">';
+														$pf=substr($compinfo->company_name, 0, 1);
+														echo '<p>'.$pf.'</p></div>';
+													?>
+													@endif
+												</figure>
+												<div class="friend-name">
+													<ins><a href="#" title="">{{ucfirst($customerfname)}} {{ucfirst($customerlname)}}</a> Post Album</ins>
+												</div>
+												<div class="post-meta">
+												   <p class="postText"></p>
+													<figure>
+														<div class="img-bunch" id="add_image">
+															<div class="row" >
+																<div class="col-lg-12 col-md-12 col-sm-12">
+																	<div class="default-img-profile">
+																		<img src="{{url('/public/images/newimage/fitness-img-1.jpg')}}">
+																		<label> Joined </label>
+																		<label class="lstyle">  Fitnessity for Business </label>
+																	   <span class="spanstyle"><?php 
+																		$date=date_create($compinfo->created_at); echo date_format($date,"d/m/Y"); ?></span>
+																	</div>
+																</div>
+																
+															</div> <!-- row -->
+														</div><!-- img-bunch -->
+													</figure>  
+												</div>
+											</div>
+										</div>
+									</div>
+								@endif
+								<div class="loadMore"> <?php $p=1; ?>
+									@foreach($page_posts as $page_post)
+									<?php
+										$PageData = CompanyInformation::where('id',$page_post->page_id)->first();
+									?>
+										<div class="central-meta item" id="listpostid<?php echo $page_post['id']; ?>">
+											<div class="user-post">
+												<?php if($p==1){ ?>
+													
+												<?php } ?>
+												<div class="friend-info">
+													<figure>
+														@if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo['logo'])))
+														<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
+														@else
+															<?php
+															echo '<div class="company-img-text">';
+															$pf=substr($compinfo->company_name, 0, 1);
+															echo '<p>'.$pf.'</p></div>';
+															?>
+														@endif
+													</figure>
+													<div class="friend-name">
+														<?php /*?><div class="more">
+															<div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
+																<ul>
+																	@if($loggedinUserId == $page_post['user_id'])
+																		<li><a id="{{$page_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+																		<li><a href="javascript:void(0);" class="delpagepost" postid="{{$page_post['id']}}" posttype="post" ><i class="fa fa-trash"></i>Delete Post</a></li>
+																	@endif
+																	
+																	<!--<li class="bad-report"><i class="fa fa-flag"></i>Report Post</li>
+																	<li><i class="fa fa-address-card"></i>Boost This Post</li>
+																	<li><i class="fa fa-clock-o"></i>Schedule Post</li>
+																	<li><i class="fab fa-wpexplorer"></i>Select as featured</li>
+																	<li><i class="fa fa-bell-slash"></i>Turn off Notifications</li>-->
+																</ul>
+															</div>
+														</div><?php */?>
+														<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
+														<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
+													</div>
+													<div class="post-meta">
+													<?php if( !empty($page_post->post_text) ){ ?>
+														<input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$page_post->post_text}}" disabled="">
+													<?php } ?>
+														<!-- <p  data-emojiable="true" data-emoji-input="image">
+															{{$page_post->post_text}}
+														</p> -->
+														<?php
+															$userid = $page_post->user_id;
+															$count = count(explode("|",$page_post->images));
+															$countimg = $count-5;
+															$getimages = explode("|",$page_post->images);
+														?> 
+														<figure>
+															@if(isset($page_post->video))
+																<div class="img-bunch">
+																	<div class="row">
+																		<div class="col-lg-12 col-md-12 col-sm-12">
+																			<figure>
+																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
+																				<video controls class="thumb"  style="width: 100%;">
+																					<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$page_post->video}}" type="video/mp4">
+																				</video>
+																				</a>
+																			</figure>
+																		</div>
+																	</div>
+																</div>
+															@elseif(isset($profile_post->music))   
+																<div class="img-bunch">
+																	<div class="row">
+																		<div class="col-lg-12 col-md-12 col-sm-12">
+																			<figure>
+																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
+																					<audio src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/music/{{$page_post->music}}" controls></audio>
+																				</a>
+																			</figure>
+																		</div>
+																	</div>
+																</div>
+															<!-- more than 4 images -->
+															@elseif(isset($getimages[4]) && !empty($getimages[4]))
+																<div class="img-bunch">
+																	<div class="row">
+																		<div class="col-lg-6 col-md-6 col-sm-6">
+																			@if(isset($getimages[0]))
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg4">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			@endif
+																			@if(isset($getimages[1]))
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg4">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			@endif
+																		</div>
+																		<div class="col-lg-6 col-md-6 col-sm-6">
+																			@if(isset($getimages[2]))
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg4">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			@endif
+																			@if(isset($getimages[3]))
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="groupimg4">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			@endif
+																			@if(isset($getimages[4]))
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="groupimg4">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
+																					</a>
+																					<div class="more-photos">
+																						<span>+{{$countimg}}</span>
+																					</div>
+																				</figure>
+																			@endif
+																		</div>
+																	</div>
+																</div>
+																<!-- 4 images -->
+																@elseif(isset($getimages[3]) && !empty($getimages[3]))
+																	<div class="img-bunch">
+																		<div class="row">                   
+																			<div class="col-lg-12 col-md-12 col-sm-12">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg3">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			</div>
+																		</div>
+																		<div class="row">   
+																			<div class="col-lg-4 col-md-4 col-sm-4"> 
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg3">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
+																					</a>
+																				</figure>   
+																			</div> 
+																			<div class="col-lg-4 col-md-4 col-sm-4"> 
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg3">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
+																					</a>
+																				</figure>    
+																			</div> 
+																			<div class="col-lg-4 col-md-4 col-sm-4">  
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="groupimg3">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
+																					</a>
+																				</figure>   
+																			</div> 
+																		</div>
+																	</div>
+																	<!-- 3 images -->
+																@elseif(isset($getimages[2]) && !empty($getimages[2]))
+																	<div class="img-bunch">
+																		<div class="row">
+																			<div class="col-lg-6 col-md-6 col-sm-6">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg2">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
+																					</a>
+																				</figure>
+																			</div>
+																			<div class="col-lg-6 col-md-6 col-sm-6">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg2">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
+																					</a>
+																				</figure>
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="groupimg2">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
+																					</a>
+																				</figure>
+																			</div>
+																		</div>
+																	</div>
+																@elseif(isset($getimages[1]) && !empty($getimages[1]))
+																	<div class="img-bunch-two">
+																		<div class="row">
+																			<div class="col-lg-6 col-md-6 col-sm-6">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg1">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			</div>
+																			<div class="col-lg-6 col-md-6 col-sm-6">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg1">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			</div>
+																		</div>
+																	</div>
+																	<!-- 1 images -->
+																@elseif(isset($getimages[0]) && !empty($getimages[0]))
+																	<div class="img-bunch">
+																		<div class="row">
+																			<div class="col-lg-12 col-md-12 col-sm-12">
+																				<figure>
+																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg0">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																					</a>
+																				</figure>
+																			</div>
+																		</div>
+																	</div>
+																@endif
+																<?php  
+																	
+																	$page_posts_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->count();
+																	
+																	$likemore = $page_posts_like-2;
+																	//echo $loggedinUserorignal->id.'---'; exit;
+																	
+																	$loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUserId)->first();
+																															
+																	$seconduser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUserId)->first();
+																	$total_comment='';
+																	$total_comment = PagePostComments::where('post_id',$page_post['id'])->count();$postsaved="";
+																	
+																	$postsaved = PagePostSave::where('post_id',$page_post['id'])->where('user_id',$loggedinUserId)->first();
+																	$activethumblike=''; $savedpost='';
+																	if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
+																?>
+																<ul class="like-dislike" id="ulike-dislike<?php echo $page_post['id']; ?>">
+																<?php $loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUserId)->first(); ?>
+																	@if(!empty($loginuser_like))
+																		<?php $activethumblike='activethumblike'; ?>
+																	@endif
+																	<li><a id="savepost{{$page_post['id']}}" class="bg-purple savepost <?php echo $savedpost; ?>" href="javascript:void(0);" title="Save to Pin Post" postid="{{$page_post['id']}}" pageid="{{ request()->page_id }}">
+																		<i class="thumbtrack fas fa-thumbtack"></i></a>
+																	</li>
+																   <?php /*?> <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$page_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li><?php */?>
+																	<li><a class="thumbup thumblike <?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post" id="like-thumb<?php echo $page_post['id']; ?>" postid="{{$page_post['id']}}" is_like="1" posttype="pagepost" ><i class="fas fa-thumbs-up"></i></a></li>
+																	<li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$page_post['id']}}" postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
+																</ul>
+														</figure>
+														<div class="we-video-info">
+															<ul>
+																<li>
+																	<span class="views" title="views">
+																		<i class="eyeview fas fa-eye"></i>
+																		<ins>1.2k</ins>
+																	</span>
+																</li>
+																<li>
+																	<div class="likes heart" title="Like/Dislike">
+																		<i class="fas fa-heart"></i>
+																		<span id="likecount{{$page_post['id']}}">{{$page_posts_like}}</span>
+																	</div>
+																</li>
+																<li>
+																	<span class="comment{{$page_post->id}}" title="Comments">
+																		<i class="commentdots fas fa-comment-dots"></i>
+																		<ins>{{ $total_comment}}</ins>
+																	</span>
+																</li>
+																<?php /*?><li>
+																	<span>
+																		<a class="share-pst" href="javascript:void(0);" onclick="fbPost()" title="Share">
+																			<i class="sharealt fas fa-share-alt"></i>
+																		</a>
+																		<ins>20</ins>
+																	</span>	
+																</li><?php */?>
+															</ul>
+															<div class="users-thumb-list" id="users-thumb-list<?php echo $page_post['id']; ?>">
+																<?php
+																	$page_posts_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->count(); ?>
+																	@if($page_posts_like>0)
+																		@if(!empty($loginuser_like))
+																			<a data-toggle="tooltip" title="" href="#">
+																				<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$profilePicture) }}" height="32" width="32">  
+																			</a>
+																		@endif
+																		<?php 
+																			$profile_posts_all = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUserId)->limit(4)->get();?>
+																			@if(isset($profile_posts_all[0]))
+																				<?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
+																				<a data-toggle="tooltip" title="" href="#">
+																					<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic) }}" height="32" width="32">  
+																				</a>
+																			@endif
+																			@if(isset($profile_posts_all[1]))
+																				<?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
+																				<a data-toggle="tooltip" title="" href="#">
+																					<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$thirduser->profile_pic) }}" height="32" width="32">  
+																				</a>
+																			@endif
+																			@if(isset($profile_posts_all[2]))
+																				<?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
+																				<a data-toggle="tooltip" title="" href="#">
+																					<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">  
+																				</a>
+																			@endif
+																			@if(isset($profile_posts_all[3]))
+																				<?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
+																				<a data-toggle="tooltip" title="" href="#">
+																					<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fifthuser->profile_pic) }}" height="32" width="32">  
+																				</a>
+																			@endif
+																			<span>
+																				<strong>
+																					@if(!empty($loginuser_like))
+																						You
+																					@endif
+																				</strong>
+																				@if(!empty($seconduser_like))
+																					<?php $secondusername = User::where('id',$seconduser_like->user_id)->first(); ?>,<b>{{$secondusername->username}}</b>
+																				@endif
+																				@if($page_posts_like>2)
+																					And <a href="#" title="">{{$likemore}}+ More</a> 
+																				@endif
+																					Liked
+																			</span>
+																	@endif
+															</div>
+														</div>
+													</div>
+													<div class="coment-area" style="display: block;">
+														<ul class="we-comet">
+															<?php 
+															$comments = PagePostComments::where('post_id',$page_post['id'])->limit(2)->get();
+															$allcomments = PagePostComments::where('post_id',$page_post['id'])->get();
+															?>
+															@if(count($comments) > 0)
+																@foreach($comments as $comment)
+																	<?php
+																		$username = User::find($comment->user_id);
+																		$cmntlike = PagePostCommentsLike::where('comment_id', $comment->id)->count();
+																		$cmntUlike = PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',$loggedinUserId)->count();
+																	?>
+																	<li class="commentappendremove">
+																		<div class="comet-avatar">
+																			<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$username->profile_pic ))){ ?>
+																				<img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="Fitnessity">
+																			<?php }else{ 
+																				$pf=substr($username->firstname, 0, 1).substr($username->lastname, 0, 1);
+																				echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
+																			} ?>
+																		</div>
+																		<div class="we-comment">
+																			<h5><a href="javascript:void(0);" title="">{{$username->firstname}} {{$username->lastname}}</a></h5>
+																			<p>{{$comment->comment}}</p>
+																			<div class="inline-itms">
+																				<span>{{$comment->created_at->diffForHumans()}}</span>
+																				<a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$page_post['id']}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
+																			</div>
+																		</div>
+																	</li>
+																@endforeach
+															@endif
+															<li class="commentappend{{$page_post['id']}}"></li>
+															@if(count($allcomments) > 2)
+																<input type="hidden" name="commentdisplay" id="commentdisplay" value="5">
+																<li>
+																	<a id="{{$page_post['id']}}" href="javascript:void(0);" title="" class="showcomments showmore underline">more comments+</a>
+																</li>
+															@endif
+															<li class="post-comment">
+																<div class="comet-avatar">
+
+															@if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo->user_id )))
+																<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo->user_id) }}" alt="fitnessity" >
+															@else
+																<?php
+																echo '<div class="company-img-text">';
+																$pf=substr($customerfname, 0, 1).substr($customerlname, 0, 1);
+																echo '<p>'.$pf.'</p></div>';
+																?>
+															@endif
+																</div>
+																<div class="post-comt-box">
+																	<form method="post" id="commentfrm">
+																		<textarea placeholder="Post your comment" name="comment" id="comment{{$page_post['id']}}"></textarea>
+																		<span class="error" id="err_comment{{$page_post['id']}}"></span>
+																		<div class="add-smiles">
+																			<span class="em em-expressionless" title="add icon"></span>
+																			<div class="smiles-bunch">
+																				<i class="em em---1"></i>
+																				<i class="em em-smiley"></i>
+																				<i class="em em-anguished"></i>
+																				<i class="em em-laughing"></i>
+																				<i class="em em-angry"></i>
+																				<i class="em em-astonished"></i>
+																				<i class="em em-blush"></i>
+																				<i class="em em-disappointed"></i>
+																				<i class="em em-worried"></i>
+																				<i class="em em-kissing_heart"></i>
+																				<i class="em em-rage"></i>
+																				<i class="em em-stuck_out_tongue"></i>
+																			</div>
+																		</div>
+																		<button id="{{$page_post['id']}}" class="postcomment theme-red-bgcolor" type="button">Post</button>
+																	</form> 
+																</div>
+															</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div><!-- album post -->
+										<?php $p++; ?>
+									@endforeach
+									<div class="content-dash" id="scroll_pagination"></div>
+								</div>
+								</div><!-- Timeline -->
+							</div>
+							
+							<div class="profileexp" id="experience">
+								<div class="desc-text" id="mydesc">
+									<div id="main_area" style="padding:0">
+										<div class="row">
+											<div class="col-xs-12" id="slider">
+												<span class="create-post">Experience</span>
+												<ul class="nav nav-tabs" id="expTab" role="tablist">
+													<li class="nav-item active">
+														<a class="nav-link " id="emp_history-tab" data-toggle="tab" href="#emp_history" role="tab" aria-controls="emp_history" aria-selected="true">Employment History</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="edu-tab" data-toggle="tab" href="#edu" role="tab" aria-controls="edu" aria-selected="false">Education</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="certi-tab" data-toggle="tab" href="#certi" role="tab" aria-controls="certi" aria-selected="false">Certifications</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="false">Skills, Acheivement, Awards</a>
+													</li>
+													<?php /*?><li class="nav-item">
+														<a class="nav-link" id="details-tab" data-toggle="tab" href="#detailstab" role="tab" aria-controls="detailstab" aria-selected="false">Details</a>
+													</li><?php */?>
+												</ul>
+												<div class="tab-content" id="expTabContent">
+													<div class="tab-pane fade active in" id="emp_history" role="tabpanel" aria-labelledby="emp_history-tab">
+													<?php
+													 $business_exp = BusinessExperience::where('cid', $compinfo['id'])->get();
+													if( !empty( $business_exp) )
+													{ $i=1;
+														foreach($business_exp as $bexp)
+														{ 
+															$business_name=json_decode($bexp['frm_organisationname']);
+															$position=json_decode($bexp['frm_position']);
+															$servicestart=json_decode($bexp['frm_servicestart']);
+															$serviceend=json_decode($bexp['frm_serviceend']);
+														?>
+														<?php for($i=0; $i<count($business_name); $i++){ ?>
+															<div class="row border-bottom">
+																<div class="col-md-7">
+																	<ul>
+																		<li>
+																			<p> <?php echo $business_name[$i]; ?></p>
+																			<p> <?php echo $position[$i]; ?> </p>
+																		</li>
+																	</ul>
+																</div>
+																<div class="col-md-5 exp_date">
+																	<p> <?php 
+																		echo date("F jS, Y", strtotime($servicestart[$i])); 
+																		if($serviceend[$i]!=null){
+																			echo date("F jS, Y", strtotime($serviceend[$i])); 
+																		}
+																	?>
+																	</p>
+																</div>
+															</div>
+														<?php } ?>
+														<?php $i++; }
+													}
+													?>
+													
+													</div>
+													<div class="tab-pane fade" id="edu" role="tabpanel" aria-labelledby="edu-tab">
+													<?php
+														if( !empty( $business_exp) )
+														{
+															foreach($business_exp as $bexp)
+															{
+																$course=json_decode($bexp['frm_course']);
+																$university=json_decode($bexp['frm_university']);
+																$passing_year=json_decode($bexp['frm_passingyear']);
+																
+															?>
+															<?php for($i=0; $i<count($course); $i++){ ?>
+															<ul>
+																<li> <b> Degree - Course : </b> <?php echo $course[$i]?> </li>
+																<li> <b> University - School : </b> <?php echo $university[$i]; ?> </li>
+																<li> <b> Year Graduated : </b> <?php echo $passing_year[$i]; ?> </li>
+															</ul><br>
+														<?php } } }
+													?>
+													</div>
+													<div class="tab-pane fade" id="certi" role="tabpanel" aria-labelledby="certi-tab">
+													<?php
+														if( !empty( $business_exp) )
+														{
+															foreach($business_exp as $bexp)
+															{
+																$certification=json_decode($bexp['certification']);
+																$passing_date=json_decode($bexp['frm_passingdate']);
+															?>
+															<?php for($i=0; $i<count($certification); $i++){ ?>
+															<ul>
+																<li> <b> Name of Certification : </b> <?php echo $certification[$i]; ?> </li>
+																<li> <b> Completion Date : </b> <?php echo $passing_date[$i]; ?> </li>
+															</ul><br>
+														<?php } } }
+													?>
+													</div>
+													<div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+													<?php
+														if( !empty( $business_exp) )
+														{
+															foreach($business_exp as $bexp)
+															{
+																$skill=json_decode($bexp['skill_type']);
+																$skill_completion=json_decode($bexp['skillcompletion']);
+																$skilldetail=json_decode($bexp['frm_skilldetail']);
+															?>
+															<?php for($i=0; $i<count($skill); $i++){ ?>
+															<ul>
+																<li> <b> Skill Type : </b> <?php echo $skill[$i];?> </li>
+																<li> <b> Completion Date : </b> <?php echo $skill_completion[$i]; ?> </li>
+																<li> <b> Skill Detail : </b> <?php echo $skilldetail[$i]; ?> </li>
+															</ul><br>
+
+														<?php } } }
+													?>
+													</div>
+													<?php /*?><div class="tab-pane fade" id="detailstab" role="tabpanel" aria-labelledby="details-tab">
+													<?php
+														if( !empty( $business_exp) )
+														{
+															foreach($business_exp as $bexp)
+															{
+															?>
+																<p> <?php echo $bexp->frm_skilldetail; ?> </p>
+														<?php } }
+													?>
+													</div><?php */?>
+												</div>
+												
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="thingstoknow" id="things">
+								<div class="desc-text" id="mydesc">
+									<div id="main_area" style="padding:0">
+										<div class="row">
+											<div class="col-xs-12" id="slider">
+												<span class="create-post">Things To Know</span>
+												@if( !empty($business_term['houserules']) )
+													<h3> House Rules </h3>
+													<p>{{ $business_term['houserules'] }}</p>
+												@endif
+												@if( !empty($business_term['cancelation']) )
+													<h3> Cancelation Policy </h3>
+													<p>{{ $business_term['cancelation'] }}</p>
+												@endif
+												@if( !empty($business_term['cleaning']) )
+													<h3> Safety and Cleaning Procedures </h3>
+													<p>{{ $business_term['cleaning'] }}</p>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="busreview" id="reviews">
+								<div class="desc-text" id="mydesc">
+									<div id="main_area" style="padding:0">
+										<div class="row">
+											<div class="col-xs-12" id="slider">
+												<span class="create-post">Reviews</span>
+												<div class="row">
+													<div class="col-sm-12 col-md-12 col-lg-8"> 
+														<h3 class="subtitle"> 
+															<div class="row">
+																<div class="col-md-12 col-lg-2"> Reviews: </div>
+																<div class="col-md-12 col-lg-10">
+																	<p> <a class="activered f-16 font-bold"> By Everyone  </a>
+																		<a class="f-16 font-bold"> | By People I know </a>
+																	</p>
+																</div>
+															</div>
+														</h3>
+														<div class="service-review-desc">
+															<?php
+															$reviews_count = BusinessReview::where('page_id', request()->id)->count();
+															$reviews_sum = BusinessReview::where('page_id', request()->id)->sum('rating');
+															
+															$reviews_avg=0;
+															if($reviews_count>0)
+															{ $reviews_avg = round($reviews_sum/$reviews_count,2); }
+															?>                  
+															<p> {{$reviews_count}} Reviews </p> 
+															<div class="rattxt activered">
+																<i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}}
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-lg-4"> 
+														<a class="btn submit-rev mt-10" data-toggle="modal" data-target="#busireview"> Submit Review </a>
+														<div class="rev-follow">
+														<?php
+															$reviews_people = BusinessReview::where('page_id', request()->id)->orderBy('id','desc')->limit(6)->get(); 
+														?>
+															<!--<a href="#" class="rev-follow-txt">100 Followers Reviewed This</a>-->
+															<a href="#" class="rev-follow-txt">{{$reviews_count}} People Reviewed This</a>
+															<div class="users-thumb-list">
+																@if(!empty($reviews_people))
+																	@foreach($reviews_people as $people)
+																		<?php $userinfo = User::find($people->user_id); ?>
+																		<a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" target="_blank" title="Purvi Patel" data-toggle="tooltip">
+																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+																		<img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+																		@else
+																			<?php
+																			$pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+																			echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
+																		@endif
+																		</a>
+																	@endforeach
+																@endif               
+															</div>
+														</div>
+													</div>
+												</div><!--row-->
+												<div class="ser-review-list">
+													<div id="user_ratings_div">
+														<?php
+															$reviews = BusinessReview::where('page_id', request()->id)->get(); ?>
+														@if(!empty($reviews))
+															@foreach($reviews as $review)
+																<?php $userinfo = User::find($review->user_id); ?>
+																<div class="ser-rev-user">
+																	<div class="row">
+																		<div class="col-md-2 pr-0">
+																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+																			<img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+																			@else
+																				<?php
+																				$pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+																				echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
+																			@endif
+																		</div>
+																		<div class="col-md-10 pl-0">
+																			<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
+																				<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}} </div> </h4> 
+																			<p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
+																		</div>
+																	</div>
+																</div>
+																<div class="rev-dt">
+																	<p class="mb-15"> {{$review->title}} </p>
+																	<p> {{$review->review}} </p>
+																	<?php
+																		if( !empty($review->images) ){
+																			$rimg=explode('|',$review->images);
+																			echo '<div class="listrimage">';
+																			foreach($rimg as $img)
+																			{ ?>
+																				<a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
+																				<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
+																				</a>
+																				<?php
+																			}
+																			echo '</div>';
+																		}
+																	?>
+																</div>
+															@endforeach
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
+					
+					
+					<div class="col-sm-12 col-md-4 col-lg-4">
+						@include('profiles.viewbusinessProfileRightPanel')
+					</div><!-- col-md-4 -->
+        
 					</div>
-                </div>
-               
-                
+				</div>
 			</div>
 		</div>
-		
-        <div class="col-sm-12 col-md-4 col-lg-4">
-        	@include('profiles.viewbusinessProfileRightPanel')
-        </div><!-- col-md-4 -->
-        
-	</div>
-	</div>
-	</div>
 	</div>
 </section>
 
@@ -1297,24 +1295,23 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             	<div class="rev-post-box">
                 	<form method="post" enctype="multipart/form-data" name="sreview" id="sreview" >
                     @csrf
-							<div class="clearfix"></div>
-							<input type="hidden" name="page_id" id="page_id" value="{{request()->id}}">
-							<input type="hidden" name="rating" id="rating" value="0">
-                            <div class="rvw-overall-rate rvw-ex-mrgn">
-								<span>Rating</span>
-								<div id="stars" data-service="" class="starrr" style="font-size:22px"></div>
-							</div>
-							<input type="text" name="rtitle" id="rtitle" placeholder="Review Title" class="inputs" />
-                            <textarea placeholder="Write your review" name="review" id="review"></textarea>
-                            <input type="file" name="rimg[]" id="rimg" class="inputs" multiple="multiple" />
-                            <div class="reviewerro" id="reviewerro"> </div>
-								<input type="button" onclick="submit_busi_rating('{{request()->id}}')" value="Submit" class="btn rev-submit-btn mt-10">
-                               	<script>
-									$('#stars').on('starrr:change', function(e, value){
-										$('#rating').val(value);
-									});
-								</script>
-							</div>
+					<div class="clearfix"></div>
+					<input type="hidden" name="page_id" id="page_id" value="{{request()->id}}">
+					<input type="hidden" name="rating" id="rating" value="0">
+                    <div class="rvw-overall-rate rvw-ex-mrgn">
+						<span>Rating</span>
+						<div id="stars" data-service="" class="starrr" style="font-size:22px"></div>
+					</div>
+					<input type="text" name="rtitle" id="rtitle" placeholder="Review Title" class="inputs" />
+					<textarea placeholder="Write your review" name="review" id="review"></textarea>
+                    <input type="file" name="rimg[]" id="rimg" class="inputs" multiple="multiple" />
+                    <div class="reviewerro" id="reviewerro"> </div>
+						<input type="button" onclick="submit_busi_rating('{{request()->id}}')" value="Submit" class="btn rev-submit-btn mt-10">
+                        <script>
+							$('#stars').on('starrr:change', function(e, value){
+								$('#rating').val(value);
+							});
+						</script>
 					</form>
 				</div>
             </div> <!--body-->

@@ -1517,7 +1517,7 @@ class ActivityController extends Controller {
         }
         /*echo  $searchDatafirst;
         echo  $sercatefirst;exit;*/
-        $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft =0 ;
+        $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  ;
         $selectval = $priceid = $total_price_val = '' ;
         $adult_cnt =$child_cnt =$infant_cnt =0;
         $adult_price = $child_price = $infant_price =0;
@@ -1599,10 +1599,19 @@ class ActivityController extends Controller {
             foreach($searchData as $data){
                 if($si == 1){
                 	$SpotsLeftdis = 0; 
-	        		$SpotsLeft = 0; 
-					$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=',  date('Y-m-d',strtotime($actdate)) )->count();
+					$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=',  date('Y-m-d',strtotime($actdate)) )->get()->toArray();
+					$totalquantity = 0;
+					foreach($SpotsLeft as $data1){
+						$item = json_decode($data1['qty'],true);
+						if($item['adult'] != '')
+	                        $totalquantity += $item['adult'];
+	                    if($item['child'] != '')
+	                        $totalquantity += $item['child'];
+	                    if($item['infant'] != '')
+	                        $totalquantity += $item['infant'];
+					}
 					if( $data['spots_available'] != ''){
-						$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+						$SpotsLeftdis = $data['spots_available'] - $totalquantity;
 					} 
 
                 	if($SpotsLeftdis != 0){
@@ -1679,10 +1688,21 @@ class ActivityController extends Controller {
                                             if(!empty(@$bschedule) ||count(@$bschedule)>0){
                                                 foreach(@$bschedule as $bdata){
                                                 	$SpotsLeftdis = 0; 
-                                                    $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d',strtotime($actdate)))->count();
+                                                    $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d',strtotime($actdate)))->get()->toArray();
+                                                    $totalquantity = 0;
+													foreach($SpotsLeft as $data1){
+														$item = json_decode($data1['qty'],true);
+														if($item['adult'] != '')
+								                            $totalquantity += $item['adult'];
+								                        if($item['child'] != '')
+								                            $totalquantity += $item['child'];
+								                        if($item['infant'] != '')
+								                            $totalquantity += $item['infant'];
+													}
                                                     if( $bdata['spots_available'] != ''){
-                                                        $SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
+                                                        $SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
                                                     }
+
                                                     $actbox .= '<div class="col-md-6">
                                                         <div class="donate-now">
                                                             <input type="radio" id="'.$bdata['id'].'" name="amount" value="'.$bdata['shift_start'].'" onclick="addhiddentime('.$bdata['id'].','.$serviceid.');"';
@@ -1694,7 +1714,13 @@ class ActivityController extends Controller {
                                                             }
                                                             $actbox .= '/>
                                                                 <label for="'.$bdata['id'].'">'.$bdata['shift_start'].'</label>
-                                                                <p class="end-hr">'.$SpotsLeftdis.'/'.$bdata['spots_available'].' Spots Left </p>
+                                                                <p class="end-hr">';
+                                                                if($SpotsLeftdis == 0){
+                                                                 	$actbox .= 'Sold Out'; 
+	                                                            }else{ 
+	                                                             	$actbox .= $SpotsLeftdis.'/'.$bdata['spots_available'].' Spots Left.';
+	                                                            } 
+                                                            $actbox .= '</p>
                                                         </div>
                                                     </div>';
                                                 }
@@ -1797,7 +1823,7 @@ class ActivityController extends Controller {
 										if( @$bschedulefirst->spots_available != ''){
 											$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
 										} */
-                                        if($SpotsLeft >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0){
+                                        if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0){
                                            $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>';
                                         }else{
                                             if(@$total_price_val !='' && $timedata != '') {
@@ -1953,10 +1979,20 @@ class ActivityController extends Controller {
         $pricedata= $actscheduledata= $stactbox = $categorydata =$total_price_val= '';
         $pricedata = BusinessPriceDetails::where('id',$request->pricetitleid)->first();
         $actscheduledata = BusinessActivityScheduler::where('id',$request->actscheduleid)->first();
-        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$request->actscheduleid)->whereDate('bookedtime', '=', $dateformate)->count();
+        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$request->actscheduleid)->whereDate('bookedtime', '=', $dateformate)->get()->toArray();
+        $totalquantity = 0;
+		foreach($SpotsLeft as $data){
+			$item = json_decode($data['qty'],true);
+			if($item['adult'] != '')
+                $totalquantity += $item['adult'];
+            if($item['child'] != '')
+                $totalquantity += $item['child'];
+            if($item['infant'] != '')
+                $totalquantity += $item['infant'];
+		}
         $SpotsLeftdis= 0;
         if( @$actscheduledata->spots_available != ''){
-            $SpotsLeftdis = $actscheduledata->spots_available - $SpotsLeft;
+            $SpotsLeftdis = $actscheduledata->spots_available - $totalquantity;
         }
         if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
             $total_price_val_adult =  @$pricedata['adult_weekend_price_diff'];
@@ -2309,9 +2345,19 @@ class ActivityController extends Controller {
         if(!empty($busche) && count($busche)>0){
             foreach($busche as $bdt){
             	$SpotsLeftdis = 0;
-                $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdt['id'])->whereDate('bookedtime', '=', date('Y-m-d' ,strtotime($sesdate)) )->count();
+                $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdt['id'])->whereDate('bookedtime', '=', date('Y-m-d' ,strtotime($sesdate)) )->get()->toArray();
+                $totalquantity = 0;
+				foreach($SpotsLeft as $data){
+					$item = json_decode($data['qty'],true);
+					if($item['adult'] != '')
+                        $totalquantity += $item['adult'];
+                    if($item['child'] != '')
+                        $totalquantity += $item['child'];
+                    if($item['infant'] != '')
+                        $totalquantity += $item['infant'];
+				}
                 if( $bdt['spots_available'] != ''){
-                    $SpotsLeftdis = $bdt['spots_available'] - $SpotsLeft;
+                    $SpotsLeftdis = $bdt['spots_available'] - $totalquantity;
                 } 
                 $timedata12 .='<div class="col-md-6">
                     <div class="donate-now">
@@ -2324,7 +2370,13 @@ class ActivityController extends Controller {
                         }
                         $timedata12 .='/>
                         <label for="'.$bdt['id'].'" >'.$bdt['shift_start'].'</label>
-                        <p class="end-hr">'.$SpotsLeftdis.'/'.$bdt['spots_available'].' Spots Left </p>
+                        <p class="end-hr">';
+	                        if($SpotsLeftdis == 0){
+	                         	$timedata12 .= 'Sold Out'; 
+	                        }else{ 
+	                         	$timedata12 .= $SpotsLeftdis.'/'.$bdt['spots_available'].' Spots Left.';
+	                        } 
+	                    $timedata12 .= '</p>
                     </div>
                 </div>';
             }

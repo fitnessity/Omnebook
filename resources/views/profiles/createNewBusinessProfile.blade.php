@@ -6,13 +6,14 @@
     use App\BusinessSubscriptionPlan;
     use App\BusinessPriceDetailsAges;
     use App\BusinessPriceDetails;
+    use App\StaffMembers;
 
     $fitnessity_fee= 0;
     $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
     $fitnessity_fee = $bspdata->fitnessity_fee;
 
     function timeSlotOption($lbl, $val) {
-        $start = "00:00"; //you can write here 00:00:00 but not need to it
+        $start = "00:00"; //you can write here 00:00:00 but no t need to it
         $end = "23:30";
         $tStart = strtotime($start);
         $tEnd = strtotime($end);
@@ -292,20 +293,20 @@
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="email">Legal Business Name <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="Companyname" id="b_companyname" size="30" maxlength="255" placeholder="Company Name" value="{{ $Companyname }}">
+                                    <input type="text" class="form-control" name="Companyname" id="b_companyname" size="30" maxlength="255" placeholder="Company Name" value="{{ $Companyname }}" required>
                                     <span class="error" id="b_cmpo"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">dba Business Name <span id="star">*</span>(If its the same as legal name, add it here again.)</label>
-                                    <input type="text" class="form-control" autocomplete="nope" name="dba_business_name" id="b_dba_business_name" placeholder="Dba Business name" value="{{ $dba_business_name }}">
+                                    <input type="text" class="form-control" autocomplete="nope" name="dba_business_name" id="b_dba_business_name" placeholder="Dba Business name" value="{{ $dba_business_name }}" required>
                                     <span class="error" id="b_addr"></span>
 
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business Address <span id="star">*</span></label>
-                                    <input type="text" class="form-control" autocomplete="nope" name="Address" id="b_address" placeholder="Address" value="{{ $Address }}">
+                                    <input type="text" class="form-control" autocomplete="nope" name="Address" id="b_address" placeholder="Address" value="{{ $Address }}" required>
                                     <span class="error" id="b_addr"></span>
                                 </div>
 
@@ -318,19 +319,19 @@
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="City">City <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="City" id="b_city" size="30" placeholder="City" maxlength="50" value="{{ $City }}">
+                                    <input type="text" class="form-control" name="City" id="b_city" size="30" placeholder="City" maxlength="50" value="{{ $City }}" required>
                                     <span class="error" id="b_ct"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                   <label for="State">State <span id="star">*</span></label>
-                                  <input type="text" class="form-control" name="State" id="b_state" size="30" placeholder="State" maxlength="50" value="{{ $State }}">
+                                  <input type="text" class="form-control" name="State" id="b_state" size="30" placeholder="State" maxlength="50" value="{{ $State }}" required>
                                   <span class="error" id="b_sta"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="email">Zip Code <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="ZipCode" id="b_zipcode" size="30" placeholder="Zip Code" value="{{ $ZipCode }}" maxlength="20">
+                                    <input type="text" class="form-control" name="ZipCode" id="b_zipcode" size="30" placeholder="Zip Code" value="{{ $ZipCode }}" maxlength="20" required>
                                     <span class="error" id="b_zip"></span>
                                 </div>
 
@@ -353,34 +354,42 @@
                                   <input class="form-control" type="text" name="Establishmentyear" id="b_Establishmentyear" size="30" maxlength="4" placeholder="Establishment Year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{ $Establishmentyear }}">
                                   <span class="error" id="b_estb"></span>
                                 </div>-->
-
+                                <?php   
+                                    $phone_num = $business_phone;
+                                    if (preg_match('/()-/', $phone_num)){
+                                        $phone_number = $phone_num;
+                                    }else{
+                                        
+                                        $phone_number = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone_num);
+                                    }
+                                ?>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business Phone Number <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="business_phone" id="b_business_phone" placeholder="Business Phone" value="{{ $business_phone }}">
+                                    <input type="text" class="form-control" name="business_phone" id="b_business_phone" placeholder="Business Phone" value="{{ $phone_number }}" onkeyup="changeformate_b_business_phone();" maxlength="14" required>
                                     <span class="error" id="b_usertag"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business Email <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="business_email" id="b_business_email" placeholder="Business email" value="{{ $business_email }}">
+                                    <input type="text" class="form-control" name="business_email" id="b_business_email" placeholder="Business email" value="{{ $business_email }}" required>
                                     <span class="error" id="b_usertag"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business Username <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="Businessusername" id="b_business_user_tag" placeholder="Business User Tag" value="{{ $Businessusername }}">
+                                    <input type="text" class="form-control" name="Businessusername" id="b_business_user_tag" placeholder="Business User Tag" value="{{ $Businessusername }}" required>
                                     <span class="error" id="b_usertag"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business Website</label>
-                                    <input type="text" class="form-control" name="business_website" id="b_business_user_tag" placeholder="Business Website" value="{{ $business_website }}">
+                                    <input type="text" class="form-control" name="business_website" id="b_business_user_tag" placeholder="Business Website" value="{{ $business_website }}" >
                                     <span class="error" id="b_usertag"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Business type <span id="star">*</span></label>
-                                    <select class="form-control" name="business_type">
+                                    <select class="form-control" name="business_type" required>
                                       <option {{$business_type == "individual" ? 'selected="selected"' : ''}} value="individual">Individual</option>
                                       <option {{$business_type == "business" ? 'selected="selected"' : ''}} value="individual">Business</option>
                                     </select>
@@ -412,13 +421,13 @@
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <input type="hidden" value="0" id="mybusinessid" />
                                     <label for="pwd">Company Representative First Name <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="Firstnameb" id="b_firstname" size="30" maxlength="80" placeholder="Company Representative First Name" value="{{ $Firstnameb }}">
+                                    <input type="text" class="form-control" name="Firstnameb" id="b_firstname" size="30" maxlength="80" placeholder="Company Representative First Name" value="{{ $Firstnameb }}" required>
                                     <span class="error" id="b_firstnm"></span>
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Company Representative Last Name <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="Lastnameb" id="b_lastname" size="30" maxlength="80" placeholder="Company Representative Last Name" value="{{ $Lastnameb }}">
+                                    <input type="text" class="form-control" name="Lastnameb" id="b_lastname" size="30" maxlength="80" placeholder="Company Representative Last Name" value="{{ $Lastnameb }}" required>
                                     <span class="error" id="b_lastnm"></span>
                                 </div>
 
@@ -427,10 +436,18 @@
                                     <input type="email" class="form-control myemail" name="Emailb" id="b_email" autocomplete="off" placeholder="Email Address" size="30" maxlength="80" value="{{ $Emailb }}">
                                     <span class="error" id="b_eml"></span>
                                 </div>
-
+                                <?php   
+                                    $phone_num_con = $Phonenumber;
+                                    if (preg_match('/()-/', $phone_num)){
+                                        $phone_number_con = $phone_num_con;
+                                    }else{
+                                        
+                                        $phone_number_con = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone_num_con);
+                                    }
+                                ?>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <label for="pwd">Contact Number </label>
-                                    <input type="text" class="form-control" name="Phonenumber" id="b_contact" size="30" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Contact No" value="{{ $Phonenumber }}"  onkeyup="changeformate()">
+                                    <input type="text" class="form-control" name="Phonenumber" id="b_contact" size="30" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Contact No" value="{{ $phone_number_con }}"  onkeyup="changeformate()">
                                     <span class="error" id="b_cot"></span>
                                 </div>
 
@@ -2168,11 +2185,20 @@
 
                         </div>
 
+                        <?php   
+                            $phone_num_phone_number = $phone;
+                            if (preg_match('/()-/', $phone_num)){
+                                $num_phone_number = $phone_num_phone_number;
+                            }else{
+                                
+                                $num_phone_number = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone_num_phone_number);
+                            }
+                        ?>
                         <div class="form-group col-md-4">
 
                             <label for="phone_number">Phone number <span id="star">*</span></label>
 
-                            <input type="text" name="phonenumber" id="phone_number" placeholder="" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="14" autocomplete="off" value="{{ $phone }}" onkeyup="changeformate1()">
+                            <input type="text" name="phonenumber" id="phone_number" placeholder="" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="14" autocomplete="off" value="{{ $num_phone_number }}" onkeyup="changeformate1()">
 
                             <span class="error" id="err_phone_number"></span>
 
@@ -2567,8 +2593,9 @@
                     $mon_duration = $tue_duration = $wed_duration = $thu_duration = $fri_duration = $sat_duration = $sun_duration = "";
 
                     $frm_servicedesc = $exp_country = $exp_address = $exp_building = $exp_city = $exp_state = $exp_zip = "";
+                    $instructor_id  = '';
 
-            
+                    
 
                    // echo "<pre>"; print_r($business_service); die;
 
@@ -2599,10 +2626,20 @@
                             $program_desc = $business_service['program_desc'];
 
                         }
+                        if(isset($business_service['instructor_id']) && !empty($business_service['instructor_id'])) {
+
+                            $instructor_id = $business_service['instructor_id'];
+
+                        }
 
                         if(isset($business_service['profile_pic']) && !empty($business_service['profile_pic'])) {
 
                             $profile_pic = $business_service['profile_pic'];
+                            if (strpos($profile_pic, ',') !== false) {
+                                $profile_pic1 = explode(',', $profile_pic);
+                            }else{
+                                $profile_pic1 = $profile_pic;
+                            }
 
                         }
 
@@ -3751,84 +3788,51 @@
                 </div>
 
                 <div class="container-fluid p-0 checkCurrentTabName" id="individualDiv2" style="display: none;">
-
                     <div class="tab-hed">Create Services & Prices</div>
-
                     <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
-
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-
                         <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
-
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
-
                     </div>
 
                     <section class="row">
-
                         <div class="col-md-12">
-
                             <br/>
 
-                            <div class="row">
-
+                            <div class="row" style="display:none;">
                                 <div class="col-md-8">
-
-                                    <div class="row">
-
+                                    <!-- <div class="row">
                                         <div class="form-group col-md-12">
-
                                             <label for="frm_programname"><h3>Let's get a few details to set up your service <span id="star">*</span></h3></label><br>
-
                                             <p>Please select only one sport/activity to offer your clients</p>
-
                                             <select name="frm_servicesport" id="frm_servicesport" class="form-control">
-
                                                 <option value="">Choose a Sport/Activity</option>
-
                                                 @foreach(@$sportsdata as $Sports)
-
                                                     <?php $optiondata = Sports::where('parent_sport_id',$Sports['id'])->get(); ?>
-
                                                     @if(count($optiondata)>0)
-
                                                         <optgroup label="{{$Sports['sport_name']}}">
-
                                                         @foreach($optiondata as $data)
-
                                                             <option @if($sport_activity == $data['sport_name']) selected @endif >{{$data['sport_name']}}</option>
-
                                                         @endforeach
-
                                                         </optgroup>
-
                                                     @else
-
                                                     <option @if($sport_activity == $Sports['sport_name']) selected @endif >{{$Sports['sport_name']}}</option>
-
                                                     @endif
-
                                                 @endforeach
-
                                             </select>
-
                                             <span class="error" id="err_frm_servicesportS2"></span>
-
                                         </div>
-
-                                    </div>  
-
+                                    </div>   -->
                                     <div class="row">    
-
-                                        <div class="form-group col-md-12">
+                                        <!-- <div class="form-group col-md-12">
 
                                             <input type="text" class="form-control" name="frm_programname" id="frm_programname" placeholder="Enter Name of Program" title="servicetitle" value="{{ $program_name }}">
 
                                             <span class="error" id="err_frm_programname"></span>
 
-                                        </div>
+                                        </div> -->
 
-                                        <div class="form-group col-md-12">
+                                        <!-- <div class="form-group col-md-12">
 
                                             <textarea class="form-control" rows="6" name="frm_programdesc" id="frm_programdesc" placeholder="Enter program description" maxlength="150">{{ $program_desc }}</textarea>
 
@@ -3836,7 +3840,7 @@
 
                                             <div class="text-right"><span id="frm_programdesc_left">150</span> Characters Left</div>
 
-                                        </div>
+                                        </div> -->
 
                                         <div class="form-group col-md-12 hide">
 
@@ -3867,388 +3871,6 @@
                                             <span>RESERVED BOOKING : You need to confirm each booking first before completion</span>
 
                                         </div>
-
-                                        <?php /*?><div class="form-group col-md-12">
-
-                                            <label>How much notice do you need for each booking ?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="notice_value" id="firstdayweek" rel="notice">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Days" {{ ($notice_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($notice_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($notice_value=='Months') ? "selected" : "" }}>Months</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6" id="notice_div">
-
-                                            <select class="form-control" name="notice_key" id="notice">
-
-                                                <?php if($notice_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($notice_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#firstdayweek').change(function() {
-
-                                                var t = $('#firstdayweek option:selected').val();
-
-                                                var id = $('#firstdayweek').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                        </script>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>How far in advance can a customer book ?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <?php $addv = []; ?>
-
-                                            <select class="form-control" name="advance_value" id="secdayweek" rel="addvance" onchange="seconddayweek_change_event(this.value)">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Days" {{ ($advance_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($advance_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($advance_value=='Months') ? "selected" : "" }}>Months</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="advance_key" id="addvance">
-
-                                                <? if($advance_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <? } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($advance_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#secdayweek').change(function() {
-
-                                                var t = $('#secdayweek option:selected').val();
-
-                                                var id = $('#secdayweek').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                        </script>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>What's the latest moment a person can book your activity?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="activity_value" id="thirdminute" rel="minute">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Minute" {{ ($activity_value=='Minute') ? "selected" : "" }}>Minute</option>
-
-                                                <option value="Hours" {{ ($activity_value=='Hours') ? "selected" : "" }}>Hours</option>
-
-                                                <option value="Days" {{ ($activity_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($activity_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="activity_key" id="minute">
-
-                                                <? if($activity_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <? } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($activity_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#thirdminute').change(function() {
-
-                                                var t = $('#thirdminute option:selected').val();
-
-                                                var id = $('#thirdminute').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Minute') {
-
-                                                    options_f(60, id);
-
-                                                }
-
-                                                if (t == 'Hours') {
-
-                                                    options_f(24, id);
-
-                                                }
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                            });
-
-                                        </script><?php */?>
-
-                                        
-
-                                        <!-- <div class="form-group col-md-12">
-
-                                            <label>What's the latest a customer can cancel?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="cancel_value2" id="forthcancel" rel="forthcancel1">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Days" {{ ($cancel_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($cancel_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($cancel_value=='Months') ? "selected" : "" }}>Months</option>             
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="cancel_key2" id="forthcancel1">
-
-                                                <?php if($cancel_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($cancel_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <label>Is there a fee for late cancelation?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <label>If late cancelation then enter fee amount</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="is_late_fee" id="is_late_fee" onchange="get_fee_box(this.value)">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Yes" {{ ($is_late_fee=='Yes') ? "selected" : "" }}>Yes</option>
-
-                                                <option value="No" {{ ($is_late_fee=='No') ? "selected" : "" }}>No</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <input class="form-control" type="text" name="late_fee" id="late_fee" value="{{$late_fee}}" style="width:92%;display: inline-block;" onkeypress="return digitKeyOnly(event)"/> USD
-
-                                            <br />
-
-                                            <span class="error" id="err_late_fee"></span>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#forthcancel').change(function() {
-
-                                                var t = $('#forthcancel option:selected').val();
-
-                                                var id = $('#forthcancel').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Hours') {
-
-                                                    options_f(24, id);
-
-                                                }
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                              function get_fee_box(fld)
-
-                                              {
-
-                                                if(fld=='Yes')
-
-                                                {
-
-                                                  $("[name='late_fee']").prop("required", true);
-
-                                                  $('#err_late_fee').html('Please enter late fee amount.');
-
-                                                  $('#late_fee').focus();
-
-                                                  return false;
-
-                                                }
-
-                                                else
-
-                                                {
-
-                                                  $("[name='late_fee']").prop("required", false);
-
-                                                  $('#err_late_fee').html(' ');
-
-                                                  
-
-                                                }
-
-                                              }
-
-                                        </script> -->
 
                                     </div>
 
@@ -4572,62 +4194,7 @@
 
                                               <div class="row add_another_day">
 
-                                                  <?php //echo $days_plan_title; 
-
-                                      /*if(count($days_plan_title) > 0) {
-
-                                        $dplantitle = json_decode($days_plan_title,true); 
-
-                                        print_r($days_plan_desc);
-
-                                        //$dplandesc = json_decode($days_plan_desc,true);
-
-                                        $i=1;
-
-                                        foreach($dplantitle as $dtitle){ ?>
-
-                                          <div class="col-md-12">
-
-                                                            <label class="mb-10"> Day <?php echo $i; ?> </label></div>
-
-                                                            <div class="col-md-3 text-center">
-
-                                                                <div class="imagePreview divImgPreview">
-
-                                                                    <img src="" class="imagePreview planblah0" id="showimgDayPlan">
-
-                                                                </div>
-
-                                                                <label class="img-tab-btn">Upload Image<input type="file" name="dayplanpic[]" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" style="width: 0px;height: 0px;overflow: hidden;"></label>
-
-                                                                <span class="error" id="err_oldservicepic20"></span>
-
-                                                                <input type="hidden" id="olddayplanpic20" name="olddayplanpic" value="">
-
-                                                                
-
-                                                            </div>
-
-                                                            <div class="col-md-9">
-
-                                                                <input type="text" class="form-control" name="days_title[]" id="days_title0" placeholder="Give Heading for This Day" value="<?php echo $dtitle; ?>" /><br />
-
-                                                                <textarea class="form-control" rows="6" name="days_description[]" id="days_description" placeholder="Give Description For This Day" maxlength="500"><?php //echo $dplandesc[$i]; ?></textarea>
-
-                                                            </div>
-
-                                                        <?php $i++;
-
-                                        }
-
-                                      }
-
-                                      else
-
-                                      {*/
-
-                                      ?>
-
+                                        
                                                         <div class="col-md-12"> <label class="mb-10"> Day 1 </label></div>
 
                                                         <div class="col-md-3 text-center">
@@ -4709,9 +4276,84 @@
                                     </div><!-- row -->
 
                                 </div>
-
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="step-one">
+                                        <h3>Step 1: Program Details</h3>
+                                        <p>Explain to your customer what this program is.</p>
+                                    </div>
+                                    <div class="priceactivity">
+                                        <select name="frm_servicesport" id="frm_servicesport" class="form-control">
+                                            <option value="">Choose a Sport/Activity</option>
+                                            @foreach(@$sportsdata as $Sports)
+                                                <?php $optiondata = Sports::where('parent_sport_id',$Sports['id'])->get(); ?>
+                                                @if(count($optiondata)>0)
+                                                    <optgroup label="{{$Sports['sport_name']}}">
+                                                    @foreach($optiondata as $data)
+                                                        <option @if($sport_activity == $data['sport_name']) selected @endif >{{$data['sport_name']}}</option>
+                                                    @endforeach
+                                                    </optgroup>
+                                                @else
+                                                <option @if($sport_activity == $Sports['sport_name']) selected @endif >{{$Sports['sport_name']}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        <span class="error" id="err_frm_servicesportS2"></span>
+                                    </div>
+                                    <div class="pro-title">
+                                        <label>Program Title</label>
+                                        <input type="text" class="form-control" name="frm_programname" id="frm_programname" placeholder="ex. Kickboxing for adults)" title="servicetitle" value="{{ $program_name }}">
+                                        <span class="error" id="err_frm_programname"></span>
+                                    </div>
+                                    <div class="pro-title">
+                                        <label>Program Description</label>
+                                       <textarea class="form-control" rows="6" name="frm_programdesc" id="frm_programdesc" placeholder="Enter program description" maxlength="500">{{ $program_desc }}</textarea>
+                                        <span class="error" id="err_frm_programdesc"></span>
+                                        <div class="text-right"><span id="frm_programdesc_left">500</span> Characters Left</div>
+                                    </div>
+                                    <?php $staffdata = StaffMembers::where('user_id',Auth::user()->id)->get(); ?>
+                                    <div class="selectinstructor">
+                                        <h3>Choose Instructor</h3>
+                                        <p>Which staff member(s) will lead this program?</p>
+                                        <div class="selectstaff">
+                                            <select name="instructor_id" id="instructor_id" class="form-control">
+                                                <option value="">Select Your Instructor </option>
+                                                @if(!empty($staffdata))
+                                                    @foreach($staffdata as $data)
+                                                        <option value="{{$data->id}}" @if($instructor_id == $data->id) selected @endif> {{$data->name}} </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-7">
+                                    <div class="addphotos">
+                                        <h3>Add Photos For Your Program</h3>
+                                        <ul>
+                                            <li>Photos uploaded should show details and people in action</li>
+                                            <li>Photos should be high resolution and not pixelated.</li>
+                                            <li>Photos should be professional and reflect the best of what your program represents.</li>
+                                            <li>Photos should not have heavy filters, distortion, overlaid text, or watermarks </li>
+                                        </ul>
+                                    </div>
+                                    <div id="dropBox">
+                                        <p>Drag & Drop Images Here...</p>
+                                       <!--  <form class="imgUploader"> -->
+                                            <input type="file" id="imgUpload" name="imgUpload[]" multiple accept="image/*" onchange="filesManager(this.files)">
+                                            <label class="buttonimg" for="imgUpload">...or Upload from your device</label>
+                                       <!--  </form> -->
+                                        <div id="gallery">
+                                            @foreach($profile_pic1 as $img)
+                                            <div><img src="{{ url('/public/uploads/profile_pic/'.$img) }}"><p></p></div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-12">
@@ -12897,7 +12539,7 @@ $(document).ready(function(){
 
     $('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
 
-    $('#frm_programdesc_left').text(150-parseInt($("#frm_programdesc").val().length));
+    $('#frm_programdesc_left').text(500-parseInt($("#frm_programdesc").val().length));
 
     $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));
 
@@ -12945,7 +12587,7 @@ $(document).ready(function(){
 
     $("#frm_programdesc").on('input', function() {
 
-        $('#frm_programdesc_left').text(150-parseInt(this.value.length));
+        $('#frm_programdesc_left').text(500-parseInt(this.value.length));
 
     });
 
@@ -14985,7 +14627,7 @@ $(document).ready(function(){
 
         $('#lbl_activity').html(sport_activity);
 
-        $('#frm_programdesc_left').text(150-parseInt($("#frm_programdesc").val().length));
+        $('#frm_programdesc_left').text(500-parseInt($("#frm_programdesc").val().length));
 
         $('#err_frm_servicesport').html('');
 
@@ -14994,23 +14636,15 @@ $(document).ready(function(){
     
 
         if(sport_activity == ''){
-
             $('#err_frm_servicesport').html('Please select any sport activity.');
-
             $('#frm_servicesport').focus();
-
             return false;
-
         }
 
         if(program_name == ''){
-
             $('#err_frm_servicetitle_two').html('Please enter program name');
-
             $('#frm_servicetitle_two').focus();
-
             return false;
-
         }
 
         $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
@@ -15041,7 +14675,7 @@ $(document).ready(function(){
 
         var service_pic = $("#oldservicepic").val();
 
-    $('#err_frm_servicesport').html('');
+        $('#err_frm_servicesportS2').html('');
 
         $('#err_frm_programname').html('');
 
@@ -15051,7 +14685,7 @@ $(document).ready(function(){
 
         $('#err_oldservicepic').html('');
 
-    if(sport_activity == ''){ 
+        if(sport_activity == ''){ 
 
             $('#err_frm_servicesportS2').html('Please select any sport activity.');
 
@@ -15382,7 +15016,6 @@ $(document).ready(function(){
     });
 
     $("#nextindividual5").click(function(){
-
        $('#err_pay_session_type').html('');
 
        $('#err_pay_session').html('');
@@ -17313,7 +16946,7 @@ $(document).ready(function(){
 
 
 
-  function changeformate() {
+    function changeformate() {
 
         /*alert($('#contact').val());*/
 
@@ -17323,11 +16956,31 @@ $(document).ready(function(){
 
         if (curchr == 3) {
 
-            $("#b_contact").val("(" + con + ")" + "-");
+            $("#b_contact").val("(" + con + ")" + " ");
 
         } else if (curchr == 9) {
 
             $("#b_contact").val(con + "-");
+
+        }
+
+    }
+
+    function changeformate_b_business_phone() {
+
+        /*alert($('#contact').val());*/
+
+        var con = $('#b_business_phone').val();
+
+        var curchr = con.length;
+
+        if (curchr == 3) {
+
+            $("#b_business_phone").val("(" + con + ")" + " ");
+
+        } else if (curchr == 9) {
+
+            $("#b_business_phone").val(con + "-");
 
         }
 
@@ -17345,7 +16998,7 @@ $(document).ready(function(){
 
         if (curchr == 3) {
 
-            $("#phone_number").val("(" + con + ")" + "-");
+            $("#phone_number").val("(" + con + ")" + " ");
 
         } else if (curchr == 9) {
 
@@ -17458,9 +17111,116 @@ $(document).ready(function(){
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 
+<script>
+let dropBox = document.getElementById('dropBox');
+
+    // modify all of the event types needed for the script so that the browser
+    // doesn't open the image in the browser tab (default behavior)
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+        dropBox.addEventListener(evt, prevDefault, false);
+    });
+    function prevDefault (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // remove and add the hover class, depending on whether something is being
+    // actively dragged over the box area
+    ['dragenter', 'dragover'].forEach(evt => {
+        dropBox.addEventListener(evt, hover, false);
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+        dropBox.addEventListener(evt, unhover, false);
+    });
+    function hover(e) {
+        dropBox.classList.add('hover');
+    }
+    function unhover(e) {
+        dropBox.classList.remove('hover');
+    }
+
+    // the DataTransfer object holds the data being dragged. it's accessible
+    // from the dataTransfer property of drag events. the files property has
+    // a list of all the files being dragged. put it into the filesManager function
+    dropBox.addEventListener('drop', mngDrop, false);
+    function mngDrop(e) {
+        let dataTrans = e.dataTransfer;
+        let files = dataTrans.files;
+        filesManager(files);
+    }
+
+    // use FormData browser API to create a set of key/value pairs representing
+    // form fields and their values, to send using XMLHttpRequest.send() method.
+    // Uses the same format a form would use with multipart/form-data encoding
+    function upFile(file) {
+        //only allow images to be dropped
+        let imageType = /image.*/;
+        if (file.type.match(imageType)) {
+            let url = 'HTTP/HTTPS URL TO SEND THE DATA TO';
+            // create a FormData object
+            let formData = new FormData();
+            // add a new value to an existing key inside a FormData object or add the
+            // key if it doesn't exist. the filesManager function will loop through
+            // each file and send it here to be added
+            formData.append('file', file);
+
+            // standard file upload fetch setup
+            fetch(url, {
+                method: 'put',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => { console.log('Success:', result); })
+            .catch(error => { console.error('Error:', error); });
+        } else {
+            console.error("Only images are allowed!", file);
+        }
+    }
 
 
-   
+    // use the FileReader API to get the image data, create an img element, and add
+    // it to the gallery div. The API is asynchronous so onloadend is used to get the
+    // result of the API function
+    function previewFile(file) {
+        // only allow images to be dropped
+        let imageType = /image.*/;
+        if (file.type.match(imageType)) {
+            let fReader = new FileReader();
+            let gallery = document.getElementById('gallery');
+            // reads the contents of the specified Blob. the result attribute of this
+            // with hold a data: URL representing the file's data
+            fReader.readAsDataURL(file);
+            // handler for the loadend event, triggered when the reading operation is
+            // completed (whether success or failure)
+            fReader.onloadend = function() {
+                let wrap = document.createElement('div');
+                let img = document.createElement('img');
+                // set the img src attribute to the file's contents (from read operation)
+                img.src = fReader.result;
+                let imgCapt = document.createElement('p');
+                // the name prop of the file contains the file name, and the size prop
+                // the file size. convert bytes to KB for the file size
+                let fSize = (file.size / 1000) + ' KB';
+                
+                gallery.appendChild(wrap).appendChild(img);
+                gallery.appendChild(wrap).appendChild(imgCapt);
+            }
+        } else {
+            console.error("Only images are allowed!", file);
+        }
+    }
+
+    function filesManager(files) {
+        // spread the files array from the DataTransfer.files property into a new
+        // files array here
+        files = [...files];
+        // send each element in the array to both the upFile and previewFile
+        // functions
+        files.forEach(upFile);
+        files.forEach(previewFile);
+    }
+</script>
+
 
 @endsection
 
