@@ -96,7 +96,7 @@
 
 							<span class="color-red">*</span>
 
-							<input class="width" type="text" name="bname" id="bname" value="" required>
+							<input class="width form-control" type="text" name="bname" id="bname" value="" required>
 
 						</div> 
 
@@ -106,7 +106,7 @@
 
 							<label>Street Address</label>
 
-							<input class="width" type="text" name="street_addr" id="street_addr" value="">
+							<input class="width form-control" type="text" name="street_addr" id="street_addr" value="">
 
 						</div> 
 						<div id="map"></div>
@@ -118,7 +118,7 @@
 
 							<label>Additional Address Info </label>
 
-							<input class="width" type="text" name="addi_addr" id="addi_addr" value="">
+							<input class="width form-control" type="text" name="addi_addr" id="addi_addr" value="">
 
 						</div> 
 
@@ -128,7 +128,7 @@
 
 							<label>City/Town</label>
 
-							<input class="width" type="text" name="city" id="city" value="">
+							<input class="width form-control" type="text" name="city" id="city" value="">
 
 						</div> 
 
@@ -138,7 +138,7 @@
 
 							<label>State/Province/Region  </label>
 
-							<input class="width" type="text" name="state" id="state" value="">
+							<input class="width form-control" type="text" name="state" id="state" value="">
 
 						</div> 
 
@@ -148,7 +148,7 @@
 
 							<label> Zipcode/Postal Code </label>
 
-							<input class="width" type="text" name="zip" id="zip" value="">
+							<input class="width form-control" type="text" name="zip" id="zip" value="">
 
 						</div>
 
@@ -158,7 +158,7 @@
 
 							<label> Neighborhood/Location/Area</label>
 
-							<input class="width" type="text" name="location" id="location" value="">
+							<input class="width form-control" type="text" name="location" id="location" value="">
 
 						</div>
 
@@ -168,7 +168,7 @@
 
 							<label> Phone Number</label>
 
-							<input class="width" type="text" name="phone" id="phone" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off" onkeyup="changeformate1()" maxlength="14">
+							<input class="width form-control" type="text" name="phone" id="phone" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off" onkeyup="changeformate1()" maxlength="14">
 
 						</div>
 
@@ -178,7 +178,7 @@
 
 							<label> Website   </label>
 
-							<input class="width" type="text" name="website" id="website" value="">
+							<input class="width form-control" type="text" name="website" id="website" value="">
 
 						</div>
 
@@ -188,7 +188,7 @@
 
 							<label> Email   </label>
 
-							<input class="width" type="text" name="email" id="email" value="">
+							<input class="width form-control" type="text" name="email" id="email" value="">
 
 						</div>
 
@@ -741,7 +741,7 @@
         var con = $('#phone').val();
         var curchr = con.length;
         if (curchr == 3) {
-            $("#phone").val("(" + con + ")" + "-");
+            $("#phone").val("(" + con + ")" + " ");
         } else if (curchr == 9) {
             $("#phone").val(con + "-");
         }

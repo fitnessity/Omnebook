@@ -67,7 +67,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                           <!--  <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -78,7 +78,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
@@ -282,7 +282,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                            <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -293,7 +293,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
@@ -314,9 +314,11 @@ use App\UserFamilyDetail;
                                         @php
                                             $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
+                                            echo $scheduleddata['sessiondate']."<br>";
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
                                             $sc_date = str_replace('-', '/', $sc_date);  
-
+                                            echo  $sc_date."<br>";
+                                            
                                             $servicedata = BusinessActivityScheduler::where('serviceid',@$book_details['user_booking_detail']['sport'])->first();
 
                                             $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
@@ -347,6 +349,7 @@ use App\UserFamilyDetail;
                                             $language = $language_name->languages;
                                         @endphp
                                         @if(date('Y-m-d',strtotime($sc_date)) > date('Y-m-d'))
+                                        @php echo "<pre>";print_r($book_details);  @endphp
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
                                                     <div class="headboxes">
@@ -497,7 +500,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                           <!--  <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -508,7 +511,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>

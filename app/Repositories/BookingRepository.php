@@ -323,6 +323,16 @@ class BookingRepository
                                     ->toArray();
     }
 
+    public function getBookingDetailnewdata($id,$bdid)
+    {
+        return $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
+                                    ->with('UserBookingDetail')
+                                    ->with('user')
+                                    ->where('id', $id)
+                                    ->first()
+                                    ->toArray();
+    }
+
     public function getJoblistMatchingSkill($user_id, $paginate = null)
     {
         $userData = User::where('id', $user_id)

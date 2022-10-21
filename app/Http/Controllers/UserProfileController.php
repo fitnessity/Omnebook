@@ -1531,29 +1531,23 @@ class UserProfileController extends Controller {
 
     /* Step 2 - Business Profile */
     public function addbusinesscompanydetail(Request $request) {
-
-       /* dd($request->all());*/
-        global $cid;
-        $cid = $request->cid;
-        $request->Country = 'United States';
-        $this->validate($request, [
+    /*    print_r($request->all());*/
+        $validator = Validator::make($request->all(), [
             'Companyname' => 'required',
-
             'Address' => 'required',
             'City' => 'required',
             'State' => 'required',
             'ZipCode' => 'required',
-            'Businessusername' => 'required',
+            // 'Businessusername' => 'required',
             'Firstnameb' => 'required',
             'Lastnameb' => 'required',
-//             'Emailb' => 'required',
-            /*'Phonenumber' => 'required',
-            'Aboutcompany' => 'required',
-            'Shortdescription' => 'required',*/
-             'userid' => 'required',
-
+            'userid' => 'required'
         ]);
-
+        
+        global $cid;
+        $cid = $request->cid;
+        $request->Country = 'United States';
+        
         $profile_picture = $companyId = "";
         if ($request->hasFile('Profilepic')) {
             $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -1567,17 +1561,6 @@ class UserProfileController extends Controller {
         }
         /* using the insertion time only */
         $request->Profilepic = $profile_picture;
-        
-       /* $gaddress = $request->Address.', '.$request->State.', '.$request->Country;
-        
-        $gaddress = str_replace(' ', '+', $gaddress);
-        $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
-        $geocode = file_get_contents($url);
-        $json = json_decode($geocode);
-        $data['lat'] = $json->results[0]->geometry->location->lat;
-        $data['lng'] = $json->results[0]->geometry->location->lng;*/
-
         $data['lat'] = $request->lat;
         $data['lon'] = $request->lon;
         
@@ -1610,17 +1593,10 @@ class UserProfileController extends Controller {
 			'business_website' => $request->business_website,
 			'business_type' => $request->business_type,
         ];
-                
-        /* Table - company_informations */
-       /* $company_details = CompanyInformation::where('id', $request->cid)->where('user_id', Auth::user()->id)->get();
-        if (!isset($company_details[0])) {
-            $request->cid = CompanyInformation::create($companyData)->id;
-        } else {
-            CompanyInformation::where('id', $request->cid)->where('user_id', Auth::user()->id)->update($companyData);
-        }*/
         
         if($request->cid==0)
-        {
+        {   
+          
             $cid = CompanyInformation::create($companyData)->id;
         }
         else {
@@ -1945,8 +1921,8 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-        /*print_r($request->all());
-        exit;*/
+        /*print_r($request->all());*/
+      
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -1993,13 +1969,16 @@ class UserProfileController extends Controller {
             /* using the insertion time only */
             $request->servicepic = $profile_picture;
         } else {
-            if ($request->hasFile('servicepic')) {
-                $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
-                $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-                $image_upload = Miscellaneous::uploadPhotoGallery($request->servicepic, $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
-                if($image_upload['success'] == true) {
-                    $profile_picture = $image_upload['filename'];
+            if ($request->hasFile('imgUpload')) {
+                for($i=0;$i<count($request->imgUpload);$i++){
+                    $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
+                    $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
+                    $image_upload = Miscellaneous::uploadPhotoGallery($request->imgUpload[$i], $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
+                    if($image_upload['success'] == true) {
+                        $profile_picture .= $image_upload['filename'].',';
+                    }
                 }
+                
             } else {
                 $profile_picture = $request->oldservicepic;
             }
@@ -2007,6 +1986,9 @@ class UserProfileController extends Controller {
             /* using the insertion time only */
             $request->servicepic = $profile_picture;
         }
+
+       /* echo  $profile_picture;
+        exit;*/
         
         $instant = $reserve = 0;
         
@@ -2248,7 +2230,8 @@ class UserProfileController extends Controller {
                 "sat_duration" => $request->sat_duration,
                 "sun_duration" => $request->sun_duration,
                 "is_late_fee" => $request->is_late_fee,
-                "late_fee" => $request->late_fee
+                "late_fee" => $request->late_fee,
+                "instructor_id"=> $request->instructor_id,
             ];
         }
        // print_r($businessData); exit;
@@ -8868,7 +8851,8 @@ class UserProfileController extends Controller {
                 $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
                 if($business_services != ''){
                     if($business_services->service_type == 'classes'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnewdata($value->id,$book_value->id);
+                       
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
@@ -9775,33 +9759,21 @@ class UserProfileController extends Controller {
     }
 
     public function paymentinfo(Request $request) {
+
         $cardInfo = [];
         $user = User::where('id', Auth::user()->id)->first();
         /*$savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);*/
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $savedEvents = $stripe->customers->allSources(
+        if($user->stripe_customer_id != ''){
+            $savedEvents = $stripe->customers->allSources(
                 $user->stripe_customer_id,
                 ['object' => 'card' ,'limit' => 30]
             );
+            $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            $cardInfo = $savedEvents['data'];
+        }
 
-        $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            
-        $cardInfo = $savedEvents['data'];
-        /*print_r($cardInfo);*/
-        /*if (count($savedEvents) > 0) {
-            foreach ($savedEvents as $event) {
-                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-                $carddetails = $stripe->customers->retrieveSource(
-                    $user->stripe_customer_id,
-                    $event->card_stripe_id,
-                    []
-                );
-
-                $cardInfo[] = $carddetails;
-            }
-        }*/
-        /*print_r($cardInfo);exit;*/
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
         $UserProfileDetail['lastname'] = $user->lastname;

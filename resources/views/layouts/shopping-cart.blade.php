@@ -18,6 +18,7 @@
     }
    /* echo"<pre>";*/  /*print_r($cart['cart_item']);*/ /*exit();*/
     $ajaxname = '';
+     $totalquantity = 0;
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -35,7 +36,7 @@
     				foreach ($cart['cart_item'] as $item) { 
                       /*  print_r($item);exit();*/
                         if(!empty($item['adult']))
-                            $totalquantity = $item['adult']['quantity'];
+                            $totalquantity += $item['adult']['quantity'];
                         if(!empty($item['child']))
                             $totalquantity += $item['child']['quantity'];
                         if(!empty($item['infant']))
@@ -205,7 +206,8 @@
     										for($i=0; $i<$totalquantity ; $i++)
     										{ ?>
                                             <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
-                                                <option value="" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" >Who is participating?</option>
+                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">Who is participating?</option>
+                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
                                                 <?php foreach($family as $fa){ 
 
                                                    /* $date_now = date_create();
@@ -215,8 +217,7 @@
                                                    /* echo $age;  */  											?>   
                                                 	<option value="<?php echo $fa['id']; ?>" 
                                                         data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
-                                                        data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>"
-                                                        data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif>
+                                                        data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
                                                         <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
                                             </select> 
@@ -226,7 +227,7 @@
                                     <?php 
                                         $participatearray = [];
                                     ?>
-                                    <div class="mtp-15 info-details">
+                                    <div class="mtp-15 info-details participaingdiv{{$item['code']}}">
                                     	<?php
                                             $ajaxname = Auth::user()->firstname.' '.Auth::user()->lastname;
     										for($i=0; $i<$totalquantity; $i++)
@@ -280,13 +281,16 @@
     						var name = $(this).find(':selected').data('name');
     						var cnt = $(this).find(':selected').data('cnt');
     						var act = $(this).find(':selected').data('act');
+                            var type = $(this).find(':selected').data('type');
     						/*var age = $(this).find(':selected').data('age');*/
     						var value = $(this).children("option:selected").val();
     						var counter = cnt+1;
     						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+                            
                             if(name == undefined){
                                 name = '{{$ajaxname}}';
                             }
+                            
                             
                             var txt= 'participant#'+counter+': '+name;
     						$('#part'+cnt+act).text(txt);
@@ -300,9 +304,10 @@
                                     act: act,
                                     familyid: value,
                                     counter: cnt,
+                                    type: type,
                                 },
                                 success: function (data) {
-                                    $(".info-details").load(location.href + " .info-details>*","");
+                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
                                 }
                             });
     					});

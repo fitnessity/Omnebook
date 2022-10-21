@@ -149,16 +149,25 @@ input:disabled{
 	}
 
     // print_r($bus_schedule);
-    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeft = $SpotsLeftdis = 0 ;
+    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
     $i=0;
     if(!empty(@$bus_schedule)){
         foreach($bus_schedule as $data){
         	if($i==0){
         		$SpotsLeftdis = 0; 
-        		$SpotsLeft = 0; 
-				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get()->toArray();
+				$totalquantity = 0;
+				foreach($SpotsLeft as $data1){
+					$item = json_decode($data1['qty'],true);
+					if($item['adult'] != '')
+                        $totalquantity += $item['adult'];
+                    if($item['child'] != '')
+                        $totalquantity += $item['child'];
+                    if($item['infant'] != '')
+                        $totalquantity += $item['infant'];
+				}
 				if( $data['spots_available'] != ''){
-					$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+					$SpotsLeftdis = $data['spots_available'] - $totalquantity;
 				} 
 				
 	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
@@ -424,20 +433,30 @@ input:disabled{
 												<h3 class="date-title">Booking Details</h3>
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
-													<?php $i=1;?>
+													<?php $i=1;$totalquantity = 0;?>
 													@if(!empty(@$bschedule) && count(@$bschedule)>0)
 													@foreach(@$bschedule as $bdata)
 													<?php $SpotsLeftdis = 0; ?>
-													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
+													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
+														$totalquantity = 0;
+														foreach($SpotsLeft as $data){
+															$item = json_decode($data['qty'],true);
+															if($item['adult'] != '')
+									                            $totalquantity += $item['adult'];
+									                        if($item['child'] != '')
+									                            $totalquantity += $item['child'];
+									                        if($item['infant'] != '')
+									                            $totalquantity += $item['infant'];
+														}
 													if( $bdata['spots_available'] != ''){
-        												$SpotsLeftdis = $bdata['spots_available'] - $SpotsLeft;
+        												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
         											} ?>
 													<div class="col-md-6">
 														<div class="donate-now">
 															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
 															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif/>
 																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
-																<p class="end-hr">{{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left </p>
+																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
 														</div>
 													</div>
 													@endforeach
@@ -540,7 +559,7 @@ input:disabled{
 										
 										<div id="cartadd">
 									
-										@if($SpotsLeft >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
+										@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else
                                             @if( @$total_price_val !='' && $timedata != '')

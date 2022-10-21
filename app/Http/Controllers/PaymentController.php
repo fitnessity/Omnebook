@@ -420,7 +420,7 @@ class PaymentController extends Controller {
         if(in_array($request->act, array_keys($cart_item["cart_item"]))) {
             foreach($cart_item["cart_item"] as $k => $v) {
                 if($request->act == $k) {
-                    if($request->familyid == ''){
+                    if($request->type == 'user'){
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = Auth::user()->id;
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'user';
                     }else{

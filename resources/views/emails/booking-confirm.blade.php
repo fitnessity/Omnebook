@@ -147,8 +147,7 @@ use App\UserFamilyDetail;
 																		<tr><td style="font-size: 13px;text-align: left;"></td></tr>
 																		<tr>
 																			<td style="text-align: center; padding: 25px 0px 15px 0px;">
-																				<img src="'.$url.
-																				'/public/images/logo1.png" width="225"  alt="logo" border="0" style="height: auto;">
+																				<img src="{{$url}}/public/images/logo1.png" width="225"  alt="logo" border="0" style="height: auto;">
                                                                             </td>
 																		</tr>
 																		<tr><td style="font-size: 28px; font-weight: 600; text-align: center;">BOOKING CONFIRMATION</td></tr>
@@ -204,7 +203,7 @@ use App\UserFamilyDetail;
                                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                                             <tr>
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px; text-align: left; height: 243px;">
-																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="'.$url.'/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
+																<h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="{{$url}}/public/images/1.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
 																15px;"> ACTIVITY INFO  </h2>
 																	<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 																		<tr>
@@ -451,7 +450,7 @@ use App\UserFamilyDetail;
                                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0!important; border-collapse:collapse!important;  table-layout:fixed!important;   margin:0 auto!important">
                                                             <tr>
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px 0px;; text-align: left; height: 243px;">
-																<h2 style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="'.$url.'/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
+																<h2 style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="{{$url}}/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
 																15px;">PROVIDER BUSINESS INFO  </h2>
                                                                 <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Company Name: {{ @$BookingDetail['businessuser']['company_name'] }}</h2>
 																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Email: {{ @$BookingDetail['businessuser']['email'] }} </h2>
@@ -609,7 +608,7 @@ use App\UserFamilyDetail;
 	                                            </tr>
 	                                       	@endif
 											<tr>
-												<td><h2 style="padding: 0px 0; text-align: center; font-size:14px; font-weight: normal; margin-bottom: 15px;">To date, You have booked 1 activities and posted a total of 1 reviews on Fitnessity! <a style="color: red; text-decoration: underline;"  href="'.$url.'/instant-hire">Book More</a></h2></td>
+												<td><h2 style="padding: 0px 0; text-align: center; font-size:14px; font-weight: normal; margin-bottom: 15px;">To date, You have booked 1 activities and posted a total of 1 reviews on Fitnessity! <a style="color: red; text-decoration: underline;"  href="{{$url}}/activities">Book More</a></h2></td>
 											</tr>
 											
 											 <!-- Follow us: START -->
