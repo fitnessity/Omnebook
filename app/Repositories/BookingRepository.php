@@ -325,6 +325,14 @@ class BookingRepository
 
     public function getBookingDetailnewdata($id,$bdid)
     {
+		/*\DB::enableQueryLog();
+		 $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
+                                    ->with('UserBookingDetail')
+                                    ->with('user')
+                                    ->where('id', $id)
+                                    ->first()
+                                    ->toArray();
+		dd(\DB::getQueryLog());*/
         return $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
                                     ->with('UserBookingDetail')
                                     ->with('user')

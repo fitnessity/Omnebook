@@ -314,10 +314,8 @@ use App\UserFamilyDetail;
                                         @php
                                             $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
-                                            echo $scheduleddata['sessiondate']."<br>";
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
-                                            $sc_date = str_replace('-', '/', $sc_date);  
-                                            echo  $sc_date."<br>";
+                                            $sc_date = str_replace('-', '/', $sc_date); 
                                             
                                             $servicedata = BusinessActivityScheduler::where('serviceid',@$book_details['user_booking_detail']['sport'])->first();
 
@@ -349,7 +347,7 @@ use App\UserFamilyDetail;
                                             $language = $language_name->languages;
                                         @endphp
                                         @if(date('Y-m-d',strtotime($sc_date)) > date('Y-m-d'))
-                                        @php echo "<pre>";print_r($book_details);  @endphp
+                                        
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
                                                     <div class="headboxes">

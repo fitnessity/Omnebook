@@ -72,6 +72,7 @@ input:disabled{
 	use App\CompanyInformation;
 	use App\BusinessReview;
 	use Carbon\Carbon;
+    use App\StaffMembers;
 
 	$sid = $serviceid;
 	$service = BusinessServices::where('id',$serviceid)->first();
@@ -98,6 +99,7 @@ input:disabled{
 		$comp_address .= $comp_data->country;
 	}
 
+	$staffdata = StaffMembers::where(['id'=>$service->instructor_id])->first(); 
 
 	$companyname = $comp_data->company_name;
 	$companyid = $comp_data->id;
@@ -279,6 +281,14 @@ input:disabled{
 
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
 
+    $pro_pic = $service->profile_pic;
+    $pro_pic = substr($pro_pic, 0, -1);
+    if (strpos($pro_pic, ',') !== false) {
+        $pro_pic1 = explode(',', $pro_pic);
+    }else{
+        $pro_pic1 = $pro_pic;
+    }
+
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
@@ -298,20 +308,51 @@ input:disabled{
    	<div class="container-fluid">
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
-				<div class="modal-banner modal-banner-sp">
-					<div class="bannar-size">
+				<div class="modal-banner modal-banner-sp galleryfancy">
+					@php $i=0; @endphp
+					@if(is_array(@$pro_pic1))
+	                    @if(!empty(@$pro_pic1))
+	                        @foreach(@$pro_pic1 as $img)
+	                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+
+	                            <div class="bannar-size" @if($i>4) style="display:none" @endif>
+			                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+									<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
+									@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
+			                        </a>
+								</div>	                            
+								
+								@endif
+								@php $i++; @endphp
+	                        @endforeach
+	                    @endif
+	                @else
+	                	@if(!empty($pro_pic1) && File::exists(public_path("/uploads/profile_pic/".$pro_pic1)))
+						<div class="bannar-size">
+	                    	<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+							<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
+							<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> 
+	                        </a>
+						</div>
+                        @endif
+                    @endif
+                	
+					<!-- <div class="bannar-size">
+                    	<a href="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}" title="" class="dimgfit" data-fancybox="gallery">
 						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+                        </a>
 					</div>
 					<div class="bannar-size">
+                    	<a href="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}" title="" class="dimgfit" data-fancybox="gallery">
 						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+                        </a>
 					</div>
 					<div class="bannar-size">
-						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
-					</div>
-					<div class="bannar-size">
-						<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
-						<button class="showall-btn showphotos"><i class="fas fa-bars"></i>Show all 8 photos</button>
-					</div>
+                    	<a href="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}" title="" class="dimgfit" data-fancybox="gallery">
+							<img src="{{ url('/public/uploads/gallery/720/thumb/BLUE+-+turtle.jpg')}}">
+                        </a>
+						<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all 8 photos</button>
+					</div> -->
 				</div>
 			</div>
 
@@ -342,9 +383,10 @@ input:disabled{
 								<label>Language:</label>
 								<span> {{@$languages}}</span>
 							</div>
+
 							<div>
 								<label>Instructor:</label>
-								<span>{{@$Instruname}}  </span>
+								<span>@if(@$staffdata->name != '') {{@$staffdata->name }} @else — @endif </span>
 							</div>
 						</div>
 					</div>
@@ -636,24 +678,35 @@ input:disabled{
 					</div>
 				</div>
 				
+				@if(@$staffdata != '') 
+				<?php 
+					if (@$staffdata->image != "") {
+				    	if (File::exists(public_path("/uploads/profile_pic/thumb/" . @$staffdata->image))){
+				    		$profilePicact = url('/public/uploads/profile_pic/thumb/' . @$staffdata->image);
+				    	}else{
+				    		$profilePicact = url('/public/images/service-nofound.jpg');
+				    	}
+				    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
+	    		?>
 				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
 					<div class="row">
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="instructor-img">
-								<img src="{{url('public/uploads/profile_pic/thumb/1653996182-aerobics.jpg')}}">
+								<img src="{{$profilePicact}}">
 							</div>
 						</div>
 						<div class="col-md-9 col-sm-9 col-xs-12">
 							<div class="instructor-inner-details">
 								<label>Instructor:</label>
-								<span>Darryl Phipps</span>
+								<span>{{@$staffdata->name}}</span>
 							</div>
 							<div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
+								<p>{{@$staffdata->description}}</p>
 							</div>
 						</div>
 					</div>
 				</div>
+				@endif 
 				
 				<div class="row" id="user_ratings_div{{$serviceid}}">
 					<div class="col-md-12 col-xs-12">
@@ -1135,7 +1188,13 @@ input:disabled{
 
 @include('layouts.footer')
 
-
+<script>
+$(document).ready(function() {
+	$('.showphotos').on('click', function(e) {
+		$('.firstfancyimg').click();
+	});
+});
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
 <script>
 $(document).ready(function () {

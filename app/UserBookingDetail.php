@@ -42,8 +42,8 @@ class UserBookingDetail extends Model
 
     {
 
-        return $this->belongsTo(UserBookingStatus::class, 'booking_id');
-
+     	return $this->belongsTo(UserBookingStatus::class, 'booking_id');
+		//return $this->belongsToMany(UserBookingStatus::class, 'booking_id'); ///nnn 22-10-2022
     }
 
     public function BookingSport()

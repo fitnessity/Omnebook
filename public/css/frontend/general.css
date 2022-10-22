@@ -21264,3 +21264,28 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
+.kickboxing-more-one .modal-header .close {
+  position: absolute;
+  opacity: 1;
+  text-shadow: none;
+  top: 35px;
+}
+.kickboxing-more-one .modal-header h3{
+	text-align: center;
+}
+.kickboxing-more-one .modal-header .close span {
+  background: #df0003;
+  color: #fff;
+  margin: 0;
+  width: 24px;
+  height: 22px;
+  display: inline-block;
+  border-radius: 5px;
+}
+.kickboxing-more-one .modal-dialog.rating-star{
+	display: grid;
+}
+#submit_member{
+	margin-bottom: 10px;
+}
