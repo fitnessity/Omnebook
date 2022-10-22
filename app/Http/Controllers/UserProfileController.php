@@ -86,6 +86,7 @@ use App\Notification;
 use App\BusinessServicesFavorite;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
+use App\StaffMembers;
 use Carbon\Carbon;
 
 use Request as resAll;
@@ -1921,8 +1922,8 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-        /*print_r($request->all());*/
-      
+       /* print_r($request->all());
+        exit;*/
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -1969,6 +1970,13 @@ class UserProfileController extends Controller {
             /* using the insertion time only */
             $request->servicepic = $profile_picture;
         } else {
+            $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
+            if($bus_count != ''){
+                $profile_picture .= $bus_count->profile_pic.',';
+            }else{
+                $profile_picture .= '';
+            }
+
             if ($request->hasFile('imgUpload')) {
                 for($i=0;$i<count($request->imgUpload);$i++){
                     $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -1980,14 +1988,14 @@ class UserProfileController extends Controller {
                 }
                 
             } else {
-                $profile_picture = $request->oldservicepic;
+                $profile_picture .= '';
             }
 
             /* using the insertion time only */
             $request->servicepic = $profile_picture;
         }
 
-       /* echo  $profile_picture;
+        /*echo  $profile_picture;
         exit;*/
         
         $instant = $reserve = 0;
@@ -8852,6 +8860,7 @@ class UserProfileController extends Controller {
                 if($business_services != ''){
                     if($business_services->service_type == 'classes'){
                         $BookingDetail_1 = $this->bookings->getBookingDetailnewdata($value->id,$book_value->id);
+						//print_r($BookingDetail_1);
                        
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
@@ -10673,5 +10682,34 @@ class UserProfileController extends Controller {
             }
         }
         return 'success';
+    }
+
+
+    public function add_instructor(Request $request){
+        $images = '';
+        if ($request->hasFile('insimg')) 
+        {   
+            $file = $request->file('insimg');
+            $name = date('His').$file->getClientOriginalName();
+            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'instructureimg'.DIRECTORY_SEPARATOR,$name);
+            if( !empty($name) ){
+                $images = $name;
+            }
+        }
+        $staff_mem = [
+            'name' => $request->insname,
+            'image' => $images,
+            'description' => $request->insdescription,
+            'user_id' => Auth::user()->id,
+        ]; 
+        
+        $create = StaffMembers::create($staff_mem);
+        if($create){
+            $status = "success";
+        }else{
+            $status = "fail";
+        }
+
+        return $status;
     }
 }

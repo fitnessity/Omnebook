@@ -78,6 +78,7 @@
         }*/
         echo '</select>';
     }
+      $profile_pic1  = [];
 ?>
 
 <?php @$hours = json_decode($service['serv_time_slot'],true); ?>
@@ -2594,6 +2595,7 @@
 
                     $frm_servicedesc = $exp_country = $exp_address = $exp_building = $exp_city = $exp_state = $exp_zip = "";
                     $instructor_id  = '';
+                    $profile_pic1  = [];
 
                     
 
@@ -2635,12 +2637,12 @@
                         if(isset($business_service['profile_pic']) && !empty($business_service['profile_pic'])) {
 
                             $profile_pic = $business_service['profile_pic'];
+                            $profile_pic = substr($profile_pic, 0, -1);
                             if (strpos($profile_pic, ',') !== false) {
                                 $profile_pic1 = explode(',', $profile_pic);
                             }else{
                                 $profile_pic1 = $profile_pic;
                             }
-
                         }
 
                         if(isset($business_service['instant_booking']) && !empty($business_service['instant_booking'])) {
@@ -2950,7 +2952,7 @@
                         }
 
                     }
-
+   
                 ?>
 
                 @csrf
@@ -4314,8 +4316,8 @@
                                         <div class="text-right"><span id="frm_programdesc_left">500</span> Characters Left</div>
                                     </div>
                                     <?php $staffdata = StaffMembers::where('user_id',Auth::user()->id)->get(); ?>
-                                    <div class="selectinstructor">
-                                        <h3>Choose Instructor</h3>
+                                    <div class="selectinstructor">  
+                                        <h3>Choose Instructor</h3> <a href="" data-toggle="modal" data-target="#addins" class="modelbox-edit-link">Add Instructor</a>
                                         <p>Which staff member(s) will lead this program?</p>
                                         <div class="selectstaff">
                                             <select name="instructor_id" id="instructor_id" class="form-control">
@@ -4347,9 +4349,19 @@
                                             <label class="buttonimg" for="imgUpload">...or Upload from your device</label>
                                        <!--  </form> -->
                                         <div id="gallery">
-                                            @foreach($profile_pic1 as $img)
-                                            <div><img src="{{ url('/public/uploads/profile_pic/'.$img) }}"><p></p></div>
-                                            @endforeach
+                                            @if(is_array(@$profile_pic1))
+                                                @if(!empty(@$profile_pic1))
+                                                    @foreach(@$profile_pic1 as $img)
+                                                        @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+                                                        <div><img src="{{ url('/public/uploads/profile_pic/'.$img) }}"><p></p></div>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @else
+                                                @if(!empty($profile_pic1) && File::exists(public_path("/uploads/profile_pic/".$profile_pic1)))
+                                                    <div><img src="{{ url('/public/uploads/profile_pic/'.$profile_pic1) }}"><p></p></div>
+                                                @endif
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -8918,7 +8930,30 @@
                 </div>
 
 
-
+                <div id="addins" class="modal modaladdins kickboxing-more-one" tabindex="-1">
+                    <div class="modal-dialog rating-star" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="padding:10px 36px 10px 11px!important; text-align: right;min-height: 40px;">
+                                <h3>Add Instructor</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="rev-post-box">
+                                    <form method="post" enctype="multipart/form-data" name="addinsform" id="addinsform" >
+                                    @csrf
+                                        <input type="text" name="insname" id="insname" placeholder="Instructor Name" class="inputs" />
+                                        <textarea placeholder="Description" name="insdescription" id="insdescription"></textarea>
+                                        <input type="file" name="insimg" id="insimg" class="inputs" />
+                                        <div class="reviewerro" id="addinserro"> </div>
+                                        <input type="button" onclick="submit_staffmember()" value="Submit" class="btn rev-submit-btn mt-10" id="submit_member">
+                                    </form>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
                 <div class="container-fluid p-0" id="classesDiv1" style="display: none;"></div>
 
                 <div class="container-fluid p-0" id="classesDiv2" style="display: none;"></div>
@@ -10808,11 +10843,6 @@
                 </div>
 
             </form>
-
-            
-
-            
-
         </div>
 
     </div>
@@ -17008,105 +17038,142 @@ $(document).ready(function(){
 
     }
 
+
+    function submit_staffmember() {
+        var insname=$('#insname').val();
+        var insimg=$('#insimg').val();
+        var insdescription=$('#insdescription').val();
+        var _token = $("input[name='_token']").val();
+
+        if(insname !='' && insdescription !='')
+        { 
+            var formData = new FormData($("#addinsform")[0]);
+            $.ajax({
+                url: "{{route('add_instructor')}}",
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if(response)
+                    {   
+                        $('.selectinstructor').load(' .selectinstructor > *')
+                        $('#addinserro').show(); 
+                        $('#addinserro').html('Instructure Added Successfully..'); 
+                        $("#submit_member").prop('disabled', true);
+                    }                    
+                }
+            });
+        }
+        else
+        {
+            $('#addinserro').show(); 
+            $('#addinserro').html('Please add your Instructure Name and Instructure Description rating'); 
+            return false;
+        }
+    }
+
 </script>
 
 
 
 <script type="text/javascript">
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -33.8688, lng: 151.2195},
-                zoom: 13
-            });
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
 
-            var input = document.getElementById('b_address');
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
-            var infowindow = new google.maps.InfoWindow();
-            var marker = new google.maps.Marker({
-                map: map,
-                anchorPoint: new google.maps.Point(0, -29)
-            });
+        var input = document.getElementById('b_address');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
 
-            autocomplete.addListener('place_changed', function() {
-                infowindow.close();
-                marker.setVisible(false);
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    window.alert("Autocomplete's returned place contains no geometry");
-                    return;
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode').val(place.address_components[i].long_name);
                 }
 
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city').val(place.address_components[i].long_name);
                 }
 
-                marker.setIcon(({
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(35, 35)
-                }));
-
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
-                var address = '';
-                var badd = '';
-                var sublocality_level_1 = '';
-                if (place.address_components) {
-                    address = [
-                      (place.address_components[0] && place.address_components[0].short_name || ''),
-                      (place.address_components[1] && place.address_components[1].short_name || ''),
-                      (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
                 }
 
-                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-                infowindow.open(map, marker);
-
-                // Location details
-                for (var i = 0; i < place.address_components.length; i++) {
-                    if(place.address_components[i].types[0] == 'postal_code'){
-                      $('#b_zipcode').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'locality'){
-                        $('#b_city').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                        sublocality_level_1 = place.address_components[i].long_name;
-                    }
-
-                    if(place.address_components[i].types[0] == 'street_number'){
-                       badd = place.address_components[i].long_name ;
-                    }
-
-                    if(place.address_components[i].types[0] == 'route'){
-                       badd += ' '+place.address_components[i].long_name ;
-                    } 
-
-                    if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                      $('#b_state').val(place.address_components[i].long_name);
-                    }
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
                 }
 
-                if(badd == ''){
-                  $('#b_address').val(sublocality_level_1);
-                }else{
-                  $('#b_address').val(badd);
-                }
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
 
-                $('#lat').val(place.geometry.location.lat());
-                $('#lon').val(place.geometry.location.lng());
-            });
-        }
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#b_address').val(sublocality_level_1);
+            }else{
+              $('#b_address').val(badd);
+            }
+
+            $('#lat').val(place.geometry.location.lat());
+            $('#lon').val(place.geometry.location.lng());
+        });
+    }
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>

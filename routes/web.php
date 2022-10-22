@@ -805,6 +805,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/network/followings', 'NetworkController@usereFolloweings');
     // Route::get('/outlookSignin', 'NetworkController@outlookSignin');
     // Route::get('/authorize', 'NetworkController@getOutlooktoken');
+    Route::post('/add_instructor', 'UserProfileController@add_instructor')->name('add_instructor');
+
 });
 
 Route::get('/personal-profile/booking-info', 'UserProfileController@bookinginfo');
