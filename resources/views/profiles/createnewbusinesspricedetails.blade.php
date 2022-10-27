@@ -376,7 +376,9 @@
 		});*/
 
 		$('#startingpicker').datepicker({
-	       minDate: 0   
+	       minDate: 0,
+	       changeMonth: true,
+      	 changeYear: true
 	    }).change(activitySchedule);
 
  		$("body").on("change",".shift_start, .shift_end", function(){
