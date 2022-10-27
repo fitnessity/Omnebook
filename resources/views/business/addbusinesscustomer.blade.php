@@ -28,7 +28,8 @@
 				<h3 class="business-inner-title">Tell Us About You</h3>
 			</div>
 		</div>
-		<form id="add_details" action="{{route('add_business_customer')}}">
+		<form id="add_details" action="{{route('add_business_customer')}}" method="post">
+			<input name="_token" type="hidden" value="{{csrf_token()}}">
 			<div class="border-fs">
 				<div class="row">
 					<div class="col-md-6">
