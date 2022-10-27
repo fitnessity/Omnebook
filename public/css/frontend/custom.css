@@ -1,3 +1,7 @@
+.ui-datepicker-month, .ui-datepicker-year {
+	color:  black;
+	font-weight:  300;
+}
 a{ cursor:pointer; }
 .btn-style-one {
 	position: relative;
