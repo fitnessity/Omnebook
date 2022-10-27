@@ -1680,6 +1680,7 @@
                                     <option value="77">Winter Camp</option>
                                 </optgroup>
                                 <option value="63">Canoeing</option>
+                                <option value="64">Camp</option>
                                 <optgroup label="Cycling">
                                     <option value="72">Indoor cycling</option>
                                 </optgroup>

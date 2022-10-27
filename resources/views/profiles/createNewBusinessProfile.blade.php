@@ -3455,6 +3455,8 @@
                                 </optgroup>
 
                                 <option {{ ($sport_activity=='Canoeing')?'selected':''}}>Canoeing</option>
+                                
+                                <option {{ ($sport_activity=='Camp')?'selected':''}}>Camp</option>
 
                                 <optgroup label="Cycling">
 
