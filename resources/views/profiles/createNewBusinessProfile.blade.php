@@ -3494,6 +3494,8 @@
                                 </optgroup>
 
                                 <option {{ ($sport_activity=='Canoeing')?'selected':''}}>Canoeing</option>
+                                
+                                <option {{ ($sport_activity=='Camp')?'selected':''}}>Camp</option>
 
                                 <optgroup label="Cycling">
 
@@ -6407,7 +6409,7 @@
 
                                                         <label>Set The Number</label>
 
-                                                        <input type="text" name="pay_setnum_{{$i}}{{$j}}" id="pay_setnum{{$i}}{{$j}}" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+                                                        <input type="text" name="pay_setnum_{{$i}}{{$j}}" id="pay_setnum{{$i}}{{$j}}" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="{{$pay_setnum}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
 
                                                     </div>
 

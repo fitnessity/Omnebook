@@ -284,6 +284,7 @@
                       <option {{ ($sport_activity=='Winter Camp')?'selected':''}}>Winter Camp</option>
                   </optgroup>
                   <option {{ ($sport_activity=='Canoeing')?'selected':''}}>Canoeing</option>
+                  <option {{ ($sport_activity=='Camp')?'selected':''}}>Camp</option>
                   <optgroup label="Cycling">
                       <option {{ ($sport_activity=='Indoor cycling')?'selected':''}}>Indoor cycling</option>
                   </optgroup>
