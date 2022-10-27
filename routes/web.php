@@ -11,6 +11,7 @@
 */
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
+use App\Http\Controllers\ActivityController;
 
 //Route::get('/home', 'HomeController@index')->name('homemy');
 //Route::get('/home', 'HomeController@index')->name('homemy');
@@ -176,11 +177,15 @@ Route::group(['middleware' => ['auth']], function()
 });
 
 
+// Activitys
+Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
+Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
+Route::any('/activity-details/{serviceid}', 'ActivityController@show');
+
+
+
 Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
 Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
-Route::any('/activities/{filtervalue?}','ActivityController@instanthireindex')->name('instanthireindex');
-Route::any('/activity-details/{serviceid}', 'ActivityController@getInstanthiredetails');
-/*Route::get('/activities/','ActivityController@activity')->name('activity');*/
 Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
 Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');

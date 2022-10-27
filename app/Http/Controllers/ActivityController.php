@@ -39,7 +39,36 @@ class ActivityController extends Controller {
         $this->sports = $sports;
     }
 
-	public function instanthireindex(Request $request,$filtervalue = null)
+    public function next_8_hours(Request $request){
+    	
+
+    	$nxtact = BusinessServices::where('business_services.is_active', 1);
+
+        $nxtacty = $nxtact->get();
+        if (isset($nxtacty)) {
+        	foreach ($nxtacty as $service) {
+        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
+        		if(!empty($bookscheduler)) {
+        			foreach ($bookscheduler  as $key => $value) {
+		            	$curr = date("H:i");
+        				$time1 = strtotime($curr);
+						$time2 = strtotime($value['shift_start']);
+						$difference = abs($time2 - $time1) / 3600;
+
+		            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+		              		$todayservicedata[] = $service; 
+		            	}
+		            }
+          		}
+          	}
+          	$todayservicedata = array_unique($todayservicedata);
+        }
+    	return view('activity.next_8_hours',[
+    		'todayservicedata'=>$todayservicedata,
+    	]);
+    }
+
+	public function index(Request $request,$filtervalue = null)
 	{
 		/*if(!empty($request->all() )){
 			print_r($request->all());exit;
@@ -975,7 +1004,7 @@ class ActivityController extends Controller {
 	        }else if($searchDatabusiness !=''){
 	            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
 	        }else{
-				return view('activity.instanthire',[
+				return view('activity.index',[
 					'allactivities'=>$allactivities,
 					'thismonthactivity'=>$thismonthactivity,
 					'mostpopularactivity'=>$mostpopularactivity,
@@ -1001,10 +1030,10 @@ class ActivityController extends Controller {
 		return view('activity.activity');
 	}
 
-	public function getInstanthiredetails(Request $request ,$serviceid) {
+	public function show(Request $request ,$serviceid) {
       	$cart = [];
       	$cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
-       	return view('activity.instanthire_detail', [
+       	return view('activity.show', [
         	'cart' => $cart,
         	'serviceid' =>$serviceid
       	]);
