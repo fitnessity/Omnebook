@@ -67,9 +67,9 @@
 					</div>
 				</div>
 				<div class="col-md-2"> 
-					<!--<div class="title-show">
-						<a href="{{route('show-all-list')}}">Show All</a>
-					</div>-->
+					<div class="title-show">
+						<a href="{{route('activities_next_8_hours')}}">Show All</a>
+					</div>
 				</div>
 				<?php
 	                $companyid = $companyname = $serviceid = "";
