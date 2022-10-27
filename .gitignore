@@ -24,6 +24,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+storage/framework/laravel-excel/*
 
 # Compiled Java class files
 *.class
