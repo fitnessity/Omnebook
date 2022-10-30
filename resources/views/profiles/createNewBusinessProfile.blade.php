@@ -14889,7 +14889,7 @@ $(document).ready(function(){
 
       {
 
-        $('#categ').html('<option value="Tour">Tour</option><option value="Adventure">Adventure</option><option value="Retreat">Retreat</option><option value="Workshop">Workshop</option><option value="Seminar">Seminar</option><option value="Private experience">Private experience</option>');
+        $('#categ').html('<option value="Tour">Camp</option><option value="Tour">Tour</option><option value="Adventure">Adventure</option><option value="Retreat">Retreat</option><option value="Workshop">Workshop</option><option value="Seminar">Seminar</option><option value="Private experience">Private experience</option>');
 
         $('.location_div_experience').show();
 
