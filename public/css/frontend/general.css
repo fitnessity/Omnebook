@@ -20086,6 +20086,11 @@ input#zipcode {
 .activity-time-main{
 	line-height: 1;
 }
+
+.activity-time-main-red{
+    color:  red;
+}
+
 .activity-time-main span{
 	font-size: 11px;
 }

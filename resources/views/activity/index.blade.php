@@ -156,6 +156,7 @@
 								$time1 = new DateTime($curr);
 							    $time2 = new DateTime($ser_date);
 							    $time_diff = $time1->diff($time2);
+							    $red_style = $time2->getTimestamp() - $time1->getTimestamp() < 3600 ? 'activity-time-main-red' : '';
 							   	$hours = $time_diff->h;
 							    $minutes = $time_diff->i;
 							    $seconds = $time_diff->s;
@@ -247,7 +248,7 @@
 										@endif
 										</div>
 										<div class="col-md-6 col-sm-6 col-xs-6">
-											<div class="activity-time-main">
+											<div class="activity-time-main {{$red_style}}">
 												<span>Starts in {{$starttime}}</span>
 											</div>
 											<!-- <div id="clockdiv">
