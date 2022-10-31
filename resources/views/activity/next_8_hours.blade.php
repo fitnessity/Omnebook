@@ -449,7 +449,7 @@
 										$time1 = new DateTime($curr);
 									    $time2 = new DateTime($ser_date);
 									    $time_diff = $time1->diff($time2);
-
+									    var_dump($time2);
 									    $red_style = $time2->getTimestamp() - $time1->getTimestamp() < 600 ? 'activity-time-main-red' : '';
 
 									   	$hours = $time_diff->h;
