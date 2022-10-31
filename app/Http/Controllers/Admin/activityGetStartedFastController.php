@@ -18,6 +18,13 @@ use Validator;
 
 class activityGetStartedFastController extends Controller
 {   
+
+    public function __construct()
+    {
+        $this->middleware('admin');
+       
+    }
+    
 	public function index()
     { 
         $getstarted = ActivtyGetStartedFast::get();
