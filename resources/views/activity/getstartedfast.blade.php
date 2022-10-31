@@ -115,11 +115,23 @@
 		                        }
 
 		                        if ($service['profile_pic']!="") {
-									if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-		                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-									} else {
-										$profilePic = '/public/images/service-nofound.jpg';
-									}
+		                        	if(str_contains($service['profile_pic'], ',')){
+                                        $pic_image = explode(',', $service['profile_pic']);
+                                        if( $pic_image[0] == ''){
+                                           $p_image  = $pic_image[1];
+                                        }else{
+                                            $p_image  = $pic_image[0];
+                                        }
+                                    }else{
+                                        $p_image = $service['profile_pic'];
+                                    }
+
+                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                                    }else {
+                                       $profilePic = url('/public/images/service-nofound.jpg');
+                                    }
+
 								}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 								
 								$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
@@ -319,14 +331,24 @@
 	                                }
 			                            
 	                                if ($service['profile_pic']!="") {
-										if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-			                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-										} else {
-											$profilePic = url('/public/images/service-nofound.jpg');
-										}
-									}else{ 
-										$profilePic = url('/public/images/service-nofound.jpg'); 
-									}
+		                        	if(str_contains($service['profile_pic'], ',')){
+                                        $pic_image = explode(',', $service['profile_pic']);
+                                        if( $pic_image[0] == ''){
+                                           $p_image  = $pic_image[1];
+                                        }else{
+                                            $p_image  = $pic_image[0];
+                                        }
+                                    }else{
+                                        $p_image = $service['profile_pic'];
+                                    }
+
+                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                                    }else {
+                                       $profilePic = url('/public/images/service-nofound.jpg');
+                                    }
+
+								}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 									$bookscheduler='';
 									$time='';

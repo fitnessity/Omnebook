@@ -626,13 +626,25 @@ input:disabled{
 				<h3 class="subtitle details-sp">Things To Know </h3>
 				
 				<h3 class="subtitle details-sp">Know Before You Go</h3>
-				<p>{{$houserules}}</p>
+				@if($houserules != '')
+					<p>{{$houserules}}</p>
+				@else
+					<p>No Details Found</p>
+				@endif
 				
 				<h3 class="subtitle details-sp">Cancelation Policy</h3>
-				<p>{{$cancelation}}</p>
+				@if($cancelation != '')
+					<p>{{$cancelation}}</p>
+				@else
+					<p>No Details Found</p>
+				@endif
 				
 				<h3 class="subtitle details-sp">Safety and Cleaning Procedures</h3>
-				<p>{{$cleaning}}</p>
+				@if($cleaning != '')
+					<p>{{$cleaning}}</p>
+				@else
+					<p>No Details Found</p>
+				@endif
 				
 				<div class="row">
 					<div class="col-md-9">

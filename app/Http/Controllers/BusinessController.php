@@ -1161,7 +1161,8 @@ class BusinessController extends Controller
     }
 
     public function add_business_customer(Request $request)
-    {
+    {   
+      /*  print_r($request->all());exit;*/
         $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
         if($comdata != ''){
             $var = "matched";
@@ -1227,6 +1228,6 @@ class BusinessController extends Controller
             $var = "added";
         }
 
-        return $var;
+        echo $var;
     }
 }

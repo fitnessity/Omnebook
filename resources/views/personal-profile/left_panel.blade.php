@@ -41,14 +41,14 @@
                                     <img src="{{ url('public/img/menu-icon6.svg') }}" alt="">
                                     <span>Reviews</span>
                                 </a>
-                            </li>
+                            </li> <?php */?>
 
                             <li class=" {{ (request()->is('personal-profile/favorite*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite">
                                     <img src="{{ url('public/img/menu-icon1.svg') }}" alt="">
                                     <span>Favorite</span>
                                 </a>
-                            </li> <?php */?>
+                            </li> 
 
                             <li class=" {{ (request()->is('personal-profile/followers*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/followers">

@@ -1253,7 +1253,7 @@
 	.leftside-kickboxing.kicks .col-map-show{width: 33% !important;}
 	.class-info{padding: 13px 5px 0px 5px !important;}
 	.modal-dialog.modal-lg.business{width: 95% !important;}
-	.showall-btn{padding: 5px 5px !important; font-size: 12px;}
+	.showall-btn{padding: 5px 10px !important; font-size: 12px;}
 	.modal-sidebox .modal-filter-instant p{float: right !important;}
 	.img-modal-left img{width: 137px !important; min-height: 136px !important;}
 	.modal-dialog.modal-lg.business-details{width: 95% !important;}
@@ -1280,6 +1280,8 @@
 	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%;}
 	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%;}
 	.find-activity img{max-height: 145px !important;} 
+	.show-all{margin-top: 140px;}
+	.show-all .join-btn{padding: 0px;margin-top: 18px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2236,6 +2238,7 @@
 	.instant-banner h4{top: 51%; width: 80%; left: 95px;}
 	.instant-banner img{max-height: 300px;}
 	.instant-hire-activites {  margin-top: 15px !important;}
+	.show-all .table-inner-data{margin-bottom: 15px;}
 }
 
 @media(max-width: 575px) {
@@ -2451,6 +2454,7 @@
 	header .header-right .btn{font-size: 14px;}
 	.btn-style-one{font-size: 14px;}
 	.modal-dialog.counter-modal-size {  width: 354px;}
+	.showall-btn{padding: 5px 18px;}
 }
 
 @media(max-width: 376px) {
