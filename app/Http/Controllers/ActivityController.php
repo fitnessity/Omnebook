@@ -45,17 +45,21 @@ class ActivityController extends Controller {
     	$nxtact = BusinessServices::where('business_services.is_active', 1);
 
         $nxtacty = $nxtact->get();
+        $todayservicedata = [];
+
         if (isset($nxtacty)) {
         	foreach ($nxtacty as $service) {
         		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
         		if(!empty($bookscheduler)) {
         			foreach ($bookscheduler  as $key => $value) {
 		            	$curr = date("H:i");
+
         				$time1 = strtotime($curr);
 						$time2 = strtotime($value['shift_start']);
-						$difference = abs($time2 - $time1) / 3600;
+						$difference = ($time2 - $time1) / 3600;
 
-		            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+		            	if(str_contains($value['activity_days'], date('l', strtotime($curr))) && $value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+		            		
 		              		$todayservicedata[] = $service; 
 		            	}
 		            }
@@ -958,6 +962,7 @@ class ActivityController extends Controller {
 
 	        $nxtacty = $nxtact->get();
 	        if (isset($nxtacty)) {
+	        	$todayservicedata = [];
 	        	foreach ($nxtacty as $service) {
 	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
 	        		if(!empty($bookscheduler)) {
@@ -975,11 +980,12 @@ class ActivityController extends Controller {
 	        				$curr = date("H:i");
 	        				$time1 = strtotime($curr);
 							$time2 = strtotime($value['shift_start']);
-							$difference = abs($time2 - $time1) / 3600;
+							$difference = $time1 - $time2 / 3600;
 
-			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
-			              		$todayservicedata[] = $service; 
-			            	}
+		            		if(str_contains($value['activity_days'], date('l', strtotime($curr))) && $value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
+		            			
+		            	  		$todayservicedata[] = $service; 
+		            		}
 			            }
 	          		}
 	          	}
