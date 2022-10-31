@@ -302,6 +302,7 @@ a{
     padding: 6px 8px;
     border-radius: 4px;
     right: 0px;
+	z-index: 9999;
 }
 .kickboxing-block .kickboxing-topimg-content span {
     top: 12px;
@@ -311,6 +312,7 @@ a{
     padding: 6px 8px;
     border-radius: 4px;
     left: 0px;
+	z-index: 9999;
 }
 .ratset-img .rattxt i{
     color: #f91942;

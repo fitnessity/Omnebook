@@ -28,7 +28,8 @@
 				<h3 class="business-inner-title">Tell Us About You</h3>
 			</div>
 		</div>
-		<form id="add_details" action="{{route('add_business_customer')}}" method="post">
+		<form method="post" enctype="multipart/form-data" name="add_details" id="add_details">
+        	@csrf 
 			<input name="_token" type="hidden" value="{{csrf_token()}}">
 			<div class="border-fs">
 				<div class="row">
@@ -36,12 +37,14 @@
 						<div class="form-group">
 							<label>What’s your full name?</label>
 							<input type="text" class="form-control" name="business_added_by_cust_name" id="business_added_by_cust_name">
+							<div class="reviewerro" id="business_added_by_cust_nameerro"> </div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>What’s your email?</label>
 							<input type="text" class="form-control" name="email" id="email"> 
+							<div class="reviewerro" id="emailerro"> </div>
 						</div>
 					</div>
 				</div>
@@ -57,7 +60,7 @@
 						<p>(Choose Only One)</p>
 						<div class="special-offer offer-sp">
 							<div class="multiples">
-								<select id="business" name="business_type" class="myfilter" >
+								<select id="business_type" name="business_type" class="myfilter" >
 									<option value="individual">Individual</option>
 									<option value="business">Business</option>
 								</select>
@@ -68,6 +71,7 @@
 					<div class="form-group">
 						<label>Business Name</label>
 						<input type="text" class="form-control" name="Companyname" id="b_companyname" placeholder="Enter Business Name">
+						<div class="reviewerro" id="b_companynameerro"> </div>
 					</div>
 					<div class="form-group">
 						<label>Business Owners Name (optional)</label>
@@ -76,6 +80,7 @@
 					<div class="form-group">
 						<label>Business Address</label>
 						<input type="text" class="form-control" autocomplete="nope" name="Address" id="b_address" placeholder="Address" value="">
+						<div class="reviewerro" id="b_addresserro"> </div>
 					</div>
 
 					<div id="map" style="display: none;"></div>
@@ -151,10 +156,17 @@
 						</div>
 					</div>
 					
-					<div class="widget mx-sp">
-					<h4 class="widget-title">Business Info</h4>	
-						<div class="business maparea modal-map">
-							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0; width: 100%; height: 60vh;" allowfullscreen="" loading="lazy"></iframe>
+					<div class="widget mx-sp mapscroll">
+						<h4 class="widget-title">Business Info</h4>	
+						<div class="business maparea modal-map kickboxing_map" style="margin-left:0px;">
+							<div class="mysrchmap" style="height: 100%;min-height: 300px;">
+								<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+									<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387190.279909073!2d-74.25987368715491!3d40.69767006458873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1667217425288!5m2!1sen!2sin" style="border:0; width: 100%; height: 60vh;" allowfullscreen="" loading="lazy"></iframe>
+								</div>
+							</div>
+							<div class="maparea">
+								
+							</div>
 						</div>
 						<div class="map-info">
 							<span>
@@ -175,28 +187,40 @@
 					<div>
 						<h3 class="business-inner-title">Write the first review for this business!</h3>
 					</div>
-					<div class="star-rating">
+					<!--<div class="star-rating">
 						<i class="fas fa-star"></i>
 						<i class="fas fa-star"></i>
 						<i class="fas fa-star"></i>
 						<i class="fas fa-star"></i>
 						<i class="fas fa-star"></i>
+					</div>-->
+					<div class="rvw-overall-rate rvw-ex-mrgn">
+						<span>Rating</span>
+						 <input type="hidden" name="rating" id="rating" value="0">
+						<div id="stars" class="starrr" style="font-size:22px"></div>
 					</div>
-					
+					<script>
+					 	$('#stars').on('starrr:change', function(e, value){
+							$('#rating').val(value);
+					 	});
+					</script>
 					<div class="widget control-review">
 						<div class="form-group">
-	                        <label for="email">Title your review  <span id="star">*</span></label>
-							<input type="text" class="form-control" name="pno" placeholder="">
+	                        <label for="title">Title your review  <span id="star">*</span></label>
+							<input type="text" class="form-control" name="re_title" id="re_title" placeholder="">
+							<div class="reviewerro" id="re_titleerro"> </div>
 	                    </div>
 						<div class="form-group">
 	                        <label for="email">Your review <span id="star">*</span></label>
-							<textarea class="form-control" rows="4" placeholder="Tell us about your experience" name="Aboutcompany" id="about_company" maxlength="150"></textarea>
+							<textarea class="form-control" rows="4" placeholder="Tell us about your experience" name="re_detail" id="re_detail" maxlength="150"></textarea>
+							<div class="reviewerro" id="re_detailerro"> </div>
 	                    </div>
 						<div class="row">
 							<div class="col-md-5">
 								<div class="photo-select-review">
-									<img src="https://development.fitnessity.co/public/uploads/profile_pic/thumb/1657726206-badminton-1428046__480.jpg" class="pro_card_img blah" id="showimg">
-									<input type="file" id="files" class="hidden">
+									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg">
+									<input type="file" name="rimg[]" id="files" class="hidden" multiple="multiple" />
+									<!-- <input type="file" id="files" class="hidden"> -->
 									<label for="files">Upload Image</label>
 								</div>
 							</div>
@@ -211,7 +235,7 @@
 	                    <label for="email">Business Description (Optional)</label>
 	                    <textarea class="form-control" rows="10" placeholder="Tell Us Somthing About Company in short..." name="Shortdescription" id="short_description" maxlength="1000"></textarea>
 	                    <div class="text-right"><span id="company_desc_left">1000</span> Characters Left</div>
-	                    <span class="error" id="b_short"></span>
+	                    <span class="reviewerro" id="short_descriptionerro"></span>
 	                </div>
 					<button class="showall-btn btn-display"  id="submitButton">Submit</button> 
 				</div>
@@ -249,7 +273,7 @@
     $(document).ready(function() {
       
         var categ = new SlimSelect({
-            select: '#business'
+            select: '#business_type'
         });
 	
 		var categ = new SlimSelect({
@@ -264,19 +288,111 @@
     });
 
 	$("#submitButton").click(function(e) {
-		var form = $("#add_details");
-        var url = form.attr('action');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            success: function(data) {
-            	if(data == 'matched'){
+		/*var formData = new FormData();
+		var _token = $("input[name='_token']").val();*/
+		var business_added_by_cust_name = $("#business_added_by_cust_name").val();
+		var email = $("#email").val();
+		var b_companyname = $("#b_companyname").val();
+		/*var business_type = $("#business_type").val();
+		var b_firstname = $("#b_firstname").val();*/
+		var b_address = $("#b_address").val();
+		/*var b_additional_address = $("#b_additional_address").val();
+		var b_city = $("#b_city").val();
+		var b_state = $("#b_state").val();
+		var ZipCode = $("#b_zipcode").val();
+		var lon = $("#lon").val();
+		var lat = $("#lat").val();
+		var b_neighborhood = $("#b_neighborhood").val();
+		var b_business_phone = $("#b_business_phone").val();
+		var business_website = $("#business_website").val();
+		var b_business_email = $("#b_business_email").val();*/
+		var short_description = $("#short_description").val();
+		var rating = $("#rating").val();
+		var re_title = $("#re_title").val();
+		var re_detail = $("#re_detail").val();
+		/*var files = $("#files").val();
+		formData.append('business_added_by_cust_name', business_added_by_cust_name);
+		formData.append('email', email);
+		formData.append('business_type', business_type);
+		formData.append('Companyname', b_companyname);
+		formData.append('Firstnameb', b_companyname);
+		formData.append('Address', b_address);
+		formData.append('additional_address', b_additional_address);
+		formData.append('City', b_city);
+		formData.append('State', b_state);
+		formData.append('ZipCode', b_zipcode);
+		formData.append('lon', lon);
+		formData.append('lat', lat);
+		formData.append('neighborhood', b_neighborhood);
+		formData.append('business_phone', b_business_phone);
+		formData.append('business_website', business_website);
+		formData.append('business_email', b_business_email);
+		formData.append('Shortdescription', b_business_email);
+		formData.append('rating', rating);
+		formData.append('rimg', files);
+		formData.append('_token', _token);*/
+		if(business_added_by_cust_name !='' && email !='' && b_companyname !='' && b_address !='' && short_description !='' && re_title !='' && re_detail !='')
+        {  
+			var formData = new FormData($("#add_details")[0]);
+	        $.ajax({
+	            type: "POST",
+	            url: "{{route('add_business_customer')}}",
+	            enctype: 'multipart/form-data',
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            data: formData,
+	            success: function(data) {
+	            	if(data == 'matched'){
 
-            	}
-            	/*alert(data);*/
-            },
-        });
+	            	}
+	            	/*alert(data);*/
+	            },
+	        });
+	    }else{
+	    	if(business_added_by_cust_name =='')
+	        { 	
+	        	$('#business_added_by_cust_nameerro').show(); 
+	        	$('#business_added_by_cust_nameerro').html('Please Enter Full Name'); 
+	        }
+
+	        if(email =='')
+	        { 
+	        	$('#emailerro').show(); 
+				$('#emailerro').html('Please Enter Email'); 
+	        }
+	    	
+	    	if(b_companyname =='' )
+	        { 
+	        	$('#b_companynameerro').show();
+	        	$('#b_companynameerro').html('Please Enter Company Name'); 
+	        }
+
+	        if(b_address =='')
+	        { 
+	        	$('#b_addresserro').show();
+	        	$('#b_addresserro').html('Please Enter Address'); 
+	        }
+
+	        if(short_description =='')
+	        { 
+	        	$('#short_descriptionerro').show();
+	        	$('#short_descriptionerro').html('Please Enter Short Description'); 
+	        }
+
+	        if(re_title =='')
+	        { 
+	        	$('#re_titleerro').show();
+	        	$('#re_titleerro').html('Please Enter Review Title'); 
+	        }
+
+	        if(re_detail =='')
+	        { 
+	        	$('#re_detailerro').show();
+	        	$('#re_detailerro').html('Please Enter Review'); 
+	        }
+            return false;
+        }
 	});
 </script>
 
@@ -377,6 +493,51 @@
              $('#address_p').html(place.formatted_address);
             $('#lat').val(place.geometry.location.lat());
             $('#lon').val(place.geometry.location.lng());
+
+        	var locations = place.formatted_address;
+		   
+		    var map1 = ''
+		    var infowindow1 = ''
+		    var marker1 = ''
+		    var markers1 = []
+		    var circle = ''
+		    $('#map_canvas').empty();
+
+		    if (locations.length != 0) {  console.log('!empty');
+		        map1 = new google.maps.Map(document.getElementById('map_canvas'), {
+		            zoom:18,
+		            center: new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()),
+		            mapTypeId: google.maps.MapTypeId.ROADMAP,
+		        });
+		        infowindow1 = new google.maps.InfoWindow();
+		        var bounds = new google.maps.LatLngBounds();
+		        var marker1;
+		        var icon1 = {
+		            url: "{{url('/public/images/hoverout2.png')}}",
+		            scaledSize: new google.maps.Size(50, 50),
+		            labelOrigin: {x: 25, y: 16}
+		        };
+		        for (var i = 0; i < locations.length; i++) {
+		            var labelText = i + 1
+		            marker1 = new google.maps.Marker({
+		                position: new google.maps.LatLng(place.geometry.location.lat(),place.geometry.location.lng()),
+		                map: map1,
+		                icon: icon1,
+		                title: labelText.toString(),
+		                label: {
+		                    text: labelText.toString(),
+		                    color: '#222222',
+		                    fontSize: '12px',
+		                    fontWeight: 'bold'
+		                }
+		            });
+
+		            bounds.extend(marker1.position);
+		        }		        
+		        $('.mysrchmap').show()
+		    } else {
+		        $('#mapdetails').hide()
+		    }
         });
     }
 

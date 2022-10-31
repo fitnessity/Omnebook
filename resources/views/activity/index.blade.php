@@ -24,6 +24,8 @@
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 <script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+
 <section class="instant-hire" >
 	<div class="container-fluid">
 		<div class="row">
@@ -55,6 +57,7 @@
 			$start_date = date('Y/m/d');  
 			$date = strtotime($start_date);
 			$date = strtotime("+8 hours", $date);
+			/*print_r($todayservicedata);*/
 			
 		?>
 
@@ -93,11 +96,23 @@
 		                        }
 
 		                        if ($service['profile_pic']!="") {
-									if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-		                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-									} else {
-										$profilePic = '/public/images/service-nofound.jpg';
-									}
+		                        	if(str_contains($service['profile_pic'], ',')){
+                                        $pic_image = explode(',', $service['profile_pic']);
+                                        if( $pic_image[0] == ''){
+                                           $p_image  = $pic_image[1];
+                                        }else{
+                                            $p_image  = $pic_image[0];
+                                        }
+                                    }else{
+                                        $p_image = $service['profile_pic'];
+                                    }
+
+                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                                    }else {
+                                       $profilePic = url('/public/images/service-nofound.jpg');
+                                    }
+
 								}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 								
 								$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
@@ -372,14 +387,24 @@
 			                                }
 					                            
 			                                if ($service['profile_pic']!="") {
-												if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-					                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-												} else {
-													$profilePic = url('/public/images/service-nofound.jpg');
-												}
-											}else{ 
-												$profilePic = url('/public/images/service-nofound.jpg'); 
-											}
+					                        	if(str_contains($service['profile_pic'], ',')){
+			                                        $pic_image = explode(',', $service['profile_pic']);
+			                                        if( $pic_image[0] == ''){
+			                                           $p_image  = $pic_image[1];
+			                                        }else{
+			                                            $p_image  = $pic_image[0];
+			                                        }
+			                                    }else{
+			                                        $p_image = $service['profile_pic'];
+			                                    }
+
+			                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+			                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+			                                    }else {
+			                                       $profilePic = url('/public/images/service-nofound.jpg');
+			                                    }
+
+											}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 											$bookscheduler='';
 											$time='';
@@ -411,8 +436,11 @@
 												$price_all = min($pricearr);
 											}
 		                    	?>
+								
 									<div class="item">
+
 										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+										
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
@@ -420,7 +448,9 @@
 					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
 	                                				@endphp
 	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+												
 														<img src="{{ $profilePic }}" class="productImg">
+												
 														<div class="serv_fav1" data-id = "serfavmonth" ser_id="{{$service['id']}}" >
 															<a class="fav-fun-2" id="serfavmonth{{$service['id']}}">
 						                                    	@if( !empty($favData) )
@@ -568,14 +598,24 @@
 				                                }
 						                            
 				                                if ($service['profile_pic']!="") {
-													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-													} else {
-														$profilePic = url('/public/images/service-nofound.jpg');
-													}
-												}else{ 
-													$profilePic = url('/public/images/service-nofound.jpg'); 
-												}
+						                        	if(str_contains($service['profile_pic'], ',')){
+				                                        $pic_image = explode(',', $service['profile_pic']);
+				                                        if( $pic_image[0] == ''){
+				                                           $p_image  = $pic_image[1];
+				                                        }else{
+				                                            $p_image  = $pic_image[0];
+				                                        }
+				                                    }else{
+				                                        $p_image = $service['profile_pic'];
+				                                    }
+
+				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+				                                    }else {
+				                                       $profilePic = url('/public/images/service-nofound.jpg');
+				                                    }
+
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
 												$time='';
@@ -754,14 +794,24 @@
 				                                }
 						                            
 				                                if ($service['profile_pic']!="") {
-													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-													} else {
-														$profilePic = url('/public/images/service-nofound.jpg');
-													}
-												}else{ 
-													$profilePic = url('/public/images/service-nofound.jpg'); 
-												}
+						                        	if(str_contains($service['profile_pic'], ',')){
+				                                        $pic_image = explode(',', $service['profile_pic']);
+				                                        if( $pic_image[0] == ''){
+				                                           $p_image  = $pic_image[1];
+				                                        }else{
+				                                            $p_image  = $pic_image[0];
+				                                        }
+				                                    }else{
+				                                        $p_image = $service['profile_pic'];
+				                                    }
+
+				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+				                                    }else {
+				                                       $profilePic = url('/public/images/service-nofound.jpg');
+				                                    }
+
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
 												$time='';
@@ -941,14 +991,24 @@
 				                                }
 						                            
 				                                if ($service['profile_pic']!="") {
-													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-													} else {
-														$profilePic = url('/public/images/service-nofound.jpg');
-													}
-												}else{ 
-													$profilePic = url('/public/images/service-nofound.jpg'); 
-												}
+						                        	if(str_contains($service['profile_pic'], ',')){
+				                                        $pic_image = explode(',', $service['profile_pic']);
+				                                        if( $pic_image[0] == ''){
+				                                           $p_image  = $pic_image[1];
+				                                        }else{
+				                                            $p_image  = $pic_image[0];
+				                                        }
+				                                    }else{
+				                                        $p_image = $service['profile_pic'];
+				                                    }
+
+				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+				                                    }else {
+				                                       $profilePic = url('/public/images/service-nofound.jpg');
+				                                    }
+
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
 												$time='';
@@ -1128,14 +1188,24 @@
 				                                }
 						                            
 				                                if ($service['profile_pic']!="") {
-													if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-						                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-													} else {
-														$profilePic = url('/public/images/service-nofound.jpg');
-													}
-												}else{ 
-													$profilePic = url('/public/images/service-nofound.jpg'); 
-												}
+						                        	if(str_contains($service['profile_pic'], ',')){
+				                                        $pic_image = explode(',', $service['profile_pic']);
+				                                        if( $pic_image[0] == ''){
+				                                           $p_image  = $pic_image[1];
+				                                        }else{
+				                                            $p_image  = $pic_image[0];
+				                                        }
+				                                    }else{
+				                                        $p_image = $service['profile_pic'];
+				                                    }
+
+				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+				                                    }else {
+				                                       $profilePic = url('/public/images/service-nofound.jpg');
+				                                    }
+
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
 												$time='';
@@ -1176,7 +1246,20 @@
 					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
 	                                				@endphp
 	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}" class="productImg">
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-owl" class="owl-carousel owl-theme">
+																<div class="item-inner">
+																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+																</div>
+																<div class="item-inner">
+																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+																</div>
+																<div class="item-inner">
+																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+																</div>
+															</div>
+														</div>
+														<!--<img src="{{ $profilePic }}" class="productImg">-->
 														<div class="serv_fav1" ser_id="{{$service['id']}}"  data-id = "serfavfun">
 															<a class="fav-fun-2" id="serfavfun{{$service['id']}}">
 						                                    	@if( !empty($favData) )
@@ -1314,14 +1397,24 @@
 			                                }
 					                            
 			                                if ($service['profile_pic']!="") {
-												if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-					                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-												} else {
-													$profilePic = url('/public/images/service-nofound.jpg');
-												}
-											}else{ 
-												$profilePic = url('/public/images/service-nofound.jpg'); 
-											}
+					                        	if(str_contains($service['profile_pic'], ',')){
+			                                        $pic_image = explode(',', $service['profile_pic']);
+			                                        if( $pic_image[0] == ''){
+			                                           $p_image  = $pic_image[1];
+			                                        }else{
+			                                            $p_image  = $pic_image[0];
+			                                        }
+			                                    }else{
+			                                        $p_image = $service['profile_pic'];
+			                                    }
+
+			                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+			                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+			                                    }else {
+			                                       $profilePic = url('/public/images/service-nofound.jpg');
+			                                    }
+
+											}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 											$bookscheduler='';
 											$time='';
@@ -2105,5 +2198,18 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+</script>
+<script>
+$(document).ready(function() {
+ 
+  $("#owl-demo-owl").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
 </script>
 @endsection

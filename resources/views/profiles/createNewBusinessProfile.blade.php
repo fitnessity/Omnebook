@@ -14705,7 +14705,7 @@ $(document).ready(function(){
 
     var instant_booking = $("#booking1").val();
 
-        var service_pic = $("#oldservicepic").val();
+        var service_pic = $("#imgUpload").val();
 
         $('#err_frm_servicesportS2').html('');
 
@@ -14865,7 +14865,7 @@ $(document).ready(function(){
 
     var service_type = $("#service_type").val();
 
-    if(service_type.trim()=='classes' || service_type.trim()=='experience')
+    if( service_type.trim()=='experience')
 
     {
 
