@@ -14900,6 +14900,7 @@ $(document).ready(function(){
         $("#categSType option[value='Therapy']").remove();
 
         $('#categSType').append($("<option></option>").attr("value", 'Tour').text('Tour')); 
+        $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp')); 
 
         $('#categSType').append($("<option></option>").attr("value", 'Adventure').text('Adventure')); 
 
