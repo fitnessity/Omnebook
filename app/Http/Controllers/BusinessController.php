@@ -1162,11 +1162,81 @@ class BusinessController extends Controller
 
     public function add_business_customer(Request $request)
     {   
-      /*  print_r($request->all());exit;*/
+        /*print_r($request->all());exit;*/
         $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
+
+        if($request->add_status == 'yes'){
+            $comdata =  '';
+        }
+        
         if($comdata != ''){
-            $var = "matched";
+            $modelbody = '';
+            if ($comdata->logo !="") {
+                if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . $comdata->logo)) {
+                   $profilePic = url('/public/uploads/profile_pic/thumb/' . $comdata->logo);
+                }else {
+                   $profilePic = url('/public/images/service-nofound.jpg');
+                }
+            }else{ $profilePic = '/public/images/service-nofound.jpg'; }
+
+            $address = '';
+            if($comdata->address != ''){
+                $address = $comdata->address.', ';
+            }
+            if($comdata->city != ''){
+                $address .= $comdata->city.', ';
+            }
+            if($comdata->state != ''){
+                $address .= $comdata->state.', ';
+            }
+            if($comdata->country != ''){
+                $address .= $comdata->country.', ';
+            }
+            if($comdata->zip_code != ''){
+                $address .= $comdata->zip_code;
+            }
+
+           /* $var = "matched";*/
+            $var = '<div class="row">
+                            <div class="col-md-4">
+                                <div class="modal-imgs">
+                                    <img src="'.$profilePic.'">
+                                </div>
+                            </div>
+                            <div class="col-md-6 txt-space">
+                                <div class="modal-img-title">
+                                    <h4>'.$comdata->company_name.'</h4>
+                                    <p>'.$address.'</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="modal-links">
+                                    <h3>Write a Review</h3>
+                                    <input type="file" name="rimg[]" id="files" class="hidden" multiple="multiple">
+                                    <label for="files" style="text-decoration: underline;font-weight: 500">Add a Photo</label> 
+                                </div>
+                            </div>
+                        </div>';
         } else{
+
+            $images=array(); $imgpost='';
+            if ($request->hasFile('rimg')) {
+                if(count($request->rimg) > 0)
+                {
+                    foreach($request->rimg as $img){
+                        $file = $img;
+                       /* echo $file;exit;*/
+                        $name = date('His').$file->getClientOriginalName();
+                        $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'review'.DIRECTORY_SEPARATOR,$name);
+                        if( !empty($name) ){
+                            $images[]=$name;
+                        }
+                    }
+                    $imgpost = implode("|",$images);
+                }
+            }
+           
+
             $data['lat'] = $request->lat;
             $data['lon'] = $request->lon;
 
@@ -1177,7 +1247,7 @@ class BusinessController extends Controller
                 "business_added_by_cust_name" =>$request->business_added_by_cust_name,
                 "first_name" => $request->Firstnameb,
                 "last_name" => '',
-                "email" => $request->Emailb,
+                "email" => $request->email,
                 "contact_number" => '',
                 "logo" =>'',
                 "company_name" => $request->Companyname,
@@ -1189,7 +1259,7 @@ class BusinessController extends Controller
                 "ein_number" => '',
                 "establishment_year" => '',
                 "business_user_tag" => '',
-                "about_company" => $request->Aboutcompany,
+                "about_company" => $request->Shortdescription,
                 "short_description" => '',
                 "embed_video" => '',
                 "latitude" => $data['lat'],
@@ -1202,7 +1272,10 @@ class BusinessController extends Controller
                 'business_website' => $request->business_website,
                 'business_type' => $request->business_type,
             ];
+
+
             $data = CompanyInformation::create($companyData);
+
             $businessData = [
                 "cid" => $data->id,
                 "userid" => null,
@@ -1217,17 +1290,35 @@ class BusinessController extends Controller
                 "Profilepic" => '',
                 "Firstnameb" => $request->Firstnameb,
                 "Lastnameb" => '',
-                "Emailb" => $request->Emailb,
+                "Emailb" => $request->email,
                 "Phonenumber" => '',
-                "Aboutcompany" => $request->Aboutcompany,
+                "Aboutcompany" => $request->Shortdescription,
                 "Shortdescription" => '',
                 "EmbedVideo" => '',
                 "showstep" => 2            
             ];
+
             BusinessCompanyDetail::create($businessData);
+
+            $ip=$request->ip();
+
+            
+
+            $createbus_review = array(
+                "rating"=>$request->rating,
+                "title"=>$request->re_title,
+                "review"=>$request->re_detail,
+                "images"=> $imgpost,
+                "user_id" => Auth::user()->id,
+                "page_id" => $data->id,
+                "ip" => $ip,
+            );
+
+            BusinessReview::create($createbus_review);
             $var = "added";
         }
 
         echo $var;
+        exit;
     }
 }

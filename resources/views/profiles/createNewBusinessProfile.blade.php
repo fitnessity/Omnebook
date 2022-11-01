@@ -2637,14 +2637,13 @@
                         if(isset($business_service['profile_pic']) && !empty($business_service['profile_pic'])) {
 
                             $profile_pic = $business_service['profile_pic'];
-                            $profile_pic = substr($profile_pic, 0, -1);
-                            if (strpos($profile_pic, ',') !== false) {
+                            if(str_contains($profile_pic, ',')){
                                 $profile_pic1 = explode(',', $profile_pic);
                             }else{
                                 $profile_pic1 = $profile_pic;
                             }
                         }
-
+                       
                         if(isset($business_service['instant_booking']) && !empty($business_service['instant_booking'])) {
 
                             $instant_booking = $business_service['instant_booking'];
@@ -4296,11 +4295,11 @@
                                                 @if(count($optiondata)>0)
                                                     <optgroup label="{{$Sports['sport_name']}}">
                                                     @foreach($optiondata as $data)
-                                                        <option @if($sport_activity == $data['sport_name']) selected @endif >{{$data['sport_name']}}</option>
+                                                        <option @if(strtoupper($sport_activity) == strtoupper($data['sport_name'])) selected @endif >{{$data['sport_name']}}</option>
                                                     @endforeach
                                                     </optgroup>
                                                 @else
-                                                <option @if($sport_activity == $Sports['sport_name']) selected @endif >{{$Sports['sport_name']}}</option>
+                                                <option @if(strtoupper($sport_activity) == strtoupper($Sports['sport_name'])) selected @endif >{{$Sports['sport_name']}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -14865,7 +14864,7 @@ $(document).ready(function(){
 
     var service_type = $("#service_type").val();
 
-    if( service_type.trim()=='experience')
+    /*if( service_type.trim()=='experience')
 
     {
 
@@ -14996,7 +14995,7 @@ $(document).ready(function(){
 
       $('.location_div_experience').hide();
 
-    }
+    }*/
 
     $("#individualDiv2").hide();
 

@@ -32,7 +32,7 @@
                         <div class="favorite_section padding-1 white-bg border-radius1">
 							<ul class="nav nav-tabs" role="tablist">
 								<li class="active"><a data-toggle="tab" href="#activity_list" role="tab">Activity</a></li>
-                              	<li><a data-toggle="tab" href="#business_list" role="tab"> Business </a></li>
+                              	<!-- <li><a data-toggle="tab" href="#business_list" role="tab"> Business </a></li> -->
                             </ul>
                             <div class="tab-content">
 								<div id="activity_list" class="tab-pane active" role="tabpanel">

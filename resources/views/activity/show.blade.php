@@ -282,13 +282,11 @@ input:disabled{
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
 
     $pro_pic = $service->profile_pic;
-    $pro_pic = substr($pro_pic, 0, -1);
-    if (strpos($pro_pic, ',') !== false) {
+    if(str_contains($pro_pic, ',')){
         $pro_pic1 = explode(',', $pro_pic);
     }else{
         $pro_pic1 = $pro_pic;
     }
-
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
@@ -693,8 +691,8 @@ input:disabled{
 				@if(@$staffdata != '') 
 				<?php 
 					if (@$staffdata->image != "") {
-				    	if (File::exists(public_path("/uploads/profile_pic/thumb/" . @$staffdata->image))){
-				    		$profilePicact = url('/public/uploads/profile_pic/thumb/' . @$staffdata->image);
+				    	if (File::exists(public_path("/uploads/instructureimg/" . @$staffdata->image))){
+				    		$profilePicact = url('/public/uploads/instructureimg/' . @$staffdata->image);
 				    	}else{
 				    		$profilePicact = url('/public/images/service-nofound.jpg');
 				    	}
@@ -1204,6 +1202,7 @@ input:disabled{
 $(document).ready(function() {
 	$('.showphotos').on('click', function(e) {
 		$('.firstfancyimg').click();
+		close: true,
 	});
 });
 </script>

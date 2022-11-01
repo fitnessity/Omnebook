@@ -1555,6 +1555,7 @@
 	.w-85 {  width: 80% !important;}
 	.modal-dialog.modal-lg.staff-modal{width: 80% !important;}
 	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
+	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1628,6 +1629,14 @@
 		min-height: 1005px;
 	}
 	.instant-hire{ margin-top: 70px !important;}
+	.modal-dialog.modal-lg.location-modal{width: 45% !important;}
+	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
+}
+@media screen and (min-width:1500px) and (max-width:1920px){
+	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
+}
+@media screen and (min-width:1200px){
+	.favorite-block .favorite-content .favorite-right-content{width: 75% !important;}
 }
 @media screen and (min-width:1200px) and (max-width:2500px){
 	.table-responsive{overflow-x: hidden;}
