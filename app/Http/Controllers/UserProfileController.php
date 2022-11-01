@@ -1922,8 +1922,8 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-       /* print_r($request->all());
-        exit;*/
+       /* print_r($request->all());*/
+        // exit;
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -1942,7 +1942,7 @@ class UserProfileController extends Controller {
         }
 
         $profile_picture = "";
-        if($request->service_type=='experience') {
+        /*if($request->service_type=='experience') {
             if ($request->hasFile('servicepic')) {
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
                 $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
@@ -1967,37 +1967,36 @@ class UserProfileController extends Controller {
                 }
              }
             
-            /* using the insertion time only */
+             // using the insertion time only 
             $request->servicepic = $profile_picture;
-        } else {
-            $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
-            if($bus_count != ''){
-                $profile_picture .= $bus_count->profile_pic.',';
-            }else{
-                $profile_picture .= '';
-            }
+        } else {*/
 
-            if ($request->hasFile('imgUpload')) {
-                for($i=0;$i<count($request->imgUpload);$i++){
-                    $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
-                    $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-                    $image_upload = Miscellaneous::uploadPhotoGallery($request->imgUpload[$i], $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
-                    if($image_upload['success'] == true) {
-                        $profile_picture .= $image_upload['filename'].',';
-                    }
+        $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
+        if($bus_count != ''){
+            $img = rtrim($bus_count->profile_pic,',');
+            $profile_picture .= $img.',';
+        }else{
+            $profile_picture .= '';
+        }
+     
+        if ($request->hasFile('imgUpload')) {
+            for($i=0;$i<count($request->imgUpload);$i++){
+                $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
+                $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
+                $image_upload = Miscellaneous::uploadPhotoGallery($request->imgUpload[$i], $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
+                if($image_upload['success'] == true) {
+                    $profile_picture .= $image_upload['filename'].',';
                 }
-                
-            } else {
-                $profile_picture .= '';
             }
-
-            /* using the insertion time only */
-            $request->servicepic = $profile_picture;
+            
+        } else {
+            $profile_picture .= '';
         }
 
-        /*echo  $profile_picture;
-        exit;*/
-        
+            /* using the insertion time only */
+            $request->servicepic = rtrim($profile_picture,',');
+        // }
+
         $instant = $reserve = 0;
         
         $servicetype = $servicelocation = $programfor = $agerange = $numberofpeople = "";
@@ -2162,13 +2161,14 @@ class UserProfileController extends Controller {
                 "exp_zip" => $request->exp_zip,
                 "is_late_fee" => $request->is_late_fee,
                 "late_fee" => $request->late_fee,
-                "included_items" => $included_thing,
+                 "instructor_id"=> $request->instructor_id,
+                /*"included_items" => $included_thing,
                 "notincluded_items" => $notincluded_thing,
                 "bring_wear" => $frm_wear,
                 "req_safety" => $safe_varification,
                 "days_plan_title" => $days_title,
                 "days_plan_desc" => $days_desc,
-                "days_plan_img" => $days_dayplanpic,
+                "days_plan_img" => $days_dayplanpic,*/
             ];
         } else {
             if(isset($request->booking)) {

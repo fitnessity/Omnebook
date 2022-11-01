@@ -21294,7 +21294,54 @@ span.Zebra_DatePicker_Icon_Wrapper {
 #submit_member{
 	margin-bottom: 10px;
 }
-
+.modal-imgs img{
+	width: 100%;
+	min-height: 148px;
+	margin-bottom: 0px;
+}
+.modal-img-title h4{
+	text-decoration: underline;
+	font-weight: 600;
+}
+.txt-space{
+	padding-left: 0px;
+}
+.modal-links h3{
+	text-decoration: underline;
+	font-size: 15px;
+	font-weight: 500
+}
+.modal-links{
+	text-align: left;
+}
+.addbusiness-btn-modal {
+  background: #ea1515;
+  color: #fff;
+  padding: 12px 15px;
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  margin: 10px 0;
+  font-family: "Segoe UI",Arial,sans-serif;
+  text-transform: uppercase;
+}
+.addbusiness-btn-modal:hover{
+	color: #fff;
+}
+.btns-modal .btn-right{
+	float: right;
+}
+.close-btn-location{
+	margin-top: 0 !important;
+	color: white !important;
+	right: 22px !important;
+	position: absolute !important;
+	opacity: 1.2;
+}
+.close-btn-location:hover{
+	opacity: 1 !important;
+}
 .inner-owl-slider-hire .owl-nav .owl-next{
 	width: 30px;
 	height: 30px;
@@ -21354,3 +21401,6 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	.widget.mx-sp.mapscroll{
 		overflow: hidden;
 	}
+.map-business iframe{
+	padding: 0px;
+}

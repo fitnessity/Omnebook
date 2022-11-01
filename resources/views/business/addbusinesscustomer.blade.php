@@ -10,7 +10,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-banner">
-					<img src="https://development.fitnessity.co/public/images/newimage/addbusiness-customer.jpg" alt="">
+					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="">
 				</div>
 			</div>
 		</div>
@@ -25,12 +25,18 @@
 				</div>
 			</div>
 			<div class="col-md-12">
+				<div  class="business-info success_msg">
+				</div>
+			</div>
+
+			<div class="col-md-12">
 				<h3 class="business-inner-title">Tell Us About You</h3>
 			</div>
 		</div>
 		<form method="post" enctype="multipart/form-data" name="add_details" id="add_details">
         	@csrf 
 			<input name="_token" type="hidden" value="{{csrf_token()}}">
+			<input name="add_status" id="add_status" type="hidden" value="no">
 			<div class="border-fs">
 				<div class="row">
 					<div class="col-md-6">
@@ -133,17 +139,17 @@
 						<label>Email (optional)</label>
 						<input type="email" class="form-control myemail" name="business_email" id="b_business_email" autocomplete="off" placeholder="Email Address" size="30" maxlength="80" value="" onkeyup="addemail();">
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label>Other Activites Offered (optional)</label>
 						<p>Upload Up To 6</p>
 						<p>Example: karate, yoga, physical therapy, massage (optional)</p>
 						<p>1.  Add Actviity <a href="#" class="addactivity">+</a></p>
 						<input type="text" class="form-control" name="email">
-					</div>
+					</div> -->
 					
 				</div>
 				<div class="col-md-6">
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="position">What activity does this business offer?</label>
 						<p>Pick just one. The business owner will add more later.</p>
 						<div class="special-offer offer-sp">
@@ -154,11 +160,10 @@
 								</select>
 							</div>
 						</div>
-					</div>
-					
+					</div> -->
 					<div class="widget mx-sp mapscroll">
 						<h4 class="widget-title">Business Info</h4>	
-						<div class="business maparea modal-map kickboxing_map" style="margin-left:0px;">
+						<div class="business maparea modal-map-business kickboxing_map" style="margin-left:0px; margin-bottom: 15px;">
 							<div class="mysrchmap" style="height: 100%;min-height: 300px;">
 								<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
 									<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387190.279909073!2d-74.25987368715491!3d40.69767006458873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1667217425288!5m2!1sen!2sin" style="border:0; width: 100%; height: 60vh;" allowfullscreen="" loading="lazy"></iframe>
@@ -219,9 +224,8 @@
 							<div class="col-md-5">
 								<div class="photo-select-review">
 									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg">
-									<input type="file" name="rimg[]" id="files" class="hidden" multiple="multiple" />
-									<!-- <input type="file" id="files" class="hidden"> -->
-									<label for="files">Upload Image</label>
+									<input type="file" name="rimg[]" id="files" class="" multiple="multiple" />
+									<!-- <label for="files">Upload Image</label> -->
 								</div>
 							</div>
 						</div>
@@ -237,7 +241,8 @@
 	                    <div class="text-right"><span id="company_desc_left">1000</span> Characters Left</div>
 	                    <span class="reviewerro" id="short_descriptionerro"></span>
 	                </div>
-					<button class="showall-btn btn-display"  id="submitButton">Submit</button> 
+					<button type="button" class="showall-btn btn-display"  id="submitButton">Submit</button> 
+					<!-- <button type="button" class="showall-btn btn-display"  data-toggle="modal" data-target="#location">Add</button>  -->
 				</div>
 			</div>
 		</form>
@@ -265,6 +270,38 @@
     </div>                                          
 </div>                    
 
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="location">
+    <div class="modal-dialog modal-lg location-modal">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-location" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+				<div class="row contentPop"> 
+					<div class="col-lg-12">
+					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">That location may already be listed</h4>
+					   <p>Are any of these what you are looking for?</p>
+					</div>
+                    <div class="col-lg-12" id="modelbody_already_bus">
+                    </div>
+					
+					<div class="col-lg-12 btns-modal">
+						<a class="addbusiness-btn-modal" data-dismiss="modal" >Go Back</a>
+						<a class="addbusiness-btn-modal btn-right" onclick="add_details_already()">I didn't find it, add new listing</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
 
 @include('layouts.footer')
 
@@ -287,50 +324,35 @@
     	});
     });
 
+    function add_details_already(){
+		var formData = new FormData($("#add_details")[0]);
+		$.ajax({
+            type: "POST",
+            url: "{{route('add_business_customer')}}",
+            enctype: 'multipart/form-data',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(data) {
+            	$("#add_details")[0].reset();
+            	$('#location').hide();
+            	$('.success_msg').css("color", "green");
+            	$('.success_msg').html('Successfully Added Business...');
+            },
+        });
+    }
+
 	$("#submitButton").click(function(e) {
-		/*var formData = new FormData();
-		var _token = $("input[name='_token']").val();*/
 		var business_added_by_cust_name = $("#business_added_by_cust_name").val();
 		var email = $("#email").val();
 		var b_companyname = $("#b_companyname").val();
-		/*var business_type = $("#business_type").val();
-		var b_firstname = $("#b_firstname").val();*/
 		var b_address = $("#b_address").val();
-		/*var b_additional_address = $("#b_additional_address").val();
-		var b_city = $("#b_city").val();
-		var b_state = $("#b_state").val();
-		var ZipCode = $("#b_zipcode").val();
-		var lon = $("#lon").val();
-		var lat = $("#lat").val();
-		var b_neighborhood = $("#b_neighborhood").val();
-		var b_business_phone = $("#b_business_phone").val();
-		var business_website = $("#business_website").val();
-		var b_business_email = $("#b_business_email").val();*/
 		var short_description = $("#short_description").val();
 		var rating = $("#rating").val();
 		var re_title = $("#re_title").val();
 		var re_detail = $("#re_detail").val();
-		/*var files = $("#files").val();
-		formData.append('business_added_by_cust_name', business_added_by_cust_name);
-		formData.append('email', email);
-		formData.append('business_type', business_type);
-		formData.append('Companyname', b_companyname);
-		formData.append('Firstnameb', b_companyname);
-		formData.append('Address', b_address);
-		formData.append('additional_address', b_additional_address);
-		formData.append('City', b_city);
-		formData.append('State', b_state);
-		formData.append('ZipCode', b_zipcode);
-		formData.append('lon', lon);
-		formData.append('lat', lat);
-		formData.append('neighborhood', b_neighborhood);
-		formData.append('business_phone', b_business_phone);
-		formData.append('business_website', business_website);
-		formData.append('business_email', b_business_email);
-		formData.append('Shortdescription', b_business_email);
-		formData.append('rating', rating);
-		formData.append('rimg', files);
-		formData.append('_token', _token);*/
+		
 		if(business_added_by_cust_name !='' && email !='' && b_companyname !='' && b_address !='' && short_description !='' && re_title !='' && re_detail !='')
         {  
 			var formData = new FormData($("#add_details")[0]);
@@ -343,10 +365,15 @@
 	            processData: false,
 	            data: formData,
 	            success: function(data) {
-	            	if(data == 'matched'){
-
+	            	if(data != 'added'){
+						$('#add_status').val("yes");
+						$('#location').modal('toggle');
+						$('#modelbody_already_bus').html(data);
+	            	}else{
+	            		$("#add_details")[0].reset();
+	            		$('.success_msg').css("color", "green");
+            			$('.success_msg').html('Successfully Added Business...');
 	            	}
-	            	/*alert(data);*/
 	            },
 	        });
 	    }else{

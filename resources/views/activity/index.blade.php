@@ -363,47 +363,46 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="carousel-slider" class="owl-carousel">
 								<?php
-					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+					            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 									$companycity = $companycountry = $pay_price  = "";
-					                if (isset($thismonthactivity)) {
-					                    $servicetype = [];
-					                    
-					                    foreach ($thismonthactivity as $loop => $service) {
-					                        $company = $price = $businessSp = [];
+					            if (isset($thismonthactivity)) {
+					               $servicetype = [];
+					               foreach ($thismonthactivity as $loop => $service) {
+					                  $company = $price = $businessSp = [];
 											$serviceid = $service['id'];
-					                        $sport_activity = $service['sport_activity'];
-					                        $servicetype[$service['service_type']] = $service['service_type'];
-					                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-					                        $company = CompanyInformation::where('id', $service['cid'])->first();
-			                                if($company != '') {
-			                                    $companyid = $company->id;
-			                                    $companyaddress = $company->address;
-			                                    $companyname = $company->company_name;
+			                        $sport_activity = $service['sport_activity'];
+			                        $servicetype[$service['service_type']] = $service['service_type'];
+			                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+			                        $company = CompanyInformation::where('id', $service['cid'])->first();
+                                 if($company != '') {
+                                    $companyid = $company->id;
+                                    $companyaddress = $company->address;
+                                    $companyname = $company->company_name;
 												$companycity = $company->city;
 												$companycountry = $company->country;
 												$companylogo = $company->logo;
 												$companylat = $company->latitude;
 												$companylon = $company->longitude;
-			                                }
+			                        }
 					                            
-			                                if ($service['profile_pic']!="") {
-					                        	if(str_contains($service['profile_pic'], ',')){
-			                                        $pic_image = explode(',', $service['profile_pic']);
-			                                        if( $pic_image[0] == ''){
-			                                           $p_image  = $pic_image[1];
-			                                        }else{
-			                                            $p_image  = $pic_image[0];
-			                                        }
-			                                    }else{
-			                                        $p_image = $service['profile_pic'];
-			                                    }
+			                        if ($service['profile_pic']!="") {
+											    if(str_contains($service['profile_pic'], ',')){
+											     $pic_image = explode(',', $service['profile_pic']);
+												    if( $pic_image[0] == ''){
+												       $p_image  = $pic_image[1];
+												    }else{
+												       $p_image  = $pic_image[0];
+												    }
+												  }else{
+												  	$pic_image = $service['profile_pic'];
+												   $p_image = $service['profile_pic'];
+												}
 
-			                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-			                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-			                                    }else {
-			                                       $profilePic = url('/public/images/service-nofound.jpg');
-			                                    }
-
+												if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+												   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+												}else {
+												   $profilePic = url('/public/images/service-nofound.jpg');
+												}
 											}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 											$bookscheduler='';
@@ -444,36 +443,116 @@
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-												
-														<img src="{{ $profilePic }}" class="productImg">
-												
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+                             				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_thismon{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
 														<div class="serv_fav1" data-id = "serfavmonth" ser_id="{{$service['id']}}" >
 															<a class="fav-fun-2" id="serfavmonth{{$service['id']}}">
-						                                    	@if( !empty($favData) )
-						                                        	<i class="fas fa-heart"></i>
+			                                    	@if( !empty($favData) )
+			                                        	<i class="fas fa-heart"></i>
 																@else
-						                                    		<i class="far fa-heart"></i>
-						                                    	@endif
-						                                     </a>
-							                            </div>
-							                            @if($price_all != '')
-														<span>From ${{$price_all}}/Person</span>
+			                                    		<i class="far fa-heart"></i>
+			                                    	@endif
+			                                     </a>
+				                            	</div>
+							                     @if($price_all != '')
+															<span>From ${{$price_all}}/Person</span>
 														@endif
 													</div>
-	                                			@else
-		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
-						                            </div>
-	                                			@endif
-	                                			@php
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_thismon{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+				                              <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+				                              @if($price_all != '')	
+				                                	<span>From ${{$price_all}}/Person</span>
+				                              @endif
+				                           </div>
+                             			@endif
+                             			@php
 													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													$reviews_avg=0;
@@ -574,47 +653,46 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="popular-activities" class="owl-carousel">
 									<?php
-						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+						            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
-						                if (isset($mostpopularactivity)) {
-						                    $servicetype = [];
-						                    
-						                    foreach ($mostpopularactivity as $loop => $service) {
-						                        $company = $price = $businessSp = [];
+						            if (isset($mostpopularactivity)) {
+						               $servicetype = [];
+						               foreach ($mostpopularactivity as $loop => $service) {
+						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
-						                        $sport_activity = $service['sport_activity'];
-						                        $servicetype[$service['service_type']] = $service['service_type'];
-						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-						                        $company = CompanyInformation::where('id', $service['cid'])->first();
-				                                if($company != '') {
-				                                    $companyid = $company->id;
-				                                    $companyaddress = $company->address;
-				                                    $companyname = $company->company_name;
+				                        $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+		                               if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
 													$companylat = $company->latitude;
 													$companylon = $company->longitude;
-				                                }
-						                            
-				                                if ($service['profile_pic']!="") {
-						                        	if(str_contains($service['profile_pic'], ',')){
-				                                        $pic_image = explode(',', $service['profile_pic']);
-				                                        if( $pic_image[0] == ''){
-				                                           $p_image  = $pic_image[1];
-				                                        }else{
-				                                            $p_image  = $pic_image[0];
-				                                        }
-				                                    }else{
-				                                        $p_image = $service['profile_pic'];
-				                                    }
+	                                 }
+			                            
+	                                 if ($service['profile_pic']!="") {
+												   if(str_contains($service['profile_pic'], ',')){
+												     $pic_image = explode(',', $service['profile_pic']);
+													    if( $pic_image[0] == ''){
+													       $p_image  = $pic_image[1];
+													    }else{
+													       $p_image  = $pic_image[0];
+													    }
+													  }else{
+													  	$pic_image = $service['profile_pic'];
+													   $p_image = $service['profile_pic'];
+													}
 
-				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-				                                    }else {
-				                                       $profilePic = url('/public/images/service-nofound.jpg');
-				                                    }
-
+													if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+													   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+													}else {
+													   $profilePic = url('/public/images/service-nofound.jpg');
+													}
 												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
@@ -652,34 +730,116 @@
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}" class="productImg">
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+                             				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_pop{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
 														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavpopular">
 															<a class="fav-fun-2" id="serfavpopular{{$service['id']}}">
-						                                    	@if( !empty($favData) )
-						                                        	<i class="fas fa-heart"></i>
+			                                    	@if( !empty($favData) )
+			                                        	<i class="fas fa-heart"></i>
 																@else
-						                                    		<i class="far fa-heart"></i>
-						                                    	@endif
-						                                     </a>
-							                            </div>
-							                            @if($price_all != '')
-														<span>From ${{$price_all}}/Person</span>
+			                                    		<i class="far fa-heart"></i>
+			                                    	@endif
+			                                     </a>
+							                     </div>
+							                     @if($price_all != '')
+															<span>From ${{$price_all}}/Person</span>
 														@endif
 													</div>
-	                                			@else
-		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
-						                            </div>
-	                                			@endif
-	                                			@php
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_pop{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+			                                	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+			                                	@if($price_all != '')	
+			                                		<span>From ${{$price_all}}/Person</span>
+			                                	@endif
+				                           </div>
+                             			@endif
+                             			@php
 													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													$reviews_avg=0;
@@ -771,46 +931,46 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="find-trainers" class="owl-carousel">
 									<?php
-						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+						            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
-						                if (isset($Trainers_coachesacitvity)) {
-						                    $servicetype = [];
-						                    foreach ($Trainers_coachesacitvity as $loop => $service) {
-						                        $company = $price = $businessSp = [];
+						            if (isset($Trainers_coachesacitvity)) {
+						               $servicetype = [];
+						               foreach ($Trainers_coachesacitvity as $loop => $service) {
+						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
-						                        $sport_activity = $service['sport_activity'];
-						                        $servicetype[$service['service_type']] = $service['service_type'];
-						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-						                        $company = CompanyInformation::where('id', $service['cid'])->first();
-				                                if($company != '') {
-				                                    $companyid = $company->id;
-				                                    $companyaddress = $company->address;
-				                                    $companyname = $company->company_name;
+				                        $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+		                              if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
 													$companylat = $company->latitude;
 													$companylon = $company->longitude;
-				                                }
+				                        }
 						                            
-				                                if ($service['profile_pic']!="") {
-						                        	if(str_contains($service['profile_pic'], ',')){
-				                                        $pic_image = explode(',', $service['profile_pic']);
-				                                        if( $pic_image[0] == ''){
-				                                           $p_image  = $pic_image[1];
-				                                        }else{
-				                                            $p_image  = $pic_image[0];
-				                                        }
-				                                    }else{
-				                                        $p_image = $service['profile_pic'];
-				                                    }
+				                        if ($service['profile_pic']!="") {
+											    	if(str_contains($service['profile_pic'], ',')){
+											     		$pic_image = explode(',', $service['profile_pic']);
+												    	if( $pic_image[0] == ''){
+												       	$p_image  = $pic_image[1];
+												    	}else{
+												       	$p_image  = $pic_image[0];
+												    	}
+												   }else{
+													  	$pic_image = $service['profile_pic'];
+													   $p_image = $service['profile_pic'];
+													}
 
-				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-				                                    }else {
-				                                       $profilePic = url('/public/images/service-nofound.jpg');
-				                                    }
-
+													if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+													   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+													}else {
+													   $profilePic = url('/public/images/service-nofound.jpg');
+													}
 												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
@@ -848,11 +1008,52 @@
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}" class="productImg">
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+                             				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+                             					<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_per{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_per{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
 														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavTrainer">
 															<a class="fav-fun-2" id="serfavTrainer{{$service['id']}}">
 						                                    	@if( !empty($favData) )
@@ -868,11 +1069,52 @@
 													</div>
 	                                			@else
 		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
+																<div class="inner-owl-slider-hire">
+																	<div id="owl-demo-learn_per{{$service['id']}}" class="owl-carousel owl-theme">
+																		<?php 
+																			$i = 0;
+																			if(is_array($pic_image)){
+																				foreach($pic_image as $img){
+																					$profilePic1 = '';
+																					if($img != ''){
+																						if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+																           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																						}
+																         		} 
+
+															        				if($profilePic1 != ''){ ?>
+																						<div class="item-inner">
+																							<img src="{{$profilePic1}}" class="productImg">
+																						</div>
+																					<?php }
+																				}
+																			}else{
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+															   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+															    				}else {
+															       				$profilePic1 = url('/public/images/service-nofound.jpg');
+															    				} ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}">
+																				</div>
+																		<?php } ?>
+																	</div>
+																</div>
+																<script type="text/javascript">
+																	$(document).ready(function() {
+																	  	$("#owl-demo-learn_per{{$service['id']}}").owlCarousel({
+																		   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																		   items : 1, 
+																		   loop:true,
+																		   nav:true,
+																		   dots: false,
+																	  	});
+																	});
+																</script>
+						                              <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+						                              @if($price_all != '')	
+						                                	<span>From ${{$price_all}}/Person</span>
+						                              @endif
 						                            </div>
 	                                			@endif
 	                                			@php
@@ -968,46 +1210,46 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="ways-to-workout" class="owl-carousel">
 									<?php
-						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+						            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
-						                if (isset($Ways_To_Workout)) {
-						                    $servicetype = [];
-						                    foreach ($Ways_To_Workout as $loop => $service) {
-						                        $company = $price = $businessSp = [];
+						            if (isset($Ways_To_Workout)) {
+						               $servicetype = [];
+						               foreach ($Ways_To_Workout as $loop => $service) {
+						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
-						                        $sport_activity = $service['sport_activity'];
-						                        $servicetype[$service['service_type']] = $service['service_type'];
-						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-						                        $company = CompanyInformation::where('id', $service['cid'])->first();
-				                                if($company != '') {
-				                                    $companyid = $company->id;
-				                                    $companyaddress = $company->address;
-				                                    $companyname = $company->company_name;
+				                        $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+		                              if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
 													$companylat = $company->latitude;
 													$companylon = $company->longitude;
-				                                }
-						                            
-				                                if ($service['profile_pic']!="") {
-						                        	if(str_contains($service['profile_pic'], ',')){
-				                                        $pic_image = explode(',', $service['profile_pic']);
-				                                        if( $pic_image[0] == ''){
-				                                           $p_image  = $pic_image[1];
-				                                        }else{
-				                                            $p_image  = $pic_image[0];
-				                                        }
-				                                    }else{
-				                                        $p_image = $service['profile_pic'];
-				                                    }
+	                                 }
+			                            
+	                                 if ($service['profile_pic']!="") {
+					                        if(str_contains($service['profile_pic'], ',')){
+			                                 $pic_image = explode(',', $service['profile_pic']);
+		                                    if( $pic_image[0] == ''){
+		                                       $p_image  = $pic_image[1];
+		                                    }else{
+		                                       $p_image  = $pic_image[0];
+		                                    }
+			                              }else{
+			                              	$pic_image = $service['profile_pic'];
+	                                       $p_image = $service['profile_pic'];
+	                                    }
 
-				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-				                                    }else {
-				                                       $profilePic = url('/public/images/service-nofound.jpg');
-				                                    }
-
+	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+	                                    }else {
+	                                       $profilePic = url('/public/images/service-nofound.jpg');
+	                                    }
 												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
@@ -1045,11 +1287,52 @@
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}" class="productImg">
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+	                                		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+	                                			<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_classes{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
 														<div class="serv_fav1" ser_id="{{$service['id']}}"  data-id = "serfavWorkout">
 															<a class="fav-fun-2" id="serfavWorkout{{$service['id']}}">
 						                                    	@if( !empty($favData) )
@@ -1063,16 +1346,57 @@
 														<span>From ${{$price_all}}/Person</span>
 														@endif
 													</div>
-	                                			@else
-		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
-						                            </div>
-	                                			@endif
-	                                			@php
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_classes{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+				                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+				                                @if($price_all != '')	
+				                                <span>From ${{$price_all}}/Person</span>
+				                                @endif
+				                            </div>
+                             			@endif
+                             			@php
 													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													$reviews_avg=0;
@@ -1165,46 +1489,46 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="all-activities" class="owl-carousel">
 									<?php
-						                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+						            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 										$companycity = $companycountry = $pay_price  = "";
-						                if (isset($Fun_Activities)) {
-						                    $servicetype = [];
-						                    foreach ($Fun_Activities as $loop => $service) {
-						                        $company = $price = $businessSp = [];
+						            if (isset($Fun_Activities)) {
+						               $servicetype = [];
+						               foreach ($Fun_Activities as $loop => $service) {
+						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
-						                        $sport_activity = $service['sport_activity'];
-						                        $servicetype[$service['service_type']] = $service['service_type'];
-						                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-						                        $company = CompanyInformation::where('id', $service['cid'])->first();
-				                                if($company != '') {
-				                                    $companyid = $company->id;
-				                                    $companyaddress = $company->address;
-				                                    $companyname = $company->company_name;
+						                  $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+		                              if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
 													$companylat = $company->latitude;
 													$companylon = $company->longitude;
-				                                }
+				                        }
 						                            
-				                                if ($service['profile_pic']!="") {
-						                        	if(str_contains($service['profile_pic'], ',')){
-				                                        $pic_image = explode(',', $service['profile_pic']);
-				                                        if( $pic_image[0] == ''){
-				                                           $p_image  = $pic_image[1];
-				                                        }else{
-				                                            $p_image  = $pic_image[0];
-				                                        }
-				                                    }else{
-				                                        $p_image = $service['profile_pic'];
-				                                    }
+				                        if ($service['profile_pic']!="") {
+					                        if(str_contains($service['profile_pic'], ',')){
+			                                 $pic_image = explode(',', $service['profile_pic']);
+		                                    if( $pic_image[0] == ''){
+		                                       $p_image  = $pic_image[1];
+		                                    }else{
+		                                       $p_image  = $pic_image[0];
+		                                    }
+			                              }else{
+			                              	$pic_image = $service['profile_pic'];
+	                                       $p_image = $service['profile_pic'];
+	                                    }
 
-				                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-				                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-				                                    }else {
-				                                       $profilePic = url('/public/images/service-nofound.jpg');
-				                                    }
-
+	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+	                                    }else {
+	                                       $profilePic = url('/public/images/service-nofound.jpg');
+	                                    }
 												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
 												$bookscheduler='';
@@ -1242,47 +1566,118 @@
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<div class="inner-owl-slider-hire">
-															<div id="owl-demo-owl" class="owl-carousel owl-theme">
-																<div class="item-inner">
-																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
-																</div>
-																<div class="item-inner">
-																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
-																</div>
-																<div class="item-inner">
-																	<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
-																</div>
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+                             				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+                             					<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_exp{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
 															</div>
 														</div>
-														<!--<img src="{{ $profilePic }}" class="productImg">-->
+
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_exp{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
 														<div class="serv_fav1" ser_id="{{$service['id']}}"  data-id = "serfavfun">
 															<a class="fav-fun-2" id="serfavfun{{$service['id']}}">
-						                                    	@if( !empty($favData) )
-						                                        	<i class="fas fa-heart"></i>
+			                                    	@if( !empty($favData) )
+			                                        	<i class="fas fa-heart"></i>
 																@else
-						                                    		<i class="far fa-heart"></i>
-						                                    	@endif
-						                                     </a>
-							                            </div>
-							                            @if($price_all != '')
-														<span>From ${{$price_all}}/Person</span>
+			                                    		<i class="far fa-heart"></i>
+			                                    	@endif
+		                                     	</a>
+							                     </div>
+							                     @if($price_all != '')
+															<span>From ${{$price_all}}/Person</span>
 														@endif
 													</div>
-	                                			@else
-		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
-						                            </div>
-	                                			@endif
-	                                			@php
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_exp{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
+															</div>
+														</div>
+
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_exp{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+				                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+				                                @if($price_all != '')	
+				                                <span>From ${{$price_all}}/Person</span>
+				                                @endif
+				                            </div>
+                             			@endif
+                             			@php
 													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													$reviews_avg=0;
@@ -1373,89 +1768,131 @@
 						<div class="container-fluid">
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="trainers-coaches" class="owl-carousel">
-								<?php
-					                $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
-									$companycity = $companycountry = $pay_price  = "";
-					                if (isset($allactivities) && count($allactivities) > 0) {
-					                    $servicetype = [];
-					                    foreach ($allactivities as $loop => $service) {
-					                        $company = $price = $businessSp = [];
-											$serviceid = $service['id'];
-					                        $sport_activity = $service['sport_activity'];
-					                        $servicetype[$service['service_type']] = $service['service_type'];
-					                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-					                        $company = CompanyInformation::where('id', $service['cid'])->first();
-			                                if($company != '') {
-			                                    $companyid = $company->id;
-			                                    $companyaddress = $company->address;
-			                                    $companyname = $company->company_name;
-												$companycity = $company->city;
-												$companycountry = $company->country;
-												$companylogo = $company->logo;
-												$companylat = $company->latitude;
-												$companylon = $company->longitude;
-			                                }
+									<?php
+					            	$companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+					               if (isset($allactivities) && count($allactivities) > 0) {
+					                  $servicetype = [];
+					                  $profilePic1 = '';
+					                  $pic_image = '';
+					                  foreach ($allactivities as $loop => $service) {
+					                     $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+				                        $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+	                                 if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+			                           }
 					                            
-			                                if ($service['profile_pic']!="") {
-					                        	if(str_contains($service['profile_pic'], ',')){
-			                                        $pic_image = explode(',', $service['profile_pic']);
-			                                        if( $pic_image[0] == ''){
-			                                           $p_image  = $pic_image[1];
-			                                        }else{
-			                                            $p_image  = $pic_image[0];
-			                                        }
-			                                    }else{
-			                                        $p_image = $service['profile_pic'];
-			                                    }
+			                           if ($service['profile_pic']!="") {
+					                        if(str_contains($service['profile_pic'], ',')){
+			                                 $pic_image = explode(',', $service['profile_pic']);
+		                                    if( $pic_image[0] == ''){
+		                                       $p_image  = $pic_image[1];
+		                                    }else{
+		                                       $p_image  = $pic_image[0];
+		                                    }
+			                              }else{
+			                              	$pic_image = $service['profile_pic'];
+	                                       $p_image = $service['profile_pic'];
+	                                    }
 
-			                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-			                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-			                                    }else {
-			                                       $profilePic = url('/public/images/service-nofound.jpg');
-			                                    }
+	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+	                                    }else {
+	                                       $profilePic = url('/public/images/service-nofound.jpg');
+	                                    }
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
-											}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-											$bookscheduler='';
-											$time='';
-											$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-											if(@$bookscheduler[0]['set_duration']!=''){
-												$tm=explode(' ',$bookscheduler[0]['set_duration']);
-												$hr=''; $min=''; $sec='';
-												if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-												if($tm[2]!=0){ $min=$tm[2].'min. '; }
-												if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-												if($hr!='' || $min!='' || $sec!='')
-												{ $time =  $hr.$min.$sec; } 
-											}
-											$pricearr = [];
-											$price_all = '';
-											$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-											if(!empty($price_allarray)){
-												
-												foreach ($price_allarray as $key => $value) {
-													if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-														$pricearr[] = $value->adult_weekend_price_diff;
-													}else{
-														$pricearr[] = $value->adult_cus_weekly_price;
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
 													}
 												}
-
-											}
-											if(!empty($pricearr)){
-												$price_all = min($pricearr);
-											}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
 			                    ?>
 									<div class="item">
 										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
 											<div class="kickboxing-block">
 												@if(Auth::check())
 													@php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-	                                				@endphp
-	                                				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}" class="productImg">
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+	                                		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+	                                			<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+														
 														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavall">
 															<a class="fav-fun-2" id="serfavall{{$service['id']}}">
 						                                    	@if( !empty($favData) )
@@ -1469,16 +1906,57 @@
 														<span>From ${{$price_all}}/Person</span>
 														@endif
 													</div>
-	                                			@else
-		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<img src="{{ $profilePic }}">
-						                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-						                                @if($price_all != '')	
-						                                <span>From ${{$price_all}}/Person</span>
-						                                @endif
-						                            </div>
-	                                			@endif
-	                                			@php
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																$i = 0;
+																if(is_array($pic_image)){
+																	foreach($pic_image as $img){
+																		$profilePic1 = '';
+																		if($img != ''){
+																			if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+						                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																			}
+							                                 } 
+
+						                                    if($profilePic1 != ''){ ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}" class="productImg">
+																		</div>
+																	<?php }
+																	}
+																}else{
+																	if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+				                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+					                                    }else {
+					                                       $profilePic1 = url('/public/images/service-nofound.jpg');
+					                                    } ?>
+																	<div class="item-inner">
+																		<img src="{{$profilePic1}}">
+																	</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+			                                	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+			                                	@if($price_all != '')	
+			                                		<span>From ${{$price_all}}/Person</span>
+			                                	@endif
+				                           </div>
+                             			@endif
+                             			@php
 													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													$reviews_avg=0;
@@ -1537,6 +2015,7 @@
 											</div>
 										</div>
 									</div>
+									
 								<?php
 		                    		}
 		                		} ?>

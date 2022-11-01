@@ -13,7 +13,7 @@
     use App\User;
     use App\AddrCities;    
     use App\CompanyInformation;    
-   
+    $locations = array("Viver Mind \u0026 Body","40.8079468","-73.96654219999999",354,"1660781252-Screenshot_20220316-094557_Instagram.jpg",0,0);
 ?>
 
 
@@ -30,17 +30,48 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
-@if(@$getstarteddata != '')
 <section class="instant-hire" >
 	<div class="instant-banner">
-		<img src="{{url('/public/uploads/discover/thumb/'.@$getstarteddata->image) }}">
-		<h4>{{@$getstarteddata->title}}</h4>
+		<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648909-tennis 1.jpg">
+		<h4>Find A Personal Training Session</h4>
 	</div>
 </section>
-@endif
+
 <section class="instant-hire-activites">
 	<div class="container-fluid">
-		
+		<?php /*?><div class="row">
+			<div class="col-md-12 col-xs-12">
+				<div class="title">
+					<h3>Get Started Fast</h3>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="instant-section-info">
+					<img src="{{ url('public/uploads/discover/thumb/1649648909-tennis 1.jpg')}}" >
+					<h4>Find A Personal Training Session</h4>
+					<p>Book a Private lesson for the activity that interest you.</p>
+					<!-- <button id="84" class="showall-btn btn-position" type="button">Show all</button> -->
+					<a id="84" class="showall-btn btn-position" href="/showall-activity" >Show all</a>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="instant-section-info">
+					<img  src="{{ url('public/uploads/discover/thumb/1649648481-yoga classes.jpg') }}">
+					<h4>Find Ways to Workout</h4>
+					<p>Book classes, seminars, workshops, camps, and more</p>
+					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
+				</div>
+			</div>	
+			<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="instant-section-info">
+					<img src="{{ url('public/uploads/discover/thumb/1649648221-snow ski.jpg')}}">
+					<h4>Stay Active With Fun Things To Do</h4>
+					<p>Turn your weekend of vacation into an adventure</p>
+					<button id="84" class="showall-btn btn-position" type="button">Show all</button>
+				</div>
+			</div>	
+		</div><?php */?>
+		@include('includes.search_category_sidebar')
 		<?php 
 			$start_date = date('Y/m/d');  
 			$date = strtotime($start_date);
@@ -57,9 +88,9 @@
 					</div>
 				</div>
 				<div class="col-md-2">
-					<!--<div class="title-show">
+					<div class="title-show">
 						<a href="{{route('show-all-list')}}">Show All</a>
-					</div>-->
+					</div>
 				</div>
 				<?php
 	                $companyid = $companyname = $serviceid = "";
@@ -83,23 +114,11 @@
 		                        }
 
 		                        if ($service['profile_pic']!="") {
-		                        	if(str_contains($service['profile_pic'], ',')){
-                                        $pic_image = explode(',', $service['profile_pic']);
-                                        if( $pic_image[0] == ''){
-                                           $p_image  = $pic_image[1];
-                                        }else{
-                                            $p_image  = $pic_image[0];
-                                        }
-                                    }else{
-                                        $p_image = $service['profile_pic'];
-                                    }
-
-                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-                                    }else {
-                                       $profilePic = url('/public/images/service-nofound.jpg');
-                                    }
-
+									if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
+		                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
+									} else {
+										$profilePic = '/public/images/service-nofound.jpg';
+									}
 								}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 								
 								$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
@@ -174,12 +193,12 @@
 					<div class="col-md-4">
 						<div class="find-activity">
 							<div class="row">
-								<div class="col-md-4 col-sm-4">
+								<div class="col-md-4">
 									<img src="{{ $profilePic }}" >
 								</div>
-								<div class="col-md-8 col-sm-8 activity-data">
+								<div class="col-md-8 activity-data">
 									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="col-md-6">
 											<div class="activity-inner-data">
 												<i class="fas fa-star"></i>
 												<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
@@ -190,7 +209,7 @@
 												</div>
 											@endif
 										</div>
-										<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="col-md-6">
 											<div class="activity-city">
 												<span>{{$companycity}}, {{$companycountry}}</span>
 											@if(Auth::check())
@@ -244,10 +263,10 @@
 						</div>
 					</div>
 				<?php 
-						} 
-						$i++;
-					}
-				}?>
+							} 
+							$i++;
+						}
+					}?>
 			</div>
 		</div>
 		@endif
@@ -257,11 +276,10 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="title">
-						<h3>{{$name}} Activities</h3>
+						<h3>See All Activities</h3>
 					</div>
 				</div>
 				<div class="col-md-6">
-                <?php if (isset($allactivities) && count($allactivities) > 0) { ?>
 					<div class="direc-right distance-block map-sp">
 						<div class="mapsb">Show Maps
 							<label class="switch" for="maps">
@@ -270,297 +288,441 @@
 							</label>
 						</div>
 					</div>
-                <?php } ?>
 				</div>
 				<div class="col-md-8 leftside-kickboxing kicks">
 					<div class="row" id="activitylist">
-						<?php
-			            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
-							$companycity = $companycountry = $pay_price  = "";
-							$locations = []; 
-			            if (isset($allactivities) && count($allactivities) > 0) {
-			              $servicetype = [];
-			               foreach ($allactivities as $loop => $service) {
-			                  $company = $price = $businessSp = [];
-									$serviceid = $service['id'];
-	                        $sport_activity = $service['sport_activity'];
-	                        $servicetype[$service['service_type']] = $service['service_type'];
-	                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-	                        $company = CompanyInformation::where('id', $service['cid'])->first();
-                           if($company != '') {
-                              $companyid = $company->id;
-                              $companyaddress = $company->address;
-                              $companyname = $company->company_name;
-										$companycity = $company->city;
-										$companycountry = $company->country;
-										$companylogo = $company->logo;
-										$companylat = $company->latitude;
-										$companylon = $company->longitude;
-	                        }
-			                            
-	                        if ($service['profile_pic']!="") {
-									   if(str_contains($service['profile_pic'], ',')){
-								      $pic_image = explode(',', $service['profile_pic']);
-									    	if( $pic_image[0] == ''){
-									      	$p_image  = $pic_image[1];
-									    	}else{
-									       	$p_image  = $pic_image[0];
-									    	}
-									  	}else{
-										  	$pic_image = $service['profile_pic'];
-										   $p_image = $service['profile_pic'];
-										}
-
-										if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-										   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-										}else {
-										   $profilePic = url('/public/images/service-nofound.jpg');
-										}
-									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-									$bookscheduler='';
-									$time='';
-									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-									if(@$bookscheduler[0]['set_duration']!=''){
-										$tm=explode(' ',$bookscheduler[0]['set_duration']);
-										$hr=''; $min=''; $sec='';
-										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-										if($tm[2]!=0){ $min=$tm[2].'min. '; }
-										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-										if($hr!='' || $min!='' || $sec!='')
-										{ $time =  $hr.$min.$sec; } 
-									}
-									$pricearr = [];
-									$price_all = '';
-									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-									if(!empty($price_allarray)){
-										
-										foreach ($price_allarray as $key => $value) {
-											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-												$pricearr[] = $value->adult_weekend_price_diff;
-											}else{
-												$pricearr[] = $value->adult_cus_weekly_price;
-											}
-										}
-
-									}
-									if(!empty($pricearr)){
-										$price_all = min($pricearr);
-									}
-	                    ?>
-						<div class="col-md-4 col-sm-4 col-map-show limitload">
-							<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
-								<div class="kickboxing-block">
-									@if(Auth::check())
-										@php
-                                	$loggedId = Auth::user()->id;
-                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-                  				@endphp
-                        		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-											<div class="inner-owl-slider-hire">
-												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-													$i = 0;
-													if(is_array($pic_image)){
-														foreach($pic_image as $img){
-															$profilePic1 = '';
-															if($img != ''){
-																if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-			                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																}
-				                                 } 
-
-			                                    if($profilePic1 != ''){ ?>
-															<div class="item-inner">
-																<img src="{{$profilePic1}}" class="productImg">
-															</div>
-														<?php }
-														}
-													}else{
-														if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-	                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-		                                    }else {
-		                                       $profilePic1 = url('/public/images/service-nofound.jpg');
-		                                    } ?>
-														<div class="item-inner">
-															<img src="{{$profilePic1}}">
-														</div>
-													<?php } ?>
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654003844-yoga-outside.webp" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>5 (1)</span>
+												</div>
+												<div class="activity-hours">
+													<span>23hr. 30min. </span>
 												</div>
 											</div>
-											<script type="text/javascript">
-												$(document).ready(function() {
-												  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
-													   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-													   items : 1, 
-													   loop:true,
-													   nav:true,
-													   dots: false,
-												  	});
-												});
-											</script>
-											<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavall">	
-												<a class="fav-fun-2" id="serfavall{{$service['id']}}">
-                                    	@if( !empty($favData) )
-                                        	<i class="fas fa-heart"></i>
-													@else
-                                    		<i class="far fa-heart"></i>
-                                    	@endif
-                                     </a>
-	                            	</div>
-										</div>
-                  			@else
-                      			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-											<div class="inner-owl-slider-hire">
-												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-													$i = 0;
-													if(is_array($pic_image)){
-														foreach($pic_image as $img){
-															$profilePic1 = '';
-															if($img != ''){
-																if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-			                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																}
-				                                 } 
-
-			                                    if($profilePic1 != ''){ ?>
-															<div class="item-inner">
-																<img src="{{$profilePic1}}" class="productImg">
-															</div>
-														<?php }
-														}
-													}else{
-														if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-	                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-		                                    }else {
-		                                       $profilePic1 = url('/public/images/service-nofound.jpg');
-		                                    } ?>
-														<div class="item-inner">
-															<img src="{{$profilePic1}}">
-														</div>
-													<?php } ?>
-												</div>
-											</div>
-											<script type="text/javascript">
-												$(document).ready(function() {
-												  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
-													   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-													   items : 1, 
-													   loop:true,
-													   nav:true,
-													   dots: false,
-												  	});
-												});
-											</script>
-	                              <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-	                              @if($price_all != '')	
-	                               	<span>From ${{$price_all}}/Person</span>
-	                              @endif
-	                            </div>
-                  			@endif
-                  			@php
-										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-										$reviews_avg=0;
-										if($reviews_count>0)
-										{	
-											$reviews_avg= round($reviews_sum/$reviews_count,2); 
-										}
-									@endphp
-									
-									<div class="bottom-content">
-										<div class="class-info">
-											<div class="row">
-												<div class="col-md-7 col-xs-7 ratingtime">
-													<div class="activity-inner-data">
-														<i class="fas fa-star"></i>
-														<span>{{$reviews_avg}} ({{$reviews_count}})</span>
-													</div>
-													@if($time != '')
-														<div class="activity-hours">
-															<span>{{$time}}</span>
-														</div>
-													@endif
-												</div>
-												<div class="col-md-5 col-xs-5 country-instant">
-													<div class="activity-city">
-														<span>{{$companycity}}, {{$companycountry}}</span>
-													</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
 												</div>
 											</div>
 										</div>
-										@php
-											$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-											$service_type='';
-											if($service['service_type']!=''){
-												if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-												else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-												else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-											}
-										@endphp
-										<div class="activity-information activites-height">
-											<span><a 
-												@if (Auth::check())  
-				                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-				                                @else 
-				                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-				                                @endif
-				                                    target="_blank">{{ $service['program_name'] }}</a>
-											</span>
-											<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
-										</div>
-										<hr>
-										<div class="all-details">
-											<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
-											<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
-											<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
-										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Summer Yoga</a>
+										</span>
+										<p>Personal Training  | Baseball Lessons</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/3">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
 									</div>
 								</div>
 							</div>
 						</div>
-						<?php
-	                        if($companylat != '' || $companylon  != ''){
-	                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
-	                            array_push($locations, $a);
-							}
-						?>
-						<?php
-                    		}
-                		}else{
-                		?> 
-                		<div class="col-md-4 col-sm-4 col-map-show limitload"><p>There is no activity found</p></div>
-                		<?php } ?>
+						
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654092155-dance3.jpg" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (1)</span>
+												</div>
+												<div class="activity-hours">
+														<span>45min. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Summer Dance</a>
+										</span>
+										<p>Experience  | Dance</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing5">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/5">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+							
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654093746-GettyImages-136131022-56ca8aa35f9b5879cc4e7a73.jpg" class="productImg">
+										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+														<span>2hr. 30min. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Kickboxing Level 1</a>
+										</span>
+										<p>Personal Training  | Boxing</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing6">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/6">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+							
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654183325-badminton-1428046__480.jpg" class="productImg">
+										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+														<span>23hr. 45min. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">gym3</a>
+										</span>
+										<p>Group Classe  | Gymnastics</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing16">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/16">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+							
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654693172-Aerobics-1.jpg" class="productImg">
+										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+													<span>1hr. 30min. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Aerobics 2022</a>
+										</span>
+										<p>Personal Training  | Aerobics</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/17">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+								
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655126994-5.jpg" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+													<span>4hr. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Summer Aerobics</a>
+										</span>
+										<p>Personal Training  | Aerobics</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing20">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/20">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655389294-badminton-1428046__480.jpg" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+													<span>1hr. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">test2adasd</a>
+										</span>
+										<p>Experience  | Beach Vollyball</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing36">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/36">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="/public/images/service-nofound.jpg" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+														<span>1hr. 30min. </span>
+													</div>
+												</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">test badminton1232</a>
+										</span>
+										<p>Personal Training  | Badminton</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing92">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/92">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1660784581-IMG-20220817-WA0023.jpg" class="productImg">
+										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (2)</span>
+												</div>
+													<div class="activity-hours">
+														<span>1hr. </span>
+													</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, US</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">Yoga Personal Training Session with Christiane</a>
+										</span>
+										<p>Personal Training  | Yoga Classes</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing93">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/93">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-4 col-sm-4 col-map-show">
+							<div class="kickboxing-block">
+								<div class="kickboxing-topimg-content">
+									<img src="/public/images/service-nofound.jpg" class="productImg">
+									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
+								</div>
+								<div class="bottom-content">
+									<div class="class-info">
+										<div class="row">
+											<div class="col-md-7 ratingtime">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span>0 (0)</span>
+												</div>
+												<div class="activity-hours">
+														<span>1hr. 30min. </span>
+												</div>
+											</div>
+											<div class="col-md-5 country-instant">
+												<div class="activity-city">
+													<span>New York, United States</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="activity-information activites-height">
+										<span><a href="/userlogin" target="_blank">test11</a>
+										</span>
+										<p>Personal Training  | Badminton</p>
+									</div>
+									<hr>
+									<div class="all-details">
+										<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing95">More Details</a> -->
+										<a class="showall-btn" href="/activity-details/95">More Details</a>
+										<p class="addToCompare" id="compid1" title="Add to Compare">COMPARE SIMILAR +</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						
 					</div>
 				</div>
-
-				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_map mapskick">
-					<div class="mysrchmap" style="display:none;height: 100%;min-height: 700px;">
-						<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
-					</div>
-					<div class="maparea">
-						<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
-					</div>
+			<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_map mapskick">
+				<div class="mysrchmap" style="display:none; position:relative; ">
+					<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 				</div>
-				<div class="pagenation" style="display:none">
-	                <a href="#" class="active">1</a>
-	                <a href="#">2</a>
-	            </div>
-	        </div>
-	        @if(count($allactivities)>0)
-			<?php /*?><div class="row align-self-center">
-				<div class="col-md-6">
-					<div class="text-center ptb-65">
-					<button id="load_more_button" class="showall-btn" type="button" onclick="loadMoreData('{{$name}}');">Load More</button>
-					</div>
+				<div class="maparea">
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 				</div>
-			</div><?php */?>
-			@endif
+			</div>
+			<div class="pagenation" style="display:none">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+            </div>
+        </div>
+		<div class="row align-self-center">
+			<div class="col-md-6">
+				<div class="text-center ptb-65">
+				<button id="" class="showall-btn" type="button">Load More</button>
+				</div>
+			</div>
 		</div>
-	</section>
+	</div>
+</section>
 		<!--<div class="row">
 			<div class="col-md-12">
 				<div class="direc-right distance-block map-sp">
@@ -583,7 +745,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label> Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -906,7 +1068,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label> Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1229,7 +1391,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label> Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1552,7 +1714,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label> Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1867,7 +2029,7 @@
 			</div>
         </div>-->
 
-		<!--<div class="row">
+		<div class="row">
 			<div class="col-md-6">
 				<div class="title">
 					<h3>See all activities</h3>
@@ -1875,7 +2037,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="nav-sliders-activites">
-					<label> Results </label>
+					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="#">Show All </a>
 				</div>
 			</div>
@@ -1888,7 +2050,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-owl" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1925,7 +2100,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-activity" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1962,7 +2150,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-activitys" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1999,7 +2200,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-learn" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2036,7 +2250,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-learn-activites" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2073,7 +2300,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-jeck" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2110,7 +2350,20 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<div class="inner-owl-slider-hire">
+													<div id="owl-demo-yoga" class="owl-carousel owl-theme">
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+														</div>
+														<div class="item-inner">
+															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+														</div>
+													</div>
+												</div>
+												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2144,7 +2397,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="item">
+									<!--<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
 												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
@@ -2180,7 +2433,7 @@
 												</div>
 											</div>
 										</div>
-									</div>
+									</div>-->
 									
 								</div>
 							</div>
@@ -2188,7 +2441,7 @@
 					</div>
 				</div>
 			</div>
-        </div>-->
+        </div>
 		
 		<!--<div class="row align-self-center">
 			<div class="col-md-6">
@@ -2198,6 +2451,7 @@
 			</div> 
 		</div>-->
 
+		
 		
 		<div class="row align-self-center">
 			<div class="col-md-6 col-xs-12">
@@ -2379,7 +2633,6 @@
 	
 <script type="text/javascript">
 	$(document).ready(function () {
-
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
 	        var id = $(this).attr('data-id');
@@ -2436,9 +2689,6 @@
 	});
 
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
-
 <script>
 $(document).ready(function () {
     var locations = @json($locations);
@@ -2535,7 +2785,31 @@ $(document).ready(function () {
 </script>
 <script>
 
-	
+$(document).ready(function () {
+    // Close modal on button click
+    $(".btn-addtocart").click(function () {
+        $(".mykickboxing").modal('hide');
+    });
+});
+
+function viewActreview(aid)
+{
+	var _token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		type: 'POST',
+		url: '{{route("viewActreview")}}',
+		data: {
+			_token: _token,
+			aid: aid
+		},
+
+		success: function (data) {
+			$('#actreviewBody').html(data);
+			$("#actreview").modal('show');
+		}
+	});
+}
+
 </script>
 
 
@@ -2607,7 +2881,6 @@ $(document).ready(function () {
 		@endif	
 	}
 </script>
-
 <script type="text/javascript">
 	function changeactpr(aid,val,part,div,maid)
 	{
@@ -2647,217 +2920,286 @@ $(document).ready(function () {
 			$('#priceid'+maid+aid).val(n[2]);
 		}
 	}
+</script>
 
-	function loadMoreData(name){ 
-		var _token = $('meta[name="csrf-token"]').attr('content');
-		$.ajax({
-			url: "{{route('load-data')}}",
-			type: 'POST',
-			data:{
-				_token: _token,
-				name:name,
-			},
-			success: function (response) {
-				if(response != ''){
-				}
-			}
-		});
-	}
 
+<script>
+jQuery("#carousel-slidertwo").owlCarousel({
+  autoplay: true,
+  rewind: true, /* use rewind if you don't want loop */
+  margin: 20,
+   /*
+  animateOut: 'fadeOut',
+  animateIn: 'fadeIn',
+  */
+  responsiveClass: true,
+  autoHeight: true,
+  autoplayTimeout: 7000,
+  smartSpeed: 800,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 3
+    },
+
+    1024: {
+      items: 3
+    },
+	
+	1200: {
+      items: 5
+    },
+	
+    1366: {
+      items: 5
+    },
+  },
+});
+</script>
+<script>
+jQuery("#carousel-sliderthree").owlCarousel({
+  autoplay: true,
+  rewind: true, /* use rewind if you don't want loop */
+  margin: 20,
+   /*
+  animateOut: 'fadeOut',
+  animateIn: 'fadeIn',
+  */
+  responsiveClass: true,
+  autoHeight: true,
+  autoplayTimeout: 7000,
+  smartSpeed: 800,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 3
+    },
+
+    1024: {
+      items: 3
+    },
+	
+	1200: {
+      items: 5
+    },
+	
+    1366: {
+      items: 5
+    },
+  },
+});
+</script>
+<script>
+jQuery("#carousel-sliderfour").owlCarousel({
+  autoplay: true,
+  rewind: true, /* use rewind if you don't want loop */
+  margin: 20,
+   /*
+  animateOut: 'fadeOut',
+  animateIn: 'fadeIn',
+  */
+  responsiveClass: true,
+  autoHeight: true,
+  autoplayTimeout: 7000,
+  smartSpeed: 800,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 3
+    },
+
+    1024: {
+      items: 3
+    },
+	
+	1200: {
+      items: 5
+    },
+	
+    1366: {
+      items: 5
+    },
+  },
+});
+</script>
+<script>
+jQuery("#carousel-sliderfive").owlCarousel({
+  autoplay: true,
+  rewind: true, /* use rewind if you don't want loop */
+  margin: 20,
+   /*
+  animateOut: 'fadeOut',
+  animateIn: 'fadeIn',
+  */
+  responsiveClass: true,
+  autoHeight: true,
+  autoplayTimeout: 7000,
+  smartSpeed: 800,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 3
+    },
+
+    1024: {
+      items: 3
+    },
+	
+	1200: {
+      items: 5
+    },
+	
+    1366: {
+      items: 5
+    },
+  },
+});
+</script>
+<script>
+jQuery("#carousel-slidersix").owlCarousel({
+  autoplay: true,
+  rewind: true, /* use rewind if you don't want loop */
+  margin: 20,
+   /*
+  animateOut: 'fadeOut',
+  animateIn: 'fadeIn',
+  */
+  responsiveClass: true,
+  autoHeight: true,
+  autoplayTimeout: 7000,
+  smartSpeed: 800,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 3
+    },
+
+    1024: {
+      items: 3
+    },
+	
+	1200: {
+      items: 5
+    },
+	
+    1366: {
+      items: 5
+    },
+  },
+});
 </script>
 
 <script>
-	jQuery("#carousel-slidertwo").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
+$(document).ready(function() {
+ 
+  $("#owl-demo-owl").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
 
-	    600: {
-	      items: 3
-	    },
+$(document).ready(function() {
+ 
+  $("#owl-demo-activity").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
 
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
+$(document).ready(function() {
+ 
+  $("#owl-demo-activitys").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
+
+$(document).ready(function() {
+ 
+  $("#owl-demo-learn").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
+
+$(document).ready(function() {
+ 
+  $("#owl-demo-learn-activites").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
+
+$(document).ready(function() {
+ 
+  $("#owl-demo-jeck").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
+
+$(document).ready(function() {
+ 
+  $("#owl-demo-yoga").owlCarousel({
+    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    items : 1, 
+    loop:true,
+    nav:true,
+    dots: false,
+  });
+ 
+});
+
 </script>
 
-<script>
-	jQuery("#carousel-sliderthree").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
 
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
-</script>
-
-<script>
-	jQuery("#carousel-sliderfour").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
-</script>
-
-<script>
-	jQuery("#carousel-sliderfive").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
-</script>
-
-<script>
-	jQuery("#carousel-slidersix").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
-</script>
 @endsection
