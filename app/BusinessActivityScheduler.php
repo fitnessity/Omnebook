@@ -44,4 +44,39 @@ class BusinessActivityScheduler extends Model
         'end_activity_date'
     ];
     
+    public function business_service()
+    {
+        return $this->belongsTo(BusinessServices::class, 'serviceid');
+    }
+
+    public function get_clean_duration() {
+        $string = "";
+        $duration = date_parse(" +".$this->set_duration);
+
+        if($duration['relative']){
+            foreach($duration['relative'] as $key => $value){
+                if($value > 0){
+                    $string .= " ".$value." ".$key;
+                }
+            }
+        }
+
+        return trim($string);
+    }
+
+    public function price_detail() {
+        $price_details = BusinessPriceDetails::where('serviceid', $this->serviceid)
+                            ->where('category_id', $this->category_id)
+                            ->where('cid', $this->cid)->first();
+
+        if($price_details){
+            if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+                return $price_details['adult_weekend_price_diff'];
+            }else{
+                return $price_details['adult_cus_weekly_price'];
+            }
+        }        
+            
+
+    }
 }
