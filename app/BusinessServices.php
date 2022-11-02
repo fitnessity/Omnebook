@@ -130,6 +130,10 @@ class BusinessServices extends Model
     	}
     }
 
+    public function first_profile_pic(){
+        $pictures = explode(',',$this->profile_pic);
+        return $pictures[0];
+    }
     public function formal_service_types(){
 
 		if( $this->service_type =='individual' ) return 'Personal Training'; 

@@ -221,7 +221,7 @@
 										</div>
 										<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="activity-city">
-												<span>{{$companycity}}, {{$companycountry}}</span>
+												<span style="white-space: nowrap;">{{$companycity}}</span>
 											@if(Auth::check())
 											<?php
 												$loggedId = Auth::user()->id;
@@ -577,7 +577,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
@@ -864,7 +864,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
@@ -1142,7 +1142,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
@@ -1421,7 +1421,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
@@ -1702,7 +1702,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
@@ -1981,7 +1981,7 @@
 															</div>
 															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
 																<div class="activity-city">
-																	<span>{{$companycity}}, {{$companycountry}}</span>
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
 																</div>
 															</div>
 														</div>
