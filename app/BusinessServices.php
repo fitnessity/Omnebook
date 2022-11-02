@@ -103,8 +103,37 @@ class BusinessServices extends Model
     public function businesscompanydetail() {
         return $this->hasMany(BusinessCompanyDetail::class, 'cid');
     }
+
 	public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(BusinessServiceReview::class, 'service_id');
+    }
+
+    public function price_details(){
+    	return $this->hasMany(BusinessPriceDetails::class, 'serviceid');
+    }
+
+    public function reviews_score()
+    {
+    	$reviews_count = $this->reviews()->count();
+    	$reviews_sum = $this->reviews()->sum('rating');
+
+    	if($reviews_count > 0){	
+    		return round($reviews_sum/$reviews_count,2); 
+    	}else{
+    		return 0;
+    	}
+    }
+
+    public function formal_service_types(){
+
+		if( $this->service_type =='individual' ) return 'Personal Training'; 
+		else if( $this->service_type =='classes' )	return 'Group Class'; 
+		else if( $this->service_type =='experience' ) return 'Experience'; 
     }
 }
