@@ -48,22 +48,26 @@ class ActivityController extends Controller {
     		$business_services = $business_services->whereRaw('LOWER(`sport_activity`) LIKE ? ',['%'.trim(strtolower($request->sport_activity)).'%']);	
     	}
 
-    	$filter_time = time();
-		if(date("Y-m-d", strtotime("{$request->date} 00:00:00")) > date("Y-m-d", time())){
-			$filter_time = strtotime("{$request->date} 00:00:00");
+    	$filter_date = new DateTime(date('Y-m-d'));
+    	$shift = 1;
+    	if($request->date && (new DateTime($request->date)) > $filter_date){
+    		$filter_date = new DateTime($request->date);	
+    		$shift = 0;
+    	}
+
+		$days = [];
+		$days[] = new DateTime(date('Y-m-d'));
+
+		for($i = 0; $i<=4; $i++){
+			$d = clone($filter_date);
+			$days[] = $d->modify('+'.($i+$shift).' day');
 		}
 
-
-    	if(date("Y-m-d", $filter_time) <= date("Y-m-d", time())){
-    		$start_date = $filter_time;	
-    	}else{
-    		$start_date = strtotime("-1 days", $filter_time);
-    	}
     	
     	$bookschedulers = BusinessActivityScheduler::with(['business_service'])->whereIn('serviceid', $business_services->pluck('id'))
     												->where('activity_days', 'like', ['%'.date('l').'%'])
-    												->whereRaw("STR_TO_DATE(concat(?,'-',?,'-',?,' ',shift_start),'%Y-%m-%d %H:%i') > ?", 
-    																[date("Y", $filter_time), date("m", $filter_time), date("d", $filter_time), date("Y-m-d H:i", $filter_time)])
+    												->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') > ?", 
+    																[$filter_date->format("Y-m-d"), $filter_date->format("Y-m-d H:i:s")])
     												->orderBy('shift_start')
     												->get();
 
@@ -71,8 +75,8 @@ class ActivityController extends Controller {
 
     	return view('activity.next_8_hours',[
     		'bookschedulers' => $bookschedulers,
-    		'start_date' => $start_date,
-    		'filter_time' => $filter_time,
+    		'filter_date' => $filter_date,
+    		'days' => $days,
     	]);
     }
 
