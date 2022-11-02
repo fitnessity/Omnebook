@@ -4344,7 +4344,22 @@ class LessonController extends Controller {
        
         if (count($result) > 0) {
             foreach ($result as $item) {
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=>$item->profile_pic,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
+                $p_image = '';
+                if ($item->profile_pic != "") {
+                    if(str_contains($item->profile_pic, ',')){
+                        $pic_image = explode(',', $item->profile_pic);
+                        if( $pic_image[0] == ''){
+                           $p_image  = $pic_image[1];
+                        }else{
+                            $p_image  = $pic_image[0];
+                        }
+                    }else{
+                        $p_image = $item->profile_pic;
+                    }
+
+                }
+
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {

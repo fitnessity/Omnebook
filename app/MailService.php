@@ -365,6 +365,21 @@ else{
 
     }
 
+    public static function sendEmailBusinesslist($AllDetail){
+
+        //send mail to Business email address
+        Mail::send('emails.business-listed-message-business', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($AllDetail['company_data']['business_email'],'')->subject('Fitnessity: BUSINESS IS NOW LIVE ON FITNESSITY');
+        });
+
+        //send mail to customer email address
+
+        Mail::send('emails.business-listed-message', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject('Fitnessity: BUSINESS IS NOW LIVE ON FITNESSITY');
+        });
+    }
 
 
     public static function sendEmailFeedback($data)

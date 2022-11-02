@@ -72,6 +72,24 @@ input,select {
             $dataarray =array_unique($dataarray);
             $firstday = date('Y-m-d', strtotime("this week"));
             $UserBookingDetailcount = UserBookingDetail::where('sport',$cservice->id)->where('bookedtime',">=", $firstday)->count();
+            $profilePic = '';
+            if ($cservice['profile_pic']!="") {
+                if(str_contains($cservice['profile_pic'], ',')){
+                    $pic_image = explode(',', $cservice['profile_pic']);
+                    if( $pic_image[0] == ''){
+                       $p_image  = $pic_image[1];
+                    }else{
+                        $p_image  = $pic_image[0];
+                    }
+                }else{
+                    $p_image = $cservice['profile_pic'];
+                }
+
+                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                }
+            }
+
         ?>
         <div class="col-md-12">
             <form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('editBusinessService')}}">
@@ -86,9 +104,11 @@ input,select {
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nw-user-detail">
                                     <div class="row">
                                         <div class="col-lg-1 col-md-1 col-sm-1">	
-                                        	@if(File::exists(public_path("/uploads/profile_pic/thumb/".$cservice->profile_pic)) && !empty($cservice->profile_pic) )
-                                            <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$cservice->profile_pic}}" alt="Avatar" class="avatar">
-                                            @else <?php
+
+                                            @if($profilePic != '')
+                                                <img src="{{ $profilePic }}" alt="Avatar" class="avatar">
+                                            @else 
+                                            <?php
                                            		echo '<div class="youpage-img-text">';
             									$pf=substr($cservice->program_name, 0, 1);
             									echo '<p>'.$pf.'</p></div>';
