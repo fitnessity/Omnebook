@@ -21299,17 +21299,28 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	min-height: 148px;
 	margin-bottom: 0px;
 }
-.modal-img-title h4{
+.modal-img-title a{
 	text-decoration: underline;
 	font-weight: 600;
+	cursor: pointer;
+	font-size: 19px;
+	color: #000;
+}
+.modal-img-title a:hover{
+	color: #ea1515;
 }
 .txt-space{
 	padding-left: 0px;
 }
-.modal-links h3{
+.modal-links a{
 	text-decoration: underline;
 	font-size: 15px;
-	font-weight: 500
+	font-weight: 500;
+	font-size: 15px;
+	color: #000;
+}
+.modal-links a:hover{
+	color: #ea1515;
 }
 .modal-links{
 	text-align: left;
