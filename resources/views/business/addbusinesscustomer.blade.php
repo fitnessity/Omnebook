@@ -128,16 +128,18 @@
 					</div>
 
 					<div class="form-group">
-						<label>Phone Number (optional)</label>
-						<input type="text" class="form-control" name="business_phone" id="b_business_phone" placeholder="Business Phone" value="" onkeyup="addphonenumber();">
+						<label>Phone Number</label>
+						<input type="text" class="form-control" name="business_phone" id="b_business_phone" placeholder="Business Phone" value="" maxlength="16" onkeyup="addphonenumber();">
+						<div class="reviewerro" id="b_business_phoneerro"> </div>
 					</div>
 					<div class="form-group">
 						<label>Website Address (optional)</label>
 						<input type="text" class="form-control" name="business_website" id="business_website" placeholder="Website Name" value="">
 					</div>
 					<div class="form-group">
-						<label>Email (optional)</label>
+						<label>Email </label>
 						<input type="email" class="form-control myemail" name="business_email" id="b_business_email" autocomplete="off" placeholder="Email Address" size="30" maxlength="80" value="" onkeyup="addemail();">
+						<div class="reviewerro" id="b_business_emailerro"> </div>
 					</div>
 					<!-- <div class="form-group">
 						<label>Other Activites Offered (optional)</label>
@@ -176,15 +178,15 @@
 						<div class="map-info">
 							<span>
 								<i class="fas fa-map-marker-alt map-fa"></i>
-								<p id="address_p"></p>
+								<p id="address_p">New York, NY , United States</p>
 							</span>
 							<span>
 								<i class="fas fa-phone-alt map-fa"></i>
-								<p id="phonenum_p"></p>
+								<p id="phonenum_p">(000) 000 - 000</p>
 							</span>
 							<span>
 								<i class="fa fa-envelope map-fa"></i>
-								<p id="email_p"></p>
+								<p id="email_p">example@gmail.com</p>
 							</span>
 						</div>
 					</div>
@@ -247,28 +249,7 @@
 			</div>
 		</form>
 	</div>
-</section>
-
-<div class="modal fade" id="Countermodal">
-    <div class="modal-dialog counter-modal-size">
-        <div class="modal-content">
-           <div class="modal-header"> 
-				<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-			</div>  
-            <div class="modal-body conuter-body" id="Countermodalbody">
-
-            </div>            
-            <div class="modal-footer conuter-body">
-                <button type="button"  class="btn btn-primary rev-submit-btn">I didn't find it, add new listing</button>
-                <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">Go back</button>
-            </div>
-    	</div>                                                                       
-    </div>                                          
-</div>                    
+</section>                    
 
 <!-- The Modal Add Business-->
 <div class="modal fade compare-model" id="location">
@@ -307,6 +288,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <script>
+
     $(document).ready(function() {
       
         var categ = new SlimSelect({
@@ -335,25 +317,44 @@
             processData: false,
             data: formData,
             success: function(data) {
+            	alert('hii');
             	$("#add_details")[0].reset();
             	$('#location').hide();
+            	$('#add_status').val("no");
             	$('.success_msg').css("color", "green");
             	$('.success_msg').html('Successfully Added Business...');
             },
         });
     }
 
+    $(".closebtn").click(function(e) {
+    	$('#add_status').val("no");
+    }); 
+
+    $(".addbusiness-btn-modal").click(function(e) {
+    	$('#add_status').val("no");
+    });
+
 	$("#submitButton").click(function(e) {
+		$('#business_added_by_cust_nameerro').hide(); 
+		$('#emailerro').hide(); 
+		$('#b_companynameerro').hide();
+		$('#b_addresserro').hide();
+		$('#re_titleerro').hide();
+		$('#re_detailerro').hide();
+		$('#b_business_emailerro').hide();
+		$('#b_business_phoneerro').hide();
 		var business_added_by_cust_name = $("#business_added_by_cust_name").val();
 		var email = $("#email").val();
 		var b_companyname = $("#b_companyname").val();
 		var b_address = $("#b_address").val();
-		var short_description = $("#short_description").val();
 		var rating = $("#rating").val();
 		var re_title = $("#re_title").val();
 		var re_detail = $("#re_detail").val();
+		var b_business_email = $("#b_business_email").val();
+		var b_business_phone = $("#b_business_phone").val();
 		
-		if(business_added_by_cust_name !='' && email !='' && b_companyname !='' && b_address !='' && short_description !='' && re_title !='' && re_detail !='')
+		if(business_added_by_cust_name !='' && email !='' && b_companyname !='' && b_address !='' && re_title !='' && re_detail !='' && b_business_phone !='' && b_business_email !='')
         {  
 			var formData = new FormData($("#add_details")[0]);
 	        $.ajax({
@@ -401,12 +402,18 @@
 	        	$('#b_addresserro').html('Please Enter Address'); 
 	        }
 
-	        if(short_description =='')
+	        if(b_business_phone =='')
 	        { 
-	        	$('#short_descriptionerro').show();
-	        	$('#short_descriptionerro').html('Please Enter Short Description'); 
+	        	$('#b_business_phoneerro').show();
+	        	$('#b_business_phoneerro').html('Please Enter Business phone'); 
 	        }
 
+	        if(b_business_email =='')
+	        { 
+	        	$('#b_business_emailerro').show();
+	        	$('#b_business_emailerro').html('Please Enter Business Email'); 
+	        }
+	       
 	        if(re_title =='')
 	        { 
 	        	$('#re_titleerro').show();
@@ -569,10 +576,27 @@
     }
 
     function addphonenumber(){
-    	$('#phonenum_p').html($('#b_business_phone').val());
+    	if($('#b_business_phone').val() == ''){
+			$('#phonenum_p').html('(000) 000 - 000');
+    	}else{
+    		var con = $('#b_business_phone').val();
+	        var curchr = con.length;
+	        if (curchr == 3) {
+	            $("#b_business_phone").val("(" + con + ")" + " ");
+	        } else if (curchr == 9) {
+	            $("#b_business_phone").val(con + " - ");
+	        }
+    		$('#phonenum_p').html($('#b_business_phone').val());
+    	} 
+
+    	
     }
     function addemail(){
-    	$('#email_p').html($('#b_business_email').val());
+    	if($('#b_business_email').val() == ''){
+			$('#email_p').html('example@gmail.com');
+    	}else{
+    		$('#email_p').html($('#b_business_email').val());
+    	} 	
     }
 </script>
 

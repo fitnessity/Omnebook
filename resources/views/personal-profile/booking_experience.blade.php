@@ -67,7 +67,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                           <!--  <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -78,7 +78,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
@@ -97,7 +97,7 @@ use App\UserFamilyDetail;
                                     @php  $i = 1;@endphp
                                     @if(!empty($BookingDetail))
                                     @foreach($BookingDetail as $book_details)
-                                        @php
+                                        <?php
                                             $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
@@ -114,11 +114,31 @@ use App\UserFamilyDetail;
                                                 $b_type =ucfirst($book_details['businessservices']['service_type']); 
                                             }
 
-                                            if($book_details['businessservices']['profile_pic'] == ''){
+                                            if ($book_details['businessservices']['profile_pic']!="") {
+                                                if(str_contains($book_details['businessservices']['profile_pic'], ',')){
+                                                    $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
+                                                    if( $pic_image[0] == ''){
+                                                       $p_image  = $pic_image[1];
+                                                    }else{
+                                                        $p_image  = $pic_image[0];
+                                                    }
+                                                }else{
+                                                    $p_image = $book_details['businessservices']['profile_pic'];
+                                                }
+
+                                                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                                   $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                                                }else {
+                                                   $pro_pic = url('/public/images/service-nofound.jpg');
+                                                }
+
+                                            }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
+
+                                           /* if($book_details['businessservices']['profile_pic'] == ''){
                                                 $pro_pic = asset('/public/images/service-nofound.jpg');
                                             }else{
                                                 $pro_pic = asset('/public/uploads/profile_pic/thumb/'.$book_details['businessservices']['profile_pic']);
-                                            }
+                                            }*/
 
                                             $today = date('Y-m-d');
                                             $SpotsLeftdis = 0;
@@ -130,7 +150,7 @@ use App\UserFamilyDetail;
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages;
-                                        @endphp
+                                        ?>
                                         @if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d'))
                                             <div class="col-md-4 col-sm-6 ">
                                                 <div class="boxes_arts">
@@ -180,7 +200,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>SERVICE TYPE:</span>
-                                                            <span>{{$book_details['businessservices']['select_service_type']}}</span>
+                                                            <span>@if($book_details['businessservices']['select_service_type'] != '') {{$book_details['businessservices']['select_service_type']}} @else — @endif</span>
                                                         </p>
                                                         <p>
                                                             <span>PROGRAM NAME:</span>
@@ -282,7 +302,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                            <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -293,7 +313,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
@@ -328,11 +348,25 @@ use App\UserFamilyDetail;
                                                 $b_type =ucfirst($book_details['businessservices']['service_type']); 
                                             }
 
-                                            if($book_details['businessservices']['profile_pic'] == ''){
-                                                $pro_pic = asset('/public/images/service-nofound.jpg');
-                                            }else{
-                                                $pro_pic = asset('/public/uploads/profile_pic/thumb/'.$book_details['businessservices']['profile_pic']);
-                                            }
+                                            if ($book_details['businessservices']['profile_pic']!="") {
+                                                if(str_contains($book_details['businessservices']['profile_pic'], ',')){
+                                                    $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
+                                                    if( $pic_image[0] == ''){
+                                                       $p_image  = $pic_image[1];
+                                                    }else{
+                                                        $p_image  = $pic_image[0];
+                                                    }
+                                                }else{
+                                                    $p_image = $book_details['businessservices']['profile_pic'];
+                                                }
+
+                                                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                                   $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                                                }else {
+                                                   $pro_pic = url('/public/images/service-nofound.jpg');
+                                                }
+
+                                            }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
 
                                             $today = date('Y-m-d');
                                             $SpotsLeftdis = 0;
@@ -395,7 +429,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>SERVICE TYPE:</span>
-                                                            <span>{{$book_details['businessservices']['select_service_type']}}</span>
+                                                            <span>@if($book_details['businessservices']['select_service_type'] != '') {{$book_details['businessservices']['select_service_type']}} @else — @endif</span>
                                                         </p>
                                                         <p>
                                                             <span>PROGRAM NAME:</span>
@@ -498,7 +532,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                             </div>
-                                            <div class="col-md-2 col-sm-6">
+                                            <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -509,7 +543,7 @@ use App\UserFamilyDetail;
                                                     </select>
                                                     <label for="">Entries</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
@@ -544,11 +578,25 @@ use App\UserFamilyDetail;
                                                 $b_type =ucfirst($book_details['businessservices']['service_type']); 
                                             }
                                            
-                                            if($book_details['businessservices']['profile_pic'] == ''){
-                                                $pro_pic = asset('/public/images/service-nofound.jpg');
-                                            }else{
-                                                $pro_pic = asset('/public/uploads/profile_pic/thumb/'.$book_details['businessservices']['profile_pic']);
-                                            }
+                                            if ($book_details['businessservices']['profile_pic']!="") {
+                                                if(str_contains($book_details['businessservices']['profile_pic'], ',')){
+                                                    $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
+                                                    if( $pic_image[0] == ''){
+                                                       $p_image  = $pic_image[1];
+                                                    }else{
+                                                        $p_image  = $pic_image[0];
+                                                    }
+                                                }else{
+                                                    $p_image = $book_details['businessservices']['profile_pic'];
+                                                }
+
+                                                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                                   $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                                                }else {
+                                                   $pro_pic = url('/public/images/service-nofound.jpg');
+                                                }
+
+                                            }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
 
                                             $today = date('Y-m-d');
                                             $SpotsLeftdis = 0;
@@ -611,7 +659,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>SERVICE TYPE:</span>
-                                                            <span>{{$book_details['businessservices']['select_service_type']}}</span>
+                                                            <span>@if($book_details['businessservices']['select_service_type'] != '') {{$book_details['businessservices']['select_service_type']}} @else — @endif</span>
                                                         </p>
                                                         <p>
                                                             <span>PROGRAM NAME:</span>

@@ -33,7 +33,8 @@
     		<div class="col-sm-6 col-md-7 col-lg-7 ord-details">
     			<h3>Order Details</h3>
                 <?php $item_price=0; 
-    				foreach ($cart['cart_item'] as $item) { 
+    				foreach ($cart['cart_item'] as $item) {
+                    $totalquantity = 0; 
                       /*  print_r($item);exit();*/
                         if(!empty($item['adult']))
                             $totalquantity += $item['adult']['quantity'];

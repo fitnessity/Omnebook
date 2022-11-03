@@ -8866,7 +8866,9 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        }
                     }
                 }
             }
@@ -8923,11 +8925,14 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        }
                     } 
                 }
             }
         }
+        /*print_r($BookingDetail);exit;*/
        return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
     }
 
@@ -8978,13 +8983,13 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        }    
                     }
                 }
             }
         }
-
-/*        print_r(  $BookingDetail);exit;*/
         return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
     }
 
@@ -9002,14 +9007,18 @@ class UserProfileController extends Controller {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services->service_type ==  $pagename_type){
-                    $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                    $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                    $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                    $businessuser = json_decode(json_encode($businessuser), true);
-                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                    $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                } 
+                if($business_services != ''){
+                    if($business_services->service_type ==  $pagename_type){
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        }  
+                    } 
+                }
             }
         }
         
@@ -9037,12 +9046,27 @@ class UserProfileController extends Controller {
 
                 $language_name = BusinessService::where('cid',$book_details['businessservices']['cid'])->first(); 
                 $language = $language_name->languages; 
-                if($book_details['businessservices']['profile_pic'] == ''){
-                    $pro_pic = asset('/public/images/service-nofound.jpg');
-                }else{
-                    $pro_pic = asset('/public/uploads/profile_pic/thumb/'.$book_details['businessservices']['profile_pic']);
-                }
+                if ($book_details['businessservices']['profile_pic'] !="") {
+                    if(str_contains($book_details['businessservices']['profile_pic'] , ',')){
+                        $pic_image = explode(',', $book_details['businessservices']['profile_pic'] );
+                        if( $pic_image[0] == ''){
+                           $p_image  = $pic_image[1];
+                        }else{
+                            $p_image  = $pic_image[0];
+                        }
+                    }else{
+                        $p_image = $book_details['businessservices']['profile_pic'] ;
+                    }
 
+                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                       $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                    }else {
+                       $pro_pic = url('/public/images/service-nofound.jpg');
+                    }
+
+                }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
+
+                
                 $today = date('Y-m-d');
                 $SpotsLeftdis = 0;
                 $SpotsLeft = UserBookingDetail::where('sport', @$book_details['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
@@ -9067,7 +9091,7 @@ class UserProfileController extends Controller {
                                         </p>
                                         <p>
                                             <span>PRICE OPTION:</span>
-                                            <span>'.$BusinessPriceDetails['pay_session'].' Sessions</span>
+                                            <span>'.@$BusinessPriceDetails['pay_session'].' Sessions</span>
                                         </p>
                                         <p>
                                             <span>TOTAL REMAINING:</span>
@@ -9090,7 +9114,7 @@ class UserProfileController extends Controller {
                                         </p>
                                         <p>
                                             <span>TOTAL PRICE</span>
-                                            <span>$'.$BusinessPriceDetails['pay_price'].'</span>
+                                            <span>$'.@$BusinessPriceDetails['pay_price'].'</span>
                                         </p>
                                         
                                         <p>
@@ -9131,7 +9155,7 @@ class UserProfileController extends Controller {
                                         </p>
                                         <p>
                                             <span>MEMBERSHIP TYPE:</span>
-                                            <span>'.$BusinessPriceDetails['membership_type'].'</span>
+                                            <span>'.@$BusinessPriceDetails['membership_type'].'</span>
                                         </p>
                                         <p>
                                             <span>BUSINESS TYPE:</span>
@@ -9197,13 +9221,17 @@ class UserProfileController extends Controller {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services->service_type == $pagename_type){
-                    $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                    $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                    $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                    $businessuser = json_decode(json_encode($businessuser), true);
-                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                    $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                if($business_services != ''){
+                    if($business_services->service_type == $pagename_type){
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        } 
+                    }
                 } 
             }
         }
@@ -9231,11 +9259,27 @@ class UserProfileController extends Controller {
 
                 $language_name = BusinessService::where('cid',$book_details['businessservices']['cid'])->first(); 
                 $language = $language_name->languages; 
-                if($book_details['businessservices']['profile_pic'] == ''){
-                    $pro_pic = asset('/public/images/service-nofound.jpg');
-                }else{
-                    $pro_pic = asset('/public/uploads/profile_pic/thumb/'.$book_details['businessservices']['profile_pic']);
-                }
+
+                if ($book_details['businessservices']['profile_pic'] !="") {
+                    if(str_contains($book_details['businessservices']['profile_pic'] , ',')){
+                        $pic_image = explode(',', $book_details['businessservices']['profile_pic'] );
+                        if( $pic_image[0] == ''){
+                           $p_image  = $pic_image[1];
+                        }else{
+                            $p_image  = $pic_image[0];
+                        }
+                    }else{
+                        $p_image = $book_details['businessservices']['profile_pic'] ;
+                    }
+
+                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                       $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                    }else {
+                       $pro_pic = url('/public/images/service-nofound.jpg');
+                    }
+
+                }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
+
                 $today = date('Y-m-d');
                 $SpotsLeftdis = 0;
                 $SpotsLeft = UserBookingDetail::where('sport', @$book_details['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
@@ -9262,7 +9306,7 @@ class UserProfileController extends Controller {
                 
                 $bussiness_name = $book_details['businessuser']['company_name'];
                 $oid_num =  $data->order_id;
-
+                $data1 = $date2 = '';
                 if($bussiness_name == $request->text ||  $oid_num == $request->text || ($request->text == '' && $chk == 1)) {
                     $html.='<div class="col-md-4 col-sm-6">
                                     <div class="boxes_arts">
@@ -9278,7 +9322,7 @@ class UserProfileController extends Controller {
                                             </p>
                                             <p>
                                                 <span>PRICE OPTION:</span>
-                                                <span>'.$BusinessPriceDetails['pay_session'].' Sessions</span>
+                                                <span>'.@$BusinessPriceDetails['pay_session'].' Sessions</span>
                                             </p>
                                             <p>
                                                 <span>TOTAL REMAINING:</span>
@@ -9295,13 +9339,13 @@ class UserProfileController extends Controller {
                                                 $data1 = date('h:ia', strtotime( @$servicedata['shift_start'] )); 
                                             }
                                             if(@$servicedata['shift_end']!=''){
-                                                       $date2 = ' to '.date('h:ia', strtotime( @$servicedata['shift_end'] )); 
-                                                    }
+                                               $date2 = ' to '.date('h:ia', strtotime( @$servicedata['shift_end'] )); 
+                                            }
                                             $html.=''. $data1.''.$date2.'</span>
                                             </p>
                                             <p>
                                                 <span>TOTAL PRICE</span>
-                                                <span>$'.$BusinessPriceDetails['pay_price'].'</span>
+                                                <span>$'.@$BusinessPriceDetails['pay_price'].'</span>
                                             </p>
                                             
                                             <p>
@@ -9342,7 +9386,7 @@ class UserProfileController extends Controller {
                                             </p>
                                             <p>
                                                 <span>MEMBERSHIP TYPE:</span>
-                                                <span>'.$BusinessPriceDetails['membership_type'].'</span>
+                                                <span>'.@$BusinessPriceDetails['membership_type'].'</span>
                                             </p>
                                             <p>
                                                 <span>BUSINESS TYPE:</span>
