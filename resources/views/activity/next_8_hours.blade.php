@@ -401,22 +401,21 @@
 	<div class="container">
 		<div class="row">
 
-			<?php
 
-			foreach($days as $date){
-				$hint_class = ($filter_date == $date) ? 'pairets' : 'pairets-inviable';
-			?>
+			@foreach ($days as $date)
+				@php
+					$hint_class = ($filter_date->format('Y-m-d') == $date->format('Y-m-d')) ? 'pairets' : 'pairets-inviable';
+				@endphp
 			
 				<div class="col-md-2 col-sm-2 col-xs-6">
+
+
 					<div class="{{$hint_class}}">
 						<!-- <div class="pairets-inviable"> -->
 						<a href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d')])}}" class="calendar-btn">{{$date->format("D d")}}</a>
 					</div>
 				</div>
-			<?php
-			}
-			?>
-
+			@endforeach
 		</div>
 	
 		<div class="row">
@@ -436,57 +435,57 @@
 						</div>
 					</div>
 				</div>
-				<?php 
-				foreach($bookschedulers as $bookscheduler){
-					if($bookscheduler->price_detail() > 0){
-				
-				?>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="border-list">
-								<div class="row">
-									<div class="col-md-2 col-xs-12 col-sm-2">
-										<div class="table-inner-data">
-											<span class="mg-time"> {{date('h:i A', strtotime($bookscheduler['shift_start']))}} </span>
-											<div class="time-min">
-												<span> {{$bookscheduler->get_clean_duration()}} </span>
+				@foreach ($bookschedulers as $bookscheduler)
+					@if ($bookscheduler->price_detail() > 0)
+						<div class="row">
+							<div class="col-md-12">
+								<div class="border-list">
+									<div class="row">
+										<div class="col-md-2 col-xs-12 col-sm-2">
+											<div class="table-inner-data">
+												<span class="mg-time"> {{date('h:i A', strtotime($bookscheduler['shift_start']))}} </span>
+												<div class="time-min">
+													<span> {{$bookscheduler->get_clean_duration()}} </span>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-6 col-xs-12 col-sm-5">
-										<div class="table-inner-data-sec">
-											<img src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" alt="Fitnessity">
-											<div class="p-name">
-												<h3>{{$bookscheduler->business_service->program_name}}</h3>
-												<p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-												<!--<span> Start in 4 min </span>-->
+										<div class="col-md-6 col-xs-12 col-sm-5">
+											<div class="table-inner-data-sec">
+												<img src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" alt="Fitnessity">
+												<div class="p-name">
+													<h3>{{$bookscheduler->business_service->program_name}}</h3>
+													<p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+													@if ($bookscheduler->is_start_in_one_hour($filter_date))
+														<span> Starting in {{$bookscheduler->time_left($filter_date)->format('%i minutes')}} </span>
+													@endif
+													
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-1 col-xs-3 col-sm-2">
-										<div class="star-rest">
-											<div class="activity-inner-data">
-												<i class="fas fa-star"></i>
-												<span> {{$bookscheduler->business_service->reviews_score()}} </span>
+										<div class="col-md-1 col-xs-3 col-sm-2">
+											<div class="star-rest">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span> {{$bookscheduler->business_service->reviews_score()}} </span>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-1 col-xs-3 col-sm-1">
-										<div class="table-price">
-											<span> ${{$bookscheduler->price_detail()}} </span>
+										<div class="col-md-1 col-xs-3 col-sm-1">
+											<div class="table-price">
+												<span> ${{$bookscheduler->price_detail()}} </span>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-2 col-xs-6 col-sm-2">
-										<div class="join-btn">
-											<a class="showall-btn btn-position" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+										<div class="col-md-2 col-xs-6 col-sm-2">
+											<div class="join-btn">
+												<a class="showall-btn btn-position" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				<?php 
-				}} ?>
+					@endif
+				@endforeach
 				
 			</div>
 		</div>

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 class BusinessActivityScheduler extends Model
 {
@@ -64,6 +65,32 @@ class BusinessActivityScheduler extends Model
         return trim($string);
     }
 
+
+    public function time_left($current_datetime){
+        
+        $datetime1 = $current_datetime;
+        $datetime2 = new DateTime($current_datetime->format("Y-m-d ").$this->shift_start);
+
+        return $datetime2->diff($datetime1);
+    }
+
+    public function time_left_seconds($current_datetime){
+        
+        $datetime1 = $current_datetime;
+        $datetime2 = new DateTime($current_datetime->format("Y-m-d ").$this->shift_start);
+
+
+        return $datetime2->getTimestamp() - $datetime1->getTimestamp();
+    }
+
+    public function is_start_in_one_hour($current_datetime) {
+        if(intval($this->time_left_seconds($current_datetime)) < 3600){
+            return true;
+        }
+
+        return false;
+    }
+
     public function price_detail() {
         $price_details = BusinessPriceDetails::where('serviceid', $this->serviceid)
                             ->where('category_id', $this->category_id)
@@ -75,8 +102,6 @@ class BusinessActivityScheduler extends Model
             }else{
                 return $price_details['adult_cus_weekly_price'];
             }
-        }        
-            
-
+        }           
     }
 }

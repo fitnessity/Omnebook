@@ -48,7 +48,7 @@ class ActivityController extends Controller {
     		$business_services = $business_services->whereRaw('LOWER(`sport_activity`) LIKE ? ',['%'.trim(strtolower($request->sport_activity)).'%']);	
     	}
 
-    	$filter_date = new DateTime(date('Y-m-d'));
+    	$filter_date = new DateTime();
     	$shift = 1;
     	if($request->date && (new DateTime($request->date)) > $filter_date){
     		$filter_date = new DateTime($request->date);	
