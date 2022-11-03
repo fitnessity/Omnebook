@@ -20027,6 +20027,7 @@ input#zipcode {
 	font-size: 17px;
 	font-weight: 600;
 }
+
 .sports-list{
 	text-align: center;
 	border: 1px solid #d8d8d8;
@@ -20034,6 +20035,23 @@ input#zipcode {
 	padding: 6px 18px;
 	margin-bottom: 15px;
 }
+.sports-list:hover a, .sports-list.active a{
+    color: white;
+}
+
+.sports-list:hover, .sports-list.active{
+    background: #f91942;
+    border: 1px solid #f91942;
+    color:  white;
+    /*text-align: center;
+    margin-bottom: 20px;
+    background: #f91942;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 20px;
+    margin-top: 20px;*/
+}
+
 .sports-list i{
 	margin-left: 15px;
 }

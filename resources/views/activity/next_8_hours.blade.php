@@ -436,7 +436,11 @@
 					</div>
 				</div>
 				@foreach ($bookschedulers as $bookscheduler)
-					@if ($bookscheduler->price_detail() > 0)
+					@php
+						$spot_left = $bookscheduler->spots_left($filter_date);
+					@endphp
+					@if ($bookscheduler->price_detail() > 0 && $spot_left > 0)
+						
 						<div class="row">
 							<div class="col-md-12">
 								<div class="border-list">
@@ -454,7 +458,8 @@
 												<img src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" alt="Fitnessity">
 												<div class="p-name">
 													<h3>{{$bookscheduler->business_service->program_name}}</h3>
-													<p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+													<p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}
+														</p>
 													@if ($bookscheduler->is_start_in_one_hour($filter_date))
 														<span> Starting in {{$bookscheduler->time_left($filter_date)->format('%i minutes')}} </span>
 													@endif

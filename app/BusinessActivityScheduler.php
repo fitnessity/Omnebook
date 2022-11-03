@@ -50,6 +50,11 @@ class BusinessActivityScheduler extends Model
         return $this->belongsTo(BusinessServices::class, 'serviceid');
     }
 
+    public function booking_details()
+    {
+        return $this->hasMany(UserBookingDetail::class, 'act_schedule_id');
+    }
+
     public function get_clean_duration() {
         $string = "";
         $duration = date_parse(" +".$this->set_duration);
@@ -89,6 +94,26 @@ class BusinessActivityScheduler extends Model
         }
 
         return false;
+    }
+
+    public function spots_left($current_time){
+
+        $user_booking_details = UserBookingDetail::where('act_schedule_id', $this->id)->whereDate('bookedtime', '=', $current_time->format("Y-m-d"))->get();
+
+
+        $totalquantity = 0;
+
+        foreach($user_booking_details as $user_booking_detail){
+            $item = json_decode($user_booking_detail['qty'],true);
+            if($item['adult'] != '')
+                $totalquantity += $item['adult'];
+            if($item['child'] != '')
+                $totalquantity += $item['child'];
+            if($item['infant'] != '')
+                $totalquantity += $item['infant'];
+        }
+        
+        return intval($this->spots_available) - $totalquantity;
     }
 
     public function price_detail() {
