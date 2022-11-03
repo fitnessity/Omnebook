@@ -156,16 +156,16 @@ class MailService
         if($booking['booking_type'] == "direct") {
 
             // send mail to customer
-$f = $family->whoistraining;
-foreach($f as $value){
-if($value != 'me'){
- $u = UserFamilyDetail::where('user_id',$user['id'])->where('email',$value)->first();
-}
-else{
-    $u = User::where('id',$user['id'])->first();
-    $u['first_name'] = $u['firstname'];
-    $u['last_name'] = $u['lastname'];
-}
+            $f = $family->whoistraining;
+            foreach($f as $value){
+            if($value != 'me'){
+             $u = UserFamilyDetail::where('user_id',$user['id'])->where('email',$value)->first();
+            }
+            else{
+                $u = User::where('id',$user['id'])->first();
+                $u['first_name'] = $u['firstname'];
+                $u['last_name'] = $u['lastname'];
+            }
 
             Mail::send('emails.booking-request', ['user' => $u, 'booking'=> $booking, 'professional' => $professional, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $professional,$u,$value) {
                 
@@ -181,7 +181,7 @@ else{
 
             });
 
-}
+        }
 
             // send mail to professional if it is direct hire
 
@@ -313,6 +313,15 @@ else{
 
     }
 
+    public static function sendEmailclaimvarification($details){
+        // echo $details['email'];exit();
+        Mail::send('emails.business-claim-varification', ['details' => $details], function ($m) use ($details) {
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($details['email'])->subject('Fitnessity: Verification code for claiming business');
+        });
+    }
+
+
 	public static function sendEmailBookingConfirmnew($BookingDetail)
     {
         $sportsRepo = new SportsRepository;
@@ -366,24 +375,34 @@ else{
     }
 
     public static function sendEmailBusinesslist($AllDetail){
-
+        
         //send mail to Business email address
         Mail::send('emails.business-listed-message-business', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $comname = 'Fitnessity: '.@$AllDetail["company_data"]["company_name"].' Congratulations! Your business is now live on Fitnessity';
             $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to($AllDetail['company_data']['business_email'],'')->subject('Fitnessity: BUSINESS IS NOW LIVE ON FITNESSITY');
+            $m->to($AllDetail['company_data']['business_email'],'')->subject($comname);
         });
 
         //send mail to customer email address
 
         Mail::send('emails.business-listed-message', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $comname = 'Fitnessity: '.strtoupper(@$AllDetail["company_data"]["company_name"]).' IS NOW LIVE ON FITNESSITY';
             $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject('Fitnessity: BUSINESS IS NOW LIVE ON FITNESSITY');
+            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject($comname);
+        });
+    }
+
+
+    public static function sendEmailafterclaimed($AllDetail){
+        Mail::send('emails.business-unclaim-to-claim-success', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $comname = 'Fitnessity: CONGRATULATIONS '.strtoupper(@$AllDetail["company_data"]["company_name"]).' YOU ARE NOW LIVE ON FITNESSITY';
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject($comname);
         });
     }
 
 
     public static function sendEmailFeedback($data)
-
     {
 
         //send mail to user

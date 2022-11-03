@@ -850,6 +850,17 @@ $(function() {
                 $('#error_check').show();
                 return false;
             }
+
+            @if(!Auth::user())
+            alert('hii');
+                $.ajax({
+                   type:'GET',
+                   url:'/addcheckoutsession',
+                   data:'_token = <?php echo csrf_token() ?>',
+                   success:function(data) {
+                   }
+                });
+            @endif
         });
     });
 $(function () {

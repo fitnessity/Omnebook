@@ -22,6 +22,8 @@ use App\Http\Controllers\ActivityController;
     return "success";
 });*/
 
+Route::get('/addcheckoutsession','HomeController@addcheckoutsession');
+
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
 Route::get('/set-unset-session-business-welcome/{check?}','HomeController@set_unset_session_business_welcome');
 Route::get('/set-session-for-claim/{cid?}/{status?}','HomeController@set_session_for_claim');

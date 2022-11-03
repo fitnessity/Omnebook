@@ -146,8 +146,8 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->get();
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
+    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
+    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 
     // print_r($bus_schedule);
@@ -282,11 +282,13 @@ input:disabled{
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
 
     $pro_pic = $service->profile_pic;
-    if(str_contains($pro_pic, ',')){
-        $pro_pic1 = explode(',', $pro_pic);
-    }else{
-        $pro_pic1 = $pro_pic;
-    }
+	if(!empty($pro_pic)){
+		if(str_contains($pro_pic, ',')){
+			$pro_pic1 = explode(',', $pro_pic);
+		}else{
+			$pro_pic1 = $pro_pic;
+		}
+	}
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
