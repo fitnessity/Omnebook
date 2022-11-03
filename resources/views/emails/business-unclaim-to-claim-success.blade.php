@@ -19,27 +19,6 @@
                                             <!-- Email Body : BEGIN -->
                                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
                                                 <!-- BEGIN -->
-                                                <!-- <tr>
-                                                    <td style="padding:0px 0px 0px">
-                                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                            <tr>
-                                                                <td style="text-align: center; background-color: #e4e4e4;">
-                                                                    <div>
-                                                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                                            <tr>
-                                                                                <td style="text-align: left; padding: 15px; font-size: 13px;">SUBJECT: CONGRATULATIONS YOU ARE NOW LIVE ON FITNESSITY
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr> -->
-                                                <!-- END -->
-                                                
-                                                <!-- BEGIN -->
                                                 <tr>
                                                     <?php $url1 = $url.'/public/img/bg.png'; ?>
                                                     <td style="text-align: center; background-image: url({{$url1}}); background-repeat: no-repeat; background-position: center; padding: 15px 15px 25px;;">
@@ -125,42 +104,16 @@
                                                 <!-- END -->
                                                 
                                                 <!-- BEGIN -->
-                <tr>
-                    <td style=" padding:0px 10px 23px; text-align: center" align="center">
-                        <h6 style="font-size: 15px; font-weight: 550; color: #000;margin-bottom: 0px;margin-top: 0px;">Your First Review on Fitnessity</h6>
-                        <tr>
-                            <td style="text-align: left; padding: 0px 10px 0px 10px;">
-                                <div style="display:inline-block; width:10%">
-                                    <img src="{{$url}}/public/uploads/profile_pic/thumb/{{@$AllDetail['user']['profile_pic']}}" width="225"  alt="logo" border="0" style="height: 45px; border-radius: 100%; width: 45px;">
-                                </div>
-                                <div style="display:inline-block; width:60%; vertical-align: bottom;">
-                                    <h3 style="font-size:15px; font-weight: 400; margin-top:0px; margin-bottom:0px;"> {!! @$AllDetail['user']['firstname'] !!} {!! @$AllDetail['user']['lastname'] !!} 
-                                    <img src="{{$url}}/public/img/star.png" width="225"  alt="logo" border="0" style="height: 17px; border-radius: 100%; width: 17px;">
-                                    <span style="color: #ea1515; font-size: 15px; font-weight: 500;">{!! @$AllDetail['review']['rating'] !!}</span>
-                                    </h3>
-                                    <h3 style="font-size:11px; font-weight: 400; margin-top:0px; color: #7c7c7c;"><?php echo date('d M-Y', strtotime(@$AllDetail['review']['created_at'])); ?></h3>
-                                </div>
-                                <p style="font-size: 14px; margin-top: 2px; margin-bottom: 5px;">{!! @$AllDetail['review']['title'] !!}</p> 
-                                <p style="font-size: 13px; margin-top: 2px; margin-bottom: 10px; font-weight: 300;">{!! @$AllDetail['review']['review'] !!}</p>
-
-                                <?php
-                                    if( !empty(@$AllDetail['review']['images']) ){
-                                        if(str_contains(@$AllDetail['review']['images'], '|')){
-                                            $rimg=explode('|',@$AllDetail['review']['images']);
-                                            foreach($rimg as $img){ ?>
-                                                <img src="{{ $url}}/public/uploads/review/{{$img}}" width="225"  alt="logo" border="0" style="height: 45px; border-radius: 16%; width: 45px;">
-                                                <?php
-                                            }
-                                        }else{ ?>
-                                            <img src="{{ $url}}/public/uploads/review/{{@$AllDetail['review']['images']}}" width="225"  alt="logo" border="0" style="height: 45px; border-radius: 16%; width: 45px;">
-                                       <?php }
-                                    }
-                                ?>
-                                
-                            </td>
-                        </tr>
-                    </td>
-                </tr>
+                                                <tr>
+                                                    <td style=" padding:0px 10px 23px; text-align: center" align="center">
+                                                        <h6 style="font-size: 15px; font-weight: 550; color: #000;margin-bottom: 0px;margin-top: 0px;">Your First Review on Fitnessity</h6>
+                                                        <tr>
+                                                            <td style="text-align: left; padding: 0px 10px 0px 10px;">
+                                                                <p style="font-size: 14px; margin-top: 2px; margin-bottom: 5px;">No reviews added yet</p> 
+                                                            </td>
+                                                        </tr>
+                                                    </td>
+                                                </tr>
                                                 <!-- END -->
                                                 
                                                 <!-- BEGIN -->
