@@ -203,7 +203,7 @@ use App\UserFamilyDetail;
 
 																		</tr>
 
-																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="https://development.fitnessity.co/personal-profile/booking-info">VIEW BOOKINGS</a></td></tr>
+																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="{{$url}}/personal-profile/booking-info">VIEW BOOKINGS</a></td></tr>
 
                                                                     </table>
 
@@ -796,7 +796,7 @@ use App\UserFamilyDetail;
 
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px 0px;; text-align: left; height: 120px;">
 
-																<span style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="https://development.fitnessity.co/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:15px;">CLIENT INFO</span>
+																<span style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="https://dev.fitnessity.co/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:15px;">CLIENT INFO</span>
 
                                                                 <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Booking made by: {{ @$BookingDetail['user']['firstname'] }} {{ @$BookingDetail['user']['lastname'] }}</h2>
 

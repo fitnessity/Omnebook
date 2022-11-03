@@ -15,6 +15,8 @@ use Input;
 use Image;
 use File;
 use DB;
+use Config;
+use App\MailService;
 use App\User;
 use App\UserService;
 use App\UserProfessionalDetail;
@@ -1162,7 +1164,7 @@ class BusinessController extends Controller
 
     public function add_business_customer(Request $request)
     {   
-        /*print_r($request->all());exit;*/
+       /* print_r($request->all());exit;*/
         $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
 
         if($request->add_status == 'yes'){
@@ -1195,7 +1197,7 @@ class BusinessController extends Controller
             if($comdata->zip_code != ''){
                 $address .= $comdata->zip_code;
             }
-
+            $redlink = str_replace(" ","-",$comdata->company_name)."/".$comdata->id;
            /* $var = "matched";*/
             $var = '<div class="row">
                             <div class="col-md-4">
@@ -1205,15 +1207,14 @@ class BusinessController extends Controller
                             </div>
                             <div class="col-md-6 txt-space">
                                 <div class="modal-img-title">
-                                    <h4>'.$comdata->company_name.'</h4>
+                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'">'.$comdata->company_name.'</a>
                                     <p>'.$address.'</p>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="modal-links">
-                                    <h3>Write a Review</h3>
+                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'#reviews">Write a Review</a>
                                     <input type="file" name="rimg[]" id="files" class="hidden" multiple="multiple">
-                                    <label for="files" style="text-decoration: underline;font-weight: 500">Add a Photo</label> 
                                 </div>
                             </div>
                         </div>';
@@ -1314,8 +1315,24 @@ class BusinessController extends Controller
                 "ip" => $ip,
             );
 
-            BusinessReview::create($createbus_review);
+            $bus_re = BusinessReview::create($createbus_review);
             $var = "added";
+
+            $detail_data_com=  [];
+            $detail_data_rev =  [];
+            $detail_data_user =  [];
+            $detail_data_com['company_data'] = CompanyInformation::where('id',$data->id)->first();
+            $det_com  = json_decode(json_encode($detail_data_com), true); 
+
+            $detail_data_rev['review'] = BusinessReview::where('id',$bus_re->id)->first();
+            $det_rev  = json_decode(json_encode($detail_data_rev), true); 
+
+            $detail_data_user['user'] = User::where('id',Auth::user()->id)->first();
+            $det_user  = json_decode(json_encode($detail_data_user), true); 
+
+            $allDetail = array_merge($det_com,$det_rev,$det_user);
+            /*print_r($allDetail);exit;*/
+            MailService::sendEmailBusinesslist($allDetail);
         }
 
         echo $var;

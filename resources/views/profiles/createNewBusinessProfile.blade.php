@@ -17012,7 +17012,7 @@ $(document).ready(function(){
 
         } else if (curchr == 9) {
 
-            $("#b_business_phone").val(con + "-");
+            $("#b_business_phone").val(con + " - ");
 
         }
 
