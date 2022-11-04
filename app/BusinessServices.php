@@ -139,7 +139,6 @@ class BusinessServices extends Model
     }
 
     public function first_profile_pic(){
-        var_dump($this->profile_pic);
         $pictures = explode(',',$this->profile_pic);
         return $pictures[0];
     }
