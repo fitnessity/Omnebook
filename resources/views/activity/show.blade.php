@@ -146,8 +146,8 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->get();
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
+    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
+    	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 
     // print_r($bus_schedule);
@@ -176,7 +176,7 @@ input:disabled{
 	            $date_now = new DateTime();
 	            $expdate = new DateTime($expdate);
 	            if($SpotsLeftdis != 0){
-	            	if($date_now <= $date_now){
+	            	if($date_now <= $expdate){
 		                if(@$data['shift_start']!=''){
 		                    $start = date('h:i a', strtotime( $data['shift_start'] ));
 		                    $timedata .= $start;
@@ -197,10 +197,9 @@ input:disabled{
 		                    	$time = $hr.$min.$sec; 
 		                        $timedata .= ' / '.$time;
 		                    } 
-		                  
 		                }
+		                $i++;
 		            }
-		            $i++;
 	            }
            	}
         }
@@ -279,14 +278,16 @@ input:disabled{
     }
 
 
-    $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->limit(2)->orderBy('id', 'DESC')->get();
+    $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
 
     $pro_pic = $service->profile_pic;
-    if(str_contains($pro_pic, ',')){
-        $pro_pic1 = explode(',', $pro_pic);
-    }else{
-        $pro_pic1 = $pro_pic;
-    }
+	if(!empty($pro_pic)){
+		if(str_contains($pro_pic, ',')){
+			$pro_pic1 = explode(',', $pro_pic);
+		}else{
+			$pro_pic1 = $pro_pic;
+		}
+	}
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
@@ -575,7 +576,7 @@ input:disabled{
 
 									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
 
-									<form method="post" action="/addtocart" id="{{$serviceid}}">
+									<form method="post" action="{{route('addtocart')}}" id="{{$serviceid}}">
 										@csrf
 										<input type="hidden" name="pid" value="{{$serviceid}}"  />
 										<input type="hidden" name="persontype" id="persontype" value="adult"/>
@@ -998,6 +999,7 @@ input:disabled{
 	 						<?php
 							if (!empty($activities_search)) { 
 								$companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
+								$i=1;
 								foreach ($activities_search as  $service) {
 									$company = $price = $businessSp = [];
 									$serviceid = $service['id'];
@@ -1013,11 +1015,23 @@ input:disabled{
 			                        }
 			                       
 			                        if ($service['profile_pic']!="") {
-										if(File::exists(public_path("/uploads/profile_pic/thumb/" . $service['profile_pic']))) {
-			                            	$profilePic = url('/public/uploads/profile_pic/thumb/'.$service['profile_pic']);
-										} else {
-											$profilePic = '/public/images/service-nofound.jpg';
-										}
+			                        	if(str_contains($service['profile_pic'], ',')){
+	                                        $pic_image = explode(',', $service['profile_pic']);
+	                                        if( $pic_image[0] == ''){
+	                                           $p_image  = $pic_image[1];
+	                                        }else{
+	                                            $p_image  = $pic_image[0];
+	                                        }
+	                                    }else{
+	                                        $p_image = $service['profile_pic'];
+	                                    }
+
+	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+	                                    }else {
+	                                       $profilePic = url('/public/images/service-nofound.jpg');
+	                                    }
+
 									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 									
 									$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
@@ -1063,6 +1077,8 @@ input:disabled{
 										if($hr!='' || $min!='' || $sec!='')
 										{ $time =  $hr.$min.$sec; } 
 									}
+									if($i<3){
+										if($time != ''){
 							?>
 								<div class="col-md-12 col-sm-8 col-xs-12 ">
 									<div class="find-activity">
@@ -1112,7 +1128,7 @@ input:disabled{
 						                                <?php }?>
 						                                    target="_blank">{{ $service['program_name'] }}</a></span>
 													<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-													<a class="showall-btn" href="/activity-details/{{$service['id']}}">More Details</a>
+													<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">More Details</a>
 												</div>
 												@if($price_all != '')
 													<div>
@@ -1124,8 +1140,10 @@ input:disabled{
 									</div>
 								</div>
 							<?php 
-								
+									$i++;
+										}
 									}
+								}
 								}else{ ?>
 									<div class="col-md-4">
 										<p class="noactivity"> There Is No Activity</p>

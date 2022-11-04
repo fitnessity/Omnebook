@@ -19,7 +19,7 @@
                                         <!-- Email Body : BEGIN -->
                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
                                             <!-- BEGIN -->
-                                            <tr>
+                                           <!--  <tr>
                                                 <td style="padding:0px 0px 0px">
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
@@ -27,7 +27,7 @@
                                                                 <div>
                                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                         <tr>
-                                                                            <td style="text-align: left; padding: 15px; font-size: 13px;">Subject: <?php echo strtoupper(@$AllDetail['company_data']['company_name']); ?> IS NOW LIVE ON FITNESSITY
+                                                                            <td style="text-align: left; padding: 15px; font-size: 13px;">Subject:  IS NOW LIVE ON FITNESSITY
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -36,7 +36,7 @@
                                                         </tr>
                                                     </table>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                             <!-- END -->
                                             
                                             <!-- BEGIN -->
@@ -50,7 +50,7 @@
                                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                         <tr>
                                                                             <td style="text-align: center; padding: 25px 0px 45px 0px;">
-                                                                                <img src="{{$url1}}/img/logo.png" width="225"  alt="logo" border="0" style="height: auto;">
+                                                                                <img src="{{$url}}/images/logo1.png" width="225"  alt="logo" border="0" style="height: auto;">
                                                                             </td>
                                                                         </tr>
                                                                         <?php $redlink = str_replace(" ","-",@$AllDetail['company_data']['company_name'])."/".@$AllDetail['company_data']['id']; ?>
@@ -79,7 +79,7 @@
                                                                                 <p style="font-weight: 500; font-size: 23px; color: #000000; margin: 10px 0px 10px 0px">Greetings  {!! @$AllDetail['user']['firstname'] !!} {!! @$AllDetail['user']['lastname'] !!}  </p>
                                                                                 <p style="font-weight: 400; font-size: 14px; color: #000000; margin-bottom: 10px; margin-top: 0px; text-align: left;">This is to notify you that {{@$AllDetail['company_data']['company_name']}} is officially live on Fitnessity.</p>
                                                                                 
-                                                                                <p style="font-weight: 400; font-size: 14px; color: #000000;margin-bottom: 10px; margin-top: 0px; text-align: left;">Click <a style="color: #1e43d7; text-decoration: underline;"  href="{{$url}}/claim-your-business">here</a> to view it yourself. Your contribution helps others learn more about {{@$AllDetail['company_data']['company_name']}}. If you haven't left a  review yet or submitted pictures, please visit the business to do so. You can also book another activity with {business name} from the platform.</p>
+                                                                                <p style="font-weight: 400; font-size: 14px; color: #000000;margin-bottom: 10px; margin-top: 0px; text-align: left;">Click <a style="color: #1e43d7; text-decoration: underline;"  href="{{$url}}/claim-your-business">here</a> to view it yourself. Your contribution helps others learn more about {{@$AllDetail['company_data']['company_name']}}. If you haven't left a  review yet or submitted pictures, please visit the business to do so. You can also book another activity with {{@$AllDetail['company_data']['company_name']}} from the platform.</p>
                                                                                 
                                                                                 <p style="font-weight: 400; font-size: 14px; color: #000000;margin-bottom: 10px; margin-top: 0px; text-align: left;">Help us and others learn more about other businesses by contributing their information & leaving reviews.</p>
                                                                                 
@@ -105,7 +105,7 @@
                                                         <tr>
                                                             <td>
                                                                 <h5 style="color: white; text-align: center; font-weight: 400; margin-top: 20px; margin-bottom: 0px;">Privacy Policy  | Terms of Service</h5>
-                                                                <h5 style="color: white; text-align: center; font-weight: 400; margin-top: 0px; margin-bottom: 0px;">@ copyright 2022 Fitnessity, Inc.</h5>
+                                                                <h5 style="color: white; text-align: center; font-weight: 400; margin-top: 0px; margin-bottom:30px;">@ copyright <?php echo date('Y'); ?> Fitnessity, Inc.</h5> 
                                                             </td>
                                                         </tr>
                                                     </table>

@@ -1228,6 +1228,7 @@ class BusinessController extends Controller
                         $file = $img;
                        /* echo $file;exit;*/
                         $name = date('His').$file->getClientOriginalName();
+                        $name = str_replace(' ', '', $name);
                         $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'review'.DIRECTORY_SEPARATOR,$name);
                         if( !empty($name) ){
                             $images[]=$name;

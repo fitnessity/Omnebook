@@ -22,6 +22,8 @@ use App\Http\Controllers\ActivityController;
     return "success";
 });*/
 
+Route::get('/addcheckoutsession','HomeController@addcheckoutsession');
+
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
 Route::get('/set-unset-session-business-welcome/{check?}','HomeController@set_unset_session_business_welcome');
 Route::get('/set-session-for-claim/{cid?}/{status?}','HomeController@set_session_for_claim');
@@ -716,7 +718,7 @@ Route::any('/payments/card', 'LessonController@cartpaymentinstant');
 Route::post('/form_participate', 'PaymentController@form_participate')->name('form_participate');
 Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
-Route::any('/addtocart', 'LessonController@addToCart');
+Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
 Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
 Route::any('/removetocart', 'LessonController@removeToCart');
 Route::any('/emptycart', 'LessonController@emptyCart');

@@ -66,7 +66,7 @@
 						<p>(Choose Only One)</p>
 						<div class="special-offer offer-sp">
 							<div class="multiples">
-								<select id="business_type" name="business_type" class="myfilter" >
+								<select id="business_type" name="business_type" class="myfilter" onchange="addbustype(this.value);">
 									<option value="individual">Individual</option>
 									<option value="business">Business</option>
 								</select>
@@ -76,12 +76,12 @@
 					
 					<div class="form-group">
 						<label>Business Name</label>
-						<input type="text" class="form-control" name="Companyname" id="b_companyname" placeholder="Enter Business Name">
+						<input type="text" class="form-control" name="Companyname" id="b_companyname" placeholder="Enter Business Name" onkeyup="addbusname();">
 						<div class="reviewerro" id="b_companynameerro"> </div>
 					</div>
 					<div class="form-group">
 						<label>Business Owners Name (optional)</label>
-						<input type="text" class="form-control" name="Firstnameb" id="b_firstname" placeholder="Enter Business Owners Name">
+						<input type="text" class="form-control" name="Firstnameb" id="b_firstname" placeholder="Enter Business Owners Name" onkeyup="addownname();">
 					</div>
 					<div class="form-group">
 						<label>Business Address</label>
@@ -134,7 +134,7 @@
 					</div>
 					<div class="form-group">
 						<label>Website Address (optional)</label>
-						<input type="text" class="form-control" name="business_website" id="business_website" placeholder="Website Name" value="">
+						<input type="text" class="form-control" name="business_website" id="business_website" placeholder="Website Name" value="" onkeyup="addwebsite();;">
 					</div>
 					<div class="form-group">
 						<label>Email </label>
@@ -239,17 +239,48 @@
 				<div class="col-md-12">
 					<div class="form-group">
 	                    <label for="email">Business Description (Optional)</label>
-	                    <textarea class="form-control" rows="10" placeholder="Tell Us Somthing About Company in short..." name="Shortdescription" id="short_description" maxlength="1000"></textarea>
+	                    <textarea class="form-control" rows="10" placeholder="Tell Us Somthing About Company in short..." name="Shortdescription" id="short_description" maxlength="1000" onchange="adddesc();"></textarea>
 	                    <div class="text-right"><span id="company_desc_left">1000</span> Characters Left</div>
 	                    <span class="reviewerro" id="short_descriptionerro"></span>
 	                </div>
 					<button type="button" class="showall-btn btn-display"  id="submitButton">Submit</button> 
-					<!-- <button type="button" class="showall-btn btn-display"  data-toggle="modal" data-target="#location">Add</button>  -->
+					<!-- <button type="button" class="showall-btn btn-display"  data-toggle="modal" data-target="#successmodelbox">Add</button>  -->
 				</div>
 			</div>
 		</form>
 	</div>
 </section>                    
+
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="successmodelbox">
+    <div class="modal-dialog modal-lg location-modal">
+        <div class="modal-content">
+            <!-- Modal body -->
+            <div class="modal-body">
+				<div class="row contentPop"> 
+					<div class="col-lg-12">
+					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">Successfully Added Business to Fitnessity</h4>
+					   <p style="color: #000; line-height: inherit; font-weight: 500; margin-bottom: 10px;" >This business will be reviewed by the Quality Control Team before going live</p>
+					</div>
+                    <div class="col-lg-12" id="modelbody_successmodelbox">
+                    	<p id="modelbusname">Business Name: </p>
+                    	<p id="modelbustype">Business Type: Individual</p>
+                    	<p id="modelownername">Business Owners Name: </p>
+                    	<p id="modeladdress">Business Address: </p>
+                    	<p id="modelemail">Business Email: </p>
+                    	<p id="modelphone">Business Phone Number: </p>
+                    	<p id="modelweb">Website Address: </p>
+                    	<p id="modeldesc">Business Description: </p>
+                    </div>
+					
+					<div class="col-lg-12 btns-modal">
+						<a class="addbusiness-btn-modal" href="{{route('activities_index')}}">Close</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- The Modal Add Business-->
 <div class="modal fade compare-model" id="location">
@@ -317,7 +348,6 @@
             processData: false,
             data: formData,
             success: function(data) {
-            	alert('hii');
             	$("#add_details")[0].reset();
             	$('#location').hide();
             	$('#add_status').val("no");
@@ -372,8 +402,7 @@
 						$('#modelbody_already_bus').html(data);
 	            	}else{
 	            		$("#add_details")[0].reset();
-	            		$('.success_msg').css("color", "green");
-            			$('.success_msg').html('Successfully Added Business...');
+						$('#successmodelbox').modal('toggle');
 	            	}
 	            },
 	        });
@@ -525,6 +554,7 @@
               $('#b_address').val(badd);
             }
              $('#address_p').html(place.formatted_address);
+             $('#modeladdress').html('Business Address : ' + place.formatted_address);
             $('#lat').val(place.geometry.location.lat());
             $('#lon').val(place.geometry.location.lng());
 
@@ -578,6 +608,7 @@
     function addphonenumber(){
     	if($('#b_business_phone').val() == ''){
 			$('#phonenum_p').html('(000) 000 - 000');
+			$('#modelphone').html('Business Phone Number : — ');
     	}else{
     		var con = $('#b_business_phone').val();
 	        var curchr = con.length;
@@ -587,6 +618,8 @@
 	            $("#b_business_phone").val(con + " - ");
 	        }
     		$('#phonenum_p').html($('#b_business_phone').val());
+    		$('#modelphone').html('Business Phone Number : ' + $('#b_business_phone').val());
+
     	} 
 
     	
@@ -594,10 +627,58 @@
     function addemail(){
     	if($('#b_business_email').val() == ''){
 			$('#email_p').html('example@gmail.com');
+			$('#modelemail').html('Business Email : — ' );
     	}else{
     		$('#email_p').html($('#b_business_email').val());
+    		$('#modelemail').html('Business Email : ' + $('#b_business_email').val());
     	} 	
     }
+
+    function addwebsite() {
+    	if($('#business_website').val() != ''){
+    		$('#modelweb').html('Website Address : ' + $('#business_website').val() );
+    	}else{
+    		$('#modelweb').html('Website Address : — ');
+    	}
+    }
+
+    function adddesc() {
+    	if($('#short_description').val() != ''){
+    		$('#modeldesc').html('Business Description : ' + $('#short_description').val());
+    	}else{
+    		$('#modeldesc').html('Business Description : — ');
+    	}
+    } 
+
+    function addbustype(val) {
+    	str = $('#business_type').val().toLowerCase().replace(/\b[a-z]/g, function(letter) {
+		    return letter.toUpperCase();
+		});
+
+		if($('#business_type').val() != ''){
+    		$('#modelbustype').html('Business Type : ' + str);
+    	}else{
+    		$('#modelbustype').html('Business Type : Individual');
+    	}
+    }
+
+    function addbusname() {
+    	if($('#b_companyname').val() != ''){
+    		$('#modelbusname').html('Business Name : ' + $('#b_companyname').val());
+    	}else{
+    		$('#modelbusname').html('Business Name : — ');
+    	}
+    	
+    }
+
+    function addownname() {
+    	if($('#b_firstname').val() != ''){
+    		$('#modelownername').html('Business Owners Name : ' + $('#b_firstname').val());
+    	}else{
+    		$('#modelownername').html('Business Owners Name : — ');
+    	}
+    }
+
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
