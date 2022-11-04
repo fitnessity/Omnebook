@@ -61,7 +61,7 @@
 			<?php  $activity_meets = $starting = $schedule_until =$shift_start = $shift_end = $set_duration = $activity_days = $schedule  = $scdate = $act_met= $act_until= "";
 				foreach($business_activity as $data){
 					$schedule = $data['scheduled_day_or_week_num'];
-					$starting =  date('m-d-Y',strtotime($data['starting']));
+					$starting =  date('m/d/Y',strtotime($data['starting']));
 					$act_met = $data['activity_meets'];
 					$act_until = $data['scheduled_day_or_week'];
 				}	

@@ -1973,12 +1973,16 @@ class UserProfileController extends Controller {
 
         $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
         if($bus_count != ''){
-            $img = rtrim($bus_count->profile_pic,',');
-            $profile_picture .= $img.',';
+            if($bus_count->profile_pic != ''){
+                $img = rtrim($bus_count->profile_pic,',');
+                $profile_picture .= $img.',';
+            }else{
+                $profile_picture .= '';
+            }
         }else{
             $profile_picture .= '';
         }
-     
+       
         if ($request->hasFile('imgUpload')) {
             for($i=0;$i<count($request->imgUpload);$i++){
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;

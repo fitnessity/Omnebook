@@ -166,7 +166,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
@@ -395,7 +395,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
@@ -625,7 +625,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>

@@ -41,11 +41,11 @@
 					<h4>{{$getdatafast['title']}}</h4>
 					<p>{{$getdatafast['small_text']}}</p>
 					@if($getdatafast['id'] == 1)
-						<a class="showall-btn btn-position" href="/activities/personal_trainer" >Show all</a>
+						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'personal_trainer'])}}" >Show all</a>
 					@elseif($getdatafast['id'] == 2)
-						<a class="showall-btn btn-position" href="/activities/classes" >Show all</a>
+						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'classes'])}}" >Show all</a>
 					@else
-						<a class="showall-btn btn-position" href="/activities/experience" >Show all</a>
+						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'experience'])}}">Show all</a>
 					@endif
 				</div>
 			</div>
@@ -122,7 +122,7 @@
 								{	
 									$reviews_avg= round($reviews_sum/$reviews_count,2); 
 								}
-								$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+								$redlink = str_replace(" ","-",$companyname);
 								$service_type='';
 								if($service['service_type']!=''){
 									if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -252,7 +252,7 @@
 			                                <?php }?>
 			                                    target="_blank">{{ $service['program_name'] }}</a></span>
 										<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-										<a c class="showall-btn" href="/activity-details/{{$service['id']}}">More Details</a>
+										<a c class="showall-btn" href="{{route('activities_show',['serviceid'=> $service['id']])}}">More Details</a>
 									</div>
 									<div class="row">
 										<div class="col-md-6 col-sm-6 col-xs-6">
@@ -352,7 +352,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($thismonthactivity)}} Results </label>
-					<a href="/activities/thismonth" >Show all</a>
+					<a href="{{route('activities_index',['filtervalue'=> 'thismonth'])}}" >Show all</a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -583,7 +583,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -594,9 +594,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}"  
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -604,7 +604,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -642,7 +642,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($mostpopularactivity)}} Results </label>
-					<a href="/activities/most_popular">Show All </a>
+					<a href="{{route('activities_index',['filtervalue'=> 'most_popular'])}}">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -870,7 +870,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -881,9 +881,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}"  
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -891,7 +891,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -920,7 +920,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
-					<a href="/activities/trainers_coaches">Show All </a>
+					<a href="{{route('activities_index',['filtervalue'=> 'trainers_coaches'])}}">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -1148,7 +1148,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -1159,9 +1159,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}"  
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -1169,7 +1169,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1199,7 +1199,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Ways_To_Workout)}} Results </label>
-					<a href="/activities/ways_to_workout">Show All </a>
+					<a href="{{route('activities_index',['filtervalue'=> 'ways_to_workout'])}}">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -1427,7 +1427,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -1438,9 +1438,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}" 
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -1448,7 +1448,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1478,7 +1478,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($Fun_Activities)}} Results </label>
-					<a href="/activities/active_wth_fun_things_to_do">Show All </a>
+					<a href="{{route('activities_index',['filtervalue'=> 'active_wth_fun_things_to_do'])}}">Show All </a>
 				</div>
 			</div>
 			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
@@ -1708,7 +1708,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -1719,9 +1719,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}" 
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -1729,7 +1729,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1758,7 +1758,7 @@
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="nav-sliders-activites">
 					<label>{{count($allactivities) }} Results </label>
-					<a href="/activities/all">Show All </a>
+					<a href="{{route('activities_index',['filtervalue'=> 'all'])}}">Show All </a>
 				</div>
 			</div>
 		
@@ -1987,7 +1987,7 @@
 														</div>
 													</div>
 													@php
-														$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
+														$redlink = str_replace(" ","-",$companyname);
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
@@ -1998,9 +1998,9 @@
 													<div class="activity-information activites-height">
 														<span><a 
 							                                @if (Auth::check())  
-							                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
-							                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
+							                                    href="{{ route('userlogin') }}"  
 							                                @endif
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
@@ -2008,7 +2008,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>

@@ -146,7 +146,7 @@
 
               <span class="color-red">*</span>
 
-              <input class="width" type="text" name="bname" id="bname" value="{{$data->company_name}}" required>
+              <input class="width form-control" type="text" name="bname" id="bname" value="{{$data->company_name}}" required>
 
             </div> 
 
@@ -156,7 +156,7 @@
 
               <label>Street Address</label>
 
-              <input class="width" type="text" name="street_addr" id="street_addr" value="{{$add}}">
+              <input class="width form-control" type="text" name="street_addr" id="street_addr" value="{{$add}}">
 
             </div> 
 
@@ -168,7 +168,7 @@
 
               <label>Additional Address Info </label>
 
-              <input class="width" type="text" name="addi_addr" id="addi_addr" value="{{$add_data}}">
+              <input class="width form-control" type="text" name="addi_addr" id="addi_addr" value="{{$add_data}}">
 
             </div> 
 
@@ -178,7 +178,7 @@
 
               <label>City/Town</label>
 
-              <input class="width" type="text" name="city" id="city" value="{{$data->city}}">
+              <input class="width form-control" type="text" name="city" id="city" value="{{$data->city}}">
 
             </div> 
 
@@ -188,7 +188,7 @@
 
               <label>State/Province/Region  </label>
 
-              <input class="width" type="text" name="state" id="state" value="{{$data->state}}">
+              <input class="width form-control" type="text" name="state" id="state" value="{{$data->state}}">
 
             </div> 
 
@@ -198,7 +198,7 @@
 
               <label> Zipcode/Postal Code </label>
 
-              <input class="width" type="text" name="zip" id="zip" value="{{$data->zip_code}}">
+              <input class="width form-control" type="text" name="zip" id="zip" value="{{$data->zip_code}}">
 
             </div>
 
@@ -208,7 +208,7 @@
 
               <label> Neighborhood/Location/Area</label>
 
-              <input class="width" type="text" name="location" id="location" value="">
+              <input class="width form-control" type="text" name="location" id="location" value="">
 
             </div>
 
@@ -218,7 +218,7 @@
 
               <label> Phone Number</label>
 
-              <input class="width" type="text" name="phone" id="phone" value="@if($data->contact_number != 'null')  {{$data->contact_number}} @endif" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()" maxlength="14">
+              <input class="width form-control" type="text" name="phone" id="phone" value="@if($data->contact_number != 'null')  {{$data->business_phone}} @endif" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()" maxlength="14">
 
             </div>
 
@@ -228,7 +228,7 @@
 
               <label> Website   </label>
 
-              <input class="width" type="text" name="website" id="website" value="@if($data->website != 'null') {{$data->website}} @endif">
+              <input class="width form-control" type="text" name="website" id="website" value="@if($data->website != 'null') {{$data->website}} @endif">
 
             </div>
 
@@ -238,7 +238,7 @@
 
               <label> Email   </label>
 
-              <input class="width" type="text" name="email" id="email" value="{{$data->email}}">
+              <input class="width form-control" type="text" name="email" id="email" value="{{$data->business_email}}">
 
             </div>
 
