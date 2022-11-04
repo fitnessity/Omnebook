@@ -1973,12 +1973,16 @@ class UserProfileController extends Controller {
 
         $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
         if($bus_count != ''){
-            $img = rtrim($bus_count->profile_pic,',');
-            $profile_picture .= $img.',';
+            if($bus_count->profile_pic != ''){
+                $img = rtrim($bus_count->profile_pic,',');
+                $profile_picture .= $img.',';
+            }else{
+                $profile_picture .= '';
+            }
         }else{
             $profile_picture .= '';
         }
-     
+       
         if ($request->hasFile('imgUpload')) {
             for($i=0;$i<count($request->imgUpload);$i++){
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -10424,7 +10428,7 @@ class UserProfileController extends Controller {
         $details = [];
         $data = CompanyInformation::where('id',$request->cid)->first();
         if($request->type_enter == 'email'){
-             if($data->email == $request->val){
+             if($data->business_email == $request->val){
                 $details = array(
                     "random_code" => $random,
                     "email"=>$request->val
@@ -10495,65 +10499,26 @@ class UserProfileController extends Controller {
         $city = '';
         $ZipCode = '';
         $state = '';
-       /* $str_arr = array();
-        if($data->address != 'null'){
-            $str_arr = explode (",", $data->address);
-        }*/
-       
+
        if($data != ''){
-
-            /*if(!empty($str_arr)){
-                if(count($str_arr) == 4){
-                    $address .= $str_arr[0];
-                    $address .= ", ".$str_arr[1];
-                    $city = $str_arr[2];
-                    $state = strtok($str_arr[3], ' ');
-                    $st_arr1 = explode (' ' ,$str_arr[3]);
-                    if($st_arr1[0] == ''){
-                        $ZipCode = $st_arr1[2];
-                    }else{
-                        $ZipCode = $st_arr1[1];
-                    }
-                }else{
-                    $address = $str_arr[0];
-                    $city = $str_arr[1];
-                    $state = strtok($str_arr[2], ' ');
-                    $st_arr1 = explode (' ' ,$str_arr[2]);
-                    if($st_arr1[0] == ''){
-                        $ZipCode = $st_arr1[2];
-                    }else{
-                        $ZipCode = $st_arr1[1];
-                    }
-                }
-            }*/
-        
             if($data->claim_business_verification_code == $request->code){
-                /* $createdata = new CompanyInformation;
-                    $createdata->company_name = $data->company_name;
-                    $createdata->contact_number = $data->contact_number;
-                    $createdata->address = $address;
-                    $createdata->city = $city;
-                    $createdata->state = $state;
-                    $createdata->zip_code = $ZipCode;
-                    $createdata->serviceid = 0;
-                    $createdata->user_id = Auth::user()->id;
-                    $createdata->save();*/
-
-                /*$bcdata = new BusinessCompanyDetail;
-                    $bcdata->userid = Auth::user()->id;
-                    $bcdata->cid = $createdata->id;
-                    $bcdata->companyname = $data->business_name;
-                    $bcdata->Address = $address;
-                    $bcdata->City   = $city;
-                    $bcdata->State   = $state;
-                    $bcdata->ZipCode   = $ZipCode;
-                    $bcdata->Phonenumber = $data->phone;
-                    $bcdata->showstep = 2;
-                    $bcdata->save();*/
+                
                 CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => Auth::user()->id]);
                 BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => Auth::user()->id]);
-                User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $data->id, 'serviceid' => $data->serviceid]);
+                User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $request->cid]);
+
+                $detail_data_com=  [];
+                $detail_data_user =  [];
+                $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
+                $det_com  = json_decode(json_encode($detail_data_com), true); 
+
+                $detail_data_user['user'] = User::where('id',Auth::user()->id)->first();
+                $det_user  = json_decode(json_encode($detail_data_user), true); 
+                $allDetail = array_merge($det_com,$det_user);
+                MailService::sendEmailafterclaimed($allDetail);
+
                 $msg = 'Match';
+
             }else{
                 $msg = 'Not Match';
             }   
@@ -10643,7 +10608,9 @@ class UserProfileController extends Controller {
             foreach( $alldata as $data_all){
                 $idary[] =  $data_all['id'];
             }
-           
+            $date = '';
+            $getdate = explode('/',$request->starting);
+            $date .= $getdate[2].'-'.$getdate[0].'-'.$getdate[1];
             for($i=0; $i <= $shift_start; $i++) { 
                 if($request->id[$i] != ''){
                     $idary1[] = $request->id[$i];
@@ -10671,7 +10638,7 @@ class UserProfileController extends Controller {
                         "userid" =>Auth::user()->id,
                         "serviceid" =>$request->serviceid,
                         "activity_meets" => $request->frm_class_meets,
-                        "starting" => $request->starting,
+                        "starting" => $date,
                         "activity_days" => isset($request->activity_days[$i]) ? $request->activity_days[$i] : '',
                         "shift_start" => isset($request->shift_start[$i]) ? $request->shift_start[$i] : '',
                         "shift_end" => isset($request->shift_end[$i]) ? $request->shift_end[$i] : '',

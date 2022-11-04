@@ -128,7 +128,7 @@
                                         </div>
                                         <div class="info-display">
                                             <label>Price Option: </label>
-                                            <span><?php echo @$serprice[0]['pay_session'].' Sessions'; ?></label>
+                                            <span><?php echo @$serprice[0]['price_title'].' - '.@$serprice[0]['pay_session'].' Sessions'; ?></label>
                                         </div>
                                         <div class="info-display">
                                             <label>Service Type:</label>
@@ -850,6 +850,16 @@ $(function() {
                 $('#error_check').show();
                 return false;
             }
+
+            @if(!Auth::user())
+                $.ajax({
+                   type:'GET',
+                   url:'/addcheckoutsession',
+                   data:'_token = <?php echo csrf_token() ?>',
+                   success:function(data) {
+                   }
+                });
+            @endif
         });
     });
 $(function () {

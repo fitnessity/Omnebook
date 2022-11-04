@@ -2562,6 +2562,9 @@ class LessonController extends Controller {
     }
     
     public function cartpaymentinstant(Request $request) {
+        if($request->session()->has('checkoutsession')){
+            $request->session()->forget('checkoutsession');
+        }
         $cart = [];
          $cardInfo = [];
         if(Auth::user()){

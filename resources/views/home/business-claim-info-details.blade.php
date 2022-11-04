@@ -36,14 +36,14 @@
     $data = CompanyInformation::where('id',$cid)->first();
    
     if($data != ''){
-        $phone_number = $data->contact_number;
+        $phone_number = $data->business_phone;
         if($phone_number === $val || $phone_number == ''){
             $phone_number =  '';
         }else{
-            $phone_number =  $data->contact_number;
+            $phone_number =  $data->business_phone;
         }
 
-        $email =  $data->email;
+        $email =  $data->business_email;
         if($email === $val || $email == '' ){
             $email = '';
         }else{

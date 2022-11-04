@@ -420,6 +420,10 @@ class HomeController extends Controller
     	Session::put('manage_company', 'company'); 	
     }
 
+    public function addcheckoutsession() {
+    	Session::put('checkoutsession', 'checkoutsession'); 	
+    }
+
     public function already_claim_business() {
     	return view('home.already-claim-business');
     }

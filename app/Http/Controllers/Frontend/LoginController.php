@@ -76,6 +76,7 @@ class LoginController extends Controller {
                 $claim_cname = '';
                 $claim_welcome = '';
                 $claim_company = '';
+                $checkoutsession  = '';
                 if(session()->has('claim_business_page')) {
                 	$claim = 'set';
                     $claim_cid = session()->get('claim_cid');
@@ -91,6 +92,10 @@ class LoginController extends Controller {
                 }
                 if(session()->has('manage_company')) {
                     $claim_company = session()->get('manage_company');
+                }
+
+                if(session()->has('checkoutsession')) {
+                    $checkoutsession = session()->get('checkoutsession');
                 }
                /* $response = array(
                     'type' => 'success',
@@ -111,6 +116,8 @@ class LoginController extends Controller {
                     return redirect('/business-welcome');
                 }else if($claim_company != ''){
                     return redirect('/manage/company');
+                }else if($checkoutsession != ''){
+                    return redirect('/payments/card');
                 }else{
                     return redirect()->route('profile-viewProfile');
                 }
