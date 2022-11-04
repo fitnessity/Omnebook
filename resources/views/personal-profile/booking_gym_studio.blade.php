@@ -160,7 +160,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
@@ -390,7 +390,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span>{{$BusinessPriceDetails['pay_session']}} Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
@@ -619,7 +619,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span> @if($BusinessPriceDetails != '')  {{$BusinessPriceDetails['pay_session']}} @endif Sessions</span>
+                                                            <span> @if($BusinessPriceDetails != '')  {{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} @endif Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>

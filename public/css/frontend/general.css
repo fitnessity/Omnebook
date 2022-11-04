@@ -21070,7 +21070,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	justify-content: center;
 }
 .cart-slider{
-	height: 415px;
+	height: 465px;
 }
 .notimeoption{
 	text-align: center;
@@ -21380,9 +21380,9 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	top: 35%;
 	position: absolute;
 	right: 0px;
-	font-size: 21px;
 	color: #fff;
 	font-size: 15px;
+	background: none !important;
 }
 .inner-owl-slider-hire .owl-nav .owl-prev{
 	width: 30px;
@@ -21392,10 +21392,10 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-radius: 50px;
 	top: 35%;
 	position: absolute;
-	font-size: 21px;
 	color: #fff;
 	left: 0px;
 	font-size: 15px;
+	background: none !important;
 }
 
 #owl-demo-owl.item-inner{

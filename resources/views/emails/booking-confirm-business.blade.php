@@ -337,7 +337,7 @@ use App\UserFamilyDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$BusinessPriceDetails['pay_session']}} Sessions</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$BusinessPriceDetails['price_title']}} - {{ @$BusinessPriceDetails['pay_session']}} Sessions</h2>
 
 																			</td>
 

@@ -1300,7 +1300,7 @@ class ActivityController extends Controller {
         $serviceid = $request->serviceid;
         $companyid = $request->companyid;
         
-        //DB::enableQueryLog();
+        // DB::enableQueryLog();
         //$searchData = BusinessServices::where('cid', $companyid)->where('is_active', 1)->where('id', '!=' , $serviceid);
 
         $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid);
@@ -1331,23 +1331,25 @@ class ActivityController extends Controller {
         {
             $dt = date('Y-m-d',strtotime($actdate) );
             
-            $enddt = date('Y-m-d', strtotime("+1 year", strtotime($actdate)) );
+            $enddt = date('Y-m-d',strtotime($actdate));
             
             //Where('business_activity_scheduler.starting', $dt);
-            $searchData->join('business_activity_scheduler as bas', 'business_services.id', '=', 'bas.serviceid')->select('business_services.*','bas.starting')->Where('bas.starting', '<=', $enddt)->groupby('business_services.id')->distinct();
+            /*BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();*/
+
+            $searchData->join('business_activity_scheduler as bas', 'business_services.id', '=', 'bas.serviceid')->select('business_services.*','bas.end_activity_date')->where('bas.end_activity_date','>=',  $dt )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",bas.activity_days)')->groupby('business_services.id')->distinct();
         }
         if( !empty($actfilsType) )
         {
             $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
         }
-        //DB::enableQueryLog();
+       /* DB::enableQueryLog();*/
         $activity1 = $searchData->distinct()->get()->toArray();
-        //dd(\DB::getQueryLog());
+        // dd(\DB::getQueryLog());
         
         $activity = json_decode(json_encode($activity1), true);
         $actbox='';
         //dd(\DB::getQueryLog());
-        
+       /* print_r($activity);exit;*/
         if (!empty($activity)) { 
             $companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
             foreach ($activity as  $act) {
@@ -1362,12 +1364,24 @@ class ActivityController extends Controller {
                     $companycountry = $companyData['country'];    
                 }
                 if ($act['profile_pic']!="") {
-                    if(File::exists(public_path("/uploads/profile_pic/thumb/" . $act['profile_pic']))) {
-                        $profilePic = url('/public/uploads/profile_pic/thumb/'.$act['profile_pic']);
-                    } else {
-                        $profilePic = '/public/images/service-nofound.jpg';
+                	if(str_contains($act['profile_pic'], ',')){
+                        $pic_image = explode(',', $act['profile_pic']);
+                        if( $pic_image[0] == ''){
+                           $p_image  = $pic_image[1];
+                        }else{
+                            $p_image  = $pic_image[0];
+                        }
+                    }else{
+                        $p_image = $act['profile_pic'];
                     }
-                }else{ $profilePic = '/public/images/service-nofound.jpg'; }
+
+                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                    }else {
+                       $profilePic = url('/public/images/service-nofound.jpg');
+                    }
+
+				}else{ $profilePic = '/public/images/service-nofound.jpg'; }
 
                 $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
                 $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
@@ -1412,8 +1426,9 @@ class ActivityController extends Controller {
                 }
 
                 if( !empty( $actdate) ){
-                    $p=$act['schedule_until'];
-                    $enddt = date('Y-m-d', strtotime("+".$p, strtotime($act['starting'])) );
+                   /* $p=$act['schedule_until'];*/
+                    /*$enddt = date('Y-m-d', strtotime("+".$p, strtotime($act['starting'])) );*/ 
+                    $enddt = $act['end_activity_date'];
                     $flterdt = date('Y-m-d',strtotime($actdate) );
                     if( $flterdt <= $enddt ){
                         $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
@@ -1642,9 +1657,11 @@ class ActivityController extends Controller {
         $changeactpr_para = "'".$serviceid."',this.value,'".@$spot_avil."','book','".$serviceid."'";
         $date = date('l',strtotime($actdate)).', '.date('F d,  Y',strtotime($actdate));
 
-        if (!empty($searchData) && count($searchData)>0) { 
+        $searchDatafordisplay  = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst['id'])->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
+       /* print_r( $searchDatafordisplay);exit;*/
+        if (!empty($searchDatafordisplay) && count($searchDatafordisplay)>0) { 
             $si=1;
-            foreach($searchData as $data){
+            foreach($searchDatafordisplay as $data){
                 if($si == 1){
                 	$SpotsLeftdis = 0; 
 					$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=',  date('Y-m-d',strtotime($actdate)) )->get()->toArray();
@@ -1662,31 +1679,39 @@ class ActivityController extends Controller {
 						$SpotsLeftdis = $data['spots_available'] - $totalquantity;
 					} 
 
+					$expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
+		            $date_now = new DateTime();
+		            $expdate = new DateTime($expdate);
+					/*print_r($expdate);
+					print_r($date_now) ;exit;*/
                 	if($SpotsLeftdis != 0){
-	                    if(@$data['shift_start']!=''){
-	                        $start = date('h:i a', strtotime( $data['shift_start'] ));
-	                        $timedata .= $start;
-	                    }
-	                    if(@$data['shift_end']!=''){
-	                        $end = date('h:i a', strtotime( $data['shift_end'] ));
-	                        $timedata .= ' - '.$end;
-	                    } 
+                		if($date_now <= $expdate){
+		                    if(@$data['shift_start']!=''){
+		                        $start = date('h:i a', strtotime( $data['shift_start'] ));
+		                        $timedata .= $start;
+		                    }
+		                    if(@$data['shift_end']!=''){
+		                        $end = date('h:i a', strtotime( $data['shift_end'] ));
+		                        $timedata .= ' - '.$end;
+		                    } 
 
-	                    if(@$data['set_duration']!=''){
-	                        $tm=explode(' ',$data['set_duration']);
-	                        $hr=''; $min=''; $sec='';
-	                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-	                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-	                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-	                        if($hr!='' || $min!='' || $sec!='')
-	                        { 
-	                            $time = $hr.$min.$sec; 
-	                            $timedata .= ' / '.$time;
-	                        } 
-	                    }
+		                    if(@$data['set_duration']!=''){
+		                        $tm=explode(' ',$data['set_duration']);
+		                        $hr=''; $min=''; $sec='';
+		                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+		                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
+		                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+		                        if($hr!='' || $min!='' || $sec!='')
+		                        { 
+		                            $time = $hr.$min.$sec; 
+		                            $timedata .= ' / '.$time;
+		                        } 
+		                    }
+		                    $si++;
+		                }
                     
                     	$today = date('Y-m-d');
-                    	$si++;
+
                     }
                 }
             }
@@ -1725,15 +1750,15 @@ class ActivityController extends Controller {
                                     $SpotsLeftdis = 0;
                                    
                                     $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
-            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
-                                   
+            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();/*
+                                   	print_r( $bschedule);exit;*/
                                     $actbox .= '<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
                                         <div class="membership-details">
                                             <h3 class="date-title">Booking Details</h3>
                                             <label>Step: 4 </label> <span class=""> Select Time</span>
                                             <div class="row" id="timeschedule">';
                                             $i=1;
-                                            if(!empty(@$bschedule) ||count(@$bschedule)>0){
+                                            if(!empty(@$bschedule) && count(@$bschedule)>0){
                                                 foreach(@$bschedule as $bdata){
                                                 	$SpotsLeftdis = 0; 
                                                     $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=',date('Y-m-d',strtotime($actdate)))->get()->toArray();
@@ -2294,44 +2319,48 @@ class ActivityController extends Controller {
 
         $todayday = date("l" ,strtotime($sesdate));
         $todaydate = date('Y-m-d' ,strtotime($sesdate));
-        $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get(); 
+        $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',  $todaydate )->get(); 
                                         
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='';
-        if(!empty($bus_schedule)){           
+        if(!empty($bus_schedule)){ 
+        $i= 1;          
             foreach($bus_schedule as $data){
-            	$SpotsLeftdis = 0; 
-        		$SpotsLeft = 0; 
-				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->count();
-				if( $data['spots_available'] != ''){
-					$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
-				} 
-            	$expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
-	            $date_now = new DateTime();
-	            $expdate = new DateTime($expdate);
- 				if($SpotsLeftdis != 0){
-	                if($date_now <= $date_now){
-	                    $timedata ='';
-	                    if(@$data['shift_start']!=''){
-	                        $start = date('h:i a', strtotime( $data['shift_start'] ));
-	                        $timedata .= $start;
-	                    }
-	                    if(@$data['shift_end']!=''){
-	                        $end = date('h:i a', strtotime( $data['shift_end'] ));
-	                         $timedata .= ' - '.$end;
-	                    } 
-	                    if(@$data['set_duration']!=''){
-	                        $tm=explode(' ',$data['set_duration']);
-	                        $hr=''; $min=''; $sec='';
-	                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-	                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
-	                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-	                        if($hr!='' || $min!='' || $sec!='')
-	                        { $time = $hr.$min.$sec; 
-	                            $timedata .= ' / '.$time;} 
-	                    }
-	                    $today = date('Y-m-d');
-	                }
-	            }
+            	if($i == 1){
+	            	$SpotsLeftdis = 0; 
+	        		$SpotsLeft = 0; 
+					$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=',$todaydate)->count();
+					if( $data['spots_available'] != ''){
+						$SpotsLeftdis = $data['spots_available'] - $SpotsLeft;
+					} 
+	            	$expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
+		            $date_now = new DateTime();
+		            $expdate = new DateTime($expdate);
+	 				if($SpotsLeftdis != 0){
+		                if($date_now <= $date_now){
+		                    $timedata ='';
+		                    if(@$data['shift_start']!=''){
+		                        $start = date('h:i a', strtotime( $data['shift_start'] ));
+		                        $timedata .= $start;
+		                    }
+		                    if(@$data['shift_end']!=''){
+		                        $end = date('h:i a', strtotime( $data['shift_end'] ));
+		                         $timedata .= ' - '.$end;
+		                    } 
+		                    if(@$data['set_duration']!=''){
+		                        $tm=explode(' ',$data['set_duration']);
+		                        $hr=''; $min=''; $sec='';
+		                        if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+		                        if($tm[2]!=0){ $min=$tm[2].'min. '; }
+		                        if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+		                        if($hr!='' || $min!='' || $sec!='')
+		                        { $time = $hr.$min.$sec; 
+		                            $timedata .= ' / '.$time;} 
+		                    }
+		                    $today = date('Y-m-d');
+		                    $i++;
+		                }
+		            }
+		        }
             }
         }
         $bookdata ='';
