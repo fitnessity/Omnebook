@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use DateTime;
 
 class BusinessActivityScheduler extends Model
@@ -44,10 +45,22 @@ class BusinessActivityScheduler extends Model
         'is_active',
         'end_activity_date'
     ];
+
+    public static function between_datetime($start_datetime, $end_datetime){
+        return BusinessActivityScheduler::with(['business_service', 'company_information'])
+                                                    ->where('activity_days', 'like', ['%'.date('l').'%'])
+                                                    ->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') > ?", [$start_datetime->format("Y-m-d"), $start_datetime->format("Y-m-d H:i:s")])
+                                                    ->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') < ?", [$end_datetime->format("Y-m-d"), $end_datetime->format("Y-m-d H:i:s")])
+                                                    ->orderBy('shift_start');
+    }
     
     public function business_service()
     {
         return $this->belongsTo(BusinessServices::class, 'serviceid');
+    }
+
+    public function company_information(){
+        return $this->belongsTo(CompanyInformation::class, 'cid');
     }
 
     public function booking_details()
@@ -70,6 +83,22 @@ class BusinessActivityScheduler extends Model
         return trim($string);
     }
 
+    public function get_duration_hours() {
+        $string = "";
+        $duration = date_parse(" +".$this->set_duration);
+
+
+
+        if($duration['relative']){
+            if($duration['relative']['hour'])
+                return $duration['relative']['hour']." ".Str::plural('hour', $duration['relative']['hour']);
+
+            if($duration['relative']['minute'])
+                return $duration['relative']['minute']." ".Str::plural('minute', $duration['relative']['minute']);
+        }
+
+        return trim($string);
+    }
 
     public function time_left($current_datetime){
         

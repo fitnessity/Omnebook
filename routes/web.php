@@ -848,7 +848,7 @@ Route::post('NewService', 'UserProfileController@NewService')->name('NewService'
 //Route::post('autocomplete','UserProfileController@autocomplete'->name('autocomplete');
 
 // Page
-Route::get('businessprofile/{user_name}/{id}','BusinessController@viewbusinessprofileofOther')->name('businessprofile');
+Route::get('businessprofile/{user_name}/{id}','BusinessController@viewbusinessprofileofOther')->name('show_businessprofile');
 Route::get('businessprofile/timeline/{user_name}/{id}','BusinessController@viewbprofiletimelineofOther')->name('businessprofile');
 Route::post('pagePost', 'BusinessController@pagePost')->name('pagePost');
 Route::post('pagePostcomment/{id}', 'BusinessController@pagePostcomment');

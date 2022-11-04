@@ -114,6 +114,14 @@ class BusinessServices extends Model
         return $this->hasMany(BusinessServiceReview::class, 'service_id');
     }
 
+    public function favourites(){
+        return $this->hasMany(BusinessServicesFavorite::class, 'service_id');   
+    }
+
+    public function is_liked_by($user_id){
+        return $this->favourites()->where('service_id', $this->id)->where('user_id', $user_id)->exists();
+    }
+
     public function price_details(){
     	return $this->hasMany(BusinessPriceDetails::class, 'serviceid');
     }
@@ -131,6 +139,7 @@ class BusinessServices extends Model
     }
 
     public function first_profile_pic(){
+        var_dump($this->profile_pic);
         $pictures = explode(',',$this->profile_pic);
         return $pictures[0];
     }

@@ -61,273 +61,85 @@
 			
 		?>
 
-		@if(count($todayservicedata)>0)
-		<div class="fst-0 fsb-1">
-			<div class="row">
-				<div class="col-md-10">
-					<div class="title">
-						<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+		@if(count($bookschedulers) > 0)
+			<div class="fst-0 fsb-1">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="title">
+							<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-2"> 
-					<div class="title-show">
-						<a href="{{route('activities_next_8_hours')}}">Show All</a>
+					<div class="col-md-2"> 
+						<div class="title-show">
+							<a href="{{route('activities_next_8_hours')}}">Show All</a>
+						</div>
 					</div>
-				</div>
-				<?php
-	                $companyid = $companyname = $serviceid = "";
-					$companycity = $companycountry = $pay_price  = "";
-	                if (!empty($todayservicedata)) {
-	                    $servicetype = [];
-	                    $i=0;
-	                    foreach ($todayservicedata as $loop => $service) {
-	                    	if($i<3){
-		                        $company = $price = $businessSp = [];
-								$serviceid = $service['id'];
-		                        $sport_activity = $service['sport_activity'];
-		                        $servicetype[$service['service_type']] = $service['service_type'];
-		                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-		                        $company = CompanyInformation::where('id',$service['cid'])->first();
-		                        if ($company!= '') {
-	                                $companyid = $company->id;
-	                                $companyname = $company->company_name;
-									$companycity = $company->city;
-									$companycountry = $company->country;
-		                        }
+					@foreach ($bookschedulers as $bookscheduler)
+						<div class="col-md-4">
+							<div class="find-activity">
+								<div class="row">
+									<div class="col-md-4 col-sm-4">
+										<img src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" >
+									</div>
+									<div class="col-md-8 col-sm-8 activity-data">
+										<div class="row">
+											<div class="col-md-6 col-sm-6 col-xs-6">
+												<div class="activity-inner-data">
+													<i class="fas fa-star"></i>
+													<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}}) </span>
+												</div>
 
-		                        if ($service['profile_pic']!="") {
-		                        	if(str_contains($service['profile_pic'], ',')){
-                                        $pic_image = explode(',', $service['profile_pic']);
-                                        if( $pic_image[0] == ''){
-                                           $p_image  = $pic_image[1];
-                                        }else{
-                                            $p_image  = $pic_image[0];
-                                        }
-                                    }else{
-                                        $p_image = $service['profile_pic'];
-                                    }
-
-                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-                                    }else {
-                                       $profilePic = url('/public/images/service-nofound.jpg');
-                                    }
-
-								}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-								
-								$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-								$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-								$reviews_avg=0;
-								if($reviews_count>0)
-								{	
-									$reviews_avg= round($reviews_sum/$reviews_count,2); 
-								}
-								$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-								$service_type='';
-								if($service['service_type']!=''){
-									if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-									else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
-									else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-								}
-								$pricearr = [];
-								$price_all = '';
-								$ser_date = '';
-								$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-								if(!empty($price_allarray)){
-									foreach ($price_allarray as $key => $value) {
-										if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-											$pricearr[] = $value->adult_weekend_price_diff;
-										}else{
-											$pricearr[] = $value->adult_cus_weekly_price;
-										}
-									}
-								}
-								if(!empty($pricearr)){
-									$price_all = min($pricearr);
-								}
-
-								$bookscheduler='';
-								$time='';
-								
- 								$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->orderby('id','asc')->first();
- 								/*print_r($bookscheduler);*/
- 								if(@$bookscheduler['set_duration']!=''){
-									$tm=explode(' ',$bookscheduler['set_duration']);
-									$hr=''; $min=''; $sec='';
-									if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-									if($tm[2]!=0){ $min=$tm[2].'min. '; }
-									if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-									if($hr!='' || $min!='' || $sec!='')
-									{ $time =  $hr.$min.$sec; } 
-								}
- 								/*echo $bookscheduler;exit;*/
-
-					            if(@$bookscheduler['end_activity_date'] >= date('Y-m-d') &&  date("H:i:s") < $bookscheduler['shift_start'] ){ 
-					                $ser_date = @$bookscheduler['shift_start']; 
-					             }
-						            
-								$starttime = '';
-								$curr = date("H:i:s");
-								$time1 = new DateTime($curr);
-							    $time2 = new DateTime($ser_date);
-							    $time_diff = $time1->diff($time2);
-							    $red_style = $time2->getTimestamp() - $time1->getTimestamp() < 600 ? 'activity-time-main-red' : '';
-							   	$hours = $time_diff->h;
-							    $minutes = $time_diff->i;
-							    $seconds = $time_diff->s;
-							  
-								if($hours != ''){
-									$starttime .= $hours.' hr';
-								}
-								if($minutes != ''){
-									$starttime .= ' '.$minutes.' min';
-								}
-
-								$startmin =0;
-								$startsec =0;
-								if($minutes != ''){
-									$startmin = $minutes;
-								}
-								if($seconds != ''){
-									$startsec = $seconds;
-								}
-
-								if($seconds != 0){
-									$coundownt = $startmin * $startsec;
-								}else{
-									$coundownt = $startmin;
-								}
-								
-								
-                	?>
-					<div class="col-md-4">
-						<div class="find-activity">
-							<div class="row">
-								<div class="col-md-4 col-sm-4">
-									<img src="{{ $profilePic }}" >
-								</div>
-								<div class="col-md-8 col-sm-8 activity-data">
-									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-6">
-											<div class="activity-inner-data">
-												<i class="fas fa-star"></i>
-												<span> {{$reviews_avg}} ({{$reviews_count}}) </span>
-											</div>
-											@if($time != '')
 												<div class="activity-hours">
-													<span>{{$time}}</span>
+													<span>{{$bookscheduler->get_duration_hours()}}</span>
 												</div>
-											@endif
-										</div>
-										<div class="col-md-6 col-sm-6 col-xs-6">
-											<div class="activity-city">
-												<span style="white-space: nowrap;">{{$companycity}}</span>
-											@if(Auth::check())
-											<?php
-												$loggedId = Auth::user()->id;
-												$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->orderby('id','desc')->first();                   
-											?>
-												<div class="serv_fav1" ser_id="{{$service['id']}}" data-id="serfavstarts">
-													<a class="fav-fun-2" id="serfavstarts{{$service['id']}}">
-														<?php
-															if( !empty($favData) ){ ?>
-																<i class="fas fa-heart"></i>
-															<?php }
-															else{ ?>
-																<i class="far fa-heart"></i>
-														 <?php } ?></a>
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-6">
+												<div class="activity-city">
+													<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
+													@auth
+														<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+															<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+
+																<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+														</div>
+													@endauth
+													@guest
+														<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="far fa-heart"></i></a>
+													@endguest
 												</div>
-											@else
-												<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-											@endif
 											</div>
 										</div>
-									</div>
-									<div class="activity-information ">
-										<span><a 
-			                                <?php if (Auth::check()) { ?> 
-			                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-			                                <?php } else { ?>
-			                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-			                                <?php }?>
-			                                    target="_blank">{{ $service['program_name'] }}</a></span>
-										<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-										<a c class="showall-btn" href="/activity-details/{{$service['id']}}">More Details</a>
-									</div>
-									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-6">
-										@if($price_all != '')
+										<div class="activity-information ">
+											<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+											<a c class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+										</div>
+										<div class="row">
+											<div class="col-md-6 col-sm-6 col-xs-6">
 											<div class="dollar-person">
-												<span>From ${{$price_all}}/Person</span>
+												<span>From ${{$bookscheduler->price_detail()}}/Person</span>
 											</div>
-										@endif
-										</div>
-										<div class="col-md-6 col-sm-6 col-xs-6">
-											<div class="activity-time-main {{$red_style}}">
-												<span>Starts in {{$starttime}}</span>
 											</div>
-											<!-- <div id="clockdiv">
-											  <div>
-											    <span class="minutes{{$service['id']}}"></span>
-											    <div class="smalltext{{$service['id']}}">Minutes</div>
-											  </div>
-											  <div>
-											    <span class="seconds{{$service['id']}}"></span>
-											    <div class="smalltext{{$service['id']}}">Seconds</div>
-											  </div>
-											</div> -->
+											<div class="col-md-6 col-sm-6 col-xs-6">
+												<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
+													<span>Starts in 
+														@if ($bookscheduler->time_left($current_date)->h)
+															{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hour', $bookscheduler->time_left($current_date)->h)}}
+														@endif
+														@if ($bookscheduler->time_left($current_date)->i)
+															{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('minute', $bookscheduler->time_left($current_date)->i)}}
+														@endif
+													</span>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-
-					<!-- <script type="text/javascript">
-						function getTimeRemaining(endtime) {
-						 	var t = Date.parse(endtime) - Date.parse(new Date());
-						  	var seconds = Math.floor((t / 1000) % 60);
-						  	var minutes = Math.floor((t / 1000 / 60) % 60);
-						  	var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-						  	var days = Math.floor(t / (1000 * 60 * 60 * 24));
-						  	return {
-							    'total': t,
-							    'minutes': minutes,
-							    'seconds': seconds
-						  	};
-						}
-
-						function initializeClock(id, endtime) {
-							var clock = document.getElementById(id);
-							var minutesSpan = clock.querySelector('.minutes'+'{{$service['id']}}');
-							var secondsSpan = clock.querySelector('.seconds'+'{{$service['id']}}');
-
-						  	function updateClock() {
-						    	var t = getTimeRemaining(endtime);
-						    	/*alert(t);*/
-						    	minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-						    	secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-
-						    	if (t.total <= 0) {
-						      		clearInterval(timeinterval);
-						    	}
-						  	}
-
-						  	updateClock();
-						  	var timeinterval = setInterval(updateClock, 1000);
-						}
-						var dt ='{{$coundownt}}';
-						console.log(dt);
-						var deadline = new Date(Date.parse(new Date()) + parseInt(dt));
-						initializeClock('clockdiv', deadline);
-					</script> -->
-				<?php 
-							} 
-							$i++;
-						}
-					}?>
+					@endforeach
+				</div>
 			</div>
-		</div>
 		@endif
 		<?php /*?><div class="row">
 			<div class="col-md-12">
