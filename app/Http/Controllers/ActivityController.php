@@ -63,14 +63,10 @@ class ActivityController extends Controller {
 			$days[] = $d->modify('+'.($i+$shift).' day');
 		}
 
-    	
-    	$bookschedulers = BusinessActivityScheduler::with(['business_service'])->whereIn('serviceid', $business_services->pluck('id'))
-    												->where('activity_days', 'like', ['%'.date('l').'%'])
-    												->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') > ?", 
-    																[$filter_date->format("Y-m-d"), $filter_date->format("Y-m-d H:i:s")])
-    												->orderBy('shift_start')
-    												->get();
-
+    	$start_date = $filter_date;
+    	$end_date = clone($start_date);
+    	$end_date = $end_date->modify("23:59:59");
+    	$bookschedulers = BusinessActivityScheduler::between_datetime($filter_date, $end_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
 
 
     	return view('activity.next_8_hours',[
@@ -91,6 +87,7 @@ class ActivityController extends Controller {
 
 		$cart = [];
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
+
 		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience' || $filtervalue == 'all' || $filtervalue == 'thismonth' || $filtervalue == 'most_popular' || $filtervalue == 'trainers_coaches' || $filtervalue == 'ways_to_workout'|| $filtervalue == 'active_wth_fun_things_to_do')
 		{
 
@@ -140,6 +137,7 @@ class ActivityController extends Controller {
 			}
 
 	        $nxtacty = $nxtact->get();
+
 	        if (isset($nxtacty)) {
 	        	foreach ($nxtacty as $service) {
 	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
@@ -969,41 +967,10 @@ class ActivityController extends Controller {
 	        }	
 
 	        $nxtacty = $nxtact->get();
-	        if (isset($nxtacty)) {
-	        	$todayservicedata = [];
-	        	foreach ($nxtacty as $service) {
-	        		$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->get();
-	        		if(!empty($bookscheduler)) {
-	        			foreach ($bookscheduler  as $key => $value) {
-	        				
-							/*$difference = ($time1 - $time2) / 3600;
-
-			            	if($value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8  && $curr <= $value['shift_start']){		
-			              		$todayservi= $service;
-
-			              		$todayservi['businessservices']  = array_unique($todayservi); 
-			              		$todayservicact['actdata'] = array("actid"=>$value['id']);
-			              		$todayservicedata[] = array_merge($todayservi,$todayservicact); 
-			            	}*/
-	        				$curr = date("H:i");
-	        				$time1 = strtotime($curr);
-							$time2 = strtotime($value['shift_start']);
-							/*$difference = $time1 - $time2 / 3600;*/
-							$difference = abs($time2 - $time1) / 3600;
-							/*echo $value['activity_days']."  -  ";
-							echo date('l', strtotime($curr))."  -  ";
-							echo $value['end_activity_date']."  -  ";
-							echo date('Y-m-d')."  -  ";
-							echo $difference."<br>";*/
-		            		if(str_contains($value['activity_days'], date('l', strtotime($curr))) && $value['end_activity_date'] >= date('Y-m-d') &&  $difference< 8 &&  $difference > 0){
-		            		
-		            	  		$todayservicedata[] = $service; 
-		            		}
-			            }
-	          		}
-	          	}
-	          	$todayservicedata = array_unique($todayservicedata);
-	        }
+	        $current_date = new DateTime();
+	        $end_date = clone($current_date);
+	        $end_date = $end_date->modify("+8 hours");
+	        $bookschedulers = BusinessActivityScheduler::between_datetime($current_date, $end_date)->whereIn('serviceid', $nxtacty->pluck('id'))->get();
 	       
 			$allactivities = $all_activities->limit(10)->get();
 			/*dd(DB::getQueryLog());*/
@@ -1016,7 +983,7 @@ class ActivityController extends Controller {
 
 			$serviceLocation = Miscellaneous::serviceLocation();
 			$getstarteddata =  ActivtyGetStartedFast::orderby('id','asc')->get();
-			/*print_r($todayservicedata);exit;*/
+
 
 			if($searchDatauserProfile != ''){
 	            return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
@@ -1030,10 +997,11 @@ class ActivityController extends Controller {
 					'Fun_Activities'=>$Fun_Activities,
 					'Ways_To_Workout'=>$Ways_To_Workout,
 					'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
-					'todayservicedata'=>$todayservicedata,
+					'bookschedulers' => $bookschedulers,
 					'serviceLocation'=>$serviceLocation,
 					'getstarteddata'=>$getstarteddata,
-					 'cart' => $cart
+					 'cart' => $cart,
+					 'current_date' => $current_date,
 				]);
 			}
 		}
