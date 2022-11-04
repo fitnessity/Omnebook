@@ -34,7 +34,9 @@ class ActivityController extends Controller {
 
 	protected $sports;
 
+
     public function __construct(UserRepository $users, BookingRepository $bookings, Request $request, SportsRepository $sports) {
+    	$this->middleware('auth', ['only' => ['show']]);
         $this->users = $users;
         $this->bookings = $bookings;
         $this->sports = $sports;
