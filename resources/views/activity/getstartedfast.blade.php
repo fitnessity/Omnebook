@@ -39,7 +39,7 @@
 </section>
 @endif
 
-<section class="instant-hire-activites @if(count($todayservicedata) <= 0) mar-tp @endif">
+<section class="instant-hire-activites @if(count($bookschedulers) <= 0) mar-tp @endif">
 	<div class="container-fluid">
 		
 		
