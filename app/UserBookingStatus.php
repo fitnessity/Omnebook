@@ -35,7 +35,7 @@ class UserBookingStatus extends Model
 
     public function UserBookingDetail()
     {
-        return $this->hasOne(UserBookingDetail::class, 'booking_id');
+        return $this->hasMany(UserBookingDetail::class, 'booking_id');
     }
 
     public function Jobpostquestions()

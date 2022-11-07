@@ -1515,6 +1515,81 @@ input[type=number] {
     padding: 10px;
     border-radius: 50px;
 }
+
+/*added ny ap*/
+.find-activity {
+    border: 1px solid #ede9e9;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.img-modal-left img {
+    width: 121px;
+}
+
+.activity-data {
+    padding-left: 0px;
+}
+
+.activity-inner-data i {
+    color: #f91942;
+}
+
+.activity-inner-data span {
+    font-weight: 600;
+}
+
+.activity-hours {
+    display: inline-block;
+    font-size: 13px;
+}
+
+.activity-hours span {
+    border: 1px solid black;
+    padding: 2px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+}
+
+.activity-city {
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+}
+
+.serv_fav1 {
+    display: inline-block;
+}
+.activity-information {
+    text-align: center;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+.activity-information span {
+    font-size: 14px;
+    font-weight: 500;
+}
+.activity-information p {
+    margin-bottom: 4px;
+}
+.showall-btn {
+    background: #f91942;
+    border: none;
+    padding: 5px 19px;
+    color: #fff;
+    border-radius: 4px;
+}
+
+a {
+    text-decoration: none;
+    transition: 0.5s;
+}
+.activity-inner-data {
+    display: inline-block;
+    font-size: 13px;
+}
 .followback { color: #fa1943; }
 .followback:hover { color: #000000; }
 .booking-info-menu{ background: #2d2d2d; color:#fff; padding: 15px; }

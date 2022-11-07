@@ -72,13 +72,13 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 				</div>
                 <div class="your-page">
 					<dl>
-                    	<dt>Monday</dt><dd><?php if($mons != ''){ echo date('h:i a', strtotime($mons)).' - '.date('h:i a', strtotime($mone)); }else{ echo "—" ;} ?></dd>
-                        <dt>Tuesday</dt><dd><?php if($tues != ''){  echo date('h:i a', strtotime($tues)).' - '.date('h:i a', strtotime($tuee));  }else{ echo "—" ;}  ?></dd>
-                        <dt>Wednesday</dt><dd><?php if($weds != ''){  echo date('h:i a', strtotime($weds)).' - '.date('h:i a', strtotime($wede));  }else{ echo "—" ;}  ?></dd>
-                        <dt>Thursday</dt><dd><?php if($thus != ''){ echo date('h:i a', strtotime($thus)).' - '.date('h:i a', strtotime($thue)); }else{ echo "—" ;}  ?></dd>
-                        <dt>Friday</dt><dd><?php if($fris != ''){ echo date('h:i a', strtotime($fris)).' - '.date('h:i a', strtotime($frie)); }else{ echo "—" ;}  ?></dd>
-                        <dt>Saturday</dt><dd><?php if($sats != ''){ echo date('h:i a', strtotime($sats)).' - '.date('h:i a', strtotime($sate)); }else{ echo "—" ;}  ?></dd>
-                        <dt>Sunday</dt><dd><?php if($suns != ''){ echo date('h:i a', strtotime($suns)).' - '.date('h:i a', strtotime($sune));  }else{ echo "—" ;}  ?></dd>
+                    	<dt>Monday</dt><dd><?php if($mons != ''){ echo date('h:i a', strtotime($mons)).' - '.date('h:i a', strtotime($mone)); }else{ echo "Closed" ;} ?></dd>
+                        <dt>Tuesday</dt><dd><?php if($tues != ''){  echo date('h:i a', strtotime($tues)).' - '.date('h:i a', strtotime($tuee));  }else{ echo "Closed" ;}  ?></dd>
+                        <dt>Wednesday</dt><dd><?php if($weds != ''){  echo date('h:i a', strtotime($weds)).' - '.date('h:i a', strtotime($wede));  }else{ echo "Closed" ;}  ?></dd>
+                        <dt>Thursday</dt><dd><?php if($thus != ''){ echo date('h:i a', strtotime($thus)).' - '.date('h:i a', strtotime($thue)); }else{ echo "Closed" ;}  ?></dd>
+                        <dt>Friday</dt><dd><?php if($fris != ''){ echo date('h:i a', strtotime($fris)).' - '.date('h:i a', strtotime($frie)); }else{ echo "Closed" ;}  ?></dd>
+                        <dt>Saturday</dt><dd><?php if($sats != ''){ echo date('h:i a', strtotime($sats)).' - '.date('h:i a', strtotime($sate)); }else{ echo "Closed" ;}  ?></dd>
+                        <dt>Sunday</dt><dd><?php if($suns != ''){ echo date('h:i a', strtotime($suns)).' - '.date('h:i a', strtotime($sune));  }else{ echo "Closed" ;}  ?></dd>
                         <?php if($mons!='' && $tues!='' && $weds!='' && $thus!='' && $fris!='' && $sats!='' && $suns) { $all='Open All Day'; } ?>
                         <dt></dt><dd> <?php echo $all; ?> </dd>
 					</dl>	
@@ -216,7 +216,7 @@ $(document).ready(function () {
         var bounds = new google.maps.LatLngBounds();
         var marker, i;
         var icon = {
-            url: "https://development.fitnessity.co/public/images/hoverout2.png",
+            url: "{{url('/public/images/hoverout2.png')}}",
             scaledSize: new google.maps.Size(50, 50),
 			labelOrigin: {x: 25, y: 16}
         };
