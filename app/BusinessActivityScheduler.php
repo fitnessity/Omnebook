@@ -46,12 +46,22 @@ class BusinessActivityScheduler extends Model
         'end_activity_date'
     ];
 
-    public static function between_datetime($start_datetime, $end_datetime){
-        return BusinessActivityScheduler::with(['business_service', 'company_information'])
-                                                    ->where('activity_days', 'like', ['%'.date('l').'%'])
-                                                    ->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') > ?", [$start_datetime->format("Y-m-d"), $start_datetime->format("Y-m-d H:i:s")])
-                                                    ->whereRaw("STR_TO_DATE(concat(?,' ',shift_start),'%Y-%m-%d %H:%i') < ?", [$end_datetime->format("Y-m-d"), $end_datetime->format("Y-m-d H:i:s")])
-                                                    ->orderBy('shift_start');
+    public static function next_8_hours($datetime){
+        $start_datetime = $datetime;
+        $end_datetime = clone($datetime);
+        $end_datetime->modify("+10 hours");
+        $business_activity_schedulers = BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start');
+        if($start_datetime->format("Y-m-d") == $end_datetime->format("Y-m-d")){
+            return $business_activity_schedulers->whereRaw("activity_days like ? and shift_start > ? and shift_start <= ?", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), $end_datetime->format("H:i")]);
+        }else{
+            return $business_activity_schedulers->whereRaw("(activity_days like ? and shift_start > ?) or ((activity_days like ? and shift_start <= ?))", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), '%'.$end_datetime->format('l').'%', $end_datetime->format("H:i")]);
+        }
+                                       
+    }
+
+    public static function allday($datetime){
+        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw("activity_days like ? and shift_start > ? ", ['%'.$datetime->format('l').'%', $datetime->format("H:i")]);
+                                       
     }
     
     public function business_service()
@@ -104,20 +114,26 @@ class BusinessActivityScheduler extends Model
         
         $datetime1 = $current_datetime;
         $datetime2 = new DateTime($current_datetime->format("Y-m-d ").$this->shift_start);
-
+        if($datetime2 < $datetime1){
+            $datetime2->modify("+1 day");
+        }
         return $datetime2->diff($datetime1);
     }
 
     public function time_left_seconds($current_datetime){
-        
-        $datetime1 = $current_datetime;
-        $datetime2 = new DateTime($current_datetime->format("Y-m-d ").$this->shift_start);
 
+        $datetime1 = $current_datetime;
+
+        $datetime2 = new DateTime($current_datetime->format("Y-m-d ").$this->shift_start);
+        if($datetime2 < $datetime1){
+            $datetime2->modify("+1 day");
+        }
 
         return $datetime2->getTimestamp() - $datetime1->getTimestamp();
     }
 
     public function is_start_in_one_hour($current_datetime) {
+
         if(intval($this->time_left_seconds($current_datetime)) < 3600){
             return true;
         }
@@ -146,15 +162,25 @@ class BusinessActivityScheduler extends Model
     }
 
     public function price_detail() {
-        $price_details = BusinessPriceDetails::where('serviceid', $this->serviceid)
+        $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
                             ->where('category_id', $this->category_id)
                             ->where('cid', $this->cid)->first();
-
-        if($price_details){
+                            
+        if($price_detail){
             if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                return $price_details['adult_weekend_price_diff'];
+                if(intval($price_detail['adult_weekend_price_diff']) > 0)
+                    return $price_detail['adult_weekend_price_diff'];
+                if(intval($price_detail['child_cus_weekend_price']) > 0)
+                    return $price_detail['child_cus_weekend_price'];
+                if(intval($price_detail['infant_cus_weekend_price']) > 0)
+                    return $price_detail['infant_cus_weekend_price'];
             }else{
-                return $price_details['adult_cus_weekly_price'];
+                if(intval($price_detail['adult_cus_weekly_price']) > 0)
+                    return $price_detail['adult_cus_weekly_price'];
+                if(intval($price_detail['child_cus_weekly_price']) > 0)
+                    return $price_detail['child_cus_weekly_price'];
+                if(intval($price_detail['infant_cus_weekly_price']) > 0)
+                    return $price_detail['infant_cus_weekly_price'];
             }
         }           
     }
