@@ -38,7 +38,8 @@
 	</div>
 </section>
 @endif
-<section class="instant-hire-activites">
+
+<section class="instant-hire-activites @if(count($todayservicedata) <= 0) mar-tp @endif">
 	<div class="container-fluid">
 		
 		<?php 
@@ -278,8 +279,10 @@
 			            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 							$companycity = $companycountry = $pay_price  = "";
 							$locations = []; 
+							$locationforhover = []; 
 			            if (isset($allactivities) && count($allactivities) > 0) {
 			              $servicetype = [];
+			              $locationforhover = []; 
 			               foreach ($allactivities as $loop => $service) {
 			                  $company = $price = $businessSp = [];
 									$serviceid = $service['id'];
@@ -350,15 +353,15 @@
 	                    ?>
 						<div class="col-md-4 col-sm-4 col-map-show limitload">
 							<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
-								<div class="kickboxing-block">
+								<div class="kickboxing-block" onmouseover="bigImg(this);">
 									@if(Auth::check())
 										@php
                                 	$loggedId = Auth::user()->id;
                                 	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
                   				@endphp
-                        		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+                        		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}"  >
 											<div class="inner-owl-slider-hire">
-												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
+												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme" >
 													<?php 
 													$i = 0;
 													if(is_array($pic_image)){
@@ -372,7 +375,7 @@
 
 			                                    if($profilePic1 != ''){ ?>
 															<div class="item-inner">
-																<img src="{{$profilePic1}}" class="productImg">
+																<img src="{{$profilePic1}}" class="productImg" >
 															</div>
 														<?php }
 														}
@@ -525,9 +528,95 @@
 	                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 	                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 	                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
+	                    		$locationforhover = $a;
 	                            array_push($locations, $a);
 							}
 						?>
+						<script type="text/javascript">
+							function bigImg(x) {
+								var locations = @json($locationforhover);
+							    alert(locations);
+							   var map = ''
+							   var infowindow = ''
+							   var marker = ''
+							   var markers = []
+							   var circle = ''
+						    	$('#map_canvas').empty();
+
+						    	if (locations.length != 0) {  console.log('!empty');
+						        	map = new google.maps.Map(document.getElementById('map_canvas'), {
+						            zoom:18,
+						            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
+						            mapTypeId: google.maps.MapTypeId.ROADMAP,
+						         });
+						         infowindow = new google.maps.InfoWindow();
+						         var bounds = new google.maps.LatLngBounds();
+						         var marker, i;
+						         var icon = {
+						            url: "{{url('/public/images/hoverout2.png')}}",
+						            scaledSize: new google.maps.Size(50, 50),
+						            labelOrigin: {x: 25, y: 16}
+						         };
+						         for (i = 0; i < locations.length; i++) {
+						            var labelText = i + 1
+						            marker = new google.maps.Marker({
+						                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+						                map: map,
+						                icon: icon,
+						                title: labelText.toString(),
+						                label: {
+						                    text: labelText.toString(),
+						                    color: '#222222',
+						                    fontSize: '12px',
+						                    fontWeight: 'bold'
+						                }
+						            });
+
+						            bounds.extend(marker.position);
+
+						            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
+						            var contents =
+						                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
+						                    '<div class="img-claimed-business">' +
+						                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
+						                    '</div></div> </div>' +
+						                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
+						                    '<div class="content-claimed-business-inner">' +
+						                    '<div class="content-left-claimed">' +
+						                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
+						                    '<ul>' +
+						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+						                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
+						                    '<li><i class="fa fa-star"></i></li>' +
+						                    '<li><i class="fa fa-star"></i></li>' +
+						                    '<li class="count">25</li>' +
+						                    '</ul>' +
+						                    '</div>' +
+						                    '<div class="content-right-claimed"></div>' +
+						                    '</div>' +
+						                    '</div></div></div>' +
+						                    '</div>';
+
+						            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
+						                return function () {
+						                    infowindow.setPosition(marker.latLng);
+						                    infowindow.setContent(contents);
+						                    infowindow.open(map, this);
+						                };
+						            })(marker, contents, infowindow));
+						            markers.push(marker);
+						         }
+
+						         //nnn commented on 18-05-2022 - its not displaying proper map
+						         // map.fitBounds(bounds);
+						         // map.panToBounds(bounds); 
+						         $('.mysrchmap').show()
+							   }else {
+							      $('#mapdetails').hide()
+							   }
+							}
+						</script>
 						<?php
                     		}
                 		}else{
@@ -535,9 +624,10 @@
                 		<div class="col-md-4 col-sm-4 col-map-show limitload"><p>There is no activity found</p></div>
                 		<?php } ?>
 					</div>
+
 				</div>
 
-				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_map mapskick">
+				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_mapone mapskick">
 					<div class="mysrchmap" style="display:none;height: 100%;min-height: 700px;">
 						<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 					</div>
@@ -561,1643 +651,6 @@
 			@endif
 		</div>
 	</section>
-		<!--<div class="row">
-			<div class="col-md-12">
-				<div class="direc-right distance-block map-sp">
-					<div class="mapsb">Show Maps
-						<label class="switch" for="maps">
-							<input type="checkbox" name="maps" id="maps" checked>
-							<span class="slider round"></span>
-						</label>
-					</div>
-				</div>
-			</div>
-		</div>-->
-
-		
-		<!--<div class="row">
-			<div class="col-md-6">
-				<div class="title">
-					<h3>New Trainers & Coaches</h3>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="nav-sliders-activites">
-					<label> Results </label>
-					<a href="#">Show All </a>
-				</div>
-			</div>
-			<div class="col-md-12 leftside-kickboxing" id="activitylist">
-				<div class="row"> 
-					<div class="ptb-65 float-left w-100 discover_activities" id="counter">
-						<div class="container-fluid">
-							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-slidertwo" class="owl-carousel">
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>-->
-		
-		<!--<div class="row">
-			<div class="col-md-6">
-				<div class="title">
-					<h3>Most Popular Trainers & Coaches</h3>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="nav-sliders-activites">
-					<label> Results </label>
-					<a href="#">Show All </a>
-				</div>
-			</div>
-			<div class="col-md-12 leftside-kickboxing" id="activitylist">
-				<div class="row"> 
-					<div class="ptb-65 float-left w-100 discover_activities" id="counter">
-						<div class="container-fluid">
-							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderthree" class="owl-carousel">
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>-->
-		
-		<!--<div class="row">
-			<div class="col-md-6">
-				<div class="title">
-					<h3>Most Book Activities with Trainers & Coaches</h3>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="nav-sliders-activites">
-					<label> Results </label>
-					<a href="#">Show All </a>
-				</div>
-			</div>
-			<div class="col-md-12 leftside-kickboxing" id="activitylist">
-				<div class="row"> 
-					<div class="ptb-65 float-left w-100 discover_activities" id="counter">
-						<div class="container-fluid">
-							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderfour" class="owl-carousel">
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>-->
-		
-		<!--<div class="row">
-			<div class="col-md-6">
-				<div class="title">
-					<h3>Find fun things to do with Trainers & Coaches</h3>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="nav-sliders-activites">
-					<label> Results </label>
-					<a href="#">Show All </a>
-				</div>
-			</div>
-			<div class="col-md-12 leftside-kickboxing" id="activitylist">
-				<div class="row"> 
-					<div class="ptb-65 float-left w-100 discover_activities" id="counter">
-						<div class="container-fluid">
-							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-sliderfive" class="owl-carousel">
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>-->
-
-		<!--<div class="row">
-			<div class="col-md-6">
-				<div class="title">
-					<h3>See all activities</h3>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="nav-sliders-activites">
-					<label> Results </label>
-					<a href="#">Show All </a>
-				</div>
-			</div>
-			<div class="col-md-12 leftside-kickboxing" id="activitylist">
-				<div class="row"> 
-					<div class="ptb-65 float-left w-100 discover_activities" id="counter">
-						<div class="container-fluid">
-							<div class="owl-slider kickboxing-slider-activites">
-								<div id="carousel-slidersix" class="owl-carousel">
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="kickboxing-block">
-											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
-												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
-												<span>From $25/Person</span>
-											</div>
-											<div class="bottom-content">
-												<div class="class-info"> 
-													<div class="row">
-														<div class="col-md-7 ratingtime">
-															<div class="activity-inner-data">
-																<i class="fas fa-star"></i>
-																<span>5 (1)</span>
-															</div>
-															<div class="activity-hours">
-																<span>2hr. 30min. </span>
-															</div>
-														</div>
-														<div class="col-md-5 country-instant">
-															<div class="activity-city">
-																<span>New York, United States</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="activity-information">
-													<span>Learn How To Do Astanga Yogo In Central Park</span>
-													<p>Group Class | Yoga</p>
-												</div>
-												<hr>
-												<div class="all-details">
-													<a class="showall-btn" data-toggle="modal" data-target="#mykickboxing17">More Details</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>-->
-		
-		<!--<div class="row align-self-center">
-			<div class="col-md-6">
-				<div class="text-center">
-				<button id="" class="showall-btn" type="button">Load More</button>
-				</div>
-			</div> 
-		</div>-->
-
 		
 		<div class="row align-self-center">
 			<div class="col-md-6 col-xs-12">
@@ -2264,8 +717,8 @@
                         </div>
                     </div>
 					<div class="col-lg-12 btns-modal">
-						<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
-						<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
+						<a href="{{route('addbusinesscustomer')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+						<a href="{{route('businessClaim')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
 					</div>
 				 </div>
             </div>
@@ -2429,10 +882,9 @@
 	    });
     
 	    $(".mapsb .switch .slider").click(function () {
-	        $(".kickboxing_map").toggleClass("mapskick");
+	        $(".kickboxing_mapone").toggleClass("mapskick");
 	        $(".leftside-kickboxing").toggleClass("kicks");
 	    });
-
 	});
 
 </script>
@@ -2533,11 +985,6 @@ $(document).ready(function () {
     }
 });
 </script>
-<script>
-
-	
-</script>
-
 
 <script type="text/javascript">	
 	function submit_rating(sid)

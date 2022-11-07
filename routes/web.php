@@ -24,6 +24,7 @@ use App\Http\Controllers\ActivityController;
 
 Route::get('/addcheckoutsession','HomeController@addcheckoutsession');
 
+
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
 Route::get('/set-unset-session-business-welcome/{check?}','HomeController@set_unset_session_business_welcome');
 Route::get('/set-session-for-claim/{cid?}/{status?}','HomeController@set_session_for_claim');
@@ -182,8 +183,8 @@ Route::group(['middleware' => ['auth']], function()
 // Activitys
 Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
 Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
-Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
 
+Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
 
 
 Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
