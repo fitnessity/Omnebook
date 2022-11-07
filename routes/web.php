@@ -180,7 +180,7 @@ Route::group(['middleware' => ['auth']], function()
 
 
 // Activitys
-Route::get('/activities/experiences','ActivityController@experiences')->name('activities_experiences');
+Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
 Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
 Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
 Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');

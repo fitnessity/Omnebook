@@ -45,7 +45,7 @@
 					@elseif($getdatafast['id'] == 2)
 						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'classes'])}}" >Show all</a>
 					@else
-						<a class="showall-btn btn-position" href="{{route('activities_experiences')}}">Show all</a>
+						<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
 					@endif
 				</div>
 			</div>
