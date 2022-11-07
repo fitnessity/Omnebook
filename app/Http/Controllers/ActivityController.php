@@ -42,14 +42,55 @@ class ActivityController extends Controller {
         $this->sports = $sports;
     }
 
+    public function ways_to_workout(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(2);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'classes')->with(['company_information']);
+		$name = 'Personal Training';
+		
+
+
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			'name' => $name,
+		]);	
+    }
+
+    public function personal_trainer(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(1);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'individual')->with(['company_information']);
+
+		$name = 'Personal Training';
+		
+
+
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			'name' => $name,
+		]);	
+    }
+
     public function experiences(Request $request){
     	$activity_get_start_fast =  ActivtyGetStartedFast::find(3);
 
 		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'experience')->with(['company_information']);
-
-		$cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
-		$nxtact = BusinessServices::where('business_services.is_active', 1);
-
 		$name = 'Experience';
 		
 
@@ -57,13 +98,10 @@ class ActivityController extends Controller {
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
 
-		
-		// $allactivities = $all_activities->get();
-
 
 
 	
-		return view('activity.experiences',[
+		return view('activity.get_started',[
 			'activity_get_start_fast'=>$activity_get_start_fast,
 			'bookschedulers' => $bookschedulers,
 			'current_date' => $current_date,
