@@ -180,6 +180,8 @@ Route::group(['middleware' => ['auth']], function()
 
 
 // Activitys
+Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
+Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
 Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
 Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
 Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');

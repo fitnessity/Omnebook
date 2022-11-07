@@ -41,9 +41,9 @@
 					<h4>{{$getdatafast['title']}}</h4>
 					<p>{{$getdatafast['small_text']}}</p>
 					@if($getdatafast['id'] == 1)
-						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'personal_trainer'])}}" >Show all</a>
+						<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
 					@elseif($getdatafast['id'] == 2)
-						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'classes'])}}" >Show all</a>
+						<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
 					@else
 						<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
 					@endif
