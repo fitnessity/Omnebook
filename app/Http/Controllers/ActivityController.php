@@ -229,6 +229,8 @@ class ActivityController extends Controller {
 	          	}
 	          	$todayservicedata = array_unique($todayservicedata);
 	        }
+	        $current_date = new DateTime();
+	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 			
 			$allactivities = $all_activities->get();
 			/*print_r($allactivities);exit();*/
@@ -238,8 +240,9 @@ class ActivityController extends Controller {
 		
 			return view('activity.getstartedfast',[
 				'allactivities'=>$allactivities,
+				'bookschedulers'=>$bookschedulers,
+				'current_date'=>$current_date,
 				'serviceLocation'=>$serviceLocation,
-				'todayservicedata'=>$todayservicedata,
 				'name'=>$name,
 				'getstarteddata'=>$getstarteddata,
 				 'cart' => $cart
