@@ -197,8 +197,7 @@ Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name(
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
 Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
-/*Route::get('/showall-activity','ActivityController@showall_activity')->name('showall_activity');
-*/
+
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
 Route::get('/cart','LessonController@getcart');

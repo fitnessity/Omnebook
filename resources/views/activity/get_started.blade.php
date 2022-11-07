@@ -46,12 +46,6 @@
 <section class="instant-hire-activites">
 	<div class="container-fluid">
 		
-		<?php 
-			$start_date = date('Y/m/d');  
-			$date = strtotime($start_date);
-			$date = strtotime("+8 hours", $date);
-
-		?>
 		@includeWhen($bookschedulers, 'activity._next_8_hour_header', ['bookschedulers' => $bookschedulers])
 		
 	<section class="direc-hire" >
