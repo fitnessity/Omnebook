@@ -21433,3 +21433,26 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .map-business iframe{
 	padding: 0px;
 }
+.kickboxing_mapone{
+	margin-left: -15px;
+}
+
+.kickboxing_mapone {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  top: 0px;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 2;
+}
+.kickboxing_mapone.mapskick {
+  display: none;
+}
+.inner-owl-slider-hire .owl-item active{
+	width: 270px !important;
+}
+.mar-tp{
+	margin-top: 100px !important;
+}

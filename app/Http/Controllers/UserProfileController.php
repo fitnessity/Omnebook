@@ -6938,8 +6938,8 @@ class UserProfileController extends Controller {
         $PagePost = PagePost::where('page_id',$page_id)->limit(1)->orderBy('id','desc')->get();
         $postsave = PagePostSave::where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
         
-        $photos = PagePost::select('images','user_id')->where('images','!=',null)->where('user_id',Auth::user()->id)->orderBy('id','desc')->limit(10)->get();
-        $videos = PagePost::select('video','user_id')->where('video','!=',null)->where('user_id',Auth::user()->id)->orderBy('id','desc')->limit(1)->get();
+        $photos = PagePost::select('images','user_id')->where('images','!=',null)->where('user_id',Auth::user()->id)->where('page_id',$page_id)->orderBy('id','desc')->limit(10)->get();
+        $videos = PagePost::select('video','user_id')->where('video','!=',null)->where('user_id',Auth::user()->id)->where('page_id',$page_id)->orderBy('id','desc')->limit(1)->get();
         $viewgallery = $this->viewPageGalleryList($page_id);
         
         $cart = []; $profile_posts=[]; $family=[];
@@ -8863,20 +8863,26 @@ class UserProfileController extends Controller {
                 $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
                 if($business_services != ''){
                     if($business_services->service_type == 'classes'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnewdata($value->id,$book_value->id);
-						//print_r($BookingDetail_1);
-                       
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id,$book_value->id);
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
                         }
+                        
                     }
                 }
             }
         }
+       
+       /* print_r($BookingDetail);exit;*/
         return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
     }
 
@@ -8929,8 +8935,13 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
                         }
                     } 
                 }
@@ -8987,13 +8998,19 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
                         }    
                     }
                 }
             }
         }
+     /*   print_r($BookingDetail);exit;*/
         return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
     }
 
@@ -9018,8 +9035,13 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
                         }  
                     } 
                 }
@@ -9232,9 +9254,14 @@ class UserProfileController extends Controller {
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        if($BookingDetail_1['user_booking_detail']['sport'] == $book_value->sport){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                        } 
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
+                        }
                     }
                 } 
             }

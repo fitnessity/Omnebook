@@ -165,6 +165,7 @@ a{
     font-weight: 600;
     font-size: 22px;
 	margin: 11px 0px;
+	margin-bottom: 25px;
 }
 .instant-section-info img{
     border-radius: 10px;
@@ -302,7 +303,7 @@ a{
     padding: 6px 8px;
     border-radius: 4px;
     right: 0px;
-	z-index: 9999;
+	z-index: 99;
 }
 .kickboxing-block .kickboxing-topimg-content span {
     top: 12px;

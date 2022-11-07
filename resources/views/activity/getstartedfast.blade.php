@@ -65,13 +65,13 @@
 					</div>
                 <?php } ?>
 				</div>
-				<div class="col-md-8 leftside-kickboxing kicks">
+				<div class="col-md-8 leftside-kickboxing kicks" id="leftside-kick">
 					<div class="row" id="activitylist">
 						<?php
 			            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
 							$companycity = $companycountry = $pay_price  = "";
 							$locations = []; 
-							$locationforhover = []; 
+							$locationforhover = ''; 
 			            if (isset($allactivities) && count($allactivities) > 0) {
 			              $servicetype = [];
 			              $locationforhover = []; 
@@ -142,10 +142,25 @@
 									if(!empty($pricearr)){
 										$price_all = min($pricearr);
 									}
+									$locationforhover = '';
+									$al = [];
+			                  if($companylat != '' || $companylon  != ''){
+			                     $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+			                    	$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+			                    	$a = [$companyname, $lat, $long, $companyid, $companylogo];
+			                    	$al[] = $companyname;
+			                    	$al[] = $lat;
+			                    	$al[] = $long;
+			                    	$al[] = $companyid;
+			                    	$al[] = $companylogo;
+			                    		
+			                     $locationforhover = json_encode($al);
+			                     array_push($locations, $a);
+							}
 	                    ?>
 						<div class="col-md-4 col-sm-4 col-map-show limitload">
 							<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
-								<div class="kickboxing-block" onmouseover="bigImg(this);">
+								<div class="kickboxing-block" onmouseover="bigImg({{$locationforhover}});">
 									@if(Auth::check())
 										@php
                                 	$loggedId = Auth::user()->id;
@@ -315,100 +330,89 @@
 								</div>
 							</div>
 						</div>
-						<?php
-	                        if($companylat != '' || $companylon  != ''){
-	                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
-	                    		$locationforhover = $a;
-	                            array_push($locations, $a);
-							}
-						?>
+
 						<script type="text/javascript">
-							function bigImg(x) {
-								var locations = @json($locationforhover);
-							    alert(locations);
-							   var map = ''
-							   var infowindow = ''
-							   var marker = ''
-							   var markers = []
-							   var circle = ''
-						    	$('#map_canvas').empty();
+							function bigImg(locations) {
+								const element = document.querySelector("#leftside-kick");
+								var setval = element.classList.contains("kicks");
+								if(setval == false){
+								   	var map1 = ''
+								    var infowindow1 = ''
+								    var marker1 = ''
+								    var markers1 = []
+								    var circle = ''
+								    $('#map_canvas').empty();
 
-						    	if (locations.length != 0) {  console.log('!empty');
-						        	map = new google.maps.Map(document.getElementById('map_canvas'), {
-						            zoom:18,
-						            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-						            mapTypeId: google.maps.MapTypeId.ROADMAP,
-						         });
-						         infowindow = new google.maps.InfoWindow();
-						         var bounds = new google.maps.LatLngBounds();
-						         var marker, i;
-						         var icon = {
-						            url: "{{url('/public/images/hoverout2.png')}}",
-						            scaledSize: new google.maps.Size(50, 50),
-						            labelOrigin: {x: 25, y: 16}
-						         };
-						         for (i = 0; i < locations.length; i++) {
-						            var labelText = i + 1
-						            marker = new google.maps.Marker({
-						                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-						                map: map,
-						                icon: icon,
-						                title: labelText.toString(),
-						                label: {
-						                    text: labelText.toString(),
-						                    color: '#222222',
-						                    fontSize: '12px',
-						                    fontWeight: 'bold'
-						                }
-						            });
+								    if (locations.length != 0) {  console.log('!empty');
+								        map1 = new google.maps.Map(document.getElementById('map_canvas'), {
+								            zoom:18,
+								            center: new google.maps.LatLng(locations[1], locations[2]),
+								            mapTypeId: google.maps.MapTypeId.ROADMAP,
+								        });
+								        infowindow1 = new google.maps.InfoWindow();
+								        var bounds = new google.maps.LatLngBounds();
+								        var marker1;
+								        var icon1 = {
+								            url: "{{url('/public/images/hoverout2.png')}}",
+								            scaledSize: new google.maps.Size(50, 50),
+								            labelOrigin: {x: 25, y: 16}
+								        };
+							            var labelText1 = 1
+							            marker1 = new google.maps.Marker({
+							                position: new google.maps.LatLng(locations[1],locations[2]),
+							                map: map1,
+							                icon: icon1,
+							                title: labelText1.toString(),
+							                label: {
+							                    text: labelText1.toString(),
+							                    color: '#222222',
+							                    fontSize: '12px',
+							                    fontWeight: 'bold'
+							                }
+							            });
+							         
+							            bounds.extend(marker1.position);
+							            var img_path1 = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
+							            var contents1 =
+							                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
+							                    '<div class="img-claimed-business">' +
+							                    '<img src=' + img_path1 + encodeURIComponent(locations[4]) + ' alt="">' +
+							                    '</div></div> </div>' +
+							                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
+							                    '<div class="content-claimed-business-inner">' +
+							                    '<div class="content-left-claimed">' +
+							                    '<a href="/pcompany/view/' + locations[3] + '">' + locations[0] + '</a>' +
+							                    '<ul>' +
+							                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+							                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+							                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
+							                    '<li><i class="fa fa-star"></i></li>' +
+							                    '<li><i class="fa fa-star"></i></li>' +
+							                    '<li class="count">25</li>' +
+							                    '</ul>' +
+							                    '</div>' +
+							                    '<div class="content-right-claimed"></div>' +
+							                    '</div>' +
+							                    '</div></div></div>' +
+							                    '</div>';
 
-						            bounds.extend(marker.position);
-
-						            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
-						            var contents =
-						                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
-						                    '<div class="img-claimed-business">' +
-						                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
-						                    '</div></div> </div>' +
-						                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
-						                    '<div class="content-claimed-business-inner">' +
-						                    '<div class="content-left-claimed">' +
-						                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
-						                    '<ul>' +
-						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-						                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
-						                    '<li><i class="fa fa-star"></i></li>' +
-						                    '<li><i class="fa fa-star"></i></li>' +
-						                    '<li class="count">25</li>' +
-						                    '</ul>' +
-						                    '</div>' +
-						                    '<div class="content-right-claimed"></div>' +
-						                    '</div>' +
-						                    '</div></div></div>' +
-						                    '</div>';
-
-						            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
-						                return function () {
-						                    infowindow.setPosition(marker.latLng);
-						                    infowindow.setContent(contents);
-						                    infowindow.open(map, this);
-						                };
-						            })(marker, contents, infowindow));
-						            markers.push(marker);
-						         }
-
-						         //nnn commented on 18-05-2022 - its not displaying proper map
-						         // map.fitBounds(bounds);
-						         // map.panToBounds(bounds); 
-						         $('.mysrchmap').show()
-							   }else {
-							      $('#mapdetails').hide()
-							   }
+							            google.maps.event.addListener(marker1, 'mouseover', (function (marker1, contents1, infowindow1) {
+							                return function () {
+							                    infowindow1.setPosition(marker1.latLng);
+							                    infowindow1.setContent(contents1);
+							                    infowindow1.open(map1, this);
+							                };
+							            })(marker1, contents1, infowindow1));
+							            markers1.push(marker1);
+								        	        
+								        $('.mysrchmap').show()
+								    } else {
+								        $('#mapdetails').hide()
+								    }
+								}
 							}
 						</script>
+
 						<?php
                     		}
                 		}else{
@@ -674,9 +678,12 @@
 	    });
     
 	    $(".mapsb .switch .slider").click(function () {
-	        $(".kickboxing_mapone").toggleClass("mapskick");
-	        $(".leftside-kickboxing").toggleClass("kicks");
-	    });
+	    		$('.owl-carousel').trigger('refresh.owl.carousel');
+	    		
+	    		/*$('#owl-demo-learn123').owlCarousel('refresh');*/
+	       	$(".kickboxing_mapone").toggleClass("mapskick");
+	       	$(".leftside-kickboxing").toggleClass("kicks");
+	   });
 	});
 
 </script>

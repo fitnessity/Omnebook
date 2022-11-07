@@ -97,18 +97,20 @@ use App\UserFamilyDetail;
                                     @php  $i = 1;@endphp
                                     @if(!empty($BookingDetail))
                                     @foreach($BookingDetail as $book_details)
-                                        @php
+                                        <?php
                                             $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
                                             $sc_date = str_replace('-', '/', $sc_date);  
+                                        ?>
 
-                                            $servicedata = BusinessActivityScheduler::where('serviceid',@$book_details['user_booking_detail']['sport'])->first();
+                                        @if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d'))
+                                        <?php 
+                                            $servicedata = BusinessActivityScheduler::where(['serviceid' => @$book_details['user_booking_detail']['sport'],'id' => $book_details['user_booking_detail']['act_schedule_id']])->first();
 
                                             $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
 
-                                            if(@$book_details['businessservices']['service_type']=='individual')
-                                            { 
+                                            if(@$book_details['businessservices']['service_type']=='individual'){ 
                                                 $b_type = 'Personal Training'; 
                                             }else { 
                                                 $b_type =ucfirst($book_details['businessservices']['service_type']); 
@@ -136,16 +138,25 @@ use App\UserFamilyDetail;
 
                                             $today = date('Y-m-d');
                                             $SpotsLeftdis = 0;
-                                            $SpotsLeft = UserBookingDetail::where('sport', @$book_details['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
-                                            
-                                            if( $book_details['businessservices']['group_size'] != '' ){
-                                                $SpotsLeftdis = $book_details['businessservices']['group_size'] - $SpotsLeft;
+                                            $SpotsLeft = UserBookingDetail::where(['act_schedule_id' => $book_details['user_booking_detail']['act_schedule_id']])->whereDate('bookedtime', '=', date('Y-m-d'))->get()->toArray();
+
+                                            $totalquantity = 0;
+                                            foreach($SpotsLeft as $data1){
+                                                $item = json_decode($data1['qty'],true);
+                                                if($item['adult'] != '')
+                                                    $totalquantity += $item['adult'];
+                                                if($item['child'] != '')
+                                                    $totalquantity += $item['child'];
+                                                if($item['infant'] != '')
+                                                    $totalquantity += $item['infant'];
+                                            }
+                                            if( @$servicedata['spots_available'] != ''){
+                                                $SpotsLeftdis = $servicedata['spots_available'] - $totalquantity;
                                             }
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages;
-                                        @endphp
-                                        @if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d'))
+                                        ?>
                                             <div class="col-md-4 col-sm-6 ">
                                                 <div class="boxes_arts">
                                                     <div class="headboxes">
@@ -164,7 +175,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span>{{$SpotsLeftdis}} / {{ $book_details['businessservices']['group_size']}}</span>
+                                                            <span>{{$SpotsLeftdis}} / {{ @$servicedata['spots_available'] }}</span>
                                                         </p>
                                                         <p>
                                                             <span>DATE SCHEDULED:</span>
@@ -181,7 +192,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{@$data->amount}} </span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -234,7 +245,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span>
+                                                            <span> 
                                                                 <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
                                                                     if(!empty($a)){
                                                                         foreach($a as $data){
@@ -247,7 +258,7 @@ use App\UserFamilyDetail;
                                                                         } 
                                                                     }
                                                                 ?>
-                                                               </span>
+                                                            </span>
                                                         </p>
                                                         <p>
                                                             <span>COMPANY:</span>
@@ -260,10 +271,6 @@ use App\UserFamilyDetail;
                                                             <a href="#">Reschedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
-                                                        <!-- <div class="icon">
-                                                            <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
-                                                            <span><img src="{{ url('public/img/message.png') }}" alt=""></span>
-                                                        </div> -->
                                                         <div class="viewmore_links">
                                                             <a id="viewmore<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
                                                             <a id="viewless<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
@@ -321,7 +328,7 @@ use App\UserFamilyDetail;
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" id="searchbydate_upcoming">
+                                     <div class="row" id="searchbydate_upcoming">
                                     @php  $i = 1;@endphp
                                     @if(!empty($BookingDetail))
                                     @foreach($BookingDetail as $book_details)
@@ -329,53 +336,62 @@ use App\UserFamilyDetail;
                                             $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
-                                            $sc_date = str_replace('-', '/', $sc_date); 
-                                            
-                                            $servicedata = BusinessActivityScheduler::where('serviceid',@$book_details['user_booking_detail']['sport'])->first();
-
-                                            $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
-
-                                            if(@$book_details['businessservices']['service_type']=='individual')
-                                            { 
-                                                $b_type = 'Personal Training'; 
-                                            }else { 
-                                                $b_type =ucfirst($book_details['businessservices']['service_type']); 
-                                            }
-
-                                            if ($book_details['businessservices']['profile_pic']!="") {
-                                                if(str_contains($book_details['businessservices']['profile_pic'], ',')){
-                                                    $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
-                                                    if( $pic_image[0] == ''){
-                                                       $p_image  = $pic_image[1];
-                                                    }else{
-                                                        $p_image  = $pic_image[0];
-                                                    }
-                                                }else{
-                                                    $p_image = $book_details['businessservices']['profile_pic'];
-                                                }
-
-                                                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                                                   $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
-                                                }else {
-                                                   $pro_pic = url('/public/images/service-nofound.jpg');
-                                                }
-
-                                            }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
-
-                                            $today = date('Y-m-d');
-                                            $SpotsLeftdis = 0;
-                                            $SpotsLeft = UserBookingDetail::where('sport', @$book_details['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
-                                            
-                                            if($book_details['businessservices']['group_size'] != '' ){
-                                                $SpotsLeftdis = $book_details['businessservices']['group_size']-$SpotsLeft;
-                                            }
-
-
-                                            $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
-                                            $language = $language_name->languages;
+                                            $sc_date = str_replace('-', '/', $sc_date);  
                                         @endphp
                                         @if(date('Y-m-d',strtotime($sc_date)) > date('Y-m-d'))
-                                        
+                                            <?php $servicedata = BusinessActivityScheduler::where(['serviceid' => @$book_details['user_booking_detail']['sport'],'id' => $book_details['user_booking_detail']['act_schedule_id']])->first();
+
+                                                $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
+
+                                                if(@$book_details['businessservices']['service_type']=='individual')
+                                                { 
+                                                    $b_type = 'Personal Training'; 
+                                                }else { 
+                                                    $b_type =ucfirst($book_details['businessservices']['service_type']); 
+                                                }
+
+                                                if ($book_details['businessservices']['profile_pic']!="") {
+                                                    if(str_contains($book_details['businessservices']['profile_pic'], ',')){
+                                                        $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
+                                                        if( $pic_image[0] == ''){
+                                                           $p_image  = $pic_image[1];
+                                                        }else{
+                                                            $p_image  = $pic_image[0];
+                                                        }
+                                                    }else{
+                                                        $p_image = $book_details['businessservices']['profile_pic'];
+                                                    }
+
+                                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                                       $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                                                    }else {
+                                                       $pro_pic = url('/public/images/service-nofound.jpg');
+                                                    }
+
+                                                }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
+
+                                                $today = date('Y-m-d');
+                                                $SpotsLeftdis = 0;
+                                                $SpotsLeft = [];
+                                                $SpotsLeft = UserBookingDetail::where(['act_schedule_id' => $book_details['user_booking_detail']['act_schedule_id'], 'id' => $book_details['user_booking_detail']['id'] , 'booking_id' => $book_details['id']])->whereDate('bookedtime', '=', $book_details['user_booking_detail']['bookedtime'])->get()->toArray();
+                                                
+                                                $totalquantity = 0;
+                                                foreach($SpotsLeft as $data1){
+                                                    $item = json_decode($data1['qty'],true);
+                                                    if($item['adult'] != '')
+                                                        $totalquantity += $item['adult'];
+                                                    if($item['child'] != '')
+                                                        $totalquantity += $item['child'];
+                                                    if($item['infant'] != '')
+                                                        $totalquantity += $item['infant'];
+                                                }
+                                                if( @$servicedata['spots_available'] != ''){
+                                                    $SpotsLeftdis =  @$servicedata['spots_available'] - $totalquantity;
+                                                }
+
+                                                $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
+                                                $language = $language_name->languages;
+                                            ?>
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
                                                     <div class="headboxes">
@@ -394,7 +410,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span>{{$SpotsLeftdis}} / {{ $book_details['businessservices']['group_size']}}</span>
+                                                            <span>{{$SpotsLeftdis}} / {{ @$servicedata['spots_available']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>DATE SCHEDULED:</span>
@@ -411,7 +427,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{@$data->amount}} </span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -464,7 +480,8 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span> <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
+                                                            <span> 
+                                                                <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
                                                                     if(!empty($a)){
                                                                         foreach($a as $data){
                                                                             if($data['from'] == 'family'){
@@ -560,51 +577,65 @@ use App\UserFamilyDetail;
                                             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
                                             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
                                             $sc_date = str_replace('-', '/', $sc_date);  
-
-                                            $servicedata = BusinessActivityScheduler::where('serviceid',@$book_details['user_booking_detail']['sport'])->first();
-
-                                            $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
-
-                                            if(@$book_details['businessservices']['service_type']=='individual')
-                                            { 
-                                                $b_type = 'Personal Training'; 
-                                            }else { 
-                                                $b_type =ucfirst($book_details['businessservices']['service_type']); 
-                                            }
-                                           
-                                            if ($book_details['businessservices']['profile_pic']!="") {
-                                                if(str_contains($book_details['businessservices']['profile_pic'], ',')){
-                                                    $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
-                                                    if( $pic_image[0] == ''){
-                                                       $p_image  = $pic_image[1];
-                                                    }else{
-                                                        $p_image  = $pic_image[0];
-                                                    }
-                                                }else{
-                                                    $p_image = $book_details['businessservices']['profile_pic'];
-                                                }
-
-                                                if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                                                   $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
-                                                }else {
-                                                   $pro_pic = url('/public/images/service-nofound.jpg');
-                                                }
-
-                                            }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
-
-                                            $today = date('Y-m-d');
-                                            $SpotsLeftdis = 0;
-                                            $SpotsLeft = UserBookingDetail::where('sport', @$book_details['user_booking_detail']['sport'] )->whereDate('bookedtime', '=', $today)->sum('qty');
-                                            
-                                            if($book_details['businessservices']['group_size'] != ''){
-                                                $SpotsLeftdis = $book_details['businessservices']['group_size']-$SpotsLeft;
-                                            }
-
-
-                                            $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
-                                            $language = $language_name->languages;
                                         @endphp
                                         @if(date('Y-m-d',strtotime($sc_date)) < date('Y-m-d'))
+                                            <?php
+                                                $servicedata  = '';
+                                                $servicedata = BusinessActivityScheduler::where(['serviceid' => @$book_details['user_booking_detail']['sport'],'id' => $book_details['user_booking_detail']['act_schedule_id']])->first();
+
+                                                $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
+
+                                                if(@$book_details['businessservices']['service_type']=='individual')
+                                                { 
+                                                    $b_type = 'Personal Training'; 
+                                                }else { 
+                                                    $b_type =ucfirst($book_details['businessservices']['service_type']); 
+                                                }
+                                               
+                                                if ($book_details['businessservices']['profile_pic']!="") {
+                                                    if(str_contains($book_details['businessservices']['profile_pic'], ',')){
+                                                        $pic_image = explode(',', $book_details['businessservices']['profile_pic']);
+                                                        if( $pic_image[0] == ''){
+                                                           $p_image  = $pic_image[1];
+                                                        }else{
+                                                            $p_image  = $pic_image[0];
+                                                        }
+                                                    }else{
+                                                        $p_image = $book_details['businessservices']['profile_pic'];
+                                                    }
+
+                                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                                                       $pro_pic = url('/public/uploads/profile_pic/' . $p_image);
+                                                    }else {
+                                                       $pro_pic = url('/public/images/service-nofound.jpg');
+                                                    }
+
+                                                }else{ $pro_pic = '/public/images/service-nofound.jpg'; }
+
+                                                $today = date('Y-m-d');
+                                                $SpotsLeftdis = 0;
+                                                $SpotsLeft = [];
+                                                $SpotsLeft = UserBookingDetail::where(['act_schedule_id' => $book_details['user_booking_detail']['act_schedule_id']])->whereDate('bookedtime', '=', $book_details['user_booking_detail']['bookedtime'])->get()->toArray();
+                                                
+                                                 $totalquantity = 0;
+                                                foreach($SpotsLeft as $data1){
+                                                   
+                                                    $item = json_decode($data1['qty'],true);
+                                                    if($item['adult'] != '')
+                                                        $totalquantity += $item['adult'];
+                                                    if($item['child'] != '')
+                                                        $totalquantity += $item['child'];
+                                                    if($item['infant'] != '')
+                                                        $totalquantity += $item['infant'];
+                                                }
+                                                if( @$servicedata['spots_available'] != ''){
+                                                    $SpotsLeftdis =  @$servicedata['spots_available'] - $totalquantity;
+                                                }
+
+
+                                                $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
+                                                $language = $language_name->languages; 
+                                            ?>
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
                                                     <div class="headboxes">
@@ -619,11 +650,11 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>PRICE OPTION:</span>
-                                                            <span> @if($BusinessPriceDetails != '')  {{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} @endif Sessions</span>
+                                                            <span>{{@$BusinessPriceDetails['price_title']}} - {{@$BusinessPriceDetails['pay_session']}} Sessions</span>
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span>{{$SpotsLeftdis}} / {{ $book_details['businessservices']['group_size']}}</span>
+                                                            <span>{{$SpotsLeftdis}} / {{ @$servicedata['spots_available']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>DATE SCHEDULED:</span>
@@ -640,7 +671,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{@$data->amount}} </span>
+                                                            <span>${{@$data->amount}}</span>
                                                         </p>
                                                         
                                                         <p>
@@ -685,7 +716,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>MEMBERSHIP TYPE:</span>
-                                                            <span>@if($BusinessPriceDetails != '') {{$BusinessPriceDetails['membership_type']}} @endif</span>
+                                                            <span>{{$BusinessPriceDetails['membership_type']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>BUSINESS TYPE:</span>
@@ -693,7 +724,8 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>WHO IS PARTICIPATING?</span>
-                                                            <span> <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
+                                                            <span> 
+                                                                <?php $a = json_decode($book_details['user_booking_detail']['participate'],true); 
                                                                     if(!empty($a)){
                                                                         foreach($a as $data){
                                                                             if($data['from'] == 'family'){

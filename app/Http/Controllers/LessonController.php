@@ -3598,7 +3598,7 @@ class LessonController extends Controller {
       $companyid = $request->companyid;
         
         //DB::enableQueryLog();
-      $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid)->groupby('business_services.id');
+    /*  $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid)->groupby('business_services.id');
       if( !empty($actoffer) )
       {
         $searchData->Where('sport_activity', $actoffer);
@@ -3617,7 +3617,7 @@ class LessonController extends Controller {
       if( !empty($actfilparticipant) )
       {
             $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->distinct();
-        /*$searchData->Where('business_services.group_size', '>=', $actfilparticipant);*/
+        //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
       }
       if( !empty($actfilgreatfor) )
       {
@@ -3639,10 +3639,10 @@ class LessonController extends Controller {
       }
       $activity1 = $searchData->get();
       //dd(\DB::getQueryLog());
-      /*$activity1 = $searchData->groupby('business_services.id')->get()->toArray();*/
-      $activity = json_decode(json_encode($activity1), true);
+     //$activity1 = $searchData->groupby('business_services.id')->get()->toArray();
+      $activity = json_decode(json_encode($activity1), true);*/
      /* print_r($activity);exit();*/
-      $actbox='';
+      /*$actbox='';
       
         if (!empty($activity)) { 
             foreach ($activity as  $act) {
@@ -3858,7 +3858,7 @@ class LessonController extends Controller {
                 $p=@$activity_sche['scheduled_day_or_week_num'].' '.@$activity_sche['scheduled_day_or_week'];
                 
                 $enddt = date('m/d/Y', strtotime("+".$p, strtotime(@$servicePrfirst['starting'])) );
-                /*     echo $enddt;exit;*/
+                     // echo $enddt;exit;
                 $flterdt = date('m/d/Y',strtotime($actdate) );
                 if($actdate != ''){
                     if( $flterdt <= $enddt ){
@@ -4104,10 +4104,246 @@ class LessonController extends Controller {
                                     ';
                 }
             }
+        }*/
+        
+
+        $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid);
+        if( !empty($actoffer) )
+        {
+            $searchData->Where('sport_activity', $actoffer);
         }
-    
-      echo $actbox;
-      exit; 
+        if( !empty($actloc) )
+        {
+             $searchData->whereRaw('FIND_IN_SET("'.$actloc.'",activity_location)');
+        }
+        if( !empty($actfilmtype) )
+        {
+            $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->
+            select('business_services.*','business_price_details.membership_type')->
+            Where('membership_type', $actfilmtype);
+        }
+      
+        if( !empty($actfilgreatfor) )
+        {
+            $searchData->whereRaw('FIND_IN_SET("'.$actfilgreatfor.'",activity_for)');
+        }
+        if( !empty($btype) )
+        {
+            $searchData->Where('service_type', $btype);
+        }
+        if( !empty($actdate) )
+        {
+            $dt = date('Y-m-d',strtotime($actdate) );
+            $enddt = date('Y-m-d',strtotime($actdate));
+            $searchData->join('business_activity_scheduler as bas', 'business_services.id', '=', 'bas.serviceid')->select('business_services.*','bas.end_activity_date')->where('bas.end_activity_date','>=',  $dt )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",bas.activity_days)')->groupby('business_services.id')->distinct();
+        }
+        if( !empty($actfilsType) )
+        {
+            $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
+        }
+        //DB::enableQueryLog();
+        $activity1 = $searchData->distinct()->get()->toArray();
+        // dd(\DB::getQueryLog());
+        
+        $activity = json_decode(json_encode($activity1), true);
+        $actbox='';
+        if (!empty($activity)) { 
+            $companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
+            foreach ($activity as  $act) {
+                $company = $price = $businessSp = [];
+                $serviceid = $act['id'];
+                $sport_activity = $act['sport_activity'];
+                $companyData = CompanyInformation::where('id',$act['cid'])->first();
+                if (isset($companyData)) {
+                    $companyid = $companyData['id'];
+                    $companyname = $companyData['company_name'];
+                    $companycity = $companyData['city'];
+                    $companycountry = $companyData['country'];    
+                }
+                if ($act['profile_pic']!="") {
+                    if(str_contains($act['profile_pic'], ',')){
+                        $pic_image = explode(',', $act['profile_pic']);
+                        if( $pic_image[0] == ''){
+                           $p_image  = $pic_image[1];
+                        }else{
+                            $p_image  = $pic_image[0];
+                        }
+                    }else{
+                        $p_image = $act['profile_pic'];
+                    }
+
+                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+                    }else {
+                       $profilePic = url('/public/images/service-nofound.jpg');
+                    }
+
+                }else{ $profilePic = '/public/images/service-nofound.jpg'; }
+
+                $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
+                $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
+                $reviews_avg=0;
+                if($reviews_count>0)
+                {   
+                    $reviews_avg= round($reviews_sum/$reviews_count,2); 
+                }
+                
+                $redlink = str_replace(" ","-",$companyname)."/".$act['cid'];
+                $service_type='';
+                if($act['service_type']!=''){
+                    if( $act['service_type']=='individual' ) {$service_type = 'Personal Training'; }
+                    else if( $act['service_type']=='classes' ) { $service_type = 'Group Class';} 
+                    else if( $act['service_type']=='experience' ) { $service_type = 'Experience'; }
+                }
+                $pricearr = [];
+                $price_all = '';
+                $ser_date = '';
+
+                $price_allarray = BusinessPriceDetails::where('serviceid', $act['id'])->get();
+                if(!empty($price_allarray)){
+                    foreach ($price_allarray as $key => $value) {
+                        $pricearr[] = $value->pay_price;
+                    }
+                }
+                if(!empty($pricearr)){
+                    $price_all = min($pricearr);
+                }
+                
+                $bookscheduler='';
+                $time='';
+                $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+                if(@$bookscheduler[0]['set_duration']!=''){
+                    $tm=explode(' ',$bookscheduler[0]['set_duration']);
+                    $hr=''; $min=''; $sec='';
+                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
+                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+                    if($hr!='' || $min!='' || $sec!='')
+                    { $time =  $hr.$min.$sec; } 
+                }
+
+                if( !empty( $actdate) ){
+                    $enddt = $act['end_activity_date'];
+                    $flterdt = date('Y-m-d',strtotime($actdate) );
+                    if( $flterdt <= $enddt ){
+                        $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
+                                        <div class="find-activity">
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                                    <div class="img-modal-left">
+                                                        <img src="'.$profilePic.'" >
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+                                                    <div class="activity-inner-data">
+                                                        <i class="fas fa-star"></i>
+                                                        <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
+                                                    </div>';
+                                                    if($time != ''){
+                                                        $actbox .= '<div class="activity-hours">
+                                                            <span>'.$time.'</span>
+                                                        </div>';
+                                                    }
+                                                    $actbox .= '<div class="activity-city">
+                                                        <span>'.$companycity.', '.$companycountry.'</span>';
+                                                    if(Auth::check()){
+                                                        $loggedId = Auth::user()->id;
+                                                        $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
+                                                        $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
+                                                            <a class="fav-fun-2" id="serfav'.$act["id"].'">';
+                                                        if( !empty($favData) ){ 
+                                                            $actbox .= '<i class="fas fa-heart"></i>';
+                                                        }else{ 
+                                                            $actbox .= '<i class="far fa-heart"></i>';
+                                                        } 
+                                                        $actbox .= '</a></div> '; 
+                                                    }else{
+                                                        $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
+                                                    }
+                                                    $actbox .= '</div>
+                                                        <div class="activity-information">
+                                                        <span><a';
+                                                        if (Auth::check()) { 
+                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
+                                                        }else { 
+                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
+                                                        }
+                                                        $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
+                                                            <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
+                                                            <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                                                        </div>';
+                                                        if($price_all != ''){
+                                                            $actbox .= '<div>
+                                                                <span class="activity-time">From $'.$price_all.'/Person</span>
+                                                            </div>';
+                                                        }
+                                                $actbox .= '</div>
+                                                </div>
+                                            </div>
+                                        </div>';
+                    }
+                }else{
+                    $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
+                                    <div class="find-activity">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <div class="img-modal-left">
+                                                    <img src="'.$profilePic.'" >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+                                                <div class="activity-inner-data">
+                                                    <i class="fas fa-star"></i>
+                                                    <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
+                                                </div>';
+                                                if($time != ''){
+                                                    $actbox .= '<div class="activity-hours">
+                                                        <span>'.$time.'</span>
+                                                    </div>';
+                                                }
+                                                $actbox .= '<div class="activity-city">
+                                                    <span>'.$companycity.', '.$companycountry.'</span>';
+                                                if(Auth::check()){
+                                                    $loggedId = Auth::user()->id;
+                                                    $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
+                                                    $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
+                                                        <a class="fav-fun-2" id="serfav'.$act["id"].'">';
+                                                    if( !empty($favData) ){ 
+                                                        $actbox .= '<i class="fas fa-heart"></i>';
+                                                    }else{ 
+                                                        $actbox .= '<i class="far fa-heart"></i>';
+                                                    } 
+                                                    $actbox .= '</a></div> '; 
+                                                }else{
+                                                    $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
+                                                }
+                                                $actbox .= '</div>
+                                                    <div class="activity-information">
+                                                    <span><a';
+                                                    if (Auth::check()) { 
+                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
+                                                    }else { 
+                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
+                                                    }
+                                                    $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
+                                                        <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
+                                                        <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                                                    </div>';
+                                                    if($price_all != ''){
+                                                        $actbox .= '<div>
+                                                            <span class="activity-time">From $'.$price_all.'/Person</span>
+                                                        </div>';
+                                                    }
+                                            $actbox .= '</div>
+                                            </div>
+                                        </div>
+                                    </div>';
+                }
+            }
+        }
+        
+        echo $actbox;
+        exit; 
     }
     
     public function instant_hire_search_filter(Request $request) {
