@@ -181,6 +181,10 @@ Route::group(['middleware' => ['auth']], function()
 
 
 // Activitys
+Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
+Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
+Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
+Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
 Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
 Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
 
@@ -194,8 +198,7 @@ Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name(
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
 Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
-/*Route::get('/showall-activity','ActivityController@showall_activity')->name('showall_activity');
-*/
+
 /* 09-june 2020 */
 Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
 Route::get('/cart','LessonController@getcart');

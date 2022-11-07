@@ -16,7 +16,11 @@
    
 ?>
 
-
+<style>
+	section.instant-hire{
+		margin-top: 69px;
+	}
+</style>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
@@ -30,18 +34,17 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
-@if(@$getstarteddata != '')
-<section class="instant-hire" >
-	<div class="instant-banner">
-		<img src="{{url('/public/uploads/discover/thumb/'.@$getstarteddata->image) }}">
-		<h4>{{@$getstarteddata->title}}</h4>
-	</div>
-</section>
+@if($activity_get_start_fast)
+	<section class="instant-hire" >
+		<div class="instant-banner">
+			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}">
+			<h4>{{@$activity_get_start_fast->title}}</h4>
+		</div>
+	</section>
 @endif
 
-<section class="instant-hire-activites @if(count($todayservicedata) <= 0) mar-tp @endif">
+<section class="instant-hire-activites">
 	<div class="container-fluid">
-		
 		
 		@includeWhen($bookschedulers, 'activity._next_8_hour_header', ['bookschedulers' => $bookschedulers])
 		
@@ -54,372 +57,22 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-                <?php if (isset($allactivities) && count($allactivities) > 0) { ?>
-					<div class="direc-right distance-block map-sp">
-						<div class="mapsb">Show Maps
-							<label class="switch" for="maps">
-								<input type="checkbox" name="maps" id="maps">
-								<span class="slider round"></span>
-							</label>
-						</div>
-					</div>
-                <?php } ?>
+
 				</div>
 				<div class="col-md-8 leftside-kickboxing kicks">
 					<div class="row" id="activitylist">
-						<?php
-			            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
-							$companycity = $companycountry = $pay_price  = "";
-							$locations = []; 
-							$locationforhover = []; 
-			            if (isset($allactivities) && count($allactivities) > 0) {
-			              $servicetype = [];
-			              $locationforhover = []; 
-			               foreach ($allactivities as $loop => $service) {
-			                  $company = $price = $businessSp = [];
-									$serviceid = $service['id'];
-	                        $sport_activity = $service['sport_activity'];
-	                        $servicetype[$service['service_type']] = $service['service_type'];
-	                        $area = !empty($service['area']) ? $service['area'] : 'Location';
-	                        $company = CompanyInformation::where('id', $service['cid'])->first();
-                           if($company != '') {
-                              $companyid = $company->id;
-                              $companyaddress = $company->address;
-                              $companyname = $company->company_name;
-										$companycity = $company->city;
-										$companycountry = $company->country;
-										$companylogo = $company->logo;
-										$companylat = $company->latitude;
-										$companylon = $company->longitude;
-	                        }
-			                            
-	                        if ($service['profile_pic']!="") {
-									   if(str_contains($service['profile_pic'], ',')){
-								      $pic_image = explode(',', $service['profile_pic']);
-									    	if( $pic_image[0] == ''){
-									      	$p_image  = $pic_image[1];
-									    	}else{
-									       	$p_image  = $pic_image[0];
-									    	}
-									  	}else{
-										  	$pic_image = $service['profile_pic'];
-										   $p_image = $service['profile_pic'];
-										}
 
-										if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-										   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-										}else {
-										   $profilePic = url('/public/images/service-nofound.jpg');
-										}
-									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-									$bookscheduler='';
-									$time='';
-									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-									if(@$bookscheduler[0]['set_duration']!=''){
-										$tm=explode(' ',$bookscheduler[0]['set_duration']);
-										$hr=''; $min=''; $sec='';
-										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-										if($tm[2]!=0){ $min=$tm[2].'min. '; }
-										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-										if($hr!='' || $min!='' || $sec!='')
-										{ $time =  $hr.$min.$sec; } 
-									}
-									$pricearr = [];
-									$price_all = '';
-									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-									if(!empty($price_allarray)){
-										
-										foreach ($price_allarray as $key => $value) {
-											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-												$pricearr[] = $value->adult_weekend_price_diff;
-											}else{
-												$pricearr[] = $value->adult_cus_weekly_price;
-											}
-										}
-
-									}
-									if(!empty($pricearr)){
-										$price_all = min($pricearr);
-									}
-	                    ?>
-						<div class="col-md-4 col-sm-4 col-map-show limitload">
-							<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
-								<div class="kickboxing-block" onmouseover="bigImg(this);">
-									@if(Auth::check())
-										@php
-                                	$loggedId = Auth::user()->id;
-                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-                  				@endphp
-                        		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}"  >
-											<div class="inner-owl-slider-hire">
-												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme" >
-													<?php 
-													$i = 0;
-													if(is_array($pic_image)){
-														foreach($pic_image as $img){
-															$profilePic1 = '';
-															if($img != ''){
-																if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-			                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																}
-				                                 } 
-
-			                                    if($profilePic1 != ''){ ?>
-															<div class="item-inner">
-																<img src="{{$profilePic1}}" class="productImg" >
-															</div>
-														<?php }
-														}
-													}else{
-														if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-	                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-		                                    }else {
-		                                       $profilePic1 = url('/public/images/service-nofound.jpg');
-		                                    } ?>
-														<div class="item-inner">
-															<img src="{{$profilePic1}}">
-														</div>
-													<?php } ?>
-												</div>
-											</div>
-											<script type="text/javascript">
-												$(document).ready(function() {
-												  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
-													   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-													   items : 1, 
-													   loop:true,
-													   nav:true,
-													   dots: false,
-												  	});
-												});
-											</script>
-											<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavall">	
-												<a class="fav-fun-2" id="serfavall{{$service['id']}}">
-                                    	@if( !empty($favData) )
-                                        	<i class="fas fa-heart"></i>
-													@else
-                                    		<i class="far fa-heart"></i>
-                                    	@endif
-                                     </a>
-	                            	</div>
-										</div>
-                  			@else
-                      			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-											<div class="inner-owl-slider-hire">
-												<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-													$i = 0;
-													if(is_array($pic_image)){
-														foreach($pic_image as $img){
-															$profilePic1 = '';
-															if($img != ''){
-																if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-			                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																}
-				                                 } 
-
-			                                    if($profilePic1 != ''){ ?>
-															<div class="item-inner">
-																<img src="{{$profilePic1}}" class="productImg">
-															</div>
-														<?php }
-														}
-													}else{
-														if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-	                                       	$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-		                                    }else {
-		                                       $profilePic1 = url('/public/images/service-nofound.jpg');
-		                                    } ?>
-														<div class="item-inner">
-															<img src="{{$profilePic1}}">
-														</div>
-													<?php } ?>
-												</div>
-											</div>
-											<script type="text/javascript">
-												$(document).ready(function() {
-												  	$("#owl-demo-learn{{$service['id']}}").owlCarousel({
-													   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-													   items : 1, 
-													   loop:true,
-													   nav:true,
-													   dots: false,
-												  	});
-												});
-											</script>
-	                              <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-	                              @if($price_all != '')	
-	                               	<span>From ${{$price_all}}/Person</span>
-	                              @endif
-	                            </div>
-                  			@endif
-                  			@php
-										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-										$reviews_avg=0;
-										if($reviews_count>0)
-										{	
-											$reviews_avg= round($reviews_sum/$reviews_count,2); 
-										}
-									@endphp
-									
-									<div class="bottom-content">
-										<div class="class-info">
-											<div class="row">
-												<div class="col-md-7 col-xs-7 ratingtime">
-													<div class="activity-inner-data">
-														<i class="fas fa-star"></i>
-														<span>{{$reviews_avg}} ({{$reviews_count}})</span>
-													</div>
-													@if($time != '')
-														<div class="activity-hours">
-															<span>{{$time}}</span>
-														</div>
-													@endif
-												</div>
-												<div class="col-md-5 col-xs-5 country-instant">
-													<div class="activity-city">
-														<span>{{$companycity}}, {{$companycountry}}</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										@php
-											$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-											$service_type='';
-											if($service['service_type']!=''){
-												if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-												else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-												else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-											}
-										@endphp
-										<div class="activity-information activites-height">
-											<span><a 
-												@if (Auth::check())  
-				                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-				                                @else 
-				                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-				                                @endif
-				                                    target="_blank">{{ $service['program_name'] }}</a>
-											</span>
-											<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
-										</div>
-										<hr>
-										<div class="all-details">
-											<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
-											<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
-											<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<?php
-	                        if($companylat != '' || $companylon  != ''){
-	                            $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-	                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
-	                    		$locationforhover = $a;
-	                            array_push($locations, $a);
-							}
-						?>
-						<script type="text/javascript">
-							function bigImg(x) {
-								var locations = @json($locationforhover);
-							    alert(locations);
-							   var map = ''
-							   var infowindow = ''
-							   var marker = ''
-							   var markers = []
-							   var circle = ''
-						    	$('#map_canvas').empty();
-
-						    	if (locations.length != 0) {  console.log('!empty');
-						        	map = new google.maps.Map(document.getElementById('map_canvas'), {
-						            zoom:18,
-						            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-						            mapTypeId: google.maps.MapTypeId.ROADMAP,
-						         });
-						         infowindow = new google.maps.InfoWindow();
-						         var bounds = new google.maps.LatLngBounds();
-						         var marker, i;
-						         var icon = {
-						            url: "{{url('/public/images/hoverout2.png')}}",
-						            scaledSize: new google.maps.Size(50, 50),
-						            labelOrigin: {x: 25, y: 16}
-						         };
-						         for (i = 0; i < locations.length; i++) {
-						            var labelText = i + 1
-						            marker = new google.maps.Marker({
-						                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-						                map: map,
-						                icon: icon,
-						                title: labelText.toString(),
-						                label: {
-						                    text: labelText.toString(),
-						                    color: '#222222',
-						                    fontSize: '12px',
-						                    fontWeight: 'bold'
-						                }
-						            });
-
-						            bounds.extend(marker.position);
-
-						            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
-						            var contents =
-						                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
-						                    '<div class="img-claimed-business">' +
-						                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
-						                    '</div></div> </div>' +
-						                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
-						                    '<div class="content-claimed-business-inner">' +
-						                    '<div class="content-left-claimed">' +
-						                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
-						                    '<ul>' +
-						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-						                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-						                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
-						                    '<li><i class="fa fa-star"></i></li>' +
-						                    '<li><i class="fa fa-star"></i></li>' +
-						                    '<li class="count">25</li>' +
-						                    '</ul>' +
-						                    '</div>' +
-						                    '<div class="content-right-claimed"></div>' +
-						                    '</div>' +
-						                    '</div></div></div>' +
-						                    '</div>';
-
-						            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
-						                return function () {
-						                    infowindow.setPosition(marker.latLng);
-						                    infowindow.setContent(contents);
-						                    infowindow.open(map, this);
-						                };
-						            })(marker, contents, infowindow));
-						            markers.push(marker);
-						         }
-
-						         //nnn commented on 18-05-2022 - its not displaying proper map
-						         // map.fitBounds(bounds);
-						         // map.panToBounds(bounds); 
-						         $('.mysrchmap').show()
-							   }else {
-							      $('#mapdetails').hide()
-							   }
-							}
-						</script>
-						<?php
-                    		}
-                		}else{
-                		?> 
-                		<div class="col-md-4 col-sm-4 col-map-show limitload"><p>There is no activity found</p></div>
-                		<?php } ?>
+						@if(@activities)
+							@each('activity.activity_main_card', $activities, 'activity')
+							{{-- @includeWhen($activities, 'activity._next_8_hour_header', ['bookschedulers' => $bookschedulers]) --}}
+						@else
+							<div class="col-md-4 col-sm-4 col-map-show limitload"><p>There is no activity found</p></div>
+						@endif
+						
 					</div>
-
 				</div>
 
-				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_mapone mapskick">
+				<div class="col-md-4 col-sm-12 col-xs-12 kickboxing_map mapskick">
 					<div class="mysrchmap" style="display:none;height: 100%;min-height: 700px;">
 						<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 					</div>
@@ -432,17 +85,10 @@
 	                <a href="#">2</a>
 	            </div>
 	        </div>
-	        @if(count($allactivities)>0)
-			<?php /*?><div class="row align-self-center">
-				<div class="col-md-6">
-					<div class="text-center ptb-65">
-					<button id="load_more_button" class="showall-btn" type="button" onclick="loadMoreData('{{$name}}');">Load More</button>
-					</div>
-				</div>
-			</div><?php */?>
-			@endif
 		</div>
 	</section>
+		
+
 		
 		<div class="row align-self-center">
 			<div class="col-md-6 col-xs-12">
@@ -509,8 +155,8 @@
                         </div>
                     </div>
 					<div class="col-lg-12 btns-modal">
-						<a href="{{route('addbusinesscustomer')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
-						<a href="{{route('businessClaim')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
+						<a href="{{url('/instant-hire')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+						<a href="{{url('/claim-your-business')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
 					</div>
 				 </div>
             </div>
@@ -674,9 +320,10 @@
 	    });
     
 	    $(".mapsb .switch .slider").click(function () {
-	        $(".kickboxing_mapone").toggleClass("mapskick");
+	        $(".kickboxing_map").toggleClass("mapskick");
 	        $(".leftside-kickboxing").toggleClass("kicks");
 	    });
+
 	});
 
 </script>
@@ -685,6 +332,7 @@
 
 <script>
 $(document).ready(function () {
+	<?php $locations = '{}';?>
     var locations = @json($locations);
    /* alert(locations);*/
     var map = ''
@@ -777,6 +425,11 @@ $(document).ready(function () {
     }
 });
 </script>
+<script>
+
+	
+</script>
+
 
 <script type="text/javascript">	
 	function submit_rating(sid)

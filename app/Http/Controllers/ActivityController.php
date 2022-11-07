@@ -42,6 +42,77 @@ class ActivityController extends Controller {
         $this->sports = $sports;
     }
 
+    public function ways_to_workout(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(2);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'classes')->with(['company_information']);
+		$name = 'Personal Training';
+		
+
+
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			'name' => $name,
+		]);	
+    }
+
+    public function personal_trainer(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(1);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'individual')->with(['company_information']);
+
+		$name = 'Personal Training';
+		
+
+
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			'name' => $name,
+		]);	
+    }
+
+    public function experiences(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(3);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'experience')->with(['company_information']);
+		$name = 'Experience';
+		
+
+
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+
+
+	
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			
+			'name'=>$name,
+			 'cart' => $cart
+		]);	
+    }
+
     public function next_8_hours(Request $request){
 
     	$business_services = BusinessServices::where('business_services.is_active', 1);
@@ -68,7 +139,7 @@ class ActivityController extends Controller {
     	$start_date = $filter_date;
     	$end_date = clone($start_date);
     	$end_date = $end_date->modify("23:59:59");
-    	$bookschedulers = BusinessActivityScheduler::between_datetime($filter_date, $end_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
+    	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
 
 
     	return view('activity.next_8_hours',[
@@ -158,6 +229,8 @@ class ActivityController extends Controller {
 	          	}
 	          	$todayservicedata = array_unique($todayservicedata);
 	        }
+	        $current_date = new DateTime();
+	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 			
 			$allactivities = $all_activities->get();
 			/*print_r($allactivities);exit();*/
@@ -167,8 +240,9 @@ class ActivityController extends Controller {
 		
 			return view('activity.getstartedfast',[
 				'allactivities'=>$allactivities,
+				'bookschedulers'=>$bookschedulers,
+				'current_date'=>$current_date,
 				'serviceLocation'=>$serviceLocation,
-				'todayservicedata'=>$todayservicedata,
 				'name'=>$name,
 				'getstarteddata'=>$getstarteddata,
 				 'cart' => $cart
@@ -970,9 +1044,7 @@ class ActivityController extends Controller {
 
 	        $nxtacty = $nxtact->get();
 	        $current_date = new DateTime();
-	        $end_date = clone($current_date);
-	        $end_date = $end_date->modify("+8 hours");
-	        $bookschedulers = BusinessActivityScheduler::between_datetime($current_date, $end_date)->whereIn('serviceid', $nxtacty->pluck('id'))->get();
+	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 	       
 			$allactivities = $all_activities->limit(10)->get();
 			/*dd(DB::getQueryLog());*/

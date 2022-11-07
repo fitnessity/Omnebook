@@ -109,6 +109,10 @@ class BusinessServices extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function company_information(){
+        return $this->belongsTo(CompanyInformation::class, 'cid');
+    }
+
     public function reviews()
     {
         return $this->hasMany(BusinessServiceReview::class, 'service_id');
@@ -126,6 +130,12 @@ class BusinessServices extends Model
     	return $this->hasMany(BusinessPriceDetails::class, 'serviceid');
     }
 
+    public function schedulers(){
+        return $this->hasMany(BusinessActivityScheduler::class, 'serviceid');
+    }
+
+    
+
     public function reviews_score()
     {
     	$reviews_count = $this->reviews()->count();
@@ -142,6 +152,11 @@ class BusinessServices extends Model
         $pictures = explode(',',$this->profile_pic);
         return $pictures[0];
     }
+
+    public function profile_pictures(){
+        return explode(',',$this->profile_pic);
+    }
+
     public function formal_service_types(){
 
 		if( $this->service_type =='individual' ) return 'Personal Training'; 
