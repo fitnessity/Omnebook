@@ -45,7 +45,7 @@
 					@elseif($getdatafast['id'] == 2)
 						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'classes'])}}" >Show all</a>
 					@else
-						<a class="showall-btn btn-position" href="{{route('activities_index',['filtervalue'=> 'experience'])}}">Show all</a>
+						<a class="showall-btn btn-position" href="{{route('activities_experiences')}}">Show all</a>
 					@endif
 				</div>
 			</div>
@@ -112,7 +112,7 @@
 										<div class="activity-information ">
 											<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-											<a c class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
 										</div>
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6">
