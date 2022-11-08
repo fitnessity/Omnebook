@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
 <?php
 use App\User;
+use App\UserFollow;
 ?>
 <div class="page-wrapper inner_top" id="wrapper">
     <div class="page-container">
@@ -31,6 +32,10 @@ use App\User;
 								->where("id", $data['follower_id'])
 								->first();
 								$logo=$queryUser["profile_pic"];
+                               
+                                $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", $queryUser["id"])->get();
+                                $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
+
 							?>
                                 <div class="followers-block">
                                     <div class="followers-content">
@@ -51,10 +56,10 @@ use App\User;
                                         <div class="followers-right-content">
                                             <h5> <?php  echo $queryUser["firstname"] . " ".$queryUser['lastname'] ;?> </h5>
                                             <ul>
-                                                <li><span>Follower</span> 1</li>
+                                                <li><span>Follower</span> {{ $queryUserfollowersdata->count()}}</li>
                                                 <li><span>Member Since</span> 
 												<?php echo date('F Y',strtotime($queryUser['created_at'])); ?> </li>
-                                                <li><span>Following</span> 2</li>
+                                                <li><span>Following</span> {{ $queryUserfollowingdata->count()}}</li>
                                                 
                                             </ul>
                                         </div>

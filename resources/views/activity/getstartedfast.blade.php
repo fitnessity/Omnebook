@@ -260,6 +260,7 @@
 													   loop:true,
 													   nav:true,
 													   dots: false,
+													   onResized: callback,
 												  	});
 												});
 											</script>
@@ -677,9 +678,14 @@
 	        }
 	    });
     
-	    $(".mapsb .switch .slider").click(function () {
-	    		$('.owl-carousel').trigger('refresh.owl.carousel');
-	    		
+	    $(".mapsb .switch .slider").click(function () { console.log("Hello!");
+	    		//$('.owl-carousel').trigger('refresh.owl.carousel');
+	    		//$('#owl-demo-learn124').trigger('refresh.owl.carousel');
+				//$('.owl-carousel').trigger('destroy.owl.carousel');
+				 /*var $carousel = $('#owl-demo-learn123');
+        		$carousel.data('owl.carousel')._invalidated.width = true;
+        		$carousel.trigger('refresh.owl.carousel');
+				console.log("Hello after!");*/
 	    		/*$('#owl-demo-learn123').owlCarousel('refresh');*/
 	       	$(".kickboxing_mapone").toggleClass("mapskick");
 	       	$(".leftside-kickboxing").toggleClass("kicks");

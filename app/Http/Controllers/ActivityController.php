@@ -107,9 +107,8 @@ class ActivityController extends Controller {
 			'current_date' => $current_date,
 			'allactivities'=>$activities,
 			'activities'=>$activities->get(),
-			
 			'name'=>$name,
-			 'cart' => $cart
+			 //'cart' => $cart
 		]);	
     }
 

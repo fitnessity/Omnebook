@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ url('public/css/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/date-range-picker.css') }}">
     <link href="{{ url('public/css/frontend/userprofile.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url('public/css/frontend/jquery.fancybox.min.css') }}">
 </head>
 
 @section('content')
@@ -999,7 +1000,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																			<figure>
 																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																					<video controls class="thumb"  style="width: 100%;">
+																					<video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();">
 																						<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post->video}}" type="video/mp4">
 																					</video>
 																				</a>
@@ -1020,146 +1021,169 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																	</div>
 																</div>
                                                                 <!-- more than 4 images -->
-															@elseif(isset($getimages[4]) && !empty($getimages[4]))
-																<div class="img-bunch">
-																	<div class="row">
-																		<div class="col-lg-6 col-md-6 col-sm-6">
-																			@if(isset($getimages[0]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[1]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-																		</div>
-                                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-																			@if(isset($getimages[2]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[3]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
-                                                                                    </a>
-																				</figure>
-																			@endif
-                                                                            @if(isset($getimages[4]))
-																				<figure>
-                                                                                	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                    	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="">
-                                                                                   	</a>
-                                                                                    <div class="more-photos">
-																						<span>+{{$countimg}}</span>
-																					</div>
-																				</figure>
-																			@endif
-																		</div>
-																	</div>
-																</div>
-            													<!-- 4 images -->
-															@elseif(isset($getimages[3]) && !empty($getimages[3]))
-																<div class="img-bunch">
-																	<div class="row">                   
-																		<div class="col-lg-12 col-md-12 col-sm-12">
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                </a>
-																			</figure>
-																		</div>
-																	</div>
-                                                                    <div class="row">   
-																		<div class="col-lg-4 col-md-4 col-sm-4"> 
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" height="170">
-																				</a>
-																			</figure>   
-																		</div> 
-                                                                        <div class="col-lg-4 col-md-4 col-sm-4"> 
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" height="170">
-																				</a>
-																			</figure>    
-																		</div> 
-                                                                        <div class="col-lg-4 col-md-4 col-sm-4">  
-																			<figure>
-                                                                            	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="" height="170">
-																				</a>
-																			</figure>   
-																		</div> 
-																	</div>
-            														<!-- 3 images -->
-																	@elseif(isset($getimages[2]) && !empty($getimages[2]))
-																		<div class="img-bunch">
-																			<div class="row">
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="" width="100" height="335">
-																						</a>
-																					</figure>
-																				</div>
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="" width="100" height="165">
-																						</a>
-																					</figure>
-																					<figure>
-                                                                                    	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" width="100" height="165">
-																						</a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-            														@elseif(isset($getimages[1]) && !empty($getimages[1]))
-																		<div class="img-bunch-two">
-																			<div class="row">
-																				<div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-                                                                                    	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                        </a>
-																					</figure>
-																				</div>
-                                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="">
-                                                                                        </a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-            															<!-- 1 images -->
-																	@elseif(isset($getimages[0]) && !empty($getimages[0]))
-																		<div class="img-bunch">
-																			<div class="row">
-																				<div class="col-lg-12 col-md-12 col-sm-12">
-																					<figure>
-																						<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
-                                                                                        </a>
-																					</figure>
-																				</div>
-																			</div>
-																		</div>
-																	@endif
+														@elseif(isset($getimages[4]) && !empty($getimages[4]))
+                                                <?php
+                                                    $i=0;
+                                                    foreach($getimages as $img){
+                                                        if(!empty($img) && File::exists(public_path("/uploads/gallery/".$userid."/".$img))){ 
+                                                            if($i>4){
+                                                ?>
+                                                    <div class="img-bunch" style="display:none">
+                                                        <div class="row">                   
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php    }
+                                                        }
+                                                    $i++;
+                                                    }                                              
+                                                ?>
+                                                    <div class="img-bunch">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                @if(isset($getimages[0]))
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                        </a>
+                                                                    </figure>
+                                                                @endif
+                                                                @if(isset($getimages[1]))
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+                                                                        </a>
+                                                                    </figure>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                @if(isset($getimages[2]))
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
+                                                                        </a>
+                                                                    </figure>
+                                                                @endif
+                                                                @if(isset($getimages[3]))
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
+                                                                        </a>
+                                                                    </figure>
+                                                                @endif
+                                                                @if(isset($getimages[4]))
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
+                                                                        </a>
+                                                                        <div class="more-photos">
+                                                                            <span>+{{$countimg}}</span>
+                                                                        </div>
+                                                                    </figure>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 4 images -->
+                                                @elseif(isset($getimages[3]) && !empty($getimages[3]))
+                                                    <div class="img-bunch">
+                                                        <div class="row">                   
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">   
+                                                            <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
+                                                                    </a>
+                                                                </figure>   
+                                                            </div> 
+                                                            <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
+                                                                    </a>
+                                                                </figure>    
+                                                            </div> 
+                                                            <div class="col-lg-4 col-md-4 col-sm-4">  
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
+                                                                    </a>
+                                                                </figure>   
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                    <!-- 3 images -->
+                                                @elseif(isset($getimages[2]) && !empty($getimages[2]))
+                                                    <div class="img-bunch">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
+                                                                    </a>
+                                                                </figure>
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif(isset($getimages[1]) && !empty($getimages[1]))
+                                                    <div class="img-bunch-two">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        <!-- 1 images -->
+                                                @elseif(isset($getimages[0]) && !empty($getimages[0]))
+                                                    <div class="img-bunch">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                                    
                                                                     <?php
 																		$profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count();
@@ -1189,15 +1213,18 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         <li><a href="javascript:void(0);" title="dislike Post"><i id="{{$profile_post->id}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
 																	</ul>
 																</figure>   
+
                                                                 <div class="we-video-info">
 																	
                                                                     <ul>
+                                                                        @if(isset($profile_post->video))
                                                                     	<li>
                                                                         	<span class="views" title="views">
 																				<i class="eyeview fas fa-eye"></i>
 																				<ins>1.2k</ins>
 																			</span>
 																		</li>
+                                                                        @endif
 																		<li>
                                                                         	<div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post->id}}">{{$profile_posts_like}}</span></div>
 																		</li>
@@ -1752,7 +1779,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                                                                         <figure>
                                                                                             <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                            <video controls class="thumb"  style="width: 100%;">
+                                                                                            <video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();">
                                                                                                 <source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post['video']}}" type="video/mp4">
                                                                                             </video>
                                                                                             </a>
@@ -1941,12 +1968,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                     </figure>   
                                                                     <div class="we-video-info">
                                                                         <ul>
+                                                                            @if(isset($profile_post['video']))
                                                                             <li>
                                                                                 <span class="views" title="views">
                                                                                     <i class="eyeview fas fa-eye"></i>
                                                                                     <ins>1.2k</ins>
                                                                                 </span>
                                                                             </li>
+                                                                            @endif
                                                                             <li>
                                                                                 <div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post['id']}}">{{$profile_posts_like}}</span></div>
                                                                             </li>
@@ -3683,6 +3712,10 @@ $('.usernameedit').click(function () {
    $('#username').val(edituser);
 });
 
+    $('video').on("play pause", function() {
+      alert('hii');
+    });
+
  $(document).on('click', '.inquiryfrm', function () {
         
         var name = $('#name').val();
@@ -3917,6 +3950,8 @@ document.querySelector('.show-btn').addEventListener('click', function() {
 });
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
 
 @endsection
             

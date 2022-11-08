@@ -423,7 +423,7 @@ class UserProfileController extends Controller {
                                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                                         <figure>
                                                             <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                            <video controls class="thumb"  style="width: 100%;">
+                                                            <video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();"  playsinline>
                                                                 <source src="/public/uploads/gallery/'.$userid.'/video/'.$profile_post->video.'" type="video/mp4">
                                                             </video>
                                                             </a>
@@ -601,14 +601,16 @@ class UserProfileController extends Controller {
                                                 </ul>
                                             </figure>   
                                             <div class="we-video-info">';
-                                                $html .= '<ul>
-                                                    <li>
+                                                $html .= '<ul>';
+                                                 if(isset($profile_post->video)){
+                                                     $html .= '<li>
                                                         <span class="views" title="views">
                                                             <i class="eyeview fas fa-eye"></i>
                                                             <ins>1.2k</ins>
                                                         </span>
-                                                    </li>
-                                                    <li>
+                                                    </li>';
+                                                }
+                                                $html .= '<li>
                                                         <div class="likes heart" title="Like/Dislike">❤ <span id="likecount'.$profile_post->id.'">'.$profile_posts_like.'</span></div>
                                                     </li>
                                                     <li>
@@ -9683,7 +9685,9 @@ class UserProfileController extends Controller {
                 $logo = isset($queryUser["profile_pic"]) ? $queryUser["profile_pic"] : "";
                 $fname = isset($queryUser["firstname"]) ? $queryUser["firstname"] : "";
                 $lname = isset($queryUser["lastname"]) ? $queryUser["lastname"] : "";
-            
+                
+                $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", $queryUser["id"])->get();
+                $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
                 $testdata .='
                 <div class="followers-block">
                     <div class="followers-content">';
@@ -9700,9 +9704,9 @@ class UserProfileController extends Controller {
                         <div class="followers-right-content">
                           <h5> '.$fname.' '.$lname.' </h5>
                           <ul>
-                              <li><span>Follower</span> 1</li>
+                              <li><span>Follower </span> '.$queryUserfollowersdata->count().' </li>
                               <li><span>Member Since</span> '.date('F Y',strtotime($user->created_at)).'</li>
-                              <li><span>Following</span> 2</li>
+                              <li><span>Following </span> '.$queryUserfollowingdata->count().' </li>
                                
                           </ul>
                         </div> ';

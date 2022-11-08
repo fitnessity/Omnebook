@@ -867,13 +867,21 @@ class BusinessController extends Controller
 		$PagePost = PagePost::where('page_id', $page_id)->orderBy('id','desc')->get();
 		
 		$postsave = PagePostSave::where('user_id',$loggedinUser->id)->orderBy('id','desc')->get();
-		
+
+		$images = PagePost::select('images','user_id')->where('images','!=',null)->where('user_id',$company['user_id'])->orderBy('id','desc')->limit(10)->get();
+
+        $videos = PagePost::select('video','user_id')->where('video','!=',null)->where('user_id',$company['user_id'])->orderBy('id','desc')->get();
+       
+        $postsavedtab = PagePostSave::where('user_id',$company['user_id'])->orderBy('id','desc')->get();
 		$cart = []; $profile_posts=[]; $family=[];
 		
 		return view('profiles.viewBusinessProfileTimeline', [
             'cart' => $cart,
 			'company' => $company,
 			'user_professional_detail' => $user_professional_detail,
+            'images'=> $images,
+            'videos'=> $videos,
+            'postsavedtab'=> $postsavedtab,
 			'services' => $services,
 			'max_price' => $max_price,
 			'min_price' => $min_price,
