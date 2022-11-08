@@ -4928,7 +4928,9 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
 	  width: 100%;
 
 	}
-
+	.fromblock{
+		padding: 0 25px
+	}
 	.your-page > figure {
 
 	  display: inline-block;
@@ -7207,4 +7209,34 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
 
 .spanstyle{
     font-weight: 900 !important;
+}
+.img-modal-left-bpage img{
+	width: 100%;
+}
+.business-right-panel{
+	padding-right: 0px !important;;
+}
+.my-business-page{
+	padding: 0px;
+}
+
+.text-left-page{
+	float: left !important;
+}
+.activity-info span a{
+	float: left !important;
+	width: auto !important;
+}
+.activity-info p{
+	text-align: left !important;
+}
+.activity-info {
+	text-align: left !important;
+}
+.activity-info span{
+	width: 100%;
+	display: inline-block;
+}
+.time-hours{
+	margin-left: 15px;
 }

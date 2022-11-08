@@ -19,7 +19,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 ?>
 <div class="widget">
 	<div class="wid-space"></div>
-	<div class="your-page">
+	<div class="your-page my-business-page">
     	<div class="row fromblock">
         	<h3> <a class="active"> View Activities </a>  </h3>
         	<div class="multiselect-block">
@@ -210,8 +210,8 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                 <div class="col-md-12 col-sm-8 col-xs-12 ">
                     <div class="find-activity">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                <div class="img-modal-left">
+                            <div class="col-md-4 col-sm-4 col-xs-12 business-right-panel">
+                                <div class="img-modal-left-bpage">
                                     <img src="{{ $profilePic }}" >
                                 </div>
                             </div>
@@ -221,32 +221,33 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                                     <span> {{$reviews_avg}} ({{$reviews_count}})  </span>
                                 </div>
                                 @if($time != '')
-                                    <div class="activity-hours">
+                                    <div class="activity-hours time-hours">
                                         <span>{{$time}}</span>
                                     </div>
                                 @endif
-                                <div class="activity-city">
-                                    <span>{{$companycity}}, {{$companycountry}}</span>
-                                    @if(Auth::check())
-                                    <?php
-                                        $loggedId = Auth::user()->id;
-                                        $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
-                                    ?>
-                                        <div class="serv_fav1" ser_id="{{$service['id']}}">
-                                            <a class="fav-fun-2" id="serfav{{$service['id']}}">
-                                                <?php
-                                                    if( !empty($favData) ){ ?>
-                                                        <i class="fas fa-heart"></i>
-                                                    <?php }
-                                                    else{ ?>
-                                                        <i class="far fa-heart"></i>
-                                                 <?php } ?></a>
-                                        </div>
-                                    @else
-                                        <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-                                    @endif
-                                </div>
-                                <div class="activity-information">
+									<div class="activity-city text-left-page">
+										<span>{{$companycity}}, {{$companycountry}}</span>
+										@if(Auth::check())
+										<?php
+											$loggedId = Auth::user()->id;
+											$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
+										?>
+										<div class="serv_fav1" ser_id="{{$service['id']}}">
+											<a class="fav-fun-2" id="serfav{{$service['id']}}">
+												<?php
+												if( !empty($favData) ){ ?>
+												<i class="fas fa-heart"></i>
+												<?php }
+													else{ ?>
+													<i class="far fa-heart"></i>
+												<?php } ?>
+											</a>
+										</div>
+										@else
+											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+										@endif
+									</div>
+                                <div class="activity-information activity-info">
                                     <span><a 
                                         <?php if (Auth::check()) { ?> 
                                             href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 

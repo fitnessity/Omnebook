@@ -73,8 +73,12 @@
     }
 	.find-activity img {  width: 130px !important;  min-height: 141px !important; }
 	.instant-hire{ margin-top: 70px !important;}
+	.img-modal-left-bpage img {width: 100% !important; min-height: 101px !important;}
 }
 
+@media only screen and (min-width: 1750px) and (max-width: 1991px){
+	.img-modal-left-bpage img {width: 100% !important; min-height: 108px !important;}
+}
 /*MEDIA QUEREIS START FROM HERE*/
 
 /*media query for mobile screen start here*/
@@ -1631,6 +1635,7 @@
 	.instant-hire{ margin-top: 70px !important;}
 	.modal-dialog.modal-lg.location-modal{width: 45% !important;}
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
+	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
 }
 @media screen and (min-width:1500px) and (max-width:1920px){
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
