@@ -87,6 +87,8 @@ use App\BusinessServicesFavorite;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
 use App\StaffMembers;
+use App\ProfilePostViews;
+use App\BusinessPostViews;
 use Carbon\Carbon;
 
 use Request as resAll;
@@ -423,11 +425,18 @@ class UserProfileController extends Controller {
                                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                                         <figure>
                                                             <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                            <video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();"  playsinline>
+                                                            <video controls class="thumb"  style="width: 100%;"  id="vedio'.$profile_post->id.'">
                                                                 <source src="/public/uploads/gallery/'.$userid.'/video/'.$profile_post->video.'" type="video/mp4">
                                                             </video>
                                                             </a>
                                                         </figure>
+                                                        <script type="text/javascript">
+                                                            const vidajax = document.getElementById("vedio'.$profile_post->id.'");
+
+                                                            ["playing"].forEach(t => 
+                                                               vidajax.addEventListener(t, e => vediopostviews("'.$profile_post->id.'"))
+                                                            );
+                                                        </script>
                                                     </div>
                                                         </div>
                                                     </div>';
@@ -601,12 +610,13 @@ class UserProfileController extends Controller {
                                                 </ul>
                                             </figure>   
                                             <div class="we-video-info">';
-                                                $html .= '<ul>';
+                                                $html .= '<ul class ="postinfoulajax'.$profile_post->id.'">';
                                                  if(isset($profile_post->video)){
+                                                    $ppvcntajax = ProfilePostViews::where('post_id' , $profile_post->id)->count();
                                                      $html .= '<li>
                                                         <span class="views" title="views">
                                                             <i class="eyeview fas fa-eye"></i>
-                                                            <ins>1.2k</ins>
+                                                            <ins>'.$ppvcntajax.'</ins>
                                                         </span>
                                                     </li>';
                                                 }
@@ -632,9 +642,14 @@ class UserProfileController extends Controller {
                                                     $profile_posts_all = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get();
                                                 if(isset($profile_posts_all[0])){
                                                     $seconduser = User::find($profile_posts_all[0]->user_id);
-                                                  $html.='<a data-toggle="tooltip" title="frank" href="#">
-                                                        <img alt="" src="/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic.'" height="32" width="32">  
-                                                    </a>';
+                                                  $html.='<a data-toggle="tooltip" title="frank" href="#">';
+                                                    if(File::exists(public_path("/uploads/profile_pic/thumb/".$seconduser->profile_pic ))){ 
+                                                        $html.='<img alt="" src="'.url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic).'" height="32" width="32">';
+                                                    }else{ 
+                                                        $pf=substr($seconduser->firstname, 0, 1).substr($seconduser->lastname, 0, 1);
+                                                        $html.='<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                    }  
+                                                    $html.='</a>';
                                                  }
                                                   if(isset($profile_posts_all[1])){
                                                     $thirduser = User::find($profile_posts_all[1]->user_id);
@@ -685,8 +700,14 @@ class UserProfileController extends Controller {
                                          $commentLiked='';
                                          if($cmntUlike>0){ $commentLiked='commentLiked'; }
                                                $html .='<li class="commentappendremove">
-                                                    <div class="comet-avatar">
-                                                        <img src="/public/uploads/profile_pic/thumb/'.$username->profile_pic.'" alt="">
+                                                    <div class="comet-avatar">';
+                                                    if(File::exists(public_path("/uploads/profile_pic/thumb/".$username->profile_pic ))){ 
+                                                        $html .='<img src="'.url('/public/uploads/profile_pic/thumb/'.$username->profile_pic).'" alt="pic">';
+                                                    }else{ 
+                                                        $pf=substr($username->firstname, 0, 1).substr($username->lastname, 0, 1);
+                                                            $html .='<div class="admin-img-text"><p>'.$pf.'</p></div>';
+                                                    } 
+                                                    $html .='
                                                     </div>
                                                     <div class="we-comment">
                                                         <h5><a href="javascript:void(0);" title="">'.$username->firstname.' '.$username->lastname.'</a></h5>
@@ -752,6 +773,18 @@ class UserProfileController extends Controller {
                             </div>';
         }
         return response()->json(array("success"=>'success','html'=>$html));   
+    }
+
+    public function updateprofilepostviewcount(Request $request){
+        $ppviews =  ProfilePostViews::where(['post_id'=>$request->post_id,'user_id' => Auth::user()->id])->first();
+        if( $ppviews == ''){
+            $data=array(
+                "user_id" => Auth::user()->id,
+                "post_id" => $request->post_id,
+            );
+           /* print_r($data);*/
+            ProfilePostViews::create($data);
+        }
     }
 
     public function reportPost($id,Request $request) {

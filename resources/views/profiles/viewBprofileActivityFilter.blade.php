@@ -24,7 +24,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
         	<h3> <a class="active"> View Activities </a>  </h3>
         	<div class="multiselect-block">
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select name="actfiloffer" id="actfiloffer" class="bd-right bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')">
+                    <select name="actfiloffer" id="actfiloffer" class="bd-right bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Activity Offered</option>
                         <?php
                             if (!empty($actoffer)) {
@@ -34,7 +34,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     </select>
                 </div>
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select name="actfillocation" id="actfillocation" class="bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')">
+                    <select name="actfillocation" id="actfillocation" class="bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Location</option>
                         <option value="Online">Online</option>
                         <option value="At Business">At Business Address</option>
@@ -42,14 +42,14 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     </select>
                 </div>
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select id="actfilmtype" name="actfilmtype" class="bd-right bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')">
+                    <select id="actfilmtype" name="actfilmtype" class="bd-right bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Membership Type</option>
                         <option>Drop In</option>
                         <option>Semester</option>
                     </select>
                 </div>
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select name="actfilgreatfor" id="actfilgreatfor" class="bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')">
+                    <select name="actfilgreatfor" id="actfilgreatfor" class="bd-bottom" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                             <option value="">Great For</option>
                             <option>Individual</option>
                             <option>Kids</option>
@@ -71,7 +71,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     </select> -->
                 <!-- </div> -->
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select id="actfilbtype" name="actfilbtype" class="bd-bottom bd-right" onchange="actFilter('<?php echo $cid; ?>','0')" >
+                    <select id="actfilbtype" name="actfilbtype" class="bd-bottom bd-right" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Business Type</option>
                         <option value="individual">Personal Trainer</option>
                         <option value="classes">Gym/Studio</option>
@@ -80,7 +80,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                 </div>
                 
                 <div class="col-md-12 col-lg-6 pl-0 pr-0">
-                    <select name="actfilsType" id="actfilsType" onchange="actFilter('<?php echo $cid; ?>','0')" class="bd-bottom" >
+                    <select name="actfilsType" id="actfilsType" onchange="actFilter('<?php echo $cid; ?>','0')" class="bd-bottom" autocomplete="off">
                             <option value="">Service Type</option>
                             <option>Personal Training</option>
                             <option>Coaching</option>
@@ -210,12 +210,12 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                 <div class="col-md-12 col-sm-8 col-xs-12 ">
                     <div class="find-activity">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12 business-right-panel">
+                            <div class="col-md-5 col-sm-4 col-xs-12 business-right-panel">
                                 <div class="img-modal-left-bpage">
                                     <img src="{{ $profilePic }}" >
                                 </div>
                             </div>
-                            <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+                            <div class="col-md-7 col-sm-8 col-xs-12 activity-data">
                                 <div class="activity-inner-data">
                                     <i class="fas fa-star"></i>
                                     <span> {{$reviews_avg}} ({{$reviews_count}})  </span>
@@ -225,14 +225,12 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                                         <span>{{$time}}</span>
                                     </div>
                                 @endif
-									<div class="activity-city text-left-page">
-										<span>{{$companycity}}, {{$companycountry}}</span>
-										@if(Auth::check())
+								@if(Auth::check())
 										<?php
 											$loggedId = Auth::user()->id;
 											$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
 										?>
-										<div class="serv_fav1" ser_id="{{$service['id']}}">
+										<div class="serv_fav1 heart-side" ser_id="{{$service['id']}}">
 											<a class="fav-fun-2" id="serfav{{$service['id']}}">
 												<?php
 												if( !empty($favData) ){ ?>
@@ -246,6 +244,9 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 										@else
 											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
 										@endif
+									<div class="activity-city text-left-page">
+										<span>{{$companycity}}, {{$companycountry}}</span>
+										
 									</div>
                                 <div class="activity-information activity-info">
                                     <span><a 

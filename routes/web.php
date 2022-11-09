@@ -564,6 +564,7 @@ Route::get('showcomments/{id}', 'UserProfileController@showcomments');
 Route::get('postDetail/', 'UserProfileController@postDetail')->name('postDetail');
 
 Route::get('loadmorepost', 'UserProfileController@loadmorepost');
+Route::post('updateprofilepostviewcount', 'UserProfileController@updateprofilepostviewcount');
 Route::get('loadmoreposts', 'Frontend\PostController@loadmoreposts');
 /////////made by me////////
 Route::get('family-member-delete/{family_id}', 'UserProfileController@deleteFamily');
@@ -854,6 +855,8 @@ Route::post('NewService', 'UserProfileController@NewService')->name('NewService'
 //Route::post('autocomplete','UserProfileController@autocomplete'->name('autocomplete');
 
 // Page
+
+Route::post('updatebusinesspostviewcount', 'BusinessController@updatebusinesspostviewcount');
 Route::get('businessprofile/{user_name}/{id}','BusinessController@viewbusinessprofileofOther')->name('show_businessprofile');
 Route::get('businessprofile/timeline/{user_name}/{id}','BusinessController@viewbprofiletimelineofOther')->name('businessprofile');
 Route::post('pagePost', 'BusinessController@pagePost')->name('pagePost');

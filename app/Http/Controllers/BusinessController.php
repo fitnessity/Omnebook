@@ -45,6 +45,7 @@ use App\PageLike;
 use App\Notification;
 use App\Sports;
 use App\BusinessReview;
+use App\BusinessPostViews;
 
 class BusinessController extends Controller
 {
@@ -232,6 +233,19 @@ class BusinessController extends Controller
 		$likecount = PagePostCommentsLike::where('post_id',$request->postId)->where('comment_id',$id)->count();
 		return response()->json(array("success"=>'success','count'=>$likecount,'status'=>$status));
 	}
+
+    public function updatebusinesspostviewcount(Request $request)
+    {
+        $ppviews =  BusinessPostViews::where(['post_id'=>$request->post_id,'user_id' => Auth::user()->id])->first();
+        if( $ppviews == ''){
+            $data=array(
+                "user_id" => Auth::user()->id,
+                "post_id" => $request->post_id,
+            );
+           /* print_r($data);*/
+            BusinessPostViews::create($data);
+        }
+    }
 	public function likepost($id,Request $request) {
       $like = PagePostLikes::where('user_id',Auth::user()->id)->where('post_id',$id)->first();
       

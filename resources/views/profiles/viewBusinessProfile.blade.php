@@ -37,6 +37,7 @@
 	use App\BusinessExperience;
 	use App\BusinessService;
 	use App\BusinessReview;
+    use App\BusinessPostViews;
 ?>
 <style>
 	.removepost{ height: auto !important; }
@@ -631,11 +632,18 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																			<figure>
 																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																				<video controls class="thumb"  style="width: 100%;">
+																				<video controls class="thumb"  style="width: 100%;"   id="vedio{{$page_post->id}}">
 																					<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$page_post->video}}" type="video/mp4">
 																				</video>
 																				</a>
 																			</figure>
+                                                                            <script type="text/javascript">
+                                                                               /* const vid = document.getElementById('vedio{{$page_post->id}}');*/
+
+                                                                                ['playing'].forEach(t => 
+                                                                                   document.getElementById('vedio{{$page_post->id}}').addEventListener(t, e => vediopostviews('{{$page_post->id}}'))
+                                                                                );
+                                                                            </script>
 																		</div>
 																	</div>
 																</div>
@@ -846,13 +854,18 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																</ul>
 														</figure>
 														<div class="we-video-info">
-															<ul>
-																<li>
-																	<span class="views" title="views">
-																		<i class="eyeview fas fa-eye"></i>
-																		<ins>1.2k</ins>
-																	</span>
-																</li>
+															<ul class ="postinfoul{{$page_post['id']}}">
+																 @if(isset($page_post->video))
+                                                                <?php 
+                                                                    $ppvcnt = BusinessPostViews::where('post_id' , $page_post->id)->count();
+                                                                ?>
+                                                                <li>
+                                                                    <span class="views" title="views">
+                                                                        <i class="eyeview fas fa-eye"></i>
+                                                                        <ins>{{$ppvcnt}}</ins>
+                                                                    </span>
+                                                                </li>
+                                                            @endif
 																<li>
 																	<div class="likes heart" title="Like/Dislike">
 																		<i class="fas fa-heart"></i>
@@ -1606,7 +1619,18 @@ $(document).ready(function(){
 	//load_data(page);
 });	
 $(document).ready(function(){ 
-	
+    $("#actfiloffer").empty();
+    $("#actfillocation").empty();
+    $("#actfilmtype").empty();
+    $("#actfilgreatfor").empty();
+    $("#actfilbtype").empty();
+    $("#actfilsType").empty();
+	/*$("#actfiloffer option[value='']").attr('selected', true);
+    $("#actfillocation option[value='']").attr('selected', true);
+    $("#actfilmtype option[value='']").attr('selected', true);
+    $("#actfilgreatfor option[value='']").attr('selected', true);
+    $("#actfilbtype option[value='']").attr('selected', true);
+    $("#actfilsType option[value='']").attr('selected', true);*/
 	$(document).on('click', '.sharefb', function(){ 
 		var id = $(this).attr("id");
 		$.ajax({
@@ -1641,6 +1665,25 @@ $(document).ready(function(){
 </script>
 
 <script type="text/javascript">
+    function vediopostviews(post_id) {
+        var _token = $("input[name='_token']").val();
+        $.ajax({
+            url: "{{url('/updatebusinesspostviewcount')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                post_id:post_id,
+                 _token: _token
+            },  
+            success: function (data){
+                $(".postinfoul"+post_id).load(" .postinfoul"+post_id+" >*");
+                $(".postinfoulajax"+post_id).load(" .postinfoulajax"+post_id+" >*");
+            }
+        });
+    }
+
 	function readURL(input) {
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();
@@ -1877,6 +1920,33 @@ function sharediv(){
     });
 </script>
 <script>
+
+     $(document).on('click', '.serv_fav1', function(){
+        var ser_id = $(this).attr('ser_id');
+        // var _token = $("input[name='_token']").val();
+        var _token = $('meta[name="csrf-token"]'). attr('content');
+        $.ajax({
+            type: 'POST',
+            url: '{{route("service_fav")}}',
+            data: {
+                _token: _token,
+                ser_id: ser_id
+            },
+            success: function (data) {
+                if(data.status=='like')
+                {
+                    $('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+                }
+                else
+                {
+                    $('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+                }
+            }
+        });
+    });
+
+
+
 	$(document).on('click', '.postcomment', function () {
         var postId =$(this).attr('id');
         var comment = $('#comment'+postId).val();     

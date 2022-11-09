@@ -260,7 +260,7 @@
 													   loop:true,
 													   nav:true,
 													   dots: false,
-													   onResized: callback,
+													  /* onResized: callback,*/
 												  	});
 												});
 											</script>
@@ -629,56 +629,8 @@
 	
 <script type="text/javascript">
 	$(document).ready(function () {
-
-		$(document).on('click', '.serv_fav1', function(){
-	        var ser_id = $(this).attr('ser_id');
-	        var id = $(this).attr('data-id');
-	        var _token = $('meta[name="csrf-token"]'). attr('content');
-	        $.ajax({
-	            type: 'POST',
-	            url: '{{route("service_fav")}}',
-	            data: {
-	                _token: _token,
-	                ser_id: ser_id
-	            },
-	            success: function (data) {
-	                if(data.status=='like')
-					{
-						$('#'+id+ser_id).html('<i class="fas fa-heart"></i>');
-					}
-					else
-					{
-						$('#'+id+ser_id).html('<i class="far fa-heart"></i>');
-					}
-	            }
-	        });
-	    });
-
-	    $("#closeActreview").click(function(){
-	    	$("#actreview").modal('hide');
-			return false;
-	    });
-	
-	    $(document).on('click', '.show-compare-detail', function () {
-			$('.compare-model').modal('hide');
-			let itemID = $(this).data('id');
-			$('#mykickboxing'+itemID).modal('show');
-		});
-
-		$("#milesnew").on("change", function() {
-	        var distance = $(this).val();
-	        var zipcode = '562398';
-	        var country = 'india';
-	        var searchString = "new delhi";
-	        
-	        if(zipcode != '' || country != '') {
-	        	searchString = zipcode + '&amp;' + country;
-	        } else {
-	        	searchString = ($("#exp_city").val() != "") ? $("#exp_city").val() : "new delhi";
-	        }
-	    });
-    
-	    $(".mapsb .switch .slider").click(function () { console.log("Hello!");
+		 $(".mapsb .switch .slider").click(function () { 
+	    	console.log("Hello!");
 	    		//$('.owl-carousel').trigger('refresh.owl.carousel');
 	    		//$('#owl-demo-learn124').trigger('refresh.owl.carousel');
 				//$('.owl-carousel').trigger('destroy.owl.carousel');
@@ -687,6 +639,8 @@
         		$carousel.trigger('refresh.owl.carousel');
 				console.log("Hello after!");*/
 	    		/*$('#owl-demo-learn123').owlCarousel('refresh');*/
+				window.dispatchEvent(new Event('resize'));
+				
 	       	$(".kickboxing_mapone").toggleClass("mapskick");
 	       	$(".leftside-kickboxing").toggleClass("kicks");
 	   });

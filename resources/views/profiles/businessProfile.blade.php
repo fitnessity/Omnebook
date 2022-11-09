@@ -36,6 +36,7 @@
 	use App\BusinessService;
 	use App\BusinessExperience;
 	use App\BusinessReview;
+    use App\BusinessPostViews;
 	
 ?>
 <style>
@@ -946,15 +947,22 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 															<div class="col-lg-12 col-md-12 col-sm-12">
 																<figure>
 																	<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																	<video controls class="thumb"  style="width: 100%;">
+																	<video controls class="thumb"  style="width: 100%;"  id="vedio{{$page_post->id}}">
 																		<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$page_post->video}}" type="video/mp4">
 																	</video>
 																	</a>
 																</figure>
+                                                                 <script type="text/javascript">
+                                                                   /* const vid = document.getElementById('vedio{{$page_post->id}}');*/
+
+                                                                    ['playing'].forEach(t => 
+                                                                       document.getElementById('vedio{{$page_post->id}}').addEventListener(t, e => vediopostviews('{{$page_post->id}}'))
+                                                                    );
+                                                                </script>
 															</div>
 														</div>
 													</div>
-												@elseif(isset($profile_post->music))   
+												@elseif(isset($page_post->music))   
 													<div class="img-bunch">
 														<div class="row">
 															<div class="col-lg-12 col-md-12 col-sm-12">
@@ -1149,19 +1157,24 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     <li><a id="savepost{{$page_post['id']}}" class="bg-purple savepost <?php echo $savedpost; ?>" href="javascript:void(0);" title="Save to Pin Post" postid="{{$page_post['id']}}" pageid="{{ request()->page_id }}">
 														<i class="thumbtrack fas fa-thumbtack"></i></a>
 													</li>
-                                                    <?php /*?> <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$page_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li><?php */?>
                                                     <li><a class="thumbup thumblike <?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post" id="like-thumb<?php echo $page_post->id; ?>" postid="{{$page_post['id']}}" is_like="1" posttype="pagepost" ><i class="fas fa-thumbs-up"></i></a></li>
                                                     <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$page_post['id']}}" postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
 												</ul>
 											</figure>
 											<div class="we-video-info">
-												<ul>
+												<ul class ="postinfoul{{$page_post['id']}}">
+                                                    @if(isset($page_post->video))
+                                                    <?php 
+
+                                                        $ppvcnt = BusinessPostViews::where('post_id' , $page_post->id)->count();
+                                                    ?>
 													<li>
 														<span class="views" title="views">
                                                             <i class="eyeview fas fa-eye"></i>
-															<ins>1.2k</ins>
+															<ins>{{$ppvcnt}}</ins>
 														</span>
 													</li>
+                                                    @endif
 													<li>
 														<div class="likes heart" title="Like/Dislike">
                                                         	<i class="fas fa-heart"></i>
@@ -1763,7 +1776,33 @@ function showWebCam()
 	 });
 	 Webcam.attach( '#my_camera' );
 }
+
+ function vediopostviews(post_id) {
+        var _token = $("input[name='_token']").val();
+        $.ajax({
+            url: "{{url('/updatebusinesspostviewcount')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                post_id:post_id,
+                 _token: _token
+            },  
+            success: function (data){
+                $(".postinfoul"+post_id).load(" .postinfoul"+post_id+" >*");
+                $(".postinfoulajax"+post_id).load(" .postinfoulajax"+post_id+" >*");
+            }
+        });
+    }
+
 $(document).ready(function(){ 
+    $("#actfiloffer option[value='']").attr('selected', true);
+    $("#actfillocation option[value='']").attr('selected', true);
+    $("#actfilmtype option[value='']").attr('selected', true);
+    $("#actfilgreatfor option[value='']").attr('selected', true);
+    $("#actfilbtype option[value='']").attr('selected', true);
+    $("#actfilsType option[value='']").attr('selected', true);
 	function detectWebcam(callback) {
 		let md = navigator.mediaDevices;
 		if (!md || !md.enumerateDevices) return callback(false);
@@ -2503,6 +2542,31 @@ $( document ).ready(function() {
     });
 </script>
 <script>
+    $(document).on('click', '.serv_fav1', function(){
+        var ser_id = $(this).attr('ser_id');
+        // var _token = $("input[name='_token']").val();
+        var _token = $('meta[name="csrf-token"]'). attr('content');
+        $.ajax({
+            type: 'POST',
+            url: '{{route("service_fav")}}',
+            data: {
+                _token: _token,
+                ser_id: ser_id
+            },
+            success: function (data) {
+                if(data.status=='like')
+                {
+                    $('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+                }
+                else
+                {
+                    $('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+                }
+            }
+        });
+    });
+
+
 	$(document).on('click', '.postcomment', function () {
         var postId =$(this).attr('id');
         var comment = $('#comment'+postId).val();     
