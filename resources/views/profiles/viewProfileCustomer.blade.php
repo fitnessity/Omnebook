@@ -40,6 +40,7 @@ use App\ProfileSave;
 use App\ProfilePost;
 use App\UserFollow;
 use App\PostCommentLike;
+use App\ProfilePostViews;
 ?>
 
 <?php
@@ -1000,11 +1001,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																			<figure>
 																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																					<video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();">
+																					<video controls class="thumb"  style="width: 100%;" id="vedio{{$profile_post->id}}">
 																						<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post->video}}" type="video/mp4">
 																					</video>
 																				</a>
 																			</figure>
+                                                                    <script type="text/javascript">
+                                                                        
+                                                                        /*const vid = document.getElementById('vedio{{$profile_post->id}}');*/
+
+                                                                        ['playing'].forEach(t => 
+                                                                           document.getElementById('vedio{{$profile_post->id}}').addEventListener(t, e => vediopostviews('{{$profile_post->id}}'))
+                                                                        );
+                                                                    </script>
 																		</div>
 																	</div>
 																</div>
@@ -1216,12 +1225,17 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
                                                                 <div class="we-video-info">
 																	
-                                                                    <ul>
+                                                                    <ul class ="postinfoul{{$profile_post->id}}">
                                                                         @if(isset($profile_post->video))
+                                                                        
+                                                                        <?php 
+
+                                                                            $ppvcnt = ProfilePostViews::where('post_id' , $profile_post->id)->count();
+                                                                        ?>
                                                                     	<li>
                                                                         	<span class="views" title="views">
 																				<i class="eyeview fas fa-eye"></i>
-																				<ins>1.2k</ins>
+																				<ins>{{$ppvcnt}}</ins>
 																			</span>
 																		</li>
                                                                         @endif
@@ -1779,11 +1793,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                                                                         <figure>
                                                                                             <a href="#" title="" data-toggle="modal" data-target="#img-comt">
-                                                                                            <video controls class="thumb"  style="width: 100%;" onclick="this.paused ? this.play() : this.pause();">
+                                                                                            <video controls class="thumb"  style="width: 100%;" id="vedio{{$profile_post['id']}}">
                                                                                                 <source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post['video']}}" type="video/mp4">
                                                                                             </video>
                                                                                             </a>
                                                                                         </figure>
+                                                                                        <script type="text/javascript">
+                                                                        
+                                                                        /*const svid = document.getElementById('vedio{{$profile_post->id}}');*/
+
+                                                                        ['playing'].forEach(t => 
+                                                                           document.getElementById('vedio{{$profile_post->id}}').addEventListener(t, e => vediopostviews('{{$profile_post->id}}'))
+                                                                        );
+                                                                    </script>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1967,12 +1989,15 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         </ul>
                                                                     </figure>   
                                                                     <div class="we-video-info">
-                                                                        <ul>
+                                                                        <ul class ="postinfouls{{$profile_post['id']}}">
                                                                             @if(isset($profile_post['video']))
+                                                                            <?php 
+                                                                                $ppvcnts = ProfilePostViews::where('post_id' , $profile_post['id'])->count();
+                                                                            ?>
                                                                             <li>
                                                                                 <span class="views" title="views">
                                                                                     <i class="eyeview fas fa-eye"></i>
-                                                                                    <ins>1.2k</ins>
+                                                                                    <ins>{{$ppvcnts}}</ins>
                                                                                 </span>
                                                                             </li>
                                                                             @endif
@@ -2410,6 +2435,28 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 	function myFunction() {
 		alert("Image verified!");
 	}
+
+
+     function vediopostviews(post_id) {
+        var _token = $("input[name='_token']").val();
+        $.ajax({
+            url: "{{url('/updateprofilepostviewcount')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                post_id:post_id,
+                 _token: _token
+            },  
+            success: function (data){
+                $(".postinfoul"+post_id).load(" .postinfoul"+post_id+" >*");
+                $(".postinfouls"+post_id).load(" .postinfouls"+post_id+" >*");
+                $(".postinfoulajax"+post_id).load(" .postinfoulajax"+post_id+" >*");
+            }
+        });
+    }
+
 	$(document).ready(function(){ 
 		function detectWebcam(callback) {
 			let md = navigator.mediaDevices;
@@ -2874,6 +2921,7 @@ function delPostImg(vl){
 </script>
 <script>
 $(document).ready(function () {
+
 	$('.delimg').click(function () {
 		$.ajax({
 			url: "{{url('/delete-image-user?myindex=')}}" + $(this).attr('myindex'),
@@ -3712,10 +3760,10 @@ $('.usernameedit').click(function () {
    $('#username').val(edituser);
 });
 
-    $('video').on("play pause", function() {
+    /*$('video').on("play pause", function() {
       alert('hii');
     });
-
+*/
  $(document).on('click', '.inquiryfrm', function () {
         
         var name = $('#name').val();

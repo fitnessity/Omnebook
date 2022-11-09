@@ -3598,53 +3598,53 @@ class LessonController extends Controller {
       $companyid = $request->companyid;
         
         //DB::enableQueryLog();
-    /*  $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid)->groupby('business_services.id');
-      if( !empty($actoffer) )
-      {
-        $searchData->Where('sport_activity', $actoffer);
-      }
+        /*  $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid)->groupby('business_services.id');
+          if( !empty($actoffer) )
+          {
+            $searchData->Where('sport_activity', $actoffer);
+          }
 
-      if( !empty($actloc) )
-      {
-        $searchData->whereRaw('FIND_IN_SET("'.$actloc.'",activity_location)');
-      }
-      if( !empty($actfilmtype) )
-      {
-        $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->
-        select('business_services.*','business_price_details.membership_type')->
-        Where('membership_type', $actfilmtype);
-      }
-      if( !empty($actfilparticipant) )
-      {
-            $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->distinct();
-        //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
-      }
-      if( !empty($actfilgreatfor) )
-      {
-        $searchData->whereRaw('FIND_IN_SET("'.$actfilgreatfor.'",activity_for)');
-      }
-      if( !empty($btype) )
-      {
-        $searchData->Where('service_type', $btype);
-      }
-      if( !empty($actdate) )
-      {
-        $dt = date('Y-m-d',strtotime($actdate) );
-        $enddt = date('Y-m-d', strtotime("+1 year", strtotime($actdate)) );
-        $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.starting')->Where('business_activity_scheduler.starting', '<=', $enddt);
-      }
-      if( !empty($actfilsType) )
-      {
-        $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
-      }
-      $activity1 = $searchData->get();
-      //dd(\DB::getQueryLog());
-     //$activity1 = $searchData->groupby('business_services.id')->get()->toArray();
-      $activity = json_decode(json_encode($activity1), true);*/
-     /* print_r($activity);exit();*/
-      /*$actbox='';
+          if( !empty($actloc) )
+          {
+            $searchData->whereRaw('FIND_IN_SET("'.$actloc.'",activity_location)');
+          }
+          if( !empty($actfilmtype) )
+          {
+            $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->
+            select('business_services.*','business_price_details.membership_type')->
+            Where('membership_type', $actfilmtype);
+            }
+            if( !empty($actfilparticipant) )
+          {
+                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->distinct();
+            //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
+          }
+          if( !empty($actfilgreatfor) )
+          {
+            $searchData->whereRaw('FIND_IN_SET("'.$actfilgreatfor.'",activity_for)');
+          }
+          if( !empty($btype) )
+          {
+            $searchData->Where('service_type', $btype);
+          }
+            if( !empty($actdate) )
+            {
+                $dt = date('Y-m-d',strtotime($actdate) );
+                $enddt = date('Y-m-d', strtotime("+1 year", strtotime($actdate)) );
+                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.starting')->Where('business_activity_scheduler.starting', '<=', $enddt);
+            }
+            if( !empty($actfilsType) )
+            {
+                $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
+            }
+            $activity1 = $searchData->get();
+            //dd(\DB::getQueryLog());
+            //$activity1 = $searchData->groupby('business_services.id')->get()->toArray();
+            $activity = json_decode(json_encode($activity1), true);*/
+            /* print_r($activity);exit();*/
+            /*$actbox='';
       
-        if (!empty($activity)) { 
+            if (!empty($activity)) { 
             foreach ($activity as  $act) {
               $servicePrice = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
               $pay_session1=''; $pay_price1=''; $priceid1='';
@@ -4229,8 +4229,8 @@ class LessonController extends Controller {
                         $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
                                         <div class="find-activity">
                                             <div class="row">
-                                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="img-modal-left">
+                                                <div class="col-md-4 col-sm-4 col-xs-12 business-right-panel">
+                                                    <div class="img-modal-left-bpage">
                                                         <img src="'.$profilePic.'" >
                                                     </div>
                                                 </div>
@@ -4240,11 +4240,11 @@ class LessonController extends Controller {
                                                         <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
                                                     </div>';
                                                     if($time != ''){
-                                                        $actbox .= '<div class="activity-hours">
+                                                        $actbox .= '<div class="activity-hours time-hours">
                                                             <span>'.$time.'</span>
                                                         </div>';
                                                     }
-                                                    $actbox .= '<div class="activity-city">
+                                                    $actbox .= '<div class="activity-city text-left-page">
                                                         <span>'.$companycity.', '.$companycountry.'</span>';
                                                     if(Auth::check()){
                                                         $loggedId = Auth::user()->id;
@@ -4261,12 +4261,12 @@ class LessonController extends Controller {
                                                         $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
                                                     }
                                                     $actbox .= '</div>
-                                                        <div class="activity-information">
+                                                        <div class="activity-information activity-info">
                                                         <span><a';
                                                         if (Auth::check()) { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
+                                                            $actbox .= ' href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
                                                         }else { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
+                                                            $actbox .= ' href="'.Config::get('constants.SITE_URL').'/userlogin"';
                                                         }
                                                         $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
                                                             <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
