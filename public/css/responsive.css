@@ -1560,6 +1560,7 @@
 	.modal-dialog.modal-lg.staff-modal{width: 80% !important;}
 	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
 	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
+	.modal-dialog.modal-lg.booking-receipt{width: 70% !important;}
 }
 
 /*media query for laptops & desktops screen start here*/

@@ -20456,7 +20456,7 @@ input#zipcode {
 }
 #gallery div {
 	display: inline-block;
-	margin: 15px;
+	/*margin: 15px; */
 }
 #gallery img {
 	min-height: 150px;
@@ -21458,4 +21458,228 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-city.text-left-page span{
 	  margin-right: 6px;
+}
+.imagediv .more-option .more {
+  float: right;
+  position: relative;
+}
+.imagediv .more-option .more-post-optns {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+.imagediv .more-option .more-post-optns:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+.imagediv .more-option .more-post-optns::before {
+  background: #eee none repeat scroll 0 0;
+  border-radius: 100%;
+  content: "";
+  height: 33px;
+  left: 50%;
+  position: absolute;
+  top: 45%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.2s linear 0s;
+  width: 33px;
+  z-index: 1;
+}
+.imagediv .more-option .more-post-optns > i {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+.imagediv .more-option .more-post-optns:hover > i{
+	 color: #000;
+}
+.imagediv .more-option .more-post-optns:hover > ul {
+  opacity: 1;
+  right: -1px;
+  top: 100%;
+  transform: scale(1);
+  visibility: visible;
+}
+.imagediv .more-option .more-post-optns > ul {
+  background: #fff none repeat scroll 0 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  list-style: outside none none;
+  margin: 0;
+  opacity: 0;
+  padding: 15px;
+  position: absolute;
+  right: -100px;
+  top: -220%;
+  transform: scale(0);
+  transition: all 0.2s linear 0s;
+  visibility: hidden;
+  width: 175px;
+  z-index: 9;
+}
+.imagediv .more-option .more-post-optns > ul > li {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 11.5px;
+  transition: all 0.2s linear 0s;
+  width: 100%;
+  font-weight: 400;
+  color: #f91942;
+}
+.imagediv .more-option .more-post-optns > ul > li > a {
+  color: #f91942 !important;
+  float: left;
+}
+.imagediv .more-option .more-post-optns > ul > li i {
+  color: #f91942;
+  display: inline-block;
+  font-size: 14px;
+  margin-right: 8px;
+  transition: all 0.1s linear 0s;
+  vertical-align: middle;
+}
+.imagediv .more-option .more{
+	position: absolute;
+	bottom: 43px;
+	left: 133px;
+}
+.imagediv .more-option {
+	position: relative;
+}
+.file-booking-receipt{
+	position: absolute;
+	top: 1px;
+	right: 103px;
+	font-size: 16px !important;
+}
+.your-booking-page {
+  display: inline-block;
+  width: 100%;
+  padding: 20px 0px;
+}
+.your-booking-page > figure {
+  display: inline-block;
+  margin-bottom: 0;
+  max-width: 55px;
+  vertical-align: middle;
+  width: 55px;
+}
+.your-booking-page > figure img {
+  border-radius: 100%;
+  width: 55px;
+  height: 55px;
+}
+.booking-page-meta {
+  display: inline-block;
+  padding-left: 10px;
+  vertical-align: middle;
+  width: 69.8%;
+}
+.booking-page-meta > a {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+  width: auto;
+  color: #fff !important;
+}
+.bg-sidebar{
+	background: #2d2d2d;
+}
+.your-booking-page .box-subtitle h4{
+	color: #fff;
+	font-weight: 500 !important;
+	margin-bottom: 20px;
+}
+.modal-inner-box{
+	background-color: #fff;
+	background-color: #fff;
+	padding: 11px 10px;
+	border-radius: 5px;
+}
+.box-subtitle .modal-inner-box label{
+	color: #2d2d2d;
+	text-align: center;
+	width: 100%;
+	font-size: 17px !important;
+	margin-bottom: 15px;
+}
+.box-subtitle .modal-inner-box h3{
+	font-size: 14px;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.box-subtitle .modal-inner-box .form-group{
+	border: 1px solid #000;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.box-subtitle .modal-inner-box .form-group .form-control{
+	border-bottom: none;
+	border-radius: 0;
+	padding: 5px 25px 5px 0;
+	font-size: 12px;
+	font-weight: 600;
+	color: #a8a8a8;
+	height: auto !important;
+	box-shadow: none;
+	border: none;
+}
+.btn-modal-booking{
+	width: 100%;
+	border-radius: 5px;
+}
+.modal-booking-info h3{
+	text-align: center;
+	font-size: 20px;
+	border-bottom: 2px solid #000;
+	padding: 5px;
+	font-weight: 500;
+}
+.booking-page-meta-info label{
+	font-size: 15px;
+	font-weight: 400;
+	text-transform: uppercase;
+	margin-bottom: 1px;
+}
+.booking-page-meta-info span{
+	font-size: 15px;
+	font-weight: 400;
+	margin-bottom: 1px;
+	text-align: right;
+}
+.booking-page-meta-info{
+	display: grid;
+}
+.total-titles{
+	display: grid;
+}
+.total-titles span{
+	text-align: right;
+}
+.border-xx{
+	border-bottom: 1px solid #000;
+}
+.mg-tp{
+	margin-top: 45px;
+}
+.your-booking-page.side-part{
+	min-height: 609px;
+}
+.powered-img label{
+	color: #fff;
+	display: inline-block;
+}
+.booking-modal-logo{
+	display: inline;
+}
+.booking-modal-logo img{
+	width: 50%;
+	height: auto;
+	max-width: 300px;
+}
+.powered-img{
+  position: absolute;
+  bottom: 10px;	
+  text-align: center;
 }

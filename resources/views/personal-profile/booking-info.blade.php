@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
 <link href="{{ url('public/css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
-
+<link rel="stylesheet" type="text/css" href="http://dev.fitnessity.co/public/css/font-awesome.min.css" />
 <style type="text">
     .intro{
         height: auto;
@@ -24,6 +24,7 @@ use App\UserBookingStatus;
 use App\UserBookingDetail;
 use App\UserFamilyDetail;
 ?>
+
 <div class="page-wrapper inner_top" id="wrapper">
     <div class="page-container">
         <!-- Left Sidebar Start -->
@@ -409,8 +410,14 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{  $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
+														
+														<a href="#" data-toggle="modal" data-target="#bookingreceipt" class="openreceiptmodel">
+															<i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+														</a>
+														
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
+
                                                     <div class="middleboxes middletoday" id="upcoming_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
                                                         <p>
                                                             <span>BOOKING CONFIRMATION #</span>
@@ -799,7 +806,159 @@ use App\UserFamilyDetail;
         </div>
     </div>
 </div>
+
+<div class="modal" id="bookingreceipt" role="dialog">
+    <div class="modal-dialog modal-lg booking-receipt">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: right;"> 
+                <div class="closebtn">
+                    <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="receiptbody">
+                <div class="row"> 
+                    <div class="col-lg-4 bg-sidebar">
+                       <div class="your-booking-page side-part">
+                            <figure>
+                                <img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1650612371-20.jpg" alt="Fitnessity">
+                            </figure>
+                            <div class="booking-page-meta">
+                                <a href="#" title="" class="underline">Valor Mixed Martial Arts</a>
+                            </div>
+                            <div class="box-subtitle">
+                                <h4>Transaction Complete</h4>
+                                <div class="modal-inner-box">
+                                    <label>Lisa Santana</label>
+                                    <h3>Email Receipt</h3>
+                                    <div class="form-group">
+                                         <input type="text" name=""  placeholder="youremail@abc.com" class="form-control">
+                                    </div>
+                                    <a type="submit" name="" id="" value="Send Email Receipt" class="submit-btn btn-modal-booking" >Send Email Receipt</a>
+                                </div>
+                            </div>
+                            <div class="powered-img">
+                                <label>Powered By</label>
+                                <div class="booking-modal-logo">
+                                    <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="modal-booking-info">
+                            <h3>Booking Receipt</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="booking-page-meta-info">
+                                        <label>Booking# </label>
+                                        <label>Total Price</label>
+                                        <label>payment type:</label>
+                                        <label>total remainnig:</label>
+                                        <label>program name:</label>
+                                        <label>expiration date:</label>
+                                        <label>date booked:</label>
+                                        <label>reserved date:</label>
+                                        <label>booked by:</label>
+                                        <label>check in date:</label>
+                                        <label>check in time:</label>
+                                        <label>activity type:</label>
+                                        <label>service type:</label>
+                                        <label>activity location:</label>
+                                        <label>activity duration:</label>
+                                        <label>great for:</label>
+                                        <label>participant#</label>
+                                        <label>who is praticipating?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="booking-page-meta-info">
+                                        <span>3808</span>
+                                        <span>$1,200</span>
+                                        <span>15 Sessions</span>
+                                        <span>15/15</span>
+                                        <span>Kickboxing for Adults</span>
+                                        <span>06/1/2021</span>
+                                        <span>04/07/2021</span>
+                                        <span>04/10/2021</span>
+                                        <span>Darry Phipps</span>
+                                        <span>None</span>
+                                        <span>None</span>
+                                        <span>Kickboxing</span>
+                                        <span>Personal Training</span>
+                                        <span>On Location</span>
+                                        <span>1 Hour</span>
+                                        <span>Adults</span>
+                                        <span>2</span>
+                                        <span>me(18+)</span>
+                                        <span>Lisa(18+)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx mg-tp">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Payment Type</label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>CC ending in ****3489</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Sub-total</label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$1200</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Taxes & Service Fee's</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$200</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Grand Total</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$1400</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>  
 @include('layouts.footer')
+
+
 
 <script src="{{ url('public/js/jquery.1.11.1.min.js') }}"></script>
 
@@ -816,7 +975,7 @@ use App\UserFamilyDetail;
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 
 <script src="{{ url('public/js/custom.js') }}"></script>
-
+<script src="{{ url('public/js/compare/jquery-1.9.1.min.js') }}"></script>
 <script>
 
     $( document ).ready(function() {
@@ -939,5 +1098,6 @@ use App\UserFamilyDetail;
     }
 
 </script>
+
 
 @endsection

@@ -235,7 +235,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <!-- Modal Ends -->  
 
             </div>
-
+           
             <div class="col-lg-6 col-sm-6">
                 <div class="bnr-information">
                     <div class="viewdisplay">
