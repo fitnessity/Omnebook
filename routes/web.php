@@ -47,6 +47,7 @@ Route::post('editBusinessProfile','UserProfileController@editBusinessProfile')->
 Route::post('editBusinessService','UserProfileController@editBusinessService')->name('editBusinessService');
 /*Route::get('business/welcome','UserProfileController@welcomeBusinessProfile')->name('welcomeBusinessProfile');*/ //nnn its showing database connection error
 
+
 Route::get('business-welcome','UserProfileController@welcomeBusinessProfile')->name('business-welcome');
 
 Route::get('business/company','UserProfileController@companyBusinessProfile')->name('companyBusinessProfile');
@@ -72,6 +73,9 @@ Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
 Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('modelboxsuccess');
+Route::post('delimageactivity', 'UserProfileController@delimageactivity')->name('delimageactivity');
+Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
+Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){

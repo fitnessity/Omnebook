@@ -1530,7 +1530,7 @@
                                             <label><strong>Any Special Days Off ?</strong> </label>
                                             <div class="special-date">
                                                 <!--<input type="text" class="form-control" name="special_days_off" value="{{ $special_days_off }}" placeholder="Click here to select the dates you are closed" id="mdp-demo" maxlength="500" />-->               
-                                                    <input type="text" class="form-control multidatepicker" id="mdp-demo" name="special_days_off" placeholder="Click here to select the dates you are closed" onkeydown="no_backspaces(event);" autocomplete="off" >
+                                                    <input type="text" class="form-control multidatepicker" id="mdp-demo" name="special_days_off" placeholder="Click here to select the dates you are closed" onkeydown="no_backspaces(event);" autocomplete="off" value="{{ $special_days_off }}">
                                             </div>
                                             <script>
                                                 $(document).on('click', '#mdp-demo', function() {
@@ -4351,16 +4351,49 @@
                                        <!--  </form> -->
                                         <div id="gallery">
                                             @if(is_array(@$profile_pic1))
-                                                @if(!empty(@$profile_pic1))
-                                                    @foreach(@$profile_pic1 as $img)
-                                                        @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
-                                                        <div><img src="{{ url('/public/uploads/profile_pic/'.$img) }}"><p></p></div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
+                                                <?php $i=0;?>
+                                                    @if(!empty(@$profile_pic1))
+                                                        @foreach(@$profile_pic1 as $img)
+                                                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+                                                            <div class="imagediv  imgno_{{$i}}" >
+																<div class="more-option">
+																	<div class="more">
+																		<div class="more-post-optns">
+																			<i class="fa fa-ellipsis-h"></i>
+																			<ul>
+																				<li><a  imgname="{{$img}}" class="editpopup" href="javascript:void(0);" serviceid="{{$business_service['id']}}"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+																				<li><a href="javascript:void(0);" class="delpagepost" serviceid="{{$business_service['id']}}" imgname="{{$img}}" valofi={{$i}}><i class="fa fa-trash"></i>Delete Post</a></li>
+																			</ul>
+																		</div>
+																	</div>
+																</div>
+                                                                <img src="{{ url('/public/uploads/profile_pic/'.$img) }}">
+                                                            </div>
+                                                            @endif
+                                                        <?php $i++; ?>
+                                                        @endforeach
+                                                    @endif
                                             @else
                                                 @if(!empty($profile_pic1) && File::exists(public_path("/uploads/profile_pic/".$profile_pic1)))
-                                                    <div><img src="{{ url('/public/uploads/profile_pic/'.$profile_pic1) }}"><p></p></div>
+                                                    <div class="imagediv  imgno_0" >
+                                                        <div class="more-option">
+                                                            <div class="more">
+                                                                <div class="more-post-optns">
+                                                                    <i class="fa fa-ellipsis-h"></i>
+                                                                    <ul>
+                                                                        <li>
+                                                                           <a imgname="{{$profile_pic1}}" class="editpopup" href="javascript:void(0);" serviceid="{{$business_service['id']}}"><i class="fa fa-pencil-square-o"></i>Edit Post</a>
+                                                                           <!--  <a imgname="{{$profile_pic1}}" class="editpopup" href="javascript:void(0);" erviceid="{{$business_service['id']}}" onclick="openEditphotoModal();"><i class="fa fa-pencil-square-o"></i>Edit Post</a>  -->
+                                                                           <!-- <a data-toggle="modal" data-target="#edit_post"><i class="fa fa-pencil-square-o"></i>Edit Post</a> --> 
+
+                                                                        </li>
+                                                                        <li><a href="javascript:void(0);" class="delpagepost" serviceid="{{$business_service['id']}}" imgname="{{$profile_pic1}}" valofi="0"><i class="fa fa-trash"></i>Delete Post</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <img src="{{ url('/public/uploads/profile_pic/'.$profile_pic1) }}">
+                                                    </div>
                                                 @endif
                                             @endif
                                         </div>
@@ -4421,7 +4454,7 @@
 
                             <div class="row">
 
-                               <!--  <div class="col-md-6 location_div">
+                                <!--  <div class="col-md-6 location_div">
 
                                     <div class="row">
 
@@ -4513,11 +4546,7 @@
 
                                                 <label>Tell customers how to meet up, where to meet up, meeting point name and how to find you once the customers arrive.Don't leave it up to customers to figure out how to meet up with you. Let them know before hand.</label><br>
 
-                                                <textarea class="form-control" value="yes" name="meetup_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder is ABC Anytown, town 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting poing, Or; Please meet us at Central Park at the entrance
-
-                                        of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red
-
-                                        hat and yellow vest. Please arrive 10 minutes before your activity starts.)">{{$meetup_location}}</textarea>
+                                                <textarea class="form-control" value="yes" name="meetup_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder is ABC Anytown, town 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting poing, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)">{{$meetup_location}}</textarea>
 
                                             </div>
 
@@ -4611,10 +4640,28 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label>Select Service Type You Offer</label>
-                                            <select name="frm_servicetype[]" id="categSType" multiple>
-                                                <option value="Personal Training">Personal Training</option>
-                                                <option value="Coaching">Coaching</option>
-                                                <option value="Therapy">Therapy</option>
+
+                                                @if($service_type=='individual')
+                                                    <select name="frm_servicetype[]" id="categSType" multiple>
+                                                        <option value="Personal Training">Personal Training</option>
+                                                        <option value="Coaching">Coaching</option>
+                                                        <option value="Therapy">Therapy</option>
+                                                    </select>
+                                                @else
+                                                    <select name="frm_servicetype[]" id="categSType" multiple>
+                                                        <option value="Personal Training">Personal Training</option>
+                                                        <option value="Coaching">Coaching</option>
+                                                        <option value="Class">Class</option>
+                                                        <option value="Therapy">Therapy</option>
+                                                        <option value="Gym">Gym</option>
+                                                        <option value="Adventure">Adventure</option>
+                                                        <option value="Trip">Trip</option>
+                                                        <option value="Tour">Tour</option>
+                                                        <option value="Camp">Camp</option>
+                                                        <option value="Team">Team</option>
+                                                        <option value="Clinic">Clinic</option>
+                                                    </select>
+                                                @endif
                                             </select>
                                             <script>
                                                 var p = new SlimSelect({
@@ -4673,7 +4720,7 @@
                                                 });
                                             </script>
                                         </div>
-                                       <!--  <div class="form-group col-md-12">
+                                        <!--  <div class="form-group col-md-12">
                                             <label>Number of slots Available for Booking</label>
                                             <select name="frm_numberofpeople[]" id="frm_numberofpeople">
                                                 <option>1</option>
@@ -10850,6 +10897,38 @@
 
 </div>
 
+<div class="modal" id="edit_post" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body login-pad">  
+                <div class="pop-title employe-title"><h3>Edit Photo</h3></div>
+                <button type="button" class="close modal-close modelboxclose" data-dismiss="modal">
+                    <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                </button>
+                <div>                  
+                    <div class="loadMore">
+                        <div class="central-meta item">
+                            <div class="user-post">
+                                <form method="post" action="{{route('activityimgupdate')}}" enctype="multipart/form-data" >
+                                    @csrf
+                                    <div class="friend-info">      
+                                        <div class="post-meta" id="edit_image"></div>
+										<div class="row">
+											<div class="col-md-12 align-self-modal">
+												<button class="post-btn align-width" type="submit" data-ripple="">Update</button>
+											</div>
+										</div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @include('layouts.footer')
 
 
@@ -12448,9 +12527,32 @@ $(document).on('click', '.rounded-corner', function() {
 
 
 
-
-
-
+$(document).on('click', '.delpagepost', function(){
+    if(confirm("Are you sure you want to delete this?")){
+        var _token = $("input[name='_token']").val();
+        var serviceid =$(this).attr('serviceid');
+        var imgname =$(this).attr('imgname');
+        var valofi =$(this).attr('valofi');
+        $.ajax({
+            url: "{{url('/delimageactivity')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                _token:_token,
+                serviceid:serviceid,
+                imgname:imgname,
+            },
+            success: function (data) {
+                if(data=='success'){
+                    $(".imgno_"+valofi).remove();
+                }
+            }
+        });
+    }
+    else{ return false; }
+});
 
 function removeValue(list, value) {
 
@@ -12561,8 +12663,6 @@ $('#expiry_date').on('focusout', function(){
   
 
 $(document).ready(function(){ 
-
-    
 
     $('#quick_business_left').text(150-parseInt($("#about_company").val().length));
 
@@ -16952,6 +17052,7 @@ $(document).ready(function(){
 
 </script>
 
+
 <script>
 
   function checkstillwork(val ,i){ 
@@ -17078,7 +17179,6 @@ $(document).ready(function(){
     }
 
 </script>
-
 
 
 <script type="text/javascript">
@@ -17290,7 +17390,34 @@ let dropBox = document.getElementById('dropBox');
     }
 </script>
 
+<script type="text/javascript">
+    $(document).on('click', '.editpopup', function(e){
+        var imgname = $(this).attr("imgname");
+        var serviceid =$(this).attr('serviceid');
+        jQuery.noConflict();
+        $.ajax({
+            url: "{{route('editactivityimg')}}",
+            xhrFields: {
+                    withCredentials: true
+                },
+            type: 'get',
+            data:{
+                imgname:imgname,
+                serviceid:serviceid,
+            },
+            success: function (response) {
+               $("#edit_post").modal('show');
+               /* $("#edit_post").css('display','block');*/
+                $('#edit_image').html(response);
+            }
+        });
+    });
 
+    /*$(document).on('click', '.modelboxclose ', function(e){
+        $("#edit_post").css('display','none');
+    });*/
+
+</script>
 @endsection
 
 

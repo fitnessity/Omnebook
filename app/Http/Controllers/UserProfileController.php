@@ -1957,8 +1957,7 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-       /* print_r($request->all());*/
-        // exit;
+        /*exit;*/
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -2017,7 +2016,6 @@ class UserProfileController extends Controller {
         }else{
             $profile_picture .= '';
         }
-       
         if ($request->hasFile('imgUpload')) {
             for($i=0;$i<count($request->imgUpload);$i++){
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -10787,4 +10785,99 @@ class UserProfileController extends Controller {
 
         return $status;
     }
+
+    public function delimageactivity(Request $request){
+        $imgeiddata = BusinessServices::where('id',$request->serviceid)->first();
+        $profile_pic = $imgeiddata->profile_pic;
+        if(str_contains($profile_pic, ',')){
+            $profile_pic1 = explode(',', $profile_pic);
+        }else{
+            $profile_pic1 = $profile_pic;
+        }
+
+        $pro_img = '';
+        if(is_array($profile_pic1)){
+            foreach($profile_pic1 as $key => $data){
+                if ($request->imgname != $data) {
+                    if($data != ''){
+                       $pro_img .= $data.',';
+                    }
+                }
+            }
+        }else{
+            $pro_img = '';
+        }
+
+        $pro_img = rtrim($pro_img,',');
+        $updateval = BusinessServices::where('id',$request->serviceid)->update(['profile_pic' => $pro_img]);
+        if($updateval == true){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
+    public function editactivityimg(Request $request) {
+        $loggedinUser = Auth::user(); 
+        $serviceid = $request->serviceid;
+
+        $html = '<input type="hidden" name="serviceid" id="serviceid" value="'.$serviceid.'">
+                    <input type="hidden" name="imgnameajax" id="imgnameajax" value="'.$request->imgname.'">'; 
+        $html .='<figure>
+                    <div class="img-bunch">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 align-self-modal">
+                                <figure>
+                                    <input id="image_post" type="file" name="image_post[]" />
+                                    <a href="#" title="" data-toggle="modal">
+                                        <span class="error" id="err_image_sign">
+
+                                   <img src="'.url('/public/uploads/profile_pic/'.$request->imgname).'" alt="">
+                                    </a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </figure>';
+      
+       return $html;
+    }
+
+    public function activityimgupdate(Request $request) { 
+        $serviceid = $request->serviceid;        
+        $imgeiddata = BusinessServices::where('id',$serviceid)->first();
+         $profile_pic = $imgeiddata->profile_pic;
+
+        if ($request->hasFile('image_post')) {
+            $filename = $request->file('image_post');
+            $name=$filename[0]->getClientOriginalName(); 
+            $filestatus = $filename[0]->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
+          /*  $image_name = $image_upload['filename'];*/
+
+            if(str_contains($profile_pic, ',')){
+                $profile_pic1 = explode(',', $profile_pic);
+            }else{
+                $profile_pic1 = $profile_pic;
+            }
+
+            $pro_img = '';
+            if(is_array($profile_pic1)){
+                foreach($profile_pic1 as $key => $data){
+                    if ($request->imgnameajax != $data) {
+                        if($data != ''){
+                           $pro_img .= $data.',';
+                        }
+                    }else{
+                        $pro_img .= $name.',';
+                    }
+                }
+            }else{
+                $pro_img = $name;
+            }  
+
+        }  
+        $pro_img = rtrim($pro_img,',');
+        $updateval = BusinessServices::where('id',$request->serviceid)->update(['profile_pic' => $pro_img]);
+        return redirect()->route('createNewBusinessProfile');
+    } 
 }

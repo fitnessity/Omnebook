@@ -681,3 +681,131 @@ span.status::after {
 	.top-search { width: 73%; }
 }
 @media screen and (min-width: 1920px) and (max-width: 2500px){ }
+
+
+/*aks page createNewBusinessProfile*/
+
+.friend-info > figure img {
+    border-radius: 100%;
+    max-width: 100%;
+    width: 35px;
+    height: 35px;
+}
+
+.friend-info > figure {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-top: 0;
+    position: relative;
+    vertical-align: middle;
+    width: 40px;
+}
+
+.friend-name {
+    display: inline-block;
+    padding-left: 10px;
+    vertical-align: middle;
+    width: 91.2%;
+}
+
+.emoji-wysiwyg-editor {
+    border: none;
+}
+
+.emoji-menu {
+    right: 354px;
+    top: 209px;
+}
+
+#edit_post .emoji-picker-icon {
+    left: 0px;
+}
+
+
+.post-meta {
+    float: left;
+    margin-top: 15px;
+    width: 100%;
+    position: relative;
+}
+
+.post-meta {
+    float: left;
+    margin-top: 15px;
+    width: 100%;
+    position: relative;
+}
+
+.post-btn {
+    background: #f91942;
+    border: medium none;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 500;
+    margin-top: 11px;
+    padding: 5px;
+    width: 100%;
+    transition: all 0.2s linear 0s;
+}
+
+#edit_post .post-meta {
+    padding-top: 18px;
+}
+#image_post{padding: 16px 10px;}
+.friend-info {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+.central-meta .user-post:last-child {
+    border: 0 none;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.post-meta > figure img {
+	max-width: 100%;
+max-height: 300px;
+}
+.central-meta{
+	background: #fff none repeat scroll 0 0;
+	border: 1px solid #ede9e9;
+	border-radius: 5px;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 20px;
+	position: relative; 
+}
+.align-self-modal{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.post-btn.align-width{
+	width: 20%;
+}
+.img-bunch > .row {
+    margin: 0;
+}
+
+.error {
+    color: #C9302C !important;
+    display: block;
+    text-align: left;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+}
+
+.img-bunch > .row > div {
+    /* padding: 0; */
+}
+
+.img-bunch {
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+/*end*/
