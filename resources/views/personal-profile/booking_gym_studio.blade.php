@@ -9,6 +9,8 @@
 <link href="{{ url('public/css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
 
+<link rel="stylesheet" type="text/css" href="http://dev.fitnessity.co/public/css/font-awesome.min.css" />
+
 <style type="text">
     .intro{
         height: auto;
@@ -162,6 +164,9 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{ $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['businessservices']['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
+                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
                                                     <div class="middleboxes middletoday" id="today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
@@ -268,7 +273,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <div class="viewmore_links">
@@ -397,6 +402,9 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{  $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
+                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
                                                     <div class="middleboxes middletoday" id="upcoming_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
@@ -503,7 +511,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -641,6 +649,9 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{ $pro_pic }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
+                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
                                                     <div class="middleboxes middletoday" id="past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
@@ -747,7 +758,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -787,6 +798,24 @@ use App\UserFamilyDetail;
         </div>
     </div>
 </div>
+<div class="modal" id="bookingreceipt" role="dialog">
+    <div class="modal-dialog modal-lg booking-receipt">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: right;"> 
+                <div class="closebtn">
+                    <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="receiptbody">
+            </div>
+        </div>
+    </div>
+</div>  
+
 @include('layouts.footer')
 
 <script src="{{ url('public/js/jquery.1.11.1.min.js') }}"></script>
@@ -862,6 +891,27 @@ use App\UserFamilyDetail;
                 }
             });
         });*/
+
+         $(document).on('click', '.openreceiptmodel', function(e){
+            var orderdetailid = $(this).attr("orderdetailid");
+            var orderid =$(this).attr('orderid');
+            jQuery.noConflict();
+            $.ajax({
+                url: "{{route('getreceiptmodel')}}",
+                xhrFields: {
+                        withCredentials: true
+                    },
+                type: 'get',
+                data:{
+                    orderdetailid:orderdetailid,
+                    orderid:orderid,
+                },
+                success: function (response) {
+                    $("#bookingreceipt").modal('show');
+                    $('#receiptbody').html(response);
+                }
+            });
+        });
        
     });
 
@@ -909,6 +959,10 @@ use App\UserFamilyDetail;
         dateFormat: "mm/dd/yy"
     })
 
+
+</script>
+
+<script type="text/javascript">
     function  changecolor(id){
      /*   alert(id);*/
         if(id === 'nav-upcoming-tab'){
@@ -926,6 +980,47 @@ use App\UserFamilyDetail;
         }
     }
 
+     function valid(email)
+    {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test(email); //this will either return true or false based on validation
+    }
+     function sendemail(odetailid,oid){
+        $('.reviewerro').html('');
+        var email = $('#email').val();
+        if(email == ''){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Add Email Address..');
+        }else if(!valid(email)){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Enter Valid Email Address..');
+        }else{
+            $('.btn-modal-booking').attr('disabled',true);
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Sending...');
+            $.ajax({
+                url: "{{route('sendemailofreceipt')}}",
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: 'get',
+                data:{
+                    odetailid:odetailid,
+                    oid:oid,
+                    email:email,
+                },
+                success: function (response) {
+                    $('.reviewerro').html('');
+                    $('.reviewerro').css('display','block');
+                    if(response == 'success'){
+                        $('.reviewerro').html('Email Successfully Sent..');
+                    }else{
+                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                    }
+                }
+            });
+        }
+    }
 </script>
 
 @endsection

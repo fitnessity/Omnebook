@@ -10880,4 +10880,391 @@ class UserProfileController extends Controller {
         $updateval = BusinessServices::where('id',$request->serviceid)->update(['profile_pic' => $pro_img]);
         return redirect()->route('createNewBusinessProfile');
     } 
+
+    public function getreceiptmodel(Request $request) {
+        $booking_status = UserBookingStatus::where('id',$request->orderid)->first();
+        $booking_details = UserBookingDetail::where('id',$request->orderdetailid)->first();
+        $business_services = BusinessServices::where('id',@$booking_details->sport)->first();
+        $businessuser= CompanyInformation::where('id', @$business_services->cid)->first();
+        $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$booking_details->priceid,'serviceid' =>@$booking_details->sport])->first();
+        $schedulerdata = BusinessActivityScheduler::where(['serviceid' => @$booking_details->sport ,'id' =>@$booking_details->act_schedule_id ])->first();
+
+        if(@$businessuser->logo != "") {
+            if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$businessuser->logo)) {
+               $com_pic = url('/public/uploads/profile_pic/thumb/' . @$businessuser->logo);
+            }else {
+               $com_pic = url('/public/images/service-nofound.jpg');
+            }
+
+        }else{ $com_pic = '/public/images/service-nofound.jpg'; }
+
+        $SpotsLeftdis = 0;
+        $SpotsLeft = [];
+        $SpotsLeft = UserBookingDetail::where('act_schedule_id' ,@$booking_details->act_schedule_id)->whereDate('bookedtime', '=', @$booking_details->bookedtime)->get()->toArray();
+        
+        $totalquantity = 0;
+        foreach($SpotsLeft as $data1){
+           
+            $item = json_decode($data1['qty'],true);
+            if($item['adult'] != '')
+                $totalquantity += $item['adult'];
+            if($item['child'] != '')
+                $totalquantity += $item['child'];
+            if($item['infant'] != '')
+                $totalquantity += $item['infant'];
+        }
+        if( @$schedulerdata['spots_available'] != ''){
+            $SpotsLeftdis =  @$schedulerdata['spots_available'] - $totalquantity;
+        }
+
+        $time='';
+        if(@$schedulerdata->set_duration != ''){
+            $tm = explode(' ',$schedulerdata->set_duration);
+            $hr=''; $min=''; $sec='';
+            if($tm[0]!=0){ $hr=$tm[0].' hour '; }
+            if($tm[2]!=0){ $min=$tm[2].' minutes '; }
+            if($tm[4]!=0){ $sec=$tm[4].' seconds'; }
+            if($hr!='' || $min!='' || $sec!='')
+            { $time =  $hr.$min.$sec; } 
+        }
+
+
+        $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$request->orderid)->get();
+        $sub_totprice = 0;
+        foreach( $booking_details_for_sub_total as $bds){
+            $aprice = json_decode($bds->price,true); 
+            $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
+            if( !empty($aprice['adult']) ){ 
+                $sub_price_adu = $aprice['adult']; 
+            }
+            if( !empty($aprice['child']) ){
+                $sub_price_chi = $aprice['child']; 
+            }
+            if( !empty($aprice['infant']) ){
+                $sub_price_inf = $aprice['infant']; 
+            }
+
+            $a = json_decode($bds->qty,true);
+            if( !empty($a['adult']) ){  
+                $sub_totprice += $sub_price_adu * $a['adult'];
+            }
+            if( !empty($a['child']) ){
+                $sub_totprice += $sub_price_chi * $a['child'];
+            }
+            if( !empty($a['infant']) ){ 
+                $sub_totprice += $sub_price_inf * $a['infant'];
+            }
+        }
+
+        $tot_amount_cart = 0;
+        if(@$booking_status->amount != ''){
+            $tot_amount_cart = @$booking_status->amount;
+        }
+        
+        $taxval = 0;
+        $taxval = $tot_amount_cart - $sub_totprice; 
+        
+        $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
+
+        $aprice = json_decode(@$booking_details->price,true); 
+        $aprice_adu = $aprice_chi = $aprice_inf = 0;
+        if( !empty($aprice['adult']) ){ 
+            $aprice_adu = $aprice['adult']; 
+        }
+        if( !empty($aprice['child']) ){
+            $aprice_chi = $aprice['child']; 
+        }
+        if( !empty($aprice['infant']) ){
+            $aprice_inf = $aprice['infant']; 
+        }
+
+        $qty = '';
+        $totprice_for_this = 0;
+        $a = json_decode(@$booking_details->qty,true);
+        if( !empty($a['adult']) ){ 
+            $qty .= 'Adult: '.$a['adult']; 
+            $totprice_for_this += $aprice_adu * $a['adult'];
+        }
+        if( !empty($a['child']) ){
+            $qty .= '<br> Child: '.$a['child']; 
+            $totprice_for_this += $aprice_chi * $a['child'];
+        }
+        if( !empty($a['infant']) ){
+            $qty .= '<br>Infant: '.$a['infant']; 
+            $totprice_for_this += $aprice_inf * $a['infant'];
+        }
+
+        $main_total =  $tax_for_this + $totprice_for_this;
+
+        $parti_data = '';
+        $ap = json_decode(@$booking_details->participate,true); 
+        if(!empty($ap)){
+            foreach($ap as $data){
+                if($data['from'] == 'family'){
+                    $family = UserFamilyDetail::where('id',$data['id'])->first();
+                    $parti_data .= @$family->first_name.' '.@$family->last_name.'<br>';
+                }else{ 
+                    $parti_data .= Auth::user()->firstname.' '.Auth::user()->lastname.'<br>'; 
+                } 
+            } 
+        }
+
+
+        if(@$booking_status->order_id != ''){
+            $order_id = @$booking_status->order_id;
+        }else{ 
+           $order_id =  "—"; 
+        }
+
+        if(@$schedulerdata->spots_available != ''){
+            $to_rem = $SpotsLeftdis.' / '.@$schedulerdata->spots_available;
+        }else{ 
+            $to_rem = "—"; 
+        }
+
+        if(@$business_services->program_name != ''){
+            $program_name = @$business_services->program_name;
+        }else{
+            $program_name = "—"; 
+        }
+
+        if(@$schedulerdata->end_activity_date != ''){
+            $end_activity_date = date('d-m-Y', strtotime(@$schedulerdata->end_activity_date));
+        }else{ 
+            $end_activity_date = "—"; 
+        }
+
+        if(@$booking_details->created_at != ''){
+            $created_at = date('d-m-Y', strtotime(@$booking_details->created_at));
+        }else{ 
+            $created_at = "—"; 
+        }
+
+        if(@$booking_details->bookedtime != ''){
+            $bookedtime = date('d-m-Y', strtotime(@$booking_details->bookedtime));
+        }else{ 
+            $bookedtime = "—"; 
+        }
+
+        if(Auth::user()->firstname != '' && Auth::user()->lastname != ''){
+            $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
+        }else{ 
+            $nameofbookedby = "—"; 
+        }
+
+        if(@$business_services->sport_activity != ''){
+            $sport_activity = $business_services->sport_activity;
+        }else{ 
+            $sport_activity=  "—"; 
+        } 
+
+        if(@$business_services->select_service_type != ''){
+            $select_service_type = $business_services->select_service_type;
+        }else{ 
+            $select_service_type=  "—"; 
+        }
+        if(@$business_services->activity_for != ''){
+            $activity_for = $business_services->activity_for;
+        }else{ 
+            $activity_for=  "—"; 
+        }
+        if(@$business_services->activity_location != ''){
+            $activity_location = $business_services->activity_location;
+        }else{ 
+            $activity_location=  "—"; 
+        }
+
+        if(@$business_services->activity_location != ''){
+            $price_opt = @$BusinessPriceDetails->price_title.' - '.@$BusinessPriceDetails->pay_session.' Sessions';
+        }else{ 
+            $price_opt=  "—"; 
+        }
+
+        if(@$schedulerdata->shift_start != ''){
+            $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
+        }else{
+            $shift_start=  "—"; 
+        }
+
+        $stripe = new \Stripe\StripeClient(
+            config('constants.STRIPE_KEY')
+        );
+
+        if(@$booking_status->stripe_id != ''){
+            $payment_intent = $stripe->paymentIntents->retrieve(
+                $booking_status->stripe_id,
+                []
+            );
+        }
+
+        $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
+        
+
+        $html = '';
+        $html .= '<div class="row"> 
+                    <div class="col-lg-4 bg-sidebar">
+                       <div class="your-booking-page side-part">
+                            <figure>
+                                <img src="'.$com_pic.'" alt="Fitnessity">
+                            </figure>
+                            <div class="booking-page-meta">
+                                <a href="#" title="" class="underline">'.@$businessuser->company_name.'</a>
+                            </div>
+                            <div class="box-subtitle">
+                                <h4>Transaction Complete</h4>
+                                <div class="modal-inner-box">
+                                    <label>'.$nameofbookedby.'</label>
+                                    <h3>Email Receipt</h3>
+                                    <div class="form-group">
+                                        <input type="text" name="email" id="email"  placeholder="youremail@abc.com" class="form-control">
+                                    </div>
+                                    <button class="submit-btn btn-modal-booking" 
+                                    onclick="sendemail('.$request->orderdetailid.' , '.$request->orderid.');">Send Email Receipt</button>
+                                    <div class="reviewerro" id="reviewerro"></div>
+                                </div>
+                            </div>
+                            <div class="powered-img">
+                                <label>Powered By</label>
+                                <div class="booking-modal-logo">
+                                    <img src="'.url("/public/images/fitnessity_logo1.png").'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="modal-booking-info">
+                            <h3>Booking Receipt</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="booking-page-meta-info">
+                                        <label>Booking# </label>
+                                        <label>Total Price:</label>
+                                        <label>price option:</label>
+                                        <label>total remainnig:</label>
+                                        <label>program name:</label>
+                                        <label>expiration date:</label>
+                                        <label>date booked:</label>
+                                        <label>reserved date:</label>
+                                        <label>booked by:</label>
+                                        <label>check in date:</label>
+                                        <label>check in time:</label>
+                                        <label>activity type:</label>
+                                        <label>service type:</label>
+                                        <label>activity location:</label>
+                                        <label>activity duration:</label>
+                                        <label>great for:</label>
+                        
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="booking-page-meta-info">
+                                        <span>'.$order_id.'</span>
+                                        <span>$'.$totprice_for_this.'</span>
+                                        <span>'.$price_opt.'</span>
+                                        <span>'. $to_rem.'</span>
+                                        <span>'.$program_name.'</span>
+                                        <span>'.$end_activity_date .'</span>
+                                        <span>'.$created_at.'</span>
+                                        <span>'.$bookedtime.'</span>
+                                        <span>'.$nameofbookedby.'</span>
+                                        <span>'.$bookedtime.'</span>
+                                        <span>'.$shift_start.'</span>
+                                        <span>'. $sport_activity.'</span>
+                                        <span>'.$select_service_type.'</span>
+                                        <span>'.$activity_location.'</span>
+                                        <span>'.$time.'</span>
+                                        <span>'.$activity_for.'</span>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>PARTICIPANTS#</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $qty.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>WHO IS PRATICIPATING?</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $parti_data.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx mg-tp">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Payment Type</label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>CC ending in ********'.$last4.'</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Sub-total</label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$'.$totprice_for_this.'</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Taxes & Service Fees</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$'.$tax_for_this.'</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-xx">
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <label>Grand Total</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="total-titles">
+                                        <span>$'.$main_total.'</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+        return $html;
+    }
+
+    public function sendemailofreceipt(Request $request){
+        $email_detail = array(
+            'odetailid' => $request->odetailid,
+            'oid' => $request->oid,
+            'email' => $request->email);
+        $status = MailService::sendEmailReceipt($email_detail);
+        return $status;
+    }
 }

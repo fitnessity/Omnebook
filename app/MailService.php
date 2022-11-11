@@ -374,6 +374,19 @@ class MailService
 
     }
 
+
+    public static function sendEmailReceipt($email_detail){
+        Mail::send('emails.email-order-receipt', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($email_detail['email'],'')->subject('Booking Receipt');
+        });
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
     public static function sendEmailBusinesslist($AllDetail){
         
         //send mail to Business email address

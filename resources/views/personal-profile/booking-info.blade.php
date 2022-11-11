@@ -166,6 +166,9 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{ $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['businessservices']['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
+                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
                                                     <div class="middleboxes middletoday" id="today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
@@ -275,7 +278,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <!--<a href="#">Reschedule</a>-->
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -411,7 +414,7 @@ use App\UserFamilyDetail;
                                                         <img src="{{  $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
 														
-														<a href="#" data-toggle="modal" data-target="#bookingreceipt" class="openreceiptmodel">
+														<a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
 															<i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
 														</a>
 														
@@ -522,7 +525,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -660,6 +663,9 @@ use App\UserFamilyDetail;
                                                     <div class="headboxes">
                                                         <img src="{{ $pro_pic }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
+                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
                                                     <div class="middleboxes middletoday" id="past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
@@ -766,7 +772,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="#">Reschedule</a>
+                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                             <a href="#">Cancel</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -812,7 +818,7 @@ use App\UserFamilyDetail;
         <div class="modal-content">
             <div class="modal-header" style="text-align: right;"> 
                 <div class="closebtn">
-                    <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close-btn-design-booking" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -820,138 +826,6 @@ use App\UserFamilyDetail;
 
             <!-- Modal body -->
             <div class="modal-body" id="receiptbody">
-                <div class="row"> 
-                    <div class="col-lg-4 bg-sidebar">
-                       <div class="your-booking-page side-part">
-                            <figure>
-                                <img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1650612371-20.jpg" alt="Fitnessity">
-                            </figure>
-                            <div class="booking-page-meta">
-                                <a href="#" title="" class="underline">Valor Mixed Martial Arts</a>
-                            </div>
-                            <div class="box-subtitle">
-                                <h4>Transaction Complete</h4>
-                                <div class="modal-inner-box">
-                                    <label>Lisa Santana</label>
-                                    <h3>Email Receipt</h3>
-                                    <div class="form-group">
-                                         <input type="text" name=""  placeholder="youremail@abc.com" class="form-control">
-                                    </div>
-                                    <a type="submit" name="" id="" value="Send Email Receipt" class="submit-btn btn-modal-booking" >Send Email Receipt</a>
-                                </div>
-                            </div>
-                            <div class="powered-img">
-                                <label>Powered By</label>
-                                <div class="booking-modal-logo">
-                                    <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1.png">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="modal-booking-info">
-                            <h3>Booking Receipt</h3>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="booking-page-meta-info">
-                                        <label>Booking# </label>
-                                        <label>Total Price</label>
-                                        <label>payment type:</label>
-                                        <label>total remainnig:</label>
-                                        <label>program name:</label>
-                                        <label>expiration date:</label>
-                                        <label>date booked:</label>
-                                        <label>reserved date:</label>
-                                        <label>booked by:</label>
-                                        <label>check in date:</label>
-                                        <label>check in time:</label>
-                                        <label>activity type:</label>
-                                        <label>service type:</label>
-                                        <label>activity location:</label>
-                                        <label>activity duration:</label>
-                                        <label>great for:</label>
-                                        <label>participant#</label>
-                                        <label>who is praticipating?</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="booking-page-meta-info">
-                                        <span>3808</span>
-                                        <span>$1,200</span>
-                                        <span>15 Sessions</span>
-                                        <span>15/15</span>
-                                        <span>Kickboxing for Adults</span>
-                                        <span>06/1/2021</span>
-                                        <span>04/07/2021</span>
-                                        <span>04/10/2021</span>
-                                        <span>Darry Phipps</span>
-                                        <span>None</span>
-                                        <span>None</span>
-                                        <span>Kickboxing</span>
-                                        <span>Personal Training</span>
-                                        <span>On Location</span>
-                                        <span>1 Hour</span>
-                                        <span>Adults</span>
-                                        <span>2</span>
-                                        <span>me(18+)</span>
-                                        <span>Lisa(18+)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row border-xx mg-tp">
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <label>Payment Type</label>
-                                    </div>
-                                    
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <span>CC ending in ****3489</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row border-xx">
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <label>Sub-total</label>
-                                    </div>
-                                    
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <span>$1200</span>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="row border-xx">
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <label>Taxes & Service Fee's</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <span>$200</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row border-xx">
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <label>Grand Total</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="total-titles">
-                                        <span>$1400</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
             </div>
         </div>
     </div>
@@ -1033,7 +907,28 @@ use App\UserFamilyDetail;
                 }
             });
         });*/
-       
+
+
+        $(document).on('click', '.openreceiptmodel', function(e){
+            var orderdetailid = $(this).attr("orderdetailid");
+            var orderid =$(this).attr('orderid');
+            jQuery.noConflict();
+            $.ajax({
+                url: "{{route('getreceiptmodel')}}",
+                xhrFields: {
+                        withCredentials: true
+                    },
+                type: 'get',
+                data:{
+                    orderdetailid:orderdetailid,
+                    orderid:orderid,
+                },
+                success: function (response) {
+                    $("#bookingreceipt").modal('show');
+                    $('#receiptbody').html(response);
+                }
+            });
+        });
     });
 
     function getsearchdata(type){
@@ -1080,6 +975,11 @@ use App\UserFamilyDetail;
         dateFormat: "mm/dd/yy"
     })
 
+    
+</script>
+
+<script type="text/javascript">
+
     function  changecolor(id){
      /*   alert(id);*/
         if(id === 'nav-upcoming-tab'){
@@ -1097,7 +997,47 @@ use App\UserFamilyDetail;
         }
     }
 
+    function valid(email)
+    {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test(email); //this will either return true or false based on validation
+    }
+
+    function sendemail(odetailid,oid){
+        $('.reviewerro').html('');
+        var email = $('#email').val();
+        if(email == ''){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Add Email Address..');
+        }else if(!valid(email)){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Enter Valid Email Address..');
+        }else{
+            $('.btn-modal-booking').attr('disabled',true);
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Sending...');
+            $.ajax({
+                url: "{{route('sendemailofreceipt')}}",
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: 'get',
+                data:{
+                    odetailid:odetailid,
+                    oid:oid,
+                    email:email,
+                },
+                success: function (response) {
+                    $('.reviewerro').html('');
+                    $('.reviewerro').css('display','block');
+                    if(response == 'success'){
+                        $('.reviewerro').html('Email Successfully Sent..');
+                    }else{
+                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                    }
+                }
+            });
+        }
+    }
 </script>
-
-
 @endsection
