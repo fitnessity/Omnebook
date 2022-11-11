@@ -263,6 +263,7 @@ Route::group(array('prefix' => 'admin'), function(){
     //Manage Customers
     Route::get('/customers', 'Admin\AdminUserController@viewCustomers');
     Route::post('/customers', 'Admin\AdminUserController@postCustomers');
+    Route::get('/customers/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
     Route::get('/customers/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
     Route::get('/customers/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
     Route::post('/customers/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
