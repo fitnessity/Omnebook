@@ -96,6 +96,9 @@
                   <span class="<?=$class?>"><?php echo ucfirst($value->status); ?></span>
 
                 </td>
+                <td>
+                  <a href="{{route('admin_user_login_as', ['id' => $value->id])}}">Login</a>
+                </td>
 
                 <td>
 
