@@ -1548,6 +1548,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
 <script>
+$(document).ready(function() {
+	$('.showphotosbusiness').on('click', function(e) {
+		close: true,
+	});
+});
+</script>
+<script>
 function take_snapshot() {
 	Webcam.snap( function(data_uri) {
 		$(".image-tag").val(data_uri);
