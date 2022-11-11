@@ -108,7 +108,7 @@ class ActivityController extends Controller {
 			'allactivities'=>$activities,
 			'activities'=>$activities->get(),
 			'name'=>$name,
-			 //'cart' => $cart
+
 		]);	
     }
 

@@ -124,6 +124,12 @@ class AdminUserController extends Controller
 
     }
 
+    public function login_as(Request $request){
+        $user = User::find($request->id);
+        Auth::login($user, true);
+        return redirect('/');
+    }
+
     public function postCustomers(Request $request){
       
         $input = $request->all();
