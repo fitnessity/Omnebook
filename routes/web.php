@@ -825,6 +825,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+
+Route::get('/getreceiptmodel', 'UserProfileController@getreceiptmodel')->name('getreceiptmodel');
 Route::get('/personal-profile/booking-info', 'UserProfileController@bookinginfo');
 Route::get('/personal-profile/gym-studio-info', 'UserProfileController@gym_studio_page');
 Route::get('/personal-profile/experience-info', 'UserProfileController@experience_page');
