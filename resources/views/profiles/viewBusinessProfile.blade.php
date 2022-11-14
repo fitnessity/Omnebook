@@ -513,10 +513,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     </div>
                                                 @endif
 												<?php 
-													/*if (!empty($videos)) 
+													if (!empty($videos)) 
 													{
 														foreach($videos as $data)
-														{*/ ?>
+														{ ?>
 															<!-- <div class="row">
 																<div class="col-sm-12 col-md-12 col-lg-12">
 																	<div class="video-tab-iframe">
@@ -529,8 +529,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																</div>
 															</div> -->
 															<?php 
-														/*}
-													}*/
+														}
+                                                    }
 												?>
 											</div>
 										</div>

@@ -32,7 +32,8 @@ class BusinessServices extends Model
         'program_desc',
         'profile_pic',
         'instant_booking',
-        'reserved_booking',
+        'request_booking',
+        'frm_min_participate',
         'notice_value',
         'notice_key',
         'advance_value',
@@ -98,6 +99,11 @@ class BusinessServices extends Model
 		'days_plan_img',
 		'is_active',
 		'instructor_id',
+        'exp_highlight',
+        'addi_info',
+        'accessibility',
+        'addi_info_help',
+        'desc_location',
     ];
     
     public function businesscompanydetail() {

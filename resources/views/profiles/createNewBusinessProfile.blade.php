@@ -3801,486 +3801,6 @@
                     <section class="row">
                         <div class="col-md-12">
                             <br/>
-
-                            <div class="row" style="display:none;">
-                                <div class="col-md-8">
-                                    <!-- <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <label for="frm_programname"><h3>Let's get a few details to set up your service <span id="star">*</span></h3></label><br>
-                                            <p>Please select only one sport/activity to offer your clients</p>
-                                            <select name="frm_servicesport" id="frm_servicesport" class="form-control">
-                                                <option value="">Choose a Sport/Activity</option>
-                                                @foreach(@$sportsdata as $Sports)
-                                                    <?php $optiondata = Sports::where('parent_sport_id',$Sports['id'])->get(); ?>
-                                                    @if(count($optiondata)>0)
-                                                        <optgroup label="{{$Sports['sport_name']}}">
-                                                        @foreach($optiondata as $data)
-                                                            <option @if($sport_activity == $data['sport_name']) selected @endif >{{$data['sport_name']}}</option>
-                                                        @endforeach
-                                                        </optgroup>
-                                                    @else
-                                                    <option @if($sport_activity == $Sports['sport_name']) selected @endif >{{$Sports['sport_name']}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                            <span class="error" id="err_frm_servicesportS2"></span>
-                                        </div>
-                                    </div>   -->
-                                    <div class="row">    
-                                        <!-- <div class="form-group col-md-12">
-
-                                            <input type="text" class="form-control" name="frm_programname" id="frm_programname" placeholder="Enter Name of Program" title="servicetitle" value="{{ $program_name }}">
-
-                                            <span class="error" id="err_frm_programname"></span>
-
-                                        </div> -->
-
-                                        <!-- <div class="form-group col-md-12">
-
-                                            <textarea class="form-control" rows="6" name="frm_programdesc" id="frm_programdesc" placeholder="Enter program description" maxlength="150">{{ $program_desc }}</textarea>
-
-                                            <span class="error" id="err_frm_programdesc"></span>
-
-                                            <div class="text-right"><span id="frm_programdesc_left">150</span> Characters Left</div>
-
-                                        </div> -->
-
-                                        <div class="form-group col-md-12 hide">
-
-                                            <label class="switch" for="booking1">
-
-                                                <input type="radio" name="booking" id="booking1" value="instant" {{ ($instant_booking==1) ? "Checked" : "" }}>
-
-                                                <span class="slider round"></span>
-
-                                            </label>
-
-                                            <span class="error" id="err_booking1"></span>
-
-                                            <span>INSTANT BOOKING : Allow customers to book you instantly</span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12" style="display:none">
-
-                                            <label class="switch" for="booking2">
-
-                                                <input type="radio" name="booking" id="booking2" value="reserve" {{ ($reserved_booking==1) ? "Checked" : "" }}>
-
-                                                <span class="slider round"></span>
-
-                                            </label>
-
-                                            <span>RESERVED BOOKING : You need to confirm each booking first before completion</span>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row itenerary_div" style="display:none">
-
-                                      <div class="form-group col-md-12">
-
-                                          <label><h3>Set Up Your Itinerary</h3></label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label class="labelstyle" for="what_you_doing">What will you be doing? </label>
-
-                                            <textarea class="form-control" rows="6" name="what_you_doing" id="what_you_doing" placeholder="Briefly describe what you'll do with your customers. Be specific about what guests will do on your activity." maxlength="500">{{ $program_desc }}</textarea>
-
-                                            <span class="error" id="err_what_you_doing"></span>
-
-                                            <div class="text-right"><span id="frm_what_you_doing">500</span> Characters Left</div>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12 mt-25">
-
-                                            <label class="labelstyle">What's Included with this experience?</label><br>
-
-                                            <p>
-
-                                              What do you provide for your guest that will make the experience memorabel?
-
-                                              (You can provide transportation and pickup from hotels etc. Food an drinks, special
-
-                                              equipment, video and photography services, or anything else special to make your 
-
-                                              guests comfortable.)
-
-                                              Select all that apply </p>
-
-                                            <select name="frm_included_things[]" id="frm_included_things" multiple class="mt-10">
-
-                                                <option value="Safety & Protective Gear">Safety & Protective Gear</option>
-
-                                                <option value="Activity Equipment">Activity Equipment</option>
-
-                                                <option value="Breakfast">Breakfast</option>
-
-                                                <option value="Lunch">Lunch</option>
-
-                                                <option value="Dinner">Dinner</option>
-
-                                                <option value="Snacks">Snacks</option>
-
-                                                <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
-
-                                                <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
-
-                                                <option value="Transportation">Transportation</option>
-
-                                                <option value="Insurance Coverage">Insurance Coverage</option>
-
-                                                <option value="Entrance Fees ">Entrance Fees </option>
-
-                                                <option value="Airfare">Airfare</option>
-
-                                                <option value="Taxes">Taxes</option>
-
-                                                <option value="Professional Guide">Professional Guide</option>
-
-                                                <option value="Guide Gratuity">Guide Gratuity</option>
-
-                                                <option value="Accommodations">Accommodations</option>
-
-                                                <option value="Video">Video</option>
-
-                                                <option value="Photography">Photography</option>
-
-                                                <option value="Fully Narrated">Fully Narrated</option>
-
-                                                <option value="Historic landmarks">Historic landmarks</option>
-
-                                                <option value="Rest period">Rest period</option>
-
-                                                <option value="Typical souvenir">Typical souvenir</option>
-
-                                              
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#frm_included_things'
-
-                                                });
-
-                                            </script>
-
-                                            <span class="error" id="err_what_included"></span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label class="labelstyle">What's Not Included with this experience?</label><br>
-
-                                            <p> List the items or services that are not includes with this experience. i.e. no food or drinks, no equipment, no insurance, etc.</p>
-
-                                            <select name="frm_notincluded_things[]" id="frm_notincluded_things" multiple>
-
-                                                <option value="Safety & Protective Gear">Safety & Protective Gear</option>
-
-                                                <option value="Activity Equipment">Activity Equipment</option>
-
-                                                <option value="Breakfast">Breakfast</option>
-
-                                                <option value="Lunch">Lunch</option>
-
-                                                <option value="Dinner">Dinner</option>
-
-                                                <option value="Snacks">Snacks</option>
-
-                                                <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
-
-                                                <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
-
-                                                <option value="Transportation">Transportation</option>
-
-                                                <option value="Insurance Coverage">Insurance Coverage</option>
-
-                                                <option value="Entrance Fees ">Entrance Fees </option>
-
-                                                <option value="Airfare">Airfare</option>
-
-                                                <option value="Taxes">Taxes</option>
-
-                                                <option value="Professional Guide">Professional Guide</option>
-
-                                                <option value="Guide Gratuity">Guide Gratuity</option>
-
-                                                <option value="Accommodations">Accommodations</option>
-
-                                                <option value="Video">Video</option>
-
-                                                <option value="Photography">Photography</option>
-
-                                                <option value="Fully Narrated">Fully Narrated</option>
-
-                                                <option value="Historic landmarks">Historic landmarks</option>
-
-                                                <option value="Rest period">Rest period</option>
-
-                                                <option value="Typical souvenir">Typical souvenir</option>
-
-                                              
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#frm_notincluded_things'
-
-                                                });
-
-                                            </script>
-
-                                            <span class="error" id="err_what_not_included"></span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label  class="labelstyle">What should Guest Bring and Wear?</label><br>
-
-                                            <p> If guests need anything in order to enjoy your experience, this is the place to tell them. This list will be emailed to guests when they book your experience to help them prepare. Be as detailed as possible and each item individually.</p>
-
-                                            <select name="frm_wear[]" id="frm_wear" multiple>
-
-                                                <option value="Any Clothing Type">Any Clothing Type</option>
-
-                                                <option value="Dress for warm weather">Dress for warm weather</option>
-
-                                                <option value="Dress for wet weather">Dress for wet weather</option>
-
-                                                <option value="Dress for cold weather">Dress for cold weather</option>
-
-                                                <option value="Dress for nature activities">Dress for nature activities</option>
-
-                                                <option value="Dress for wet activities">Dress for wet activities</option>
-
-                                                <option value="Dress for cold activities">Dress for cold activities</option>
-
-                                                <option value="Pants">Pants</option>
-
-                                                <option value="Long Sleeve">Long Sleeve</option>
-
-                                                <option value="Jacket">Jacket</option>
-
-                                                <option value="Sandals">Sandals</option>
-
-                                                <option value="Shoes">Shoes</option>
-
-                                                <option value="Hats">Hats</option>
-
-                                                <option value="Sunglasses">Sunglasses</option>
-
-                                                <option value="Sunblock">Sunblock</option>
-
-                                                <option value="Bug Spray">Bug Spray</option>
-
-                                                <option value="Safety Goggles">Safety Goggles</option>
-
-                                                <option value="Dinner">Dinner</option>
-
-                                                <option value="Snacks">Snacks</option>
-
-                                                <option value="First Aid Kit">First Aid Kit</option>
-
-                                                <option value="Rain jacket">Rain jacket</option>
-
-                                                <option value="Daypack">Daypack</option>
-
-                                                <option value="Backpack">Backpack</option>
-
-                                                <option value="Headlamp">Headlamp</option>
-
-                                                <option value="Water bottle">Water bottle</option>
-
-                                                <option value="Compass">Compass</option>
-
-                                                <option value="Swimsuit">Swimsuit</option>
-
-                                                <option value="Drybag (waterproof)">Drybag (waterproof)</option>
-
-                                                <option value="Bandana or Buff headwear">Bandana or Buff headwear</option>
-
-                                                <option value="Sleeping bag">Sleeping bag</option>
-
-                                                <option value="Padlock">Padlock</option>
-
-                                                <option value="Duct Tape">Duct Tape</option>
-
-                                                <option value="Ear Plugs">Ear Plugs</option>
-
-                                                <option value="Tent">Tent</option>
-
-                                                <option value="Small Cooking Kit">Small Cooking Kit</option>
-
-                                                <option value="Rope">Rope</option>
-
-                                                <option value="Utility Knife">Utility Knife</option>
-
-                                              
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#frm_wear'
-
-                                                });
-
-                                            </script>
-
-                                            <span class="error" id="err_what_guest_bring"></span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label  class="labelstyle">Require Safety Verifications</label><br>
-
-                                            <p> The primary booker has to successfully complete verified ID in order for them and there guests to attend your experience.</p>
-
-                                            <div class="col-md-12">
-
-                                              <input type="checkbox" id="id_proof" name="id_proof" value="1" 
-
-                                                <?php 
-
-                                        if(!empty($req_safety)){
-
-                                        if(in_array("id_proof", $req_safety)){ echo 'checked'; } } ?> /> 
-
-                                                Require the booker to have ID upon arrival for verification of age and identity (This will be emailed to guest so the are prepared).
-
-                                            </div>
-
-                                            <div class="col-md-12">
-
-                                              <input type="checkbox" id="id_vaccine" name="id_vaccine" value="1" <?php if(!empty($req_safety)){ if(in_array("id_vaccine", $req_safety)){ echo 'checked'; } } ?> /> 
-
-                                                Require the booker to have proof of vacination. (This will be emailed to guest so they are prepared)
-
-                                            </div>
-
-                                            <div class="col-md-12">
-
-                                              <input type="checkbox" id="id_covid" name="id_covid" value="1" <?php if(!empty($req_safety)){ if(in_array("id_covid", $req_safety)){ echo 'checked'; } } ?> /> Require the booker to have proof of a nagative Covid-19 test. (This will be emailed to guest so they are prepared)
-
-                                            </div>
-
-                                            
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label  class="labelstyle">Let's Plan Your Day By Day</label><br>
-
-                                            <p> Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days.</p>
-
-                                            <input type="hidden"  name="planday_count" id="planday_count" value="0" />
-
-                                            <div class="col-md-12 add-another-day-schedule-block mt-25">
-
-                                              <div class="row add_another_day">
-
-                                        
-                                                        <div class="col-md-12"> <label class="mb-10"> Day 1 </label></div>
-
-                                                        <div class="col-md-3 text-center">
-
-                                                            <div class="imagePreview divImgPreview">
-
-                                                                <img src="" class="imagePreview planblah0" id="showimgDayPlan">
-
-                                                            </div>
-
-                                                            <label class="img-tab-btn">Upload Image<input type="file" name="dayplanpic[]" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" style="width: 0px;height: 0px;overflow: hidden;"></label>
-
-                                                            <span class="error" id="err_oldservicepic20"></span>
-
-                                                            <input type="hidden" id="olddayplanpic20" name="olddayplanpic" value="">
-
-                                                            
-
-                                                        </div>
-
-                                                        <div class="col-md-9">
-
-                                                            <input type="text" class="form-control" name="days_title[]" id="days_title0" placeholder="Give Heading for This Day"/><br />
-
-                                                            <textarea class="form-control" rows="6" name="days_description[]" id="days_description" placeholder="Give Description For This Day" maxlength="500"></textarea>
-
-                                                        </div>
-
-                                        <?php //} ?>
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-md-12 text-center" style="margin-top: 50px;">
-
-                                              <a id="test" class="button-fitness add-another-day-schedule">Add Another Day</a>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-4 text-center">
-
-                                    <div class="row">
-
-                                        <div class="col-md-2"></div>
-
-                                        <div class="col-md-8 imgUp">
-
-                                            <div class="imagePreview divImgPreview">
-
-                                                @if(!empty($profile_pic) && File::exists(public_path("/uploads/profile_pic/thumb/".$profile_pic)))
-
-                                                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$profile_pic) }}" class="imagePreview blah2" id="showimgservice">
-
-                                                @else
-
-                                                <img src="{{ url('/public/images/default-avatar.png') }}" class="imagePreview blah2" id="showimgservice">
-
-                                                @endif
-
-                                            </div>
-
-                                            <label class="img-tab-btn">Upload Image<input type="file" name="servicepic" class="uploadFile img" value="Upload Photo" onchange="readServicePic2(this);" style="width: 0px;height: 0px;overflow: hidden;"></label>
-
-                                            <span class="error" id="err_oldservicepic2"></span>
-
-                                            <input type="hidden" id="oldservicepic" name="oldservicepic" value="{{ $profile_pic }}" >
-
-                                            <label style="font-size: 12px;">Upload an image that best represents your program</label>
-
-                                        </div><!-- col-2 -->
-
-                                    </div><!-- row -->
-
-                                </div>
-                            </div>
-
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="step-one">
@@ -4433,415 +3953,19 @@
 
 
                 <div class="container-fluid p-0 checkCurrentTabName" id="individualDiv3" style="display: none;">
-
                     <div class="tab-hed">Create Services & Prices</div>
-
                     <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
-
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-
                         <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
-
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
-
                     </div>
 
                     <section class="row">
-
                         <br/>
-
                         <div class="col-md-12">
-
-                            <div class="row">
-
-                                <!--  <div class="col-md-6 location_div">
-
-                                    <div class="row">
-
-                                        <div class="form-group col-md-12">
-
-                                            <h3 style="font-size: 17px;font-weight: bold;">MORE DETAILS ABOUT YOUR SERVICES</h3>
-
-                                            <div class="form-group">
-
-                                                <label>Do you travel to clients to offer this service ? If yes, click yes to activate.</label><br>
-
-                                                <input class="willing_to_travel" value="yes" type="radio" name="willing_to_travel" {{ ($willing_to_travel=='yes')?'checked':'' }} id="checkserviceyes" style="width: 25px;height: 25px;position: relative;top: 5px;">
-
-                                                <span style="font-size: 20px;font-weight: bold;">Yes</span>
-
-                                                <input class="willing_to_travel" value="no" type="radio" name="willing_to_travel" {{ ($willing_to_travel=='no')?'checked':'' }} id="checkserviceno" style="width: 25px;height: 25px;position: relative;top: 5px;margin-left: 20px;">
-
-                                                <span style="font-size: 20px;font-weight: bold;">No</span>
-
-                                            </div>
-
-                                            <div class="form-group" id="servicebox" style="display:block;">
-
-                                                <label for="milesnew">If yes, how far are you willing to travel out of your base zipcode ? Select the distance and check the map for reference of distance. </label>
-
-                                                <?php
-
-                                                $miles_arr = array('1'=>'1 Mile','3'=>'3 Miles','5'=>'5 Miles','10'=>'10 Miles','15'=>'15 Miles','20'=>'20 Miles');
-
-                                                ?>
-
-                                                <select class="form-control travel_miles_div" name="travel_miles" id="milesnew" {{ ($willing_to_travel=='yes')?'':'disabled="disabled"' }}>
-
-                                                    <option value="">Select Miles</option>
-
-                                                    <?php foreach($miles_arr as $key=>$value) { ?>
-
-                                                    <option <?= ($miles == $key) ? "selected" : "" ?> value="<?= $key; ?>"><?php echo $value; ?></option>
-
-                                                    <?php } ?>
-
-                                                </select>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="where_do_you_work">
-
-                                            <div class="col-md-6">
-
-                                                <label for="wanttowork">Where do you want to work ?</label>
-
-                                                <input type="text" name="wanttowork" id="wanttowork" class="form-control" placeholder="Specific Area" value="{{ !empty($area) ? $area : 'New York' }}">
-
-                                            </div>
-
-                                            <div class="col-md-6">
-
-                                                <input style="margin-top:25px;" type="button" class="btn btn-primary" value="Refresh Map" id="refresh_map" />
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="map-block" style="border:1px solid #000">
-
-                                            <span class="travel_miles_div">
-
-                                                <div id="map_canvas"></div>
-
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                </div> -->
-
-                                <div class="col-md-6 location_div_experience">
-
-                                    <div class="row">
-
-                                        <div class="form-group col-md-12">
-
-                                            <h3 style="font-size: 17px;font-weight: bold;">Describe the location</h3>
-
-                                            <div class="form-group">
-
-                                                <label>Tell customers how to meet up, where to meet up, meeting point name and how to find you once the customers arrive.Don't leave it up to customers to figure out how to meet up with you. Let them know before hand.</label><br>
-
-                                                <textarea class="form-control" value="yes" name="meetup_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder is ABC Anytown, town 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting poing, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)">{{$meetup_location}}</textarea>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="expmap" style="display:none">
-
-                                            <div class="form-group col-md-12">
-
-                                                <label>Where should customers meet you?</label><br />
-
-                                                If the meet up spot is different from the address you set earlier in Company Details, then you can set it here.
-
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-
-                                                <label>Country/Region</label>
-
-                                                <input type="text" name="meetup_country_region" id="meetup_country_region" class="form-control" value="New York">
-
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-
-                                                <label>Street address</label>
-
-                                                <input type="text" name="meetup_street_address" id="meetup_street_address" class="form-control">
-
-                                            </div>
-
-                                             <div class="form-group col-md-3">
-
-                                                <label>Apt/Suite/Bldg.</label>
-
-                                                <input type="text" name="meetup_apt_suit" id="meetup_apt_suit" class="form-control">
-
-                                            </div>
-
-                                            <div class="form-group col-md-3">
-
-                                                <label>City</label>
-
-                                                <input type="text" name="meetup_city" id="meetup_city" class="form-control">
-
-                                            </div>
-
-                                            <div class="form-group col-md-3">
-
-                                                <label>State</label>
-
-                                                <input type="text" name="state" id="meetup_state" class="form-control">
-
-                                            </div>
-
-                                            <div class="form-group col-md-3">
-
-                                                <label>ZIP Code</label>
-
-                                                <input type="text" name="meetup_zipcode" id="meetup_zipcode" class="form-control">
-
-                                            </div>
-
-                                            <div class="where_do_you_work">
-
-                                                <div class="form-group col-md-12">
-
-                                                    <input style="margin-top:25px;" type="button" class="btn btn-primary" value="Refresh Map" id="refresh_map" />
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="map-block" style="border:1px solid #000">
-
-                                                <span class="travel_miles_div">
-
-                                                    <div id="map_canvas"></div>
-
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6  service_type">
-                                    <br>
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <label>Select Service Type You Offer</label>
-
-                                                @if($service_type=='individual')
-                                                    <select name="frm_servicetype[]" id="categSType" multiple>
-                                                        <option value="Personal Training">Personal Training</option>
-                                                        <option value="Coaching">Coaching</option>
-                                                        <option value="Therapy">Therapy</option>
-                                                    </select>
-                                                @else
-                                                    <select name="frm_servicetype[]" id="categSType" multiple>
-                                                        <option value="Personal Training">Personal Training</option>
-                                                        <option value="Coaching">Coaching</option>
-                                                        <option value="Class">Class</option>
-                                                        <option value="Therapy">Therapy</option>
-                                                        <option value="Gym">Gym</option>
-                                                        <option value="Adventure">Adventure</option>
-                                                        <option value="Trip">Trip</option>
-                                                        <option value="Tour">Tour</option>
-                                                        <option value="Camp">Camp</option>
-                                                        <option value="Team">Team</option>
-                                                        <option value="Clinic">Clinic</option>
-                                                    </select>
-                                                @endif
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#categSType'
-                                                });
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Location of Activity</label>
-                                            <select name="frm_servicelocation[]" id="frm_servicelocation" multiple>
-                                                <option value="Online">Online</option>
-                                                <option value="At Business">At Business</option>
-                                                <option value="On Location">On Location</option>
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_servicelocation'
-                                                });
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Activity Great For</label>
-                                            <select name="frm_programfor[]" id="frm_programfor" multiple>
-                                                <option value="Kids">Kids</option>
-                                                <option value="Teens">Teens</option>
-                                                <option value="Adults">Adults</option>
-                                                <option value="Family">Family</option>
-                                                <option value="Groups">Groups</option>
-                                                <option value="Paralympic">Paralympic</option>
-                                                <option value="Prenatal">Prenatal</option>
-                                                <option value="Any">Any</option>
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_programfor'
-                                                });
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Age Range</label>
-                                            <select name="frm_agerange[]" id="frm_agerange" multiple>
-                                                <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
-                                                <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
-                                                <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
-                                                <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
-                                                <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
-                                                <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
-                                                <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
-                                                <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
-                                                <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
-                                                <option value="Any">Any</option>
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_agerange'
-                                                });
-                                            </script>
-                                        </div>
-                                        <!--  <div class="form-group col-md-12">
-                                            <label>Number of slots Available for Booking</label>
-                                            <select name="frm_numberofpeople[]" id="frm_numberofpeople">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                                <option>6</option>
-                                                <option>7</option>
-                                                <option>8</option>
-                                                <option>9</option>
-                                                <option>10</option>
-                                                <option>15</option>
-                                                <option>20</option>
-                                                <option>25</option>
-                                                <option>30</option>
-                                                <option>35</option>
-                                                <option>40</option>
-                                                <option>45</option>
-                                                <option>50</option>
-                                                <option>55</option>
-                                                <option>60</option>
-                                                <option>65</option>
-                                                <option>70</option>
-                                                <option>75</option>
-                                                <option>80</option>
-                                                <option>85</option>
-                                                <option>90</option>
-                                                <option>95</option>
-                                                <option>100</option>
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_numberofpeople'
-                                                });
-                                            </script>
-                                        </div> -->
-                                        <div class="form-group col-md-12">
-                                            <label>Difficulty Level</label>
-                                            <select name="frm_experience_level[]" id="frm_experience_level" multiple>
-                                                <option>Easy</option>
-                                                <option>Medium</option>
-                                                <option>Hard</option>
-                                                <option>Any</option>
-                                            </select>
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_experience_level'
-                                                });
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Activity Experience</label>
-                                            <select name="frm_servicefocuses[]" id="frm_servicefocuses" multiple>
-                                                <option value="Have Fun"> Have Fun</option>
-                                                <option value="Adventurous">Adventurous</option>
-                                                <option value="Thrilling">Thrilling</option>
-                                                <option value="Physically Challenging">Physically Challenging </option>
-                                                <option value="Mentally Challenging">Mentally Challenging </option>
-                                                <option value="Peaceful">Peaceful</option>
-                                                <option value="Calm">Calm</option>
-                                                <option value="Gain Focus">Gain Focus</option>
-                                                <option value="Learning a skill">Learning a skill</option>
-                                                <option value="To accomplish a goal">To accomplish a goal</option>
-                                                <option value="Gain Discipline">Gain Discipline</option>
-                                                <option value="Gain Confidence">Gain Confidence</option>
-                                                <option value="Better hand-eye coordination">Better hand-eye coordination</option>
-                                                <option value="Get a toned body">Get a toned body</option>
-                                                <option value="Get better nutrition habits">Get better nutrition habits</option>
-                                                <option value="Release Pain">Release Pain</option>
-                                                <option value="Relax">Relax</option>
-                                                <option value="Body Alignment">Body Alignment</option>
-                                                <option value="Strength and Conditioning">Strength and Conditioning </option>
-                                                <option value="Athletic Conditioning">Athletic Conditioning</option>
-                                                <option value="Better Technique">Better Technique</option>
-                                                <option value="Weight Loss Help">Weight Loss Help</option>
-                                                <option value="Competition training and prep">Competition training and prep</option>
-                                                <option value="Gain better cardio">Gain better cardio</option>
-                                            </select>
-
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#frm_servicefocuses'
-                                                });
-                                            </script>
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-                                            <label>Personality & Habits of Instructor</label>
-                                            <select name="frm_teachingstyle[]" id="teaching" multiple>
-                                                <option value="An educator">An Educator</option>
-                                                <option value="A teacher">A Teacher</option>
-                                                <option value="A lot of energy">A lot of energy</option>
-                                                <option value="A drill sergeant">A drill sergeant</option>
-                                                <option value="Inspiring">Inspiring</option>
-                                                <option value="Motivational">Motivational</option>
-                                                <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
-                                                <option value="Tough and Firm">Tough and Firm</option>
-                                                <option value="Gentle">Gentle</option>
-                                                <option value="Intense">Intense</option>
-                                                <option value="Likes to talk">Likes to talk</option>
-                                                <option value="Punctual">An entertainer</option>
-                                                <option value="Organized">Stern</option>
-                                                <option value="Stern">Friendly & outgoing</option>
-                                                <option value="Tells jokes and funny">Tells jokes and funny</option>
-                                                <option value="Loves to talk">Loves to talk about the details</option>
-                                                <option value="Very Organized">Very Organized</option>
-                                                <option value="Punctual">Punctual</option>
-                                                <option value="On Time">On Time</option>
-
-                                            </select>
-
-                                            <script>
-                                                var p = new SlimSelect({
-                                                    select: '#teaching'
-                                                });
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="row service_type" >
+                            <div class="service_type">
+                                <br>
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="step-one">
                                             <h3>Step 2: Booking Settings</h3>
@@ -4849,12 +3973,13 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-1">  
                                         <div class="instantl-book map-sp">
                                             <div class="">
-                                                <label class="switch" for="instant">
-                                                    <input type="checkbox" name="instant" id="instant" checked="">
+                                                <label class="switch" for="instantbooking">
+                                                    <input type="checkbox" name="instantbooking" id="instantbooking" @if($business_service['instant_booking'] == 1) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
                                                 
@@ -4871,8 +3996,9 @@
                                     <div class="col-md-1">  
                                         <div class="instantl-book map-sp">
                                             <div class="">
-                                                <label class="switch" for="request">
-                                                    <input type="checkbox" name="request" id="request" checked="">
+                                                <label class="switch" for="requestbooking">
+            
+                                                    <input type="checkbox" name="requestbooking" id="requestbooking" @if($business_service['request_booking'] == 1) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
                                                 
@@ -4886,6 +4012,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-6 col-lg-5">
                                         <div class="participant-req">
@@ -4894,10 +4021,11 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="1" >
+                                            <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="{{$business_service['frm_min_participate']}}">
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-6 col-lg-5">
                                         <div class="">
@@ -4906,24 +4034,41 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="1" >
+                                            <input type="text" class="form-control valid" name="" id="" placeholder="1" >
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="frm_programname" id="" placeholder="Hour(s)+" >
+                                            <input type="text" class="form-control valid" name="" id="" placeholder="Hour(s)+" >
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-3 col-sm-6">
                                         <div class="priceselect sp-select">
                                             <label>Select Service Type</label>
-                                            <select name="frm_servicetype[]" id="categSType" multiple>
-                                                <option value="Personal Training">Personal Training</option>
-                                                <option value="Coaching">Coaching</option>
-                                                <option value="Therapy">Therapy</option>
-                                            </select>
+                                            @if($service_type=='individual')
+                                                <select name="frm_servicetype[]" id="categSType" multiple>
+                                                    <option value="Personal Training">Personal Training</option>
+                                                    <option value="Coaching">Coaching</option>
+                                                    <option value="Therapy">Therapy</option>
+                                                </select>
+                                            @else
+                                                <select name="frm_servicetype[]" id="categSType" multiple>
+                                                    <option value="Personal Training">Personal Training</option>
+                                                    <option value="Coaching">Coaching</option>
+                                                    <option value="Class">Class</option>
+                                                    <option value="Therapy">Therapy</option>
+                                                    <option value="Gym">Gym</option>
+                                                    <option value="Adventure">Adventure</option>
+                                                    <option value="Trip">Trip</option>
+                                                    <option value="Tour">Tour</option>
+                                                    <option value="Camp">Camp</option>
+                                                    <option value="Team">Team</option>
+                                                    <option value="Clinic">Clinic</option>
+                                                </select>
+                                            @endif
                                             <script>
                                                 var p = new SlimSelect({
                                                     select: '#categSType'
@@ -4991,6 +4136,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-3 col-sm-6">
                                         <div class="priceselect sp-select">
@@ -5078,10 +4224,365 @@
                                             </script>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
+
+                                <div  @if($service_type != "experience" ) style="display: none;" @endif>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="itinerary-data">
+                                                <h3>Set Up Your Itinerary</h3> <p>( Let customers know what they will be doing for this experience)</p>
+                                                <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 5px;">
+                                            </div>
+                                            <div class="highlights-title">
+                                                <label>Experience Highlights</label>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <textarea class="form-control valid" rows="6" name="exp_highlight" id="exp_highlight" maxlength="150" placeholder="Briefly describe a few highlights so customer understand what they will be doing. ">{{@$business_service['exp_highlight']}}</textarea>
+                                                        <span>1,000 Character Left</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+                                            
+                                        <div class="col-md-12">
+                                            <div class="booking-titles">
+                                                <h3>What’s Included with this experience?</h3>
+                                                <p>What do you provide for your customers?</p>
+                                                <p>Examples: You provide pick up and drop off transportation from hotels etc., provider, food and drinks, special equipment, video and photography services etc.)</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="activity-width">
+                                                        <div class="special-offer select-dropoff">
+                                                            <div class="multiples">
+                                                                <select name="frm_included_things[]" id="frm_included_things" multiple class="mt-10">
+                                                                    <option value="Safety & Protective Gear">Safety & Protective Gear</option>
+                                                                    <option value="Activity Equipment">Activity Equipment</option>
+                                                                    <option value="Breakfast">Breakfast</option>
+                                                                    <option value="Lunch">Lunch</option>
+                                                                    <option value="Dinner">Dinner</option>
+                                                                    <option value="Snacks">Snacks</option>
+                                                                    <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
+                                                                    <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
+                                                                    <option value="Transportation">Transportation</option>
+                                                                    <option value="Insurance Coverage">Insurance Coverage</option>
+                                                                    <option value="Entrance Fees ">Entrance Fees </option>
+                                                                    <option value="Airfare">Airfare</option>
+                                                                    <option value="Taxes">Taxes</option>
+                                                                    <option value="Professional Guide">Professional Guide</option>
+                                                                    <option value="Guide Gratuity">Guide Gratuity</option>
+                                                                    <option value="Accommodations">Accommodations</option>
+                                                                    <option value="Video">Video</option>
+                                                                    <option value="Photography">Photography</option>
+                                                                    <option value="Fully Narrated">Fully Narrated</option>
+                                                                    <option value="Historic landmarks">Historic landmarks</option>
+                                                                    <option value="Rest period">Rest period</option>
+                                                                    <option value="Typical souvenir">Typical souvenir</option>
+                                                                </select>
+
+                                                                <script>
+                                                                    var p = new SlimSelect({
+                                                                        select: '#frm_included_things'
+                                                                    });
+                                                                </script>
+                                                                <span class="error" id="err_what_included"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="booking-titles">
+                                                <h3>What’s Not Included with this experience?</h3>
+                                                <p>List the items or services that are not includes with this experience. i.e. no food or drinks, no equipment, no insurance, etc. </p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="activity-width">
+                                                        <div class="special-offer select-dropoff">
+                                                            <div class="multiples">
+                                                                <select name="frm_notincluded_things[]" id="frm_notincluded_things" multiple>
+                                                                    <option value="Safety & Protective Gear">Safety & Protective Gear</option>
+                                                                    <option value="Activity Equipment">Activity Equipment</option>
+                                                                    <option value="Breakfast">Breakfast</option>
+                                                                    <option value="Lunch">Lunch</option>
+                                                                    <option value="Dinner">Dinner</option>
+                                                                    <option value="Snacks">Snacks</option>
+                                                                    <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
+                                                                    <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
+                                                                    <option value="Transportation">Transportation</option>
+                                                                    <option value="Insurance Coverage">Insurance Coverage</option>
+                                                                    <option value="Entrance Fees ">Entrance Fees </option>
+                                                                    <option value="Airfare">Airfare</option>
+                                                                    <option value="Taxes">Taxes</option>
+                                                                    <option value="Professional Guide">Professional Guide</option>
+                                                                    <option value="Guide Gratuity">Guide Gratuity</option>
+                                                                    <option value="Accommodations">Accommodations</option>
+                                                                    <option value="Video">Video</option>
+                                                                    <option value="Photography">Photography</option>
+                                                                    <option value="Fully Narrated">Fully Narrated</option>
+                                                                    <option value="Historic landmarks">Historic landmarks</option>
+                                                                    <option value="Rest period">Rest period</option>
+                                                                    <option value="Typical souvenir">Typical souvenir</option>
+                                                                </select>
+                                                                <script>
+                                                                    var p = new SlimSelect({
+                                                                        select: '#frm_notincluded_things'
+                                                                    });
+                                                                </script>
+                                                                 <span class="error" id="err_what_not_included"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="booking-titles">
+                                                <h3>What Should Guest Bring and Wear?</h3>
+                                                <p>If guests need anything in order to enjoy your experience, this is the place to tell them. Be as detailed as possible and add each item individually.</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="activity-width">
+                                                        <div class="special-offer select-dropoff">
+                                                            <div class="multiples">
+                                                                <select name="frm_wear[]" id="frm_wear" multiple>
+                                                                    <option value="Any Clothing Type">Any Clothing Type</option>
+                                                                    <option value="Dress for warm weather">Dress for warm weather</option>
+                                                                    <option value="Dress for wet weather">Dress for wet weather</option>
+                                                                    <option value="Dress for cold weather">Dress for cold weather</option>
+                                                                    <option value="Dress for nature activities">Dress for nature activities</option>
+                                                                    <option value="Dress for wet activities">Dress for wet activities</option>
+                                                                    <option value="Dress for cold activities">Dress for cold activities</option>
+                                                                    <option value="Pants">Pants</option>
+                                                                    <option value="Long Sleeve">Long Sleeve</option>
+                                                                    <option value="Jacket">Jacket</option>
+                                                                    <option value="Sandals">Sandals</option>
+                                                                    <option value="Shoes">Shoes</option>
+                                                                    <option value="Hats">Hats</option>
+                                                                    <option value="Sunglasses">Sunglasses</option>
+                                                                    <option value="Sunblock">Sunblock</option>
+                                                                    <option value="Bug Spray">Bug Spray</option>
+                                                                    <option value="Safety Goggles">Safety Goggles</option>
+                                                                    <option value="Dinner">Dinner</option>
+                                                                    <option value="Snacks">Snacks</option>
+                                                                    <option value="First Aid Kit">First Aid Kit</option>
+                                                                    <option value="Rain jacket">Rain jacket</option>
+                                                                    <option value="Daypack">Daypack</option>
+                                                                    <option value="Backpack">Backpack</option>
+                                                                    <option value="Headlamp">Headlamp</option>
+                                                                    <option value="Water bottle">Water bottle</option>
+                                                                    <option value="Compass">Compass</option>
+                                                                    <option value="Swimsuit">Swimsuit</option>
+                                                                    <option value="Drybag (waterproof)">Drybag (waterproof)</option>
+                                                                    <option value="Bandana or Buff headwear">Bandana or Buff headwear</option>
+                                                                    <option value="Sleeping bag">Sleeping bag</option>
+                                                                    <option value="Padlock">Padlock</option>
+                                                                    <option value="Duct Tape">Duct Tape</option>
+                                                                    <option value="Ear Plugs">Ear Plugs</option>
+                                                                    <option value="Tent">Tent</option>
+                                                                    <option value="Small Cooking Kit">Small Cooking Kit</option>
+                                                                    <option value="Rope">Rope</option>
+                                                                    <option value="Utility Knife">Utility Knife</option>
+                                                                </select>
+                                                                <script>
+                                                                    var p = new SlimSelect({
+                                                                        select: '#frm_wear'
+                                                                    });
+                                                                </script>
+                                                                <span class="error" id="err_what_guest_bring"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="booking-titles">
+                                                <h3>Accessibility</h3>
+                                                <p>Explain if there is easy access for the disabled </p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="accessibility select-dropoff">
+                                                        <textarea class="form-control valid" rows="3" name="frm_accessibility" id="frm_accessibility" maxlength="500" >{{$business_service['accessibility']}}</textarea>
+                                                        <span id="frm_accessibility_left">500 Character Left</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="booking-titles">
+                                                <h3>Additional Information & FAQ</h3>
+                                                <p>Have a few things you want your customers to know before arriving? </p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="accessibility select-dropoff">
+                                                        <textarea class="form-control valid" rows="6" name="frm_addi_info" id="frm_addi_info" maxlength="1000" >{{$business_service['addi_info']}}</textarea>
+                                                        <span id="frm_addi_info_left">1,000 Character Left</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="plandaybyday">
+                                                <h3>Let’s Plan Your Day By Day</h3>
+                                                <p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+                                                <input type="hidden"  name="planday_count" id="planday_count" value="0" />
+                                                <div class="add-another-day-schedule-block">
+                                                    <div class="add_another_day">
+                                                        <label class="select-dropoff">Day - 1</label>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <div class="photo-upload">
+                                                                            <label for="dayplanpic" id="label">
+                                                                              <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg" >
+                                                                              <span id="span">Upload your file here</span>
+                                                                              <input type="file" name="dayplanpic[]" id="dayplanpic" class="uploadFile img" value="Upload Photo"></label>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div>
+                                                                            <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
+                                                                        </div>
+                                                                        <div class="description-txt">
+                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea>
+                                                                            <span>500 Character Left</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span class="addnewdiv add-another-day-schedule">+ Add another day</span>
+                                        </div>
+                                        <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+                                    </div>
+
+                                    <div class="row">   
+                                        <div class="col-md-6">
+                                            <div class="return-info">
+                                                <h3>Departure & Return Info & Describe the Location</h3>
+                                                <p>Tell customers how and when you will depart and return, how to meet up, where to meet up, meeting point name and how to find you once the customer arrives. Don’t leave it up to customers to figure out how to meet up with you. Let them know before hand.</p>
+                                                
+                                                <textarea class="form-control valid" rows="6" name="desc_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder  is ABC Anytown, town, 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting point, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)" maxlength="150">{{@$business_service['desc_location']}}</textarea>
+                                                <span>500 Character Left</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">   
+                                        <div class="col-md-6">                  
+                                            <div class="companydetails">
+                                                <h3>Where should customers meet you?</h3>
+                                                <p>If the meet up spot is different from the address you set earlier in Company Details, then you can set it here.</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="companydetails-info">
+                                                        <label>Street address </label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="companydetails-info">
+                                                        <label>Country / Region </label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="companydetails-info">
+                                                        <label>Bldg (optional)</label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div>
+                                                        <label> City </label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div>
+                                                        <label>State  </label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div>
+                                                        <label> ZIP code</label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="select-dropoff">
+                                                        <button class="showall-btn">Update Map</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="pin-on-map">
+                                                        <h3>Adjust the pin on the map</h3>
+                                                        <p>You can drag the map so the pin is in the right location.</p>
+                                                        <div class="maparea">
+                                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="customers-help">
+                                                <h3>Confirm your phone number if customers need your help</h3>
+                                                <p>If customers have trouble finding your location, or need questions with help, they may need to call you. The number on file we'll give them is +1 (555) 555-5555. </p>
+                                                <h3>Any additinal information for help</h3>
+                                                <textarea class="form-control valid" rows="3" maxlength="500" name="addi_info_help" id="addi_info_help">{{@$business_service['addi_info_help']}}</textarea>
+                                                <span id="addi_info_help_left">500 Character Left</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                              
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="customers-help">
+                                                <h3>Require Safety Verifications </h3>
+                                                <p>The primary booker has to successfully complete verified ID in order for them and their guests to attend your experience.</p>
+
+                                                <input type="checkbox" id="id_proof" name="id_proof" value="1" @if(!empty($req_safety))
+                                                    @if(in_array("id_proof", $req_safety)) checked @endif @endif />
+                                                <label for="id_proof">Require the booker to have ID upon arrival for verificaiton of age and identity</label><br>
+                                               
+                                                <input type="checkbox" id="id_vaccine" name="id_vaccine" value="1" @if(!empty($req_safety))  @if(in_array("id_vaccine", $req_safety))checked @endif @endif />
+
+                                                <label for="id_vaccine">Require the booker to have proof of Vacination. </label><br>
+
+                                                <input type="checkbox" id="id_covid" name="id_covid" value="1"  @if(!empty($req_safety))  @if(in_array("id_covid", $req_safety))checked @endif @endif  />
+                                                <label for="id_covid">Require the booker to have proof of a negative Covid-19 test. </label><br> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <br/>
                             <div class="row">
@@ -10931,33 +10432,11 @@
 
 @include('layouts.footer')
 
-
-<!-- <script>
-    $('form').on('submit', function (e) {
-        e.preventDefault(); // prevent the form submit
-        var url = '{{ route('modelboxsuccess')}}';
-        // create the FormData object from the form context (this),
-        // that will be present, since it is a form event
-        var formData = new FormData(this); 
-        // build the ajax call
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                // handle success response
-                console.log(response.data);
-            },
-            error: function (response) {
-                // handle error response
-                console.log(response.data);
-            },
-            contentType: false,
-            processData: false
-        });
-    });
-</script> -->
-
+<script>
+document.getElementById("dayplanpic").addEventListener("change", (e) => {
+  document.getElementById("span").innerText = e.target.files[0].name;
+});
+</script>
 
 
 <script>
@@ -12006,34 +11485,22 @@ $("body").on("blur", "#pay_discount", function(){
 
 
 $("body").on("click", ".add-another-day-schedule", function(){
+    var cnt=$('#planday_count').val();
+    cnt++;
+    $('#planday_count').val(cnt);
+    var service_price = ""; var daycnt='';
+    daycnt = cnt+1;                          
+    
+    service_price += '<div class="add_another_day planday'+cnt+'" style="margin-top:20px; padding-top:10px;border-top:1px dotted #000;">'; 
 
-  var cnt=$('#planday_count').val();
 
-  cnt++;
+    service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
 
-  $('#planday_count').val(cnt);
+    service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic" id="label"><img src="{{url("/public/images/Upload-Icon.png")}}" class="pro_card_img blah" id="showimg" ><span id="span">Upload your file here</span><input type="file" name="dayplanpic[]" id="dayplanpic" class="uploadFile img" value="Upload Photo"></label></label></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
 
-  var service_price = ""; var daycnt='';
+    service_price += '</div>';
 
-  daycnt = cnt+1;
-
-  service_price += '<div class="row add_another_day planday'+cnt+'" style="margin-top:20px; padding-top:10px;border-top:1px dotted #000;">';
-
-  service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
-
-  //service_price += $(".add_another_day").html();
-
-  service_price += '<div class="col-md-12"> <label class="mb-10"> Day '+daycnt+' </label></div><div class="col-md-3 text-center"><div class="imagePreview divImgPreview"><img src="" class="imagePreview planblah'+cnt+'" id="showimgDayPlan"></div><label class="img-tab-btn">Upload Image<input type="file" name="dayplanpic[]" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" style="width: 0px;height: 0px;overflow: hidden;"></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic" value=""></div>';
-
-  
-
-  service_price +='<div class="col-md-9"><input type="text" class="form-control" name="days_title[]" id="days_title0" placeholder="Give Heading for This Day"/><br /><textarea class="form-control" rows="6" name="days_description[]" id="days_description" placeholder="Give Description For This Day" maxlength="500"></textarea>';
-
-  
-
-  service_price += '</div>';
-
-  $(".add-another-day-schedule-block").append(service_price);
+    $(".add-another-day-schedule-block").append(service_price);
 
 });
 
@@ -12042,13 +11509,11 @@ $("body").on("click", ".add-another-day-schedule", function(){
 
 
 $("body").on("click", ".remove-day-schedule", function(){
-
-  $(this).parent().parent().remove();
-
+    var cnt=$('#planday_count').val();
+    cnt--;
+    $('#planday_count').val(cnt);
+    $(this).parent().parent().remove();
 });
-
-
-
 
 
 $("body").on("click", ".remove-pricedetails", function(){
@@ -12665,49 +12130,29 @@ $('#expiry_date').on('focusout', function(){
 $(document).ready(function(){ 
 
     $('#quick_business_left').text(150-parseInt($("#about_company").val().length));
-
     $('#company_desc_left').text(1000-parseInt($("#short_description").val().length));
-
     $('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
-
     $('#frm_programdesc_left').text(500-parseInt($("#frm_programdesc").val().length));
-
+    $('#frm_accessibility_left').text(500-parseInt($("#frm_accessibility").val().length));
+    $('#addi_info_help_left').text(500-parseInt($("#addi_info_help").val().length));
+    $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
     $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));
-
     $('#house_rules_left').text(500-parseInt($("#house_rules").val().length));
-
     $('#cancelation_policy_left').text(500-parseInt($("#cancelation_policy").val().length));
-
     $('#safety_cleaning_left').text(500-parseInt($("#safety_cleaning").val().length));
-
     $('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
-
     $('#contracttermtext_left').text(1000-parseInt($("#contracttermtext").val().length));
-
     $('#refundpolicy_left').text(1000-parseInt($("#refundpolicytext").val().length));
-
     $('#liabilitystext_left').text(1000-parseInt($("#liabilitystext").val().length));
-
     $('#covidstext_left').text(1000-parseInt($("#covidstext").val().length));
 
-    $('#frm_what_you_doing').text(500-parseInt($("#what_you_doing").val().length)); 
-
-    
 
     $("#about_company").on('input', function() {
-
-        //$('#display_count').text(this.value.length);
-
         $('#quick_business_left').text(150-parseInt(this.value.length));
-
     });
 
     $("#short_description").on('input', function() {
-
-        //$('#display_count_business').text(this.value.length);
-
         $('#company_desc_left').text(1000-parseInt(this.value.length));
-
     });
 
     $("#frm_skilldetail").on('input', function() {
@@ -12722,11 +12167,29 @@ $(document).ready(function(){
 
     });
 
-  $("#what_you_doing").on('input', function() {
+    $("#frm_accessibility").on('input', function() {
+
+        $('#frm_accessibility_left').text(500-parseInt(this.value.length));
+
+    }); 
+
+    $("#addi_info_help").on('input', function() {
+
+        $('#addi_info_help_left').text(500-parseInt(this.value.length));
+
+    }); 
+
+    $("#frm_addi_info").on('input', function() {
+
+        $('#frm_addi_info_left').text(1000-parseInt(this.value.length));
+
+    });
+
+  /*$("#what_you_doing").on('input', function() {
 
         $('#frm_what_you_doing').text(500-parseInt(this.value.length));
 
-    });
+    });*/
 
     $("#frm_programdesc1").on('input', function() {
 
@@ -14793,342 +14256,197 @@ $(document).ready(function(){
     
 
     $("#nextindividual2").click(function(){
-
         loadMap();
-
-    var sport_activity = $("#frm_servicesport").val();
-
+        var sport_activity = $("#frm_servicesport").val();
         var program_name = $("#frm_programname").val();
-
         var program_desc = $("#frm_programdesc").val();
-
-    var instant_booking = $("#booking1").val();
-
+        var instant_booking = $("#booking1").val();
         var service_pic = $("#imgUpload").val();
-
         $('#err_frm_servicesportS2').html('');
-
         $('#err_frm_programname').html('');
-
         $('#err_frm_programdesc').html('');
-
         $('#err_booking1').html('');
-
         $('#err_oldservicepic').html('');
-
         if(sport_activity == ''){ 
-
             $('#err_frm_servicesportS2').html('Please select any sport activity.');
-
             $('#frm_servicesport').focus();
-
             return false;
-
         }
 
         if(program_name == ''){
-
             $('#err_frm_programname').html('Please enter program name');
-
             $('#frm_programname').focus();
-
             return false;
-
         }
 
         if(program_desc == ''){ 
-
             $('#err_frm_programdesc').html('Please enter program description.');
-
             $('#frm_programdesc').focus();
-
             return false;
-
         }
 
-    
+        if($("#what_you_doing").is(":visible")){ 
+            var what_you_doing = $("#what_you_doing").val();
+            $('#err_what_you_doing').html('');
+            if(what_you_doing == ''){ 
+                $('#err_what_you_doing').html('Please enter what will you be doing.');
+                $('#what_you_doing').focus();
+                return false;
+            }
+        }
 
-    if($("#what_you_doing").is(":visible")){ 
-
-      var what_you_doing = $("#what_you_doing").val();
-
-      $('#err_what_you_doing').html('');
-
-      if(what_you_doing == ''){ 
-
-        $('#err_what_you_doing').html('Please enter what will you be doing.');
-
-        $('#what_you_doing').focus();
-
-        return false;
-
-      }
-
-    }
-
-    if($("#frm_included_things").is(":visible")){ 
-
-      var included_things = $("#frm_included_things").val();
-
-      $('#err_what_included').html('');
-
-      if(included_things == ''){ 
-
-        $('#err_what_included').html('Please Select.');
-
-        $('#included_things').focus();
-
-        return false;
-
-      }
-
-    }
-
-    if($("#frm_notincluded_things").is(":visible")){ 
-
-      var notincluded_things = $("#frm_notincluded_things").val();
-
-      $('#err_what_not_included').html('');
-
-      if(notincluded_things == ''){ 
-
-        $('#err_what_not_included').html('Please Select.');
-
-        $('#notincluded_things').focus();
-
-        return false;
-
-      }
-
-    }
-
-    if($("#frm_wear").is(":visible")){ 
-
-      var wear = $("#frm_wear").val();
-
-      $('#err_what_guest_bring').html('');
-
-      if(wear == ''){ 
-
-        $('#err_what_guest_bring').html('Please Select.');
-
-        $('#wear').focus();
-
-        return false;
-
-      }
-
-    }
-
-    if($('#is_late_fee').val()=="Yes")
-
-    { 
-
-      if($('#late_fee').val()=="")
-
-      { 
-
-        $('#err_late_fee').html('Please enter late fee amount.');
-
-        $('#late_fee').focus();
-
-        return false;
-
-      }
-
-    }
-
-    else
-
-    {
-
-      $("[name='late_fee']").prop("required", false);
-
-      $('#err_late_fee').html(' ');
-
-    }
+        if($('#is_late_fee').val()=="Yes")
+        { 
+            if($('#late_fee').val()=="")
+            { 
+                $('#err_late_fee').html('Please enter late fee amount.');
+                $('#late_fee').focus();
+                return false;
+            }
+        }else{
+            $("[name='late_fee']").prop("required", false);
+            $('#err_late_fee').html(' ');
+        }
 
         /*
-
         if (!$('#booking1').is(":checked")) {
-
             $('#err_booking1').html('Please enabled instant booking');
-
             $('#booking1').focus();
-
             return false;
-
         }
-
         */
 
-    var service_type = $("#service_type").val();
+        var service_type = $("#service_type").val();
 
-    /*if( service_type.trim()=='experience')
+        /*if( service_type.trim()=='experience')
+        {
+            if(service_pic == ''){ 
+                $('#err_oldservicepic2').html('Please choose profile picture.');
+                return false;
+            }
 
-    {
+            $('#categ').html('<option value="Group Class">Group Class</option><option value="Seminar">Seminar</option><option value="Workshop">Workshop</option><option value="Clinic">Clinic</option><option value="Camp">Camp</option><option value="Team">Team</option><option value="Corporate">Corporate</option>');
 
-      if(service_pic == ''){ 
+            $("#individualDiv2").hide();
+            $('.location_div').hide();
+            if(service_type.trim()=='experience')
+            {
+                $('#categ').html('<option value="Tour">Camp</option><option value="Tour">Tour</option><option value="Adventure">Adventure</option><option value="Retreat">Retreat</option><option value="Workshop">Workshop</option><option value="Seminar">Seminar</option><option value="Private experience">Private experience</option>');
 
-        $('#err_oldservicepic2').html('Please choose profile picture.');
+                $('.location_div_experience').show();
 
-        return false;
+                $("#categSType option[value='Personal Training']").remove();
 
-          }
+                $("#categSType option[value='Coaching']").remove();
 
-      $('#categ').html('<option value="Group Class">Group Class</option><option value="Seminar">Seminar</option><option value="Workshop">Workshop</option><option value="Clinic">Clinic</option><option value="Camp">Camp</option><option value="Team">Team</option><option value="Corporate">Corporate</option>');
+                $("#categSType option[value='Therapy']").remove();
 
-      
+                $('#categSType').append($("<option></option>").attr("value", 'Tour').text('Tour')); 
+                $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp')); 
 
-      $("#individualDiv2").hide();
+                $('#categSType').append($("<option></option>").attr("value", 'Adventure').text('Adventure')); 
 
-      $('.location_div').hide();
+                $('#categSType').append($("<option></option>").attr("value", 'Retreat').text('Retreat')); 
 
-      if(service_type.trim()=='experience')
+                $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop'));
 
-      {
+                $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar'));
 
-        $('#categ').html('<option value="Tour">Camp</option><option value="Tour">Tour</option><option value="Adventure">Adventure</option><option value="Retreat">Retreat</option><option value="Workshop">Workshop</option><option value="Seminar">Seminar</option><option value="Private experience">Private experience</option>');
+                $('#categSType').append($("<option></option>").attr("value", 'Private experience').text('Private experience'));
 
-        $('.location_div_experience').show();
+                var servicetypearr = [];
+                var servicetype = '{{ $select_service_type }}';
+                servicetype = servicetype.split(',');
+                $.each(servicetype, function( index, value ) {
+                    servicetypearr.push(value);              
+                });
 
-        $("#categSType option[value='Personal Training']").remove();
+                const serviceSelect1 = new SlimSelect({
+                    select: '#categSType'
+                });
 
-        $("#categSType option[value='Coaching']").remove();
+                serviceSelect1.set(servicetypearr);
+            }else{ 
+                $('.location_div_experience').hide();
+            }
 
-        $("#categSType option[value='Therapy']").remove();
+            if(service_type.trim()=='classes')
+            {
+                $('#categSType').append($("<option></option>").attr("value", 'Group Class').text('Group Class')); 
+                $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar')); 
+                $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop')); 
+                $('#categSType').append($("<option></option>").attr("value", 'Clinic').text('Clinic'));
+                $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp'));
+                $('#categSType').append($("<option></option>").attr("value", 'Team').text('Team'));
+                $('#categSType').append($("<option></option>").attr("value", 'Corporate').text('Corporate'));
 
-        $('#categSType').append($("<option></option>").attr("value", 'Tour').text('Tour')); 
-        $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp')); 
+                var servicetypearr = [];
+                var servicetype = '{{ $select_service_type }}';
+                servicetype = servicetype.split(',');
+                $.each(servicetype, function( index, value ) {
+                  servicetypearr.push(value);
+                });
 
-        $('#categSType').append($("<option></option>").attr("value", 'Adventure').text('Adventure')); 
+                const serviceSelect1 = new SlimSelect({
+                  select: '#categSType'
+                });
+                serviceSelect1.set(servicetypearr);
+            }
+        }else{ 
+            $('#categ').html('<option value="Personal Training">Personal Training</option><option value="Coaching">Coaching</option><option value="Instructions">Instructions</option><option value="Therapy">Therapy</option>');
 
-        $('#categSType').append($("<option></option>").attr("value", 'Retreat').text('Retreat')); 
+            $('.location_div').show();
+            $('.location_div_experience').hide();
 
-        $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop'));
+        }*/
 
-        $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar'));
-
-        $('#categSType').append($("<option></option>").attr("value", 'Private experience').text('Private experience'));
-
-        var servicetypearr = [];
-
-        var servicetype = '{{ $select_service_type }}';
-
-        servicetype = servicetype.split(',');
-
-        $.each(servicetype, function( index, value ) {
-
-          servicetypearr.push(value);
-
-        });
-
-        const serviceSelect1 = new SlimSelect({
-
-          select: '#categSType'
-
-        });
-
-        serviceSelect1.set(servicetypearr);
-
-        
-
-      }
-
-      else{ 
-
-        $('.location_div_experience').hide();
-
-      }
-
-      if(service_type.trim()=='classes')
-
-      {
-
-        $('#categSType').append($("<option></option>").attr("value", 'Group Class').text('Group Class')); 
-
-        $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar')); 
-
-        $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop')); 
-
-        $('#categSType').append($("<option></option>").attr("value", 'Clinic').text('Clinic'));
-
-        $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp'));
-
-        $('#categSType').append($("<option></option>").attr("value", 'Team').text('Team'));
-
-        $('#categSType').append($("<option></option>").attr("value", 'Corporate').text('Corporate'));
-
-        var servicetypearr = [];
-
-        var servicetype = '{{ $select_service_type }}';
-
-        servicetype = servicetype.split(',');
-
-        $.each(servicetype, function( index, value ) {
-
-          servicetypearr.push(value);
-
-        });
-
-        const serviceSelect1 = new SlimSelect({
-
-          select: '#categSType'
-
-        });
-
-        serviceSelect1.set(servicetypearr);
-
-      }
-
-    }
-
-    else
-
-    { 
-
-      $('#categ').html('<option value="Personal Training">Personal Training</option><option value="Coaching">Coaching</option><option value="Instructions">Instructions</option><option value="Therapy">Therapy</option>');
-
-      
-
-      $('.location_div').show();
-
-      $('.location_div_experience').hide();
-
-    }*/
-
-    $("#individualDiv2").hide();
-
+        $("#individualDiv2").hide();
         $("#individualDiv3").show();
 
-    
-
-    if(service_type.trim()=='individual'){
-
-      $(".location_div").show();
-
-      $('.location_div_experience').hide();
-
-    }
-
-    
-
-    $('#current_tab_name').val('individualDiv3');
-
+        if(service_type.trim()=='individual'){
+            $(".location_div").show();
+            $('.location_div_experience').hide();
+        }
+        
+        $('#current_tab_name').val('individualDiv3');
     });
+
 
     $("#nextindividual3").click(function(){
 
+        if($("#frm_included_things").is(":hidden")){ 
+            var included_things = $("#frm_included_things").val();
+            $('#err_what_included').html('');
+            if(included_things == '' || included_things == null){ 
+                $('#err_what_included').html('Please Select.');
+                $('#frm_included_things').focus();
+                return false;
+            }
+        }
+
+        if($("#frm_notincluded_things").is(":hidden")){ 
+            var notincluded_things = $("#frm_notincluded_things").val();
+            $('#err_what_not_included').html('');
+            if(notincluded_things == '' || notincluded_things == null){ 
+                $('#err_what_not_included').html('Please Select.');
+                $('#frm_notincluded_things').focus();
+                return false;
+            }
+        }
+
+        if($("#frm_wear").is(":hidden")){ 
+            var wear = $("#frm_wear").val();
+            $('#err_what_guest_bring').html('');
+            if(wear == '' || wear == null){ 
+                $('#err_what_guest_bring').html('Please Select.');
+                $('#frm_wear').focus();
+                return false;
+            }
+        }
+
         $("#individualDiv3").hide();
-
-       /* $("#individualDiv4").show();*/
-
-       $("#individualDiv5").show();
-
-    // $('#current_tab_name').val('individualDiv4');
-
-    $('#current_tab_name').val('individualDiv5');
-
+        $("#individualDiv5").show();
+        $('#current_tab_name').val('individualDiv5');
     });
 
     $("#nextindividual4").click(function(){ //alert('call');
