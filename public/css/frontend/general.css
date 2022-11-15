@@ -21655,6 +21655,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-weight: 400;
 	margin-bottom: 1px;
 	text-align: right;
+	line-break: anywhere;
 }
 .booking-page-meta-info{
 	display: grid;
@@ -21735,9 +21736,9 @@ span.Zebra_DatePicker_Icon_Wrapper {
   display: none !important;
 }
 .photo-upload .pro_card_img{
-	border-radius: 50%;
-	width: 90px;
-	height: 105px;
+	width: 100%;
+	min-height: 115px;
+	border-radius: 0px;
 }
 .photo-upload label {
   width: 300px;

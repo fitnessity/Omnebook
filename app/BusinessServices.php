@@ -104,6 +104,8 @@ class BusinessServices extends Model
         'accessibility',
         'addi_info_help',
         'desc_location',
+        'exp_lng',
+        'exp_lat',
     ];
     
     public function businesscompanydetail() {

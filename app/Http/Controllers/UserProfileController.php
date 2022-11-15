@@ -1957,8 +1957,8 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-        /*print_r($request->all());
-        exit;*/
+       /*print_r($request->all());*/
+         /*exit;*/
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -1977,36 +1977,31 @@ class UserProfileController extends Controller {
         }
 
         $profile_picture = "";
-        /*if($request->service_type=='experience') {
-            if ($request->hasFile('servicepic')) {
-                $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
-                $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-                $image_upload = Miscellaneous::uploadPhotoGallery($request->servicepic, $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
-            
-                if($image_upload['success'] == true) {
-                $profile_picture = $image_upload['filename'];
-                }
-            } else {
-                $profile_picture = $request->oldservicepic;
-            }
-            if($request->hasfile('dayplanpic'))
-             {
-                 $no=1;
-                foreach($request->file('dayplanpic') as $file)
-                {
+        $datadayimg = [];
+
+        $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
+
+        if($request->service_type=='experience') {
+            for ($i=0; $i <count($request->days_title) ; $i++) { 
+                if($request->file('dayplanpic_'.$i)){
+                    $no= $i+1;
+                    $file = $request->file('dayplanpic_'.$i);
                     $name = time().$no.'.'.$file->extension();
                     $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
                     $file->move($thumb_upload_path, $name);  
-                    $datadayimg[] = $name;  
+                    $datadayimg[$i] = $name;  
                     $no++;
+                }else{
+                    if($request->input('olddayplanpic_'.$i)){
+                        $datadayimg[$i] = $request->input('olddayplanpic_'.$i);
+                    }else{
+                        $datadayimg[$i] = null;
+                    }
                 }
-             }
-            
-             // using the insertion time only 
-            $request->servicepic = $profile_picture;
-        } else {*/
-
-        $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
+            }
+        } 
+       
+       
         if($bus_count != ''){
             if($bus_count->profile_pic != ''){
                 $img = rtrim($bus_count->profile_pic,',');
@@ -2017,6 +2012,7 @@ class UserProfileController extends Controller {
         }else{
             $profile_picture .= '';
         }
+
         if ($request->hasFile('imgUpload')) {
             for($i=0;$i<count($request->imgUpload);$i++){
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -2031,10 +2027,9 @@ class UserProfileController extends Controller {
             $profile_picture .= '';
         }
 
-            /* using the insertion time only */
-            $request->servicepic = rtrim($profile_picture,',');
-        // }
 
+        $request->servicepic = rtrim($profile_picture,',');
+       
         $instant = $reserve = 0;
         
         $servicetype = $servicelocation = $programfor = $agerange = $numberofpeople = "";
@@ -2116,10 +2111,11 @@ class UserProfileController extends Controller {
         }
         if(isset($request->days_description) && !empty($request->days_description)) {
             $days_desc = json_encode($request->days_description);
+             $days_dayplanpic = json_encode($datadayimg);
         }
-        if(isset($request->dayplanpic) && !empty($request->dayplanpic)) {
+        /*if(isset($request->dayplanpic) && !empty($request->dayplanpic)) {
             $days_dayplanpic = json_encode($datadayimg);
-        }
+        }*/
         
         if($request->has('instantbooking')){
             $instant = 1;
@@ -2135,14 +2131,6 @@ class UserProfileController extends Controller {
 
         //echo $safe_varification; exit;
         if($request->service_type=='experience') {
-            /*if(isset($request->booking)) {
-                if($request->booking == 'instant') {
-                    $instant = 1;
-                }
-                if($request->booking == 'reserve') {
-                    $reserve = 1;
-                }
-            }*/
             $businessData = [
                 "cid" => $request->cid,
                 "userid" => $request->userid,
@@ -2204,12 +2192,14 @@ class UserProfileController extends Controller {
                 "sat_duration" => $request->sat_duration,
                 "sun_duration" => $request->sun_duration,
                 "frm_servicedesc" => $request->frm_servicedesc,
-                "exp_country" => $request->exp_country,
-                "exp_address" => $request->exp_address,
-                "exp_building" => $request->exp_building,
-                "exp_city" => $request->exp_city,
-                "exp_state" => $request->exp_state,
-                "exp_zip" => $request->exp_zip,
+                "exp_country" => @$request->cus_country,
+                "exp_address" => @$request->cus_st_address,
+                "exp_building" => @$request->cus_addi_address,
+                "exp_city" => @$request->cus_city,
+                "exp_state" => @$request->cus_state,
+                "exp_zip" => @$request->cus_zip,
+                "exp_lat" => @$request->cus_lat,
+                "exp_lng" => @$request->cus_lng,
                 "is_late_fee" => $request->is_late_fee,
                 "late_fee" => $request->late_fee,
                 "instructor_id"=> $request->instructor_id,
@@ -2217,9 +2207,9 @@ class UserProfileController extends Controller {
                 "notincluded_items" => $notincluded_thing,
                 "bring_wear" => $frm_wear,
                 "req_safety" => $safe_varification,
-                /*"days_plan_title" => $days_title,
+                "days_plan_title" => $days_title,
                 "days_plan_desc" => $days_desc,
-                "days_plan_img" => $days_dayplanpic,*/
+                "days_plan_img" => $days_dayplanpic,
                 "exp_highlight" =>$request->exp_highlight,
                 "addi_info" =>$request->frm_addi_info,
                 "accessibility" =>$request->frm_accessibility,
@@ -2227,14 +2217,6 @@ class UserProfileController extends Controller {
                 "desc_location" =>$request->desc_location,
             ];
         } else {
-            if(isset($request->booking)) {
-                /*if($request->booking == 'instant') {
-                    $instant = 1;
-                }
-                if($request->booking == 'reserve') {
-                    $reserve = 1;
-                }*/
-            }
             $businessData = [
                 "cid" => $request->cid,
                 "userid" => $request->userid,
@@ -2299,7 +2281,7 @@ class UserProfileController extends Controller {
                 "instructor_id"=> $request->instructor_id,
             ];
         }
-       // print_r($businessData); exit;
+       /*print_r($businessData); exit;*/
         $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_price= $recurring_every= $recurring_duration= $fitnessity_fee= $is_recurring ="";
         if(isset($request->pay_chk) && !empty($request->pay_chk)) {
             $pay_chk = @implode(",",$request->pay_chk);    
@@ -11156,12 +11138,12 @@ class UserProfileController extends Controller {
                             <h3>Booking Receipt</h3>
                             <div class="row">
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>BOOKING#</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $order_id.'</span>
                                         </div>
@@ -11169,12 +11151,12 @@ class UserProfileController extends Controller {
                                 </div>
                                 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>TOTAL PRICE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>$'. $totprice_for_this.'</span>
                                         </div>
@@ -11182,12 +11164,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>PRICE OPTION:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $price_opt.'</span>
                                         </div>
@@ -11195,12 +11177,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>TOTAL REMAINNIG:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $to_rem.'</span>
                                         </div>
@@ -11208,12 +11190,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>PROGRAM NAME:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $program_name.'</span>
                                         </div>
@@ -11221,12 +11203,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>EXPIRATION DATE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $end_activity_date.'</span>
                                         </div>
@@ -11234,12 +11216,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>DATE BOOKED:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $created_at.'</span>
                                         </div>
@@ -11247,12 +11229,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>RESERVED DATE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $bookedtime.'</span>
                                         </div>
@@ -11260,12 +11242,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>BOOKED BY:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $nameofbookedby.'</span>
                                         </div>
@@ -11273,12 +11255,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>CHECK IN DATE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $bookedtime.'</span>
                                         </div>
@@ -11286,12 +11268,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>CHECK IN TIME:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $shift_start.'</span>
                                         </div>
@@ -11299,12 +11281,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>ACTIVITY TYPE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $sport_activity.'</span>
                                         </div>
@@ -11312,12 +11294,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>SERVICE TYPE:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $select_service_type.'</span>
                                         </div>
@@ -11325,12 +11307,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>ACTIVITY LOCATION:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $activity_location.'</span>
                                         </div>
@@ -11338,12 +11320,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>ACTIVITY DURATION:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $time.'</span>
                                         </div>
@@ -11351,12 +11333,12 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>GREAT FOR:</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $activity_for.'</span>
                                         </div>
@@ -11364,24 +11346,24 @@ class UserProfileController extends Controller {
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>PARTICIPANTS#</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $qty.'</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <label>WHO IS PRATICIPATING?</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
                                             <span>'. $parti_data.'</span>
                                         </div>
@@ -11389,26 +11371,26 @@ class UserProfileController extends Controller {
                                 </div>
                             </div>
                             <div class="row border-xx mg-tp">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <label>Payment Type</label>
                                     </div>
                                     
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <span>CC ending in ********'.$last4.'</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row border-xx">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <label>Sub-total</label>
                                     </div>
                                     
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <span>$'.$totprice_for_this.'</span>
                                     </div>
@@ -11416,24 +11398,24 @@ class UserProfileController extends Controller {
                                 
                             </div>
                             <div class="row border-xx">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <label>Taxes & Service Fees</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <span>$'.$tax_for_this.'</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row border-xx">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <label>Grand Total</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
                                         <span>$'.$main_total.'</span>
                                     </div>
