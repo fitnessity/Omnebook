@@ -377,17 +377,6 @@
                 </div>
             </div>
             <div class="col-lg-8">
-               <!-- <div class="row clamwithblack">
-                    <a href="{{route('user-profile')}}" style="float: right"><div class="claim-business"> Edit Profile </div></a>
-                    @if(isset($companies) && !empty($companies[0]))
-                    <a href="{{route('manageCompany')}}" style="float: right"><div class="claim-business"> Manage Business </div></a>
-                    @else
-                    <a href="{{route('welcomeBusinessProfile')}}" style="float: right"><div class="claim-business"> Create Business </div></a>
-                    @endif
-                    {{-- <a href="javascript::void(0);" style="float: right" data-toggle="modal" data-target="#editProfileDetailModal"><div class="claim-business"> Edit Profile </div></a>
-                    <a href="{{url('/profile/createProfileSecurity')}}" style="float: right" ><div class="claim-business"> Add/Edit Security Questions </div></a>
-                    <a href="{{url('/profile/change-password')}}" style="float: right" ><div class="claim-business"> Change Password</div></a> --}}
-                </div>-->
             </div>
         </div>
     </div>

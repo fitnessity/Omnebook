@@ -32,17 +32,6 @@
             $tNow = strtotime('+15 minutes',$tNow);
         }
 
-        /*timeslots = array();
-            for ($n = 0; $n < 24 * 60; $n+=5)
-            {
-                $date = sprintf('%02d:%02d', $n / 60, $n % 60);
-                $timeslots[$date] = $date;
-                if($val == $date) {
-                    echo "<option selected>".$date."</option>";
-                } else {
-                    echo "<option>".$date."</option>";
-                }
-            }*/
         echo '</select>';
     }
 
@@ -65,17 +54,6 @@
             $tNow = strtotime('+15 minutes',$tNow);
         }
 
-        /* $timeslots = array();
-        for ($n = 0; $n < 24 * 60; $n+=5)
-        {
-            $date = sprintf('%02d:%02d', $n / 60, $n % 60);
-            $timeslots[$date] = $date;
-            if($val == $date) {
-                echo "<option selected>".$date."</option>";
-            } else {
-                echo "<option>".$date."</option>";
-            }
-        }*/
         echo '</select>';
     }
       $profile_pic1  = [];
@@ -108,13 +86,6 @@
                 <div class="navlink1" id="tab7" onclick="linkJump(7);">Create Services & Prices</div>
                 <div class="navlink1" id="tab8" onclick="linkJump(8);">Booking Info</div>
                 </div><?php */
-            ?>
-            <?php /*
-                @if(isset($business_details) && !empty($business_details['id']))
-                    <div class="navbar1">
-                        <div class="navlink1"><a style="color:#fff" href="/pcompany/view/{{ $business_details['id'] }}" target="_blank">Preview Profile</a></div>
-                    </div>
-                @endif */
             ?>
         </div>
 
@@ -344,17 +315,6 @@
                                     <span class="error" id="b_cont"></span>
                                 </div>
 
-                                <!-- <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                    <label for="email">EIN Number <span id="star">*</span></label>
-                                    <input type="text" class="form-control" name="EINnumber" id="b_EINnumber" maxlength="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="EIN Number" value="{{ $EINnumber }}">
-                                    <span class="error" id="b_ein"></span>
-                                </div> -->
-
-                                <!-- <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                  <label for="pwd">Establishment Year <span id="star">*</span></label>
-                                  <input class="form-control" type="text" name="Establishmentyear" id="b_Establishmentyear" size="30" maxlength="4" placeholder="Establishment Year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{ $Establishmentyear }}">
-                                  <span class="error" id="b_estb"></span>
-                                </div>-->
                                 <?php   
                                     $phone_num = $business_phone;
                                     if (preg_match('/()-/', $phone_num)){
@@ -1392,7 +1352,6 @@
                                         <label for="wed">Wednesday</label>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="wed_shift_start" value="{{ $wed_shift_start }}" readonly class="form-control timepicker"> -->
                                         <?php timeSlotOptionforservice('wed_shift_start', $wed_shift_start); ?>
                                     </div>
 
@@ -1401,7 +1360,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="wed_shift_end" value="{{ $wed_shift_end }}" readonly class="form-control timepicker1"> -->
                                         <?php timeSlotOptionforservice('wed_shift_end', $wed_shift_end); ?>
                                     </div>
                                 </div>
@@ -1418,7 +1376,6 @@
                                         To
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="thu_shift_end" value="{{ $thu_shift_end }}" readonly class="form-control timepicker1"> -->
                                         <?php timeSlotOptionforservice('thu_shift_end', $thu_shift_end); ?>
                                     </div>
                                 </div>
@@ -1427,7 +1384,6 @@
                                         <label for="fri">Friday</label>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                     <!--    <input type="text" name="fri_shift_start" value="{{ $fri_shift_start }}" readonly class="form-control timepicker"> -->
                                         <?php timeSlotOptionforservice('fri_shift_start', $fri_shift_start); ?>
                                     </div>
 
@@ -1436,7 +1392,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="fri_shift_end" value="{{ $fri_shift_end }}" readonly class="form-control timepicker1"> -->
                                         <?php timeSlotOptionforservice('fri_shift_end', $fri_shift_end); ?>
                                     </div>
                                 </div>
@@ -1447,7 +1402,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="sat_shift_start" value="{{ $sat_shift_start }}" readonly class="form-control timepicker"> -->
                                         <?php timeSlotOptionforservice('sat_shift_start', $sat_shift_start); ?>
                                     </div>
 
@@ -1456,7 +1410,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                       <!--  <input type="text" name="sat_shift_end" value="{{ $sat_shift_end }}" readonly class="form-control timepicker1"> -->
                                         <?php timeSlotOptionforservice('sat_shift_end', $sat_shift_end); ?>
                                     </div>
                                 </div>
@@ -1467,7 +1420,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="sun_shift_start" value="{{ $sun_shift_start }}" readonly class="form-control timepicker"> -->
                                         <?php timeSlotOptionforservice('sun_shift_start', $sun_shift_start); ?>
                                     </div>
 
@@ -1476,7 +1428,6 @@
                                     </div>
 
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <!-- <input type="text" name="sun_shift_end" value="{{ $sun_shift_end }}" readonly class="form-control timepicker1"> -->
                                         <?php timeSlotOptionforservice('sun_shift_end', $sun_shift_end); ?>
                                     </div>
 
@@ -1528,8 +1479,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Any Special Days Off ?</strong> </label>
-                                            <div class="special-date">
-                                                <!--<input type="text" class="form-control" name="special_days_off" value="{{ $special_days_off }}" placeholder="Click here to select the dates you are closed" id="mdp-demo" maxlength="500" />-->               
+                                            <div class="special-date">               
                                                     <input type="text" class="form-control multidatepicker" id="mdp-demo" name="special_days_off" placeholder="Click here to select the dates you are closed" onkeydown="no_backspaces(event);" autocomplete="off" value="{{ $special_days_off }}">
                                             </div>
                                             <script>
@@ -2571,71 +2521,48 @@
 
                 <?php
 
-                    //echo "<pre>";print_r($business_service);die;
-
                     $service_type = $sport_activity = "";
-
-                    $program_name = $program_desc = $profile_pic = $instant_booking = $reserved_booking = $meetup_location ="";
-
+                    $program_name = $program_desc = $profile_pic = $instant_booking = $request_booking = $meetup_location = $frm_min_participate ="";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
-
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
-
-                    $late_fee = ""; $bring_wear=''; $notincluded_items=''; $included_items=''; $req_safety=''; $days_plan_title='';
-
-                    $days_plan_desc=''; $days_plan_img='';
+                    $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
+                    $dplantitle= $dplandesc = $dplanimg= [];
 
                     
-
                     $mon_shift_start = $mon_shift_end = $tue_shift_start = $tue_shift_end = $wed_shift_start = $wed_shift_end = $thu_shift_start = $thu_shift_end = "";
 
                     $fri_shift_start = $fri_shift_end = $sat_shift_start = $sat_shift_end = $sun_shift_start = $sun_shift_end = "";
 
                     $mon_duration = $tue_duration = $wed_duration = $thu_duration = $fri_duration = $sat_duration = $sun_duration = "";
 
-                    $frm_servicedesc = $exp_country = $exp_address = $exp_building = $exp_city = $exp_state = $exp_zip = "";
+                    $frm_servicedesc = $exp_country = $exp_address = $exp_building = $exp_city = $exp_state = $exp_zip = $full_address = $exp_lng = $exp_lat = "" ;
                     $instructor_id  = '';
                     $profile_pic1  = [];
 
-                    
-
                    // echo "<pre>"; print_r($business_service); die;
 
-                    
-
                     if(isset($business_service)) {
-
                         if(isset($business_service['service_type']) && !empty($business_service['service_type'])) {
-
                             $service_type = $business_service['service_type'];
-
                         }
 
                         if(isset($business_service['sport_activity']) && !empty($business_service['sport_activity'])) {
-
                             $sport_activity = $business_service['sport_activity'];
-
                         }
 
                         if(isset($business_service['program_name']) && !empty($business_service['program_name'])) {
-
                             $program_name = $business_service['program_name'];
-
                         }
 
                         if(isset($business_service['program_desc']) && !empty($business_service['program_desc'])) {
-
                             $program_desc = $business_service['program_desc'];
-
                         }
+
                         if(isset($business_service['instructor_id']) && !empty($business_service['instructor_id'])) {
-
                             $instructor_id = $business_service['instructor_id'];
-
                         }
 
                         if(isset($business_service['profile_pic']) && !empty($business_service['profile_pic'])) {
-
                             $profile_pic = $business_service['profile_pic'];
                             if(str_contains($profile_pic, ',')){
                                 $profile_pic1 = explode(',', $profile_pic);
@@ -2645,311 +2572,227 @@
                         }
                        
                         if(isset($business_service['instant_booking']) && !empty($business_service['instant_booking'])) {
-
                             $instant_booking = $business_service['instant_booking'];
-
                         }
 
-                        if(isset($business_service['reserved_booking']) && !empty($business_service['reserved_booking'])) {
+                        if(isset($business_service['request_booking']) && !empty($business_service['request_booking'])) {
+                            $request_booking = $business_service['request_booking'];
+                        }
 
-                            $reserved_booking = $business_service['reserved_booking'];
-
+                        if(isset($business_service['frm_min_participate']) && !empty($business_service['frm_min_participate'])) {
+                            $frm_min_participate = $business_service['frm_min_participate'];
                         }
 
                         if(isset($business_service['notice_value']) && !empty($business_service['notice_value'])) {
-
                             $notice_value = $business_service['notice_value'];
-
                         }
 
                         if(isset($business_service['notice_key']) && !empty($business_service['notice_key'])) {
-
                             $notice_key = $business_service['notice_key'];
-
                         }
 
                         if(isset($business_service['advance_value']) && !empty($business_service['advance_value'])) {
-
                             $advance_value = $business_service['advance_value'];
-
                         }
 
                         if(isset($business_service['advance_key']) && !empty($business_service['advance_key'])) {
-
                             $advance_key = $business_service['advance_key'];
-
                         }
 
                         if(isset($business_service['activity_value']) && !empty($business_service['activity_value'])) {
-
                             $activity_value = $business_service['activity_value'];
-
                         }
 
                         if(isset($business_service['activity_key']) && !empty($business_service['activity_key'])) {
-
                             $activity_key = $business_service['activity_key'];
-
                         }
 
                         if(isset($business_service['cancel_value']) && !empty($business_service['cancel_value'])) {
-
                             $cancel_value = $business_service['cancel_value'];
-
                         }
 
                         if(isset($business_service['cancel_key']) && !empty($business_service['cancel_key'])) {
-
                             $cancel_key = $business_service['cancel_key'];
-
                         }
 
                         if(isset($business_service['willing_to_travel']) && !empty($business_service['willing_to_travel'])) {
-
                             $willing_to_travel = $business_service['willing_to_travel'];
-
                         }
 
                         if(isset($business_service['miles']) && !empty($business_service['miles'])) {
-
                             $miles = $business_service['miles'];
-
                         }
 
                         if(isset($business_service['area']) && !empty($business_service['area'])) {
-
                             $area = $business_service['area'];
-
                         }
 
                         if(isset($business_service['select_service_type']) && !empty($business_service['select_service_type'])) {
-
                             $select_service_type = $business_service['select_service_type'];
-
                         }
 
                         if(isset($business_service['activity_location']) && !empty($business_service['activity_location'])) {
-
                             $activity_location = $business_service['activity_location'];
-
                         }
 
                         if(isset($business_service['activity_for']) && !empty($business_service['activity_for'])) {
-
                             $activity_for = $business_service['activity_for'];
-
                         }
 
                         if(isset($business_service['age_range']) && !empty($business_service['age_range'])) {
-
                             $age_range = $business_service['age_range'];
-
                         }
 
                         if(isset($business_service['group_size']) && !empty($business_service['group_size'])) {
-
                             $group_size = $business_service['group_size'];
-
                         }
 
                         if(isset($business_service['difficult_level']) && !empty($business_service['difficult_level'])) {
-
                             $difficult_level = $business_service['difficult_level'];
-
                         }
 
                         if(isset($business_service['activity_experience']) && !empty($business_service['activity_experience'])) {
-
                             $activity_experience = $business_service['activity_experience'];
-
                         }
 
                         if(isset($business_service['instructor_habit']) && !empty($business_service['instructor_habit'])) {
-
                             $instructor_habit = $business_service['instructor_habit'];
-
                         }
 
                         if(isset($business_service['frm_servicedesc']) && !empty($business_service['frm_servicedesc'])) {
-
                             $frm_servicedesc = $business_service['frm_servicedesc'];
-
-                        }
-
-                        if(isset($business_service['exp_country']) && !empty($business_service['exp_country'])) {
-
-                            $exp_country = $business_service['exp_country'];
-
                         }
 
                         if(isset($business_service['exp_address']) && !empty($business_service['exp_address'])) {
-
                             $exp_address = $business_service['exp_address'];
-
+                            $full_address .=  $exp_address.',';
                         }
 
                         if(isset($business_service['exp_building']) && !empty($business_service['exp_building'])) {
-
                             $exp_building = $business_service['exp_building'];
-
                         }
 
                         if(isset($business_service['exp_city']) && !empty($business_service['exp_city'])) {
-
                             $exp_city = $business_service['exp_city'];
-
+                            $full_address .=  $exp_city.',';
                         }
 
                         if(isset($business_service['exp_state']) && !empty($business_service['exp_state'])) {
-
                             $exp_state = $business_service['exp_state'];
+                            $full_address .=  $exp_state.',';
+                        }
 
+                        if(isset($business_service['exp_country']) && !empty($business_service['exp_country'])) {
+                            $exp_country = $business_service['exp_country'];
+                            $full_address .=  $exp_country.',';
                         }
 
                         if(isset($business_service['exp_zip']) && !empty($business_service['exp_zip'])) {
-
                             $exp_zip = $business_service['exp_zip'];
-
+                        }
+                        
+                        if(isset($business_service['exp_lng']) && !empty($business_service['exp_lng'])) {
+                            $exp_lng = $business_service['exp_lng'];
                         }
 
-                      if(isset($business_service['cancel_key']) && !empty($business_service['cancel_key'])) {
+                        if(isset($business_service['exp_lat']) && !empty($business_service['exp_lat'])) {
+                            $exp_lat = $business_service['exp_lat'];
+                        }
 
-                                    $cancel_key = $business_service['cancel_key'];
+                        if(isset($business_service['cancel_key']) && !empty($business_service['cancel_key'])) {
+                            $cancel_key = $business_service['cancel_key'];
+                        }
 
-                                }
+                        if(isset($business_service['is_late_fee']) && !empty($business_service['is_late_fee'])) {
+                            $is_late_fee = $business_service['is_late_fee'];
+                        }
 
-                      if(isset($business_service['is_late_fee']) && !empty($business_service['is_late_fee'])) {
+                        if(isset($business_service['late_fee']) && !empty($business_service['late_fee'])) {
+                            $late_fee = $business_service['late_fee'];
+                        }
 
-                                    $is_late_fee = $business_service['is_late_fee'];
+                        if(isset($business_service['included_items']) && !empty($business_service['included_items'])) {
+                            $included_items = $business_service['included_items'];
+                        }
 
-                                }
+                        if(isset($business_service['included_items']) && !empty($business_service['included_items'])) {
+                            $included_items = $business_service['included_items'];
+                        }
 
-                      if(isset($business_service['late_fee']) && !empty($business_service['late_fee'])) {
+                        if(isset($business_service['notincluded_items']) && !empty($business_service['notincluded_items'])) {
+                            $notincluded_items = $business_service['notincluded_items'];
+                        }
 
-                                    $late_fee = $business_service['late_fee'];
-
-                                }
-
-                      if(isset($business_service['included_items']) && !empty($business_service['included_items'])) {
-
-                                    $included_items = $business_service['included_items'];
-
-                                }
-
-                      if(isset($business_service['included_items']) && !empty($business_service['included_items'])) {
-
-                                    $included_items = $business_service['included_items'];
-
-                                }
-
-                      if(isset($business_service['notincluded_items']) && !empty($business_service['notincluded_items'])) {
-
-                                    $notincluded_items = $business_service['notincluded_items'];
-
-                                }
-
-                      if(isset($business_service['bring_wear']) && !empty($business_service['bring_wear'])) {
-
+                        if(isset($business_service['bring_wear']) && !empty($business_service['bring_wear'])) {
                             $bring_wear = $business_service['bring_wear'];
-
                         }
 
                         if(isset($business_service['req_safety']) && !empty($business_service['req_safety']))
-
-                          {
-
+                        {
                             $req_safety=explode(',',$business_service['req_safety']);
-
-                          }
+                        }
 
                         if(isset($business_service['days_plan_title']) && !empty($business_service['days_plan_title'])) {
-
                             $days_plan_title = $business_service['days_plan_title'];
-
+                            if($days_plan_title  != "[null]"){
+                                $dplantitle = json_decode($days_plan_title,true); 
+                            }
                         }
 
                         if(isset($business_service['days_plan_desc']) && !empty($business_service['days_plan_desc'])) {
-
                             $days_plan_desc = $business_service['days_plan_desc'];
-
+                            $dplandesc = json_decode($days_plan_desc,true);
                         }
 
                         if(isset($business_service['days_plan_img']) && !empty($business_service['days_plan_img'])) {
-
                             $days_plan_img = $business_service['days_plan_img'];
-
+                            $dplanimg = json_decode($days_plan_img,true);
                         }
-
-
 
                         if(isset($business_service['meetup_location']) && !empty($business_service['meetup_location'])) {
-
                             $meetup_location = $business_service['meetup_location'];
-
                         }
-
                     }
 
                     
-
                     $activity_meets = $starting = $schedule_until = "";
-
                     $sales_tax = $sales_tax_percent = $dues_tax = $dues_tax_percent = "";
 
-            
 
                     if(isset($business_activity[0])) {
-
                         $activity = $business_activity[0];
-
                         if(isset($activity['activity_meets']) && !empty($activity['activity_meets'])) {
-
                             $activity_meets = $activity['activity_meets'];
-
                         }
 
                         if(isset($activity['starting']) && !empty($activity['starting'])) {
-
                             $starting = $activity['starting'];
-
                         }
 
                         if(isset($activity['schedule_until']) && !empty($activity['schedule_until'])) {
-
                             $schedule_until = $activity['schedule_until'];
-
                         }
 
-                        if(isset($activity['set_duration']) && !empty($activity['set_duration'])) {
-
+                        if(isset($activity['set_duration']) && !empty($activity['set_duration']))
+                        {
                             $set_duration = $activity['set_duration'];
-
                         }
 
                         if(isset($activity['sales_tax']) && !empty($activity['sales_tax'])) {
-
                             $sales_tax = $activity['sales_tax'];
-
                         }
 
                         if(isset($activity['sales_tax_percent']) && !empty($activity['sales_tax_percent'])) {
-
                             $sales_tax_percent = $activity['sales_tax_percent'];
-
                         }
 
                         if(isset($activity['dues_tax']) && !empty($activity['dues_tax'])) {
-
                             $dues_tax = $activity['dues_tax'];
-
                         }
 
                         if(isset($activity['dues_tax_percent']) && !empty($activity['dues_tax_percent'])) {
-
                             $dues_tax_percent = $activity['dues_tax_percent'];
-
                         }
-
                     }
    
                 ?>
@@ -2958,7 +2801,7 @@
 
                 <input type="hidden" name="userid" id="userid" value="{{Auth::user()->id}}">
 
-                <?php /*?>if( !empty($business_service) ){ ?>111
+                <?php /*?>if( !empty($business_service) ){ ?> 111
 
                     <input type="hidden" name="cid" value="{{$business_service['cid']}}">
 
@@ -2997,172 +2840,96 @@
                 
 
                 <div class="container-fluid p-0" id="creServicediv" style="display: none;">
-
                     <div class="tab-hed">Create Services & Prices</div>
-
                     <?php /*?><div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
-
                         <span class="nav-link1 subtab">PERSONAL TRAINER</span>
-
                         <span class="nav-link1 subtab1">GYM/STUDIO</span>
-
                         <span class="nav-link1 subtab2">EXPERIENCE</span>
-
                     </div><?php */?>
 
                     <section class="row">
-
                         <?php /*?><div class="col-md-12 text-justify">
-
                             <br/>
-
-                            <p><span style="font-size: 22px;font-weight: bold;">YOU'RE ALMOST DONE!</span> This last section is where you will describe your programs, add attractive images, description, prices, taxes, terms
-
-                                and conditions, contracts, one-time payments, recurring payment, sessions, and more. We recommend you make sure your price sare competitive to your skill level and to what the market demands</p>
-
+                            <p><span style="font-size: 22px;font-weight: bold;">YOU'RE ALMOST DONE!</span> This last section is where you will describe your programs, add attractive images, description, prices, taxes, terms and conditions, contracts, one-time payments, recurring payment, sessions, and more. We recommend you make sure your price sare competitive to your skill level and to what the market demands</p>
                         </div><?php */?>
 
                         <div class="col-md-12 text-center">
-
                             <br>
-
                             <span style="font-size: 20px;font-weight: bold;text-transform: uppercase;display: block;padding-bottom: 20px;">Select Your Type Of Business</span>
-
                             <label>Click on the business type below that you have experience in and best represents what you do.
-
                             <br /> You can always set up more than one business type later.</label><br>
-
                         </div>
 
                         <div class="col-md-12 col-sm-12">
-
                             <br/><br/>
-
                             <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-
                                 <input type="radio" id="test1" name="radio_group" {{ ($service_type=='individual')?'checked':'' }} value="individual">
-
                                 <label for="test1">
-
                                     <div class="row">
-
                                         <div class="col-md-2 col-xs-12">
-
                                             <img src="/public/images/newimage/bus-individual.png" class="pro_card_img1">
-
                                         </div>
 
                                         <div class="col-md-10 col-xs-12">
-
                                             <div class="tab-hed1">Personal Trainer</div>
-
                                             <p>A provider offers one-on-one personal training, coaching, nutrition advice, or instructions.</p>
-
                                         </div>
-
                                     </div>
-
                                 </label>
-
                             </div>
-
                             <br/>
 
                             <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-
                                 <input type="radio" id="test2" name="radio_group" {{ ($service_type=='classes')?'checked':'' }} value="classes">
-
                                 <label for="test2">
-
                                     <div class="row">
-
                                         <div class="col-md-2 col-xs-12">
-
                                             <img src="/public/images/newimage/bus-gym.png" class="pro_card_img1">
-
                                         </div>
-
                                         <div class="col-md-10 col-xs-12">
-
                                             <div class="tab-hed1">Gym/Studio</div>
-
                                             <p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
-
                                         </div>
-
                                     </div>
-
                                 </label>
-
                             </div>
-
                             <br/>
 
                             <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-
                                 <input type="radio" id="test3" name="radio_group" {{ ($service_type=='experience')?'checked':'' }} value="experience">
-
                                 <label for="test3">
-
                                     <div class="row">
-
                                         <div class="col-md-2 col-xs-12">
-
                                             <img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
-
                                         </div>
 
                                         <div class="col-md-10 col-xs-12">
-
                                             <div class="tab-hed1">Experience</div>
-
                                             <p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
-
                                         </div>
-
                                     </div>
-
                                 </label>
-
                             </div>
-
                             <br/><br/>
-
                         </div>
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
-
                             <br/>
-
                             <div class="row">
-
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-
                                     <button type="button" class="btn-bck" id="bck-nxt8"><i class="fa fa-arrow-left"></i> Back</button>
-
                                 </div>
 
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-
                                     <div class="text-right btn-txt-rp">
-
                                         <button type="button" class="btn-nxt" id="nextservice">Continue <i class="fa fa-arrow-right"></i></button>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                             <br/>
-
                         </div>
-
                     </section>
-
                 </div>
-
-                
 
                 <div class="container-fluid p-0 checkCurrentTabName" id="individualDiv0" style="display: none;">
 
@@ -3232,10 +2999,6 @@
 
                         </div>
 
-                        
-
-                       <!-- <div class="col-md-8 text-justify individualBody" style="display:{{ ($service_type=='individual')?'block':'none' }}; background:url(/public/img/fitness-bg1.jpg); background-size:100% 100%;">-->
-
                         <div class="col-md-8 text-justify individualBody" style="display:{{ ($service_type=='individual')?'block':'none' }};">
 
                             <p>Set up your details and prices for your training services. Let customers know why you are the best personal trainer/coach.Personal training is completitive market. Think about your descriptions, heading, images, & prices. It's essential to becompetitive with your price point but not too low to de-value your experience.</p>
@@ -3254,23 +3017,7 @@
 
                             </ul>
 
-                           <!-- <p>- Create a professional profile. It’s your website and resume to potential clients.</p>
-
-                            <p>- Sell your business and show what makes your business the best.</p>
-
-                            <p>- Take professional pictures and make your customers feel welcomed.</p>-->
-
                             <h3>Tips Not to Do :</h3>
-
-                            <!--<p>- Having images that are not of professional manner, creepy or not comfortable.</p>
-
-                            <p>- Not having a well-planned experience.</p>
-
-                            <p>- Just going with the flow will not give you repeat business.</p>
-
-                            <p>- Creating a generic service that customers can easily do on their own.</p>
-
-                            <p>- Offering a service you are not qualified or skilled to do.</p>-->
 
                             <ul>
 
@@ -3321,25 +3068,6 @@
                                 <li>Offering a service you are not qualified or skilled to do.</li>
 
                             </ul>
-
-                            <!--<p>- Create a professional profile. It’s your website and resume to potential clients.</p>
-
-                            <p>- Sell your business and show what makes your business the best.</p>
-
-                            <p>- Take professional pictures and make your customers feel welcomed.</p>
-
-                            <h3>Tips Not to Do :</h3>
-
-                            <p>- Having images that are not of professional manner, creepy or not comfortable.</p>
-
-                            <p>- Not having a well-planned experience.</p>
-
-                            <p>- Just going with the flow will not give you repeat business.</p>
-
-                            <p>- Creating a generic service that customers can easily do on their own.</p>
-
-                            <p>- Offering a service you are not qualified or skilled to do.</p>-->
-
                         </div>
 
                         
@@ -3364,20 +3092,6 @@
 
                             </ul>
 
-                            
-
-                            <!--<p>- Create an experience around your activity.</p>
-
-                            <p>- Make it unique and different.</p>
-
-                            <p>- Think about your meet-up points, how customers will get to you.</p>
-
-                            <p>- Think about what your experience includes and what your customers will need to bring.</p>
-
-                            <p>- Think about your plans and think about the experience your customer will have.</p>-->
-
-                            
-
                             <h3>Tips Not to Do :</h3>
 
                             <ul>
@@ -3393,20 +3107,7 @@
                                 <li>Offering an experience you are not qualified or skilled to host.</li>
 
                             </ul>
-
-                            <!--<p>- Having no experience planned around your activity.</p>
-
-                            <p>- Not having a well-planned experience.</p>
-
-                            <p>- Giving incomplete information is not recommended.</p>
-
-                            <p>- Creating generic experiences and activities customers can easily do on their own.</p>
-
-                            <p>- Offering an experience you are not qualified or skilled to host.</p>-->
-
                         </div>
-
-                        
 
                         <div class="col-md-12">
 
@@ -3979,7 +3680,7 @@
                                         <div class="instantl-book map-sp">
                                             <div class="">
                                                 <label class="switch" for="instantbooking">
-                                                    <input type="checkbox" name="instantbooking" id="instantbooking" @if($business_service['instant_booking'] == 1) checked @endif>
+                                                    <input type="checkbox" name="instantbooking" id="instantbooking" @if(@$instant_booking == 1) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
                                                 
@@ -3998,7 +3699,7 @@
                                             <div class="">
                                                 <label class="switch" for="requestbooking">
             
-                                                    <input type="checkbox" name="requestbooking" id="requestbooking" @if($business_service['request_booking'] == 1) checked @endif>
+                                                    <input type="checkbox" name="requestbooking" id="requestbooking" @if($request_booking == 1) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
                                                 
@@ -4021,7 +3722,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="{{$business_service['frm_min_participate']}}">
+                                            <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="{{$frm_min_participate}}">
                                         </div>
                                     </div>
                                 </div>
@@ -4053,6 +3754,8 @@
                                                     <option value="Personal Training">Personal Training</option>
                                                     <option value="Coaching">Coaching</option>
                                                     <option value="Therapy">Therapy</option>
+                                                    <option value="Event">Event </option>
+                                                    <option value="Seminar">Seminar </option>
                                                 </select>
                                             @else
                                                 <select name="frm_servicetype[]" id="categSType" multiple>
@@ -4067,6 +3770,8 @@
                                                     <option value="Camp">Camp</option>
                                                     <option value="Team">Team</option>
                                                     <option value="Clinic">Clinic</option>
+                                                    <option value="Event">Event </option>
+                                                    <option value="Seminar">Seminar </option>
                                                 </select>
                                             @endif
                                             <script>
@@ -4237,8 +3942,8 @@
                                                 <label>Experience Highlights</label>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <textarea class="form-control valid" rows="6" name="exp_highlight" id="exp_highlight" maxlength="150" placeholder="Briefly describe a few highlights so customer understand what they will be doing. ">{{@$business_service['exp_highlight']}}</textarea>
-                                                        <span>1,000 Character Left</span>
+                                                        <textarea class="form-control valid" rows="6" name="exp_highlight" id="exp_highlight" maxlength="1000" placeholder="Briefly describe a few highlights so customer understand what they will be doing. ">{{@$business_service['exp_highlight']}}</textarea>
+                                                        <span id="exp_highlight_left">1,000 Character Left</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -4405,7 +4110,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="accessibility select-dropoff">
-                                                        <textarea class="form-control valid" rows="3" name="frm_accessibility" id="frm_accessibility" maxlength="500" >{{$business_service['accessibility']}}</textarea>
+                                                        <textarea class="form-control valid" rows="3" name="frm_accessibility" id="frm_accessibility" maxlength="500" >{{@$business_service['accessibility']}}</textarea>
                                                         <span id="frm_accessibility_left">500 Character Left</span>
                                                     </div>
                                                 </div>
@@ -4418,7 +4123,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="accessibility select-dropoff">
-                                                        <textarea class="form-control valid" rows="6" name="frm_addi_info" id="frm_addi_info" maxlength="1000" >{{$business_service['addi_info']}}</textarea>
+                                                        <textarea class="form-control valid" rows="6" name="frm_addi_info" id="frm_addi_info" maxlength="1000" >{{@$business_service['addi_info']}}</textarea>
                                                         <span id="frm_addi_info_left">1,000 Character Left</span>
                                                     </div>
                                                 </div>
@@ -4432,8 +4137,60 @@
                                             <div class="plandaybyday">
                                                 <h3>Let’s Plan Your Day By Day</h3>
                                                 <p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+
+                                            @if(count($dplantitle) > 0)
+                                                <input type="hidden"  name="planday_count" id="planday_count" value="{{count($dplantitle) - 1}}" />
+                                            @else
                                                 <input type="hidden"  name="planday_count" id="planday_count" value="0" />
+                                            @endif
                                                 <div class="add-another-day-schedule-block">
+                                                <?php if(count($dplantitle) > 0){
+                                                        for($i=0;$i<count($dplantitle);$i++){?>
+                                                    <div class="add_another_day">
+                                                        @if($i != 0)
+                                                        <div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>
+                                                        @endif
+                                                        <label class="select-dropoff">Day - <?php echo $i+1; ?></label>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <div class="photo-upload">
+                                                                            <label for="dayplanpic{{$i}};" id="label">
+                                                <?php if (@$dplanimg[$i] != '' && file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$dplanimg[$i])){
+                                                    $old_pic =  @$dplanimg[$i];
+                                                   $day_pic = url('/public/uploads/profile_pic/thumb/' .  @$dplanimg[$i]);
+                                                }else {
+                                                    $old_pic =  '';
+                                                   $day_pic = url('/public/images/Upload-Icon.png');
+                                                } ?>
+                                            
+                                                                                <img src="{{$day_pic}}" class="pro_card_img blah planblah{{$i}}" id="showimg" >
+                                                                                <span id="span_{{$i}}">Upload your file here</span>
+                                                                                <input type="file" name="dayplanpic_{{$i}}" id="dayplanpic{{$i}}" class="uploadFile img" value="Upload Photo" onchange="planImg(this,{{$i}});" required>
+                                                                            </label>
+                                                                            <span class="error" id="err_oldservicepic2{{$i}}"></span>
+                                                                            <input type="hidden" id="olddayplanpic2{{$i}}" name="olddayplanpic_{{$i}}" value="{{$old_pic}}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div>
+                                                                            <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle" value="{{$dplantitle[$i]}}">
+                                                                        </div>
+                                                                        <div class="description-txt">
+                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description{{$i}}" placeholder="Give a description for this day" maxlength="500">{{$dplandesc[$i]}}</textarea>
+                                                                            <span id="days_description_left{{$i}}">500 Character Left</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                       /* $('#desc_location_left{{$i}}').text(500-parseInt($("#desc_location{{$i}}").val().length));*/
+                                                    </script>
+                                                <?php } 
+                                                    }else{ ?>
                                                     <div class="add_another_day">
                                                         <label class="select-dropoff">Day - 1</label>
                                                         <div class="row">
@@ -4441,11 +4198,13 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3">
                                                                         <div class="photo-upload">
-                                                                            <label for="dayplanpic" id="label">
-                                                                              <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg" >
-                                                                              <span id="span">Upload your file here</span>
-                                                                              <input type="file" name="dayplanpic[]" id="dayplanpic" class="uploadFile img" value="Upload Photo"></label>
+                                                                            <label for="dayplanpic0" id="label">
+                                                                                <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" >
+                                                                                <span id="span_0">Upload your file here</span>
+                                                                                <input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" required>
                                                                             </label>
+                                                                            <span class="error" id="err_oldservicepic20"></span>
+                                                                            <input type="hidden" id="olddayplanpic20" name="olddayplanpic_0" value="">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -4453,14 +4212,18 @@
                                                                             <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
                                                                         </div>
                                                                         <div class="description-txt">
-                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea>
-                                                                            <span>500 Character Left</span>
+                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500"></textarea>
+                                                                            <span id="days_description_left0">500 Character Left</span>
                                                                         </div>
+                                                                    <script type="text/javascript">
+                                                                       /* $('#desc_location_left0').text(500-parseInt($("#desc_location0").val().length));*/
+                                                                    </script>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -4476,8 +4239,8 @@
                                                 <h3>Departure & Return Info & Describe the Location</h3>
                                                 <p>Tell customers how and when you will depart and return, how to meet up, where to meet up, meeting point name and how to find you once the customer arrives. Don’t leave it up to customers to figure out how to meet up with you. Let them know before hand.</p>
                                                 
-                                                <textarea class="form-control valid" rows="6" name="desc_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder  is ABC Anytown, town, 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting point, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)" maxlength="150">{{@$business_service['desc_location']}}</textarea>
-                                                <span>500 Character Left</span>
+                                                <textarea class="form-control valid" rows="6" name="desc_location" id="desc_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder  is ABC Anytown, town, 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting point, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)" maxlength="500">{{@$business_service['desc_location']}}</textarea>
+                                                <span id="desc_location_left">500 Character Left</span>
                                             </div>
                                         </div>
                                     </div>
@@ -4492,13 +4255,17 @@
                                                 <div class="col-md-6">
                                                     <div class="companydetails-info">
                                                         <label>Street address </label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_st_address" id="cus_st_address" class="form-control" value="{{$exp_address}}">
                                                     </div>
                                                 </div>
+                                                <input type="hidden" id="address_p" value="{{ $full_address}}">
+                                                <input type="hidden" name="cus_lat" id="cus_lat" value="{{$exp_lat}}">
+                                                <input type="hidden" name="cus_lng" id="cus_lng" value="{{$exp_lng}}">
+                                                <div id="cus_map" style="display: none;"></div>
                                                 <div class="col-md-6">
                                                     <div class="companydetails-info">
                                                         <label>Country / Region </label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_country" id="cus_country" class="form-control" value="{{$exp_country}}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -4506,30 +4273,31 @@
                                                 <div class="col-md-3">
                                                     <div class="companydetails-info">
                                                         <label>Bldg (optional)</label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_addi_address" id="cus_addi_address" class="form-control" value="{{$exp_building}}"> 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div>
                                                         <label> City </label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_city" id="cus_city" class="form-control" value="{{$exp_city}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div>
                                                         <label>State  </label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_state" id="cus_state" class="form-control" value="{{$exp_state}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div>
                                                         <label> ZIP code</label>
-                                                        <input type="text" class="form-control">
+                                                        <input type="text" name="cus_zip" id="cus_zip" class="form-control" value="{{$exp_zip}}">
                                                     </div>
                                                 </div>
+                                                <div class="reviewerro" id="cus_map_error"></div>
                                                 <div class="col-md-12">
                                                     <div class="select-dropoff">
-                                                        <button class="showall-btn">Update Map</button>
+                                                        <button class="showall-btn" type="button"  onclick="loadMaponclick();">Update Map</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -4539,9 +4307,16 @@
                                                     <div class="pin-on-map">
                                                         <h3>Adjust the pin on the map</h3>
                                                         <p>You can drag the map so the pin is in the right location.</p>
-                                                        <div class="maparea">
-                                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                                                       <div class="mysrchmap_cus" style="height: 100%;min-height: 300px;">
+                                                            <div id="map_canvas_cus" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+                                                                <div class="maparea">
+                                                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                       <!-- <div class="maparea"> 
+                                                           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> 
+                                                        </div>  -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -4562,7 +4337,7 @@
                                     </div>
                               
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="customers-help">
                                                 <h3>Require Safety Verifications </h3>
                                                 <p>The primary booker has to successfully complete verified ID in order for them and their guests to attend your experience.</p>
@@ -4591,7 +4366,7 @@
                                 </div>
 
                                 <div class="col-md-6 text-right">
-                                    <button type="button" class="btn-nxt" id="nextindividual3">Continue <i class="fa fa-arrow-right"></i></button>
+                                    <button type="button" class="btn-nxt" data-type= "{{$service_type}}" id="nextindividual3">Continue <i class="fa fa-arrow-right"></i></button>
                                 </div>
                             </div>
                             <br>
@@ -6297,34 +6072,6 @@
 
                                                                             <div class="col-md-8">
 
-                                                                                <!-- <div class="autopay">
-
-                                                                                    <input type="radio" id="cust_be_charge_child{{$i}}{{$j}}" name="cust_be_charge_child_{{$i}}{{$j}}" value="num_of_autopay" @if($recurring_cust_be_charge_child == 'num_of_autopay') checked @endif>
-
-                                                                                    <label for="Autopays">Set number of autopays</label><br>
-
-                                                                                    <input type="radio" id="cust_be_charge_child{{$i}}{{$j}}" name="cust_be_charge_child_{{$i}}{{$j}}" value="month-to-month" @if($recurring_cust_be_charge_child == 'month-to-month') checked @endif>
-
-                                                                                    <label for="Month">Month - to -Month    </label><br> 
-
-                                                                                </div>
-
-                                                                                <div class="customerscharged">
-
-                                                                                    <label> Every </label>
-
-                                                                                    <input type="text" class="form-control valid" name="every_time_num_child_{{$i}}{{$j}}" id="every_time_num_child{{$i}}{{$j}}" placeholder="1" value="{{$recurring_every_time_num_child}}">
-
-                                                                                    <select class="form-control" name="every_time_child_{{$i}}{{$j}}" id="every_time_child{{$i}}{{$j}}">
-
-                                                                                        <option value="Weekly" @if($recurring_every_time_child == 'Weekly') selected @endif>Weekly</option>
-
-                                                                                        <option value="On a specific month" @if($recurring_every_time_child == 'On a specific month') selected @endif>Month </option>
-
-                                                                                    </select>
-
-                                                                                </div> -->
-
                                                                                 <p>Customers will be charged every month for the duration of the contract</p>
 
                                                                             </div>
@@ -6573,32 +6320,6 @@
 
                                                                 <div class="setting-box">
 
-                                                                    <!-- <div class="row set-78">
-
-                                                                        <div class="col-md-4">
-
-                                                                            <label class="contractsettings">Run Auto Pay</label>
-
-                                                                        </div>
-
-                                                                        <div class="col-md-8">
-
-                                                                            <div class="autopay">
-
-                                                                                <input type="radio" id="run_auto_pay_infant{{$i}}{{$j}}" name="run_auto_pay_infant_{{$i}}{{$j}}" value="on_set_schedule"  @if($recurring_run_auto_pay_infant == 'on_set_schedule') checked @endif>
-
-                                                                                <label for="on_set_schedule">On a set schedule (recommended)</label><br>
-
-                                                                                <input type="radio" id="run_auto_pay_infant{{$i}}{{$j}}" name="run_auto_pay_infant_{{$i}}{{$j}}" value="price_opt_run_out" @if($recurring_run_auto_pay_infant == 'price_opt_run_out') checked @endif>
-
-                                                                                <label for="price_opt_run_out">When price option runs out   </label><br> 
-
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                    </div> -->
-
                                                                     <div class="row set-78">
 
                                                                         <div class="col-md-4">
@@ -6608,34 +6329,6 @@
                                                                         </div>
 
                                                                         <div class="col-md-8">
-
-                                                                            <!-- <div class="autopay">
-
-                                                                                <input type="radio" id="cust_be_charge_infant{{$i}}{{$j}}" name="cust_be_charge_infant_{{$i}}{{$j}}" value="num_of_autopay" @if($recurring_cust_be_charge_infant == 'num_of_autopay') checked @endif>
-
-                                                                                <label for="Autopays">Set number of autopays</label><br>
-
-                                                                                <input type="radio" id="cust_be_charge_infant{{$i}}{{$j}}" name="cust_be_charge_infant_{{$i}}{{$j}}" value="month-to-month" @if($recurring_cust_be_charge_infant == 'month-to-month') checked @endif>
-
-                                                                                <label for="Month">Month - to -Month    </label><br> 
-
-                                                                            </div>
-
-                                                                            <div class="customerscharged">
-
-                                                                                <label> Every </label>
-
-                                                                                <input type="text" class="form-control valid" name="every_time_num_infant_{{$i}}{{$j}}" id="every_time_num_infant{{$i}}{{$j}}" placeholder="1" value="{{$recurring_every_time_num_infant}}">
-
-                                                                                <select class="form-control" name="every_time_infant_{{$i}}{{$j}}" id="every_time_infant{{$i}}{{$j}}">
-
-                                                                                    <option value="Weekly" @if($recurring_every_time_infant == 'Weekly') selected @endif>Weekly</option>
-
-                                                                                    <option value="On a specific month" @if($recurring_every_time_infant == 'On a specific month') selected @endif>Month </option>
-
-                                                                                </select>
-
-                                                                            </div> -->
 
                                                                             <p>Customers will be charged every month for the duration of the contract</p>
 
@@ -6820,14 +6513,6 @@
 
                                                                     </div>
 
-                                                                    <!-- <div class="modal-footer">
-
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                                                                        <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
-
-                                                                    </div> -->
-
                                                                 </div>
 
                                                             </div>
@@ -6849,8 +6534,6 @@
                                             }?>
 
                                     </div>
-
-                                <!-- <div  class="row"> -->
 
                                 <div  class="">
 
@@ -7549,34 +7232,6 @@
 
                                                                     <div class="col-md-8">
 
-                                                                       <!--  <div class="autopay">
-
-                                                                            <input type="radio" id="cust_be_charge_adult00" name="cust_be_charge_adult_00" value="num_of_autopay" >
-
-                                                                            <label for="Autopays">Set number of autopays</label><br>
-
-                                                                            <input type="radio" id="cust_be_charge_adult00" name="cust_be_charge_adult_00" value="month-to-month" >
-
-                                                                            <label for="Month">Month - to -Month    </label><br> 
-
-                                                                        </div>
-
-                                                                        <div class="customerscharged">
-
-                                                                            <label> Every </label>
-
-                                                                            <input type="text" class="form-control valid" name="every_time_num_adult_00" id="every_time_num_adult00" placeholder="1" value="">
-
-                                                                            <select class="form-control" name="every_time_adult_00" id="every_time_adult00">
-
-                                                                                <option value="Weekly" >Weekly</option>
-
-                                                                                <option value="On a specific month">Month </option>
-
-                                                                            </select>
-
-                                                                        </div> -->
-
                                                                         <p>Customers will be charged every month for the duration of the contract</p>
 
                                                                     </div>
@@ -7650,14 +7305,6 @@
                                                                         <div class="saledate">
                                                                             <input type="hidden" name="client_be_charge_on_adult_00" id="client_be_charge_on_adult_00" value="On the sale date">
                                                                                 <p>On the sale date </p>
-                                                                            <!-- <select class="form-control" name="client_be_charge_on_adult_00" id="client_be_charge_on_adult00">
-
-                                                                                <option value="sale date" >On the sale date </option> -->
-
-                                                                                <!-- <option value="date" >date</option> -->
-
-                                                                            <!-- </select> -->
-
                                                                         </div>
 
                                                                     </div>
@@ -7760,14 +7407,6 @@
 
                                                                 </div>
 
-                                                                <!-- <div class="modal-footer">
-
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                                                                    <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
-
-                                                                </div> -->
-
                                                             </div>
 
                                                         </div>
@@ -7828,32 +7467,6 @@
 
                                                             <div class="setting-box">
 
-                                                                <!-- <div class="row set-78">
-
-                                                                    <div class="col-md-4">
-
-                                                                        <label class="contractsettings">Run Auto Pay</label>
-
-                                                                    </div>
-
-                                                                    <div class="col-md-8">
-
-                                                                        <div class="autopay">
-
-                                                                            <input type="radio" id="run_auto_pay_child00" name="run_auto_pay_child_00" value="on_set_schedule"  >
-
-                                                                            <label for="on_set_schedule">On a set schedule (recommended)</label><br>
-
-                                                                            <input type="radio" id="run_auto_pay_child00" name="run_auto_pay_child_00" value="price_opt_run_out" >
-
-                                                                            <label for="price_opt_run_out">When price option runs out   </label><br> 
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div> -->
-
                                                                 <div class="row set-78">
 
                                                                     <div class="col-md-4">
@@ -7863,34 +7476,6 @@
                                                                     </div>
 
                                                                     <div class="col-md-8">
-
-                                                                        <!-- <div class="autopay">
-
-                                                                            <input type="radio" id="cust_be_charge_child00" name="cust_be_charge_child_00" value="num_of_autopay">
-
-                                                                            <label for="Autopays">Set number of autopays</label><br>
-
-                                                                            <input type="radio" id="cust_be_charge_child00" name="cust_be_charge_child_00" value="month-to-month">
-
-                                                                            <label for="Month">Month - to -Month    </label><br> 
-
-                                                                        </div>
-
-                                                                        <div class="customerscharged">
-
-                                                                            <label> Every </label>
-
-                                                                            <input type="text" class="form-control valid" name="every_time_num_child_00" id="every_time_num_child00" placeholder="1" value="">
-
-                                                                            <select class="form-control" name="every_time_child_00" id="every_time_child00">
-
-                                                                                <option value="Weekly">Weekly</option>
-
-                                                                                <option value="On a specific month" >Month </option>
-
-                                                                            </select>
-
-                                                                        </div> -->
 
                                                                         <p>Customers will be charged every month for the duration of the contract</p>
 
@@ -7965,13 +7550,6 @@
                                                                         <div class="saledate">
                                                                             <input type="hidden" name="client_be_charge_on_child_00" id="client_be_charge_on_child_00" value="On the sale date">
                                                                                 <p>On the sale date </p>
-                                                                            <!-- <select class="form-control" name="client_be_charge_on_child_00" id="client_be_charge_on_child00">
-
-                                                                                <option value="sale date" >On the sale date </option> -->
-
-                                                                               <!--  <option value="date">date</option> -->
-
-                                                                           <!--  </select> -->
 
                                                                         </div>
 
@@ -8075,13 +7653,6 @@
 
                                                                 </div>
 
-                                                                <!-- <div class="modal-footer">
-
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                                                                    <button type="button" class="btn button-fitness" data-dismiss="modal">Save</button>
-
-                                                                </div> -->
 
                                                             </div>
 
@@ -8143,32 +7714,6 @@
 
                                                             <div class="setting-box">
 
-                                                                <!-- <div class="row set-78">
-
-                                                                    <div class="col-md-4">
-
-                                                                        <label class="contractsettings">Run Auto Pay</label>
-
-                                                                    </div>
-
-                                                                    <div class="col-md-8">
-
-                                                                        <div class="autopay">
-
-                                                                            <input type="radio" id="run_auto_pay_infant00" name="run_auto_pay_infant_00" value="on_set_schedule"  >
-
-                                                                            <label for="on_set_schedule">On a set schedule (recommended)</label><br>
-
-                                                                            <input type="radio" id="run_auto_pay_infant00" name="run_auto_pay_infant_00" value="price_opt_run_out" >
-
-                                                                            <label for="price_opt_run_out">When price option runs out   </label><br> 
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div> -->
-
                                                                 <div class="row set-78">
 
                                                                     <div class="col-md-4">
@@ -8179,34 +7724,7 @@
 
                                                                     <div class="col-md-8">
 
-                                                                        <!-- <div class="autopay">
-
-                                                                            <input type="radio" id="cust_be_charge_infant00" name="cust_be_charge_infant_00" value="num_of_autopay" >
-
-                                                                            <label for="Autopays">Set number of autopays</label><br>
-
-                                                                            <input type="radio" id="cust_be_charge_infant00" name="cust_be_charge_infant_00" value="month-to-month">
-
-                                                                            <label for="Month">Month - to -Month    </label><br> 
-
-                                                                        </div>
-
-                                                                        <div class="customerscharged">
-
-                                                                            <label> Every </label>
-
-                                                                            <input type="text" class="form-control valid" name="every_time_num_infant_00" id="every_time_num_infant00" placeholder="1" value="">
-
-                                                                            <select class="form-control" name="every_time_infant_00" id="every_time_infant00">
-
-                                                                                <option value="Weekly">Weekly</option>
-
-                                                                                <option value="On a specific month" >Month </option>
-
-                                                                            </select>
-
-                                                                        </div> -->
-
+                                                                
                                                                         <p>Customers will be charged every month for the duration of the contract</p>
 
                                                                     </div>
@@ -8443,10 +7961,6 @@
                         <div class="col-md-12">
 
                             <div class="btn-cart-price">
-
-                              <!--   <button class="showall-btn">Add Another Category Price Options</button> -->
-
-
 
                                 <a class="showall-btn add-cate add-another-category-price">Add Another Category Price Options</a>
 
@@ -8784,956 +8298,11 @@
                     </section>
 
                 </div>
-
-
-
-                <div class="container-fluid p-0" id="experiencesDiv2" style="display: none;">
-
-                    <div class="tab-hed">Create Services & Prices</div>
-
-                    <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
-
-                        <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
-
-                        <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
-
-                    </div>
-
-                    <section class="row">
-
-                        <div class="col-md-12">
-
-                            <br/>
-
-                            <div class="row">
-
-                                <div class="col-md-8">
-
-                                    <div class="row">
-
-                                        <div class="form-group col-md-12">
-
-                                            <label for="frm_programname1">Setup the programs for your <span id="lbl_activity1">kickboxing</span> service<br>
-
-                                                Let's get a few details to set up your service <span id="star">*</span></label><br>
-
-                                                <input type="text" class="form-control" name="frm_programname1" id="frm_programname1" placeholder="Enter Name of Program" title="servicetitle" value="{{ $program_name }}">
-
-                                                <span class="error" id="err_frm_programname1"></span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <textarea class="form-control" rows="6" name="frm_programdesc1" id="frm_programdesc1" placeholder="Enter program description" maxlength="150">{{ $program_desc }}</textarea>
-
-                                            <div class="text-right"><span id="frm_programdesc1_left">150</span> Characters Left</div>
-
-                                            <span class="error" id="err_frm_programdesc1"></span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12 hide">
-
-                                            <label class="switch" for="booking_1">
-
-                                                <input type="radio" name="booking1" id="booking_1" value="instant" {{ ($instant_booking==1) ? "Checked" : "" }}>
-
-                                                <span class="slider round"></span>
-
-                                            </label>
-
-                                            <span class="error" id="err_booking_1"></span>
-
-                                            <span>INSTANT BOOKING : Allow customers to book you instantly</span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12" style="display:none">
-
-                                            <label class="switch" for="booking_2">
-
-                                                <input type="radio" name="booking1" id="booking_2" value="reserve" {{ ($reserved_booking==1) ? "Checked" : "" }}>
-
-                                                <span class="slider round"></span>
-
-                                            </label>
-
-                                            <span>RESERVED BOOKING : You need to confirm each booking first before completion</span>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>How much notice do you need for each booking ?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="notice_value1" id="notice_value1" rel="notice_key1">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Days" {{ ($notice_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($notice_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($notice_value=='Months') ? "selected" : "" }}>Months</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="notice_key1" id="notice_key1">
-
-                                                <?php if($notice_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($notice_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#notice_value1').change(function() {
-
-                                                var t = $('#notice_value1 option:selected').val();
-
-                                                var id = $('#notice_value1').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                        </script>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>How far in advance can a customer book ?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <?php $addv = []; ?>
-
-                                            <select class="form-control" name="advance_value1" id="advance_value1" rel="advance_key1" onchange="seconddayweek_change_event(this.value)">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Days" {{ ($advance_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($advance_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($advance_value=='Months') ? "selected" : "" }}>Months</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="advance_key1" id="advance_key1">
-
-                                                <?php if($advance_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($advance_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#advance_value1').change(function() {
-
-                                                var t = $('#advance_value1 option:selected').val();
-
-                                                var id = $('#advance_value1').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                        </script>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>What's the latest moment a person can book your activity?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="activity_value1" id="activity_value1" rel="activity_key1">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Minute" {{ ($activity_value=='Minute') ? "selected" : "" }}>Minute</option>
-
-                                                <option value="Hours" {{ ($activity_value=='Hours') ? "selected" : "" }}>Hours</option>
-
-                                                <option value="Days" {{ ($activity_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($activity_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="activity_key1" id="activity_key1">
-
-                                                <?php if($activity_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($activity_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#activity_value1').change(function() {
-
-                                                var t = $('#activity_value1 option:selected').val();
-
-                                                var id = $('#activity_value1').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Minute') {
-
-                                                    options_f(60, id);
-
-                                                }
-
-                                                if (t == 'Hours') {
-
-                                                    options_f(24, id);
-
-                                                }
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                            });
-
-                                        </script>
-
-                                        <!-- <div class="form-group col-md-12">
-
-                                            <label>What's the latest a customer can cancel?</label>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="cancel_value1" id="cancel_value1" rel="cancel_key1">
-
-                                                <option value="">Select Value</option>
-
-                                                <option value="Hours" {{ ($cancel_value=='Hours') ? "selected" : "" }}>Hours</option>
-
-                                                <option value="Days" {{ ($cancel_value=='Days') ? "selected" : "" }}>Days</option>
-
-                                                <option value="Weeks" {{ ($cancel_value=='Weeks') ? "selected" : "" }}>Weeks</option>
-
-                                                <option value="Months" {{ ($cancel_value=='Months') ? "selected" : "" }}>Months</option>             
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-
-                                            <select class="form-control" name="cancel_key1" id="cancel_key1">
-
-                                                <?php if($cancel_key == "") { ?>
-
-                                                <option value="">Select Value</option>
-
-                                                <?php } ?>
-
-                                                <?php for($i=1; $i<=31; $i++) { ?>
-
-                                                <option value="<?=$i?>" <?= ($cancel_key==$i) ? "selected" : "" ?>><?=$i?></option>
-
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                        <script>
-
-                                            $('#cancel_value1').change(function() {
-
-                                                var t = $('#cancel_value1 option:selected').val();
-
-                                                var id = $('#cancel_value1').attr('rel');
-
-                                                console.log(t, "---", id)
-
-                                                if (t == 'Hours') {
-
-                                                    options_f(24, id);
-
-                                                }
-
-                                                if (t == 'Days') {
-
-                                                    options_f(31, id);
-
-                                                }
-
-                                                if (t == 'Weeks') {
-
-                                                    options_f(52, id);
-
-                                                }
-
-                                                if (t == 'Months') {
-
-                                                    options_f(12, id);
-
-                                                }
-
-                                            });
-
-                                        </script> -->
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-4 text-center">
-
-                                    <div class="row">
-
-                                        <div class="col-md-2"></div>
-
-                                        <div class="col-md-8 imgUp">
-
-                                            <div class="imagePreview divImgPreview">
-
-                                                @if(!empty($profile_pic) && File::exists(public_path("/uploads/profile_pic/thumb/".$profile_pic)))
-
-                                                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$profile_pic) }}" class="imagePreview blah" id="showimg">
-
-                                                @else
-
-                                                <img src="{{ url('/public/images/default-avatar.png') }}" class="imagePreview blah" id="showimg">
-
-                                                @endif
-
-                                            </div>
-
-                                            <label class="img-tab-btn">Upload Image<input type="file" name="servicepic1" id="servicepic1" onchange="readServicePic1(this);" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;"></label>
-
-                                            <span class="error" id="err_oldservicepic1"></span>
-
-                                            <input type="hidden" name="oldservicepic1" id="oldservicepic1" value="{{ $profile_pic }}" >
-
-                                            <label style="font-size: 12px;">Upload an image that best represents your program</label>
-
-                                        </div><!-- col-2 -->
-
-                                    </div><!-- row -->
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-12">
-
-                            <br>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-
-                                    <button type="button" class="btn-bck" id="backexperiences2"><i class="fa fa-arrow-left"></i> Back</button>
-
-                                </div>
-
-                                <div class="col-md-6 text-right">
-
-                                    <button type="button" class="btn-nxt" id="nextexperiences2">Continue <i class="fa fa-arrow-right"></i></button>
-
-                                </div>
-
-                            </div>
-
-                            <br>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-
-
-                <div class="container-fluid p-0" id="experiencesDiv3" style="display: none;">
-
-                    <div class="tab-hed">Create Services & Prices</div>
-
-                    <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
-
-                        <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
-
-                        <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
-
-                    </div>
-
-                    <section class="row">
-
-                        <br>
-
-                        <div class="col-md-12">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-
-                                    <div class="row">
-
-                                        <div class="form-group col-md-12">
-
-                                            <h3 style="font-size: 17px;font-weight: bold;">Describe the location</h3>
-
-                                            <div class="form-group">
-
-                                                <label>Tell customers how to meet up, where to meet up, meeting point name and how to find you once the customers arrive.</label><br>
-
-                                                <textarea class="form-control" rows="6" name="frm_servicedesc" id="frm_servicedesc" placeholder="Don't leave it up to customers to figure out how to meet up with you. Let them know before hand. (Ex. We will pick you up at your hotel. Talk with your front desk staff or we will meet at Central Park at the entrance of 81st and Central Park West, (CPW). Wait at the seating area if you arrive early. The nstructor will have on a red hat and yellow vest. Please arrive 10 minutes before tour starts.)">{{ $frm_servicedesc }}</textarea>
-
-                                            </div>
-
-                                            <h3 style="font-size: 17px;font-weight: bold;">Where should customers meet you?</h3>
-
-                                            <div class="form-group">
-
-                                                <label for="email">if the meet up spot is different from the address you set earlier in Company Details, then you can set in here.</label>
-
-                                            </div>
-
-                                            <div class="row">
-
-                                                <div class="form-group col-md-6">
-
-                                                    <label for="exp_country">Country / Region</label>
-
-                                                    <input type="text" name="exp_country" id="exp_country" value="{{ $exp_country }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-6">
-
-                                                    <label for="">Street address</label>
-
-                                                    <input type="text" name="exp_address" id="exp_address" value="{{ $exp_address }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-3" style="align-self: flex-end;">
-
-                                                    <label for="exp_building">Apt, Suit, Bldg. <span style="font-size: 10px">(optional)</span></label>
-
-                                                    <input type="text" name="exp_building" id="exp_building" value="{{ $exp_building }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-3" style="align-self: flex-end;">
-
-                                                    <label for="exp_city">City</label>
-
-                                                    <input type="text" name="exp_city" id="exp_city" value="{{ $exp_city }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-3" style="align-self: flex-end;">
-
-                                                    <label for="exp_state">State</label>
-
-                                                    <input type="text" name="exp_state" id="exp_state" value="{{ $exp_state }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-3" style="align-self: flex-end;">
-
-                                                    <label for="exp_zip">ZIP Code</label>
-
-                                                    <input type="text" name="exp_zip" id="exp_zip" value="{{ $exp_zip }}" class="form-control">
-
-                                                </div>
-
-                                                <div class="form-group col-md-12">
-
-                                                    <a href="javascript:void(0)" class="updat-map-btn" onclick="loadEmbedMap()">Update Map</a>
-
-                                                </div>
-
-                                                <h3 class="col-md-12" style="font-size: 17px;font-weight: bold;">Adjust the pin on the map</h3>
-
-                                                <div class="form-group col-md-12">
-
-                                                    <label for="">You can drag the map so the pin is in the right location.</label>
-
-                                                </div>
-
-                                                <div class="col-md-12 maploaction-block">
-
-                                                    <iframe id="gmap_iframe" src="https://maps.google.com/maps?width=400&amp;height=300&amp;hl=en&amp;q={{ ($ZipCode!="") ? $ZipCode."&amp;".$Country : 'New York' }}&amp;t=&amp;z=10&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-
-                                                </div>
-
-                                                <h3 class="col-md-12" style="font-size: 17px;font-weight: bold;">Confirm your phone number</h3>
-
-                                                <div class="form-group col-md-12">
-
-                                                    <label for="">If customers have trouble finding your locatoin, they may need to call you. The number we'll give them is +1 (555) 555-5555. This was set during the company details section. You can update this number</label>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                
-
-                                <div class="col-md-6">
-
-                                    <br>
-
-                                    <div class="row">
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Select Service Type</label>
-
-                                            <select name="frm_lservice[]" id="l_service" multiple>
-
-                                                <option value="Personal Training">Personal Training</option>
-
-                                                <option value="Coaching">Coaching</option>
-
-                                                <option value="Class">Class</option>
-
-                                                <option value="Therapy">Therapy</option>
-
-                                                <option value="Gym">Gym</option>
-
-                                                <option value="Adventure">Adventure</option>
-
-                                                <option value="Trip">Trip</option>
-
-                                                <option value="Tour">Tour</option>
-
-                                                <option value="Camp">Camp</option>
-
-                                                <option value="Team">Team</option>
-
-                                                <option value="Clinic">Clinic</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_service'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Location of Activity</label>
-
-                                            <select name="frm_lactivity[]" id="l_activity" multiple>
-
-                                                <option value="Online">Online</option>
-
-                                                <option value="At Business">At Business</option>
-
-                                                <option value="On Location">On Location</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_activity'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Activity Great For</label>
-
-                                            <select name="frm_lgreat[]" id="l_greatfor" multiple>
-
-                                                <option value="Individual">Individual</option>
-
-                                                <option value="Kids">Kids</option>
-
-                                                <option value="Teens">Teens</option>
-
-                                                <option value="Adults">Adults</option>
-
-                                                <option value="Family">Family</option>
-
-                                                <option value="Groups">Groups</option>
-
-                                                <option value="Any">Any</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_greatfor'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Age Range</label>
-
-                                            <select name="frm_lagerange[]" id="l_agerange" multiple>
-
-                                                <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
-
-                                                <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
-
-                                                <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
-
-                                                <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
-
-                                                <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
-
-                                                <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
-
-                                                <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
-
-                                                <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
-
-                                                <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
-
-                                                <option>Any</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_agerange'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Difficulty Level</label>
-
-                                            <select name="frm_ldifficulty[]" id="l_difficulty" multiple>
-
-                                                <option value="Beginner">Beginner</option>
-
-                                                <option value="Intermediate">Intermediate</option>
-
-                                                <option value="Advanced">Advanced</option>
-
-                                                <option value="Professional">Professional</option>
-
-                                                <option value="Expert">Expert</option>
-
-                                                <option value="Any">Any</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_difficulty'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>What experience will the customers have</label>
-
-                                            <select name="frm_lcustomers[]" id="l_customershave" multiple>
-
-                                                <option value="teaching_a_desired_skill"> Teaching a desired skill</option>
-
-                                                <option value="accomplish_a_goal_or_skill"> Accomplish a goal or skill</option>
-
-                                                <option value="cardio"> Cardio</option>
-
-                                                <option value="weight_loss"> Weight loss</option>
-
-                                                <option value="technique"> Technique</option>
-
-                                                <option value="strength_and_conditioning"> Strength and conditioning</option>
-
-                                                <option value="athletic_conditioning"> Athletic conditioning</option>
-
-                                                <option value="body_building"> Body building</option>
-
-                                                <option value="total_body_workout"> Total body workout</option>
-
-                                                <option value="get_toned"> Get toned</option>
-
-                                                <option value="with_equipment"> With equipment</option>
-
-                                                <option value="fun_experience"> Fun experience</option>
-
-                                                <option value="thrilling_experience"> Thrilling experience</option>
-
-                                                <option value="challenging_experience"> Challenging experience</option>
-
-                                                <option value="gross_motor_skills"> Gross motor skills</option>
-
-                                                <option value="hand_eye_coordination"> Hand eye coordination</option>
-
-                                                <option value="discipline"> Discipline</option>
-
-                                                <option value="focus"> Focus</option>
-
-                                                <option value="self-defense"> Self-Defense</option>
-
-                                                <option value="confidence"> Confidence</option>
-
-                                                <option value="mental_challenge"> Mental Challenge</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_customershave'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-
-                                            <label>Personality & Habits of Instructor</label>
-
-                                            <select name="frm_lproviders[]" id="l_providers" multiple>
-
-                                                <option value="An educator &amp; teacher">An Educator</option>
-
-                                                <option value="A lot of energy">A Teacher</option>
-
-                                                <option value="A drill sergeant">A lot of energy</option>
-
-                                                <option value="Inspiring">A drill sergeant</option>
-
-                                                <option value="Inspiring">Inspiring</option>
-
-                                                <option value="Motivational">Motivational</option>
-
-                                                <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
-
-                                                <option value="Tough and Firm">Tough and Firm</option>
-
-                                                <option value="Gentle">Gentle</option>
-
-                                                <option value="Intense">Intense</option>
-
-                                                <option value="Likes to talk">Likes to talk</option>
-
-                                                <option value="Punctual">An entertainer</option>
-
-                                                <option value="Organized">Stern</option>
-
-                                                <option value="Stern">Friendly & outgoing</option>
-
-                                                <option value="Tells jokes and funny">Tells jokes and funny</option>
-
-                                                <option value="Loves to talk">Loves to talk about the details</option>
-
-                                                <option value="Very Organized">Very Organized</option>
-
-                                                <option value="Punctual">Punctual</option>
-
-                                                <option value="On Time">On Time</option>
-
-                                            </select>
-
-                                            <script>
-
-                                                var p = new SlimSelect({
-
-                                                    select: '#l_providers'
-
-                                                });
-
-                                            </script>
-
-                                        </div>
-
-                                    </div><!-- row -->
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-12">
-
-                            <br>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-
-                                    <button type="button" class="btn-bck" id="backexperiences3"><i class="fa fa-arrow-left"></i> Back</button>
-
-                                </div>
-
-                                <div class="col-md-6 text-right">
-
-                                    <button type="submit" class="btn-nxt" id="nextexperiences3">Save & Continue <i class="fa fa-arrow-right"></i></button>
-
-                                </div>
-
-                            </div>
-
-                            <br>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
             </form>
 
             
 
             <form id="bookingInfo" name="bookingInfo" method="post" action="{{route('addbusinessbooking')}}">
-
-                <?php
-
-                
-
-                ?>
 
                 @csrf
 
@@ -10432,11 +9001,7 @@
 
 @include('layouts.footer')
 
-<script>
-document.getElementById("dayplanpic").addEventListener("change", (e) => {
-  document.getElementById("span").innerText = e.target.files[0].name;
-});
-</script>
+
 
 
 <script>
@@ -10602,7 +9167,7 @@ $('body').delegate('.subtab2','click',function(){
 
 <script src="{{ url('public/js/scripts.js') }}"></script>
 
-<script src="{{ url('public/js/jquery.min.map.js') }}"></script>
+<!-- <script src="{{ url('public/js/jquery.min.map.js') }}"></script> -->
 
 
 
@@ -10626,11 +9191,11 @@ $('body').delegate('.subtab2','click',function(){
 
 
 
-<script src="https://dev.fvnew.com/plugins/markerclusterer/oms.min.js"></script>
+<!-- <script src="https://dev.fvnew.com/plugins/markerclusterer/oms.min.js"></script>
 
 <script src="https://dev.fvnew.com/plugins/markerclusterer/markerclusterer.js"></script>
 
-<script src="https://dev.fvnew.com/plugins/markerclusterer/markerclustererplus.min.js"></script>
+<script src="https://dev.fvnew.com/plugins/markerclusterer/markerclustererplus.min.js"></script> -->
 
 
 
@@ -10762,30 +9327,18 @@ $('body').delegate('.subtab2','click',function(){
 
     }
 
-    function planImg(input,cnt) { //alert(input);
-
+    function planImg(input,cnt) { 
+        alert(input);
+        alert(cnt);
         if (input.files && input.files[0]) {
-
             var reader = new FileReader();
-
             reader.onload = function(e) {
-
                 $('.planblah'+cnt).attr('src', e.target.result);
-
-        $("#oldservicepic2"+cnt).val(e.target.result);
-
-                var html = '<img src="' + e.target.result + '">';
-
-                $('.uploadedpic2'+cnt).html(html);
-
+                $("#oldservicepic2"+cnt).val(e.target.result);
             };
-
             profile_pic_var = input.files[0];
-
             reader.readAsDataURL(input.files[0]);
-
         }
-
     }
 
     
@@ -10819,284 +9372,140 @@ $('body').delegate('.subtab2','click',function(){
     
 
     function initialize() {
-
         console.log('initialize');
-
         var geocoder = new google.maps.Geocoder();
-
         var zipcode = '<?=$ZipCode?>';
-
         var country = '<?=$Country?>';
-
         var searchString = "New York";
-
         if(zipcode != '' || country != '') {
-
-        searchString = zipcode + '&amp;' + country;
-
+            searchString = zipcode + '&amp;' + country;
         } 
-
         console.log('searchString', searchString);
-
         geocoder.geocode( { 'address': searchString}, function(results, status) {
-
           if (status == google.maps.GeocoderStatus.OK) {
-
             var latitude = results[0].geometry.location.lat();
-
             var longitude = results[0].geometry.location.lng();
-
             //var latitude = results[0].geometry.bounds.Bb.h;
-
             //var longitude = results[0].geometry.bounds.Ra.h;
-
             console.log('Lat and Long');
-
             console.log(latitude, longitude);
-
           } 
-
         }); 
-
     }
 
-       
-
+    
     function loadMap() {
-
-
-
         console.log("initMap");
-
         var lat = '40.7127';
-
         var long = '-74.0060';
-
         var miles = 20;
-
         var zoom = 9;
-
-        
-
         var geocoder = new google.maps.Geocoder();
-
         var address = $("#wanttowork").val();
-
-        
-
         geocoder.geocode( { 'address': address}, function(results, status) {
-
             if (status == "OK") {
-
               //  lat = results[0].geometry.bounds.Bb.h;
 
                // long = results[0].geometry.bounds.Ra.h;
-
-
-
             var lat = results[0].geometry.location.lat();
-
             var long = results[0].geometry.location.lng();
-
-      
-
-      
-
                 console.log(lat + "=" + long);
-
                 var map = new google.maps.Map(document.getElementById("map_canvas"), {
-
                     zoom: zoom,
-
                     center: new google.maps.LatLng(lat, long),
-
                     mapTypeId: google.maps.MapTypeId.ROADMAP
-
                 });
 
                 //console.log(map);
-
                 var circle = new google.maps.Circle({
-
                     center: new google.maps.LatLng(lat, long),
-
                     radius: miles * 1609.344,
-
                     fillColor: "#ff69b4",
-
                     fillOpacity: 0.5,
-
                     strokeOpacity: 0.0,
-
                     strokeWeight: 0,
-
                     map: map
-
                 });
-
-
-
             } 
-
         });
-
     }
 
     
-
     function loadEmbedMap() {
-
-        
-
         var zipcode = '<?=$ZipCode?>';
-
         var country = '<?=$Country?>';
-
         var searchString = "New York";
 
-        
-
         if(zipcode != '' || country != '') {
-
-        searchString = zipcode + '&amp;' + country;
-
+            searchString = zipcode + '&amp;' + country;
         } else {
-
-        searchString = ($("#exp_city").val() != "") ? $("#exp_city").val() : "New York";
-
+            searchString = ($("#exp_city").val() != "") ? $("#exp_city").val() : "New York";
         }
-
-    
-
         var mapURL = "https://maps.google.com/maps?width=400&amp;height=300&amp;hl=en&amp;t=&amp;z=10&amp;ie=UTF8&amp;iwloc=B&amp;output=embed";
-
         mapURL += "&amp;q=" + searchString;
-
-        
-
         //document.getElementById('gmap_iframe').src = mapURL;
-
-
-
         var frame = '<iframe id="gmap_iframe" src="' + mapURL + '" style="border:0;" allowfullscreen="" loading="lazy"></iframe>';
-
         $(".maploaction-block").html(frame);   
-
     }
-
-    
-
 </script>
 
 <script>
-
 //$(".is_recurring_cls").click(function(event){
 
 $('body').delegate('.is_recurring_cls','click',function(){
-
   if($(this).prop("checked"))
-
   {
-
     var iid=$(this).attr("data-count");
-
     $('#btn_recurring'+iid).trigger("click");
-
   }
-
 });
-
 </script>
 
 <script type="text/javascript">
-
   function IsNumeric(evt) {
-
     var getNumCd = (evt.which) ? evt.which : event.keyCode;
-
     if (getNumCd != 46 && getNumCd > 31 && (getNumCd < 48 || getNumCd > 57))
-
       return false;
-
       return true;
-
   }
 
-
-
    function pay_session_select(i,j,selectedval){
-
         if(selectedval=='Single') { 
-
             $('#pay_session'+i+j).val('1');
-
             $('#pay_session'+i+j).attr('readonly', true); 
-
         }
 
         if(selectedval=='Multiple') {
-
-            
-
             $('#pay_session'+i+j).val('0');
-
             $('#pay_session'+i+j).attr('readonly', false);
-
         }
 
         if(selectedval=='Unlimited') {
-
             $('#pay_session'+i+j).val('10000');
-
             $('#pay_session'+i+j).attr('readonly', true);
-
         }
-
     }
-
-
 
     function remove_agediv(i,j) {
-
         /*alert(i);*/
-
         var cnt=$('#ages_count'+i).val();
-
        /* alert(cnt);*/
-
         cnt--;
-
         $('#ages_count'+i).val(cnt);
-
-       $('#agesdiv'+i+j).remove(); 
-
-
-
+        $('#agesdiv'+i+j).remove(); 
     }
-
-
 
     function setschedule(){
-
         $("#individualDiv5").hide();
-
         $("#individualDiv4").show();
-
     }
 
-
-
     function adultchangeestprice(i,j){
-
         var adult_discount = 0;
         var pay_price =  $('#adult_cus_weekly_price'+i+j).val();; 
-
         var adult_discount =  $('#adult_discount'+i+j).val();
-
         var fitnessity_fee = '{{$fitnessity_fee}}';
-
-        $('#adult_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*adult_discount)/100);
-
+        $('#adult_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*adult_discount)/100);s
         $('#adult_estearn'+i+j).attr('readonly', true);
         if(pay_price == ''){
             pay_price = 0;
@@ -11458,10 +9867,6 @@ $("body").on("blur", ".pay_price", function(){
 
   $('#'+pid).find('.pay_estearn:first').val($(this).val() - ($(this).val()*fitnessity_fee)/100 - ($(this).val()*pay_disc)/100);
 
-  //$(".pay_estearn").val($(this).val() - 19.95);
-
-    //$(".pay_estearn").val($(this).val() - 19.95);
-
 });
 
 
@@ -11496,7 +9901,8 @@ $("body").on("click", ".add-another-day-schedule", function(){
 
     service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
 
-    service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic" id="label"><img src="{{url("/public/images/Upload-Icon.png")}}" class="pro_card_img blah" id="showimg" ><span id="span">Upload your file here</span><input type="file" name="dayplanpic[]" id="dayplanpic" class="uploadFile img" value="Upload Photo"></label></label></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
+
+    service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
 
     service_price += '</div>';
 
@@ -12135,7 +10541,9 @@ $(document).ready(function(){
     $('#frm_programdesc_left').text(500-parseInt($("#frm_programdesc").val().length));
     $('#frm_accessibility_left').text(500-parseInt($("#frm_accessibility").val().length));
     $('#addi_info_help_left').text(500-parseInt($("#addi_info_help").val().length));
+    $('#desc_location_left').text(500-parseInt($("#desc_location").val().length));
     $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
+    $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
     $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));
     $('#house_rules_left').text(500-parseInt($("#house_rules").val().length));
     $('#cancelation_policy_left').text(500-parseInt($("#cancelation_policy").val().length));
@@ -12182,6 +10590,18 @@ $(document).ready(function(){
     $("#frm_addi_info").on('input', function() {
 
         $('#frm_addi_info_left').text(1000-parseInt(this.value.length));
+
+    });
+
+    $("#exp_highlight").on('input', function() {
+
+        $('#exp_highlight_left').text(1000-parseInt(this.value.length));
+
+    });
+
+    $("#desc_location").on('input', function() {
+
+        $('#desc_location_left').text(500-parseInt(this.value.length));
 
     });
 
@@ -12453,131 +10873,8 @@ $(document).ready(function(){
 
     date.setDate(date.getDate()-1);
 
-    /*       
-
-    $(".daycircle").hide();
-
-    $(".remove-week").hide();
-
-    var activityMeet = '<?= $activity_meets ?>';
-
-    console.log('activityMeet', activityMeet);
-
-    var starting = '<?= $starting ?>';
-
-    console.log('starting', starting);
-
-    var day = moment(starting, 'MM-DD-YYYY').format('dddd');
-
-    console.log('day', day);
-
-    $(".timezone-round").css('pointer-events', 'none');
-
-    if(activityMeet == 'Weekly') {
-
-        if(day=='Monday') {
-
-            $(".Monday").css('pointer-events', '');
-
-            $(".Tuesday").css('pointer-events', '');
-
-            $(".Wednesday").css('pointer-events', '');
-
-            $(".Thursday").css('pointer-events', '');
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Tuesday') {
-
-            $(".Tuesday").css('pointer-events', '');
-
-            $(".Wednesday").css('pointer-events', '');
-
-            $(".Thursday").css('pointer-events', '');
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Wednesday') {
-
-            $(".Wednesday").css('pointer-events', '');
-
-            $(".Thursday").css('pointer-events', '');
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Thursday') {
-
-            $(".Thursday").css('pointer-events', '');
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Friday') {
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Saturday') {
-
-            $(".Saturday").css('pointer-events', '');
-
-        }
-
-        if(day=='Sunday') {
-
-            $(".Monday").css('pointer-events', '');
-
-            $(".Tuesday").css('pointer-events', '');
-
-            $(".Wednesday").css('pointer-events', '');
-
-            $(".Thursday").css('pointer-events', '');
-
-            $(".Friday").css('pointer-events', '');
-
-            $(".Saturday").css('pointer-events', '');
-
-            $(".Sunday").css('pointer-events', '');
-
-        }
-
-        //$(".remove-week").show();
-
-    } 
-
-    //$(".timezone-round").removeClass('day_circle_fill');
-
-    //$(".daycircle ."+day).addClass('day_circle_fill');
-
-    $("#activity_scheduler_body").append($("#day-circle").html());
-
-    $("#activity_scheduler_body .daycircle").show();
-
-    */
-
-    
 
     $(".ui-datepicker-div").hide();
-
-
 
     $('#startingpicker').datepicker({
 
@@ -12625,11 +10922,6 @@ $(document).ready(function(){
 
         }
 
-        
-
-        //console.log(timeStart + '-' + timeEnd + '=' + duration);
-
-        
 
         $(this).parent().parent().find('.set_duration').val(duration);
 
@@ -12657,19 +10949,7 @@ $(document).ready(function(){
 
         });
 
-        
-
       });
-
-      
-
-            /*$.each( $(this).find('.weekdays').children(".day_circle_fill"), function( key, value ) {
-
-        activity_days += value.classList[3] + ",";
-
-            });*/
-
-      //alert('call---'+activity_days);
 
             $(this).find('.activity_days').val(activity_days);
 
@@ -12697,9 +10977,6 @@ $(document).ready(function(){
 
     $("body").on("click", ".remove-activity", function(){
 
-        //$(this).parent().parent().parent().remove();
-
-    //$(this).parent().parent('.daycircle').remove();
 
     if($('#duration_cnt').val()<=0)
 
@@ -12733,11 +11010,7 @@ $(document).ready(function(){
 
     
 
-    //$(".add-another-time").on("click", function(){ alert('call'); 
-
   $("body").on("click", ".add-another-time", function(){ 
-
-       // $(".timezone-round").removeClass('day_circle_fill');
 
     var cnt=$('#duration_cnt').val();
 
@@ -12753,9 +11026,6 @@ $(document).ready(function(){
 
         add_time += '</div></div>';
 
-    <?php /*?>//add_time += '<div class="row"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-activity fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove activity"></i></div></div>';
-
-        //console.log(add_time.replace("shift_start[]", "shift_start1[]"));<?php */?>
 
         $("#activity_scheduler_body").append(add_time);
 
@@ -12772,24 +11042,8 @@ $(document).ready(function(){
     shift_end = parent.querySelector('#shift_end').value='';
 
     set_duration = parent.querySelector('#set_duration').value='';
-
-    //parent.querySelector('.weekdays').removeClass("day_circle_fill");
-
-    //$("#dayduration"+cnt).closest('div[class=day_circle_fill]').find('.day_circle_fill').removeClass('day_circle_fill');
-
-    //$("#dayduration"+cnt).closest('div.timezone-round').removeClass('day_circle_fill');
-
-    //parent.closest('div[class=day_circle_fill]').removeClass("day_circle_fill");
-
-    //parent.querySelector('.day_circle_fill').removeClass('day_circle_fill');
-
-    
-
     $("#dayduration"+cnt).parent().find('div.timezone-round').removeClass("day_circle_fill");
 
-    
-
-    
 
     });
 
@@ -14413,37 +12667,39 @@ $(document).ready(function(){
 
 
     $("#nextindividual3").click(function(){
+        var stype = $(this).attr('data-type');
+        if(stype == 'experience'){
+            if($("#frm_included_things").is(":hidden")){
+                var included_things = $("#frm_included_things").val();
+                $('#err_what_included').html('');
+                if(included_things == '' || included_things == null){ 
+                    $('#err_what_included').html('Please Select.');
+                    $('#frm_included_things').focus();
+                    return false;
+                }
+            }
 
-        if($("#frm_included_things").is(":hidden")){ 
-            var included_things = $("#frm_included_things").val();
-            $('#err_what_included').html('');
-            if(included_things == '' || included_things == null){ 
-                $('#err_what_included').html('Please Select.');
-                $('#frm_included_things').focus();
-                return false;
+            if($("#frm_notincluded_things").is(":hidden")){ 
+                var notincluded_things = $("#frm_notincluded_things").val();
+                $('#err_what_not_included').html('');
+                if(notincluded_things == '' || notincluded_things == null){ 
+                    $('#err_what_not_included').html('Please Select.');
+                    $('#frm_notincluded_things').focus();
+                    return false;
+                }
+            }
+
+            if($("#frm_wear").is(":hidden")){ 
+                var wear = $("#frm_wear").val();
+                $('#err_what_guest_bring').html('');
+                if(wear == '' || wear == null){ 
+                    $('#err_what_guest_bring').html('Please Select.');
+                    $('#frm_wear').focus();
+                    return false;
+                }
             }
         }
-
-        if($("#frm_notincluded_things").is(":hidden")){ 
-            var notincluded_things = $("#frm_notincluded_things").val();
-            $('#err_what_not_included').html('');
-            if(notincluded_things == '' || notincluded_things == null){ 
-                $('#err_what_not_included').html('Please Select.');
-                $('#frm_notincluded_things').focus();
-                return false;
-            }
-        }
-
-        if($("#frm_wear").is(":hidden")){ 
-            var wear = $("#frm_wear").val();
-            $('#err_what_guest_bring').html('');
-            if(wear == '' || wear == null){ 
-                $('#err_what_guest_bring').html('Please Select.');
-                $('#frm_wear').focus();
-                return false;
-            }
-        }
-
+        
         $("#individualDiv3").hide();
         $("#individualDiv5").show();
         $('#current_tab_name').val('individualDiv5');
@@ -16500,10 +14756,69 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+
+    function loadMaponclick(){
+        $('#cus_map_error').hide();
+        var locations = $('#address_p').val();
+        var cus_lat = $('#cus_lat').val();
+        var cus_lng = $('#cus_lng').val();
+        var map1 = ''
+        var infowindow1 = ''
+        var marker1 = ''
+        var markers1 = []
+        var circle = ''
+        
+
+        if (locations.length != 0) { 
+            $('#map_canvas_cus').empty(); 
+            console.log('!empty');
+            map1 = new google.maps.Map(document.getElementById('map_canvas_cus'), {
+                zoom:18,
+                center: new google.maps.LatLng(cus_lat, cus_lng),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+            });
+            infowindow1 = new google.maps.InfoWindow();
+            var bounds = new google.maps.LatLngBounds();
+            var marker1;
+            var icon1 = {
+                url: "{{url('/public/images/hoverout2.png')}}",
+                scaledSize: new google.maps.Size(50, 50),
+                labelOrigin: {x: 25, y: 16}
+            };
+            for (var i = 0; i < locations.length; i++) {
+                var labelText = i + 1
+                marker1 = new google.maps.Marker({
+                    position: new google.maps.LatLng(cus_lat,cus_lng),
+                    map: map1,
+                    icon: icon1,
+                    title: labelText.toString(),
+                    label: {
+                        text: labelText.toString(),
+                        color: '#222222',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+
+                bounds.extend(marker1.position);
+            }               
+            $('.mysrchmap_cus').show()
+        } else {
+            $('#cus_map_error').show(); 
+            $('#cus_map_error').html('Plese Enter All Value For Map');
+        }
+    }
+
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -33.8688, lng: 151.2195},
             zoom: 13
+        });
+
+        
+        var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
+        google.maps.event.addListener(autocomplete2, 'place_changed', function() {
+          initMapforcustomermeet();
         });
 
         var input = document.getElementById('b_address');
@@ -16734,8 +15049,125 @@ let dropBox = document.getElementById('dropBox');
     /*$(document).on('click', '.modelboxclose ', function(e){
         $("#edit_post").css('display','none');
     });*/
-
 </script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        loadMaponclick();
+        $('#cus_map_error').hide();
+    });
+    
+    function initMapforcustomermeet() {
+        alert('initMapforcustomermeet');
+        var map = new google.maps.Map(document.getElementById('cus_map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('cus_st_address');
+        alert(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+           
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                alert(place.address_components[i].types[0]);
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#cus_zip').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                  $('#cus_country').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#cus_city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#cus_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#cus_st_address').val(sublocality_level_1);
+            }else{
+              $('#cus_st_address').val(badd);
+            }
+            $('#address_p').val(place.formatted_address);
+            $('#cus_lat').val(place.geometry.location.lat());
+            $('#cus_lng').val(place.geometry.location.lng());
+        });
+    
+    }
+</script>
+<script type="text/javascript">
+   /* var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
+    google.maps.event.addListener(autocomplete2, 'place_changed', function() {
+      initMapforcustomermeet();
+    });*/
+</script>
+
+
 @endsection
 
 

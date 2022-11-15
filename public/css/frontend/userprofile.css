@@ -4908,9 +4908,9 @@
 
     }
 
-	@media screen and (min-width: 1000px) and (max-width: 1049px){
+		@media screen and (min-width: 1000px) and (max-width: 1049px){
 
-		.emoji-picker-icon{ right: 39%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 61%; top: 68%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4926,7 +4926,7 @@
 
 	@media screen and (min-width: 1100px) and (max-width: 1149px){
 
-		.emoji-picker-icon{ right: 45%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 64%; top: 67%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4942,7 +4942,7 @@
 
 	@media screen and (min-width: 1200px) and (max-width: 1249px){
 
-		.emoji-picker-icon{ right: 51%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 67%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4950,7 +4950,7 @@
 
 	@media screen and (min-width: 1250px) and (max-width: 1299px){
 
-		.emoji-picker-icon{ right: 53%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 68%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4958,7 +4958,7 @@
 
 	@media screen and (min-width: 1300px) and (max-width: 1349px){
 
-		.emoji-picker-icon{ right: 55%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 69%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4966,7 +4966,7 @@
 
 	@media screen and (min-width: 1350px) and (max-width: 1399px){
 
-		.emoji-picker-icon{ right: 56%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 71%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4974,7 +4974,7 @@
 
 	@media screen and (min-width: 1400px) and (max-width: 1449px){
 
-		.emoji-picker-icon{ right: 58%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 72%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4982,7 +4982,7 @@
 
 	@media screen and (min-width: 1450px) and (max-width: 1499px){
 
-		.emoji-picker-icon{ right: 59%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 73%; top: 67%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4990,7 +4990,7 @@
 
 	@media screen and (min-width: 1500px) and (max-width: 1549px){
 
-		.emoji-picker-icon{ right: 74%; top: 63%; font-size: 17px; }
+		.emoji-picker-icon{ right: 74%; top: 68%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -4998,7 +4998,7 @@
 
 	@media screen and (min-width: 1550px) and (max-width: 1599px){
 
-		.emoji-picker-icon{ right: 74%; top: 63%; font-size: 17px; }
+		.emoji-picker-icon{ right: 75%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -5006,7 +5006,7 @@
 
 	@media screen and (min-width: 1600px) and (max-width: 1649px){
 
-		.emoji-picker-icon{ right: 63%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 76%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -5014,7 +5014,7 @@
 
 	@media screen and (min-width: 1650px) and (max-width: 1699px){
 
-		.emoji-picker-icon{ right: 64%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 76%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -5022,7 +5022,7 @@
 
 	@media screen and (min-width: 1700px) and (max-width: 1749px){
 
-		.emoji-picker-icon{ right: 65%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 77%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
 
@@ -5030,9 +5030,47 @@
 
 	@media screen and (min-width: 1750px) and (max-width: 1799px){
 
-		.emoji-picker-icon{ right: 66%; top: 67%; font-size: 17px; }
+		.emoji-picker-icon{ right: 78%; top: 66%; font-size: 17px; }
 
 		.newpst-input { width: 85%; }
+
+	}
+	
+	@media screen and (min-width: 1800px) and (max-width: 1849px){
+		.emoji-picker-icon{ right: 78%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
+	
+	@media screen and (min-width: 1850px) and (max-width: 1899px){
+		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
+
+	@media screen and (min-width: 1900px) and (max-width: 1949px){
+		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
+	
+	@media screen and (min-width: 1950px) and (max-width: 1999px){
+		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
+	
+	@media screen and (min-width: 2000px) and (max-width: 2049px){
+		.emoji-picker-icon{ right: 81%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
+	
+	@media screen and (min-width: 2050px) and (max-width: 2099px){
+		.emoji-picker-icon{ right: 81%; top: 66%; font-size: 17px; }
+
+		.newpst-input { width: 85%; }
+	}
 
 	}
 
