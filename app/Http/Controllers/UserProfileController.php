@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Redirect;
@@ -11436,3 +11435,4 @@ class UserProfileController extends Controller {
         return $status;
     }
 }
+

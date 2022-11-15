@@ -10544,7 +10544,7 @@ $(document).ready(function(){
     $('#desc_location_left').text(500-parseInt($("#desc_location").val().length));
     $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
     $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
-    $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));
+   /* $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));*/
     $('#house_rules_left').text(500-parseInt($("#house_rules").val().length));
     $('#cancelation_policy_left').text(500-parseInt($("#cancelation_policy").val().length));
     $('#safety_cleaning_left').text(500-parseInt($("#safety_cleaning").val().length));
@@ -10611,11 +10611,11 @@ $(document).ready(function(){
 
     });*/
 
-    $("#frm_programdesc1").on('input', function() {
+    /*$("#frm_programdesc1").on('input', function() {
 
         $('#frm_programdesc1_left').text(150-parseInt(this.value.length));
 
-    });
+    });*/
 
     $("#house_rules").on('input', function() {
 
