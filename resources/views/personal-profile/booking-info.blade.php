@@ -8,7 +8,6 @@
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
 <link href="{{ url('public/css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
-<link rel="stylesheet" type="text/css" href="http://dev.fitnessity.co/public/css/font-awesome.min.css" />
 <style type="text">
     .intro{
         height: auto;
@@ -160,6 +159,75 @@ use App\UserFamilyDetail;
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages; 
+
+
+                                            $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$book_details['user_booking_detail']['booking_id'])->get();
+                                            $sub_totprice = 0;
+                                            foreach( $booking_details_for_sub_total as $bds){
+                                                $aprice = json_decode($bds->price,true); 
+                                                $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
+                                                if( !empty($aprice['adult']) ){ 
+                                                    $sub_price_adu = $aprice['adult']; 
+                                                }
+                                                if( !empty($aprice['child']) ){
+                                                    $sub_price_chi = $aprice['child']; 
+                                                }
+                                                if( !empty($aprice['infant']) ){
+                                                    $sub_price_inf = $aprice['infant']; 
+                                                }
+
+                                                $a = json_decode($bds->qty,true);
+                                                if( !empty($a['adult']) ){  
+                                                    $sub_totprice += $sub_price_adu * $a['adult'];
+                                                }
+                                                if( !empty($a['child']) ){
+                                                    $sub_totprice += $sub_price_chi * $a['child'];
+                                                }
+                                                if( !empty($a['infant']) ){ 
+                                                    $sub_totprice += $sub_price_inf * $a['infant'];
+                                                }
+                                            }
+
+                                            $tot_amount_cart = 0;
+                                            if(@$book_details['amount'] != ''){
+                                                $tot_amount_cart = @$book_details['amount'];
+                                            }
+                                            
+                                            $taxval = 0;
+                                            $taxval = $tot_amount_cart - $sub_totprice; 
+                                            
+                                            $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
+
+                                            $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
+                                            $aprice_adu = $aprice_chi = $aprice_inf = 0;
+                                            if( !empty($aprice['adult']) ){ 
+                                                $aprice_adu = $aprice['adult']; 
+                                            }
+                                            if( !empty($aprice['child']) ){
+                                                $aprice_chi = $aprice['child']; 
+                                            }
+                                            if( !empty($aprice['infant']) ){
+                                                $aprice_inf = $aprice['infant']; 
+                                            }
+
+                                            $qty = '';
+                                            $totprice_for_this = 0;
+                                            $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
+                                            if( !empty($a['adult']) ){ 
+                                                $qty .= 'Adult: '.$a['adult']; 
+                                                $totprice_for_this += $aprice_adu * $a['adult'];
+                                            }
+                                            if( !empty($a['child']) ){
+                                                $qty .= '<br> Child: '.$a['child']; 
+                                                $totprice_for_this += $aprice_chi * $a['child'];
+                                            }
+                                            if( !empty($a['infant']) ){
+                                                $qty .= '<br>Infant: '.$a['infant']; 
+                                                $totprice_for_this += $aprice_inf * $a['infant'];
+                                            }
+
+                                            $main_total =  $tax_for_this + $totprice_for_this;
+
                                         ?>
                                             <div class="col-md-4 col-sm-6 ">
                                                 <div class="boxes_arts">
@@ -167,7 +235,7 @@ use App\UserFamilyDetail;
                                                         <img src="{{ $pro_pic  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['businessservices']['program_name']}}</h4>
                                                         <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
-                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                            <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
@@ -201,8 +269,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <?php /*?><span>${{$BusinessPriceDetails['pay_price']}}</span><?php */?>
-                                                            <span>${{@$data->amount}} </span>
+                                                            <span>${{@$main_total}} </span>
                                                         </p>
                                                         
                                                         <p>
@@ -407,6 +474,72 @@ use App\UserFamilyDetail;
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages;
+                                            $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$book_details['user_booking_detail']['booking_id'])->get();
+                                            $sub_totprice = 0;
+                                            foreach( $booking_details_for_sub_total as $bds){
+                                                $aprice = json_decode($bds->price,true); 
+                                                $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
+                                                if( !empty($aprice['adult']) ){ 
+                                                    $sub_price_adu = $aprice['adult']; 
+                                                }
+                                                if( !empty($aprice['child']) ){
+                                                    $sub_price_chi = $aprice['child']; 
+                                                }
+                                                if( !empty($aprice['infant']) ){
+                                                    $sub_price_inf = $aprice['infant']; 
+                                                }
+
+                                                $a = json_decode($bds->qty,true);
+                                                if( !empty($a['adult']) ){  
+                                                    $sub_totprice += $sub_price_adu * $a['adult'];
+                                                }
+                                                if( !empty($a['child']) ){
+                                                    $sub_totprice += $sub_price_chi * $a['child'];
+                                                }
+                                                if( !empty($a['infant']) ){ 
+                                                    $sub_totprice += $sub_price_inf * $a['infant'];
+                                                }
+                                            }
+
+                                            $tot_amount_cart = 0;
+                                            if(@$book_details['amount'] != ''){
+                                                $tot_amount_cart = @$book_details['amount'];
+                                            }
+                                            
+                                            $taxval = 0;
+                                            $taxval = $tot_amount_cart - $sub_totprice; 
+                                            
+                                            $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
+
+                                            $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
+                                            $aprice_adu = $aprice_chi = $aprice_inf = 0;
+                                            if( !empty($aprice['adult']) ){ 
+                                                $aprice_adu = $aprice['adult']; 
+                                            }
+                                            if( !empty($aprice['child']) ){
+                                                $aprice_chi = $aprice['child']; 
+                                            }
+                                            if( !empty($aprice['infant']) ){
+                                                $aprice_inf = $aprice['infant']; 
+                                            }
+
+                                            $qty = '';
+                                            $totprice_for_this = 0;
+                                            $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
+                                            if( !empty($a['adult']) ){ 
+                                                $qty .= 'Adult: '.$a['adult']; 
+                                                $totprice_for_this += $aprice_adu * $a['adult'];
+                                            }
+                                            if( !empty($a['child']) ){
+                                                $qty .= '<br> Child: '.$a['child']; 
+                                                $totprice_for_this += $aprice_chi * $a['child'];
+                                            }
+                                            if( !empty($a['infant']) ){
+                                                $qty .= '<br>Infant: '.$a['infant']; 
+                                                $totprice_for_this += $aprice_inf * $a['infant'];
+                                            }
+
+                                            $main_total =  $tax_for_this + $totprice_for_this;
                                         ?>
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
@@ -415,7 +548,7 @@ use App\UserFamilyDetail;
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
 														
 														<a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
-															<i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+															<i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
 														</a>
 														
                                                         <div class="highlighted_box">Confirmed</div>
@@ -449,7 +582,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{@$data->amount}} </span>
+                                                             <span>${{@$main_total}} </span>
                                                         </p>
                                                         
                                                         <p>
@@ -657,6 +790,72 @@ use App\UserFamilyDetail;
 
                                             $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                                             $language = $language_name->languages; 
+                                            $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$book_details['user_booking_detail']['booking_id'])->get();
+                                            $sub_totprice = 0;
+                                            foreach( $booking_details_for_sub_total as $bds){
+                                                $aprice = json_decode($bds->price,true); 
+                                                $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
+                                                if( !empty($aprice['adult']) ){ 
+                                                    $sub_price_adu = $aprice['adult']; 
+                                                }
+                                                if( !empty($aprice['child']) ){
+                                                    $sub_price_chi = $aprice['child']; 
+                                                }
+                                                if( !empty($aprice['infant']) ){
+                                                    $sub_price_inf = $aprice['infant']; 
+                                                }
+
+                                                $a = json_decode($bds->qty,true);
+                                                if( !empty($a['adult']) ){  
+                                                    $sub_totprice += $sub_price_adu * $a['adult'];
+                                                }
+                                                if( !empty($a['child']) ){
+                                                    $sub_totprice += $sub_price_chi * $a['child'];
+                                                }
+                                                if( !empty($a['infant']) ){ 
+                                                    $sub_totprice += $sub_price_inf * $a['infant'];
+                                                }
+                                            }
+
+                                            $tot_amount_cart = 0;
+                                            if(@$book_details['amount'] != ''){
+                                                $tot_amount_cart = @$book_details['amount'];
+                                            }
+                                            
+                                            $taxval = 0;
+                                            $taxval = $tot_amount_cart - $sub_totprice; 
+                                            
+                                            $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
+
+                                            $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
+                                            $aprice_adu = $aprice_chi = $aprice_inf = 0;
+                                            if( !empty($aprice['adult']) ){ 
+                                                $aprice_adu = $aprice['adult']; 
+                                            }
+                                            if( !empty($aprice['child']) ){
+                                                $aprice_chi = $aprice['child']; 
+                                            }
+                                            if( !empty($aprice['infant']) ){
+                                                $aprice_inf = $aprice['infant']; 
+                                            }
+
+                                            $qty = '';
+                                            $totprice_for_this = 0;
+                                            $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
+                                            if( !empty($a['adult']) ){ 
+                                                $qty .= 'Adult: '.$a['adult']; 
+                                                $totprice_for_this += $aprice_adu * $a['adult'];
+                                            }
+                                            if( !empty($a['child']) ){
+                                                $qty .= '<br> Child: '.$a['child']; 
+                                                $totprice_for_this += $aprice_chi * $a['child'];
+                                            }
+                                            if( !empty($a['infant']) ){
+                                                $qty .= '<br>Infant: '.$a['infant']; 
+                                                $totprice_for_this += $aprice_inf * $a['infant'];
+                                            }
+
+                                            $main_total =  $tax_for_this + $totprice_for_this;
                                         ?>
                                             <div class="col-md-4 col-sm-6">
                                                 <div class="boxes_arts">
@@ -664,7 +863,7 @@ use App\UserFamilyDetail;
                                                         <img src="{{ $pro_pic }}" class="imgboxes" alt="">
                                                         <h4>{{$book_details['businessservices']['program_name']}}</h4>
                                                         <a class="openreceiptmodel" orderid = '{{$book_details["id"]}}' orderdetailid="{{$book_details['user_booking_detail']['id']}}">
-                                                            <i class="fa fa-file-text-o file-booking-receipt" aria-hidden="true"></i>
+                                                            <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
                                                     </div>
@@ -696,7 +895,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL PRICE</span>
-                                                            <span>${{@$data->amount}} </span>
+                                                           <span>${{@$main_total}} </span>
                                                         </p>
                                                         
                                                         <p>

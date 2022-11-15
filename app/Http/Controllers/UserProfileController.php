@@ -1957,7 +1957,8 @@ class UserProfileController extends Controller {
     /* Step 7 - Business Profile */
     public function addbusinessservices(Request $request)
     {   
-        /*exit;*/
+        /*print_r($request->all());
+        exit;*/
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -2120,16 +2121,28 @@ class UserProfileController extends Controller {
             $days_dayplanpic = json_encode($datadayimg);
         }
         
+        if($request->has('instantbooking')){
+            $instant = 1;
+        }else{
+            $instant = 0;
+        }
+
+        if($request->has('requestbooking')){
+            $reserve = 1;
+        }else{
+            $reserve = 0;
+        }
+
         //echo $safe_varification; exit;
         if($request->service_type=='experience') {
-            if(isset($request->booking)) {
+            /*if(isset($request->booking)) {
                 if($request->booking == 'instant') {
                     $instant = 1;
                 }
                 if($request->booking == 'reserve') {
                     $reserve = 1;
                 }
-            }
+            }*/
             $businessData = [
                 "cid" => $request->cid,
                 "userid" => $request->userid,
@@ -2140,7 +2153,8 @@ class UserProfileController extends Controller {
                 "program_desc" => $request->frm_programdesc,
                 "profile_pic" => $request->servicepic,
                 "instant_booking" => $instant,
-                "reserved_booking" => $reserve,
+                "request_booking" => $reserve,
+                "frm_min_participate" => $request->frm_min_participate,
                 "notice_value" => $request->notice_value,
                 "notice_key" => $request->notice_key,
                 "advance_value" => $request->advance_value,
@@ -2198,23 +2212,28 @@ class UserProfileController extends Controller {
                 "exp_zip" => $request->exp_zip,
                 "is_late_fee" => $request->is_late_fee,
                 "late_fee" => $request->late_fee,
-                 "instructor_id"=> $request->instructor_id,
-                /*"included_items" => $included_thing,
+                "instructor_id"=> $request->instructor_id,
+                "included_items" => $included_thing,
                 "notincluded_items" => $notincluded_thing,
                 "bring_wear" => $frm_wear,
                 "req_safety" => $safe_varification,
-                "days_plan_title" => $days_title,
+                /*"days_plan_title" => $days_title,
                 "days_plan_desc" => $days_desc,
                 "days_plan_img" => $days_dayplanpic,*/
+                "exp_highlight" =>$request->exp_highlight,
+                "addi_info" =>$request->frm_addi_info,
+                "accessibility" =>$request->frm_accessibility,
+                "addi_info_help" =>$request->addi_info_help,
+                "desc_location" =>$request->desc_location,
             ];
         } else {
             if(isset($request->booking)) {
-                if($request->booking == 'instant') {
+                /*if($request->booking == 'instant') {
                     $instant = 1;
                 }
                 if($request->booking == 'reserve') {
                     $reserve = 1;
-                }
+                }*/
             }
             $businessData = [
                 "cid" => $request->cid,
@@ -2226,7 +2245,8 @@ class UserProfileController extends Controller {
                 "program_desc" => $request->frm_programdesc,
                 "profile_pic" => $request->servicepic,
                 "instant_booking" => $instant,
-                "reserved_booking" => $reserve,
+                "request_booking" => $reserve,
+                "frm_min_participate" => $request->frm_min_participate,
                 "notice_value" => $request->notice_value,
                 "notice_key" => $request->notice_key,
                 "advance_value" => $request->advance_value,
@@ -11135,45 +11155,211 @@ class UserProfileController extends Controller {
                         <div class="modal-booking-info">
                             <h3>Booking Receipt</h3>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="booking-page-meta-info">
-                                        <label>Booking# </label>
-                                        <label>Total Price:</label>
-                                        <label>price option:</label>
-                                        <label>total remainnig:</label>
-                                        <label>program name:</label>
-                                        <label>expiration date:</label>
-                                        <label>date booked:</label>
-                                        <label>reserved date:</label>
-                                        <label>booked by:</label>
-                                        <label>check in date:</label>
-                                        <label>check in time:</label>
-                                        <label>activity type:</label>
-                                        <label>service type:</label>
-                                        <label>activity location:</label>
-                                        <label>activity duration:</label>
-                                        <label>great for:</label>
-                        
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>BOOKING#</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $order_id.'</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="booking-page-meta-info">
-                                        <span>'.$order_id.'</span>
-                                        <span>$'.$totprice_for_this.'</span>
-                                        <span>'.$price_opt.'</span>
-                                        <span>'. $to_rem.'</span>
-                                        <span>'.$program_name.'</span>
-                                        <span>'.$end_activity_date .'</span>
-                                        <span>'.$created_at.'</span>
-                                        <span>'.$bookedtime.'</span>
-                                        <span>'.$nameofbookedby.'</span>
-                                        <span>'.$bookedtime.'</span>
-                                        <span>'.$shift_start.'</span>
-                                        <span>'. $sport_activity.'</span>
-                                        <span>'.$select_service_type.'</span>
-                                        <span>'.$activity_location.'</span>
-                                        <span>'.$time.'</span>
-                                        <span>'.$activity_for.'</span>
+                                
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>TOTAL PRICE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>$'. $totprice_for_this.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>PRICE OPTION:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $price_opt.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>TOTAL REMAINNIG:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $to_rem.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>PROGRAM NAME:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $program_name.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>EXPIRATION DATE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $end_activity_date.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>DATE BOOKED:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $created_at.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>RESERVED DATE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $bookedtime.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>BOOKED BY:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $nameofbookedby.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>CHECK IN DATE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $bookedtime.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>CHECK IN TIME:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $shift_start.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>ACTIVITY TYPE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $sport_activity.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>SERVICE TYPE:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $select_service_type.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>ACTIVITY LOCATION:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $activity_location.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>ACTIVITY DURATION:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $time.'</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <label>GREAT FOR:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-page-meta-info">
+                                            <span>'. $activity_for.'</span>
+                                        </div>
                                     </div>
                                 </div>
 
