@@ -2521,8 +2521,8 @@
 
                 <?php
 
-                    $service_type = $sport_activity = "";
-                    $program_name = $program_desc = $profile_pic = $instant_booking = $request_booking = $meetup_location = $frm_min_participate ="";
+                    $service_type = $sport_activity = ""; $instant_booking = 0;
+                    $program_name = $program_desc = $profile_pic = $request_booking = $meetup_location = $frm_min_participate ="";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
                     $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
@@ -9873,7 +9873,8 @@ $("body").on("click", ".add-another-day-schedule", function(){
     service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
 
 
-    service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
+    <?php /*?>service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';<?php */?>
+	service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('"/public/images/Upload-Icon.png"')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
 
     service_price += '</div>';
 
@@ -9881,297 +9882,138 @@ $("body").on("click", ".add-another-day-schedule", function(){
 
 });
 
-
-
-
-
 $("body").on("click", ".remove-day-schedule", function(){
     var cnt=$('#planday_count').val();
     cnt--;
     $('#planday_count').val(cnt);
     $(this).parent().parent().remove();
 });
-
-
 $("body").on("click", ".remove-pricedetails", function(){
-
     var cnt=$('#recurring_count').val();
-
  /*   cnt--;*/
-
     $('#recurring_count').val(cnt);
-
     $(this).parent('div').parent('div').remove();
-
 });
-
-  
-
 $("body").on("click", ".remove-empdetails", function(){
-
     var cnt=$('#Emp_count').val();
-
     cnt--;
-
     $('#Emp_count').val(cnt);
-
     $(this).parent('div').parent('div').remove();
-
 });
-
-
-
 $("body").on("click", ".remove-edudetails", function(){
-
     var cnt=$('#Edu_count').val();
-
     cnt--;
-
     $('#Edu_count').val(cnt);
-
     $(this).parent('div').parent('div').remove();
-
 });
-
-
-
 $("body").on("click", ".remove-category-price ", function(){
-
     var cnt=$('#recurring_count').val();
-
     cnt--;
-
     $('#recurring_count').val(cnt);
-
     $(this).parent('div').parent('div').parent('div').remove();
-
 });
-
-
-
 $("body").on("click", ".remove-certidetails", function(){
-
     var cnt=$('#certi_count').val();
-
     cnt--;
-
     $('#certi_count').val(cnt);
-
     $(this).parent('div').parent('div').remove();
-
 });
-
-
-
 $("body").on("click", ".remove-skilldetails", function(){
-
     var cnt=$('#skill_count').val();
-
     cnt--;
-
     $('#skill_count').val(cnt);
-
     $(this).parent('div').parent('div').remove();
-
 });
-
-
-
 $("body").on("click", ".add-another-session-skilldetails", function(){
-
   var cnt=$('#skill_count').val();
-
   cnt++;
-
   $('#skill_count').val(cnt);
-
   var skill_details = '';
-
   skill_details += '<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-skilldetails fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div>';
-
   skill_details +='<div class="col-md-12"><div id="certidetail'+cnt+'"><div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group"><label for="pwd">Skill Type </label><select name="skill_type[]" id="skiils_achievments_awards1" class="form-control my-select"><option value="">Select Item</option><option value="Skills">Skills</option><option value="Achievment">Achievments</option> <option value="Award">Awards</option></select><span class="error" id="b_skilltype"></span></div><div class="form-group" id="skillcompletionpicker-position"><label for="email">Completion Date (mm/dd/yyyy) </label><div class="special-date"><input type="text" name="skillcompletion[]" class="form-control skillcompletionpicker'+cnt+'" id="skillcompletionpicker" placeholder="Completion Date"  autocomplete="off" value=""><span class="error" id="b_skillyear"></span></div></div></div><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">Description </label><textarea name="frm_skilldetail[]" id="frm_skilldetail" placeholder="Description" cols="10" rows="3" class="form-control" maxlength="300"></textarea><span class="error" id="b_skilldetail"></span><span id="frm_skilldetail_left">150</span> Characters Left</div></div></div></div>';
-
     $(".skilldetails_block").append(skill_details);
-
     $('.skillcompletionpicker'+cnt).Zebra_DatePicker({
-
         format: 'm/d/Y',
-
         default_position: 'below'
-
     });
-
 });
-
-
-
 $("body").on("click", ".add-another-session-certidetails", function(){
-
   var cnt=$('#certi_count').val();
-
   cnt++;
-
   $('#certi_count').val(cnt);
-
   var certi_details = '';
-
   certi_details += '<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-certidetails fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div>';
-
   certi_details +='<div class="col-md-12"><div id="certidetail'+cnt+'"><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">Name of Certification </label><input type="text" id="certification" name="certification[]" class="form-control" placeholder="Name of Certification" value="" maxlength="200"><span class="error" id="b_certification"></span></div><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="email">Completion Date (mm/dd/yyyy) </label><div class="special-date"><input type="text" class="form-control completionyear'+cnt+'" id="completionyear" name="frm_passingdate[]" placeholder="Completion Date" autocomplete="off" value=""><span class="error" id="b_certificateyear"></span></div></div></div></div></div>';
-
     $(".certidetail_block").append(certi_details);
-
     $('.completionyear'+cnt).Zebra_DatePicker({
-
         format: 'm/d/Y',
-
         default_position: 'below'
-
     });
-
 });
-
-
-
 $("body").on("click", ".add-another-session-edudetails", function(){
-
   var cnt=$('#Edu_count').val();
-
   cnt++;
-
   $('#Edu_count').val(cnt);
-
-
-
   var edu_details = '';
-
   edu_details += '<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-edudetails fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div>';
-
   edu_details +='<div class="col-md-12"><div id="edudetail'+cnt+'"><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">Degree - Course </label><input type="text" id="frm_course" name="frm_course[]" class="form-control frm_course" placeholder="Degree/Course (Obtained or Seeking)" value="" maxlength="500"><span class="error" id="b_degree"></span></div><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">University - School </label><input type="text" id="frm_university" name="frm_university[]" class="form-control frm_university" placeholder="University/School" value=""  maxlength="200"><span class="error" id="b_university"></span></div><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">Year Graduated (yyyy) </label><input id="passingyear" name="frm_passingyear[]" class="form-control passingyear'+cnt+'" placeholder="Year graduated" type="number" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" style="width:100%" autocomplete="off" value=""><span class="error" id="b_year"></span></div></div></div></div>';
-
     $(".edudetail_block").append(edu_details);
-
     $('.passingyear'+cnt+'').Zebra_DatePicker({
-
         format: 'Y',
-
         default_position: 'below'
-
     });
-
 });
-
-
 
 $("body").on("click", ".add-another-session-emphis", function(){
-
   var cnt=$('#Emp_count').val();
-
   cnt++;
-
   $('#Emp_count').val(cnt);
-
   var emp_details = "";
-
   emp_details += '<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-empdetails fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div>';
-
   emp_details +='<div class="col-md-12"><div id="empdetail'+cnt+'"><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="email">Company Name </label><input type="text" name="frm_organisationname[]" id="frm_organisationname" placeholder="Organization name" class="form-control" maxlength="100" value=""><span class="error" id="b_organisationname"></span></div><div class="form-group col-md-6 col-sm-6 col-xs-12"><label for="pwd">Position </label><input type="text" class="form-control" id="frm_position" name="frm_position[]" placeholder="Position" value="" maxlength="100"><span class="error" id="b_position" ></span></div><div class="col-md-12 col-sm-6 col-xs-12"><div class="form-group"><label class=" present_work_btn"><input type="checkbox" style="width: 25px;height: 25px;position: relative;top: 5px;" name="frm_ispresentcheck[]" id="frm_ispresentcheck'+cnt+'" onchange="checkstillwork(this.value,'+cnt+')" checked /><span>I Still Work Here</span><input type="hidden" name="frm_ispresent[]" id="frm_ispresent'+cnt+'" value="1"></label></div></div><div class="form-group col-md-6 col-sm-6 col-xs-12" id="dp1-position"><label for="email">From (mm/dd/yyyy)</label><div class="special-date"><input type="text" class="form-control span2" name="frm_servicestart[]" placeholder="From" id="dp1_'+cnt+'" value=""><span class="error" id="b_employmentfrom"></span></div></div><div class="form-group col-md-6 col-sm-6 col-xs-12" id="dp2_'+cnt+'-position'+cnt+'" style="display:none;"><label for="pwd">To (mm/dd/yyyy) </label><div class="special-date"><input type="text" class="form-control" id="dp2_'+cnt+'" name="frm_serviceend[]" placeholder="To" value=""><span class="error" id="b_employmentto"></span></div></div></div></div>';
 
     $(".empdetail_block").append(emp_details);
-
-
-
     $('#dp1_'+cnt+', #dp2_'+cnt+'').Zebra_DatePicker({
-
         format: 'm/d/Y',
-
         default_position: 'below'
-
     });
-
 });
-
-
-
-
-
-
-
 $("body").on("click", ".add-another-category-price", function(){
-
     var fitnessity_fee = '{{$fitnessity_fee}}';
-
     var cnt=$('#recurring_count').val();
-
     cnt++;
-
     $('#recurring_count').val(cnt);
-
     var service_price = "";
-
     service_price += '';
-
     service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-3"><div class="priceselect sp-select"><input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""><label>Category Title (Give a name for this category)</label><input type="text" name="category_title[]" id="category_title"  class="inputs"></div></div><div class="col-md-6"><div class="sp-select-sche"></div></div></div><input type="hidden" name="price_id_db_'+cnt+'0" id="price_id_db'+cnt+'0" value="" /><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
 
-
-
     var onclickadult ="'adult'";
-
-        service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+cnt+'0" name="is_recurring_adult_'+cnt+'0" value="0" onclick="openmodelbox('+cnt+',0,'+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+cnt+'0" name="btn_recurring_adult_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="childchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0"  onkeyup="childdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
-
-
+	service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+cnt+'0" name="is_recurring_adult_'+cnt+'0" value="0" onclick="openmodelbox('+cnt+',0,'+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+cnt+'0" name="btn_recurring_adult_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="childchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0"  onkeyup="childdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
 
     var onclickchild ="'child'";
-
-
-
-       service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child'+cnt+'0" name="is_recurring_child_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickchild+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Children</label><button style="display:none" id="btn_recurring_child'+cnt+'0" name="btn_recurring_child_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickchild+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Infants</label><p>Ages 2 & Under</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+cnt+'0" id="infant_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="infantchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+cnt+'0" id="infant_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendinfantchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+cnt+'0" id="infant_discount'+cnt+'0" onkeyup="infantdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="infant_estearn_'+cnt+'0" id="infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+cnt+'0" id="weekend_infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+	service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child'+cnt+'0" name="is_recurring_child_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickchild+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Children</label><button style="display:none" id="btn_recurring_child'+cnt+'0" name="btn_recurring_child_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickchild+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Infants</label><p>Ages 2 & Under</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="infant_cus_weekly_price_'+cnt+'0" id="infant_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="infantchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="infant_weekend_price_diff_'+cnt+'0" id="infant_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendinfantchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="infant_discount_'+cnt+'0" id="infant_discount'+cnt+'0" onkeyup="infantdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="infant_estearn_'+cnt+'0" id="infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_infant_estearn_'+cnt+'0" id="weekend_infant_estearn'+cnt+'0" placeholder="$"></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
 
     var onclickinfant ="'infant'";
-
-        service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant'+cnt+'0"     name="is_recurring_infant_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickinfant+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label><button style="display:none" id="btn_recurring_infant'+cnt+'0" name="btn_recurring_infant_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickinfant+');">Launch demo modal</button></div></div></div><div class="row"><div class="col-md-12 col-sm-12"><div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+cnt+'0" id="pay_setnum'+cnt+'0" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>The Duration</label><select name="pay_setduration_'+cnt+'0" id="pay_setduration'+cnt+'0" class="form-control valid"><option value="">Select Value</option><option selected="">Days</option><option>Months</option><option>Year</option></select></div></div><div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div></div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+cnt+'0" id="pay_after'+cnt+'0" class="pay_after form-control valid"><option value="">Select Value</option><option value="1" selected="">Starts to expire the day of purchase</option><option value="2">Starts to expire when the customer first participates in the activity</option></select></div></div></div><div class="modal fade ModelRecurring_adult'+cnt+'0" id="ModelRecurring_adult'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_adult'+cnt+'0">Editing Recurring Payments Contract Settings for ("Adults") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_adult_'+cnt+'0" id="nuberofautopays_adult'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickadult+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_adult'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_adult'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_renew" ><label for="renews" id="renew_adult'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_adult_'+cnt+'0" id="client_be_charge_on_adult_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_adult'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_adult'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_adult'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_adult_'+cnt+'0" id="first_pmt_adult'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_adult_'+cnt+'0" id="recurring_pmt_adult'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_adult_'+cnt+'0" id="total_contract_revenue_adult'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_adult'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div> <div class="modal fade ModelRecurring_child'+cnt+'0" id="ModelRecurring_child'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_child'+cnt+'0">Editing Recurring Payments Contract Settings for ("Children")  </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_child_'+cnt+'0" id="nuberofautopays_child'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickchild+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_child'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_child'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_renew"><label for="renews" id="renew_child'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_child_'+cnt+'0" id="client_be_charge_on_child_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_child'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_child'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_child'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_child_'+cnt+'0" id="first_pmt_child'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_child_'+cnt+'0" id="recurring_pmt_child'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_child_'+cnt+'0" id="total_contract_revenue_child'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_child'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div><div class="modal fade ModelRecurring_infant'+cnt+'0" id="ModelRecurring_infant'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_infant'+cnt+'0">Editing Recurring Payments Contract Settings for ("Infant") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_infant_'+cnt+'0" id="nuberofautopays_infant'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickinfant+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_infant'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_infant'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_renew" ><label for="renews" id="renew_infant'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_infant_'+cnt+'0" id="client_be_charge_on_infant_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_infant'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_infant'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_infant'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_infant'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_infant_'+cnt+'0" id="first_pmt_infant'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_infant_'+cnt+'0" id="recurring_pmt_infant'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_infant'+cnt+'0">$0</p></div>';
-
-
-
-                   
+	service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant'+cnt+'0"     name="is_recurring_infant_'+cnt+'0" value="0"  onclick="openmodelbox('+cnt+',0,'+onclickinfant+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Infants</label><button style="display:none" id="btn_recurring_infant'+cnt+'0" name="btn_recurring_infant_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickinfant+');">Launch demo modal</button></div></div></div><div class="row"><div class="col-md-12 col-sm-12"><div class="serviceprice sp-select"><h3>When Does This Price Setting Expire</h3></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>Set The Number</label><input type="text" name="pay_setnum_'+cnt+'0" id="pay_setnum'+cnt+'0" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="set-num"><label>The Duration</label><select name="pay_setduration_'+cnt+'0" id="pay_setduration'+cnt+'0" class="form-control valid"><option value="">Select Value</option><option selected="">Days</option><option>Months</option><option>Year</option></select></div></div><div class="col-md-1 col-xs-12"><div class="set-num after"><label>After</label></div></div><div class="col-md-5 col-xs-12"><div class="after-select"><select name="pay_after_'+cnt+'0" id="pay_after'+cnt+'0" class="pay_after form-control valid"><option value="">Select Value</option><option value="1" selected="">Starts to expire the day of purchase</option><option value="2">Starts to expire when the customer first participates in the activity</option></select></div></div></div><div class="modal fade ModelRecurring_adult'+cnt+'0" id="ModelRecurring_adult'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_adult'+cnt+'0">Editing Recurring Payments Contract Settings for ("Adults") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_adult_'+cnt+'0" id="nuberofautopays_adult'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickadult+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_adult'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_adult'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_adult'+cnt+'0" name="happens_aftr_12_pmt_adult_'+cnt+'0" value="contract_renew" ><label for="renews" id="renew_adult'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_adult_'+cnt+'0" id="client_be_charge_on_adult_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_adult'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_adult'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_adult'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_adult_'+cnt+'0" id="first_pmt_adult'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_adult_'+cnt+'0" id="recurring_pmt_adult'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_adult'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_adult_'+cnt+'0" id="total_contract_revenue_adult'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_adult'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div> <div class="modal fade ModelRecurring_child'+cnt+'0" id="ModelRecurring_child'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_child'+cnt+'0">Editing Recurring Payments Contract Settings for ("Children")  </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_child_'+cnt+'0" id="nuberofautopays_child'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickchild+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_child'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_child'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_child'+cnt+'0" name="happens_aftr_12_pmt_child_'+cnt+'0" value="contract_renew"><label for="renews" id="renew_child'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_child_'+cnt+'0" id="client_be_charge_on_child_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_child'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_child'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_child'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_child_'+cnt+'0" id="first_pmt_child'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_child_'+cnt+'0" id="recurring_pmt_child'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_child'+cnt+'0">$0</p></div><input type="hidden" name="total_contract_revenue_child_'+cnt+'0" id="total_contract_revenue_child'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_child'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div><div class="modal fade ModelRecurring_infant'+cnt+'0" id="ModelRecurring_infant'+cnt+'0" tabindex="-1" role="dialog" aria-labelledby="ModelRecurringTitle" aria-hidden="true"><div class="modal-dialog editingautopay" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="row"><div class="col-md-12"><div class="editingautopay"><h5 class="modal-title" id="ModelRecurringTitle_infant'+cnt+'0">Editing Recurring Payments Contract Settings for ("Infant") </h5></div></div></div><div class="row"><div class="col-md-8"><div class="Settings-title"><h5> Settings </h5></div><div class="setting-box"><div class="row set-78"><div class="col-md-4"><label class="contractsettings">How often will customers be charged?</label></div><div class="col-md-8"><p>Customers will be charged every month for the duration of the contract</p></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">Number of autopays  </label></div><div class="col-md-8"><div class="nuberofautopays"><input type="text" class="form-control valid" name="nuberofautopays_infant_'+cnt+'0" id="nuberofautopays_infant'+cnt+'0" placeholder="12" value="" oninput="getnumberofpmt('+cnt+',0,'+onclickinfant+');"></div><div class="contract"><label>  Total duration of contract: </label><p id="total_duration_infant'+cnt+'0">0 months</p></div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings" id="contractsettings_infant'+cnt+'0">What happens after payments?</label></div><div class="col-md-8"><div class="autopay"><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_expire"><label for="contract">Contract Expires</label><br><input type="radio" id="happens_aftr_12_pmt_infant'+cnt+'0" name="happens_aftr_12_pmt_infant_'+cnt+'0" value="contract_renew" ><label for="renews" id="renew_infant'+cnt+'0">Contract Automaitcally Renews Every payments</label><br> </div></div></div><div class="row set-78"><div class="col-md-4"><label class="contractsettings">When will clients be charged?</label></div><div class="col-md-8"><div class="saledate"><input type="hidden" name="client_be_charge_on_infant_'+cnt+'0" id="client_be_charge_on_infant_'+cnt+'0" value="On the sale date"><p>On the sale date </p></div></div></div></div></div><div class="col-md-4"><div class="Settings-title"><h5> Contract Review </h5></div><div class="setting-box"><div class="set-border"><div class="row"><div class="col-md-8"><p id="p_price_title_infant'+cnt+'0"></p></div><div class="col-md-4"><p id="p1_price_infant'+cnt+'0">$0</p></div></div></div><div class="row"><div class="col-md-12"><div class="Settings-title"><h5> Revenue Breakdown </h5></div></div><div class="col-md-10"><p id="trems_payment_infant'+cnt+'0">Terms: 0 Monthly Payments</p></div><div class="col-md-8"><p>First Payment:</p></div><div class="col-md-4"><p id="p_first_pmt_infant'+cnt+'0">$0</p></div><input type="hidden" name="first_pmt_infant_'+cnt+'0" id="first_pmt_infant'+cnt+'0" value=""><input type="hidden" name="recurring_pmt_infant_'+cnt+'0" id="recurring_pmt_infant'+cnt+'0" value=""><div class="col-md-8"><p>Recurring Payment: </p></div><div class="col-md-4"><p id="p_recurring_pmt_infant'+cnt+'0">$0</p></div>';
 
     service_price +='<input type="hidden" name="total_contract_revenue_infant_'+cnt+'0" id="total_contract_revenue_infant'+cnt+'0" value=""><div class="col-md-8"><label>Total Contract Revenue:  </label></div><div class="col-md-4"><p id="p_total_contract_revenue_infant'+cnt+'0"> $0</p></div></div></div></div></div></div></div></div></div></div>';
 
      service_price +='<div  class=""><div class="col-md-12"><div class="addanother"><a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Session </a></div> </div></div></div>';
 
     $(".service_price_block").append(service_price);
-
 });
-
-
-
 $("body").on("click", ".add-another-session", function(){
-
-  
-
-  var cnt=$('#recurring_count').val();
-
-  cnt++;
-
-  $('#recurring_count').val(cnt);
-
-  
-
-  
-
-    var service_price = "";
-
+	var cnt=$('#recurring_count').val();
+	cnt++;
+	$('#recurring_count').val(cnt);
+	var service_price = "";
     service_price += '<div class="col-md-12 service_price serpridiv'+cnt+'" id="serpridiv'+cnt+'" style="margin-top:20px; padding-top:10px; float:left; border-top:1px dotted #000;">';
 
     service_price += '<div class="row"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-service-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove price option"></i></div></div>';
 
     service_price += $(".service_price").html();
-
     service_price += '</div>';
-
     $(".service_price_block").append(service_price);
-
-  
 
   parent = document.querySelector(".serpridiv"+cnt);
 
@@ -10193,181 +10035,86 @@ $("body").on("click", ".add-another-session", function(){
 
   pay_after = parent.querySelector('#pay_after').value='';
 
-  
-
-  
-
-  
-
   var inps = document.getElementsByName('is_recurring[]');
-
-  
-
   var cnt_chk=0;
 
   $('.is_recurring_cls').each(function(){
-
     var iid=$(this).attr('id');
-
     if(iid=='is_recurring0' && cnt_chk>0)
-
     { 
-
       $(this).attr('id', 'is_recurring'+cnt);
-
       $('#is_recurring'+cnt).attr("data-count",cnt);
-
     }
-
     cnt_chk++;
-
   });
 
-  
-
   var cnt_chk=0;
-
   $('.recurrint_id').each(function(){ 
-
     var iid=$(this).attr('id'); 
-
     if(iid=='btn_recurring0' && cnt_chk>0)
-
     {
-
       $(this).attr('id', 'btn_recurring'+cnt);
-
       $('#btn_recurring'+cnt).attr("data-target","#ModelRecurring"+cnt);
-
       $('#btn_recurring'+cnt).attr("data-count",cnt);
-
     }
-
     cnt_chk++;
-
   });
 
-  
-
   var cnt_chk=0;
-
   $('.model_cls').each(function(){
-
     var iid=$(this).attr('id');
-
     if(iid=='ModelRecurring0' && cnt_chk>0)
-
     {
-
       $(this).attr('id', 'ModelRecurring'+cnt);
-
-      
-
     }
-
     cnt_chk++;
-
   });
 
-  
-
   var cnt_chk=0;
-
   $('.rcprice').each(function(){
-
     var iid=$(this).attr('id');
-
     if(iid=='recurring_price0' && cnt_chk>0)
-
     {
-
       $(this).attr('id', 'recurring_price'+cnt);
-
-      
-
     }
-
     cnt_chk++;
-
   });
-
   var cnt_chk=0;
-
   $('.rcevery').each(function(){
-
     var iid=$(this).attr('id');
-
     if(iid=='recurring_every0' && cnt_chk>0)
-
     {
-
       $(this).attr('id', 'recurring_every'+cnt);
-
-      
-
     }
-
     cnt_chk++;
-
   });
 
   var cnt_chk=0;
-
   $('.rcduration').each(function(){
-
     var iid=$(this).attr('id');
-
     if(iid=='recurring_duration0' && cnt_chk>0)
-
     {
-
       $(this).attr('id', 'recurring_duration'+cnt);
-
-      
-
     }
-
     cnt_chk++;
-
   });
-
-  
-
 });
-
-
 
 $("body").on("click", ".remove-service-price", function(){
-
     $(this).parent().parent().parent().remove();
-
 });
-
-    
 
 $(document).on('click', '.rounded-corner', function() {
-
     var dates = removeValue($('#mdp-demo').val(), $(this).attr('date'));
-
     $('#mdp-demo').val(dates);
-
     var dateObj = [];
-
     selectedDate = dates.split(',');
-
     $.each(selectedDate, function( index, value ) {
-
         dateObj.push(new Date(value));
-
     });
-
    // $('#mdp-demo').datepicker(setDates, dateObj); ///nnn 15-5-2022
-
     $(this).remove();
-
 });
-
-
 
 $(document).on('click', '.delpagepost', function(){
     if(confirm("Are you sure you want to delete this?")){
@@ -10397,115 +10144,52 @@ $(document).on('click', '.delpagepost', function(){
 });
 
 function removeValue(list, value) {
-
   return list.replace(new RegExp(",?" + value + ",?"), function(match) {
-
       var first_comma = match.charAt(0) === ',',
-
           second_comma;
-
-
-
-      if (first_comma &&
-
-          (second_comma = match.charAt(match.length - 1) === ',')) {
-
+      if (first_comma && (second_comma = match.charAt(match.length - 1) === ',')) {
         return ',';
-
       }
-
       return '';
-
     });
-
 };
 
-
-
 var expiryMask = function() {
-
     var inputChar = String.fromCharCode(event.keyCode);
-
     var code = event.keyCode;
-
     var allowedKeys = [8];
-
     if (allowedKeys.indexOf(code) !== -1) {
-
         return;
-
     }
-
-
-
     event.target.value = event.target.value.replace(
-
         /^([1-9]\/|[2-9])$/g, '0$1/'
-
     ).replace(
-
         /^(0[1-9]|1[0-2])$/g, '$1/'
-
     ).replace(
-
         /^([0-1])([3-9])$/g, '0$1/$2'
-
     ).replace(
-
         /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2'
-
     ).replace(
-
         /^([0]+)\/|[0]+$/g, '0'
-
     ).replace(
-
         /[^\d\/]|^[\/]*$/g, ''
-
     ).replace(
-
         /\/\//g, '/'
-
     );
-
 }
-
-
-
 var splitDate = function($domobj, value) {
-
     var regExp = /(1[0-2]|0[1-9]|\d)\/(20\d{2}|19\d{2}|0(?!0)\d|[1-9]\d)/;
-
     var matches = regExp.exec(value);
-
     $domobj.siblings('input[name$="expiryMonth"]').val(matches[1]);
-
     $domobj.siblings('input[name$="expiryYear"]').val(matches[2]);
-
 }
-
-
-
 $('#expiry_date').on('keyup', function(){
-
     expiryMask();
-
 });
-
-
-
 $('#expiry_date').on('focusout', function(){
-
     splitDate($(this), $(this).val());
-
 });
-
-    
-
-  
-
 $(document).ready(function(){ 
-
     $('#quick_business_left').text(150-parseInt($("#about_company").val().length));
     $('#company_desc_left').text(1000-parseInt($("#short_description").val().length));
     $('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
@@ -10525,7 +10209,6 @@ $(document).ready(function(){
     $('#liabilitystext_left').text(1000-parseInt($("#liabilitystext").val().length));
     $('#covidstext_left').text(1000-parseInt($("#covidstext").val().length));
 
-
     $("#about_company").on('input', function() {
         $('#quick_business_left').text(150-parseInt(this.value.length));
     });
@@ -10535,1925 +10218,896 @@ $(document).ready(function(){
     });
 
     $("#frm_skilldetail").on('input', function() {
-
         $('#frm_skilldetail_left').text(150-parseInt(this.value.length));
-
     });
-
     $("#frm_programdesc").on('input', function() {
-
         $('#frm_programdesc_left').text(500-parseInt(this.value.length));
-
     });
 
     $("#frm_accessibility").on('input', function() {
-
         $('#frm_accessibility_left').text(500-parseInt(this.value.length));
-
     }); 
 
     $("#addi_info_help").on('input', function() {
-
         $('#addi_info_help_left').text(500-parseInt(this.value.length));
-
     }); 
 
     $("#frm_addi_info").on('input', function() {
-
         $('#frm_addi_info_left').text(1000-parseInt(this.value.length));
-
     });
 
     $("#exp_highlight").on('input', function() {
-
         $('#exp_highlight_left').text(1000-parseInt(this.value.length));
-
     });
-
     $("#desc_location").on('input', function() {
-
         $('#desc_location_left').text(500-parseInt(this.value.length));
-
     });
-
   /*$("#what_you_doing").on('input', function() {
-
         $('#frm_what_you_doing').text(500-parseInt(this.value.length));
-
     });*/
-
     /*$("#frm_programdesc1").on('input', function() {
-
         $('#frm_programdesc1_left').text(150-parseInt(this.value.length));
-
     });*/
-
     $("#house_rules").on('input', function() {
-
         $('#house_rules_left').text(500-parseInt(this.value.length));
-
     });
-
     $("#cancelation_policy").on('input', function() {
-
         $('#cancelation_policy_left').text(500-parseInt(this.value.length));
-
     });
-
     $("#safety_cleaning").on('input', function() {
-
         $('#safety_cleaning_left').text(500-parseInt(this.value.length));
-
     });
-
     $("#termcondfaqtext").on('input', function() {
-
         $('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
-
     }); 
-
     $("#contracttermtext").on('input', function() {
-
         $('#contracttermtext_left').text(1000-parseInt(this.value.length));
-
     });
-
     $("#liabilitystext").on('input', function() {
-
         $('#liabilitystext_left').text(1000-parseInt(this.value.length));
-
     }); 
-
     $("#refundpolicytext").on('input', function() {
-
         $('#refundpolicy_left').text(1000-parseInt(this.value.length));
-
     });
-
-   
-
     $("#liabilitytext").on('input', function() {
-
         $('#liabilitytext_left').text(1000-parseInt(this.value.length));
-
     });
-
     $("#covidstext").on('input', function() {
-
         $('#covidstext_left').text(1000-parseInt(this.value.length));
-
     });
-
-    
-
-
-
     var wo_json = [];
-
     //updateMap(wo_json, null);
-
-    
-
     $('#milesnew').change(function() {
-
         var zoom = 9;
-
         if ($('#milesnew option:selected').val() == 1) {
-
             var miles = 4;
-
         } else if ($('#milesnew option:selected').val() == 3) {
-
             var miles = 5;
-
         } else if ($('#milesnew option:selected').val() == 5) {
-
             var miles = 6;
-
         } else {
-
             var miles = $('#milesnew option:selected').val();
-
         }
-
         //console.log('map canvas = ', miles, zoom);
-
         $('#map_canvas').empty();
-
-        
-
         var geocoder = new google.maps.Geocoder();
-
         var address = $("#wanttowork").val();
-
-        
-
         geocoder.geocode( { 'address': address}, function(results, status) {
-
-            if (status == "OK") {
-
-                
-
-        var lat = results[0].geometry.location.lat();
-
+        if (status == "OK") {
+        	var lat = results[0].geometry.location.lat();
             var long = results[0].geometry.location.lng();
-
-        //var lat = results[0].geometry.bounds.Bb.h;
-
-                //var long = results[0].geometry.bounds.Ra.h;
-
-
-
-                //console.log(lat + "=" + long);
-
-                var map = new google.maps.Map(document.getElementById("map_canvas"), {
-
-                    zoom: zoom,
-
+        	//var lat = results[0].geometry.bounds.Bb.h;
+			//var long = results[0].geometry.bounds.Ra.h;
+			//console.log(lat + "=" + long);
+			var map = new google.maps.Map(document.getElementById("map_canvas"), {
+			zoom: zoom,
+			center: new google.maps.LatLng(lat, long),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		var circle = new google.maps.Circle({
                     center: new google.maps.LatLng(lat, long),
-
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-
-                });
-
-                //console.log(map);
-
-                var circle = new google.maps.Circle({
-
-                    center: new google.maps.LatLng(lat, long),
-
                     radius: miles * 1609.344,
-
                     fillColor: "#ff69b4",
-
                     fillOpacity: 0.5,
-
                     strokeOpacity: 0.0,
-
                     strokeWeight: 0,
-
                     map: map
-
                 });
-
-
-
             } 
-
         });
-
     });
-
-
 
     $('#refresh_map').click(function() {
-
         var zoom = 9;
-
         if ($('#milesnew option:selected').val() == 1) {
-
             var miles = 4;
 
         } else if ($('#milesnew option:selected').val() == 3) {
-
             var miles = 5;
 
         } else if ($('#milesnew option:selected').val() == 5) {
-
             var miles = 6;
-
         } else {
-
             var miles = $('#milesnew option:selected').val();
-
         }
-
-        //console.log('map canvas = ', miles, zoom);
-
         $('#map_canvas').empty();
-
-
-
         var geocoder = new google.maps.Geocoder();
-
         var address = $("#wanttowork").val();
-
-        
-
         geocoder.geocode( { 'address': address}, function(results, status) {
-
             if (status == "OK") {
-
                 //var lat = results[0].geometry.bounds.Bb.h;
-
                 //var long = results[0].geometry.bounds.Ra.h;
-
-      
-
-      var lat = results[0].geometry.location.lat();
-
-            var long = results[0].geometry.location.lng();
-
-
-
-                console.log(lat + "=" + long);
-
+      			var lat = results[0].geometry.location.lat();
+            	var long = results[0].geometry.location.lng();
+                //console.log(lat + "=" + long);
                 var map = new google.maps.Map(document.getElementById("map_canvas"), {
-
                     zoom: zoom,
-
                     center: new google.maps.LatLng(lat, long),
-
                     mapTypeId: google.maps.MapTypeId.ROADMAP
-
                 });
-
-                //console.log(map);
-
                 var circle = new google.maps.Circle({
-
                     center: new google.maps.LatLng(lat, long),
-
                     radius: miles * 1609.344,
-
                     fillColor: "#ff69b4",
-
                     fillOpacity: 0.5,
-
                     strokeOpacity: 0.0,
-
                     strokeWeight: 0,
-
                     map: map
-
                 });
-
-
-
             } 
-
         });
-
-        
-
     });
-
-
-
     var date = new Date();
-
     date.setDate(date.getDate()-1);
-
-
     $(".ui-datepicker-div").hide();
-
     $('#startingpicker').datepicker({
-
-       minDate: 0   
-
+       minDate: 0
     }).change(activitySchedule);
-
-  
-
     $("body").on("change",".shift_start, .shift_end", function(){
-
-        
-
         var timeStart = new Date("01/01/2007 " + $(this).parent().parent().find('.shift_start').val());
-
         var timeEnd = new Date("01/01/2007 " + $(this).parent().parent().find('.shift_end').val());
-
-
-
         var seconds = Math.floor((timeEnd - (timeStart))/1000);
-
         var minutes = Math.floor(seconds/60);
-
         var hours = Math.floor(minutes/60);
-
         var days = Math.floor(hours/24);
-
-
-
         hours = hours-(days*24);
-
         minutes = minutes-(days*24*60)-(hours*60);
-
         seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
-
-
-
         if(hours > 1 || hours < -1) {
-
-        var duration = hours + ' hours ' + minutes + ' minutes ' + seconds + ' second';
-
+        	var duration = hours + ' hours ' + minutes + ' minutes ' + seconds + ' second';
         } else {
-
-        var duration = hours + ' hour ' + minutes + ' minutes ' + seconds + ' second';  
-
+        	var duration = hours + ' hour ' + minutes + ' minutes ' + seconds + ' second';  
         }
-
-
         $(this).parent().parent().find('.set_duration').val(duration);
-
     });
-
-
-
     $("body").on("click", ".daycircle", function(){
-
         if($("#frm_class_meets").val() == 'Weekly')
-
-    {
-
-            activity_days = "";     
-
-      $(this).find(".weekdays").each( function() {
-
-        $.each( $(this).find('.day_circle'), function( key, value ) {
-
-          if ($(this).hasClass('day_circle_fill')) {            
-
-            activity_days += value.classList[3] + ",";
-
-          }  
-
-        });
-
-      });
-
+    	{
+			activity_days = "";     
+      		$(this).find(".weekdays").each( function() {
+				$.each( $(this).find('.day_circle'), function( key, value ) {
+					if ($(this).hasClass('day_circle_fill')) {
+            			activity_days += value.classList[3] + ",";
+          			}  
+				});
+			});
             $(this).find('.activity_days').val(activity_days);
-
         }
-
-    if($("#frm_class_meets").val() == 'On a specific day')
-
-    {
-
-      activity_days = "";
-
+    	if($("#frm_class_meets").val() == 'On a specific day')
+		{
+			activity_days = "";
             $.each( $(this).find('.weekdays').children(".day_circle_fill"), function( key, value ) {
-
                 activity_days += value.classList[3] + ","
-
             });
-
             $(this).find('.activity_days').val(activity_days);
-
-    }
-
+    	}
     });
-
-    
 
     $("body").on("click", ".remove-activity", function(){
-
-
-    if($('#duration_cnt').val()<=0)
-
-    {
-
-       $(this).closest(".daycircle").hide();
-
-    }
-
-    else
-
-    {
-
-      $(this).closest(".daycircle").remove();
-
-    }
-
+		if($('#duration_cnt').val()<=0)
+		{
+       		$(this).closest(".daycircle").hide();
+		}
+    	else
+    	{
+      		$(this).closest(".daycircle").remove();
+    	}
        var cnt=$('#duration_cnt').val();
-
        var cnt1;
-
        if( cnt <= 0){ cnt1 = 0; }
-
        else{ cnt1 = cnt-1; }
-
-       //alert(cnt+'--'+cnt1);
-
        $('#duration_cnt').val(cnt1);
-
     });
-
-    
-
   $("body").on("click", ".add-another-time", function(){ 
-
     var cnt=$('#duration_cnt').val();
-
     cnt++;
-
     $('#duration_cnt').val(cnt);
-
         var add_time = "";
-
         add_time += '<div id="dayduration'+cnt+'"><div class="daycircle" >';
-
-    add_time += $(".daycircle").html();
-
+    	add_time += $(".daycircle").html();
         add_time += '</div></div>';
-
-
         $("#activity_scheduler_body").append(add_time);
-
        // $("#activity_scheduler_body .daycircle").show();
-
-        $(".remove-week").show();
-
-    
-
-    parent = document.querySelector("#dayduration"+cnt);
-
-    shift_start = parent.querySelector('#shift_start').value='';
-
-    shift_end = parent.querySelector('#shift_end').value='';
-
-    set_duration = parent.querySelector('#set_duration').value='';
-    $("#dayduration"+cnt).parent().find('div.timezone-round').removeClass("day_circle_fill");
-
-
+        $(".remove-week").show();   
+		parent = document.querySelector("#dayduration"+cnt);
+		shift_start = parent.querySelector('#shift_start').value='';
+		shift_end = parent.querySelector('#shift_end').value='';
+		set_duration = parent.querySelector('#set_duration').value='';
+		$("#dayduration"+cnt).parent().find('div.timezone-round').removeClass("day_circle_fill");
     });
-
-    
-
     $("#frm_class_meets").on("change", function () {
-
         $('#startingpicker').val('');
-
         $(".daycircle").hide();
-
         $(".remove-week").hide();
-
         var day = moment($('#startingpicker').val(), 'MM-DD-YYYY').format('dddd');
-
         var activityMeet = $(this).val();
-
         $("#activity_scheduler_body").html("");
-
         $(".timezone-round").removeClass('day_circle_fill');
-
         $(".timezone-round").css('pointer-events', 'none');
-
         if(activityMeet == 'Weekly') {
-
             if(day=='Monday') {
-
                 $(".Monday").css('pointer-events', '');
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Tuesday') {
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Wednesday') {
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Thursday') {
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Friday') {
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Saturday') {
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Sunday') {
-
                 $(".Monday").css('pointer-events', '');
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
                 $(".Sunday").css('pointer-events', '');
-
             }
-
             //$(".remove-week").show();
-
         }
-
         $(".timezone-round").removeClass('day_circle_fill');
-
         $(".daycircle ."+day).addClass('day_circle_fill');
-
         $("#activity_scheduler_body").append($("#day-circle").html());
-
         $("#activity_scheduler_body .daycircle").show();
-
         $('#startingpicker').datepicker('hide');     
-
     });
-
-    
-
-    function activitySchedule(event) { //alert('aaaaa'+$('#startingpicker').val());
-
+	function activitySchedule(event) { 
         var d = new Date($('#startingpicker').val());
-
-    var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-    //alert(weekday[d.getDay()]); 
-
-    
-
-    $(".daycircle").hide();
-
+    	var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    	$(".daycircle").hide();
         $(".remove-week").hide();
-
         //var day = moment($(this).val(), 'MM-DD-YYYY').format('dddd');
-
         var day = weekday[d.getDay()];
-
-        //alert(day);
-
         var activityMeet = $("#frm_class_meets").val();
-
         $("#activity_scheduler_body").html("");
-
         $(".timezone-round").removeClass('day_circle_fill');
-
         //$(".timezone-round").css('pointer-events', 'none');
-
         if(activityMeet == 'Weekly') {
-
             if(day=='Monday') {
-
                 $(".Monday").css('pointer-events', '');
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Tuesday') {
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Wednesday') {
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Thursday') {
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Friday') {
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Saturday') {
-
                 $(".Saturday").css('pointer-events', '');
-
             }
-
             if(day=='Sunday') {
-
                 $(".Monday").css('pointer-events', '');
-
                 $(".Tuesday").css('pointer-events', '');
-
                 $(".Wednesday").css('pointer-events', '');
-
                 $(".Thursday").css('pointer-events', '');
-
                 $(".Friday").css('pointer-events', '');
-
                 $(".Saturday").css('pointer-events', '');
-
                 $(".Sunday").css('pointer-events', '');
-
             }
-
             //$(".remove-week").show();
-
         }
-
         $(".timezone-round").removeClass('day_circle_fill');
-
         //$(".daycircle ."+day).addClass('day_circle_fill');
-
     
-
         var cnt=$('#duration_cnt').val();
-
         if(cnt>=0){
-
           $("#editscheduler").hide();
-
           $("#dayduration0 .daycircle").show();
-
           //$("#activity_scheduler_body").append($("#dayduration0").html());
-
           $('#duration_cnt').val('0');
-
         }
-
         else
-
         {
-
           $("#activity_scheduler_body").append($("#day-circle").html());
-
         }
-
             $("#activity_scheduler_body .daycircle").show();
-
             $(this).datepicker('hide');
-
         var cnt=$('#duration_cnt').val();
-
         parent = document.querySelector("#dayduration"+cnt);
-
         shift_start = parent.querySelector('#shift_start').value='';
-
         shift_end = parent.querySelector('#shift_end').value='';
-
         set_duration = parent.querySelector('#set_duration').value='';
-
-            //alert(parent.querySelector('#shift_start').value);
-
     }
-
-          
-
     /* 
-
      * *********************************************
-
      * Business Specification Checks 
-
      * *********************************************
-
      */
-
     $("#hours1").click(function () {
-
         $("#selectdays").show();
-
     });
-
     $("#hours2").click(function () {
-
         $("#selectdays").hide();
-
     });
-
     $("#hours3").click(function () {
-
         $("#selectdays").hide();
-
     });
-
     $("#hours4").click(function () {
-
         $("#selectdays").hide();
-
     });
-
     
-
     $('#mdp-demo').datepicker({
-
         todayHighlight: true,
-
         multidate: true,
-
         startDate: date
-
     }).change(dateChanged);
-
     
-
     function dateChanged(event) {
-
         //$(this).datepicker('hide');
-
         var dates = $('#mdp-demo').val();
-
         var dateObj = [];
-
         selectedDate = dates.split(',');
-
         $('.manual-remove').html("");
-
         $.each(selectedDate, function( index, value ) {
-
             dateObj.push(value);
-
             if(value!='') {
-
             $('.manual-remove').append('<button type="button" date="' + value + '" class="rounded-corner">' + value + ' x</button>');
-
             }
-
         });        
-
         
-
         /*
-
         var dateText = $(this).val();
-
         var dates = dateText.split(/[\s,]+/);
-
         var fdate = dates[dates.length-1];
-
         if(fdate!='') {
-
         $('.manual-remove').append('<button type="button" date="' + fdate + '" class="rounded-corner">' + fdate + ' x</button>');
-
         }
-
         */
-
     }
-
-
-
     /* Set the value of slimSelect drop down list */
-
     var langarr = [];
-
     var languages = '{{ $languages }}';
-
     languages = languages.split(',');
-
     $.each(languages, function( index, value ) {
-
-        langarr.push(value);
-
+       langarr.push(value);
     });
-
     const displaySelect = new SlimSelect({
-
         select: '#testdemo'
-
     });
-
     displaySelect.set(langarr);
-
     
-
     var busiarr = [];
-
     var serBusinessoff1 = '{{ $serBusinessoff1 }}';
-
     serBusinessoff1 = serBusinessoff1.split(',');
-
     $.each(serBusinessoff1, function( index, value ) {
-
         busiarr.push(value);
-
     });
-
     const displaySelect1 = new SlimSelect({
-
         select: '#serBusinessoff1'
-
     });
-
-    displaySelect1.set(busiarr);
-
-    
-
+    displaySelect1.set(busiarr);   
     var medicalarr = [];
-
     var medicaltype = '{{ $medical_type }}';
-
     medicaltype = medicaltype.split(',');
-
     $.each(medicaltype, function( index, value ) {
-
         medicalarr.push(value);
-
     });
-
     const displaySelect2 = new SlimSelect({
-
         select: '#mcc'
-
     });
-
     displaySelect2.set(medicalarr);
-
-
-
     var goalarr = [];
-
     var goaloption = '{{ $goals_option }}';
-
     goaloption = goaloption.split(',');
-
     $.each(goaloption, function( index, value ) {
-
         goalarr.push(value);
-
     });
-
     const displaySelect3 = new SlimSelect({
-
         select: '#fitness_goals_array'
-
     });
-
     displaySelect3.set(goalarr);
-
-    
-
     /* Service Specifics - Radio button click event show or hide relevent section */
-
     $('input[name="medical_states"]').click(function(){
-
         if($(this).val() == 1) {
-
             $("#medproblm").show();
-
         } else {
-
             $("#medproblm").hide();
-
         }
-
     });
-
-
 
     $('input[name="fitness_goals"]').click(function(){
-
         if($(this).val() == 1) {
-
             $("#fit-goals").show();
-
         } else {
-
             $("#fit-goals").hide();
-
         }
-
     });
-
-    
-
+   
     /*$('input[name="hours_opt"]').click(function(){
-
         if($(this).val() == 'Temporalily closed' || $(this).val() == 'Permanently closed') {
-
             $("#selected_date_off").hide();
-
         } else {
-
             $("#selected_date_off").show();
-
         }
-
     });
-
     */
-
-    
-
-    
-
     /* Business Specific - On page load special dates displaying right side section */
-
     var special_dates = '{{ $special_days_off }}';  
-
     special_dates = special_dates.split(',');
-
     $.each(special_dates, function( index, value ) {
-
         if(value != "") {
-
             $('.manual-remove').append('<button type="button" date="' + value + '" class="rounded-corner">' + value + ' x</button>');
-
         }
-
     });
-
     
-
     /* 
-
      * *********************************************
-
      * Business Terms Checks 
-
      * *********************************************
-
      */
-
     /* Terms - Checkbox button click event show or hide relevent section */
-
     $("#termcondfaq").click(function(){
-
         if($("#termcondfaq").is(':checked')) {
-
             $("#termcondfaqdiv").show();
-
         } else {
-
             $("#termcondfaqdiv").hide();
-
         }
-
     });
-
     $("#contractterm").click(function(){
-
         if($("#contractterm").is(':checked')) {
-
             $("#contracttermdiv").show();
-
         } else {
-
             $("#contracttermdiv").hide();
-
         }
-
     }); 
 
     $("#liabilitys").click(function(){
-
         if($("#liabilitys").is(':checked')) {
-
             $("#liabilitysdiv").show();
-
         } else {
-
             $("#liabilitysdiv").hide();
-
         }
-
     });
-
     $("#refundpolicy").click(function(){
-
         if($("#refundpolicy").is(':checked')) {
-
             $("#refundpolicydiv").show();
-
         } else {
-
             $("#refundpolicydiv").hide();
-
         }
-
     });    
-
  
-
     $("#covids").click(function(){
-
         if($("#covids").is(':checked')) {
-
             $("#covidsdiv").show();
-
         } else {
-
             $("#covidsdiv").hide();
-
         }    
-
     });    
-
     
-
     /* Business Terms - On page load hidden content show/hide */
-
     if($("#termcondfaq").is(':checked')) {$("#termcondfaqdiv").show();}
-
     if($("#contractterm").is(':checked')) {$("#contracttermdiv").show();}
-
     if($("#liabilitys").is(':checked')) {$("#liabilitysdiv").show();}
-
     if($("#refundpolicy").is(':checked')) {$("#refundpolicydiv").show();}
-
     if($("#covids").is(':checked')) {$("#covidsdiv").show();}
-
     
-
     /* 
-
      * *********************************************
-
      * Business Experience Checks 
-
      * *********************************************
-
      */
-
     
-
     /* Business Experience - Calendar object attached with elements */
-
     $('#dp1, #dp2, #completionyear, #skillcompletionpicker, #date_birth').Zebra_DatePicker({
-
         format: 'm/d/Y',
-
-        default_position: 'below'
-
+       default_position: 'below'
     });
-
-
-
-   
-
-    
 
     $('#passingyear').Zebra_DatePicker({
-
         format: 'Y',
-
         default_position: 'below'
-
     });
-
-    
-
-    
-
     /* Form navigation after the submission */
-
     var data = '{{$user->bstep}}'; 
-
-    //alert(data);
-
     if(data == '1' || data == '0'){
-
         $("#tab1").addClass("tab-active");
-
         $("#frmWelcomediv").show();
-
     }
-
     if(data == '2'){
-
         $("#tab2").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#companyDetaildiv").show();
-
     }
-
     if(data == '3'){
-
         $("#tab3").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#empHistorydiv").show();
-
     }
-
     if(data == '4'){
-
         $("#tab4").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#serviceSpecificsdiv").show();
-
     }
-
     if(data == '5'){
-
         $("#tab5").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#termSetdiv").show();
-
     }
-
     if(data == '6'){
-
-        $("#tab6").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+       $("#tab6").addClass("tab-active");
+	   $("#tab1").removeClass("tab-active");
        $("#frmVerifieddiv0").show();
-
-    // $("#creServicediv").show();
-
+	    // $("#creServicediv").show();
     }
-
     if(data == '7'){
-
         $("#tab7").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#creServicediv").show();
-
     }
-
     if(data == '71'){
-
         $("#tab7").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+	    $("#tab1").removeClass("tab-active");
         $("#creServicediv").show();
-
     }
-
     if(data == '72'){
-
         $("#tab7").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
-        ///$("#individualDiv1").show(); ///nnn
-
-    $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');
-
-    if($('#service_type').val()=='experience'){
-
-      $('.itenerary_div').show();
-
+    	$("#tab1").removeClass("tab-active");
+	    ///$("#individualDiv1").show(); ///nnn
+	    $("#individualDiv2").show();
+	    $('#current_tab_name').val('individualDiv2');
+    	if($('#service_type').val()=='experience'){
+      		$('.itenerary_div').show();
+    	}
     }
-
-    }
-
     if(data == '8'){
-
         $("#tab8").addClass("tab-active");
-
-    $("#tab1").removeClass("tab-active");
-
+    	$("#tab1").removeClass("tab-active");
         $("#bookingInfodiv").show();
-
     }
-
-    
-
     //$('#date_birth').datepicker({});
-
-    
-
     /* Business Verified - multi form next button */
-
     $("#nextverified0").click(function(){
-
-        $("#frmVerifieddiv0").hide();
-
+       $("#frmVerifieddiv0").hide();
        $("#frmVerifieddiv").show();
-
-    // $("#creServicediv").show();
-
-     
-
+   	 // $("#creServicediv").show();
     });
-
-    
-
     $("#nextverified1").click(function(){
-
-        
-
         var card_number = $('#card_number').val();
-
         var name_card = $('#name_card').val();
-
         var expiry_date = $('#expiry_date').val();
-
         var cvv = $('#cvv').val();
-
-
-
         $('#err_card_number').html('');
-
         $('#err_name_card').html('');
-
         $('#err_expiry_date').html('');
-
-        $('#err_cvv').html('');
-
-        
-
-        var str = /^[a-zA-Z\s]+$/;
-
-        
-
+        $('#err_cvv').html('');       
+        var str = /^[a-zA-Z\s]+$/;       
         if(card_number == ''){
-
             $('#err_card_number').html('Please enter card number');
-
             $('#card_number').focus();
-
             return false;
-
         }
-
         if(name_card == ''){
-
             $('#err_name_card').html('Please enter card owner');
-
             $('#name_card').focus();
-
             return false;
-
         }
-
         if(!str.test(name_card)){
-
             $('#err_name_card').html('Card owner name should be in alphabets');
-
             $('#name_card').focus();
-
               return false;
-
         }
-
         if(expiry_date == ''){
-
             $('#err_expiry_date').html('Please enter expiry date');
-
             $('#expiry_date').focus();
-
             return false;
-
         }
-
         if(cvv == ''){
-
             $('#err_cvv').html('Please enter CVV number');
-
             $('#cvv').focus();
-
             return false;
-
-        }
-
-        
-
+        }        
         $("#frmVerifieddiv").hide();
-
         $("#frmVerifieddiv1").show();
-
     });
-
-    
-
     $("#nextverified2").click(function(){
-
         var first_name = $('#first_name').val();
-
         var last_name = $('#last_name').val();
-
         var date_birth = $('#date_birth').val();
-
         var security_number = $('#security_number').val();
-
         var phone_number = $('#phone_number').val();
-
         var eamil = $('#eamil').val();
-
-        var radio_verified = $('#radio_verified').val();
-
-        
-
+        var radio_verified = $('#radio_verified').val();       
         $('#err_first_name').html('');
-
         $('#err_last_name').html('');
-
         $('#err_date_birth').html('');
-
         $('#err_security_number').html('');
-
         $('#err_phone_number').html('');
-
         $('#err_eamil').html('');
-
         $('#err_radio_verified').html('');
-
-        
-
         var filter = /^\d*(?:\.\d{1,2})?$/;
-
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
         var str = /^[a-zA-Z\s]+$/;
-
-        
-
+  
         if(first_name == ''){
-
             $('#err_first_name').html('Please enter first name');
-
             $('#first_name').focus();
-
             return false;
-
         }
-
         if(last_name == ''){
-
             $('#err_last_name').html('Please enter last name');
-
             $('#last_name').focus();
-
             return false;
-
         }
-
         if(date_birth == ''){
-
             $('#err_date_birth').html('Please enter date of birth');
-
             $('#date_birth').focus();
-
             return false;
-
         }
-
         if(security_number == ''){
-
             $('#err_security_number').html('Please enter social security number');
-
             $('#security_number').focus();
-
             return false;
-
         }
-
         if(phone_number == ''){
-
             $('#err_phone_number').html('Please enter phone number');
-
             $('#phone_number').focus();
-
             return false;
-
         }
-
         if(filter.test(phone_number)){
-
             if(b_contact.length > 9 || b_contact.length < 9){
-
                 $('#err_phone_number').html('Phone number is not valid.');
-
                 $('#phone_number').focus();
-
                 return false;
-
             }
-
         }
-
         if(eamil == ''){
-
             $('#err_eamil').html('Please enter Email');
-
             $('#eamil').focus();
-
             return false;
-
         }
-
         if(!regex.test(eamil)){
-
             $('#err_eamil').html('Please enter valid email');
-
             $('#eamil').focus();
-
             return false;
-
         }
-
         if ($('input[name="radio_verified"]:checked').length == 0) {
-
             $('#err_radio_verified').html('You agree to Fitnessity, Inc. and Evident ID, Inc');
-
             $('#radio_verified').focus();
-
             return false;
-
         }
-
         
-
         $("#frmVerifieddiv1").hide();
-
         $("#frmVerifieddiv2").show();
-
     });
-
     $("#nextverified3").click(function(){
-
         $('#err_summary_receipt').html('');
-
         if ($('input[name="summary_receipt"]:checked').length == 0) {
-
             $('#err_summary_receipt').html('I acknowledge receipt of the Summary');
-
             $('#summary_receipt').focus();
-
             return false;
-
         }
-
         $("#frmVerifieddiv2").hide();
-
         $("#frmVerifieddiv3").show();
-
     });
-
-    $("#nextverified4").click(function(){
-
-        
-
+    $("#nextverified4").click(function(){       
         $('#err_receive_consumer').html('');
-
         $('#err_full_name').html('');
-
         if ($('input[name="receive_consumer"]:checked').length == 0) {
-
             $('#err_receive_consumer').html('You would like to receive a copy of a consumer report');
-
             $('#receive_consumer').focus();
-
             return false;
-
         }
-
         if ($('#full_name').val()=="") {
-
-            $('#err_full_name').html('Please enter full name');
-
-            $('#full_name').focus();
-
-            return false;
-
-        }
-
-        $("#frmVerifieddiv3").hide();
-
-        $("#frmVerifieddiv4").show();
-
-    });
+           $('#err_full_name').html('Please enter full name');
+           $('#full_name').focus();
+           return false;
+       }
+       $("#frmVerifieddiv3").hide();
+       $("#frmVerifieddiv4").show();
+   });
 
     /* Business Verified - multi form back button */
-
     /* First back button will jump on previous step
-
      * $("#backverified1").click(function(){
-
         $("#individualDiv1").hide();
-
         $("#creServicediv").show();
-
     });*/
-
     $("#backverified1").click(function(){
-
         $("#frmVerifieddiv").hide();
-
         $("#frmVerifieddiv0").show();
-
     });
-
     $("#backverified2").click(function(){
-
         $("#frmVerifieddiv1").hide();
-
         $("#frmVerifieddiv").show();
-
     });
-
     $("#backverified3").click(function(){
-
         $("#frmVerifieddiv2").hide();
-
         $("#frmVerifieddiv1").show();
-
     });
-
     $("#backverified4").click(function(){
-
         $("#frmVerifieddiv3").hide();
-
         $("#frmVerifieddiv2").show();
-
     });
-
     $("#backverified5").click(function(){
-
         $("#frmVerifieddiv4").hide();
-
         $("#frmVerifieddiv3").show();
-
     });
-
-    
-
     /* Business Services - Individual form next button */   
-
     $(".clsManageService").click(function () { 
-
         var sid = $(this).data('sid');
-
     $.ajax({
-
       url: "{{url('/getServiceData')}}",
-
       type: 'post',
-
       data:{
-
         _token: '<?php echo csrf_token(); ?>',
-
         sid:sid,
-
       },
-
       success: function (data) {;
-
         location.reload(true);
-
       }
-
     });
-
   
-
-    
-
         /*var sid = $(this).data('sid');
-
         $("#serviceid").val(sid);
-
         var service_type = "{{ $service_type }}";
-
         $(".manageserviceUL li").hide();
-
         $(".manageserviceUL li."+service_type).show();
-
         if(service_type == 'individual') {
-
             $("#test1").prop("checked", true);
-
         } else if(service_type == 'classes') {
-
             $("#test2").prop("checked", true);
-
         } else if(service_type == 'experience') {
-
             $("#test3").prop("checked", true);
-
         }
-
         $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
-
         $("."+service_type+"Txt").css("color","red");
-
         $("#frm_servicesport option:selected").val("{{ $sport_activity }}");
-
         $("#frm_servicesport option:selected").text("{{ $sport_activity }}");
-
         $("#frm_servicetitle_two").val("{{ $program_name }}");
-
         $("#frm_programname").val("{{ $program_name }}");
-
         $("#booking1").prop("checked", true);
-
         $("#creServicediv").hide();
-
         $("#individualDiv0").hide();
-
-    $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');*/
-
+   		$("#individualDiv2").show();
+    	$('#current_tab_name').val('individualDiv2');*/
     });
-
-    
-
     $("#btnCreateService").click(function () {
-        /*alert('hii');*/
-        var service_type = $("#service_type").val();
-
+      	var service_type = $("#service_type").val();
         $("#serviceid").val(0);
-
-        $("#test1").prop("checked", true);
-
-        
-
+        $("#test1").prop("checked", true);     
         $("#individualBody, #classesBody, #experienceBody").hide();
-
         $("."+service_type+"Body").show();
-
-        
-
         $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
-
         $("."+service_type+"Txt").css("color","red");
-
-    
-
         $("#frm_servicesport option:selected").val("");
-
         $("#frm_servicesport option:selected").text("Choose a Sport/Activity");
-
         $("#frm_servicetitle_two").val("");
-
         $("#frm_programname").val("");
-
         $("#frm_programdesc").val("");
-
-    $("#what_you_doing").val("");
-
-    $("#days_description").val("");
-
+	    $("#what_you_doing").val("");
+	    $("#days_description").val("");
         $("#showimgservice").attr("src","");
-
         $("#oldservicepic").val("");
-
         $("#booking1").prop("checked", false);
-
-    var cid = $("#cid").val();
-
-    $.ajax({
-
-      url: "{{url('/NewService')}}",
-
-      type: 'post',
-
-      data:{
-
-        _token: '<?php echo csrf_token(); ?>',
-
-        cid:cid,
-
-        service_type : service_type,
-
-      },
-
-      success: function (data) {
-
-       
-       /* alert(data);*/
-        location.reload();
-
-      }
-
+	    var cid = $("#cid").val();
+    	$.ajax({
+	      url: "{{url('/NewService')}}",
+	      type: 'post',
+		  data:{
+			_token: '<?php echo csrf_token(); ?>',
+			cid:cid,
+			service_type : service_type,
+		  },
+      	success: function (data) {
+        	location.reload();
+	     }
     });
-
-    
-
-        /*$("#individualDiv0").hide();
-
+	/*$("#individualDiv0").hide();
     if(service_type.trim()=='experience'){
-
-      $('.itenerary_div').show();
-
+      	$('.itenerary_div').show();
     }
-
     else
-
-      $('.itenerary_div').hide();
-
-    $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');*/
-
+      	$('.itenerary_div').hide();
+	    $("#individualDiv2").show();
+    	$('#current_tab_name').val('individualDiv2');*/
     });
-
-    
-
     $("#btnManageService").click(function () {
-
         var service_type = $("#service_type").val();
-
         $(".manageserviceUL li").hide();
-
         $(".manageserviceUL li."+service_type).show();
-
     });
-
-    
-
-    
-
     $("#nextservice").click(function () {
-
         var service_type=$("input[name='radio_group']:checked").val();
-
-        $("#service_type").val(service_type);
-
-        
-
+        $("#service_type").val(service_type);      
         $(".individualBody, .classesBody, .experienceBody").hide();
-
-        $("."+service_type+"Body").show();
-
-        
-
+        $("."+service_type+"Body").show();       
         $(".manageserviceUL li").hide();
-
         $(".manageserviceUL li."+service_type).show();
-
-        //console.log(servicetype);
-
         $("#creServicediv").hide();
-
         if(service_type == 'individual') {
-
             $("#individualDiv0").show();
-
-      $('#current_tab_name').val('individualDiv0');
-
+	      $('#current_tab_name').val('individualDiv0');
         }
-
         if(service_type == 'classes') {
-
             //$("#classesDiv1").show();
-
             $("#individualDiv0").show();
-
-      $('#current_tab_name').val('individualDiv0');
-
+      		$('#current_tab_name').val('individualDiv0');
         }
-
         if(service_type == 'experience') {
-
             $("#individualDiv0").show();
-
-      $('#current_tab_name').val('individualDiv0');
-
+      		$('#current_tab_name').val('individualDiv0');
         }
-
     });
-
-    
-
     $("#nextindividual0").click(function(){
-
         $("#individualDiv0").hide();
-
         //$("#individualDiv1").show(); ///nnn
-
-    $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');
-
+    	$("#individualDiv2").show();
+   		$('#current_tab_name').val('individualDiv2');
     });
-
-    
-
     $("#nextindividual1").click(function(){
-
         var sport_activity = $("#frm_servicesport").val();
-
         var program_name = $("#frm_servicetitle_two").val();
-
         var service_type = $("#service_type").val();
-
         $('#lbl_activity').html(sport_activity);
-
         $('#frm_programdesc_left').text(500-parseInt($("#frm_programdesc").val().length));
-
         $('#err_frm_servicesport').html('');
-
         $('#err_frm_servicetitle_two').html('');
-
     
-
         if(sport_activity == ''){
             $('#err_frm_servicesport').html('Please select any sport activity.');
             $('#frm_servicesport').focus();
@@ -12467,19 +11121,11 @@ $(document).ready(function(){
         }
 
         $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
-
         $("."+service_type+"Txt").css("color","red");
-
         $("#individualDiv1").hide();
-
         $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');
-
+	    $('#current_tab_name').val('individualDiv2');
     });
-
-    
-
     $("#nextindividual2").click(function(){
         loadMap();
         var sport_activity = $("#frm_servicesport").val();
@@ -12533,7 +11179,6 @@ $(document).ready(function(){
             $('#err_late_fee').html(' ');
         }
 
-        
         var service_type = $("#service_type").val();
         $("#individualDiv2").hide();
         $("#individualDiv3").show();
@@ -12545,7 +11190,6 @@ $(document).ready(function(){
         
         $('#current_tab_name').val('individualDiv3');
     });
-
 
     $("#nextindividual3").click(function(){
         var stype = $(this).attr('data-type');
@@ -12586,1858 +11230,852 @@ $(document).ready(function(){
         $('#current_tab_name').val('individualDiv5');
     });
 
-    $("#nextindividual4").click(function(){ //alert('call');
+    $("#nextindividual4").click(function(){
 
     /*$('input[name="shift_start[]"]').each(function(){
-
       alert($(this).val());
-
     });*/
-
         // $("#individualDiv4").hide();
-
         // $("#individualDiv5").show();
-
     // $('#current_tab_name').val('individualDiv5');
-
     });
-
     $("#nextindividual5").click(function(){
        $('#err_pay_session_type').html('');
-
        $('#err_pay_session').html('');
-
        $('#err_pay_setnum').html('');
-
        $('#err_pay_setduration').html('');
-
        $('#err_pay_after').html('');
-
     });
-
     /* Business Services - Individual form back button */
-
     $("#backindividual0").click(function(){
-
         $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
-
         $("#individualDiv0").hide();
-
         $("#creServicediv").show();
-
     });
-
     $("#backindividual1").click(function(){
-
         $("#individualDiv1").hide();
-
         $("#individualDiv0").show();
-
-    $('#current_tab_name').val('individualDiv0');
-
+	    $('#current_tab_name').val('individualDiv0');
     });
-
     $("#backindividual2").click(function(){
-
         $("#individualDiv2").hide();
-
        // $("#individualDiv1").show(); ///nnn
-
-     $("#individualDiv0").show();
-
-     $('#current_tab_name').val('individualDiv0');
-
+	     $("#individualDiv0").show();
+	     $('#current_tab_name').val('individualDiv0');
     });
-
     $("#backindividual3").click(function(){
-
         /*$("#individualDiv3").hide(); */
-
         $("#individualDiv3").hide();
-
         $("#individualDiv2").show();
-
-    $('#current_tab_name').val('individualDiv2');
-
+	    $('#current_tab_name').val('individualDiv2');
     });
-
     $("#backindividual4").click(function(){
-
         $("#individualDiv4").hide();
-
         // $("#individualDiv3").show();
-
         $("#individualDiv5").show();
-
-    $('#current_tab_name').val('individualDiv3');
-
+	    $('#current_tab_name').val('individualDiv3');
     });
-
     $("#backindividual5").click(function(){
-
         $("#individualDiv5").hide();
-
         // $("#individualDiv4").show();
-
         $("#individualDiv3").show();
-
-    $('#current_tab_name').val('individualDiv4');
-
+	    $('#current_tab_name').val('individualDiv4');
     });
-
     
-
     /* Business Services - Classes form next button */
-
     $("#nextclasses1").click(function(){
-
         $("#classesDiv1").hide();
-
         $("#classesDiv2").show();
-
     });
-
     $("#nextclasses2").click(function(){
-
         $("#classesDiv2").hide();
-
         $("#classesDiv3").show();
-
     });
-
     $("#nextclasses3").click(function(){
-
         $("#classesDiv3").hide();
-
         $("#classesDiv4").show();
-
     });
-
     $("#nextclasses4").click(function(){
-
         $("#classesDiv4").hide();
-
         $("#classesDiv5").show();
-
     });
-
     /* Business Services - Classes form back button */
-
     $("#backclasses1").click(function(){
-
         $("#classesDiv1").hide();
-
         $("#creServicediv").show();
-
     });
-
     $("#backclasses2").click(function(){
-
         $("#classesDiv2").hide();
-
         $("#classesDiv1").show();
-
     });
-
     $("#backclasses3").click(function(){
-
         $("#classesDiv3").hide();
-
         $("#classesDiv2").show();
-
     });
-
     $("#backclasses4").click(function(){
-
         $("#classesDiv4").hide();
-
         $("#classesDiv3").show();
-
-    });
-
+   });
     $("#backclasses5").click(function(){
-
         $("#classesDiv5").hide();
-
         $("#classesDiv4").show();
-
     });
-
-    
-
     /* Business Services - Experience form next button */
-
     $("#nextexperiences1").click(function(){
-
                
-
         var sport_activity = $("#frm_servicesport1").val();
-
         var program_name = $("#frm_servicetitle_two1").val();
-
         $('#lbl_activity1').html(sport_activity);
-
         $('#err_frm_servicesport1').html('');
-
         $('#err_frm_servicetitle_two1').html('');
-
         if(sport_activity == ''){
-
             $('#err_frm_servicesport1').html('Please select any sport activity.');
-
             $('#frm_servicesport1').focus();
-
             return false;
-
         }
-
         if(program_name == ''){
-
             $('#err_frm_servicetitle_two1').html('Please enter program name');
-
             $('#frm_servicetitle_two1').focus();
-
             return false;
-
-        }
-
+         }
         $("#experiencesDiv1").hide();
-
         $("#experiencesDiv2").show();
-
     });
-
     
-
-    $("#nextexperiences2").click(function(){
-
-                
-
+    $("#nextexperiences2").click(function(){              
         var program_name = $("#frm_programname1").val();
-
         var program_desc = $("#frm_programdesc1").val();
-
         var instant_booking = $("#booking_1").val();
-
         var service_pic = $("#oldservicepic1").val();
-
         $('#err_frm_programname1').html('');
-
         $('#err_frm_programdesc1').html('');
-
         $('#err_booking_1').html('');
-
         $('#err_oldservicepic1').html('');
-
         if(program_name == ''){
-
             $('#err_frm_programname1').html('Please enter program name');
-
             $('#frm_programname1').focus();
-
             return false;
-
         }
-
         if(program_desc == ''){
-
             $('#err_frm_programdesc1').html('Please enter program description.');
-
             $('#frm_programdesc1').focus();
-
             return false;
-
         }
-
         if (!$('#booking_1').is(":checked")) {
-
             $('#err_booking_1').html('Please enabled instant booking');
-
             $('#booking_1').focus();
-
             return false;
-
         }
-
         if(service_pic == ''){
-
             $('#err_oldservicepic1').html('Please choose profile picture.');
-
             return false;
-
         }
-
         $("#experiencesDiv2").hide();
-
         $("#experiencesDiv3").show();
-
-    });
-
-    
-
+    });   
     $("#nextexperiences3").click(function(){
-
         // Disable things that we don't want to validate.
-
         //$(["input:hidden, textarea:hidden, select:hidden"]).attr("disabled", true);        
-
     });
-
-    
-
     /* Business Services - Classes form back button */
-
     $("#backexperiences1").click(function(){
-
         $("#experiencesDiv1").hide();
-
         $("#creServicediv").show();
-
     });
-
     $("#backexperiences2").click(function(){
-
         $("#experiencesDiv2").hide();
-
         $("#experiencesDiv1").show();
-
     });
-
     $("#backexperiences3").click(function(){
-
         $("#experiencesDiv3").hide();
-
         $("#experiencesDiv2").show();
-
     });
-
-    
-
     /* 
-
      * *********************************************
-
      * Business Services Checks 
-
      * *********************************************
-
      */
-
     /* Mouse over effect for the service activity type */
-
     $(".custome-div").on('mouseover', function(){
-
         $(this).find("input[name='radio_group']").prop('checked', true);
-
     });
-
-    
-
     /* Business Services Step 1 */
-
     $("input[name='radio_group']").click(function () {
-
     var service_type=$("input[name='radio_group']:checked").val();
-
-    $("#service_type").val(service_type);
-
-    
-
+    $("#service_type").val(service_type);   
     $(".individualTxt, .classesTxt, .experiencesTxt").css("color","white");
-
-    $("."+service_type+"Txt").css("color","red");
-
-    
-
+    $("."+service_type+"Txt").css("color","red");  
     $(".individualBody, .classesBody, .experienceBody").hide();
-
     $("."+service_type+"Body").show();
-
-    
-
-    //console.log(servicetype);
-
     $("#creServicediv").hide();
-
     if(service_type == 'individual') {
-
         $("#individualDiv0").show();
-
-    $('#current_tab_name').val('individualDiv0');
-
+	    $('#current_tab_name').val('individualDiv0');
     }
-
     if(service_type == 'classes') {
-
         //$("#classesDiv1").show();
-
         $("#individualDiv0").show();
-
-    $('#current_tab_name').val('individualDiv0');
-
+	    $('#current_tab_name').val('individualDiv0');
     }
-
     if(service_type == 'experience') {
-
         $("#individualDiv0").show();
-
-    $('#current_tab_name').val('individualDiv0');
-
+	    $('#current_tab_name').val('individualDiv0');
     }
-
-    });
-
-    
+});
 
     $("#nextservice").click(function () {
-
         $("#creServicediv").hide();
-
         $("#individualDiv0").show();
-
-    $('#current_tab_name').val('individualDiv0');
-
+    	$('#current_tab_name').val('individualDiv0');
     });
-
-    
-
     $("#checkserviceyes").click(function () {
-
         $("#servicebox").show();
-
         $('.where_do_you_work').show();
-
         $('.service_type').removeClass("fixed_service");
-
         var rad_val = $("input[type='radio'][name='willing_to_travel']:checked").val();
-
-
-
         /*var willing_to_travel_radio = $(this).find('input[type=radio]');
-
         var willing_to_travel_val = $(willing_to_travel_radio).attr('value');*/
-
-
-
         if (rad_val == 'yes') {
-
             $(".travel_miles_div").prop("disabled", false);
-
             $('.travel_miles_div').show();
-
             $('.where_do_you_work').show();
-
-
-
         } else {
-
             $(".travel_miles_div").prop("disabled", true);
-
             $('.travel_miles_div').hide();
-
             $('.where_do_you_work').show();
-
         }
-
     });
-
-    
-
     $("#checkserviceno").click(function () {
-
         $("#servicebox").hide();
-
         $('.where_do_you_work').hide();
-
         $('.service_type').addClass("fixed_service");
-
         var rad_val = $("input[type='radio'][name='willing_to_travel']:checked").val();
-
         if (rad_val == 'no') {
-
             $(".travel_miles_div").prop("disabled", true);
-
             $('.travel_miles_div').hide();
-
             $('.where_do_you_work').hide();
-
         } else {
-
             $(".travel_miles_div").prop("disabled", false);
-
             $('.travel_miles_div').show();
-
             $('.where_do_you_work').hide();
-
         }
-
     });
-
-    
-
     /* Set the value of slimSelect drop down list */
-
-    
-
     var servicetypearr = [];
-
     var servicetype = '{{ $select_service_type }}';
-
     servicetype = servicetype.split(',');
-
     $.each(servicetype, function( index, value ) {
-
         servicetypearr.push(value);
-
     });
-
     const serviceSelect1 = new SlimSelect({
-
         select: '#categSType'
-
     });
-
-    serviceSelect1.set(servicetypearr);
-
-  
-
+    serviceSelect1.set(servicetypearr); 
     var included_thingsarr = [];
-
     var included_things = '<?php echo $included_items; ?>';
-
     included_things = included_things.split(',');
-
     $.each(included_things, function( index, value ) {
-
         included_thingsarr.push(value);
-
     });
-
     const included_thingsSelect = new SlimSelect({
-
         select: '#frm_included_things'
-
     });
-
-    included_thingsSelect.set(included_thingsarr);
-
-  
-
+    included_thingsSelect.set(included_thingsarr); 
     var notincluded_thingsarr = [];
-
     var notincluded_things = '<?php echo $notincluded_items; ?>';
-
     notincluded_things = notincluded_things.split(',');
-
     $.each(notincluded_things, function( index, value ) {
-
         notincluded_thingsarr.push(value);
-
     });
-
     const notincluded_thingsSelect = new SlimSelect({
-
         select: '#frm_notincluded_things'
-
     });
-
-    notincluded_thingsSelect.set(notincluded_thingsarr);
-
-  
-
+    notincluded_thingsSelect.set(notincluded_thingsarr);  
     var frm_wearsarr = [];
-
     var frm_wear = '<?php echo $bring_wear; ?>';
-
     frm_wear = frm_wear.split(',');
-
     $.each(frm_wear, function( index, value ) {
-
         frm_wearsarr.push(value);
-
     });
-
     const frm_wearSelect = new SlimSelect({
-
         select: '#frm_wear'
-
     });
-
     frm_wearSelect.set(frm_wearsarr);
-
-  
-
     var servicelocationarr = [];
-
     var servicelocation = '{{ $activity_location }}';
-
     /*  alert(servicelocation); */
-
     servicelocation = servicelocation.split(',');
-
     $.each(servicelocation, function( index, value ) {
-
       servicelocationarr.push(value);
-
     });
-
     const serviceSelect2 = new SlimSelect({
-
       select: '#frm_servicelocation'
-
     });
-
-
-
-    serviceSelect2.set(servicelocationarr);
-
-  
-
-    
-
+    serviceSelect2.set(servicelocationarr);    
     var programforarr = [];
-
     var programfor = '{{ $activity_for }}';
-
     programfor = programfor.split(',');
-
     $.each(programfor, function( index, value ) {
-
         programforarr.push(value);
-
     });
-
     const serviceSelect3 = new SlimSelect({
-
         select: '#frm_programfor'
-
     });
-
     serviceSelect3.set(programforarr);
-
-
-
-    
-
     var agerangearr = [];
-
     var agerange = '{{ $age_range }}';
-
     agerange = agerange.split(',');
-
-    $.each(agerange, function( index, value ) {
-
-     
-
+    $.each(agerange, function( index, value ) {    
         agerangearr.push(value);
-
     });
-
     const serviceSelect4 = new SlimSelect({
-
         select: '#frm_agerange'
-
     });
-
     serviceSelect4.set(agerangearr);
-
-
-
-
-
     /*var numberofpeoplearr = [];
-
     var numberofpeople = '{{ $group_size }}';
-
     numberofpeople = numberofpeople.split(',');
-
     $.each(numberofpeople, function( index, value ) {
-
         numberofpeoplearr.push(value);
-
     });
-
     const serviceSelect5 = new SlimSelect({
-
         select: '#frm_numberofpeople'
-
     });
-
     serviceSelect5.set(numberofpeoplearr);*/
-
-
-
-
-
     var experiencelevelarr = [];
-
     var experiencelevel = '{{ $difficult_level }}';
-
     experiencelevel = experiencelevel.split(',');
-
     $.each(experiencelevel, function( index, value ) {
-
         experiencelevelarr.push(value);
-
     });
-
     const serviceSelect6 = new SlimSelect({
-
         select: '#frm_experience_level'
-
     });
-
     serviceSelect6.set(experiencelevelarr);
-
-    
-
-
-
     var servicefocusesarr = [];
-
     var servicefocuses = '{{ $activity_experience }}';
-
     servicefocuses = servicefocuses.split(',');
-
     $.each(servicefocuses, function( index, value ) {
-
         servicefocusesarr.push(value);
-
     });
-
     const serviceSelect7 = new SlimSelect({
-
         select: '#frm_servicefocuses'
-
     });
-
-    serviceSelect7.set(servicefocusesarr);
-
-
-
-    
-
+    serviceSelect7.set(servicefocusesarr);    
     var teachingstylearr = [];
-
     var teachingstyle = '{{ $instructor_habit }}';
-
-    /*alert(teachingstyle);*/
-
     teachingstyle = teachingstyle.split(',');
-
     $.each(teachingstyle, function( index, value ) {
-
-        /*alert(value);*/
-
         teachingstylearr.push(value);
-
     });
-
-    /*alert(teachingstylearr);*/
-
+    
     const serviceSelect8 = new SlimSelect({
-
         select: '#teaching'
-
     });
-
     serviceSelect8.set(teachingstylearr);
-
-    
-
-    
-
  });
-
- 
-
- $("#frm_servicetitle_two").on("change", function() {
-
+$("#frm_servicetitle_two").on("change", function() {
      $("#frm_programname").val($("#frm_servicetitle_two").val());
-
  });
-
- 
-
- $("#frm_servicetitle_two1").on("change", function() {
-
+$("#frm_servicetitle_two1").on("change", function() {
      $("#frm_programname1").val($("#frm_servicetitle_two1").val());
-
- });
-
- 
+});
 
     $('.percentageckeck').click(function() {
-
         if ($(this).find('input[type=checkbox]').val() == 'salestax') {
-
             if($("#salestax").prop('checked') == true) {
-
                 $('#salestaxpercentage').show();
-
             } else {
-
                 $('#salestaxpercentage').hide();
-
             }
-
         }
-
         if ($(this).find('input[type=checkbox]').val() == 'duestax') {
-
             if($("#duestax").prop('checked') == true) {
-
                 $('#duestaxpercentage').show();
-
             } else {
-
                 $('#duestaxpercentage').hide();
-
             }
-
         }
-
     });
-
   
-
     $('.c_percentageckeck').click(function() {
-
         if ($(this).find('input[type=checkbox]').val() == 'csalestax') {
-
             if($("#c_salestax").prop('checked') == true) {
-
                 $('#c_salestaxpercentage').show();
-
             } else {
-
                 $('#c_salestaxpercentage').hide();
-
-            }
-
-            
-
+            }            
         }
-
         if ($(this).find('input[type=checkbox]').val() == 'cduestax') {
-
             if($("#c_duestax").prop('checked') == true) {
-
                 $('#c_duestaxpercentage').show();
-
             } else {
-
                 $('#c_duestaxpercentage').hide();
-
             }
-
         }
-
     });
-
-        
-
 </script>
-
-
-
 <script>
-
     /*$("#b_EINnumber").keyup(function() {
-
         var $this = $(this);
-
         var input = $this.val();
-
         input = input.replace(/[\W\s\._\-]+/g, '');
-
         var split = 2;
-
         var chunk = [];
-
         for (var i = 0, len = input.length; i < len; i += split) {
-
             split = (i >= 2 && i <= 9) ? 7 : 2;
-
             chunk.push(input.substr(i, split));
-
         }
-
         $this.val(function() {
-
             return chunk.join("-").toUpperCase();
-
         });
-
     });*/
-
-
 
     function showEditDate() {
-
         $("#editDateDiv").toggle();
-
         $("#hoursshow").hide();
-
     }
-
-
-
     function hideEditDate() {
-
         $("#editDateDiv").hide();
-
     }
-
-
-
     function hidehoursshow() {
-
         $('#hoursshow').hide();
-
     }
-
-
-
     function hoursshow() {
-
         $('#hoursshow').toggle();
-
         $("#editDateDiv").hide();
-
     }
-
-  
-
 </script>
-
-
-
-
-
 <script type="text/javascript">
-
-    
-
     $("#btn-nxt8").click(function () {
-
         var frm_servicetitle = $("#frm_servicetitle").val();
-
         var frm_servicedesc = $("#frm_servicedesc").val();
-
     });
-
-    
-
     $('#btn-nxt5').click(function () {
-
-        
-
         var card_number = $('#card_number').val();
-
         var name_card = $('#name_card').val();
-
         var expiry_date = $('#expiry_date').val();
-
         var cvv = $('#cvv').val();
-
-        
-
         $('#err_card_number').html('');
-
         $('#err_name_card').html('');
-
         $('#err_expiry_date').html('');
-
         $('#err_cvv').html('');
-
-        
-
         var str = /^[a-zA-Z\s]+$/;
-
-        
-
         if(card_number == ''){
-
             $('#err_card_number').html('Please enter card number');
-
             $('#card_number').focus();
-
             return false;
-
         }
-
         if(name_card == ''){
-
             $('#err_name_card').html('Please enter card owner');
-
             $('#name_card').focus();
-
             return false;
-
         }
-
         if(!str.test(name_card)){
-
             $('#err_name_card').html('Card owner name should be in alphabets');
-
             $('#name_card').focus();
-
             return false;
-
         }
-
         if(expiry_date == ''){
-
             $('#err_expiry_date').html('Please enter expiry date');
-
             $('#expiry_date').focus();
-
             return false;
-
         }
-
         if(cvv == ''){
-
-            $('#err_cvv').html('Please enter CVV number');
-
-            $('#cvv').focus();
-
-            return false;
-
-        }
-
-        
-
+           $('#err_cvv').html('Please enter CVV number');
+           $('#cvv').focus();
+           return false;
+        }       
     });
-
-   
-
     /*$('#btn-nxt4').click(function () {
-
-        
-
         var house_rules = $('#house_rules').val();
-
         var cancelation_policy = $('#cancelation_policy').val();
-
-        var safety_cleaning = $('#safety_cleaning').val();
-
-        
-
+        var safety_cleaning = $('#safety_cleaning').val();       
         $('#err_house_rules').html('');
-
         $('#err_cancelation_policy').html('');
-
         $('#err_safety_cleaning').html('');
-
-        
-
         if(house_rules == ''){
-
             $('#err_house_rules').html('Please enter house rules');
-
             $('#house_rules').focus();
-
             return false;
-
         }
-
         if(cancelation_policy == ''){
-
             $('#err_cancelation_policy').html('Please enter cancelation policy');
-
             $('#cancelation_policy').focus();
-
             return false;
-
         }
-
         if(safety_cleaning == ''){
-
             $('#err_safety_cleaning').html('Please enter safety and cleaning procedures');
-
             $('#safety_cleaning').focus();
-
             return false;
-
-        }
-
-        
-
+        }        
     });*/
-
-    
-
     $('#btn-nxt3').click(function () {
-
         var testdemo = $('#testdemo').val();
-
         $('#b_testdemo').html('');
-
         if(testdemo == null){
-
             $('#b_testdemo').html('Please select some languages');
-
             $('#testdemo').focus();
-
             return false;
-
         }
-
-    });
-
-    
-
+    });    
     function linkJump(bstep) {
-
         var cid = '<?=$companyId?>';
-
        // if(cid!='') {
-
             location.href = '/businessjumps/'+bstep+'/'+cid;
-
        // }
-
     }
-
-    
-
     $('#bck-nxt1').click(function () {
-
         $("#bstep2").val(1);
-
         $('#companyDetail').attr('action', '{{route('addbstep')}}');
-
         $('#companyDetail').attr('method', 'POST');
-
         $('#companyDetail').submit();
-
-    });
-
-    
-
+    });   
     $('#bck-nxt2').click(function () {
-
         $("#bstep3").val(2);
-
         $('#empHistory').attr('action', '{{route('addbstep')}}');
-
         $('#empHistory').attr('method', 'POST');
-
         $('#empHistory').submit();
-
-    }); 
-
-    
-
+    });
     $('#bck-nxt3').click(function () {
-
         $("#bstep4").val(3);
-
         $('#serviceSpecifics').attr('action', '{{route('addbstep')}}');
-
         $('#serviceSpecifics').attr('method', 'POST');
-
         $('#serviceSpecifics').submit();
-
     });
-
-    
-
     $('#bck-nxt4').click(function () {
-
         $("#bstep5").val(4);
-
         $('#termSet').attr('action', '{{route('addbstep')}}');
-
         $('#termSet').attr('method', 'POST');
-
         $('#termSet').submit();
-
     });
-
     /* old id - bck-nxt5 */
-
     $('#backverified0').click(function () {
-
         $("#bstep6").val(5);
-
         $('#frmVerified').attr('action', '{{route('addbstep')}}');
-
         $('#frmVerified').attr('method', 'POST');
-
         $('#frmVerified').submit();
-
     });
-
-    
-
     $('#bck-nxt8').click(function () {
-
         $("#bstep7").val(6);
-
         $('#creService').attr('action', '{{route('addbstep')}}');
-
         $('#creService').attr('method', 'POST');
-
         $('#creService').submit();
-
     });
-
-    
-
     $('#book-back1').click(function () {
-
         $("#bstep8").val(7);
-
         $('#bookingInfo').attr('action', '{{route('addbstep')}}');
-
         $('#bookingInfo').attr('method', 'POST');
-
         $('#bookingInfo').submit();
-
     });
-
-    
-
     $('#btn-nxt2').click(function () {
-
         var frm_organisationname = $('#frm_organisationname').val();
-
         var frm_position = $('#frm_position').val();
-
         var frm_ispresentcheck = $('#frm_ispresentcheck1').val();
-
         var b_employmentfrom = $('#dp1').val();
-
         var b_employmentto = $('#dp2').val();
-
         var frm_course = $('#frm_course').val();
-
         var frm_university = $('#frm_university').val();
-
         var passingyear = $('#passingyear').val();
-
         var certification = $('#certification').val();
-
         var completionyear = $('#completionyear').val();
-
         var skiils_achievments_awards1 = $('#skiils_achievments_awards1').val();
-
         var skillcompletionpicker = $('#skillcompletionpicker').val();
-
         var frm_skilldetail = $('#frm_skilldetail').val();
-
         var frm_ispresent = $('#frm_ispresent').val();
 
-        
-
         $('#b_organisationname').html('');
-
         $('#b_position').html('');
-
         $('#b_employmentfrom').html('');
-
         $('#b_employmentto').html('');
-
         $('#b_degree').html('');
-
         $('#b_university').html('');
-
         $('#b_year').html('');
-
         $('#b_certification').html('');
-
         $('#b_certificateyear').html('');
-
         $('#b_skilltype').html('');
-
         $('#b_skillyear').html('');
-
         $('#b_skilldetail').html('');
-
-        
-
+      
        /* if(frm_organisationname == ''){
-
             $('#b_organisationname').html('Please enter company name');
-
               $('#frm_organisationname').focus();
-
               return false;
-
         }
-
         if(frm_position == ''){
-
             $('#b_position').html('Please enter position in company');
-
               $('#frm_position').focus();
-
               return false;
-
         }*/
-
         /*if (!$('#frm_ispresentcheck').is(":checked")) {
-
             alert('Please checked I still work here.');
-
             $('#frm_ispresentcheck').focus();
-
             return false;
-
         }*/
-
         /*if(b_employmentfrom == ''){
-
-          $('#b_employmentfrom').html('From date is required');
-
-            $('#dp1').focus();
-
-            return false;
-
+	         $('#b_employmentfrom').html('From date is required');
+             $('#dp1').focus();
+             return false;
         }*/
-
-        
-
-            
 
         /*if (!$("#frm_ispresentcheck").is(":checked"))
-
         { 
-
           if(b_employmentto == ''){
-
             $('#b_employmentto').html('To date is required');
-
               $('#dp2').focus();
-
               return false;
-
           }
-
         }*/
-
     
-
         /*if(frm_course == ''){
-
             $('#b_degree').html('Please enter degree / course name');
-
               $('#frm_course').focus();
-
               return false;
-
         }
-
         if(frm_university == ''){
-
             $('#b_university').html('Please enter university / school name');
-
               $('#frm_university').focus();
-
               return false;
-
         }
-
         if(passingyear == ''){
-
             $('#b_year').html('Please enter passing year');
-
               $('#passingyear').focus();
-
               return false;
-
         }
-
         if(certification == ''){
-
             $('#b_certification').html('Please enter name of certification');
-
               $('#certification').focus();
-
               return false;
-
         }
-
         if(completionyear == ''){
-
             $('#b_certificateyear').html('Please enter certification year');
-
               $('#completionyear').focus();
-
               return false;
-
         }
-
         if(skiils_achievments_awards1 == ''){
-
             $('#b_skilltype').html('Please select skill type');
-
               $('#skiils_achievments_awards1').focus();
-
               return false;
-
         }
-
         if(skillcompletionpicker == ''){
-
             $('#b_skillyear').html('Pleaes enter skill completion date');
-
-              $('#skillcompletionpicker').focus();
-
+             $('#skillcompletionpicker').focus();
               return false;
-
         }
-
         if(frm_skilldetail == ''){
-
             $('#b_skilldetail').html('Please describe your skills, achievement');
-
               $('#frm_skilldetail').focus();
-
               return false;
-
         }*/
-
-        
-
     });
-
-    
-
     $('#b_EINnumber').keypress(function(){
-
         $('#b_estb').html('');
-
         if($(this).val().length >= 9) {
-
             $('#b_estb').html('Establishment Year is required');
-
             $('#b_Establishmentyear').focus();
-
         }
-
-    });
-
-    
-
-    $('#b_Establishmentyear').keypress(function(){
-
+    });    
+   $('#b_Establishmentyear').keypress(function(){
         $('#b_usertag').html('');
-
         if($(this).val().length >= 4) {
-
             $('#b_usertag').html('Business Username is required');
-
             $('#b_business_user_tag').focus();
-
         }
-
     });
-
-    
-
+   
     $('#b_contact').keypress(function(){
-
         $('#b_abt').html('');
-
         if($(this).val().length == 9) {
-
             $('#b_abt').html('About Company is required');
-
             $('#about_company').focus();
-
         }
-
     });
-
     
-
     $('#btn-nxt1').click(function () {
-
         var b_companyname = $('#b_companyname').val();
-
         var b_address = $('#b_address').val();
-
         var b_city = $('#b_city').val();
-
         var b_state = $('#b_state').val();
-
         var b_zipcode = $('#b_zipcode').val();
-
         var b_country = $('#b_country').val();
-
         var b_EINnumber = $('#b_EINnumber').val();
-
         var b_Establishmentyear = $('#b_Establishmentyear').val();
-
         var b_business_user_tag = $('#b_business_user_tag').val();
-
         var b_firstname = $('#b_firstname').val();
-
         var b_lastname = $('#b_lastname').val();
-
         var b_email = $('#b_email').val();
-
         var b_contact = $('#b_contact').val();
-
         var about_company = $('#about_company').val();
-
         var short_description = $('#short_description').val();
-
-
-
         var filter = /^\d*(?:\.\d{1,2})?$/;
-
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
         var str = /^[a-zA-Z\s]+$/;
-
-
-
         $('#b_cmpo').html('');
-
         $('#b_addr').html('');
-
         $('#b_ct').html('');
-
         $('#b_sta').html('');
-
         $('#b_zip').html('');
-
         $('#b_cont').html('');
-
         $('#b_ein').html('');
-
         $('#b_estb').html('');
-
         $('#b_usertag').html('');
-
         $('#b_firstnm').html('');
-
         $('#b_lastnm').html('');
-
         $('#b_eml').html('');
-
         $('#b_cot').html('');
-
         $('#b_abt').html('');
-
         $('#b_short').html('');
-
         
-
         if(b_companyname == ''){
-
             $('#b_cmpo').html('Company Name is required');
-
             $('#b_companyname').focus();
-
             return false;
-
         }
-
         if(b_address == ''){
-
             $('#b_addr').html('Address is required');
-
             $('#b_address').focus();
-
             return false;
-
         }
-
         if(b_city == ''){
-
-            $('#b_ct').html('City is required');
-
-            $('#b_city').focus();
-
-            return false;
-
+           $('#b_ct').html('City is required');
+           $('#b_city').focus();
+           return false;
         }
-
         if(!str.test(b_city)){
-
             $('#b_ct').html('City Name is not Valid');
-
             $('#b_city').focus();
-
             return false;
-
         }
-
         if(b_state == ''){
-
             $('#b_sta').html('State is required');
-
             $('#b_state').focus();
-
             return false;
-
         }
-
         if(!str.test(b_state)){
-
             $('#b_sta').html('State Name is not Valid');
-
             $('#b_state').focus();
-
             return false;
-
         }
-
         if(b_zipcode == ''){
-
             $('#b_zip').html('Zipcode is required');
-
             $('#b_zipcode').focus();
-
             return false;
-
         }
-
         if(b_country == ''){
-
             $('#b_cont').html('Country is required');
-
             $('#b_country').focus();
-
             return false;
-
         }
-
         if(!str.test(b_country)){
-
             $('#b_cont').html('Country Name is not Valid');
-
             $('#b_country').focus();
-
             return false;
-
         }
-
         /*if(b_EINnumber == ''){
-
             $('#b_ein').html('EIN number is required');
-
             $('#b_EINnumber').focus();
-
             return false;
-
         }*/
-
         if(b_Establishmentyear == ''){
-
             $('#b_estb').html('Establishment Year is required');
-
             $('#b_Establishmentyear').focus();
-
             return false;
-
         }
-
         if(!filter.test(b_Establishmentyear)){
-
             $('#b_estb').html('Establishment Year Not Valid');
-
             $('#b_Establishmentyear').focus();
-
             return false;
-
         }
-
         if(b_business_user_tag == ''){
-
             $('#b_usertag').html('Business Username is required');
-
             $('#b_business_user_tag').focus();
-
             return false;
-
         }
-
         if(b_firstname == ''){
-
             $('#b_firstnm').html('Company First Name is required');
-
             $('#b_firstname').focus();
-
             return false;
-
         }
-
         if(b_lastname == ''){
-
             $('#b_lastnm').html('Company Last Name is required');
-
             $('#b_lastname').focus();
-
             return false;
-
         }
-
         if(b_email == ''){
-
             $('#b_eml').html('Email is required');
-
             $('#b_email').focus();
-
             return false;
-
         }
-
         if(!regex.test(b_email)){
-
             $('#b_eml').html('Email is Not Valid');
-
             $('#b_email').focus();
-
             return false;
-
         }
-
        /* if(b_contact == ''){
-
             $('#b_cot').html('Contact Number is required');
-
             $('#b_contact').focus();
-
             return false;
-
         }*/
 
-        if (filter.test(b_contact)) {
-
+       if (filter.test(b_contact)) {
             if(b_contact.length > 9 || b_contact.length < 9){
-
                 $('#b_cot').html('Contact Number is not Valid');
-
                 $('#b_contact').focus();
-
                 return false;
-
             }
-
         }
-
        /* if(about_company == ''){
-
             $('#b_abt').html('About Company is required');
-
             $('#about_company').focus();
-
             return false;
-
-        }
-
+       }
         if(short_description == ''){
-
             $('#b_short').html('Short Description is required');
-
             $('#short_description').focus();
-
             return false;
-
         }*/
-
        
-
     });
-
 </script>
-
-
 <script>
-
   function checkstillwork(val ,i){ 
-
     if ( $("#frm_ispresentcheck"+i).is(":checked")){ 
-
       $("#dp2_"+i+"-position"+i).hide(); 
-
       $("#frm_ispresent"+i).val('1');
-
       /*$("#frm_ispresentcheck"+i).val('1');*/
-
       $("#frm_ispresentcheck"+i).prop('checked', true);
-
     }
-
     else{ $("#dp2_"+i+"-position"+i).show(); $("#frm_ispresent"+i).val('0'); 
-
        /* $("#frm_ispresentcheck"+i).val('0');*/
-
       $("#frm_ispresentcheck"+i).prop('checked', false);}
-
   }
-
-
-
-    function changeformate() {
-
-        /*alert($('#contact').val());*/
-
-        var con = $('#b_contact').val();
-
+  function changeformate() {
+		var con = $('#b_contact').val();
         var curchr = con.length;
-
         if (curchr == 3) {
-
             $("#b_contact").val("(" + con + ")" + " ");
-
         } else if (curchr == 9) {
-
             $("#b_contact").val(con + "-");
-
         }
-
     }
-
     function changeformate_b_business_phone() {
-
-        /*alert($('#contact').val());*/
-
         var con = $('#b_business_phone').val();
-
         var curchr = con.length;
-
         if (curchr == 3) {
-
             $("#b_business_phone").val("(" + con + ")" + " ");
-
         } else if (curchr == 9) {
-
             $("#b_business_phone").val(con + "-");
-
-        }
-
+       }
     }
-
-    
-
     function changeformate1() {
-
-        /*alert($('#contact').val());*/
-
-        var con = $('#phone_number').val();
-
+	   var con = $('#phone_number').val();
         var curchr = con.length;
-
         if (curchr == 3) {
-
             $("#phone_number").val("(" + con + ")" + " ");
-
         } else if (curchr == 9) {
-
             $("#phone_number").val(con + "-");
-
         }
-
     }
-
 
     function submit_staffmember() {
         var insname=$('#insname').val();
@@ -14477,7 +12115,6 @@ $(document).ready(function(){
 
 </script>
 
-
 <script type="text/javascript">
 
     function loadMaponclick(){
@@ -14491,7 +12128,6 @@ $(document).ready(function(){
         var markers1 = []
         var circle = ''
         
-
         if (locations.length != 0) { 
             $('#map_canvas_cus').empty(); 
             console.log('!empty');
@@ -14538,7 +12174,6 @@ $(document).ready(function(){
             zoom: 13
         });
 
-        
         var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
         google.maps.event.addListener(autocomplete2, 'place_changed', function() {
           initMapforcustomermeet();
@@ -14702,7 +12337,6 @@ let dropBox = document.getElementById('dropBox');
         }
     }
 
-
     // use the FileReader API to get the image data, create an img element, and add
     // it to the gallery div. The API is asynchronous so onloadend is used to get the
     // result of the API function
@@ -14773,7 +12407,6 @@ let dropBox = document.getElementById('dropBox');
         $("#edit_post").css('display','none');
     });*/
 </script>
-
 
 <script type="text/javascript">
     $(document).ready(function(){ 
