@@ -513,7 +513,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     </div>
                                                 @endif
 												<?php 
-													/*if (!empty($videos)) 
+													if (!empty($videos)) 
 													{
 														foreach($videos as $data)
 														{ ?>
@@ -530,7 +530,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 															</div> -->
 															<?php 
 														}
-													}*/
+                                                    }
 												?>
 											</div>
 										</div>

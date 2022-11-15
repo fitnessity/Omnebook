@@ -25,7 +25,7 @@
 	}
 	$totalbookings = $i;
 	$business_usre_name= '—';
-	if($company != ''){
+	if(@$company->business_user_tag != ''){
 		$business_usre_name = "@".$company->business_user_tag;
 	}
 ?>
@@ -85,13 +85,6 @@
 				<div class="pro-intro">
 					<b> Member Since: </b> <p><?php echo date('m/y', strtotime($company->created_at) ); ?></p>
 				</div>
-				@if(isset($userData['dobstatus']))
-                    @if($userData['dobstatus'] == 0)
-                        <!-- <div class="pro-intro">
-                            <b> Birthday: </b> <p> <?php /*echo date('F d, Y', strtotime($userData['birthdate']) );*/ ?></p>
-                        </div> -->
-                    @endif
-                @endif
 			</div>
 		</div>
 	</div>
@@ -102,12 +95,10 @@
     		if($company->country == 'usa' || $company->country == 'USA' || $company->country == 'United States' || $company->country == 'US' || $company->country == ''){
     			$country = 'United States';
     		} ?>
-    		<!-- @if($company->country != '')  -->
 			<div class="wid-sp img-bot">
 				<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" class="img-fluid" width="25" height="15">
 				{{ $country }}
 			</div>
-			<!-- @endif -->
             <?php
 				$activity = BusinessServices::where('cid',request()->page_id)->get();
 				if(count($activity) >0){

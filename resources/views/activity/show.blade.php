@@ -146,11 +146,12 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
+		/*DB::enableQueryLog();*/
+    	$bus_schedule = BusinessActivityScheduler::where('business_activity_scheduler.category_id',@$sercatefirst['id'])->join('business_service as bs', 'business_activity_scheduler.cid', '=','bs.cid' )->select('business_activity_scheduler.*','bs.special_days_off')->whereRaw('FIND_IN_SET("'.date('d/m/Y').'",bs.special_days_off)')->whereRaw('FIND_IN_SET("'.$todayday.'",business_activity_scheduler.activity_days)')->where('business_activity_scheduler.starting','<=',date('Y-m-d') )->where('business_activity_scheduler.end_activity_date','>=',date('Y-m-d') )->get();
+    	/*dd(\DB::getQueryLog());*/
     	$maxspotValue = BusinessActivityScheduler::where('serviceid',  @$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 
-    // print_r($bus_schedule);
     $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
     $i=0;
     if(!empty(@$bus_schedule)){

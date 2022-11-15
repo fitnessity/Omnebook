@@ -26,7 +26,7 @@
 	$totalbookings = $i;
 	/*$totalbookings = UserBookingStatus::where('user_id',$compinfo->user_id)->count();*/
 	$business_usre_name= '—';
-	if($compinfo != ''){
+	if(@$compinfo->business_user_tag != ''){
 		$business_usre_name = "@".$compinfo->business_user_tag;
 	}
 ?>
@@ -57,13 +57,13 @@
 			<a href="#" title="1000+ Subscribers" data-toggle="tooltip"><img src="/images/badges/badge3.png" alt=""></a>
 		</li>
 		<li>
-			<a href="#" title="fitness Shirt winner" data-toggle="tooltip"><img src="/images/badges/badge20.png" alt="></a>
+			<a href="#" title="fitness Shirt winner" data-toggle="tooltip"><img src="/images/badges/badge20.png" alt=""></a>
 		</li>
 		<li>
 			<a href="#" title="500+ Followers" data-toggle="tooltip"><img src="/images/badges/badge10.png" alt=""></a>
 		</li>
 	</ul>
-</div><?php */?><!-- widget -->
+</div><?php */ ?><!-- widget -->
 
 <div class="widget">			
 	<h4 class="widget-title">Profile Intro</h4>
@@ -85,31 +85,24 @@
     	<div class="col-sm-12 col-md-12 col-lg-12">
 			<div class="wid-sp">
 				<div class="pro-intro">
-					<b> Member Since: </b> <p><?php echo date('m/y', strtotime($compinfo->created_at) ); ?></p>
+					<b> Member Since: </b> <p><?php echo " ".date('m/y', strtotime($compinfo->created_at) ); ?></p>
 				</div>
-				@if(isset($userData['dobstatus']))
-                    @if($userData['dobstatus'] == 0)
-                        <!-- <div class="pro-intro">
-                            <b> Birthday: </b> <p> <?php /*echo date('F d, Y', strtotime($userData['birthdate']) );*/ ?></p>
-                        </div> -->
-                    @endif
-                @endif
 			</div>
 		</div>
 	</div>
     <div class="row">
     	<div class="col-sm-12 col-md-12 col-lg-12">
     		<?php 
-    		$country = '';
-    		if($compinfo->country == 'usa' || $compinfo->country == 'USA' || $compinfo->country == 'United States' || $compinfo->country == 'US' || $compinfo->country == ''){
+    			$country = '';
+    			if($compinfo->country == 'usa' || $compinfo->country == 'USA' || $compinfo->country == 'United States' || $compinfo->country == 'US' || $compinfo->country == ''){
     			$country = 'United States';
-    		} ?>
-    		<!-- @if($compinfo['country'] != '') -->
+    			} 
+    		?>
+    		
 			<div class="wid-sp img-bot">
 				<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" class="img-fluid" width="25" height="15">
 				{{ $country  }}
 			</div>
-			@endif
 			
             <?php
 				$activity = BusinessServices::where('cid',request()->id)->get();

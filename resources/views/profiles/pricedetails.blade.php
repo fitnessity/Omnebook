@@ -3,6 +3,8 @@
 @include('layouts.userHeader')
 
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/js/select/select.css" />
 
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
@@ -609,8 +611,6 @@
 			</div>
 			
 			
-			
-			
 			<div class="row">
 				<div class="col-md-6">
 					<div class="step-four">
@@ -816,6 +816,262 @@
 				</div>
 			</div>
 			
+			<div class="row">
+				<div class="col-md-12">
+					<div class="itinerary-data">
+						<h3>Set Up Your Itinerary</h3> <p>( Let customers know what they will be doing for this experience)</p>
+						<hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 5px;">
+					</div>
+					<div class="highlights-title">
+						<label>Experience Highlights</label>
+						<div class="row">
+							<div class="col-md-6">
+								<textarea class="form-control valid" rows="6" name="frm_programdesc" id="" maxlength="150" placeholder="Briefly describe a few highlights so customer understand what they will be doing. "></textarea>
+								<span>1,000 Character Left</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+				<hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+					
+				<div class="col-md-12">
+					<div class="booking-titles">
+						<h3>What’s Included with this experience?</h3>
+						<p>What do you provide for your customers?</p>
+						<p>Examples: You provide pick up and drop off transportation from hotels etc., provider, food and drinks, special equipment, video and photography services etc.)</p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="activity-width">
+								<div class="special-offer select-dropoff">
+									<div class="multiples">
+										<select id="providepickup" name="" class="myfilter" multiple="multiple">
+											<option>Personal Training</option>
+											<option>Coaching</option>
+											<option>Seminar</option>
+											<option>Private experience</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="booking-titles">
+						<h3>What’s Not Included with this experience?</h3>
+						<p>List the items or services that are not includes with this experience. i.e. no food or drinks, no equipment, no insurance, etc. </p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="activity-width">
+								<div class="special-offer select-dropoff">
+									<div class="multiples">
+										<select id="serviceitems" name="" class="myfilter" multiple="multiple">
+											<option>Personal Training</option>
+											<option>Coaching</option>
+											<option>Seminar</option>
+											<option>Private experience</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="booking-titles">
+						<h3>What Should Guest Bring and Wear?</h3>
+						<p>If guests need anything in order to enjoy your experience, this is the place to tell them. Be as detailed as possible and add each item individually.</p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="activity-width">
+								<div class="special-offer select-dropoff">
+									<div class="multiples">
+										<select id="itemindividually" name="" class="myfilter" multiple="multiple">
+											<option>Personal Training</option>
+											<option>Coaching</option>
+											<option>Seminar</option>
+											<option>Private experience</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="booking-titles">
+						<h3>Accessibility</h3>
+						<p>Explain if there is easy access for the disabled </p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="accessibility select-dropoff">
+								<textarea class="form-control valid" rows="1" name="frm_programdesc" id="" maxlength="150" ></textarea>
+								<span>500 Character Left</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="booking-titles">
+						<h3>Additional Information & FAQ</h3>
+						<p>Have a few things you want your customers to know before arriving? </p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="accessibility select-dropoff">
+								<textarea class="form-control valid" rows="1" name="frm_programdesc" id="" maxlength="150" ></textarea>
+								<span>1,000 Character Left</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12">
+					<div class="plandaybyday">
+						<h3>Let’s Plan Your Day By Day</h3>
+						<p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+						<label class="select-dropoff">Day - 1</label>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="photo-upload">
+											<label for="input" id="label">
+											  <img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah" id="showimg">
+											  <span id="span">Upload your file here</span>
+											  <input id="input" type="file">
+											</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div>
+											<input type="text" class="form-control" name="frm_programname" id="" placeholder="Give a heading for this day." title="servicetitle">
+										</div>
+										<div class="description-txt">
+											<textarea class="form-control valid" rows="2" name="frm_programdesc" placeholder="Give a description for this day" maxlength="150"></textarea>
+											<span>500 Character Left</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<span class="addnewdiv">+ Add another day</span>
+				</div>
+				<hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+			</div>
+			<div class="row">	
+				<div class="col-md-6">
+					<div class="return-info">
+						<h3>Departure & Return Info & Describe the Location</h3>
+						<p>Tell customers how and when you will depart and return, how to meet up, where to meet up, meeting point name and how to find you once the customer arrives. Don’t leave it up to customers to figure out how to meet up with you. Let them know before hand.</p>
+						
+						<textarea class="form-control valid" rows="6" name="frm_programdesc" placeholder="(Ex. Please arrive at the location of our business. The address reminder  is ABC Anytown, town, 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting point, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)" maxlength="150"></textarea>
+						<span>500 Character Left</span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">	
+				<div class="col-md-6">					
+					<div class="companydetails">
+						<h3>Where should customers meet you?</h3>
+						<p>If the meet up spot is different from the address you set earlier in Company Details, then you can set it here.</p>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="companydetails-info">
+								<label>Street address </label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="companydetails-info">
+								<label>Country / Region </label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="companydetails-info">
+								<label>Bldg (optional)</label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div>
+								<label> City </label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div>
+								<label>State  </label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div>
+								<label> ZIP code</label>
+								<input type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="select-dropoff">
+								<button class="showall-btn">Update Map</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="pin-on-map">
+								<h3>Adjust the pin on the map</h3>
+								<p>You can drag the map so the pin is in the right location.</p>
+								<div class="maparea">
+									<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+			</div>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<div class="customers-help">
+						<h3>Confirm your phone number if customers need your help</h3>
+						<p>If customers have trouble finding your location, or need questions with help, they may need to call you. The number on file we'll give them is +1 (555) 555-5555. </p>
+						<h3>Any additinal information for help</h3>
+						<textarea class="form-control valid" rows="3" maxlength="150"></textarea>
+						<span>500 Character Left</span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<div class="customers-help">
+						<h3>Require Safety Verifications </h3>
+						<p>The primary booker has to successfully complete verified ID in order for them and their guests to attend your experience.</p>
+						
+							<input type="checkbox" id="" name="one" value="">
+							<label for="vehicle1">Require the booker to have ID upon arrival for verificaiton of age and identity</label><br>
+							<input type="checkbox" id="" name="two" value="Car">
+							<label for="vehicle2">Require the booker to have proof of Vacination. </label><br>
+							<input type="checkbox" id="" name="three" value="Boat">
+							<label for="vehicle3">Require the booker to have proof of a negative Covid-19 test. </label><br> 
+					</div>
+				</div>
+			</div>
+			
 		</div>
 		
 	</div>
@@ -825,6 +1081,30 @@
 				
 
 @include('layouts.footer')
+<script>
+	document.getElementById("input").addEventListener("change", (e) => {
+  document.getElementById("span").innerText = e.target.files[0].name;
+});
+</script>
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
+<script>
+    $(document).ready(function() {
+		var categ = new SlimSelect({
+            select: '#providepickup'
+        });
+		
+		var categ = new SlimSelect({
+            select: '#serviceitems'
+        });
+		
+		var categ = new SlimSelect({
+            select: '#itemindividually'
+        });
+    });
+
+</script>
+
 <script>
 let dropBox = document.getElementById('dropBox');
 
