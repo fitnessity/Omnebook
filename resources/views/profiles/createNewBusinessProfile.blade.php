@@ -9245,33 +9245,6 @@ $('body').delegate('.subtab2','click',function(){
 
     }
 
-    
-
-  /*$(".uploadFile").bind("change", function() {  alert('bbb');
-
-    if ($(this).files && $(this).files[0]) 
-
-    { 
-
-      alert('aaaa');
-
-       var reader = new FileReader();
-
-       reader.onload = function(e) {
-
-       alert(e.target.result);
-
-        $(this).closest('.blah2').attr('src', e.target.result);
-
-       // $(this).parents('.blah2').attr('src', e.target.result);
-
-         var html = '<img src="' + e.target.result + '">';
-
-       });
-
-    }
-
-  });*/
 
     function readServicePic(input) { 
 
@@ -9328,8 +9301,6 @@ $('body').delegate('.subtab2','click',function(){
     }
 
     function planImg(input,cnt) { 
-        alert(input);
-        alert(cnt);
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
@@ -12562,98 +12533,8 @@ $(document).ready(function(){
             $('#err_late_fee').html(' ');
         }
 
-        /*
-        if (!$('#booking1').is(":checked")) {
-            $('#err_booking1').html('Please enabled instant booking');
-            $('#booking1').focus();
-            return false;
-        }
-        */
-
+        
         var service_type = $("#service_type").val();
-
-        /*if( service_type.trim()=='experience')
-        {
-            if(service_pic == ''){ 
-                $('#err_oldservicepic2').html('Please choose profile picture.');
-                return false;
-            }
-
-            $('#categ').html('<option value="Group Class">Group Class</option><option value="Seminar">Seminar</option><option value="Workshop">Workshop</option><option value="Clinic">Clinic</option><option value="Camp">Camp</option><option value="Team">Team</option><option value="Corporate">Corporate</option>');
-
-            $("#individualDiv2").hide();
-            $('.location_div').hide();
-            if(service_type.trim()=='experience')
-            {
-                $('#categ').html('<option value="Tour">Camp</option><option value="Tour">Tour</option><option value="Adventure">Adventure</option><option value="Retreat">Retreat</option><option value="Workshop">Workshop</option><option value="Seminar">Seminar</option><option value="Private experience">Private experience</option>');
-
-                $('.location_div_experience').show();
-
-                $("#categSType option[value='Personal Training']").remove();
-
-                $("#categSType option[value='Coaching']").remove();
-
-                $("#categSType option[value='Therapy']").remove();
-
-                $('#categSType').append($("<option></option>").attr("value", 'Tour').text('Tour')); 
-                $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp')); 
-
-                $('#categSType').append($("<option></option>").attr("value", 'Adventure').text('Adventure')); 
-
-                $('#categSType').append($("<option></option>").attr("value", 'Retreat').text('Retreat')); 
-
-                $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop'));
-
-                $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar'));
-
-                $('#categSType').append($("<option></option>").attr("value", 'Private experience').text('Private experience'));
-
-                var servicetypearr = [];
-                var servicetype = '{{ $select_service_type }}';
-                servicetype = servicetype.split(',');
-                $.each(servicetype, function( index, value ) {
-                    servicetypearr.push(value);              
-                });
-
-                const serviceSelect1 = new SlimSelect({
-                    select: '#categSType'
-                });
-
-                serviceSelect1.set(servicetypearr);
-            }else{ 
-                $('.location_div_experience').hide();
-            }
-
-            if(service_type.trim()=='classes')
-            {
-                $('#categSType').append($("<option></option>").attr("value", 'Group Class').text('Group Class')); 
-                $('#categSType').append($("<option></option>").attr("value", 'Seminar').text('Seminar')); 
-                $('#categSType').append($("<option></option>").attr("value", 'Workshop').text('Workshop')); 
-                $('#categSType').append($("<option></option>").attr("value", 'Clinic').text('Clinic'));
-                $('#categSType').append($("<option></option>").attr("value", 'Camp').text('Camp'));
-                $('#categSType').append($("<option></option>").attr("value", 'Team').text('Team'));
-                $('#categSType').append($("<option></option>").attr("value", 'Corporate').text('Corporate'));
-
-                var servicetypearr = [];
-                var servicetype = '{{ $select_service_type }}';
-                servicetype = servicetype.split(',');
-                $.each(servicetype, function( index, value ) {
-                  servicetypearr.push(value);
-                });
-
-                const serviceSelect1 = new SlimSelect({
-                  select: '#categSType'
-                });
-                serviceSelect1.set(servicetypearr);
-            }
-        }else{ 
-            $('#categ').html('<option value="Personal Training">Personal Training</option><option value="Coaching">Coaching</option><option value="Instructions">Instructions</option><option value="Therapy">Therapy</option>');
-
-            $('.location_div').show();
-            $('.location_div_experience').hide();
-
-        }*/
-
         $("#individualDiv2").hide();
         $("#individualDiv3").show();
 
@@ -12731,164 +12612,6 @@ $(document).ready(function(){
        $('#err_pay_setduration').html('');
 
        $('#err_pay_after').html('');
-
-
-
-       /* var counter = 0;
-
-        $(".pay_session_type").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_pay_session_type').html('Please select All Session Type.');
-
-              $('#err_pay_session_type').focus();
-
-              counter++;
-
-            }
-
-        });
-
-        $(".pay_session").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_pay_session').html('Please Enter All Numbers of Sessions.');
-
-              $('#err_pay_session').focus();
-
-              counter++;
-
-            }
-
-        });
-
-        $(".membership_type").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_membership_type').html('Please select All Membership Type.');
-
-              $('#err_membership_type').focus();
-
-              counter++;
-
-            }
-
-        });
-
-
-
-        $(".pay_setnum").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_pay_setnum').html('Please Enter All Set Number.');
-
-              $('#err_pay_setnum').focus();
-
-              counter++;
-
-            }
-
-        });
-
-        $(".pay_setduration").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_pay_setduration').html('Please Enter All Duration.');
-
-              $('#err_pay_setduration').focus();
-
-              counter++;
-
-            }
-
-        });
-
-        $(".pay_after").each(function() {
-
-            if ($(this).val() === "") {
-
-              $('#err_pay_after').html('Please Select All After');
-
-              $('#err_pay_after').focus();
-
-              counter++;
-
-            }
-
-        });
-
-        alert(counter);
-
-        if(counter == 0){*/
-
-            /*$("#individualDiv5").hide();
-
-            $("#individualDiv4").show();*/
-
-        /*}*/
-
-
-
-        /*if($('#pay_session_type').val() == ''){
-
-            $('#err_pay_session_type').html('Please select Session Type.');
-
-            $('#err_pay_session_type').focus();
-
-            return false;
-
-        } */
-
-        /*if( $('#pay_session').val() == ''){
-
-            $('#err_pay_session').html('Please Enter Numbers of Sessions.');
-
-            $('#err_pay_session').focus();
-
-            return false;
-
-        }*/ 
-
-        /*if($('#pay_setnum').val() == ''){
-
-             $('#err_pay_setnum').html('Please Enter Set Number.');
-
-              $('#err_pay_setnum').focus();
-
-              return false;
-
-        } */
-
-        /*if($('#pay_setduration').val() == ''){
-
-            $('#err_pay_setduration').html('Please Enter Duration.');
-
-             $('#err_pay_setduration').focus();
-
-             return false;
-
-        }*/ 
-
-        /*if($('#pay_after').val() == ''){
-
-            $('#err_pay_after').html('Please Select After');
-
-             $('#err_pay_after').focus();
-
-             return false;
-
-        }*/
-
-      
-
-        // Disable things that we don't want to validate.
-
-        //$(["input:hidden, textarea:hidden, select:hidden"]).attr("disabled", true);
 
     });
 
@@ -15059,14 +14782,12 @@ let dropBox = document.getElementById('dropBox');
     });
     
     function initMapforcustomermeet() {
-        alert('initMapforcustomermeet');
         var map = new google.maps.Map(document.getElementById('cus_map'), {
             center: {lat: -33.8688, lng: 151.2195},
             zoom: 13
         });
 
         var input = document.getElementById('cus_st_address');
-        alert(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
@@ -15119,7 +14840,6 @@ let dropBox = document.getElementById('dropBox');
            
             // Location details
             for (var i = 0; i < place.address_components.length; i++) {
-                alert(place.address_components[i].types[0]);
                 if(place.address_components[i].types[0] == 'postal_code'){
                   $('#cus_zip').val(place.address_components[i].long_name);
                 }
