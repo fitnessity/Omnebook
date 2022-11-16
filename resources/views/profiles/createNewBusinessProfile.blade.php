@@ -3727,7 +3727,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <?php /*?><div class="row">
                                     <div class="col-md-6 col-lg-5">
                                         <div class="">
                                             <p>What is the latest a customer can book before your activity starts?</p>
@@ -3743,21 +3743,22 @@
                                             <input type="text" class="form-control valid" name="" id="" placeholder="Hour(s)+" >
                                         </div>
                                     </div>
-                                </div>
+                                </div><?php */?>
 
                                 <div class="row">
                                     <div class="col-md-3 col-sm-6">
                                         <div class="priceselect sp-select">
                                             <label>Select Service Type</label>
-                                            @if($service_type=='individual')
-                                                <select name="frm_servicetype[]" id="categSType" multiple>
+                                            <div id="individualstype" style="display:none;">
+                                                <select name="frm_servicetype[]" id="categSTypeidividual" multiple>
                                                     <option value="Personal Training">Personal Training</option>
                                                     <option value="Coaching">Coaching</option>
                                                     <option value="Therapy">Therapy</option>
                                                     <option value="Event">Event </option>
                                                     <option value="Seminar">Seminar </option>
                                                 </select>
-                                            @else
+                                            </div>
+                                            <div id="experiencestype" style="display:none;">
                                                 <select name="frm_servicetype[]" id="categSType" multiple>
                                                     <option value="Personal Training">Personal Training</option>
                                                     <option value="Coaching">Coaching</option>
@@ -3773,10 +3774,15 @@
                                                     <option value="Event">Event </option>
                                                     <option value="Seminar">Seminar </option>
                                                 </select>
-                                            @endif
+                                            </div>
                                             <script>
                                                 var p = new SlimSelect({
                                                     select: '#categSType'
+                                                });
+                                            </script>
+                                            <script>
+                                                var p = new SlimSelect({
+                                                    select: '#categSTypeidividual'
                                                 });
                                             </script>
                                         </div>
@@ -3931,7 +3937,7 @@
                                     </div>
                                 </div>
 
-                                <div  @if($service_type != "experience" ) style="display: none;" @endif>
+                                <div  id="experienceitinerary" style="display:none;">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="itinerary-data">
@@ -4156,7 +4162,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3">
                                                                         <div class="photo-upload">
-                                                                            <label for="dayplanpic{{$i}};" id="label">
+                                                                            <label for="dayplanpic{{$i}}" id="label">
                                                 <?php if (@$dplanimg[$i] != '' && file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$dplanimg[$i])){
                                                     $old_pic =  @$dplanimg[$i];
                                                    $day_pic = url('/public/uploads/profile_pic/thumb/' .  @$dplanimg[$i]);
@@ -4178,17 +4184,18 @@
                                                                             <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle" value="{{$dplantitle[$i]}}">
                                                                         </div>
                                                                         <div class="description-txt">
-                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description{{$i}}" placeholder="Give a description for this day" maxlength="500">{{$dplandesc[$i]}}</textarea>
+                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description{{$i}}" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght({{$i}});">{{$dplandesc[$i]}}</textarea>
                                                                             <span id="days_description_left{{$i}}">500 Character Left</span>
                                                                         </div>
+                                                                        <script type="text/javascript">
+                                                                          $('#days_description_left{{$i}}').text(500-parseInt($("#days_description{{$i}}").val().length)); 
+                                                                        </script>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <script type="text/javascript">
-                                                       /* $('#desc_location_left{{$i}}').text(500-parseInt($("#desc_location{{$i}}").val().length));*/
-                                                    </script>
+                                                    
                                                 <?php } 
                                                     }else{ ?>
                                                     <div class="add_another_day">
@@ -4212,12 +4219,9 @@
                                                                             <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
                                                                         </div>
                                                                         <div class="description-txt">
-                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500"></textarea>
+                                                                            <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght(0);"></textarea>
                                                                             <span id="days_description_left0">500 Character Left</span>
                                                                         </div>
-                                                                    <script type="text/javascript">
-                                                                       /* $('#desc_location_left0').text(500-parseInt($("#desc_location0").val().length));*/
-                                                                    </script>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -9806,25 +9810,17 @@ $('body').delegate('.is_recurring_cls','click',function(){
         $("#recurring_pmt_"+val+i+j).val(price);
         $("#contractsettings_"+val+i+j).html('What happens after '+part +' payments?');        
         $("#renew_"+val+i+j).html('Contract Automaitcally Renews Every '+part +' payments');        
+    }
 
-        /*var total = Math.round(price/part);
-        if(total == 'Infinity'){
-            total = 0;
-        }*/
-       /* $('#p_first_pmt_'+val+i+j).html("$"+total);
-        $('#p_recurring_pmt_'+val+i+j).html("$"+total);*/
-       /* alert('p_recurring_pmt_'+val+i+j);
-        alert('recurring_pmt_'+val+i+j);*/
-        /*$('#first_pmt_'+val+i+j).val(total);
-        $('#recurring_pmt_'+val+i+j).val(total);*/
+    function changedesclenght(i){
+        var desc = $('#days_description'+i).val();
+        $('#days_description_left'+i).text(500-parseInt(desc.length));
     }
 </script>
 
 
 
 <script type="text/javascript">
-
-
 
 $("body").on("blur", ".pay_price", function(){
 
@@ -9851,11 +9847,6 @@ $("body").on("blur", "#pay_discount", function(){
   var fitnessity_fee = '{{$fitnessity_fee}}';
 
   $('#'+p_dis_id).find('.pay_estearn:first').val( pay_price - ((pay_price * $(this).val())/100 + (pay_price*fitnessity_fee)/100));
-
-  //$(".pay_estearn").val($(this).val() - 19.95);
-
-    //$(".pay_estearn").val($(this).val() - 19.95);
-
 });
 
 
@@ -9872,9 +9863,9 @@ $("body").on("click", ".add-another-day-schedule", function(){
 
     service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
 
+    var img = "{{url('/public/images/Upload-Icon.png')}}";
 
-    <?php /*?>service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';<?php */?>
-	service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="{{url('"/public/images/Upload-Icon.png"')}}" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description" placeholder="Give a description for this day" maxlength="150"></textarea><span>500 Character Left</span> </div></div> </div></div></div>';
+	service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="'+img+'" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description'+cnt+'" placeholder="Give a description for this day" maxlength="150" oninput="changedesclenght('+cnt+');"></textarea><span id="days_description_left'+cnt+'">500 Character Left</span> </div></div> </div></div></div>';
 
     service_price += '</div>';
 
@@ -10810,9 +10801,23 @@ $(document).ready(function(){
 	    ///$("#individualDiv1").show(); ///nnn
 	    $("#individualDiv2").show();
 	    $('#current_tab_name').val('individualDiv2');
-    	if($('#service_type').val()=='experience'){
+        if($('#service_type').val() == 'individual') {
+            $("#individualstype").show();
+          $('#current_tab_name').val('individualDiv0');
+        }
+        if($('#service_type').val() == 'classes') {
+            //$("#classesDiv1").show();
+            $("#experiencestype").show();
+            $('#current_tab_name').val('individualDiv0');
+        }
+        if($('#service_type').val()=='experience') {
+             $("#experiencestype").show();
+             $("#experienceitinerary").show();
+            $('#current_tab_name').val('individualDiv0');
+        }
+    	/*if($('#service_type').val()=='experience'){
       		$('.itenerary_div').show();
-    	}
+    	}*/
     }
     if(data == '8'){
         $("#tab8").addClass("tab-active");
@@ -11044,6 +11049,7 @@ $(document).ready(function(){
         $("#showimgservice").attr("src","");
         $("#oldservicepic").val("");
         $("#booking1").prop("checked", false);
+
 	    var cid = $("#cid").val();
     	$.ajax({
 	      url: "{{url('/NewService')}}",
@@ -11081,15 +11087,19 @@ $(document).ready(function(){
         $("#creServicediv").hide();
         if(service_type == 'individual') {
             $("#individualDiv0").show();
+            $("#individualstype").show();
 	      $('#current_tab_name').val('individualDiv0');
         }
         if(service_type == 'classes') {
             //$("#classesDiv1").show();
             $("#individualDiv0").show();
+            $("#experiencestype").show();
       		$('#current_tab_name').val('individualDiv0');
         }
         if(service_type == 'experience') {
             $("#individualDiv0").show();
+             $("#experiencestype").show();
+             $("#experienceitinerary").show();
       		$('#current_tab_name').val('individualDiv0');
         }
     });
@@ -11471,6 +11481,12 @@ $(document).ready(function(){
         select: '#categSType'
     });
     serviceSelect1.set(servicetypearr); 
+
+    const serviceSelect1indi = new SlimSelect({
+        select: '#categSTypeidividual'
+    });
+    serviceSelect1indi.set(servicetypearr); 
+
     var included_thingsarr = [];
     var included_things = '<?php echo $included_items; ?>';
     included_things = included_things.split(',');
@@ -12176,7 +12192,84 @@ $("#frm_servicetitle_two1").on("change", function() {
 
         var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
         google.maps.event.addListener(autocomplete2, 'place_changed', function() {
-          initMapforcustomermeet();
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+           
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#cus_zip').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                  $('#cus_country').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#cus_city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#cus_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#cus_st_address').val(sublocality_level_1);
+            }else{
+              $('#cus_st_address').val(badd);
+            }
+            $('#address_p').val(place.formatted_address);
+            $('#cus_lat').val(place.geometry.location.lat());
+            $('#cus_lng').val(place.geometry.location.lng());
         });
 
         var input = document.getElementById('b_address');
@@ -12413,113 +12506,7 @@ let dropBox = document.getElementById('dropBox');
         loadMaponclick();
         $('#cus_map_error').hide();
     });
-    
-    function initMapforcustomermeet() {
-        var map = new google.maps.Map(document.getElementById('cus_map'), {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13
-        });
-
-        var input = document.getElementById('cus_st_address');
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-        var infowindow = new google.maps.InfoWindow();
-        var marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29)
-        });
-
-        autocomplete.addListener('place_changed', function() {
-            infowindow.close();
-            marker.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Autocomplete's returned place contains no geometry");
-                return;
-            }
-
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-
-            marker.setIcon(({
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(35, 35)
-            }));
-
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-            var address = '';
-            var badd = '';
-            var sublocality_level_1 = '';
-            if (place.address_components) {
-                address = [
-                  (place.address_components[0] && place.address_components[0].short_name || ''),
-                  (place.address_components[1] && place.address_components[1].short_name || ''),
-                  (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker);
-           
-            // Location details
-            for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
-                  $('#cus_zip').val(place.address_components[i].long_name);
-                }
-                if(place.address_components[i].types[0] == 'country'){
-                  $('#cus_country').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'locality'){
-                    $('#cus_city').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                    sublocality_level_1 = place.address_components[i].long_name;
-                }
-
-                if(place.address_components[i].types[0] == 'street_number'){
-                   badd = place.address_components[i].long_name ;
-                }
-
-                if(place.address_components[i].types[0] == 'route'){
-                   badd += ' '+place.address_components[i].long_name ;
-                } 
-
-                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                  $('#cus_state').val(place.address_components[i].long_name);
-                }
-            }
-
-            if(badd == ''){
-              $('#cus_st_address').val(sublocality_level_1);
-            }else{
-              $('#cus_st_address').val(badd);
-            }
-            $('#address_p').val(place.formatted_address);
-            $('#cus_lat').val(place.geometry.location.lat());
-            $('#cus_lng').val(place.geometry.location.lng());
-        });
-    
-    }
 </script>
-<script type="text/javascript">
-   /* var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
-    google.maps.event.addListener(autocomplete2, 'place_changed', function() {
-      initMapforcustomermeet();
-    });*/
-</script>
-
 
 @endsection
 
