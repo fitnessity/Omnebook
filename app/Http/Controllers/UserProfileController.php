@@ -2017,6 +2017,7 @@ class UserProfileController extends Controller {
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
                 $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
                 $image_upload = Miscellaneous::uploadPhotoGallery($request->imgUpload[$i], $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
+                print_r($image_upload);
                 if($image_upload['success'] == true) {
                     $profile_picture .= $image_upload['filename'].',';
                 }
@@ -2028,7 +2029,8 @@ class UserProfileController extends Controller {
 
 
         $request->servicepic = rtrim($profile_picture,',');
-       
+       /* print_r($request->file('imgUpload'));
+        echo $request->servicepic ;exit;*/
         $instant = $reserve = 0;
         
         $servicetype = $servicelocation = $programfor = $agerange = $numberofpeople = "";

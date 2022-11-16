@@ -289,12 +289,25 @@ class HomeController extends Controller {
 
             if (count($postArr) > 0) {
 
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+                $last_name = ($postArr['lastname']) ? $postArr['lastname'] : '';
+                $cus_name = $postArr['firstname'].' '.$last_name;
+                $customer = \Stripe\Customer::create(
+                    [
+                        'name' => $cus_name,
+                        'email'=> $postArr['email'],
+                    ]);
+                $stripe_customer_id = $customer->id;
+
                 $userObj = New User();
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $userObj->username = $postArr['username'];
                 $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $userObj->email = $postArr['email'];
+                $userObj->stripe_customer_id = $stripe_customer_id;
                 $userObj->role = 'customer';
                 $userObj->country = 'US';
                 $userObj->activated = 0;
