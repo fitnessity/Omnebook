@@ -38,6 +38,7 @@
 	use App\BusinessService;
 	use App\BusinessReview;
     use App\BusinessPostViews;
+    use App\UserFollow;
 ?>
 <style>
 	.removepost{ height: auto !important; }
@@ -1596,7 +1597,7 @@ $(document).ready(function(){
 	$(document.body).on('touchmove', onScroll); // for mobile
 	$(window).on('scroll', onScroll);
 	
-	function onScroll() { alert('scroll');
+	function onScroll() { /*alert('scroll');*/
 		var addition = ($(window).scrollTop() + window.innerHeight);
 	  	//var footerHeight = $('#footer').height();
 	  	var scrollHeight = (document.body.scrollHeight - 1);
@@ -1609,9 +1610,10 @@ $(document).ready(function(){
 	  	}
 	}
 	
-	function load_data(page){ alert(page);
+	function load_data(page){ /*alert(page);*/
 		$('.loader').show();
 		var userid = '<?php echo $loggedinUserId; ?>';
+        var pageid = '{{request()->id}}';
 		$.ajax({
 			url: "{{url('/loadmorepagepostview')}}",
             xhrFields: {
@@ -1621,7 +1623,7 @@ $(document).ready(function(){
 			data:{
 				page:page,
 				userid:userid,
-				pageid:request()->id
+				pageid:pageid,
 			},  
 			success: function (data) {
 				if(data.success=='success'){
@@ -1634,12 +1636,12 @@ $(document).ready(function(){
 	//load_data(page);
 });	
 $(document).ready(function(){ 
-    $("#actfiloffer").empty();
+/*    $("#actfiloffer").empty();
     $("#actfillocation").empty();
     $("#actfilmtype").empty();
     $("#actfilgreatfor").empty();
     $("#actfilbtype").empty();
-    $("#actfilsType").empty();
+    $("#actfilsType").empty();*/
 	/*$("#actfiloffer option[value='']").attr('selected', true);
     $("#actfillocation option[value='']").attr('selected', true);
     $("#actfilmtype option[value='']").attr('selected', true);

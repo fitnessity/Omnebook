@@ -48,16 +48,21 @@ class UserRepository
 
     public function getUserProfileDetail($id, $module = array())
     {
+        $userid = 0;
+        if(Auth::User()){
+            $userid = Auth::User()->id;
+        }
+        
         $query = User::with('countries')
                     ->with('states')
                     ->with('cities')
                     ->with('customerDetail')
-                    ->with(['follows' => function ($q) use($id) {
-                        $q->where('user_id', '=', Auth::User()->id);
+                    ->with(['follows' => function ($q) use($id,$userid) {
+                        $q->where('user_id', '=', $userid);
                         $q->where('follower_id', '=', $id);
                     }])
-                    ->with(['favourites' => function ($q) use($id) {
-                        $q->where('user_id', '=', Auth::User()->id);
+                    ->with(['favourites' => function ($q) use($id,$userid) {
+                        $q->where('user_id', '=', $userid);
                         $q->where('favourite_user_id', '=', $id);
                     }]);
 

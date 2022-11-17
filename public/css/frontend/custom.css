@@ -442,7 +442,7 @@ span.status::after {
   text-transform: uppercase;
 }
 .video-tab-iframe iframe {
-	max-width: 100%; border-color: white; height: auto; width: 886px;
+	max-width: 100%; border-color: white; /*height: auto;*/ width: 886px;
 }
 .favorite_section .nav-tabs{ border-bottom: none; }
 .favorite_section .nav-tabs a { font-size: 16px; color: #fff; }

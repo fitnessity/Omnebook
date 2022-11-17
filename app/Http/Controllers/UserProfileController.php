@@ -3443,8 +3443,12 @@ class UserProfileController extends Controller {
                     $str = $str . ', ';
                 }
             }
+            $pro_pic_l = '';
             $user_logo = User::where('id', $value['user_id'])->first();
-            $user_logo1 = $user_logo->profile_pic;
+            if($user_logo != ''){
+                $pro_pic_l  = $user_logo->profile_pic;
+            }
+            $user_logo1 = $pro_pic_l;
             $value['business_name'] = $value['company_name'];
             $value['activity'] = "";
             $value['website'] = "";
@@ -8906,7 +8910,7 @@ class UserProfileController extends Controller {
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
                         foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
                             if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
                                     $BookingDetail_1['user_booking_detail'] = $details;
                                 }
                                 $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);

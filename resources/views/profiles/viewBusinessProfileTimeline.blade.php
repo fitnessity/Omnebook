@@ -632,7 +632,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														</li>
                                                        <?php /*?> <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$page_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li><?php */?>
                                                         <li><a class="thumbup thumblike <?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post" id="like-thumb<?php echo $page_post->id; ?>" postid="{{$page_post['id']}}" is_like="1" posttype="pagepost" ><i class="fas fa-thumbs-up"></i></a></li>
-                                                        <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
+                                                        <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$page_post['id']}}"  postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
 													</ul>
 											</figure>
 											<div class="we-video-info">
@@ -655,7 +655,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         </div>
 													</li>
 													<li>
-														<span class="comment" title="Comments">
+														<span class="commentalbum{{$page_post->id}}"  title="Comments">
 															<i class="commentdots fas fa-comment-dots"></i>
 															<ins>{{ $total_comment}}</ins>
 														</span>
@@ -1129,7 +1129,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         </a>
                                                     </li> 
                                                     <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$posts_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li>
-                                                    <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$posts_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
+                                                    <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$posts_post['id']}}"  postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
                                                 </ul>
                                             </figure>   
                                             <div class="we-video-info">
@@ -1547,6 +1547,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 <script>
 $(document).ready(function() {
 	$('.showphotosbusiness').on('click', function(e) {
@@ -2346,6 +2348,7 @@ $( document ).ready(function() {
                 success: function (data) {
                     $('.commentappend'+postId).append(data.html);
 					$('#comment'+postId).val('');
+                    $(".postinfoul"+postId).load(" .postinfoul"+postId+" >*");
                 }
             });
         }       

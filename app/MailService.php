@@ -326,15 +326,21 @@ class MailService
     {
         $sportsRepo = new SportsRepository;
         $sportsList = $sportsRepo->getAllSportsNames(1);
-        Mail::send('emails.booking-confirm', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
+        foreach($BookingDetail as $bd1){
+            $username = $bd1['user']['firstname'].' '.$bd1['user']['lastname'];
+            $useremail  = $bd1['user']['email'];
+            $bususeremail  = $bd1['businessuser']['email'];
+            $bususername = $bd1['businessuser']['first_name'].' '.$bd1['businessuser']['last_name'];
+        }
+        Mail::send('emails.booking-confirm', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList,'useremail'=>  $useremail,'username' => $username ,'bususeremail'=>  $bususeremail,'bususername' => $bususername], function ($m) use ($BookingDetail,$sportsList,$useremail,$username,$bususeremail,$bususername) {
             $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to($BookingDetail['user']['email'], $BookingDetail['user']['firstname'].' '.$BookingDetail['user']['lastname'])->subject('Fitnessity: Booking request is confirmed!');
+            $m->to($useremail, $username)->subject('Fitnessity: Booking request is confirmed!');
         });
 
-        Mail::send('emails.booking-confirm-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
+        Mail::send('emails.booking-confirm-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList,'bususeremail'=>  $bususeremail,'bususername' => $bususername,'useremail'=>  $useremail,'username' => $username ], function ($m) use ($BookingDetail,$sportsList,$bususeremail,$bususername,$useremail,$username) {
 
             $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to($BookingDetail['businessuser']['email'], $BookingDetail['businessuser']['first_name'].' '.$BookingDetail['businessuser']['last_name'])->subject('Fitnessity: YOU HAVE A NEW  BOOKING!');
+            $m->to( $bususeremail,  $bususername)->subject('Fitnessity: YOU HAVE A NEW  BOOKING!');
         });
     }
 

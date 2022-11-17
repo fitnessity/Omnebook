@@ -128,10 +128,10 @@ if(!empty($cart["cart_item"])) {
 					<div class="col-md-7 col-sm-12">
 						<div class="cart-btns-continues">
 							<div class="btn-cart-modal">
-								<a type="submit" href="/activities" class="btn btn-black mt-10" >Continue Shopping</a>
+								<a type="submit" href="{{route('activities_index')}}" class="btn btn-black mt-10" >Continue Shopping</a>
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
-								<a type="submit" href="/payments/card" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								<a type="submit" href="{{route('payments_card')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
 							</div>
 						</div>
 					</div>
