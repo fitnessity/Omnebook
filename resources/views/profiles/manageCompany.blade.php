@@ -82,13 +82,13 @@ input,select {
                       $serviceid = $value->sport;
                       $getdata = BusinessServices::where('id',$serviceid)->first();
                       // echo $getdata;exit();
-                      if($getdata->cid == $comp->id && $getdata->service_type == 'individual'){
+                      if($getdata && $getdata->cid == $comp->id && $getdata->service_type == 'individual'){
                         $i++;
                       }
-                      if($getdata->cid == $comp->id && $getdata->service_type == 'classes'){
+                      if($getdata && $getdata->cid == $comp->id && $getdata->service_type == 'classes'){
                         $y++;
                       }
-                      if($getdata->cid == $comp->id && $getdata->service_type == 'experience'){
+                      if($getdata && $getdata->cid == $comp->id && $getdata->service_type == 'experience'){
                         $z++;
                       }
                     }
