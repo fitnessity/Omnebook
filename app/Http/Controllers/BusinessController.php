@@ -46,6 +46,7 @@ use App\Notification;
 use App\Sports;
 use App\BusinessReview;
 use App\BusinessPostViews;
+use App\UserFollow;
 
 class BusinessController extends Controller
 {
@@ -810,8 +811,12 @@ class BusinessController extends Controller
 	public function viewbprofiletimelineofOther($user_name,$id)
 	{
 		$page_id = $id;
+        $loggedinUserid = '';
 		$company = CompanyInformation::where('id',$id)->first();
-		$loggedinUser = User::where('id',$company->user_id)->first();
+        if($company != ''){
+            $loggedinUser = User::where('id',$company->user_id)->first();
+            $loggedinUserid = @$loggedinUser->id;
+        }
 		
 		$user_professional_detail = $terms = $business_details = $business_exp = $business_term = $business_spec = $business_service = $business_price = $gallery = [];
         $companyData = $serviceData = $servicePrice = $businessSpec = $services = $max_price = $min_price = [];
@@ -880,7 +885,7 @@ class BusinessController extends Controller
 		
 		$PagePost = PagePost::where('page_id', $page_id)->orderBy('id','desc')->get();
 		
-		$postsave = PagePostSave::where('user_id',$loggedinUser->id)->orderBy('id','desc')->get();
+		$postsave = PagePostSave::where('user_id',@$loggedinUserid)->orderBy('id','desc')->get();
 
 		$images = PagePost::select('images','user_id')->where('images','!=',null)->where('user_id',$company['user_id'])->orderBy('id','desc')->limit(10)->get();
 

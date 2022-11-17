@@ -615,8 +615,8 @@
                             </div>
                         </div>
 						<div class="col-lg-12 btns-modal">
-							<a href="/instant-hire" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
-							<a href="/claim-your-business" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
+							<a href="{{route('addbusinesscustomer')}}" class="addbusiness-btn-modal">I'M A CUSTOMER</a>
+							<a href="{{route('businessClaim')}}" class="addbusiness-btn-black">I'M A BUSINESS OWNER</a>
 						</div>
 					</div>
                 </div>

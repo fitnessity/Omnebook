@@ -4644,9 +4644,9 @@ class LessonController extends Controller {
             $cart_item = session()->get('cart_item');
         }
         $sdata = BusinessServices::where('id',$pid)->first();
-        $ser = BusinessService::where('cid', $sdata->cid)->first();
-        $companyData = CompanyInformation::where('id',$sdata->cid)->first();
-        $discovermore = BusinessServices::where('cid',$sdata->cid)->where('id','!=',$pid)->limit(4)->get();
+        $ser = BusinessService::where('cid', @$sdata->cid)->first();
+        $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
+        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$pid)->limit(4)->get();
 
         return view('activity.success_cart',[
             'pid'=> $pid,

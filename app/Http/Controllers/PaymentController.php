@@ -214,9 +214,18 @@ class PaymentController extends Controller {
                 $businessuser = json_decode(json_encode($businessuser), true); 
                 $BusinessServices['businessservices'] = BusinessServices::where('id',$activitylocation->id)->first();
                 $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                $BookingDetail = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
+                foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                    if($details['sport'] == $pidval){
+                        if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $lastid){
+                            $BookingDetail_1['user_booking_detail'] = $details;
+                        }
+                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                    }
+                }
+                /*print_r($BookingDetail);exit();*/
+                /*$BookingDetail = array_merge($BookingDetail_1,$businessuser,$BusinessServices);*/
                 $user = User::where('id', $businessuser['businessuser']['user_id'])->first();
-                
                 \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
                 // Create a Transfer to a connected account (later):
                 /*  $transfer = \Stripe\Transfer::create([

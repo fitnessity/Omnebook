@@ -13,69 +13,100 @@ use App\UserFamilyDetail;
 	$url = env('APP_URL');
 	$dt = Carbon::now();
 	$cart = session()->get('cart_item');
+	$sc_date = "—";
+	$Datebooked = "—";
+	$qty = "—";
+	$b_type = "—";
+	$sport_activity = "—";
+	$company_name = "—";
+	$select_service_type = "—";
+	$program_name = "—";
+	$activity_location = "—";
+	$activity_for = "—";
+	$difficult_level = "—";
+	$bus_address = "—";
+	$contact_number = "—";
+	$program_desc = "—";
+	$SpotsLeftdis = 0;
+    $country = "United States";
+    $homerule = '';
+	$cancelrule = '';
+	$cleanrule = '';
+	$meetup_location = '';
+	$service_type = '';
+    $included_items = [];
+    $notincluded_items = [];
+    $bring_wear = [];
+    $a  = [];
+
+
+	foreach(@$BookingDetail as $BookingDetail1){
+		$sportval = @$BookingDetail1['user_booking_detail']['sport'];
+		$qty = str_replace(str_split('{""}'), ' ',@$BookingDetail1['user_booking_detail']['qty']);
+		$Datebooked = date("m-d-Y", strtotime(@$BookingDetail1['user_booking_detail']['bookedtime'])); 
+		$Datebooked = str_replace('-', '/', $Datebooked);  
+
+		$scheduleddata = json_decode(@$BookingDetail1['user_booking_detail']['booking_detail'],true);
+		if(@$scheduleddata['sessiondate'] != ''){
+			$sc_date = date("m-d-Y", strtotime(@$scheduleddata['sessiondate']));
+			$sc_date = str_replace('-', '/', $sc_date); 
+		}
+
+		$servicedata = BusinessActivityScheduler::where('id',@$BookingDetail1['user_booking_detail']['act_schedule_id'])->first();
+
+		if(@$BookingDetail1['businessservices']['service_type']=='individual')
+		{ 
+			$b_type = 'Personal Training'; 
+		}else { 
+			$b_type =ucfirst(@$BookingDetail1['businessservices']['service_type']); 
+		}
+
+		$language_name = BusinessService::where('cid',@$BookingDetail1['businessservices']['cid'])->first(); 
+		$language = @$language_name->languages;
+
+		$today = date('Y-m-d');
+	    $SpotsLeft = UserBookingDetail::where(['sport'=>@$BookingDetail1['businessservices']['id'],'act_schedule_id'=>@$servicedata->id])->whereDate('bookedtime', '=', $today)->count();
+	  
+	    if( @$servicedata->spots_available != ''){
+	        $SpotsLeftdis = @$servicedata->spots_available  - $SpotsLeft;
+	    }
+
+	    $BusinessTerms = BusinessTerms::where('cid',@$BookingDetail1['businessservices']['cid'])->first();
+	    $homerule =  @$BusinessTerms->houserules;
+	    $cancelrule =  @$BusinessTerms->cancelation;
+	    $cleanrule =  @$BusinessTerms->cleaning;
+
+	    $included_items = explode (",", @$BookingDetail1['businessservices']['included_items']);
+	    $notincluded_items = explode (",", @$BookingDetail1['businessservices']['notincluded_items']);
+	    $bring_wear = $str_arr = explode (",", @$BookingDetail1['businessservices']['bring_wear']);
+	    $meetup_location = @$BookingDetail1['businessservices']['meetup_location'];
+
+	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
+	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];
+	    $program_name = @$BookingDetail1['businessservices']['program_name'];
+	    $activity_location = @$BookingDetail1['businessservices']['activity_location'];
+	    $activity_for = @$BookingDetail1['businessservices']['activity_for'];
+	    $difficult_level = @$BookingDetail1['businessservices']['difficult_level'];
+
+	    $a = json_decode(@$BookingDetail1['user_booking_detail']['participate'],true); 
+
+	    $bus_address = @$BookingDetail1['businessuser']['address'].' , '.@$BookingDetail1['businessuser']['city'].' , '.@$BookingDetail1['businessuser']['state'].' , '.@$BookingDetail1['businessuser']['country'];
+	    $contact_number = @$BookingDetail1['businessuser']['contact_number'];
+	    $service_type = @$BookingDetail1['businessservices']['service_type'];
+	    $program_desc = @$BookingDetail['businessservices']['program_desc'];
+	}
+
 	foreach ($cart as $key => $value) {
 		foreach ($value as $key => $cartval) {
-			if($cartval['code']== @$BookingDetail['user_booking_detail']['sport']){
+			if($cartval['code']== $sportval){
 				$priceid = $cartval['priceid'];
 				$totalpaid = $cartval['totalprice'];
 			}
 		}
 	}	
 
-	$qty = str_replace(str_split('{""}'), ' ',@$BookingDetail['user_booking_detail']['qty']);
-	
-	$Datebooked = date("m-d-Y", strtotime(@$BookingDetail['user_booking_detail']['bookedtime'])); 
-	$Datebooked = str_replace('-', '/', $Datebooked);  
-
-	$scheduleddata = json_decode(@$BookingDetail['user_booking_detail']['booking_detail'],true);
-	$sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
-	$sc_date = str_replace('-', '/', $sc_date);  
-
-	$servicedata = BusinessActivityScheduler::where('id',@$BookingDetail['user_booking_detail']['act_schedule_id'])->first();
-
-	/*$BusinessPriceDetails = BusinessPriceDetails::where(['id'=>$priceid,'serviceid' =>@$BookingDetail['user_booking_detail']['sport']])->first();*/
 	$BusinessPriceDetails = BusinessPriceDetails::where('id',$priceid)->first();
-
-	if(@$BookingDetail['businessservices']['service_type']=='individual')
-	{ 
-		$b_type = 'Personal Training'; 
-	}else { 
-		$b_type =ucfirst(@$BookingDetail['businessservices']['service_type']); 
-	}
-
-	$language_name = BusinessService::where('cid',@$BookingDetail['businessservices']['cid'])->first(); 
-	$language = @$language_name->languages;
-
-	$today = date('Y-m-d');
-    $SpotsLeftdis = 0;
-    $SpotsLeft = UserBookingDetail::where(['sport'=>@$BookingDetail['businessservices']['id'],'act_schedule_id'=>$servicedata->id])->whereDate('bookedtime', '=', $today)->count();
-  
-    if( @$servicedata->spots_available != ''){
-        $SpotsLeftdis = @$servicedata->spots_available  - $SpotsLeft;
-    }
-
-	/*$country = '';*/
-    /*if(@$BookingDetail['businessuser']['country'] == 'usa' || @$BookingDetail['businessuser']['country'] == 'USA' || @$BookingDetail['businessuser']['country'] == 'United states' )
-    {*/
-    	$country = "United States";
-    /*}*/
-
-	$homerule = '';
-	$cancelrule = '';
-	$cleanrule = '';
-    $BusinessTerms = BusinessTerms::where('cid',@$BookingDetail['businessservices']['cid'])->first();
-    $homerule =  @$BusinessTerms->houserules;
-    $cancelrule =  @$BusinessTerms->cancelation;
-    $cleanrule =  @$BusinessTerms->cleaning;
-
-    $meetup_location = '';
-    $included_items = [];
-    $notincluded_items = [];
-    $bring_wear = [];
-    $included_items = explode (",", @$BookingDetail['businessservices']['included_items']);
-    $notincluded_items = explode (",", @$BookingDetail['businessservices']['notincluded_items']);
-    $bring_wear = $str_arr = explode (",", @$BookingDetail['businessservices']['bring_wear']);
-    $meetup_location = @$BookingDetail['businessservices']['meetup_location'];
 
 ?>
 <body width="100%" style="margin: 0; padding: 0 !important; background-color:#ede9e6; margin:0 auto!important; padding:0!important; height:100%!important; width:100%!important; font-family:Poppins,Arial,sans-serif">
@@ -171,8 +202,8 @@ use App\UserFamilyDetail;
                                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                         <tr>
                                                                             <td style="text-align: center; padding: 0px 28px 14px 28px;" align="center">
-																				<p style="font-weight: 500; font-size: 20px; color: #000000; margin: 10px 0px 2px 0px">Greetings {!! @$BookingDetail['user']['firstname'] !!} {!! @$BookingDetail['user']['lastname'] !!}  </p>
-																				<p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px;">This is to notify you that your scheduled booking with {{ @$BookingDetail['businessuser']['company_name'] }} has been confirmed.   </p>
+																				<p style="font-weight: 500; font-size: 20px; color: #000000; margin: 10px 0px 2px 0px">Greetings {!!  $username !!}  </p>
+																				<p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px;">This is to notify you that your scheduled booking with {{ @$company_name }} has been confirmed.   </p>
 																				<p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px;">View the company's information and your booking details below. </p>
 																				<p style="font-weight: 400; font-size: 13px; color: #000000;margin-bottom: 0px; margin-top: 0px;">This company required that you understand & agree to their terms below before you arrive.  </p>
                                                                             </td>
@@ -277,6 +308,8 @@ use App\UserFamilyDetail;
 																			<td>
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">
 													<?php 
+
+													$tm = "—";
 														if(@$servicedata->set_duration !=''){
 															$time = explode(' ',$servicedata->set_duration);
 															$hr =''; $min =''; $sec ='';
@@ -313,7 +346,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Booked by:  </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$BookingDetail['user']['firstname'] }} {{ @$BookingDetail['user']['lastname'] }}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ $username }}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -321,7 +354,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Activity Type: </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$BookingDetail['businessservices']['sport_activity']}} </h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$sport_activity}} </h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -329,7 +362,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Service Type: </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$BookingDetail['businessservices']['select_service_type']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$select_service_type}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -337,7 +370,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Program Name:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$BookingDetail['businessservices']['program_name']}} </h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$program_name}} </h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -345,7 +378,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Activity Location:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$BookingDetail['businessservices']['activity_location']}}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$activity_location}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -353,7 +386,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Great For: </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$BookingDetail['businessservices']['activity_for']}} </h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> {{@$activity_for}} </h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -377,7 +410,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Activity Skill Level:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">Easy</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{@$difficult_level}}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -403,14 +436,14 @@ use App\UserFamilyDetail;
 																			<td>
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right"> 
 																				
-																<?php  $a = json_decode(@$BookingDetail['user_booking_detail']['participate'],true); 
+																<?php  
 																    if(!empty($a)){
 																        foreach($a as $data){
 																            if($data['from'] == 'family'){
 																                $family = UserFamilyDetail::where('id',$data['id'])->first();
 																                echo @$family->first_name.' '.@$family->last_name."<br>";
 																            }else{ ?>
-																                {{ @$BookingDetail['user']['firstname'] }} {{ @$BookingDetail['user']['lastname']}}
+																                {{ $username}}
 																            <?php echo "<br>"; } 
 																        } 
 																    } ?>
@@ -423,7 +456,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Your Instructor Is:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$BookingDetail['businessuser']['first_name'] }} {{ @$BookingDetail['businessuser']['last_name'] }}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$bususername }}</h2>
 																			</td>
 																		</tr>
 																		<tr>
@@ -431,7 +464,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Company: </h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$BookingDetail['businessuser']['company_name'] }} </h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$company_name }} </h2>
 																			</td>
 																		</tr>
 																	</table>
@@ -452,11 +485,11 @@ use App\UserFamilyDetail;
                                                                 <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 20px 10px 0px;; text-align: left; height: 243px;">
 																<h2 style="margin: -44px 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 15px; line-height: 50px; color: black; font-weight: 600;margin-bottom: 0px;"><img src="{{$url}}/public/images/2.png" width="30"  alt="logo" border="0" style="height: auto; margin-right:
 																15px;">PROVIDER BUSINESS INFO  </h2>
-                                                                <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Company Name: {{ @$BookingDetail['businessuser']['company_name'] }}</h2>
-																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Email: {{ @$BookingDetail['businessuser']['email'] }} </h2>
-																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Address: {{@$BookingDetail['businessuser']['address']}}, {{@$BookingDetail['businessuser']['city']}}, {{@$BookingDetail['businessuser']['state']}}, {{@$BookingDetail['businessuser']['country']}}</h2>
-																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Phone Number:  {{ @$BookingDetail['businessuser']['contact_number']}}</h2>
-																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Contact Person: {{ @$BookingDetail['businessuser']['first_name'] }} {{ @$BookingDetail['businessuser']['last_name'] }} </h2>
+                                                                <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Company Name: {{ @$company_name }}</h2>
+																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Email: {{ @$bususeremail }} </h2>
+																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Provider Address: {{@$bus_address}}</h2>
+																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Phone Number:  {{ @$contact_number}}</h2>
+																<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Contact Person: {{ @$bususername }}  </h2>
 																<h2 style="padding: 0px 0; text-align: center; border-bottom:2px solid #f91942;margin-bottom: 0px;"></h2>
                                                                 </td>
                                                             </tr>
@@ -525,14 +558,14 @@ use App\UserFamilyDetail;
                                                         </table>
                                                     </div>
 											
-                                            	@if(@$BookingDetail['businessservices']['service_type']=='experience')
+                                            	@if(@$service_type == 'experience')
                                                     <h2 style="padding: 0px 0; text-align: center; border-bottom:2px solid #f91942;margin-bottom: 0px;"></h2>
                                                 @endif
                                                 </td>
                                             </tr>
                                             <!-- Thumbnail Right, Text Left : END -->
 
-                                            @if(@$BookingDetail['businessservices']['service_type']=='experience')
+                                            @if(@$service_type == 'experience')
 												
 	                                            <tr>
 	                                                <td style=" padding:15px 10px 15px; text-align: center" align="center">
@@ -555,9 +588,6 @@ use App\UserFamilyDetail;
 																				margin-top: -10px;
 																			">{{$b_wear}}</li>
 																			@endforeach
-																			<!-- <li style=" list-style-type: number; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: #000;font-weight: 300;margin-left: -28px;">Activity Equipment </li>
-																			<li style=" list-style-type: number; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: #000;font-weight: 300;margin-left: -28px;">Food </li>
-																			<li style=" list-style-type: number; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: #000;font-weight: 300;margin-left: -28px;">Water </li> -->
 																		</ul>
 																	@if($meetup_location != '')
 																		<h2 style="margin: 0 0 10px 0;font-family: 'Poppins', sans-serif; font-size: 13px;line-height: 22px; color: black; font-weight: 600; 
@@ -578,7 +608,7 @@ use App\UserFamilyDetail;
 	                                                                <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 0px 10px; text-align: justify; height: 243px;">
 	                                                                	<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 600;margin-bottom: 0px;margin-bottom: 5px;">What will you be doing?</h2>
 																		<p style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; margin-bottom: 5px; font-weight: 300;">
-																		{{@$BookingDetail['businessservices']['program_desc']}}</p>
+																		{{@$program_desc}}</p>
 
 																		<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 600;margin-bottom: 0px;">What's Included with this experience? </h2>
 																		<ul>
@@ -598,7 +628,6 @@ use App\UserFamilyDetail;
 																				margin-top: -10px;
 																			">{{$notincitem}}</li>
 																			@endforeach
-																			<!-- <li style=" list-style-type: number; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: #000;font-weight: 300;margin-left: -28px;">Activity Equipment </li> -->
 																		</ul>
 	                                                                </td>
 	                                                            </tr>

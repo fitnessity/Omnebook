@@ -1685,6 +1685,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 <script>
 function submit_busi_rating(cid)
 {

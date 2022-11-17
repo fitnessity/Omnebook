@@ -3345,7 +3345,7 @@
 
                         
 
-                        <div class="col-md-8 text-justify individualBody" style="display:{{ ($service_type=='individual')?'block':'none' }}; background:url(/public/img/fitness-bg1.jpg); background-size:100% 100%;">
+                        <div class="col-md-8 text-justify individualBody" style="display: {{ ($service_type=='individual')?'block':'none' }}; background:url(/public/img/fitness-bg1.jpg); background-size:100% 100%;">
 
                             <p>Let’s create your service details and prices for your independent business.
 
