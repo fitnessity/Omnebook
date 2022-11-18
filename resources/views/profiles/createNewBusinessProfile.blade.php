@@ -1678,29 +1678,29 @@
                                     </p>
                                     <br/><br/>
                                     <div class="form-group">
-                                        <label for="house_rules">House Rules <!-- <span id="star">*</span> --></label>
-                                        <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="houserules" id="house_rules" cols="30" rows="4" class="form-control" maxlength="500">{{ $houserules }}</textarea>
+                                        <label for="house_rules">Know Before You Go <!-- <span id="star">*</span> --></label>
+                                        <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="houserules" id="house_rules" cols="30" rows="6" class="form-control" maxlength="1000">{{ $houserules }}</textarea>
                                         <span class="error" id="err_house_rules"></span>
 
-                                        <div class="text-right"><span id="house_rules_left">500</span> Characters Left</div>
+                                        <div class="text-right"><span id="house_rules_left">1000</span> Characters Left</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="cancelation_policy">Cancelation Policy <!-- <span id="star">*</span> --></label>
-                                        <textarea  placeholder="Let your customers know your rules about canceling a booking. Set your policy and regulations." name="cancelation" id="cancelation_policy" cols="30" rows="4" class="form-control" maxlength="500">{{ $cancelation }}</textarea>
+                                        <textarea  placeholder="Let your customers know your rules about canceling a booking. Set your policy and regulations." name="cancelation" id="cancelation_policy" cols="30" rows="6" class="form-control" maxlength="1000">{{ $cancelation }}</textarea>
                                         <span class="error" id="err_cancelation_policy"></span>
-                                        <div class="text-right"><span id="cancelation_policy_left">500</span> Characters Left</div>
+                                        <div class="text-right"><span id="cancelation_policy_left">1000</span> Characters Left</div>
                                     </div>
 
                                     <div class="form-group">
 
                                         <label for="safety_cleaning">Safety and Cleaning Procedures <!-- <span id="star">*</span> --></label>
 
-                                        <textarea  placeholder="Let your customers know your safety and cleaning procedures to keep them healthy and safe." name="cleaning" id="safety_cleaning" cols="30" rows="4" class="form-control" maxlength="500">{{ $cleaning }}</textarea>
+                                        <textarea  placeholder="Let your customers know your safety and cleaning procedures to keep them healthy and safe." name="cleaning" id="safety_cleaning" cols="30" rows="6" class="form-control" maxlength="1000">{{ $cleaning }}</textarea>
 
                                         <span class="error" id="err_safety_cleaning"></span>
 
-                                        <div class="text-right"><span id="safety_cleaning_left">500</span> Characters Left</div>
+                                        <div class="text-right"><span id="safety_cleaning_left">1000</span> Characters Left</div>
                                     </div>
                                 </div>
 
@@ -1723,8 +1723,8 @@
                                             </label>
 
                                             <div class="col-md-12 textsam" id="contracttermdiv" style="display: none;">
-                                                <textarea class="form-control" placeholder="Contract Terms" id="contracttermtext" name="contracttermstext">{{ $contracttermstext }}</textarea>
-                                                <div class="text-right"><span id="contracttermtext_left">1000</span> Characters Left</div>
+                                                <textarea class="form-control" placeholder="Contract Terms" id="contracttermtext" name="contracttermstext"  rows="8" maxlength="20000">{{ $contracttermstext }}</textarea>
+                                                <div class="text-right"><span id="contracttermtext_left">20000</span> Characters Left</div>
                                             </div>
                                         </div>
 
@@ -2521,8 +2521,8 @@
 
                 <?php
 
-                    $service_type = $sport_activity = ""; $instant_booking = 0;
-                    $program_name = $program_desc = $profile_pic = $request_booking = $meetup_location = $frm_min_participate ="";
+                    $service_type = $sport_activity = ""; $instant_booking = $request_booking = '';
+                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate ="";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
                     $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
@@ -2536,7 +2536,7 @@
                     $mon_duration = $tue_duration = $wed_duration = $thu_duration = $fri_duration = $sat_duration = $sun_duration = "";
 
                     $frm_servicedesc = $exp_country = $exp_address = $exp_building = $exp_city = $exp_state = $exp_zip = $full_address = $exp_lng = $exp_lat = "" ;
-                    $instructor_id  = '';
+                    $instructor_id  =  $business_phone = '';
                     $profile_pic1  = [];
 
                    // echo "<pre>"; print_r($business_service); die;
@@ -2751,6 +2751,15 @@
 
                         if(isset($business_service['meetup_location']) && !empty($business_service['meetup_location'])) {
                             $meetup_location = $business_service['meetup_location'];
+                        }
+
+                        if(isset($company_info['business_phone']) && !empty($company_info['business_phone'])) {
+                            $business_phone = $company_info['business_phone'];
+                            if (preg_match('/()-/', $business_phone)){
+                                $business_phone = $business_phone;
+                            }else{
+                                $business_phone = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $business_phone);
+                            }
                         }
                     }
 
@@ -3680,10 +3689,9 @@
                                         <div class="instantl-book map-sp">
                                             <div class="">
                                                 <label class="switch" for="instantbooking">
-                                                    <input type="checkbox" name="instantbooking" id="instantbooking" @if(@$instant_booking == 1) checked @endif>
+                                                    <input type="checkbox" name="instantbooking" id="instantbooking" onchange="changetoggle(this.value,'instantbooking');" @if(@$request_booking == '' || @$request_booking == 0) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -3698,11 +3706,9 @@
                                         <div class="instantl-book map-sp">
                                             <div class="">
                                                 <label class="switch" for="requestbooking">
-            
-                                                    <input type="checkbox" name="requestbooking" id="requestbooking" @if($request_booking == 1) checked @endif>
+                                                    <input type="checkbox" name="requestbooking" id="requestbooking" onchange="changetoggle(this.value,'requestbooking');" @if(@$request_booking == 1) checked @endif>
                                                     <span class="slider round"></span>
                                                 </label>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -3712,6 +3718,57 @@
                                             <p>Customers can request a booking, but you want to confirm first.(Less booking frequency with this option) </p>
                                         </div>
                                     </div>
+                                    <script type="text/javascript">
+
+                                        $("#instantbooking").on('change', function() {
+                                            if ($(this).is(':checked')) {
+                                                switchStatus = $(this).is(':checked');
+                                                $("#requestbooking").prop("checked", false);
+                                                $('#requestbooking').value(1);
+                                            }
+                                            else {
+                                                $("#requestbooking").prop("checked", true);
+                                                $('#requestbooking').value(0); 
+                                            }
+                                        });
+
+                                        $("#requestbooking").on('change', function() {
+                                            if ($(this).is(':checked')) {
+                                                switchStatus = $(this).is(':checked');
+                                                $("#instantbooking").prop("checked", false);
+                                                $('#instantbooking').value(1);
+                                            }
+                                            else {
+                                                switchStatus = $(this).is(':checked');
+                                                $("#instantbooking").prop("checked", true);
+                                                $('#instantbooking').value(1);
+                                            }
+                                        });
+
+                                        /*function changetoggle(val,id) {
+                                            alert(val);
+                                            alert(id);
+                                            if(id == 'instantbooking'){
+                                                if(val == 0){
+                                                    $(".requestbooking").prop("checked", true);
+                                                    $('.requestbooking').value(1);
+                                                }
+                                                else{
+                                                    $(".requestbooking").prop("checked", false);
+                                                    $('.requestbooking').value(0);   
+                                                }
+                                            }else{
+                                                if(val == 0){
+                                                    $(".instantbooking").prop("checked", true);
+                                                    $('.instantbooking').value(1);
+                                                }
+                                                else{
+                                                    $(".instantbooking").prop("checked", false);
+                                                    $('.instantbooking').value(0); 
+                                                }
+                                            }
+                                        }*/
+                                    </script>
                                 </div>
 
                                 <div class="row">
@@ -3722,7 +3779,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="{{$frm_min_participate}}">
+                                            <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="@if($frm_min_participate != '') {{$frm_min_participate}} @else 1 @endif">
                                         </div>
                                     </div>
                                 </div>
@@ -3903,7 +3960,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-3 col-sm-6">
+                                    <div class="col-md-4 col-sm-6">
                                         <div class="priceselect sp-select">
                                             <label>Personality & Habits of Instructor?</label>
                                             <select name="frm_teachingstyle[]" id="teaching" multiple>
@@ -4332,7 +4389,7 @@
                                         <div class="col-md-6">
                                             <div class="customers-help">
                                                 <h3>Confirm your phone number if customers need your help</h3>
-                                                <p>If customers have trouble finding your location, or need questions with help, they may need to call you. The number on file we'll give them is +1 (555) 555-5555. </p>
+                                                <p>If customers have trouble finding your location, or need questions with help, they may need to call you. The number on file we'll give them is +1 {{$business_phone}}. </p>
                                                 <h3>Any additinal information for help</h3>
                                                 <textarea class="form-control valid" rows="3" maxlength="500" name="addi_info_help" id="addi_info_help">{{@$business_service['addi_info_help']}}</textarea>
                                                 <span id="addi_info_help_left">500 Character Left</span>
@@ -10191,11 +10248,11 @@ $(document).ready(function(){
     $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
     $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
    /* $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));*/
-    $('#house_rules_left').text(500-parseInt($("#house_rules").val().length));
-    $('#cancelation_policy_left').text(500-parseInt($("#cancelation_policy").val().length));
-    $('#safety_cleaning_left').text(500-parseInt($("#safety_cleaning").val().length));
+    $('#house_rules_left').text(1000-parseInt($("#house_rules").val().length));
+    $('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
+    $('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
     $('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
-    $('#contracttermtext_left').text(1000-parseInt($("#contracttermtext").val().length));
+    $('#contracttermtext_left').text(20000-parseInt($("#contracttermtext").val().length));
     $('#refundpolicy_left').text(1000-parseInt($("#refundpolicytext").val().length));
     $('#liabilitystext_left').text(1000-parseInt($("#liabilitystext").val().length));
     $('#covidstext_left').text(1000-parseInt($("#covidstext").val().length));
@@ -10240,19 +10297,19 @@ $(document).ready(function(){
         $('#frm_programdesc1_left').text(150-parseInt(this.value.length));
     });*/
     $("#house_rules").on('input', function() {
-        $('#house_rules_left').text(500-parseInt(this.value.length));
+        $('#house_rules_left').text(1000-parseInt(this.value.length));
     });
     $("#cancelation_policy").on('input', function() {
-        $('#cancelation_policy_left').text(500-parseInt(this.value.length));
+        $('#cancelation_policy_left').text(1000-parseInt(this.value.length));
     });
     $("#safety_cleaning").on('input', function() {
-        $('#safety_cleaning_left').text(500-parseInt(this.value.length));
+        $('#safety_cleaning_left').text(1000-parseInt(this.value.length));
     });
     $("#termcondfaqtext").on('input', function() {
         $('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
     }); 
     $("#contracttermtext").on('input', function() {
-        $('#contracttermtext_left').text(1000-parseInt(this.value.length));
+        $('#contracttermtext_left').text(20000-parseInt(this.value.length));
     });
     $("#liabilitystext").on('input', function() {
         $('#liabilitystext_left').text(1000-parseInt(this.value.length));

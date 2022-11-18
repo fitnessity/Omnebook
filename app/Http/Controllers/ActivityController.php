@@ -1472,15 +1472,15 @@ class ActivityController extends Controller {
                     $enddt = $act['end_activity_date'];
                     $flterdt = date('Y-m-d',strtotime($actdate) );
                     if( $flterdt <= $enddt ){
-                        $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
+                        $actbox .= '<div class="col-md-4 col-sm-12 col-xs-12 ">
                                         <div class="find-activity">
                                             <div class="row">
-                                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <div class="img-modal-left">
                                                         <img src="'.$profilePic.'" >
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+                                                <div class="col-md-6 col-sm-6 col-xs-12 activity-data">
                                                     <div class="activity-inner-data">
                                                         <i class="fas fa-star"></i>
                                                         <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
@@ -1827,7 +1827,7 @@ class ActivityController extends Controller {
                                                             	}
                                                             }
                                                             $actbox .= '/>
-                                                                <label for="'.$bdata['id'].'">'.$bdata['shift_start'].'</label>
+                                                                <label for="'.$bdata['id'].'">'.date('h:i a', strtotime($bdata['shift_start'])).'</label>
                                                                 <p class="end-hr">';
                                                                 if($SpotsLeftdis == 0){
                                                                  	$actbox .= 'Sold Out'; 

@@ -195,11 +195,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                   <?php /*?><h5> <i class="fa fa-star rating-pro"></i><span>5.0 </span>(100) </h5><?php */?>
                   <ul class="profile-controls" id="profilecontrol">
                   	<?php
-					$PageLike = PageLike::where('pageid',$compinfo->id)->where('follower_id',$loggedinUserorignal->id)->first(); ?>
+					$PageLike = PageLike::where('pageid',$compinfo->id)->where('follower_id',@$loggedinUserorignal->id)->first(); ?>
 					<?php if($PageLike) { ?>
                     	<li> <p class="following-tag"> Following </p> </li>
                     <?php } else { ?> 
-                    	<li><a href="javascript:void(0);" class="followPage" title="Follow" pageid="{{$compinfo->id}}" userid="{{$loggedinUserorignal->id}}"><i class="fa fa-star"></i></a></li>
+                    	<li><a href="javascript:void(0);" class="followPage" title="Follow" pageid="{{$compinfo->id}}" userid="{{@$loggedinUserorignal->id}}"><i class="fa fa-star"></i></a></li>
                     <?php } ?>
                   </ul>
 							
@@ -765,12 +765,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 												<li class="post-comment">
                                                 	<div class="comet-avatar">
 
-                                                @if($loggedinUserorignal->profile_pic  != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUserorignal->profile_pic  )))
-                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUserorignal->profile_pic ) }}" alt="fitnessity" >
+                                                @if(@$loggedinUserorignal->profile_pic  != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUserorignal->profile_pic  )))
+                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUserorignal->profile_pic ) }}" alt="fitnessity" >
                                                 @else
                                                     <?php
                                                     echo '<div class="company-img-text">';
-                                                    $pf=substr($loggedinUserorignal->firstname, 0, 1).substr($loggedinUserorignal->lastname, 0, 1);
+                                                    $pf=substr(@$loggedinUserorignal->firstname, 0, 1).substr(@$loggedinUserorignal->lastname, 0, 1);
                                                     echo '<p>'.$pf.'</p></div>';
                                                     ?>
                                                 @endif
