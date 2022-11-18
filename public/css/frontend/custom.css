@@ -812,6 +812,7 @@ max-height: 300px;
 
 .mt-20{ margin-top: 20px; }
 .mt-30{ margin-top: 30px; }
+.mt-50{ margin-top: 50px; }
 .mb-10{ margin-bottom: 10px; }
 .mb-30{ margin-bottom: 30px; }
 .mb-80{ margin-bottom: 80px; }
@@ -822,6 +823,7 @@ max-height: 300px;
 .modal-filter-instant p{ margin-bottom: 20px; }
 .mykickboxing-activities .dropdowns{ margin-bottom: 15px; }
 .black-border{ border: 1px solid #000 !important; }
+.detail-fil-sticky{ position: fixed; right: 0; top: 50%; }
 
 
 

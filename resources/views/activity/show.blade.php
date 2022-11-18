@@ -316,7 +316,7 @@ input:disabled{
 
 <div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails" style="padding-top: 78px">
 <!-- The Modal Add Business-->
-   	<div class="container-fluid">
+   	<div class="container">
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
@@ -529,13 +529,13 @@ input:disabled{
 				
 				<div class="row" id="user_ratings_div{{$serviceid}}">
 					<div class="col-md-12 col-xs-12">
-						<h3 class="subtitle mt-30">Submit A Review </h3>
+						<h3 class="subtitle mt-50">Submit A Review </h3>
 					</div>
 					<div class="col-md-8 col-sm-8 col-xs-12"> 
 						<h3 class="subtitle1"> 
 							<div class="row">
-								<div class="col-md-2 col-sm-2"> Reviews: </div>
-								<div class="col-md-10 col-sm-10">
+								<div class="col-md-3 col-sm-2"> Reviews: </div>
+								<div class="col-md-9 col-sm-10">
 									<p> <a class="activered f-16 font-bold"> By Everyone </a>
 										<a class="f-16 font-bold pepole-color"> | By People I know </a>
 									</p>
