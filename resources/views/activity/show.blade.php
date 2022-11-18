@@ -773,7 +773,9 @@ input:disabled{
 														<div class="donate-now">
 															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
 															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
-																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
+																<label for="{{$bdata['id']}}" >
+                                                                <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
+                                                                </label>
 																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
 														</div>
 													</div>
@@ -1106,12 +1108,12 @@ input:disabled{
 								<div class="col-md-4 col-sm-12 col-xs-12 ">
 									<div class="find-activity">
 										<div class="row">
-											<div class="col-md-4 col-sm-4 col-xs-12">
+											<div class="col-md-6 col-sm-6 col-xs-12">
 												<div class="img-modal-left">
 													<img src="{{ $profilePic }}" >
 												</div>
 											</div>
-											<div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+											<div class="col-md-6 col-sm-6 col-xs-12 activity-data">
 												<div class="activity-inner-data">
 													<i class="fas fa-star"></i>
 													<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
