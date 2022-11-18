@@ -20736,11 +20736,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .details-titles{
 	color: #000;
-	font-size: 27px;
+	font-size: 30px;
 	font-weight: 600;
+	padding-bottom:10px;
 }
 .subtitle.details-sp{
-	margin-top: 25px;
+	margin-top: 40px;
 }
 .date-title{
 	font-size: 20px;
