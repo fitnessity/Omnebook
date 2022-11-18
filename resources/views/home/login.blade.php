@@ -28,6 +28,7 @@ if(!empty(@$response)){
                     @if($msg != '')
                         <div id='systemMessage' class="alert-class alert-danger">{{ $msg }}</div>
                     @endif
+                    <input type="hidden" name="redirect" value="{{$request->redirect}}">
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <span class="text-danger cls-error" id="erremail"></span>                    
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
