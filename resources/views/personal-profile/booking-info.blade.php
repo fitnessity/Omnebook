@@ -1048,7 +1048,7 @@ use App\UserFamilyDetail;
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 
 <script src="{{ url('public/js/custom.js') }}"></script>
-<script src="{{ url('public/js/compare/jquery-1.9.1.min.js') }}"></script>
+<!-- <script src="{{ url('public/js/compare/jquery-1.9.1.min.js') }}"></script> -->
 <script>
 
     $( document ).ready(function() {
@@ -1161,9 +1161,7 @@ use App\UserFamilyDetail;
     }
     
 
-    $('.booking-date').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
+    
     $('.booking_date1').datepicker({
         dateFormat: "mm/dd/yy"
     })
@@ -1171,6 +1169,9 @@ use App\UserFamilyDetail;
         dateFormat: "mm/dd/yy"
     })
     $('.booking_date3').datepicker({
+        dateFormat: "mm/dd/yy"
+    })
+    $('.booking-date').datepicker({
         dateFormat: "mm/dd/yy"
     })
 

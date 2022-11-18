@@ -84,19 +84,24 @@ input:disabled{
     $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
     $email = $companylat = $companylon  = $companylogo = '';
     $comp_data = CompanyInformation::where('id', $service['cid'])->first();
-    
+    $address = '';
 	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
 	if($comp_data->address != ''){
 		$comp_address = $comp_data->address.', ';
 	}
 	if($comp_data->city != ''){
 		$comp_address .= $comp_data->city.', ';
+		$address .= ', '.$comp_data->city.', ';
 	}
 	if($comp_data->state != ''){
 		$comp_address .= $comp_data->state.', ';
 	}
 	if($comp_data->country != ''){
 		$comp_address .= $comp_data->country;
+		$address .= $comp_data->country.', ';
+	}
+	if($comp_data->zip_code != ''){
+		$address .= $comp_data->zip_code;
 	}
 
 	$staffdata = StaffMembers::where(['id'=>$service->instructor_id])->first(); 
@@ -119,8 +124,8 @@ input:disabled{
 	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
 	$companyactid = $current_act[0]['cid'];
 	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
-	$address = '';
-	if(!empty($companycity)) { 
+	/*$address = '';*/
+	/*if(!empty($companycity)) { 
 		$address .= $companycity; 
 	}
     if(!empty($companycountry)) 
@@ -129,7 +134,7 @@ input:disabled{
 	}
     if(!empty($companyzip)) {
      	$address .=', '.$companyzip; 
- 	} 
+ 	}*/ 
 
 
 	$servicePr=[]; $bus_schedule=[];
@@ -311,7 +316,7 @@ input:disabled{
 
 <div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails" style="padding-top: 78px">
 <!-- The Modal Add Business-->
-   	<div class="container-fluid">
+   	<div class="container">
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
@@ -346,11 +351,27 @@ input:disabled{
 				</div>
 			</div>
 
-			<div class="col-lg-7 col-xs-12">
+			<div class="col-lg-7 col-xs-12 pr-100">
 				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
 				<h3 class="details-titles">{{@$service['program_name']}}</h3>
 				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
 				</p>
+				<div class="service-review-desc">
+					<div class="provider_review">
+					<?php
+						$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
+						$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
+						
+						$reviews_avg=0;
+						if($reviews_count>0)
+						{ 
+							$reviews_avg = round($reviews_sum/$reviews_count,2); 
+						}
+					?>
+						<p class="mb-10"> {{$reviews_count}} Reviews </p> 
+						<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
+					</div>
+				</div>
 				<h3 class="subtitle details-sp"> Description </h3>
 				<p>{{ @$service['program_desc'] }}</p>
 				<h3 class="subtitle details-sp"> Program Details: </h3>
@@ -405,231 +426,26 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				<h3 class="subtitle details-sp"> Check Availability </h3>
-				<div class="mainboxborder">
-					<div class="row">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div class="activities-calendar">
-								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-6">
-										<div class="activityselect3 special-date">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" value="{{date('M-d-Y')}}">
-											<i class="fa fa-calendar"></i>
-										</div>
-									</div>
-									<!-- <div class="col-md-6 col-sm-6 col-xs-6">
-										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
-											<option value="">Participant #</option>
-										</select>
-									</div> -->
-								</div>
-							</div>
-						</div>
-						@php $date = date('l').', '.date('F d,  Y'); @endphp 
-						<div id="updatefilterforcart">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="choose-calendar-time">
-									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<h3 class="date-title">{{$date}}</h3>
-									
-											<label>Step: 1 </label> <span class="">Select Category</span>
-											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book','simple')">
-												<?php $c=1;  
-													if (!empty($sercate)) { 
-														foreach ($sercate as  $sc) {
-															echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-															$c++;
-														}
-													}
-												?>
-											</select>
-											
-											<label>Step: 2 </label> <span class=""> Select Membership Type</span>
-											<div id="memberoption">
-												<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember({{$serviceid}});">												<?php echo $mbox; ?>
-												</select>
-											</div>
-											<label>Step: 3 </label> <span class="">Select Price Option</span>
-											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
-												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
-													<?php echo $selectval; ?>
-												</select>
-											</div>	
-										</div>
-										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
-										?>
-										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-											<div class="membership-details">
-												<h3 class="date-title">Booking Details</h3>
-												<label>Step: 4 </label> <span class=""> Select Time</span>
-												<div class="row" id="timeschedule">
-													<?php $i=1;$totalquantity = 0;?>
-													@if(!empty(@$bschedule) && count(@$bschedule)>0)
-													@foreach(@$bschedule as $bdata)
-													<?php $SpotsLeftdis = 0; ?>
-													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
-														$totalquantity = 0;
-														foreach($SpotsLeft as $data){
-															$item = json_decode($data['qty'],true);
-															if($item['adult'] != '')
-									                            $totalquantity += $item['adult'];
-									                        if($item['child'] != '')
-									                            $totalquantity += $item['child'];
-									                        if($item['infant'] != '')
-									                            $totalquantity += $item['infant'];
-														}
-													if( $bdata['spots_available'] != ''){
-        												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
-        											} ?>
-													<div class="col-md-6">
-														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
-															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif/>
-																<label for="{{$bdata['id']}}" >{{$bdata['shift_start']}}</label>
-																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
-														</div>
-													</div>
-													@endforeach
-													@else 
-														<p class="notimeoption">No time option available Select category to view available times</p>
-															
-													@endif
-												</div>
-												<div id="book<?php echo $service["id"].$service["id"]; ?>">
-													
-													<div class="price-cat">
-														<label>Category:</label>
-														@if(@$sercatefirst['category_title'] != '')
-															<span>{{@$sercatefirst['category_title']}}</span>
-														@endif
-													</div>
-													
-													
-													<div id="timeduration">
-														<label>Duration:</label>
-														@if($timedata != '')
-															<span>{{$timedata}}</span>
-														@endif
-													</div>
-													
-													<div>
-														<label>Price Title:</label>
-														@if(@$servicePrfirst['price_title'] != '')
-															<span>{{@$servicePrfirst['price_title']}}</span>
-														@endif	
-													</div>
-														
-													<div>
-														<label>Price Option:</label>
-														@if(@$servicePrfirst['pay_session'] != '')
-														<span>{{@$servicePrfirst['pay_session']}} Session</span>@endif
-													</div>
-													
-													
-													<div>
-														<label>Membership:</label>
-														@if(@$servicePrfirst['membership_type'] != '')
-														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
-														@endif
-													</div>
-													
-													<div class="personcategory" >
-														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
-														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
-														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
-													</div>
-													
-													<div>
-														<label>Total </label>
-														@if(@$total_price_val != '')
-															<span id="totalprice">
-														${{@$total_price_val}} USD</span>
-														@else
-															<span id="totalprice">
-														$0 USD</span>
-														@endif
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12 col-xs-12">
-								<div class="indetails-btn">
-									@if(!empty(@$servicePrfirst))
-										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
-									@endif
-									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != '' ) value="{{$timedata}}" @endif>
-									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
-
-									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
-
-									<form method="post" action="{{route('addtocart')}}" id="{{$serviceid}}">
-										@csrf
-										<input type="hidden" name="pid" value="{{$serviceid}}"  />
-										<input type="hidden" name="persontype" id="persontype" value="adult"/>
-										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
-
-										<input type="hidden" name="aduquantity" id="adupricequantity" value="{{$adult_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="childquantity" id="childpricequantity" value="{{$child_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="infantquantity" id="infantpricequantity" value="{{$infant_cnt}}" class="product-quantity"/>
-
-										<input type="hidden" name="cartaduprice" id="cartaduprice" value="{{$adult_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartchildprice" id="cartchildprice" value="{{$child_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="{{$infant_price}}" class="product-quantity"/>
-
-									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
-									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
-										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
-										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
-										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
-										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
-										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-										
-										<div id="cartadd">
-									
-										@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
-											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-										@else
-                                            @if( @$total_price_val !='' && $timedata != '')
-												<div id="addcartdiv">
-													<div class="btn-cart-modal">
-														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
-													</div>
-													<div class="btn-cart-modal instant-detail-booknow">
-														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
-													</div>
-												</div>
-										  	@endif
-										@endif
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>  
-				</div>
-
-				<h3 class="subtitle details-sp">Things To Know </h3>
 				
-				<h3 class="subtitle details-sp">Know Before You Go</h3>
+				
+
+				<h3 class="subtitle details-sp font-32 mt-20">Things To Know </h3>
+				
+				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
 				@if($houserules != '')
 					<p>{{$houserules}}</p>
 				@else
 					<p>No Details Found</p>
 				@endif
 				
-				<h3 class="subtitle details-sp">Cancelation Policy</h3>
+				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
 				@if($cancelation != '')
 					<p>{{$cancelation}}</p>
 				@else
 					<p>No Details Found</p>
 				@endif
 				
-				<h3 class="subtitle details-sp">Safety and Cleaning Procedures</h3>
+				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
 				@if($cleaning != '')
 					<p>{{$cleaning}}</p>
 				@else
@@ -638,6 +454,7 @@ input:disabled{
 				
 				<div class="row">
 					<div class="col-md-9">
+                    <h3 class="subtitle details-sp mt-20">Location</h3>
 						<div class="widget mx-sp">
 							<h4 class="widget-title">Provider: {{$companyname }}</h4>
 							<div class="widget" style="height:300px">
@@ -712,13 +529,13 @@ input:disabled{
 				
 				<div class="row" id="user_ratings_div{{$serviceid}}">
 					<div class="col-md-12 col-xs-12">
-						<h3 class="subtitle">Submit A Review </h3>
+						<h3 class="subtitle mt-50">Submit A Review </h3>
 					</div>
 					<div class="col-md-8 col-sm-8 col-xs-12"> 
-						<h3 class="subtitle"> 
+						<h3 class="subtitle1"> 
 							<div class="row">
-								<div class="col-md-2 col-sm-2"> Reviews: </div>
-								<div class="col-md-10 col-sm-10">
+								<div class="col-md-3 col-sm-2"> Reviews: </div>
+								<div class="col-md-9 col-sm-10">
 									<p> <a class="activered f-16 font-bold"> By Everyone </a>
 										<a class="f-16 font-bold pepole-color"> | By People I know </a>
 									</p>
@@ -753,8 +570,7 @@ input:disabled{
 										$reviews_per = ($totalRating/$sum_of_rating)*100;
 									}
 								?>
-	                    
-									<p> {{$reviews_count}} Reviews </p> 
+									<p class="mb-10"> {{$reviews_count}} Reviews </p> 
 									<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
 								</div>
 							</div>
@@ -874,14 +690,235 @@ input:disabled{
 			</div>	
 				
 	        <div class="col-lg-5 col-sm-12 col-xs-12">
-	            <div class="modal-sidebox">
+            	<h3 class="subtitle details-sp mb-30"> Check Availability </h3>
+            	<div class="mainboxborder black-border">	
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div class="modal-filter-instant morefilter">
-								<p>More Filter<i class="fas fa-filter"></i></p>
+                        	
+							<div class="activities-calendar">
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="activityselect3 special-date">
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" value="{{date('M-d-Y')}}">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									<!-- <div class="col-md-6 col-sm-6 col-xs-6">
+										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
+											<option value="">Participant #</option>
+										</select>
+									</div> -->
+								</div>
 							</div>
 						</div>
-						@php 
+						@php $date = date('l').', '.date('F d,  Y'); @endphp 
+						<div id="updatefilterforcart">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="choose-calendar-time">
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-12">
+											<h3 class="date-title">{{$date}}</h3>
+									
+											<label>Step: 1 </label> <span class="">Select Category</span>
+											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book','simple')">
+												<?php $c=1;  
+													if (!empty($sercate)) { 
+														foreach ($sercate as  $sc) {
+															echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
+															$c++;
+														}
+													}
+												?>
+											</select>
+											
+											<label>Step: 2 </label> <span class=""> Select Membership Type</span>
+											<div id="memberoption">
+												<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember({{$serviceid}});">												<?php echo $mbox; ?>
+												</select>
+											</div>
+											<label>Step: 3 </label> <span class="">Select Price Option</span>
+											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
+												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
+													<?php echo $selectval; ?>
+												</select>
+											</div>	
+										</div>
+										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
+										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
+										?>
+										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
+											<div class="membership-details">
+												<h3 class="date-title">Booking Details</h3>
+												<label>Step: 4 </label> <span class=""> Select Time</span>
+												<div class="row" id="timeschedule">
+													<?php $i=1;$totalquantity = 0;?>
+													@if(!empty(@$bschedule) && count(@$bschedule)>0)
+													@foreach(@$bschedule as $bdata)
+													<?php $SpotsLeftdis = 0; ?>
+													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
+														$totalquantity = 0;
+														foreach($SpotsLeft as $data){
+															$item = json_decode($data['qty'],true);
+															if($item['adult'] != '')
+									                            $totalquantity += $item['adult'];
+									                        if($item['child'] != '')
+									                            $totalquantity += $item['child'];
+									                        if($item['infant'] != '')
+									                            $totalquantity += $item['infant'];
+														}
+													if( $bdata['spots_available'] != ''){
+        												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
+        											} ?>
+													<div class="col-md-6">
+														<div class="donate-now">
+															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
+															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
+																<label for="{{$bdata['id']}}" >
+                                                                <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
+                                                                </label>
+																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
+														</div>
+													</div>
+													@endforeach
+													@else 
+														<p class="notimeoption">No time option available Select category to view available times</p>
+															
+													@endif
+												</div>
+												<div id="book<?php echo $service["id"].$service["id"]; ?>" >
+													
+													<div class="price-cat pt-20">
+														<label>Category:</label>
+														@if(@$sercatefirst['category_title'] != '')
+															<span>{{@$sercatefirst['category_title']}}</span>
+														@endif
+													</div>
+													
+													
+													<div id="timeduration">
+														<label>Duration:</label>
+														@if($timedata != '')
+															<span>{{$timedata}}</span>
+														@endif
+													</div>
+													
+													<div>
+														<label>Price Title:</label>
+														@if(@$servicePrfirst['price_title'] != '')
+															<span>{{@$servicePrfirst['price_title']}}</span>
+														@endif	
+													</div>
+														
+													<div>
+														<label>Price Option:</label>
+														@if(@$servicePrfirst['pay_session'] != '')
+														<span>{{@$servicePrfirst['pay_session']}} Session</span>@endif
+													</div>
+													
+													
+													<div>
+														<label>Membership:</label>
+														@if(@$servicePrfirst['membership_type'] != '')
+														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
+														@endif
+													</div>
+													
+													<div class="personcategory" >
+														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
+														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
+														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
+													</div>
+													
+													<div class="mt-20">
+														<label>Total </label>
+														@if(@$total_price_val != '')
+															<span id="totalprice">
+														${{@$total_price_val}} USD</span>
+														@else
+															<span id="totalprice">
+														$0 USD</span>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 col-xs-12">
+								<div class="indetails-btn">
+									@if(!empty(@$servicePrfirst))
+										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
+									@endif
+									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != '' ) value="{{$timedata}}" @endif>
+									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
+
+									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
+
+									<form method="post" action="{{route('addtocart')}}" id="{{$serviceid}}">
+										@csrf
+										<input type="hidden" name="pid" value="{{$serviceid}}"  />
+										<input type="hidden" name="persontype" id="persontype" value="adult"/>
+										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
+
+										<input type="hidden" name="aduquantity" id="adupricequantity" value="{{$adult_cnt}}" class="product-quantity"/>
+										<input type="hidden" name="childquantity" id="childpricequantity" value="{{$child_cnt}}" class="product-quantity"/>
+										<input type="hidden" name="infantquantity" id="infantpricequantity" value="{{$infant_cnt}}" class="product-quantity"/>
+
+										<input type="hidden" name="cartaduprice" id="cartaduprice" value="{{$adult_price}}" class="product-quantity"/>
+										<input type="hidden" name="cartchildprice" id="cartchildprice" value="{{$child_price}}" class="product-quantity"/>
+										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="{{$infant_price}}" class="product-quantity"/>
+
+									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
+									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
+										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
+										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
+										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
+										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
+										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
+										
+										<div id="cartadd">
+									
+										@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
+											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
+										@else
+                                            @if( @$total_price_val !='' && $timedata != '')
+												<div id="addcartdiv">
+													<div class="btn-cart-modal">
+														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
+													</div>
+													<div class="btn-cart-modal instant-detail-booknow">
+														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
+													</div>
+												</div>
+										  	@endif
+										@endif
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>  
+				</div>
+            
+	        </div>	
+            
+            <div class="col-md-12 col-xs-12 mb-80">
+            	@if(count($activities_search)>0)
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<h3 class="subtitle text-center mtb-30">Other Activities Offered By This Provider</h3>
+					</div>
+				@endif
+            	<div class="modal-sidebox">
+					<div class="row">
+						<div class="col-md-5 col-sm-12 col-xs-12">
+                        	<div class="col-md-12 col-xs-12">
+							<div class="modal-filter-instant morefilter">
+								<p>More Filters &nbsp; <i class="fas fa-filter"></i></p>
+							</div>
+                            </div>
+						
+                        @php 
 							$actoffer = BusinessServices::where('cid',$companyactid)->groupBy('sport_activity')->get()->toArray();
 						@endphp
 						<div class="col-md-6 col-sm-6 col-xs-6">
@@ -911,7 +948,7 @@ input:disabled{
                             	</select>
 							</div>
                         </div>
-						<div id="filteroption" style="display: none">
+                        <div id="filteroption" style="display: none">
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
 		                            <select id="actfillocation{{$serviceid}}" name="actfillocation" class="form-control activityselect2" onchange="actFilter({{$companyactid}},{{$serviceid}})">
@@ -980,13 +1017,10 @@ input:disabled{
 		                            </select>
 		                        </div>
 	                        </div>
-						</div>
-						@if(count($activities_search)>0)
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<h3 class="subtitle text-center">Other Activities Offered By This Provider</h3>
-						</div>
-						@endif
-						<div id="filtersearchdata">
+                       </div> <!--filteroption -->     
+					</div><!-- col-5 -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">    
+                        <div id="filtersearchdata">
 	 						<?php
 							if (!empty($activities_search)) { 
 								$companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
@@ -1071,15 +1105,15 @@ input:disabled{
 									if($i<3){
 										if($time != ''){
 							?>
-								<div class="col-md-12 col-sm-8 col-xs-12 ">
+								<div class="col-md-4 col-sm-12 col-xs-12 ">
 									<div class="find-activity">
 										<div class="row">
-											<div class="col-md-4 col-sm-4 col-xs-12">
+											<div class="col-md-6 col-sm-6 col-xs-12">
 												<div class="img-modal-left">
 													<img src="{{ $profilePic }}" >
 												</div>
 											</div>
-											<div class="col-md-8 col-sm-8 col-xs-12 activity-data">
+											<div class="col-md-6 col-sm-6 col-xs-12 activity-data">
 												<div class="activity-inner-data">
 													<i class="fas fa-star"></i>
 													<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
@@ -1141,9 +1175,19 @@ input:disabled{
 									</div>
 							<?php	} ?>
 						</div>
+
+					</div> <!-- 12 -->
+                        
+                        
+                        
+                        
+                        
+                        
 					</div>
-	            </div>
-	        </div>	
+				</div>
+            </div>
+            
+            
 		</div>
    	</div>            
 <!-- end modal -->
@@ -1654,6 +1698,7 @@ $(document).ready(function () {
 	            data: formData,
 				success: function (response) {
 					$('.progress-bar-main').load(' .progress-bar-main > *')
+					$(".provider_review").load(location.href+" .provider_review >*","");
 					if(response=='submitted')
 					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
 						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
