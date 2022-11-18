@@ -824,6 +824,7 @@ max-height: 300px;
 .mykickboxing-activities .dropdowns{ margin-bottom: 15px; }
 .black-border{ border: 1px solid #000 !important; }
 .detail-fil-sticky{ position: fixed; right: 0; top: 50%; }
+.activity-time{ font-size: 13px; }
 
 
 
