@@ -1472,7 +1472,7 @@ class ActivityController extends Controller {
                     $enddt = $act['end_activity_date'];
                     $flterdt = date('Y-m-d',strtotime($actdate) );
                     if( $flterdt <= $enddt ){
-                        $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
+                        $actbox .= '<div class="col-md-4 col-sm-12 col-xs-12 ">
                                         <div class="find-activity">
                                             <div class="row">
                                                 <div class="col-md-4 col-sm-4 col-xs-12">

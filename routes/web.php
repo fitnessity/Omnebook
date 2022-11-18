@@ -827,13 +827,15 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-Route::get('/sendemailofreceipt', 'UserProfileController@sendemailofreceipt')->name('sendemailofreceipt');
-Route::get('/getreceiptmodel', 'UserProfileController@getreceiptmodel')->name('getreceiptmodel');
-Route::get('/personal-profile/booking-info', 'UserProfileController@bookinginfo');
-Route::get('/personal-profile/gym-studio-info', 'UserProfileController@gym_studio_page');
-Route::get('/personal-profile/experience-info', 'UserProfileController@experience_page');
-Route::post('/datefilterdata', 'UserProfileController@datefilterdata')->name('datefilterdata');
-Route::post('/searchfilterdata', 'UserProfileController@searchfilterdata')->name('searchfilterdata');
+Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
+Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
+Route::get('/personal-profile/booking-info', 'BookingController@bookinginfo');
+Route::get('/personal-profile/gym-studio-info', 'BookingController@gym_studio_page');
+Route::get('/personal-profile/experience-info', 'BookingController@experience_page');
+Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
+Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
+
+
 Route::get('/personal-profile/calendar', 'UserProfileController@calendar')->name('calendar');
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
