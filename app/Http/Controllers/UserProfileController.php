@@ -2144,6 +2144,8 @@ class UserProfileController extends Controller {
                 "instant_booking" => $instant,
                 "request_booking" => $reserve,
                 "frm_min_participate" => $request->frm_min_participate,
+                "beforetime" => $request->beforetime,
+                "beforetimeint" => $request->beforetimeint,
                 "notice_value" => $request->notice_value,
                 "notice_key" => $request->notice_key,
                 "advance_value" => $request->advance_value,

@@ -34,6 +34,8 @@ class BusinessServices extends Model
         'instant_booking',
         'request_booking',
         'frm_min_participate',
+        'beforetimeint',
+        'beforetime',
         'notice_value',
         'notice_key',
         'advance_value',

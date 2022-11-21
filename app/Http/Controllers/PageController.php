@@ -83,11 +83,13 @@ class PageController extends Controller
             'pageTitle' => "STORE"
         ]);
     }
+    
     public function GetPageJobs(Request $request) {
         return view('pages.jobs', [
             'pageTitle' => "JOBS"
         ]);
     }
+
     public function GetPageContactUs(Request $request) {        
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -100,6 +102,45 @@ class PageController extends Controller
             'cart' => $cart
         ]);
     }
+
+    public function PostPageContactUs(Request $request)
+    {
+        $postArr = $request->all();
+        $rules = [
+            'name' => 'required',
+            'email' => 'required',
+            'message' => 'required'
+        ];
+        $validator = Validator::make($postArr,$rules);
+        if($validator->fails()) {
+            $errMsg = array();
+            foreach($validator->messages()->getMessages() as $field_name => $messages) {
+                $errMsg = $messages;
+            }
+            $response = array(
+                'type' => 'danger',
+                'msg' => $errMsg,
+            );
+            return Response::json($response);
+        } else {
+            ContactUs::create($postArr);
+            try {
+
+                MailService::sendContactUs($postArr);
+                $response = array(
+                    'type' => 'success',
+                    'msg' => 'Thank you for contacting Fitnessity. We will get back to you soon!'
+                );
+            } catch(Exception $e) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Some issue in ending email. Please try again later.'
+                );
+            }
+           return Response::json($response);
+        }
+    }
+
     public function CustomerSupport(Request $request)
     {
         return view('pages.Help', [
@@ -133,42 +174,7 @@ class PageController extends Controller
             'lists' => $new_list,
         ]);
     }
-    public function PostPageContactUs(Request $request)
-    {
-        $postArr = $request->all();
-        $rules = [
-            'name' => 'required',
-            'email' => 'required',
-            'message' => 'required'
-        ];
-        $validator = Validator::make($postArr,$rules);
-        if($validator->fails()) {
-            $errMsg = array();
-            foreach($validator->messages()->getMessages() as $field_name => $messages) {
-                $errMsg = $messages;
-            }
-            $response = array(
-                'type' => 'danger',
-                'msg' => $errMsg,
-            );
-            return Response::json($response);
-        } else {
-            ContactUs::create($postArr);
-            try {
-                MailService::sendContactUs($postArr);
-                $response = array(
-                    'type' => 'success',
-                    'msg' => 'Thank you for contacting Fitnessity. We will get back to you soon!'
-                );
-            } catch(Exception $e) {
-                $response = array(
-                    'type' => 'danger',
-                    'msg' => 'Some issue in ending email. Please try again later.'
-                );
-            }
-           return Response::json($response);
-        }
-    }
+
     public function GetPageNetwork()
     {
         return view('pages.usernetwork', [

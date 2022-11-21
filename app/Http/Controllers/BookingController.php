@@ -1157,31 +1157,65 @@ class BookingController extends Controller {
             $pagename_type = 'classes';
         }
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        $business_data = CompanyInformation::where('company_name', 'like', '%'. $request->text.'%')->get();
+        if(!empty($business_data) && count($business_data) > 0){
+            $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        }else{
+            $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id, 'order_id'=>$request->text])->get();
+        }
+
+        
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services != ''){
-                    if($business_services->service_type == $pagename_type){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
+               /* echo $business_services;*/
+                if(!empty($business_data) && count($business_data) > 0){
+                    foreach($business_data as $databus){
+                        if($business_services != ''){
+                            if($databus['id'] == $business_services->cid){
+                           
+                                if($business_services->service_type == $pagename_type){
+                                    $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                                    $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                                    $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                                    $businessuser = json_decode(json_encode($businessuser), true);
+                                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                                    foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                                        if($details['sport'] == $book_value->sport){
+                                            if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                                $BookingDetail_1['user_booking_detail'] = $details;
+                                            }
+                                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                                        }
+                                    }
                                 }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                            }
+                            } 
                         }
                     }
-                } 
+                }else{
+                    if($business_services != ''){
+                        if($business_services->service_type == $pagename_type){
+                            $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                            $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                            $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                            $businessuser = json_decode(json_encode($businessuser), true);
+                            $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                            foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                                if($details['sport'] == $book_value->sport){
+                                    if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                        $BookingDetail_1['user_booking_detail'] = $details;
+                                    }
+                                    $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                                }
+                            }
+                        }
+                    } 
+                }
+
+                
             }
         }
-        
         $html = '';
         $html.='<div class="row" id="searchbydate_'.$request->type.'">';
         $i=1;
@@ -1210,7 +1244,7 @@ class BookingController extends Controller {
                 $bussiness_name = $book_details['businessuser']['company_name'];
                 $oid_num =  $data->order_id;
                 $data1 = $date2 = '';
-                if($bussiness_name == $request->text ||  $oid_num == $request->text || ($request->text == '' && $chk == 1))
+                if($chk == 1)
                 {
                     $servicedata = BusinessActivityScheduler::where(['serviceid' => @$book_details['user_booking_detail']['sport'],'id' => $book_details['user_booking_detail']['act_schedule_id']])->first();
 
@@ -1486,6 +1520,10 @@ class BookingController extends Controller {
         }
         $html.='</div>';
         return $html;
+    }
+
+    public function cancelbooking(Request $request){
+       
     }
 
 
