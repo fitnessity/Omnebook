@@ -115,19 +115,19 @@
 											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
 										</div>
 										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
 											<div class="dollar-person">
 												<span>From ${{$bookscheduler->price_detail()}}/Person</span>
 											</div>
 											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details-left">
 												<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
 													<span>Starts in 
 														@if ($bookscheduler->time_left($current_date)->h)
-															{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hour', $bookscheduler->time_left($current_date)->h)}}
+															{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
 														@endif
 														@if ($bookscheduler->time_left($current_date)->i)
-															{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('minute', $bookscheduler->time_left($current_date)->i)}}
+															{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
 														@endif
 													</span>
 												</div>

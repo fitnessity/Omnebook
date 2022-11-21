@@ -326,9 +326,9 @@
             select: '#business_type'
         });
 	
-		var categ = new SlimSelect({
+		/*var categ = new SlimSelect({
             select: '#activity'
-        });
+        });*/
 
         $('#company_desc_left').text(1000-parseInt($("#short_description").val().length));
 

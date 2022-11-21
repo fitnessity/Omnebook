@@ -346,7 +346,7 @@ use App\UserFamilyDetail;
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
                                                             <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
-                                                            <a href="#">Cancel</a>
+                                                           <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button>
                                                         </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
@@ -659,7 +659,7 @@ use App\UserFamilyDetail;
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
                                                             <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
-                                                            <a href="#">Cancel</a>
+                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button>
                                                         </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
@@ -972,7 +972,7 @@ use App\UserFamilyDetail;
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
                                                             <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
-                                                            <a href="#">Cancel</a>
+                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button>
                                                         </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
@@ -1179,6 +1179,28 @@ use App\UserFamilyDetail;
 </script>
 
 <script type="text/javascript">
+
+    function cancelorder(bookingid) {
+        $.ajax({
+            url: "{{route('cancelbooking')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'get',
+            data:{
+                bookingid:bookingid,
+            },
+            success: function (response) {
+               /* $('.reviewerro').html('');
+                $('.reviewerro').css('display','block');
+                if(response == 'success'){
+                    $('.reviewerro').html('Email Successfully Sent..');
+                }else{
+                    $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                }*/
+            }
+        });
+    }
 
     function  changecolor(id){
      /*   alert(id);*/

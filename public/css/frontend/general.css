@@ -21845,4 +21845,24 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .file-booking-receipt{
 	color: #2d2d2d;
 }
-
+.activites-price-details{
+	padding-right: 0px;
+}
+.activites-price-details-left{
+	padding-left: 0px;
+}
+.activity-time-main.activity-time-main-red{
+	text-align: end;
+}
+.activity-time-main{
+	text-align: end;
+}
+.canclebtn{
+	background: #dbd9d9;
+	color: #000;
+	font-size: 14px;
+	font-weight: 700;
+	padding: 5px 20px;
+	border-radius: 20px;
+	border: none;
+}

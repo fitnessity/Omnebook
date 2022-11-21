@@ -2522,7 +2522,7 @@
                 <?php
 
                     $service_type = $sport_activity = ""; $instant_booking = $request_booking = '';
-                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate ="";
+                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate = $beforetime = $beforetimeint= "";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
                     $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
@@ -2581,6 +2581,13 @@
 
                         if(isset($business_service['frm_min_participate']) && !empty($business_service['frm_min_participate'])) {
                             $frm_min_participate = $business_service['frm_min_participate'];
+                        }
+                        if(isset($business_service['beforetime']) && !empty($business_service['beforetime'])) {
+                            $beforetime = $business_service['beforetime'];
+                        }
+
+                        if(isset($business_service['beforetimeint']) && !empty($business_service['beforetimeint'])) {
+                            $beforetimeint = $business_service['beforetimeint'];
                         }
 
                         if(isset($business_service['notice_value']) && !empty($business_service['notice_value'])) {
@@ -3745,29 +3752,6 @@
                                             }
                                         });
 
-                                        /*function changetoggle(val,id) {
-                                            alert(val);
-                                            alert(id);
-                                            if(id == 'instantbooking'){
-                                                if(val == 0){
-                                                    $(".requestbooking").prop("checked", true);
-                                                    $('.requestbooking').value(1);
-                                                }
-                                                else{
-                                                    $(".requestbooking").prop("checked", false);
-                                                    $('.requestbooking').value(0);   
-                                                }
-                                            }else{
-                                                if(val == 0){
-                                                    $(".instantbooking").prop("checked", true);
-                                                    $('.instantbooking').value(1);
-                                                }
-                                                else{
-                                                    $(".instantbooking").prop("checked", false);
-                                                    $('.instantbooking').value(0); 
-                                                }
-                                            }
-                                        }*/
                                     </script>
                                 </div>
 
@@ -3784,23 +3768,26 @@
                                     </div>
                                 </div>
 
-                                <?php /*?><div class="row">
+                                <?php /* ?><div class="row">
                                     <div class="col-md-6 col-lg-5">
                                         <div class="">
                                             <p>What is the latest a customer can book before your activity starts?</p>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="" id="" placeholder="1" >
+                                            <input type="text" class="form-control valid" name="beforetimeint" id="beforetimeint" placeholder="1" @if($beforetimeint != '') value="{{$beforetimeint}}" @else value="1" @endif>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="sp-bottom">
-                                            <input type="text" class="form-control valid" name="" id="" placeholder="Hour(s)+" >
+                                            <select class="form-control week-section" name="beforetime" id="beforetime">
+                                                <option value="minutes"  <?=($beforetime=='minutes')?"selected":""?>>Minute(s)</option>
+                                                <option value="hours"  <?=($beforetime=='hours')?"selected":""?>>Hour(s)</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div><?php */?>
+                                </div>?php */ ?>
 
                                 <div class="row">
                                     <div class="col-md-3 col-sm-6">

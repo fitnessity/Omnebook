@@ -15,11 +15,12 @@
         </ul>
     </div>
 </section>
-        <div class="alert alert-success fade in alert-dismissible show successmsg" style="display: none;">
+        <div class="alert alert-success fade in alert-dismissible successmsg" style="display: none;">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
                 <span aria-hidden="true" style="font-size:20px">×</span>
-            </button> {{ session()->get('success') }}
-        </div>                                 
+            </button> <!-- {{ session()->get('success') }} -->
+        </div>  
+        <div class="alert alert-success alert-dismissible successmsgcontact"style="display: none;">Thank you for contacting Fitnessity. We will get back to you soon!</div>                               
         
 <div class="location-detail contactpage-sec">
     <div class="container">
@@ -113,9 +114,9 @@
                             $("#email").val('');
                             $("#message").val('');
                         }
-                        location.reload();
-                        $('.successmsg').css("display", "block");
-
+                        /* location.reload();*/
+                        /*$('.successmsg').css("display", "block");*/
+                        $('.successmsgcontact').css("display", "block");
                     }
                 });
             }

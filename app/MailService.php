@@ -731,38 +731,24 @@ class MailService
 
     public static function sendContactUs($mail_data)
 
-    {
-
+    { 
         // $admin = User::where('role', 'admin')->first();
 
-
-
         //send mail to admin
-
         // Mail::send('emails.contact-us', ['name' => $mail_data['name'], 'email' => $mail_data['email'], 'post_message' => nl2br($mail_data['message'])],
 
         //     function ($m) use ($mail_data, $admin) {
 
         //         $m->from($mail_data['email'], $mail_data['name']);
 
-
-
         //         $m->to($admin['email'], $admin['firstname'].' '.$admin['lastname'])->subject('Fitnessity: '.$mail_data['name'].' has contacted you');
 
         // });
 
-        Mail::send('emails.contact-us', ['name' => $mail_data['name'], 'email' => $mail_data['email'], 'post_message' => nl2br($mail_data['message'])],
-
-            function ($m) use ($mail_data) {
-
-                $m->from($mail_data['email'], $mail_data['name']);
-
-
-
+        Mail::send('emails.contact-us', ['name' => $mail_data['name'], 'email' => $mail_data['email'], 'post_message' => nl2br($mail_data['message'])], function ($m) use ($mail_data) {
+                $m->from('noreply@fitnessity.co', $mail_data['name']);
                 $m->to(env('CONTACT_EMAIL'))->subject('Fitnessity: '.$mail_data['name'].' has contacted you');
-
         });
-
     }
 
 

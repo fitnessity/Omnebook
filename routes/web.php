@@ -834,6 +834,7 @@ Route::get('/personal-profile/gym-studio-info', 'BookingController@gym_studio_pa
 Route::get('/personal-profile/experience-info', 'BookingController@experience_page');
 Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
 Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
+Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
 
 
 Route::get('/personal-profile/calendar', 'UserProfileController@calendar')->name('calendar');
