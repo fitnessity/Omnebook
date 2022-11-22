@@ -35,6 +35,7 @@ class LoginController extends Controller {
 	}*/
     
     public function postLogin(Request $request) {
+
         /*print_r($request->all());
         echo "string";exit();*/
         $postArr = $request->input();
@@ -110,6 +111,9 @@ class LoginController extends Controller {
                     'd'=>$request->user()
                 );*/
 
+                if($request->redirect){
+                    return redirect($request->redirect);
+                }
                 if($claim  == 'set'){
                     return redirect('/claim/reminder/'.$claim_cname."/".$claim_cid); 
                 }else if($claim_welcome != ''){
