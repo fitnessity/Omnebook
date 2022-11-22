@@ -13,7 +13,6 @@ class Init extends Migration
      */
     public function up()
     {
-        echo(getcwd());
         DB::unprepared(file_get_contents(__DIR__.'/../initialize.sql'));
     }
 
