@@ -163,6 +163,9 @@
                     cid:cid
 
                 },
+                xhrFields: {
+                    withCredentials: true
+                },
 
                 success:function(response){
 
