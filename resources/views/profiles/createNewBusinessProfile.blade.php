@@ -12157,6 +12157,7 @@ $("#frm_servicetitle_two1").on("change", function() {
                 success: function (response) {
                     if(response)
                     {   
+                        $("#addinsform")[0].reset();
                         $('.selectinstructor').load(' .selectinstructor > *')
                         $('#addinserro').show(); 
                         $('#addinserro').html('Instructure Added Successfully..'); 

@@ -1118,8 +1118,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="foterboxes">
                                         <div class="threebtn_fboxes">
-                                            <a href="'.route('activities_show',['serviceid' => $book_details['businessservices']['id'] ]).'" target="_blank">Schedule</a>
-                                            <a href="#">Cancel</a>
+                                            
                                         </div>
                                         <div class="viewmore_links">
                                             <a id="viewmore'.$i.'_'.$book_details['businessservices']['id'].'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>
@@ -1492,8 +1491,7 @@ class BookingController extends Controller {
                                         </div>
                                         <div class="foterboxes">
                                             <div class="threebtn_fboxes">
-                                                <a href="'.route('activities_show',['serviceid' => $book_details['businessservices']['id'] ]).'" target="_blank">Schedule</a>
-                                                <a href="#">Cancel</a>
+                                                
                                             </div>
                                             <div class="viewmore_links">
                                                 <a id="viewmore'.$i.'_'.$book_details['businessservices']['id'].'" style="display:block">View More <img src="'. url('public/img/arrow-down.png').'" alt=""></a>
