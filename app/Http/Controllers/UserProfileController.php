@@ -9181,7 +9181,7 @@ class UserProfileController extends Controller {
     }
     
     public function paymentdelete(Request $request) {
-        print_r($request->all());
+        /*print_r($request->all());*/
         $user = User::where('id', Auth::user()->id)->first();
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));

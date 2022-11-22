@@ -27,6 +27,7 @@ use App\BusinessPriceDetailsAges;
 use App\UserBookingDetail;
 use App\ActivtyGetStartedFast;
 use App\BusinessServicesFavorite;
+use App\BusinessService;
 use App\User;
 use DateTime;
 
@@ -1599,6 +1600,13 @@ class ActivityController extends Controller {
         $serviceid = $request->serviceid;
         $companyid = $request->companyid;
         $searchData = [];
+        $bus_service = BusinessService::where('cid' ,$companyid)->first();
+        $chk_found = '';
+        if( strpos(@$bus_service->special_days_off , date('m/d/Y',strtotime($actdate))) !== false){
+        	$chk_found = "Found";
+        }else{
+        	$chk_found = "Not";
+        }
         if(!empty($actdate)){
             $searchData = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
             $searchDatafirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
@@ -1700,7 +1708,7 @@ class ActivityController extends Controller {
 
         $searchDatafordisplay  = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst['id'])->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
        /* print_r( $searchDatafordisplay);exit;*/
-        if (!empty($searchDatafordisplay) && count($searchDatafordisplay)>0) { 
+        if (!empty($searchDatafordisplay) && count($searchDatafordisplay)>0 && $chk_found =='Not') { 
             $si=1;
             foreach($searchDatafordisplay as $data){
                 if($si == 1){
@@ -1952,7 +1960,7 @@ class ActivityController extends Controller {
                                                 
                                             }
                                         }
-                                     $actbox .= '<div id="cartadd"></form>
+                                     $actbox .= '<div id="cartadd"><div id="addcartdiv"></div></form>
                                 </div>
                             </div>';
         }else{
@@ -2274,7 +2282,15 @@ class ActivityController extends Controller {
         $catid = $request->catid;
         $sid = $request->sid;
         $filtertype = $request->filtertype;
+        $cid = $request->cid;
         $sesdate = date('Y-m-d',strtotime($request->sesdate));
+        $bus_service = BusinessService::where('cid' , $cid)->first();
+        $chk_found = '';
+        if( strpos(@$bus_service->special_days_off,date('m/d/Y',strtotime($request->sesdate))) !== false){
+	       	$chk_found = "Found";
+	    }else{
+	        $chk_found = "Not";
+	    }
         $catetitle = '';
         $mem_ary = [];
         $cate_data = BusinessPriceDetailsAges::where('serviceid', $actid)->where('id', $catid)->first();
@@ -2363,7 +2379,7 @@ class ActivityController extends Controller {
         $bus_schedule = BusinessActivityScheduler::where('category_id',$catid)->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->where('end_activity_date','>=',  $todaydate )->get(); 
                                         
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='';
-        if(!empty($bus_schedule)){ 
+        if(!empty($bus_schedule) && $chk_found =='Not'){ 
         $i= 1;          
             foreach($bus_schedule as $data){
             	if($i == 1){
@@ -2460,7 +2476,7 @@ class ActivityController extends Controller {
         $bus_schedulefirst = BusinessActivityScheduler::where('category_id',$catid)->orderBy('id', 'ASC')->where('end_activity_date','>=',date('Y-m-d' ,strtotime($sesdate))  )->whereRaw('FIND_IN_SET("'.date("l" ,strtotime($sesdate)).'",activity_days)')->first();
         /*echo $catid;exit;*/
         $i=1;
-        if(!empty($busche) && count($busche)>0){
+        if(!empty($busche) && count($busche)>0 && $chk_found =='Not'){
             foreach($busche as $bdt){
             	$SpotsLeftdis = 0;
                 $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdt['id'])->whereDate('bookedtime', '=', date('Y-m-d' ,strtotime($sesdate)) )->get()->toArray();
