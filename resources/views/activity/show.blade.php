@@ -155,19 +155,26 @@ input:disabled{
     	
     	
     	/*DB::enableQueryLog();*/
-    	/*$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('d/m/Y').'",business_service.special_days_off)')->get();*/
+    	/*$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('m/d/Y').'",business_service.special_days_off)')->get();*/
     	/*dd(\DB::getQueryLog());*/
 
     	$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
-
+    	$bus_service = BusinessService::where('cid' ,$service['cid'])->first();
     	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 	
+$chk_found = '';
+	if( strpos(@$bus_service->special_days_off,date('m/d/Y')) !== false){
+       	$chk_found = "Found";
+    }else{
+        $chk_found = "Not";
+    }
+
     $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
     $i=0;
     if(!empty(@$bus_schedule)){
         foreach($bus_schedule as $data){
-        	if($i==0){
+        	if($i==0 && $chk_found =='Not'){
         		$SpotsLeftdis = 0; 
 				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get()->toArray();
 				$totalquantity = 0;
@@ -752,7 +759,7 @@ input:disabled{
 												<label>Step: 4 </label> <span class=""> Select Time</span>
 												<div class="row" id="timeschedule">
 													<?php $i=1;$totalquantity = 0;?>
-													@if(!empty(@$bschedule) && count(@$bschedule)>0)
+													@if(!empty(@$bschedule) && count(@$bschedule)>0 &&  $chk_found =='Not')
 													@foreach(@$bschedule as $bdata)
 													<?php $SpotsLeftdis = 0; ?>
 													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
@@ -1448,9 +1455,9 @@ $(document).ready(function () {
 	
 		if(aducnt ==0 && chilcnt==0 && infcnt==0){
 			$('#errordiv').html('Please Select participate');
-			$('#cartadd').html('');
+			$('#cartadd').html('<div id="addcartdiv"></div>');
 		}else if(maxlengthval == 0){
-			$('#cartadd').html('<div id="cartadd"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a></div>');
+			$('#cartadd').html('<div id="addcartdiv"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a></div>');
 			$('#errordiv').html('Please Select another Category or Activity.');
 			
 		}else if(totalcnt > maxlengthval){
@@ -1540,7 +1547,7 @@ $(document).ready(function () {
 					var data = response.split('~~');
 					$('#Countermodalbody').html(data[0]);
 					$('#book'+sid+sid).html(data[1]);
-					$('#cartadd').html('');
+					$('#cartadd').html('<div id="addcartdiv"></div>');
 				}
 			}
 		});
@@ -1874,6 +1881,7 @@ $(document).ready(function () {
 	    }else{
 	        var price = $('#pricebookajax'+main+aid).val();   
 	    }
+	    var cid = '{{@$service["cid"]}}';
 
 	    var session = $('#session'+main+aid).val();
 		if(aid != '')
@@ -1893,6 +1901,7 @@ $(document).ready(function () {
 	                div:div,
 	                filtertype:simple,
 	                sesdate:sesdate,
+	                cid:cid,
 				},
 
 				success: function (response) { /*alert(response);*/
@@ -1934,18 +1943,16 @@ $(document).ready(function () {
 	                }else{
 	                    $('#bookajax'+main+aid).html(bookdata);
 	                }
-
 	                if(cattitle != ''){
 	                    $('#cate_title'+main+aid).val(cattitle);
 	                }
 	                if(timedata == 'no' || timedata == ''){
-	            	 	$('#addcartdiv').html('');
+	            	 	$('#cartadd').html('<div id="addcartdiv" ></div>');
 	            	 	$('#timeschedule').html(setime);
 	            	}else{
-	            		
 	            		$('#timeschedule').html(setime);
 	            		$('#time_hidden'+main+aid).val(timedata);
-						$('#addcartdiv').html('<div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div>');
+						$('#cartadd').html('<div id="addcartdiv" ><div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div></div>');
 	            	}
 	            	$('#actscheduleid'+aid).val(id);
 	            	$("#actfiloffer_forcart option:selected").prop("selected", false);
