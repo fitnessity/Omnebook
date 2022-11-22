@@ -19,6 +19,7 @@
         "laravel/ui": "*",
         "laravelcollective/html": "^6.1",
         "maatwebsite/excel": "~3.1.30",
+        "sentry/sentry-laravel": "^3.1",
         "stripe/stripe-php": "^7.100",
         "twilio/sdk": "^6.9"
     },
