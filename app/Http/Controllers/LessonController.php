@@ -2568,17 +2568,19 @@ class LessonController extends Controller {
         $cart = [];
          $cardInfo = [];
         if(Auth::user()){
-             $user = User::where('id', Auth::user()->id)->first();
+            $user = User::where('id', Auth::user()->id)->first();
              \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $savedEvents = $stripe->customers->allSources(
-                $user->stripe_customer_id,
-                ['object' => 'card' ,'limit' => 30]
-            );
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($user->stripe_customer_id != ''){
+                $savedEvents = $stripe->customers->allSources(
+                    $user->stripe_customer_id,
+                    ['object' => 'card' ,'limit' => 30]
+                );
+                $savedEvents  = json_decode( json_encode( $savedEvents),true);
+                $cardInfo = $savedEvents['data'];
+            }
 
-        $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            
-       $cardInfo = $savedEvents['data'];
+        
            /* $savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);
             if (count($savedEvents) > 0) {
                 foreach ($savedEvents as $event) {
@@ -2591,8 +2593,6 @@ class LessonController extends Controller {
                     $cardInfo[] = $carddetails;
                 }
             }*/
-        }else{
-            $cardInfo = [];
         }
        
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
