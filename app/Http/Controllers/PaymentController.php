@@ -140,6 +140,12 @@ class PaymentController extends Controller {
                 
                 if ($metadatapro[$i] == $cartnew[$i]['code'])
                 {   
+                    /*$transfer_amt_to_bususer = 0;
+                    $tot_pri = 0;
+                    $per_act_trns_amt_to_admin =0;
+                    $tot_fee_adu =0;
+                    $tot_fee_child =0;
+                    $tot_fee_infant =0;*/
                   /*  print_r($cartnew[$i]['participate']);*/
                     $priceid = $cartnew[$i]['priceid'];
                     $sesdate = $cartnew[$i]['sesdate'];
@@ -149,15 +155,28 @@ class PaymentController extends Controller {
                     if(!empty($cartnew[$i]['adult'])){
                         $aduqnt = $cartnew[$i]['adult']['quantity'];
                         $aduprice = $cartnew[$i]['adult']['price'];
+                        /*$tot_fee_adu =  ($aduprice * $fitnessity_fee) / 100;
+                        $per_act_trns_amt_to_admin +=   $tot_fee_adu * $aduqnt ;
+                        $tot_pri +=   $aduqnt * $aduprice ;*/
                     }
                     if(!empty($cartnew[$i]['child'])){
                         $childqnt = $cartnew[$i]['child']['quantity'];
                         $childprice= $cartnew[$i]['child']['price'];
+                        /*$tot_fee_child =  ($childprice * $fitnessity_fee) / 100;
+                        $per_act_trns_amt_to_admin  += $tot_fee_child * $childqnt ;
+                        $tot_pri +=   $childqnt * $childprice ;*/
                     }
                     if(!empty($cartnew[$i]['infant'])){
                         $infantqnt = $cartnew[$i]['infant']['quantity'];
                         $infantprice = $cartnew[$i]['infant']['price'];
+                       /* $tot_fee_infant =   ($infantprice * $fitnessity_fee) / 100;
+                        $per_act_trns_amt_to_admin  += $tot_fee_infant * $infantqnt ;
+                        $tot_pri +=   $infantqnt * $infantprice ;*/
                     }
+
+                    /*$transfer_amt_to_bususer = $tot_pri - $per_act_trns_amt_to_admin ;
+                    $fit_acc_amt += $per_act_trns_amt_to_admin ;*/
+
                     $participate = [];
                     if(!empty($cartnew[$i]['participate'])){
                         $participate = $cartnew[$i]['participate'];
@@ -227,22 +246,36 @@ class PaymentController extends Controller {
                 /*$BookingDetail = array_merge($BookingDetail_1,$businessuser,$BusinessServices);*/
                 $user = User::where('id', $businessuser['businessuser']['user_id'])->first();
                 \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                // Create a Transfer to a connected account (later):
-                /*  $transfer = \Stripe\Transfer::create([
-                  'amount' => $transfer_amount,
-                  'currency' => 'usd',
-                  'source_transaction' => $payment_intent->charges->data[0]->id,
-                  'destination' => $user->stripe_connect_id,
+                 // Create a Transfer to a connected account (later):
+                /*$transfer = \Stripe\Transfer::create([
+                    'amount' => $transfer_amt_to_bususer * 100,
+                    'currency' => 'usd',
+                    'source_transaction' => $payment_intent->charges->data[0]->id,
+                    'destination' => $bus_user->stripe_connect_id,
                 ]);*/
                 MailService::sendEmailBookingConfirmnew($BookingDetail);
             }
+            
+            /*$transfer_amt_to_fit_acc = 0;
+            $transfer_amt_to_fit_acc = $fit_acc_amt + $fitness_acc_cust_fee_trans_amt;
+            
+            // Create a second Transfer to another connected account (later):
+            $admin_stripeid = User::where(['id'=>1, 'role'=>'admin'])->first();
+            if(@$admin_stripeid->stripe_connect_id != ''){
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $transfer_admin = \Stripe\Transfer::create([
+                    'amount' => $transfer_amt_to_fit_acc * 100,
+                    'currency' => 'usd',
+                    'destination' => $admin_stripeid->stripe_connect_id,
+                ]);
+            }*/
              
-          session()->forget('stripepayid');
-          session()->forget('stripechargeid');
-          session()->forget('cart_item');
+            session()->forget('stripepayid');
+            session()->forget('stripechargeid');
+            session()->forget('cart_item');
         }
 
-        
+            
         // Create a second Transfer to another connected account (later):
 		/* $transfer = \Stripe\Transfer::create([
 		          'amount' => 15,
