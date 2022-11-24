@@ -420,6 +420,19 @@ class MailService
         });
     }
 
+    public static function sendEmailfromadmin($AllDetail){
+        Mail::send('emails.business-unclaim-to-claim-success', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $comname = 'Fitnessity: CONGRATULATIONS '.strtoupper(@$AllDetail["company_data"]["company_name"]).' YOU ARE NOW LIVE ON FITNESSITY';
+            $m->from('noreply@fitnessity.co', 'Fitnessity');
+            $m->to($AllDetail['company_data']['business_email'], $AllDetail['company_data']['first_name'])->subject($comname);
+        });
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
 
     public static function sendEmailFeedback($data)
     {

@@ -41,6 +41,8 @@ use App\BusinessReview;
 use App\Miscellaneous;
 use App\BusinessPriceDetailsAges;
 
+use App\MailService;
+
 class PlansController extends Controller
 {   
     protected $plan;
@@ -1477,5 +1479,16 @@ class PlansController extends Controller
             }
         }
         return redirect()->route('admin_businesspricedetails', [$request->catid]);
+    }
+
+    public function sendemail(Request $request){
+
+        $detail_data_com=  [];
+        $detail_data_user =  [];
+
+        $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
+        $AllDetail  = json_decode(json_encode($detail_data_com), true); 
+        $status = MailService::sendEmailfromadmin($AllDetail);
+        return $status;
     }
 }

@@ -1638,6 +1638,7 @@
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
 }
+
 @media screen and (min-width:1500px) and (max-width:1920px){
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 }
@@ -2254,6 +2255,9 @@
 	.instant-banner img{max-height: 300px;}
 	.instant-hire-activites {  margin-top: 15px !important;}
 	.show-all .table-inner-data{margin-bottom: 15px;}
+	.home-black-section{display: inline-block;}
+	.home-black-section label{font-size: 22px;}
+	.home-black-section i{display: none;}
 }
 
 @media(max-width: 575px) {
@@ -2441,7 +2445,6 @@
     }
 	.w-38 { width: 70% !important;}
 	.dob input { width: 249px !important;}
-
 }
 
 @media(max-width: 400px) {
@@ -2470,6 +2473,8 @@
 	.btn-style-one{font-size: 14px;}
 	.modal-dialog.counter-modal-size {  width: 354px;}
 	.showall-btn{padding: 5px 18px;}
+	.home-black-section label{font-size: 20px;}
+	.home-black-section i{display: none;}
 }
 
 @media(max-width: 376px) {
@@ -2515,6 +2520,8 @@
     }
 	.dob input { width: 196px !important;}
 	.emoji-picker-icon {  right: 44%;  top: 62%;}
+	.home-black-section label{font-size: 20px;}
+	.home-black-section i{display: none;}
 	
 }
 
