@@ -39,8 +39,10 @@ use App\CompanyInformation;
 use App\BusinessPriceDetails;
 use App\BusinessService;
 use App\BusinessCompanyDetail;
+use App\BusinessActivityScheduler;
 use App\HomeTracker;
 use View;
+use DateTime;
 
 class HomeController extends Controller {
 
@@ -127,6 +129,10 @@ class HomeController extends Controller {
             $cart = $request->session()->get('cart_item');
         }
         
+        $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
+
         return view('home.index1', [
             'cart' => $cart,
             'serviceData' => $serviceData,
@@ -148,6 +154,8 @@ class HomeController extends Controller {
             'bepart_data' => $bepart_data,
 			'count_location' => $count_location,
 			'why_fitnessity' => $why_fitnessity,
+            'bookschedulers'=>$bookschedulers,
+            'current_date' => $current_date,
         ]);
     }
     public function leftpanel() 

@@ -54,6 +54,8 @@
     <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Upload CSV</a>
     <a href="{{route('manual_add_unclaim_business')}}" class="btn btn-success">Manual Upload</a>
   </p>
+
+  <div class="reviewerro" id="reviewerro"></div>
   <div class="panel panel-default">
     <div class="panel-heading">  List of Business </div>
     <div class="panel-body">
@@ -70,6 +72,7 @@
                 <th>Address</th>
                 <th>Status</th>
                 <th>Activity</th>
+                <th>Send Email</th>
                 <th>Action</th>
               </tr>
           </thead>
@@ -77,7 +80,14 @@
               @if (count($claims) > 0)
               <?php $i = 0; ?>
                   @foreach ($claims as $value)
-                    <?php $i++; 
+                    <?php $cid= $value->id;
+                      $email = '';
+                      if($email == $value->business_email){
+                        $emailval= "empty";
+                      }else{
+                        $emailval= $value->business_email;
+                      }
+                        $i++; 
                       $address = '';
                       if($value->address != ''){
                         $address = $value->address.', ';
@@ -99,14 +109,17 @@
                         <td><input type="checkbox" name="planIds[]" value="{{$value->id}}"></td>
                         <td>{{ $value->company_name}}</td>
                         <td>{{ $value->location}}</td>
-                        <td>{{ $value->email}}</td>
+                        <td>{{ $value->business_email}}</td>
                         <td>{{ $value->website}}</td>
-                        <td>{{ $value->contact_number}}</td>
+                        <td>{{ $value->business_phone}}</td>
                         <td>{{ $address }}</td>
                         <td>@if($value->is_verified == 1) Verfied @else Unclaimed @endif</td>
                         <td><a class="btn btn-success-red btn-sp" href="{{route('add_activity',['id'=>$value->id])}}">Add</a><a class="btn btn-success-red" href="{{route('list_activity',['id'=>$value->id])}}">List</a></td>
                         <td> 
-                          <a href="{{route('edit_unclaim',['id'=>$value->id])}}" title="Click to edit" class="btn btn-xs btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                          <a class="btn btn-success-red btn-sp" onclick="send_email({{$cid}},'{{$emailval}}');">Send Email</a>
+                        </td>
+                        <td> 
+                          <a href="{{route('edit_unclaim',['id'=>$value->id])}}" title="Click to Edit" class="btn btn-xs btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 
                           <a href="{{route('claim_delete',['id'=>$value->id])}}" title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                       </tr>
@@ -147,7 +160,36 @@
       profile_pic_var = input.files[0];
       reader.readAsDataURL(input.files[0]);
     }
-  }  
+  } 
+
+
+   function send_email(cid,email){
+        if(email != "empty"){
+          $.ajax({
+            url: "{{route('sendemail')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type: 'get',
+            data:{
+              cid:cid,
+            },
+            success: function (response) {
+                // $('.reviewerro').html('');
+                // $('.reviewerro').css('display','block');
+                if(response == 'success'){
+                    //$('.reviewerro').html('Email Successfully Sent..');
+                  alert('Email Successfully Sent..');
+                }else{
+                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                  alert("Can't Mail on this Address. Plese Check your Email..");
+                }
+              }
+          });
+        }else{
+          alert('Email Id Is Not Provided..');
+        }
+      } 
 </script>
 <script>
   $(document).ready(function(){
@@ -201,7 +243,7 @@
           }
         })
       }
-           
+
       $('#upload-csv').click(function(){
           if(profile_pic_var == ''){
               showSystemMessages('#systemMessage', 'danger', 'Select file to upload.');

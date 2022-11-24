@@ -373,6 +373,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('/import-claimbusiness', 'Admin\PlansController@addBusinessClaim');
     Route::post('/ignore-replace-claimbusiness', 'Admin\PlansController@ignoreReplaceBusinessClaim');
 	Route::get('/business_delete/{id}','Admin\PlansController@business_delete')->name('business_delete');
+    Route::get('/sendemail/{cid?}','Admin\PlansController@sendemail')->name('sendemail');
 
     //Feedbacks
     Route::get('/feedbacks', 'Admin\FeedbackController@index');
