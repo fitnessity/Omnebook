@@ -13,7 +13,6 @@
                             <div style="max-width: 680px; margin: 0 auto;">
 
                                  <table height="100%" width="100%" cellpadding="0" cellspacing="0" border="0">
-                                   
                                     <tr>
                                         <td  style="background: #fff;">
                                             <!-- Email Body : BEGIN -->
@@ -34,7 +33,7 @@
                                                                             </tr>
                                                                             <tr><td style="font-size: 22px; font-weight: 600; text-align: center; padding-bottom: 16px;">CONGRATULATIONS!</td></tr>
                                                                             <tr><td style="font-size: 22px; font-weight: 600; text-align: center; padding: 0px 15px;">YOUR BUSINESS HAS BEEN LISTED ON FITNESSITY FOR FREE BY YOUR FORMER OR CURRENT CLIENT</td></tr>
-                                                                            <tr><td><a href="{{$url}}/claim-your-business" style="background: #ef1313;border: none;font-family: 'Poppins' ,sans-serif;font-size: 16px;line-height: 30px;  text-decoration: none;padding: 10px 0px;color: #ffffff;display: block;border-radius: 0;font-weight: 500;margin: auto;width:35%;height: 30px; margin-bottom: 30px; margin-top: 30px; border-radius: 10px; text-align: center;">CLAIM YOUR BUSINESS</a></td></tr>
+                                                                            <tr><td><a href="{{$url}}claim-your-business" style="background: #ef1313;border: none;font-family: 'Poppins' ,sans-serif;font-size: 16px;line-height: 30px;  text-decoration: none;padding: 10px 0px;color: #ffffff;display: block;border-radius: 0;font-weight: 500;margin: auto;width:35%;height: 30px; margin-bottom: 30px; margin-top: 30px; border-radius: 10px; text-align: center;">CLAIM YOUR BUSINESS</a></td></tr>
                                                                             
                                                                         </table>
                                                                     </div>
@@ -58,7 +57,7 @@
                                                                                     <p style="font-weight: 600; font-size: 23px; color: #000000; margin: 10px 0px 10px 0px">Greetings {{@$AllDetail['company_data']['company_name']}}  </p>
                                                                                     <p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px; text-align: left;">This is to notify you that {{@$AllDetail['company_data']['company_name']}} is officially live on Fitnessity.  </p>
                                                                                     <h3 style="font-weight: 600; font-size: 15px; color: #000000; text-align: left;">How did I get listed? </h3>
-                                                                                    <p style="font-weight: 400; font-size: 13px; color: #000000;margin-bottom: 0px; margin-top: 0px; text-align: left;">A current or former customer of yours by the name of {{@$AllDetail['company_data']['business_added_by_cust_name']}} , contributed your business information to Fitnessity so others around the world can learn about what you do, book your services and leave reviews.</p>
+                                                                                    <p style="font-weight: 400; font-size: 13px; color: #000000;margin-bottom: 0px; margin-top: 0px; text-align: left;">A current, former customer or someone familiar with your business contributed your business information to Fitnessity so others around the world can learn about what you do, book your services and leave reviews.</p>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
@@ -120,9 +119,9 @@
                                                 <tr>
                                                     <td style=" padding:23px 10px 23px;">
                                                         <h6 style="font-size: 15px; font-weight: 550; color: #000;margin-bottom: 0px; text-align: left;margin-top: 0px;">How to claim your business profile</h6>
-                                                        <p style="text-align: left;font-size: 13px;">When {!! @$AllDetail['user']['firstname'] !!} {!! @$AllDetail['user']['lastname'] !!}  listed your business, they added either a phone number or email that you use for customer to contact you. You will will use that information to claim and verifiy that this business is yours. Once you have verified, you will start the process of adding your business detials, images, services, prices and times slots for your services. Customers can add reviews to your business even if you don’t claim your business. In order to respond to reviews, you will need to claim your business profile.</p>
-                                                        <p style="text-align: left;font-size: 13px;">Claim your acount <a style="color: #1e43d7; text-decoration: underline;"  href="{{$url}}/claim-your-business">here</a> and finish setting up your account details to attract more customers, boost your sales and gain instant access to monthly visitors in New York. </p>
-                                                        <tr><td><a href="{{$url}}/claim-your-business" style="background: #ef1313;font-family: 'Poppins' ,sans-serif;font-size: 13px;line-height: 30px;  text-decoration: none;padding: 5px 0px;color: #ffffff;display: block;border-radius: 0;font-weight: 500;margin: 0px 10px;width:25%;height: 30px; margin-bottom: 20px; border-radius: 5px; text-align: center;">CLAIM YOUR BUSINESS</a></td></tr>
+                                                        <p style="text-align: left;font-size: 13px;">When your former or current customer listed your business, they added either a phone number or email that you use for customer to contact you. You will will use that information to claim and verifiy that this business is yours. Once you have verified, you will start the process of adding your business detials, images, services, prices and times slots for your services. Customers can add reviews to your business even if you don’t claim your business. In order to respond to reviews, you will need to claim your business profile.</p>
+                                                        <p style="text-align: left;font-size: 13px;">Claim your acount <a style="color: #1e43d7; text-decoration: underline;"  href="{{$url}}claim-your-business">here</a> and finish setting up your account details to attract more customers, boost your sales and gain instant access to monthly visitors in New York. </p>
+                                                        <tr><td><a href="{{$url}}claim-your-business" style="background: #ef1313;font-family: 'Poppins' ,sans-serif;font-size: 13px;line-height: 30px;  text-decoration: none;padding: 5px 0px;color: #ffffff;display: block;border-radius: 0;font-weight: 500;margin: 0px 10px;width:25%;height: 30px; margin-bottom: 20px; border-radius: 5px; text-align: center;">CLAIM YOUR BUSINESS</a></td></tr>
                                                     </td>
                                                 </tr>
                                                 <!-- END -->

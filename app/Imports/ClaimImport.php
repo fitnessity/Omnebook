@@ -34,7 +34,7 @@ class ClaimImport implements ToModel, WithStartRow
                'activity'    => $row[1],
                'location' => $row[2],
                'website' => $row[3],
-               'phone' => $row[4],
+               'business_phone' => $row[4],
                'address' => $row[5],
             ]);
         }

@@ -139,6 +139,7 @@ class ActivityController extends Controller {
     	$start_date = $filter_date;
     	$end_date = clone($start_date);
     	$end_date = $end_date->modify("23:59:59");
+    	$business_services;
     	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
 
 
