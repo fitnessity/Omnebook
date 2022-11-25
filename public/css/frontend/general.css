@@ -21866,3 +21866,134 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-radius: 20px;
 	border: none;
 }
+.fsbh-1 {
+  margin-bottom: 100px;
+}
+.fsth-0 {
+  margin-top: 120px;
+}
+.instant-hire-home h3{
+	font-weight: 600;
+	font-size: 22px;
+	margin: 11px 0px;
+	margin-bottom: 11px; 
+	margin-bottom: 25px;
+}
+.title-show a {
+  font-size: 15px;
+  font-weight: 500;
+  float: right;
+  cursor: pointer;
+  margin-top: 10px;
+  color: #0b0b0b;
+}
+.find-activity {
+  border: 1px solid #ede9e9;
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.find-activity img {
+  width: 116px;
+  min-height: 148px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+}
+.activity-data {
+  padding-left: 6px;
+}
+.activity-inner-data {
+  display: inline-block;
+  font-size: 13px;
+}
+.activity-inner-data i {
+  color: #f91942;
+}
+.activity-inner-data span {
+  font-weight: 600;
+}
+.activity-hours {
+  display: inline-block;
+  font-size: 13px;
+}
+.activity-hours span {
+  border: 1px solid black;
+  padding: 2px 4px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+.activity-city {
+  display: inline-block;
+  float: right;
+  font-size: 13px;
+}
+.activity-information {
+  text-align: center;
+  margin-bottom: 7px;
+  margin-top: 7px;
+}
+.activity-information span {
+  font-size: 14px;
+  font-weight: 500;
+}
+.activity-information span a {
+  width: 100%;
+  display: inline-block;
+}
+.activity-information  a{
+	color: #333;
+}
+.activity-information p {
+  margin-bottom: 4px;
+}
+.showall-btn {
+  background: #f91942;
+  border: none;
+  padding: 5px 19px;
+  color: #fff !important;
+  border-radius: 4px;
+}
+.activites-price-details {
+  padding-right: 0px;
+}
+.dollar-person {
+  line-height: 1;
+}
+.dollar-person span {
+  font-size: 11px;
+}
+.activites-price-details-left {
+  padding-left: 0px;
+}
+.activity-time-main {
+  text-align: end;
+  line-height: 1;
+}
+.activity-time-main span {
+  font-size: 11px;
+}
+.home-black-section{
+	background: #010101;
+	max-height: 150px;
+}
+.home-black-section label{
+	color: white;
+	font-size: 35px;
+	padding: 25px;
+	text-align: center;
+	width: 100%;
+}
+.home-black-section i{
+	top: 16%;
+	left: 50%;
+	position: absolute;
+	font-size: 120px;
+	color: #010101;
+}
+.fav-fun-2{
+	color: #010101;
+}
+.fav-fun-2:hover{
+	color: #010101;
+}

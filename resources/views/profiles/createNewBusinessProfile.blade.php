@@ -4355,16 +4355,16 @@
                                                     <div class="pin-on-map">
                                                         <h3>Adjust the pin on the map</h3>
                                                         <p>You can drag the map so the pin is in the right location.</p>
-                                                       <div class="mysrchmap_cus" style="height: 100%;min-height: 300px;">
-                                                            <div id="map_canvas_cus" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+                                                      <div class="mysrchmap_cus" style="height: 100%;min-height: 300px;">
+                                                            <div id="map_canvas_cus">
                                                                 <div class="maparea">
                                                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                       <!-- <div class="maparea"> 
+                                                        <!-- <div class="maparea"> 
                                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> 
-                                                        </div>  -->
+                                                        </div> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -12175,60 +12175,9 @@ $("#frm_servicetitle_two1").on("change", function() {
     }
 
 </script>
-
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 <script type="text/javascript">
-
-    function loadMaponclick(){
-        $('#cus_map_error').hide();
-        var locations = $('#address_p').val();
-        var cus_lat = $('#cus_lat').val();
-        var cus_lng = $('#cus_lng').val();
-        var map1 = ''
-        var infowindow1 = ''
-        var marker1 = ''
-        var markers1 = []
-        var circle = ''
-        
-        if (locations.length != 0) { 
-            $('#map_canvas_cus').empty(); 
-            console.log('!empty');
-            map1 = new google.maps.Map(document.getElementById('map_canvas_cus'), {
-                zoom:18,
-                center: new google.maps.LatLng(cus_lat, cus_lng),
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-            });
-            infowindow1 = new google.maps.InfoWindow();
-            var bounds = new google.maps.LatLngBounds();
-            var marker1;
-            var icon1 = {
-                url: "{{url('/public/images/hoverout2.png')}}",
-                scaledSize: new google.maps.Size(50, 50),
-                labelOrigin: {x: 25, y: 16}
-            };
-            for (var i = 0; i < locations.length; i++) {
-                var labelText = i + 1
-                marker1 = new google.maps.Marker({
-                    position: new google.maps.LatLng(cus_lat,cus_lng),
-                    map: map1,
-                    icon: icon1,
-                    title: labelText.toString(),
-                    label: {
-                        text: labelText.toString(),
-                        color: '#222222',
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                    }
-                });
-
-                bounds.extend(marker1.position);
-            }               
-            $('.mysrchmap_cus').show()
-        } else {
-            $('#cus_map_error').show(); 
-            $('#cus_map_error').html('Plese Enter All Value For Map');
-        }
-    }
-
+    
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -33.8688, lng: 151.2195},
@@ -12405,9 +12354,60 @@ $("#frm_servicetitle_two1").on("change", function() {
             $('#lon').val(place.geometry.location.lng());
         });
     }
+
+    function loadMaponclick(){
+        $('#cus_map_error').hide();
+        var locations = $('#address_p').val();
+        var cus_lat = $('#cus_lat').val();
+        var cus_lng = $('#cus_lng').val();
+        var map1 = ''
+        var infowindow1 = ''
+        var marker1 = ''
+        var markers1 = []
+        var circle = ''
+        
+        if (locations.length != 0) { 
+            $('#map_canvas_cus').empty(); 
+            console.log('!empty');
+            map1 = new google.maps.Map(document.getElementById('map_canvas_cus'), {
+                zoom:18,
+                center: new google.maps.LatLng(cus_lat, cus_lng),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+            });
+            infowindow1 = new google.maps.InfoWindow();
+            var bounds = new google.maps.LatLngBounds();
+            var marker1;
+            var icon1 = {
+                url: "{{url('/public/images/hoverout2.png')}}",
+                scaledSize: new google.maps.Size(50, 50),
+                labelOrigin: {x: 25, y: 16}
+            };
+            for (var i = 0; i < locations.length; i++) {
+                var labelText = i + 1
+                marker1 = new google.maps.Marker({
+                    position: new google.maps.LatLng(cus_lat,cus_lng),
+                    map: map1,
+                    icon: icon1,
+                    title: labelText.toString(),
+                    label: {
+                        text: labelText.toString(),
+                        color: '#222222',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+
+                bounds.extend(marker1.position);
+            }               
+            $('.mysrchmap_cus').show()
+        } else {
+            $('#cus_map_error').show(); 
+            $('#cus_map_error').html('Plese Enter All Value For Map');
+        }
+    }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+
 
 <script>
 let dropBox = document.getElementById('dropBox');

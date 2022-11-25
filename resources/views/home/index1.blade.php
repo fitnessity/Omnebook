@@ -547,6 +547,15 @@
         </div>
     </div>
 </section>
+
+<section class="instant-hire-home">
+	<div class="row">
+		<div class="col-md-12">
+			@include('includes.next_8_hours_home') 
+		</div>
+	</div>
+</section>
+
 @foreach($why_fitnessity as $whydata)
 <section class="ptb-65 plr-60 why_fitnessity" id="why-fitnessity" style=" background-image: url('/public/uploads/cms/{{ $whydata->banner_image }}')">
     <div class="cat-container">
@@ -575,7 +584,6 @@
     </div>
 </section>
 @endforeach
-
 
 <section class="ptb-65 plr-60 float-left w-100 discover_activities" id="discover" style="margin-top:100px">
     <div class="cat-container">
@@ -949,6 +957,33 @@
         $("#pac-input1").val(address);
         $("#suggesstion-box-search-location").hide();
     });
+
+        $(document).on('click', '.serv_fav1', function(){
+            var ser_id = $(this).attr('ser_id');
+            var id = $(this).attr('data-id');
+            var _token = $('meta[name="csrf-token"]'). attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '{{route("service_fav")}}',
+                data: {
+                    _token: _token,
+                    ser_id: ser_id
+                },
+                success: function (data) {
+                    if(data.status=='like')
+                    {
+                        if($('#serfavstarts'+ser_id).length){
+                            $('#serfavstarts'+ser_id).html('<i class="fas fa-heart"></i>');
+                        }
+                    }else{
+                        if($('#serfavstarts'+ser_id).length){
+                            $('#serfavstarts'+ser_id).html('<i class="far fa-heart"></i>');
+                        }
+                    }
+                }
+            });
+        });
+
 </script>
 <script>
 jQuery("#carousel-discover").owlCarousel({
