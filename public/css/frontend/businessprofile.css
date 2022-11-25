@@ -7251,7 +7251,9 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
     font-weight: 900 !important;
 }
 .img-modal-left-bpage img{
-	width: 100%;
+	width: 100% !important;
+	min-height: auto !important;
+	border-radius: 0px !important;
 }
 .business-right-panel{
 	padding-right: 0px !important;;

@@ -21901,7 +21901,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   border-radius: 10px;
 }
 .activity-data {
-  padding-left: 0px;
+  padding-left: 6px;
 }
 .activity-inner-data {
   display: inline-block;
@@ -21989,5 +21989,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	left: 50%;
 	position: absolute;
 	font-size: 120px;
+	color: #010101;
+}
+.fav-fun-2{
+	color: #010101;
+}
+.fav-fun-2:hover{
 	color: #010101;
 }

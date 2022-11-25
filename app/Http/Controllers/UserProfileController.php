@@ -9931,11 +9931,7 @@ class UserProfileController extends Controller {
                 $detail_data_com=  [];
                 $detail_data_user =  [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
-                $det_com  = json_decode(json_encode($detail_data_com), true); 
-
-                $detail_data_user['user'] = User::where('id',Auth::user()->id)->first();
-                $det_user  = json_decode(json_encode($detail_data_user), true); 
-                $allDetail = array_merge($det_com,$det_user);
+                $allDetail  = json_decode(json_encode($detail_data_com), true); ;
                 MailService::sendEmailafterclaimed($allDetail);
 
                 $msg = 'Match';
