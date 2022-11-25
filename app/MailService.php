@@ -413,8 +413,8 @@ class MailService
 
 
     public static function sendEmailafterclaimed($AllDetail){
-        Mail::send('emails.business-unclaim-to-claim-success', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
-            $comname = 'Fitnessity: CONGRATULATIONS '.strtoupper(@$AllDetail["company_data"]["company_name"]).' YOU ARE NOW LIVE ON FITNESSITY';
+        Mail::send('emails.Welcome_email_for_business_afer_claim', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $comname = 'Welcome to Fitnessity for Business';
             $m->from('noreply@fitnessity.co', 'Fitnessity');
             $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject($comname);
         });
