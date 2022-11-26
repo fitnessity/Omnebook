@@ -1262,7 +1262,6 @@ $chk_found = '';
 $(document).ready(function() {
 	$('.showphotos').on('click', function(e) {
 		$('.firstfancyimg').click();
-		close: true,
 	});
 });
 </script>
