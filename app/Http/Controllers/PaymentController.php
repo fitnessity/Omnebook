@@ -252,41 +252,43 @@ class PaymentController extends Controller {
                     'destination' => $bus_user->stripe_connect_id,
                 ]);*/
 
-                $accountcap  = $stripe->accounts->retrieveCapability(
-                    $bus_user->stripe_connect_id,
-                    'transfers',
-                    []
-                );
-                if($accountcap['status'] == 'active'){
-                    // Create a Transfer to a connected account (later):
-
-                    try {
-
-                        $transfer = \Stripe\Transfer::create([
-                            'amount' => $transfer_amt_to_bususer * 100,
-                            'currency' => 'usd',
-                            'source_transaction' => $payment_intent->charges->data[0]->id,
-                            'destination' => $bus_user->stripe_connect_id,
-                        ]);
-
-                        if(@$transfer->id != '')
-                        {  
-                            UserBookingDetail::where('id',$status->id)->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amt_to_bususer ,'provider_transaction_id' =>$transfer->id ]);
-                        }
-
-                    } catch (\Stripe\Exception\CardException $e) {
-                        UserBookingDetail::where('id',$status->id)->update(['transfer_provider_status'=>'unpaid']);
-                    }    
-                }else{
-                    $update =  $stripe->accounts->update(
-                         $bus_user->stripe_connect_id,
-                        [
-                            'capabilities' => [
-                              'card_payments' => ['requested' => true],
-                              'transfers' => ['requested' => true],
-                            ],
-                        ]
+                if($bus_user->stripe_connect_id){
+                    $accountcap  = $stripe->accounts->retrieveCapability(
+                        $bus_user->stripe_connect_id,
+                        'transfers',
+                        []
                     );
+                    if($accountcap['status'] == 'active'){
+                        // Create a Transfer to a connected account (later):
+
+                        try {
+
+                            $transfer = \Stripe\Transfer::create([
+                                'amount' => $transfer_amt_to_bususer * 100,
+                                'currency' => 'usd',
+                                'source_transaction' => $payment_intent->charges->data[0]->id,
+                                'destination' => $bus_user->stripe_connect_id,
+                            ]);
+
+                            if(@$transfer->id != '')
+                            {  
+                                UserBookingDetail::where('id',$status->id)->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amt_to_bususer ,'provider_transaction_id' =>$transfer->id ]);
+                            }
+
+                        } catch (\Stripe\Exception\CardException $e) {
+                            UserBookingDetail::where('id',$status->id)->update(['transfer_provider_status'=>'unpaid']);
+                        }    
+                    }else{
+                        $update =  $stripe->accounts->update(
+                             $bus_user->stripe_connect_id,
+                            [
+                                'capabilities' => [
+                                  'card_payments' => ['requested' => true],
+                                  'transfers' => ['requested' => true],
+                                ],
+                            ]
+                        );
+                    }
                 }
 
                 MailService::sendEmailBookingConfirmnew($BookingDetail);
