@@ -723,6 +723,7 @@ Route::any('/direct-hire/cart-payment', 'LessonController@cartpayment');
 Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');
+Route::get('/carts', 'CartController@index')->name('cart_index');
 
 
 
