@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
 	protected $fillable = [
         'booking_id', 'sport', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid',
-		'price','qty', 'bookedtime','payment_number','participate','provider_amount','provider_transaction_id','provider_transaction_id'
+		'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id'
     ];
 
 

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\UserBookingDetail;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,9 +26,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('stripe:cron')->everyMinute();
+
+        $schedule->call(function () {
+            $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
+
+
+            foreach($user_booking_details->get() as $user_booking_detail){
+                $user_booking_detail->transfer_to_provider();
+            }
+        })->everyTenMinutes();
        // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
-        // $schedule->command('inspire')
-        //          ->hourly();
+
     }
 
     protected function scheduleTimezone()
