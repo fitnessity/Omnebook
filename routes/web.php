@@ -897,6 +897,7 @@ Route::get('manageproduct','UserProfileController@manageproduct')->name('managep
 Route::get('addproduct','UserProfileController@addproduct')->name('addproduct');
 Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity');
 Route::get('manage-customer','UserProfileController@manage_customer')->name('manage-customer');
+Route::get('viewcustomer','UserProfileController@viewcustomer')->name('viewcustomer');
 Route::get('view-customer','UserProfileController@view_customer')->name('view-customer');
 Route::get('financial-dashboard','UserProfileController@financial_dashboard')->name('financial-dashboard');
 Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashboard');
