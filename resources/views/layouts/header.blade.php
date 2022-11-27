@@ -479,8 +479,9 @@ if(isset($cart["cart_item"])){
 						
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>
-							<input type="button" value="Book an Activity" class="btn-style-one" onclick="location.href='/activities'">
-							<a class="btn-cart">
+
+							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
+							<a class="btn-cart" href="{{route('carts_index')}}">
 								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">0</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
@@ -613,7 +614,6 @@ if(isset($cart["cart_item"])){
                         	@endif
                             
 							<script>
-                                $(".btn-cart").attr("href","/payments/card");
                                 $("#cart-item").html('<?=$total_quantity?>');
                             </script>
                     	</div>
