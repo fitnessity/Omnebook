@@ -57,7 +57,7 @@ use App\UserFamilyDetail;
                                         
                                         <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" href="#nav-past" role="tab" aria-controls="nav-past" aria-selected="false"  onclick="changecolor(this.id)">Past</a>
                                        
-                                        <a class="nav-item nav-link" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false"  onclick="changecolor(this.id)">Pending</a>
+                                        <!-- <a class="nav-item nav-link" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false"  onclick="changecolor(this.id)">Pending</a> -->
 
                                     </div>
                                 </nav>
