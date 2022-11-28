@@ -45,7 +45,7 @@ use App\ProfilePostViews;
 
 <?php
 $loggedinUser = Auth::user();
-$customerName = $loggedinUser->firstname . ' ' . $loggedinUser->lastname;
+$customerName = @$loggedinUser->firstname . ' ' . @$loggedinUser->lastname;
 
 /*$totFollowing = UserFollow::where('follower_id', Auth::user()->id)->count();
 $totFollowers = UserFollow::where('user_id', Auth::user()->id)->count();*/
@@ -54,8 +54,8 @@ $totFollowing = UserFollow::where('user_id', Auth::user()->id)->count();
 $totFollowers = UserFollow::where('follower_id', Auth::user()->id)->count();
 
                                 
-$profilePicture = $loggedinUser->profile_pic;
-$coverPicture = $loggedinUser->cover_photo;
+$profilePicture = @$loggedinUser->profile_pic;
+$coverPicture = @$loggedinUser->cover_photo;
 if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     ?>
     <script type="text/javascript">
@@ -81,7 +81,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     @if (!empty($viewgallery))
         @foreach (array_slice($viewgallery, 0, 4) as $pic)
            <div class="business-slider">
-                <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
+                <img src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
                 <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
             </div>
         @endforeach
@@ -104,7 +104,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 				<div class="con-width"> -->
 				<?php foreach (array_slice($viewgallery, 0, 4) as $pic) { ?>
 					<!-- <div class="one" style="width:{{$width}}%">
-						<img style="padding:0; margin:0;"  width="{{$width}}%" height="300" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
+						<img style="padding:0; margin:0;"  width="{{$width}}%" height="300" src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
 						<i class="fa fa-pen editpic editpic-fs" id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
 					</div>   -->  
                 <?php } ?>
@@ -152,7 +152,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                     <img src="{{ url('/public/uploads/profile_pic/thumb/'.$UserProfileDetail['profile_pic']) }}" alt="images" class="img-fluid">
                     @else
                     	<?php
-                    	$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+                    	$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 						echo '<div class="profile-pic-text"><p>'.$pf.'</p></div>'; ?>
                     @endif
                     <a href="javascript:void(0);" class="edit-pic" data-toggle="modal" data-target="#editProfilePic" title="Click here to change picture">
@@ -262,13 +262,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <div class="reatingbox"><!-- <h5><i class="fa fa-star rating-pro"></i><span>5.0 </span>(100) </h5> --> <div>
 				<ul class="profile-controls" id="profileControls">
                     <?php
-                        $userfollowing = UserFollow::where('user_id',$loggedinUser->id)->where('follower_id',$loggedinUser->id)->first(); ?>
+                        $userfollowing = UserFollow::where('user_id',@$loggedinUser->id)->where('follower_id',@$loggedinUser->id)->first(); ?>
 					<!-- <li><div class=""><i class="fa fa-star"></i></div></li>-->
 					<?php /* comment by Purvi?><li><a href="#" title="Add friend" data-toggle="tooltip"><i class="fa fa-user-plus"></i></a></li><?php */?>
                     <?php if($userfollowing) { ?>
                         <li> <p class="following-tag"> Following </p> </li>
                     <?php } else { ?>    
-                    <li><a href="javascript:void(0);" class="followProfile" title="Follow" profileid="{{$loggedinUser->id}}" userid="{{$loggedinUser->id}}" ><i class="fa fa-star"></i></a></li>
+                    <li><a href="javascript:void(0);" class="followProfile" title="Follow" profileid="{{@$loggedinUser->id}}" userid="{{@$loggedinUser->id}}" ><i class="fa fa-star"></i></a></li>
                     <?php } ?>
 					<!--comment by aks <li><a href="#" title="Follow" data-toggle="tooltip"><i class="fa fa-star"></i></a></li> -->
 					<?php /* comment by Purvi ?><li><a class="send-mesg" href="#" title="Send Message" data-toggle="tooltip"><i class="fa fa-comment"></i></a></li><?php */?>
@@ -440,7 +440,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     <div class="friend-info">
                                         <figure><img src="/public/images/newimage/nearly1.jpg" alt=""></figure>
                                         <div class="friend-name">
-                                            <ins><a href="#" title="">{{ucfirst($loggedinUser->firstname)}} {{ucfirst($loggedinUser->lastname)}}</a> Post Album</ins>
+                                            <ins><a href="#" title="">{{ucfirst(@$loggedinUser->firstname)}} {{ucfirst(@$loggedinUser->lastname)}}</a> Post Album</ins>
                                         </div>
                                         <div class="post-meta">
                                            <p class="postText"></p>
@@ -506,7 +506,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
                                             <figure><img src="/public/images/newimage/nearly1.jpg" alt=""></figure>
                                             <div class="friend-name">
-                                                <ins><a href="#" title="">{{ucfirst($loggedinUser->firstname)}} {{ucfirst($loggedinUser->lastname)}}</a> Post Album</ins>
+                                                <ins><a href="#" title="">{{ucfirst(@$loggedinUser->firstname)}} {{ucfirst(@$loggedinUser->lastname)}}</a> Post Album</ins>
                                             </div>
                                             <input type="text" class="post_textemoji" id="post_textemoji"  name="post_text_upd" data-emojiable="true" >     
                                             <div class="post-meta" id="edit_image"></div>
@@ -822,10 +822,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                         	@csrf
                                             <span class="create-post">Post Your Experiences</span>
 											<div class="post-img figure">
-                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-												<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="Fitnessity">
+                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
+												<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
                                                 <?php }else{ 
-												$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+												$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 													echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
 												?>
                                                 
@@ -876,17 +876,17 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 										<div class="user-post">
 											<div class="friend-info">
 												<div class="post-img figure">
-                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="Fitnessity">
+                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
+                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
                                                     <?php }else{ 
-                                                    $pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+                                                    $pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                                     ?>
                                                     
                                                     <?php } ?>
                                                 </div>
 												<div class="friend-name">
-													<ins><a href="#" title="">{{ucfirst($loggedinUser->firstname)}} {{ucfirst($loggedinUser->lastname)}}</a> Post Album</ins>
+													<ins><a href="#" title="">{{ucfirst(@$loggedinUser->firstname)}} {{ucfirst(@$loggedinUser->lastname)}}</a> Post Album</ins>
 												</div>
 												<div class="post-meta">
 												   <p class="postText"></p>
@@ -936,13 +936,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 												<div class="user-post">
 													<div class="friend-info">
                                                     <?php
-                                                    	if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData->profile_pic )))
+                                                    	if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userData->profile_pic )) && @$userData->profile_pic != '')
 														{ ?>
 														<figure>
-                                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$userData->profile_pic) }}" alt="pic">
+                                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="pic">
                                                         </figure>
 													<?php } else { 
-														$pf=substr($userData->firstname, 0, 1).substr($userData->lastname, 0, 1);
+														$pf=substr(@$userData->firstname, 0, 1).substr(@$userData->lastname, 0, 1);
 													?>
                                                     		<figure><div class="admin-img-text">
                                                             <?php echo '<p>'.$pf.'</p>'; ?>
@@ -951,29 +951,29 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     <?php } ?>
 														<div class="friend-name">
 														<?php
-															$postreport = PostReport::where('user_id',Auth::user()->id)->where('post_id',$profile_post->id)->first(); 
-															$postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',$profile_post->id)->get();
+															$postreport = PostReport::where('user_id',Auth::user()->id)->where('post_id',@$profile_post->id)->first(); 
+															$postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',@$profile_post->id)->get();
 															$postsaveCount = $postsave->count();
 														?>
                                                         <div class="more">
 															<div class="more-post-optns">
                                                             	<i class="fa fa-ellipsis-h"></i>
 																<ul>
-                                                                	@if($loggedinUser->id == $profile_post->user_id)
-																		<li><a id="{{$profile_post->id}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
-                                                                        <li><a href="{{route('delPost',$profile_post->id)}}"><i class="fa fa-trash"></i>Delete Post</a></li>
+                                                                	@if(@$loggedinUser->id == $profile_post->user_id)
+																		<li><a id="{{@$profile_post->id}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+                                                                        <li><a href="{{route('delPost',@$profile_post->id)}}"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                                     @endif
-																	@if(($loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
-																		<li><a href="{{route('savePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
+																	@if((@$loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
+																		<li><a href="{{route('savePost',['pid'=>@$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
                                                                     @elseif ($postsave->count() > 0)
-                                                                    	<li><a href="{{route('RemovesavePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
+                                                                    	<li><a href="{{route('RemovesavePost',['pid'=>@$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
 																	@endif
                                                                     <?php /*?>@if(empty($postreport))
-																		<li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
+																		<li class="bad-report"><a is_report="1" id="{{@$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
 																	@elseif($postreport->report_post==1)
-																		<li class="bad-report"><a is_report="0" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Un Report Post</a></li>
+																		<li class="bad-report"><a is_report="0" id="{{@$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Un Report Post</a></li>
                         											@elseif($postreport->report_post==0)
-																		<li class="bad-report"><a is_report="1" id="{{$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
+																		<li class="bad-report"><a is_report="1" id="{{@$profile_post->id}}" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>
 																	@endif
                         											<li><i class="fa fa-address-card"></i>Boost This Post</li>
                                                                     <li><i class="fa fa-clock-o"></i>Schedule Post</li>
@@ -982,7 +982,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																</ul>
 															</div><!-- more-post-optns -->
 														</div>
-                                                        <ins><a href="#" title="">{{ucfirst($userData->firstname)}} {{ucfirst($userData->lastname)}} </a> Post Album</ins>
+                                                        <ins><a href="#" title="">{{ucfirst(@$userData->firstname)}} {{ucfirst(@$userData->lastname)}} </a> Post Album</ins>
                                                         <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($profile_post->created_at))}}</span>
 													</div><!-- friend-info -->
 													<div class="post-meta">
@@ -1001,17 +1001,17 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																			<figure>
 																				<a href="#" title="" data-toggle="modal" data-target="#img-comt">
-																					<video controls class="thumb"  style="width: 100%;" id="vedio{{$profile_post->id}}">
+																					<video controls class="thumb"  style="width: 100%;" id="vedio{{@$profile_post->id}}">
 																						<source src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/video/{{$profile_post->video}}" type="video/mp4">
 																					</video>
 																				</a>
 																			</figure>
                                                                     <script type="text/javascript">
                                                                         
-                                                                        /*const vid = document.getElementById('vedio{{$profile_post->id}}');*/
+                                                                        /*const vid = document.getElementById('vedio{{@$profile_post->id}}');*/
 
                                                                         ['playing'].forEach(t => 
-                                                                           document.getElementById('vedio{{$profile_post->id}}').addEventListener(t, e => vediopostviews('{{$profile_post->id}}'))
+                                                                           document.getElementById('vedio{{@$profile_post->id}}').addEventListener(t, e => vediopostviews('{{@$profile_post->id}}'))
                                                                         );
                                                                     </script>
 																		</div>
@@ -1041,7 +1041,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                     <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1058,14 +1058,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[0]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[1]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
@@ -1074,21 +1074,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[2]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[3]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[4]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
                                                                         </a>
                                                                         <div class="more-photos">
@@ -1105,7 +1105,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1114,21 +1114,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">   
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>    
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4">  
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
@@ -1141,19 +1141,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
@@ -1165,14 +1165,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1185,7 +1185,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1195,18 +1195,18 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @endif
                                                                    
                                                                     <?php
-																		$profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count();
+																		$profile_posts_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->count();
                                                                         $likemore = $profile_posts_like-2;
-                                                                        $loginuser_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id',$loggedinUser->id)->first();
-                                                                        $seconduser_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->first();
+                                                                        $loginuser_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->where('user_id',@$loggedinUser->id)->first();
+                                                                        $seconduser_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->first();
                         
-                                                                        $profile_posts_comment = PostComment::where('post_id',$profile_post->id)->count();
-																		$postsaved = ProfileSave::where('profile_id',$profile_post->id)->where('user_id',$loggedinUser->id)->first();
+                                                                        $profile_posts_comment = PostComment::where('post_id',@$profile_post->id)->count();
+																		$postsaved = ProfileSave::where('profile_id',@$profile_post->id)->where('user_id',@$loggedinUser->id)->first();
 																		$activethumblike=''; $savedpost='';
 																		if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
 																																			
 																	?>
-																	<ul class="like-dislike" id="ulike-dislike<?php echo $profile_post->id; ?>">
+																	<ul class="like-dislike" id="ulike-dislike<?php echo @$profile_post->id; ?>">
 																		<!--<li><a href="" title="Save to Pin Post">
                                                                         		<i class="thumbtrack fas fa-thumbtack"></i>
 																			</a>
@@ -1218,19 +1218,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         @if(!empty($loginuser_like))
                                                                          	<?php $activethumblike='activethumblike'; ?>
                                                                         @endif
-                                                                        <li><a href="javascript:void(0);" title="Like Post" class="<?php echo $activethumblike; ?>"><i id="{{$profile_post->id}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li>
-                                                                        <li><a href="javascript:void(0);" title="dislike Post"><i id="{{$profile_post->id}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
+                                                                        <li><a href="javascript:void(0);" title="Like Post" class="<?php echo $activethumblike; ?>"><i id="{{@$profile_post->id}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li>
+                                                                        <li><a href="javascript:void(0);" title="dislike Post"><i id="{{@$profile_post->id}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
 																	</ul>
 																</figure>   
 
                                                                 <div class="we-video-info">
 																	
-                                                                    <ul class ="postinfoul{{$profile_post->id}}">
+                                                                    <ul class ="postinfoul{{@$profile_post->id}}">
                                                                         @if(isset($profile_post->video))
                                                                         
                                                                         <?php 
 
-                                                                            $ppvcnt = ProfilePostViews::where('post_id' , $profile_post->id)->count();
+                                                                            $ppvcnt = ProfilePostViews::where('post_id' , @$profile_post->id)->count();
                                                                         ?>
                                                                     	<li>
                                                                         	<span class="views" title="views">
@@ -1240,10 +1240,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		</li>
                                                                         @endif
 																		<li>
-                                                                        	<div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post->id}}">{{$profile_posts_like}}</span></div>
+                                                                        	<div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{@$profile_post->id}}">{{$profile_posts_like}}</span></div>
 																		</li>
 																		<li>
-                                                                        	<span class="comment{{$profile_post->id}}" title="Comments">
+                                                                        	<span class="comment{{@$profile_post->id}}" title="Comments">
 																				<i class="commentdots fas fa-comment-dots"></i>
 																				<ins>{{$profile_posts_comment}}</ins>
 																			</span>
@@ -1253,40 +1253,40 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                             	<a class="share-pst" href="javascript:void(0);" onclick="fbPost()" title="Share">
                                                                                 	<i class="sharealt fas fa-share-alt"></i>
 																				</a>
-                                                                                <!--<a id="{{$profile_post->id}}" href="{{route('postDetail', ['id'=>$profile_post->id])}}" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>						-->
+                                                                                <!--<a id="{{@$profile_post->id}}" href="{{route('postDetail', ['id'=>@$profile_post->id])}}" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>						-->
                                                                                 <?php
-																				$url=url('/postDetail/'.$profile_post->id);
+																				$url=url('/postDetail/'.@$profile_post->id);
 																				?>
-                                                                                <!--<a id="{{$profile_post->id}}" href="{{$url}}" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>-->
+                                                                                <!--<a id="{{@$profile_post->id}}" href="{{$url}}" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>-->
                                                                                 
                                                                                 
-                                                                                <a id="{{$profile_post->id}}" href="#" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>
+                                                                                <a id="{{@$profile_post->id}}" href="#" class="share sharefb facebook btn btn-primary"><i class="fb fab fa-facebook-f"></i> Facebook</a>
                                                                                     <!-- <ins>20</ins> -->
 																			</span> 
 																		</li><?php */?>
 																	</ul>
-                                                                    <div class="users-thumb-list" id="users-thumb-list<?php echo $profile_post->id; ?>">
+                                                                    <div class="users-thumb-list" id="users-thumb-list<?php echo @$profile_post->id; ?>">
                                                                     <?php
-                                                                    $profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count(); ?>
+                                                                    $profile_posts_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->count(); ?>
                                                                     	@if($profile_posts_like>0)
 																		
 																			@if(!empty($loginuser_like))
 																				<a data-toggle="tooltip" title="" href="#">
-                                                                                	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-                                                                                		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" height="32" width="32">  
+                                                                                	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
+                                                                                		<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" height="32" width="32">  
                                                                                     <?php }else{ 
-                                                                                        $pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+                                                                                        $pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                                                                     } ?> 
                                                                                 </a>
 																			@endif
 																			<?php 
-                                                                                $profile_posts_all = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get();?>
+                                                                                $profile_posts_all = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->limit(4)->get();?>
                                                                                 @if(isset($profile_posts_all[0]))
 																					<?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$seconduser->profile_pic ))){ ?>
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic) }}" height="32" width="32">
+                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$seconduser->profile_pic ))){ ?>
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$seconduser->profile_pic) }}" height="32" width="32">
                                                                                     <?php }else{ 
                                                                                         $pf=substr($seconduser->firstname, 0, 1).substr($seconduser->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -1296,8 +1296,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 @if(isset($profile_posts_all[1]))
 																					<?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$thirduser->profile_pic ))){ ?>
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$thirduser->profile_pic) }}" height="32" width="32">
+                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$thirduser->profile_pic ))){ ?>
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$thirduser->profile_pic) }}" height="32" width="32">
                                                                                     <?php }else{ 
                                                                                         $pf=substr($thirduser->firstname, 0, 1).substr($thirduser->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -1307,8 +1307,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 @if(isset($profile_posts_all[2]))
 																					<?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$fourthuser->profile_pic ))){ ?>
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">
+                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$fourthuser->profile_pic ))){ ?>
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$fourthuser->profile_pic) }}" height="32" width="32">
                                                                                     <?php }else{ 
                                                                                         $pf=substr($fourthuser->firstname, 0, 1).substr($fourthuser->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -1318,8 +1318,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 @if(isset($profile_posts_all[3]))
 																					<?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="" href="#">
-                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$fifthuser->profile_pic ))){ ?>
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fifthuser->profile_pic) }}" height="32" width="32"> 
+                                                                                    <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$fifthuser->profile_pic ))){ ?>
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$fifthuser->profile_pic) }}" height="32" width="32"> 
                                                                                     <?php }else{ 
                                                                                         $pf=substr($fifthuser->firstname, 0, 1).substr($fifthuser->lastname, 0, 1);
                                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -1350,8 +1350,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                 <div class="coment-area" style="display: block;">
                                                                     <ul class="we-comet">
                                                                         <?php 
-                                                                        $comments = PostComment::where('post_id',$profile_post->id)->limit(2)->get();
-                                                                        $allcomments = PostComment::where('post_id',$profile_post->id)->get();
+                                                                        $comments = PostComment::where('post_id',@$profile_post->id)->limit(2)->get();
+                                                                        $allcomments = PostComment::where('post_id',@$profile_post->id)->get();
                                                                         ?>
                                                                         @if(count($comments) > 0)
                                                                             @foreach($comments as $comment)
@@ -1362,15 +1362,15 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 ?>
                                                                                 <li class="commentappendremove">
                                                                                     <div class="comet-avatar">
-                                                                                        <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$username->profile_pic ))){ ?>
-                                                                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="pic">
+                                                                                        <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$username->profile_pic )) && @$username->profile_pic != ''){ ?>
+                                                                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$username->profile_pic) }}" alt="pic">
                                                                                         <?php }else{ 
-                                                                                            $pf=substr($username->firstname, 0, 1).substr($username->lastname, 0, 1);
+                                                                                            $pf=substr(@$username->firstname, 0, 1).substr(@$username->lastname, 0, 1);
                                                                                             echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                                                                         } ?>
                                                                                     </div>
                                                                                     <div class="we-comment">
-                                                                                        <h5><a href="javascript:void(0);" title="">{{$username->firstname}} {{$username->lastname}}</a></h5>
+                                                                                        <h5><a href="javascript:void(0);" title="">{{@$username->firstname}} {{@$username->lastname}}</a></h5>
                                                                                         <p>{{$comment->comment}}</p>
                                                                                         <div class="inline-itms" id="commentlikediv<?php echo $comment->id; ?>">
                                                                                         <?php
@@ -1379,33 +1379,33 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																						?>
                                                                                             <span>{{$comment->created_at->diffForHumans()}}</span>
                                                                                             <?php /*?><a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a><?php */?>
-                                                                                            <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
+                                                                                            <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{@$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
                                                                             @endforeach
                                                                         @endif
-                                                                        <li class="commentappend{{$profile_post->id}}"></li>
+                                                                        <li class="commentappend{{@$profile_post->id}}"></li>
                                                                         
                                                                             <input type="hidden" name="commentdisplay" id="commentdisplay" value="5">
                                                                         @if(count($allcomments) > 2)
                                                                             <li>
-                                                                                <a id="{{$profile_post->id}}" href="javascript:void(0);" title="" class="showcomments showmore underline">more comments+</a>
+                                                                                <a id="{{@$profile_post->id}}" href="javascript:void(0);" title="" class="showcomments showmore underline">more comments+</a>
                                                                             </li>
                                                                         @endif
                                                                         <li class="post-comment">
                                                                             <div class="comet-avatar">
-                                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-                                                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="pic">
+                                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic )) && @$loggedinUser->profile_pic != ''){ ?>
+                                                                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="pic">
                                                                                 <?php }else{ 
-																					$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+																					$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 																					echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
 																				} ?>
                                                                             </div>
                                                                             <div class="post-comt-box">
                                                                                 <form method="post" id="commentfrm">
-                                                                                    <textarea placeholder="Post your comment" name="comment" id="comment{{$profile_post->id}}"></textarea>
-                                                                                    <span class="error" id="err_comment{{$profile_post->id}}"></span>
+                                                                                    <textarea placeholder="Post your comment" name="comment" id="comment{{@$profile_post->id}}"></textarea>
+                                                                                    <span class="error" id="err_comment{{@$profile_post->id}}"></span>
                                                                                     <div class="add-smiles">
                                                                                         
                                                                                         <span class="em em-expressionless" title="add icon"></span>
@@ -1424,7 +1424,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                             <i class="em em-stuck_out_tongue"></i>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <button id="{{$profile_post->id}}" class="postcomment theme-red-bgcolor" type="button">Post</button>
+                                                                                    <button id="{{@$profile_post->id}}" class="postcomment theme-red-bgcolor" type="button">Post</button>
                                                                                 </form> 
                                                                             </div>
                                                                         </li>
@@ -1461,7 +1461,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 @else
                                                                                 	<div class="item"  data-slide-number="{{ $pic['id'] }}">
                                                                                 @endif
-																					<img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
+																					<img src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
 																				</div>
 																			@endforeach
 																		</div>
@@ -1473,7 +1473,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<?php
                                                                                 foreach ($gallery as $pic) { ?>
 																					<li>
-                                                                                        <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
+                                                                                        <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
                                                                                     </li>
                                                                                 <?php } ?> 
 																		</ul>
@@ -1731,30 +1731,30 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="user-post">
                                                             <div class="friend-info">
                                                             <figure>
-                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData->profile_pic ))){ ?>
-                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userData->profile_pic) }}" alt="Fitnessity">
+                                                            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userData->profile_pic ))){ ?>
+                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="Fitnessity">
                                                                 <?php }else{ 
-                                                                    $pf=substr($userData->firstname, 0, 1).substr($userData->lastname, 0, 1);
+                                                                    $pf=substr(@$userData->firstname, 0, 1).substr(@$userData->lastname, 0, 1);
                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                                                 } ?>
                                                             </figure>
                                                                 <div class="friend-name">
                                                                     <?php
                                                                     $postreport = PostReport::where('user_id',Auth::user()->id)->where('post_id',$profile_post['id'])->first();
-																	$postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',$profile_post->id)->get();
+																	$postsave = ProfileSave::where('user_id',Auth::user()->id)->where('profile_id',@$profile_post->id)->get();
                                                                     ?>                                           
                                                                     <div class="more">
                                                                         <div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
                                                                             <ul>
-                                                                                 @if($loggedinUser->id == $profile_post['user_id'])
+                                                                                 @if(@$loggedinUser->id == $profile_post['user_id'])
                                                                                 <li><a id="{{$profile_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
                                                                                 <li><a href="{{route('delPost',$profile_post['id'])}}"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                                                 @endif
 
-                                                                               	@if(($loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
+                                                                               	@if((@$loggedinUser->id != $profile_post->user_id) && $postsave->count() == 0 )
                                                                                     <li><a href="{{route('savePost',['pid'=>$profile_post['id'],'uid'=>$profile_post['user_id']])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
                                                                                 @elseif ($postsave->count() > 0)
-                                                                                    <li><a href="{{route('RemovesavePost',['pid'=>$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
+                                                                                    <li><a href="{{route('RemovesavePost',['pid'=>@$profile_post->id,'uid'=>$profile_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
                                                                                 @endif
                                                                                 
                                                                                 <?php /*?>@if(empty($postreport))
@@ -1774,7 +1774,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                             </ul>
                                                                         </div>
                                                                     </div>
-                                                                    <ins><a href="#" title="">{{ucfirst($userData->firstname)}} {{ucfirst($userData->lastname)}} </a> Post Album</ins>
+                                                                    <ins><a href="#" title="">{{ucfirst(@$userData->firstname)}} {{ucfirst(@$userData->lastname)}} </a> Post Album</ins>
                                                                     <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($profile_post['created_at']))}}</span>
                                                                 </div><!-- friend-name -->
                                                                 <div class="post-meta">
@@ -1800,10 +1800,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                         </figure>
                                                                                         <script type="text/javascript">
                                                                         
-                                                                        /*const svid = document.getElementById('vedio{{$profile_post->id}}');*/
+                                                                        /*const svid = document.getElementById('vedio{{@$profile_post->id}}');*/
 
                                                                         ['playing'].forEach(t => 
-                                                                           document.getElementById('vedio{{$profile_post->id}}').addEventListener(t, e => vediopostviews('{{$profile_post->id}}'))
+                                                                           document.getElementById('vedio{{@$profile_post->id}}').addEventListener(t, e => vediopostviews('{{@$profile_post->id}}'))
                                                                         );
                                                                     </script>
                                                                                     </div>
@@ -1967,16 +1967,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                         <?php
 																			$profile_posts_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->count();
 																			$likemore = $profile_posts_like-2;
-																			$loginuser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first();
-																			$seconduser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->first();
+																			$loginuser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first();
+																			$seconduser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->first();
                                                                         	$profile_posts_comment = PostComment::where('post_id',$profile_post['id'])->count();
-																			$postsaved = ProfileSave::where('profile_id',$profile_post->id)->where('user_id',$loggedinUser->id)->first();
+																			$postsaved = ProfileSave::where('profile_id',@$profile_post->id)->where('user_id',@$loggedinUser->id)->first();
 																			$activethumblike=''; $savedpost='';
 																			if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
                                                                         ?>
                                                                         
-                                                                        <ul class="like-dislike" id="ulike-dislike<?php echo $profile_post->id; ?>">
-                                                                        <?php $loginuser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first(); ?>
+                                                                        <ul class="like-dislike" id="ulike-dislike<?php echo @$profile_post->id; ?>">
+                                                                        <?php $loginuser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first(); ?>
                                                                         	@if(!empty($loginuser_like))
                                                                          	<?php $activethumblike='activethumblike'; ?>
                                                                         	@endif
@@ -2005,7 +2005,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 <div class="likes heart" title="Like/Dislike">❤ <span id="likecount{{$profile_post['id']}}">{{$profile_posts_like}}</span></div>
                                                                             </li>
                                                                             <li>
-                                                                                <span class="comment{{$profile_post->id}}" title="Comments">
+                                                                                <span class="comment{{@$profile_post->id}}" title="Comments">
                                                                                     <i class="commentdots fas fa-comment-dots"></i>
                                                                                     <ins>{{$profile_posts_comment}}</ins>
                                                                                 </span>
@@ -2020,42 +2020,42 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 </span> 
                                                                             </li><?php */?>
                                                                         </ul>
-                                                                        <div class="users-thumb-list" id="users-thumb-list<?php echo $profile_post->id; ?>">
+                                                                        <div class="users-thumb-list" id="users-thumb-list<?php echo @$profile_post->id; ?>">
                                                                         <?php
-                                                                    	$profile_posts_like = PostLike::where('post_id',$profile_post->id)->where('is_like',1)->count(); ?>
+                                                                    	$profile_posts_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->count(); ?>
                                                                         	@if($profile_posts_like>0)
                                                                             
                                                                                 @if(!empty($loginuser_like))
                                                                                     <a data-toggle="tooltip" title="Anderw" href="#">
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" height="32" width="32">  
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" height="32" width="32">  
                                                                                     </a>
                                                                                 @endif
                                                                                 <?php 
-                                                                                $profile_posts_all = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get();?>
+                                                                                $profile_posts_all = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->limit(4)->get();?>
                                                                                 @if(isset($profile_posts_all[0]))
                                                                                 <?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
                                                                                 	<a data-toggle="tooltip" title="frank" href="#">
-                                                                                    	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$seconduser->profile_pic) }}" height="32" width="32">  
+                                                                                    	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$seconduser->profile_pic) }}" height="32" width="32">  
                                                                                		</a>
                                                                                 @endif
                                                                                 @if(isset($profile_posts_all[1]))
                                                                                 <?php $thirduser = User::find($profile_posts_all[1]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="Sara" href="#">
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$thirduser->profile_pic) }}" height="32" width="32">  
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$thirduser->profile_pic) }}" height="32" width="32">  
                                                                                     </a>
                                                                                 @endif
             
                                                                                 @if(isset($profile_posts_all[2]))
                                                                                 <?php $fourthuser = User::find($profile_posts_all[2]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="Amy" href="#">
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fourthuser->profile_pic) }}" height="32" width="32">  
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$fourthuser->profile_pic) }}" height="32" width="32">  
                                                                                     </a>
                                                                                 @endif
             
                                                                                 @if(isset($profile_posts_all[3]))
                                                                                 <?php $fifthuser = User::find($profile_posts_all[3]->user_id); ?>
                                                                                     <a data-toggle="tooltip" title="Ema" href="#">
-                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$fifthuser->profile_pic) }}" height="32" width="32">  
+                                                                                        <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$fifthuser->profile_pic) }}" height="32" width="32">  
                                                                                     </a>
                                                                                 @endif
                                                                                 <span>
@@ -2091,10 +2091,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 ?>
                                                                                 <li class="commentappendremove">
                                                                                     <div class="comet-avatar">
-                                                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="">
+                                                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$username->profile_pic) }}" alt="">
                                                                                     </div>
                                                                                     <div class="we-comment">
-                                                                                        <h5><a href="javascript:void(0);" title="">{{$username->firstname}} {{$username->lastname}}</a></h5>
+                                                                                        <h5><a href="javascript:void(0);" title="">{{@$username->firstname}} {{@$username->lastname}}</a></h5>
                                                                                         <p>{{$comment->comment}}</p>
                                                                                         <div class="inline-itms" id="commentlikediv<?php echo $comment->id; ?>">
                                                                                         <?php
@@ -2102,7 +2102,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																						?>
                                                                                             <span>{{$comment->created_at->diffForHumans()}}</span>
                                                                                             <!--<a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>-->
-                                                                                            <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
+                                                                                            <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{@$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
@@ -2117,7 +2117,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		@endif
                                                                         <li class="post-comment">
 																			<div class="comet-avatar">
-																				<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="pic">
+																				<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="pic">
                                                                             </div>
                                                                             <div class="post-comt-box">
                                                                                 <form method="post" id="commentfrm">
@@ -2178,7 +2178,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 @else
                                                                                 	<div class="item"  data-slide-number="{{ $pic['id'] }}">
                                                                                 @endif
-																					<img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
+																					<img src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
                                                                          		</div>
 																			@endforeach
 																		</div><!-- Carousel nav -->
@@ -2190,7 +2190,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<?php
 																				foreach ($gallery as $pic) { ?>
                                                                                     <li>
-                                                                                        <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
+                                                                                        <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
                                                                                     </li>
 																			<?php } ?> 
 																		</ul>
@@ -2776,7 +2776,7 @@ $(document).on('click', '.editpic', function(){
 	//$('.editpic').click(function () {
 	var imgname = $(this).attr('imgname');
 	var id = $(this).attr('id');
-	var foldernm = '<?php echo $loggedinUser->id;  ?>';
+	var foldernm = '<?php echo @$loggedinUser->id;  ?>';
 	$('#imgId').val(id);
 	$('#imgname').val(imgname);
 	$(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);

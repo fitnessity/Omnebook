@@ -33,7 +33,7 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
-                    <input  type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth">
+                    <input  type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm-dd-YY)">
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                     <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
                     <div class="terms-wrap">
@@ -280,7 +280,7 @@
                                 </div>
                                 <div>
                                     <div class="birthday_date-position">
-                                        <input type="date" name="birthday_date" id="birthday_date" class="form-control birthday" />
+                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm-dd-YY" />
                                         <span class="error" id="err_birthday_date"></span>
                                     </div>
                                 </div>
@@ -299,12 +299,12 @@
                                     <span class="error" id="err_relationship"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input maxlength="10" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    <input maxlength="14" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('mphone')">
                                     <span class="error" id="err_mphone"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input maxlength="10" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                    <span class="error" id="err_emergency_phone"></span>
+                                    <input maxlength="14" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('emergency_phone')">
+                                    <span class="error" id="err_emergency_phone" ></span>
                                 </div>
                                 <div class="form-group">
                                     <select name="gender" id="gender" class="form-control gender">
@@ -535,6 +535,8 @@
         var city_sign = $('#city_sign').val();
         var state_sign = $('#state_sign').val();
         var zipcode_sign = $('#zipcode_sign').val();
+        var lon = $('#lon').val();
+        var lat = $('#lat').val();
         
         $('#err_address_sign').html('');
         $('#err_country_sign').html('');
@@ -748,10 +750,10 @@
             e.preventDefault();
             $('#frmregister').submit();
         });*/
-        $('.dobdate').Zebra_DatePicker({
+        /*$('.dobdate').Zebra_DatePicker({
             format: 'm/d/Y',
             default_position: 'below'
-        });
+        });*/
         $("#frmregister").submit(function (e) {
             e.preventDefault();
             $('#frmregister').validate({
@@ -896,6 +898,17 @@
             $("#contact").val("(" + con + ")" + "-");
         } else if (curchr == 9) {
             $("#contact").val(con + "-");
+        }
+    }
+
+    function changeformate_fami_pho(idname) {
+        /*alert($('#contact').val());*/
+        var con = $('#'+idname).val();
+        var curchr = con.length;
+        if (curchr == 3) {
+            $('#'+idname).val("(" + con + ")" + "-");
+        } else if (curchr == 9) {
+            $('#'+idname).val(con + "-");
         }
     }
 </script>

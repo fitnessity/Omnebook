@@ -21997,3 +21997,211 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .fav-fun-2:hover{
 	color: #010101;
 }
+.staff-main{
+	float: right;
+	margin-bottom: 15px;
+}
+.total-clients i{
+	font-size: 20px;
+}
+
+
+.custom.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: left;        /* adjust as needed */
+    color: #010101;
+	position: absolute;
+	margin-left: 15px;        /* adjust as needed */
+}
+.custom.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+.panel-group .custom-panel.panel{
+	margin-bottom: 0;
+	border-radius: 0px;
+	border: none;
+	border-bottom: 1px solid #000;
+}
+.panel-group .custom.panel-heading + .panel-collapse > .panel-body{
+	border-top: 1px solid #fff;
+}
+.custom.panel-heading{
+	background-color: #fff;
+}
+.collapse-img img{
+	width: 50px;
+	height: 50px;
+	float: left;
+	border-radius: 100%;
+}
+.client-name span{
+	font-size: 16px;
+	font-weight: 500;
+}
+.client-name p{
+	font-size: 11px;
+}
+.client-age{
+	font-size: 16px;
+}
+.collapse-inner-box{
+	box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, .35);
+	padding: 10px;
+}
+.client-status span{
+	font-size: 16px;
+}
+.client-status label{
+	font-size: 16px;
+	font-weight: 400;
+}
+.red-fonts{
+	color: #ee0404;
+}
+.green-fonts{
+	color: #048e04;
+}
+.client-status a{
+	text-decoration: underline;
+}
+.mrb-2{
+	margin-bottom: 20px;
+}
+.black-fonts{
+	color: #000;
+}
+.manage-cust-box{
+	box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, .35);
+	padding: 10px;
+	margin-bottom: 16px;
+}
+.manage-cust-img img{
+	width: 153px;
+	height: 153px;
+	border-radius: 100%;
+}
+.client-info span{
+	font-size: 25px;
+	font-weight: 500;
+	color: #040404;
+}
+.client-info{
+	border-bottom: 2px solid #f91942;
+}
+.client-info a{
+	float: right;
+	margin-top: 9px;
+}
+.client-info-parts{
+	margin-top: 15px;
+}
+.side-border{ 
+	border-left: 1px solid black;
+}
+
+.manage-cus-btn{
+	margin-top: 15px;
+	float: right;
+}
+.view-customer .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	color: #ef0c0c;
+}
+.view-customer .nav-tabs .nav-item a{
+	color: #080808;
+	background: none;
+	border: none !important;
+}
+.tab-custom{
+	margin-top: 20px;
+}
+.tab-titles{
+	font-size: 18px;
+	margin-bottom: 15px;
+}
+.customer-info a{
+	text-decoration: underline;
+	margin-left: 10px;
+}
+.manage-cust-box.box-height{
+	min-height: 219px;
+}
+.manage-cust-box.second-box-height{
+	min-height: 310px;
+}
+.tab-custom.tab-content .fade{
+  opacity: 2;
+}
+/*.view-customer .nav-tabs .nav-item .nav-link.active{
+	color: #f91942;
+}*/
+.visit-table-data span{
+	margin-right: 20px;
+}
+.visit-table-data{
+	margin-bottom:10px;
+}
+.inner-pill-tabs .nav-pills .nav-item .nav-link{
+	background: none;
+	border: none !important;
+	color: #080808;
+	padding: 0px 9px;
+}
+.inner-pill-tabs .nav-pills .nav-item.active .nav-link{ font-weight: bold; text-decoration: underline; }
+.inner-pill-tabs .nav-pills .nav-item .nav-link label{
+	margin-left: 15px;
+}
+.activities-booked-width{
+	width: 50%;
+}
+.inner-arrow .accordion-toggle::after {
+  font-family: 'Glyphicons Halflings';
+  content: "\e114";
+  float: left;
+  color: #010101;
+  position: absolute;
+  margin-left: 10px;
+}
+.inner-arrow.panel-heading{
+	text-align: center;
+	background: #fff;
+}
+.inner-accordion-titles label{
+	width: 73%;
+}
+.inner-accordion-titles span{
+	width: 15%;
+	display: inline;
+}
+.inner-accordion-titles span i{
+	font-size: 20px;
+	margin-left: 5px;
+}
+.inner-accordion-titles{
+	border-bottom: 2px solid #ec1a23;
+	margin-bottom: 10px;
+}
+.customer-profile-info span{
+	float: right;
+	font-size: 13px;
+}
+.customer-profile-info label{
+	font-size: 13px;
+}
+.customer-profile-info {
+	border-bottom: 2px solid #ec1a23;
+	margin-bottom: 15px;
+}
+.view-visits{
+	float: right;
+}
+.view-visits a{
+	text-decoration: underline;
+	color: #000;
+}
+.edit-booking a{
+	text-decoration: underline;
+	color: #000;
+}
