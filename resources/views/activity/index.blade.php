@@ -79,7 +79,7 @@
 							<div class="find-activity">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
-										<img src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" >
+										<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}" >
 									</div>
 									<div class="col-md-8 col-sm-8 activity-data">
 										<div class="row">

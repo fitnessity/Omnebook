@@ -65,10 +65,16 @@
                 echo '<img src="'.Config::get('constants.FRONT_IMAGE').'user.png" class="user-image" />';
 
               }
+              $fname = '';
+              $lname = '';
+              if(Auth::user()){
+                $fname= Auth::user()->firstname;
+                $lname= Auth::user()->lastname;
+              }
 
               ?>
 
-              <span class="hidden-xs">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</span>
+              <span class="hidden-xs">{{$fname }} {{$lname}}</span>
 
             </a>
 
@@ -96,7 +102,7 @@
 
                 <p>
 
-                  {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+                  {{$fname }} {{$lname}}
 
                   <!-- <small>Member since Nov. 2012</small> -->
 

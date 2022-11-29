@@ -958,7 +958,7 @@ class PlansController extends Controller
     }
 
     public function add_services(Request $request){
-      /* print_r($request->all());*/
+       print_r($request->all());exit;
         $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_price= $recurring_every= $recurring_duration= $fitnessity_fee= $is_recurring ="";
          $pay_discount = 0;
 

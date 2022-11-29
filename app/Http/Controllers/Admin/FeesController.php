@@ -30,6 +30,7 @@ class FeesController extends Controller
        	$input['price'] = $request->price;
 		$input['service_fee'] = $request->service_fee;
 		$input['site_tax'] = $request->site_tax;
+		$input['fitnessity_fee'] = $request->fitnessity_fee;
 		$fees = DB::table('business_subscription_plan')->where('id', $request->id)->update($input);
 		if($fees)
         {

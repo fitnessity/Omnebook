@@ -74,7 +74,7 @@
 
 	.img-bunch-two figure img { float: left; width: 100%; height: 99%; }
 
-    .btn { top: 6px !important; right: -1px !important; }
+    /*.btn { top: 6px !important; right: -1px !important; }*/
 
     /*.button {
 
@@ -5379,6 +5379,9 @@
 
 .spanstyle{
     font-weight: 900 !important;
+}
+a.btn-style-two:hover{
+	color: #fff;
 }
 
 

@@ -3063,6 +3063,7 @@ class UserProfileController extends Controller {
     public function searchResultLocation(Request $request) {
 
         $user_data = array();
+        $data_user = array();
         if($request->site_search!= null && $request->site_search != 'undefined')
         {
             $query=explode("(",$request->site_search);
@@ -6976,7 +6977,7 @@ class UserProfileController extends Controller {
                 $value2['amenties'] = $sport['sport_name'];
             }
         }
-        $UserProfileDetail = $this->users->getUserProfileDetail($company['user_id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
+        $UserProfileDetail = $this->users->getUserProfileDetail(@$company['user_id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
         $PagePost = PagePost::where('page_id',$page_id)->limit(1)->orderBy('id','desc')->get();
         $postsave = PagePostSave::where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
         

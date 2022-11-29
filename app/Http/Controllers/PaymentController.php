@@ -79,6 +79,8 @@ class PaymentController extends Controller {
         $fitnessity_fee= 0;
         $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
         $fitnessity_fee = $bspdata->fitnessity_fee;
+        $service_fee = $bspdata->service_fee;
+        $tax = $bspdata->site_tax;
 
 
         $payment_intent = $stripe->paymentIntents->retrieve(
@@ -220,6 +222,10 @@ class PaymentController extends Controller {
                             'activitylocation' => $activitylocation->activity_location,
                             'whoistraining' => 'me',
                             'sessiondate' => $sesdate,
+                    )),
+                    'extra_fees' => json_encode(array(
+                        'service_fee' => $service_fee,
+                        'fitnessity_fee' => $tax,
                     )),
                     'act_schedule_id' =>$act_schedule_id,
                     'payment_number' =>$encodepayment_number,

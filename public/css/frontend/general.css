@@ -22205,3 +22205,64 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	text-decoration: underline;
 	color: #000;
 }
+.manage-customer-modal-title h4{
+	background: #969696;
+	color: #fff;
+	font-size: 20px;
+	padding: 13px;
+	text-align: center;
+}
+.space-remover{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.manage-customer-from form input{
+	padding: 7px;
+    color: #04344d;
+    border: 2px solid #04344d;
+    font-size: 16px;
+    outline: none;
+    border-radius: 16px;
+    min-height: 45px;
+    display: block;
+    float: none;
+    margin: 20px auto;
+    width: 70%;
+    font-style: italic;
+}
+.check-txt-center{
+	margin-bottom: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.wrap-sp{
+	margin-top: 9px;
+}
+.manage-customer-gray-bg{
+	background: #2d2d2d;
+}
+.manage-customer-search h4{
+	font-size: 28px;
+	color: #fff;
+	text-align: center;	
+	margin-top: 150px;
+}
+.manage-customer-search p{
+	color: #fff;
+	text-align: center;
+	font-size: 14px;
+	margin-bottom: 25px;
+}
+.manage-customer-close{
+	right: 21px !important;
+}
+.modal-body.body-tbm{
+	padding: 0px 15px;
+}
+.manage-cus-btn:hover{
+	color: #fff;
+}
+.customer-details img{
+	width: 100% !important;
+}

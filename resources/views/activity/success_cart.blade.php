@@ -50,7 +50,7 @@ if(!empty($cart["cart_item"])) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="cart-title">
+				<div class="cart-title cart-success">
 					<h5>SUCCESSFULLY ADDED TO YOUR CART</h5>
 				</div>
 			</div>
@@ -60,7 +60,7 @@ if(!empty($cart["cart_item"])) {
 				<div class="bookedcard">
 					<h5>You Just Booked With </h5>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-2 col-sm-2 col-xs-3">
 							<div class="userblock-card">
 								<div class="login_links">
 									<?php 
@@ -76,7 +76,7 @@ if(!empty($cart["cart_item"])) {
 								</div>
 							</div>
 						</div>
-						<div class="col-md-10">
+						<div class="col-md-10 col-xs-9">
 							<div class="img-title">
 								<span>{{@$companyData->company_name}}</span>
 								<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
@@ -96,12 +96,12 @@ if(!empty($cart["cart_item"])) {
 			</div>
 			<div class="col-md-7">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
 							<img src="{{$profilePicact}}">
 						</div>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-8 col-sm-8">
 						<div class="kick-adul">
 							<h5>{{$cartdata['name']}}</h5>
 							<h4>Booking Details</h4>

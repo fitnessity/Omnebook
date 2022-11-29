@@ -27,8 +27,7 @@ class UserBookingDetail extends Model
     public $timestamps = false;
     protected $table = 'user_booking_details';
 	protected $fillable = [
-        'booking_id', 'sport', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid',
-		'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id'
+        'booking_id', 'sport', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees'
     ];
 
 
@@ -85,7 +84,9 @@ class UserBookingDetail extends Model
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
         $company_information = $this->business_services->company_information;
-
+        /*print_r($this->business_services);
+        print_r($this->business_services->company_information);
+        echo $company_information;exit;*/
         try {
             $transfer_amount = $this->provider_get_total();
             $stripe_account  = $stripe->accounts->retrieveCapability(

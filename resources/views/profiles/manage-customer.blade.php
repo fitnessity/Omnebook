@@ -547,31 +547,58 @@
 		</div>
 	</div>
 	
-<!-- The Modal Add Business
+<!-- The Modal Add Business-->
 <div class="modal fade compare-model" id="newclient">
-    <div class="modal-dialog modal-lg business">
+    <div class="modal-dialog manage-customer">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
 			</div>
 
-            <!-- Modal body 
-            <div class="modal-body">
-				<div class="row contentPop"> 
-					<div class="col-lg-12">
-					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">ADD BUSINESS</h4>
-					</div>
-                    <div class="col-lg-12">
-                        <div class="modal-inner-txt">
-                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
-                        </div>
+            <!-- Modal body -->
+            <div class="modal-body body-tbm">
+				<div class="row"> 
+                    <div class="col-lg-6 space-remover">
+						<div class="manage-customer-modal-title">
+							<h4>Add New Client</h4>
+						</div>
+						<div class="manage-customer-from">
+							<form>
+								<input type="text" name="firstname" id="" size="30" maxlength="80" placeholder="First Name">
+								<input type="text" name="lastname" id="" size="30" maxlength="80" placeholder="Last Name">
+								<input type="text" name="username" id="" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+								<input type="email" name="email" id="" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
+								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone">
+								<input type="password" name="password" id="" size="30" placeholder="Password" autocomplete="off">
+								<input type="password" name="confirm_password" id="" size="30" placeholder="Confirm Password" autocomplete="off">
+								<div class="row check-txt-center">
+									<div class="col-md-8">
+										<div class="terms-wrap wrap-sp">
+											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+										</div>
+										<button type="button" style="margin:0px;" class="signup-new" id="register_submit" >Create Account</button>
+									</div>
+								</div>
+								
+							</form>
+						</div>
                     </div>
-					<div class="col-lg-12 btns-modal">
-					</div>
+					<div class="col-lg-6 space-remover manage-customer-gray-bg">
+                        <div class="manage-customer-search">
+							<h4>Search For Client On Fitnessity</h4>
+							<p>"Your client could already have a profile on fitnessity"</p>
+						</div>
+						<div class="row check-txt-center">
+							<div class="col-md-10">
+								<input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here">
+							</div>
+						</div>
+                    </div>
 				 </div>
             </div>
         </div>

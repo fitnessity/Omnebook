@@ -44,7 +44,7 @@
     position: relative;
     display: inline-block;
     font-size: 14px;
-    line-height: 30px;
+    /*line-height: 30px;*/
     color: #ffffff;
     padding: 12px 40px;
     font-weight: 500;
@@ -56,7 +56,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.btn-style-two:before {
+/*.btn-style-two:before {
     position: absolute;
     content: '';
     left: 92%;
@@ -71,7 +71,8 @@
     -o-transition: all 0.4s;
     transition: all 0.4s;
     transform: skewX(-25deg);
-}
+}*/
+
 
 .btn-style-two .txt {
     position: relative;
@@ -85,7 +86,7 @@
 }
 
 .btn-style-two:hover {
-    color: #352c56;
+    color: #fff;
 }
 
 .page-wrapper {
