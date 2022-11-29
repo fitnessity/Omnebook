@@ -414,9 +414,13 @@ class MailService
 
     public static function sendEmailafterclaimed($AllDetail){
         Mail::send('emails.Welcome_email_for_business_afer_claim', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
+            $first_name = 'Fitnessity';
+            if(@$AllDetail['company_data']['first_name'] != ''){
+                $first_name = @$AllDetail['company_data']['first_name'];
+            }
             $comname = 'Welcome to Fitnessity for Business';
             $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject($comname);
+            $m->to($AllDetail['company_data']['email'],  $first_name)->subject($comname);
         });
     }
 

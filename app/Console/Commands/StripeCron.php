@@ -10,6 +10,7 @@ use App\UserBookingDetail;
 use App\BusinessPriceDetails;
 use App\User;
 use App\UserBookingRecurringPaymentDetails;
+use App\BusinessSubscriptionPlan;
 
 class StripeCron extends Command
 {
@@ -46,6 +47,7 @@ class StripeCron extends Command
     {   
         $stripekey = env('STRIPE_KEY');
         \Stripe\Stripe::setApiKey($stripekey);
+        $fees = BusinessSubscriptionPlan::where('id',1)->first();
         $pmtdata = UserBookingStatus::orderBy('id' ,'desc')->get();
        /* print_r($pmtdata);*//*exit();*/
         if(!empty($pmtdata)){
@@ -65,15 +67,25 @@ class StripeCron extends Command
                         foreach($bookdetails as $details){
                             $pricedetails =  BusinessPriceDetails::where('id',$details['priceid'])->first();
                             $a = json_decode($details['qty']);
+                            $extra_fees = json_decode($details['extra_fees']);
                             $pmt_num_person = json_decode($details['payment_number']);
+                            $service_fee1 = 0;
+                            $site_tax = 0;
+                            if( !empty($extra_fees->service_fee) ){
+                                $service_fee1 = @$fees->service_fee;
+                            }
+
+                            if( !empty($extra_fees->site_tax) ){
+                                $site_tax = @$fees->site_tax;
+                            }
                             if( !empty($a->adult) ){
                                 $tot_price = 0;
                                 $service_fee = 0;
                                 $tax = 0;
                                 $total_amount = 0;
                                 $tot_price = $a->adult * @$pricedetails->recurring_recurring_pmt_adult;
-                                $service_fee= ($tot_price * 7)/100;
-                                $tax= ($tot_price * 8.875)/100;
+                                $service_fee= ($tot_price * @$service_fee1)/100;
+                                $tax= ($tot_price * @$site_tax)/100;
                                 $total_amount =($tot_price + $service_fee + $tax)*100;
                                 if( $pmt_num_person->adult < @$pricedetails->recurring_nuberofautopays_adult){
                                     $today =date('Y-m-d');
@@ -128,8 +140,8 @@ class StripeCron extends Command
                                 $tax = 0;
                                 $total_amount = 0;
                                 $tot_price = $a->adult * @$pricedetails->recurring_recurring_pmt_child;
-                                $service_fee= ($tot_price * 7)/100;
-                                $tax= ($tot_price * 8.875)/100;
+                                $service_fee= ($tot_price * @$service_fee1)/100;
+                                $tax= ($tot_price * @$site_tax)/100;
                                 $total_amount =(  $tot_price + $service_fee + $tax)*100;
                                 if( $pmt_num_person->child < @$pricedetails->recurring_nuberofautopays_child){
                                     $today =date('Y-m-d');
@@ -185,8 +197,8 @@ class StripeCron extends Command
                                 $tax = 0;
                                 $total_amount = 0;
                                 $tot_price = $a->adult * @$pricedetails->recurring_recurring_pmt_infant;
-                                $service_fee= ($tot_price * 7)/100;
-                                $tax= ($tot_price * 8.875)/100;
+                                $service_fee= ($tot_price * @$service_fee1)/100;
+                                $tax= ($tot_price * @$site_tax)/100;
                                 $total_amount =($tot_price + $service_fee + $tax)*100;
                                 if( $pmt_num_person->infant < @$pricedetails->recurring_nuberofautopays_infant){
                                     $today =date('Y-m-d');

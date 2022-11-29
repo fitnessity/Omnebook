@@ -543,6 +543,9 @@
         padding-top: 40px !important;
         padding-bottom: 20px !important;
     }
+	.pr-100 {padding-right: 15px;}
+	.cart-success h5{margin-top: 20px;}
+	.cart-itme-img img{margin-bottom: 20px;}
 
 }
 
@@ -1286,6 +1289,9 @@
 	.find-activity img{max-height: 145px !important;} 
 	.show-all{margin-top: 140px;}
 	.show-all .join-btn{padding: 0px;margin-top: 18px;}
+	.cart-itme-img img{margin-bottom: 15px;}
+	.customer-details img { width: 100% !important;}
+	
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1561,6 +1567,7 @@
 	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
 	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
 	.modal-dialog.modal-lg.booking-receipt{width: 70% !important;}
+	.modal-dialog.manage-customer{width: 80% !important;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1637,6 +1644,8 @@
 	.modal-dialog.modal-lg.location-modal{width: 45% !important;}
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
+	.modal-dialog.manage-customer{width: 75% !important;}
+	.customer-details img { width: 100% !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){

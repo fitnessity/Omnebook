@@ -686,7 +686,10 @@ class BusinessController extends Controller
 		$company = CompanyInformation::where('id',$id)->first();
         $compare = 'null';
         $loggedinUser = '';
-		$loggedinUser = User::where('id',$company->user_id)->first();
+        if($company != ''){
+            $loggedinUser = User::where('id',$company->user_id)->first();
+            $loggedinUserid = @$loggedinUser->id;
+        }
 		
        /* echo $loggedinUser; exit();*/
 		// $loggedinUser = Auth::user();

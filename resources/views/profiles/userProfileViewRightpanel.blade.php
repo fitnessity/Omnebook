@@ -73,14 +73,14 @@
                         	@foreach($FollowingThisweek as $weekf)
                             	<?php $queryUser = User::select("firstname", "lastname", "username", "profile_pic", "id")
 									->where("id", $weekf->user_id)->first(); ?>
-                            	<a href="{{ Config::get('constants.SITE_URL') }}/userprofile/{{ $queryUser->username}}" 
-                                title="{{ $queryUser->username}}" data-toggle="tooltip">
+                            	<a href="{{ Config::get('constants.SITE_URL') }}/userprofile/{{ @$queryUser->username}}" 
+                                title="{{ @$queryUser->username}}" data-toggle="tooltip">
                                 	<?php 
 									
-									if(File::exists(public_path("/uploads/profile_pic/thumb/".$queryUser->profile_pic ))){ ?>
+									if(File::exists(public_path("/uploads/profile_pic/thumb/".@$queryUser->profile_pic ))){ ?>
                                     	<img src="{{ url('public/images/newimage/userlist-1.jpg') }}" alt="">  
                                     <?php }else { 
-                                    	$pf=substr($queryUser->firstname, 0, 1).substr($queryUser->lastname, 0, 1);
+                                    	$pf=substr(@$queryUser->firstname, 0, 1).substr(@$queryUser->lastname, 0, 1);
 										echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                     }?>
                                 </a>
@@ -133,11 +133,11 @@
 					<?php foreach ($following as $follow) { 
 						$logo='';
 						$queryUser = User::select("firstname", "lastname", "profile_pic", "id","created_at")->where("id", $follow['user_id'])->first();
-						$followpic=$queryUser["profile_pic"];
+						$followpic=@$queryUser["profile_pic"];
 						$querycomp = CompanyInformation::select("first_name", "last_name", "logo", "user_id", "id")->where("user_id", $follow['user_id'])->first();
 						$compid = isset($querycomp["id"]) ? $querycomp["id"] : "0";
 						$isfollow = UserFollow::select("user_id", "follow_id", "follower_id")
-						->where("follower_id", "=", $queryUser['id'])
+						->where("follower_id", "=", @$queryUser['id'])
 						->get();
 					?>
                     <li>
@@ -146,12 +146,12 @@
 						{ ?>
                         	<figure><img src="/public/uploads/profile_pic/thumb/<?php echo $followpic; ?>" alt="fitnessity"></figure>
 						<?php }else{ 
-							$pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
+							$pf=substr(@$queryUser["firstname"], 0, 1).substr(@$queryUser["lastname"], 0, 1);
 						?>
                         	<div class="admin-img-text"><p><?php echo $pf; ?></p></div>
 						<?php } ?>
                         <div class="friend-meta">
-                        	<h4><a href="#"><?php  echo $queryUser["firstname"] . " ".$queryUser['lastname'] ;?></a></h4>
+                        	<h4><a href="#"><?php  echo @$queryUser["firstname"] . " ".@$queryUser['lastname'] ;?></a></h4>
 							<?php
 							if ($isfollow->count()>0) { echo 'Following'; } 
 							else { 

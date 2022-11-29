@@ -9,6 +9,7 @@
 	use App\CompanyInformation;
 	use App\UserFamilyDetail;
     use App\BusinessTerms;
+    use App\BusinessSubscriptionPlan;
 	use Carbon\Carbon;
 
     if(Auth::user()){
@@ -19,6 +20,8 @@
    /* echo"<pre>";*/  /*print_r($cart['cart_item']);*/ /*exit();*/
     $ajaxname = '';
      $totalquantity = 0;
+
+    $fees = BusinessSubscriptionPlan::where('id',1)->first();
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -67,8 +70,8 @@
     					//dd(\DB::getQueryLog());
     					$serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
     					//print_r($ser[0]);
-    					$service_fee= ($item["totalprice"] * 7)/100;
-    					$tax= ($item["totalprice"] * 8.875)/100;
+    					$service_fee= ($item["totalprice"] * $fees->service_fee)/100;
+    					$tax= ($item["totalprice"] * $fees->site_tax)/100;
     					$total_amount = $item["totalprice"] + $service_fee + $tax;
     					$iprice = number_format($total_amount,0, '.', '');
     					//echo $total_amount.'---'.$iprice.'---'.$item["price"];		
@@ -445,8 +448,8 @@
     			    </div>
     		</div>
             <?php
-    			$service_fee= ($item_price * 7)/100;
-    			$tax= ($item_price * 8.875)/100;
+    			$service_fee= ($item_price * $fees->service_fee)/100;
+    			$tax= ($item_price * $fees->site_tax)/100;
     			$total_amount = $item_price + $service_fee + $tax;
     		?>
     		

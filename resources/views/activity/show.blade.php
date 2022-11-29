@@ -1112,44 +1112,50 @@ $chk_found = '';
 									if($i<3){
 										if($time != ''){
 							?>
-								<div class="col-md-4 col-sm-12 col-xs-12 ">
+								<div class="col-md-4 col-sm-6 col-xs-12 ">
 									<div class="find-activity">
 										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-12">
-												<div class="img-modal-left">
+											<div class="col-md-5 col-sm-5 col-xs-12">
+												<div class="img-modal-left customer-details">
 													<img src="{{ $profilePic }}" >
 												</div>
 											</div>
-											<div class="col-md-6 col-sm-6 col-xs-12 activity-data">
-												<div class="activity-inner-data">
-													<i class="fas fa-star"></i>
-													<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
-												</div>
-												@if($time != '')
-													<div class="activity-hours">
-														<span>{{$time}}</span>
+											<div class="col-md-7 col-sm-7 col-xs-12 activity-data">
+												<div class="row">
+													<div class="col-md-6 col-sm-6 col-xs-6">
+														<div class="activity-inner-data">
+															<i class="fas fa-star"></i>
+															<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
+														</div>
+														@if($time != '')
+															<div class="activity-hours">
+																<span>{{$time}}</span>
+															</div>
+														@endif
 													</div>
-												@endif
-												<div class="activity-city">
-													<span>{{$companycity}}, {{$companycountry}}</span>
-													@if(Auth::check())
-													<?php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
-					                                ?>
-														<div class="serv_fav1" ser_id="{{$service['id']}}">
-															<a class="fav-fun-2" id="serfav{{$service['id']}}">
-																<?php
-							                                    	if( !empty($favData) ){ ?>
-							                                        	<i class="fas fa-heart"></i>
-							                                        <?php }
-																	else{ ?>
-							                                    		<i class="far fa-heart"></i>
-							                                     <?php } ?></a>
-						                            	</div>
-						                            @else
-						                            	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-													@endif
+													<div class="col-md-6 col-sm-6 col-xs-6">
+														<div class="activity-city">
+															<span>{{$companycity}}, {{$companycountry}}</span>
+															@if(Auth::check())
+															<?php
+																$loggedId = Auth::user()->id;
+																$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
+															?>
+																<div class="serv_fav1" ser_id="{{$service['id']}}">
+																	<a class="fav-fun-2" id="serfav{{$service['id']}}">
+																		<?php
+																			if( !empty($favData) ){ ?>
+																				<i class="fas fa-heart"></i>
+																			<?php }
+																			else{ ?>
+																				<i class="far fa-heart"></i>
+																		 <?php } ?></a>
+																</div>
+															@else
+																<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+															@endif
+														</div>
+													</div>
 												</div>
 												<div class="activity-information">
 													<span><a 

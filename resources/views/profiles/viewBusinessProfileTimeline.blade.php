@@ -42,10 +42,10 @@
 <?php
 $compinfo = CompanyInformation::where('id',request()->id)->first();
 $loggedinUser = User::where('id',$compinfo->user_id)->first();
-$customerName = $loggedinUser->firstname . ' ' . $loggedinUser->lastname;
+$customerName = @$loggedinUser->firstname . ' ' . @$loggedinUser->lastname;
 $loggedinUserorignal = Auth::user();
-$profilePicture = $loggedinUser->profile_pic;
-$coverPicture = $loggedinUser->cover_photo;
+$profilePicture = @$loggedinUser->profile_pic;
+$coverPicture = @$loggedinUser->cover_photo;
 if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     ?>
     <script type="text/javascript">
@@ -304,7 +304,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
     			<div class="tab-pane active" id="timeline" role="tabpanel">
                     <div class="central-meta postbox">
-                    	<?php if($loggedinUser->id == $company->user_id) { ?>
+                    	<?php if(@$loggedinUser->id == $company->user_id) { ?>
                         <form method="post" action="{{route('pagePost')}}" enctype="multipart/form-data" id="profilepostfrm">
                             @csrf
     						<span class="create-post">Create post </span>
@@ -382,7 +382,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 											<?php /*?><div class="more">
 												<div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
 													<ul>
-														@if($loggedinUser->id == $page_post['user_id'])
+														@if(@$loggedinUser->id == $page_post['user_id'])
                                                         	<li><a id="{{$page_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
                                                             <li><a href="javascript:void(0);" class="delpagepost" postid="{{$page_post['id']}}" posttype="post" ><i class="fa fa-trash"></i>Delete Post</a></li>
                                                         @endif
@@ -614,16 +614,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     <?php
 														$page_posts_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->count();
 														$likemore = $page_posts_like-2;
-														$loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first();
-														$seconduser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->first();
+														$loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first();
+														$seconduser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->first();
                                                         $total_comment='';
 														$total_comment = PagePostComments::where('post_id',$page_post->id)->count();$postsaved="";
-														$postsaved = PagePostSave::where('post_id',$page_post['id'])->where('user_id',$loggedinUser->id)->first();
+														$postsaved = PagePostSave::where('post_id',$page_post['id'])->where('user_id',@$loggedinUser->id)->first();
 														$activethumblike=''; $savedpost='';
 														if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
 													?>
                                                     <ul class="like-dislike" id="ulike-dislike<?php echo $page_post->id; ?>">
-                                                    <?php $loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first(); ?>
+                                                    <?php $loginuser_like = PagePostLikes::where('post_id',$page_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first(); ?>
                                                     	@if(!empty($loginuser_like))
 															<?php $activethumblike='activethumblike'; ?>
 														@endif
@@ -675,11 +675,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         @if($page_posts_like>0)
 															@if(!empty($loginuser_like))
 																<a data-toggle="tooltip" title="" href="#">
-                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" height="32" width="32">  
+                                                                	<img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" height="32" width="32">  
                                                                 </a>
                                                             @endif
                                                    			<?php 
-																$profile_posts_all = PagePostLikes::where('post_id',$page_post->id)->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get();?>
+																$profile_posts_all = PagePostLikes::where('post_id',$page_post->id)->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->limit(4)->get();?>
                                                                 @if(isset($profile_posts_all[0]))
 																	<?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
                                                                 	<a data-toggle="tooltip" title="" href="#">
@@ -733,7 +733,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     	<?php
                                                         	$username = User::find($comment->user_id);
 															$cmntlike = PagePostCommentsLike::where('comment_id', $comment->id)->count();
-															$cmntUlike = PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',$loggedinUser->id)->count();
+															$cmntUlike = PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',@$loggedinUser->id)->count();
                                                         ?>
                                                         <li class="commentappendremove">
                                                             <div class="comet-avatar">
@@ -883,12 +883,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                             <div class="more">
                                                 <div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
                                                     <ul>
-                                                         @if($loggedinUser->id == $posts_post['user_id'])
+                                                         @if(@$loggedinUser->id == $posts_post['user_id'])
                                                         <li><a id="{{$posts_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
                                                         <li><a href="{{route('delPost',$posts_post['id'])}}"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                         @endif
 
-                                                        @if(($loggedinUser->id != $posts_post->user_id) && $postsave->count() == 0 )
+                                                        @if((@$loggedinUser->id != $posts_post->user_id) && $postsave->count() == 0 )
                                                             <li><a href="{{route('savePost',['pid'=>$posts_post['id'],'uid'=>$posts_post['user_id']])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
                                                         @elseif ($postsave->count() > 0)
                                                             <li><a href="{{route('RemovesavePost',['pid'=>$posts_post->id,'uid'=>$posts_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
@@ -1111,16 +1111,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 <?php
                                                     $profile_posts_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->count();
                                                     $likemore = $profile_posts_like-2;
-                                                    $loginuser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first();
-                                                    $seconduser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->first();
+                                                    $loginuser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first();
+                                                    $seconduser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->first();
                                                     $profile_posts_comment = PagePostComments::where('post_id',$posts_post['id'])->count();
-                                                    $postsaved = PagePostSave::where('post_id',$posts_post->id)->where('user_id',$loggedinUser->id)->first();
+                                                    $postsaved = PagePostSave::where('post_id',$posts_post->id)->where('user_id',@$loggedinUser->id)->first();
                                                     $activethumblike=''; $savedpost='';
                                                     if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
                                                 ?>
                                                 
                                                 <ul class="like-dislike" id="ulike-dislike<?php echo $posts_post->id; ?>">
-                                                <?php $loginuser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id',$loggedinUser->id)->first(); ?>
+                                                <?php $loginuser_like = PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first(); ?>
                                                     @if(!empty($loginuser_like))
                                                     <?php $activethumblike='activethumblike'; ?>
                                                     @endif
@@ -1162,11 +1162,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     
                                                         @if(!empty($loginuser_like))
                                                             <a data-toggle="tooltip" title="Anderw" href="#">
-                                                                <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" height="32" width="32">  
+                                                                <img alt="" src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" height="32" width="32">  
                                                             </a>
                                                         @endif
                                                         <?php 
-                                                        $profile_posts_all =  PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id','!=',$loggedinUser->id)->limit(4)->get();?>
+                                                        $profile_posts_all =  PagePostLikes::where('post_id',$posts_post['id'])->where('is_like',1)->where('user_id','!=',@$loggedinUser->id)->limit(4)->get();?>
                                                         @if(isset($profile_posts_all[0]))
                                                         <?php $seconduser = User::find($profile_posts_all[0]->user_id); ?>
                                                             <a data-toggle="tooltip" title="frank" href="#">
@@ -1252,7 +1252,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @endif
                                                 <li class="post-comment">
                                                     <div class="comet-avatar">
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="pic">
+                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="pic">
                                                     </div>
                                                     <div class="post-comt-box">
                                                         <form method="post" id="commentfrm">
@@ -1314,7 +1314,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         @else
                                                             <div class="item"  data-slide-number="{{ $pic['id'] }}">
                                                         @endif
-                                                            <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
+                                                            <img src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/<?= $pic['name'] ?>" style="width:100%;">
                                                         </div>
                                                     @endforeach
                                                 </div><!-- Carousel nav -->
@@ -1326,7 +1326,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     <?php
                                                         foreach ($gallery as $pic) { ?>
                                                             <li>
-                                                                <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
+                                                                <img class="short-cru-img" style="width:100%;" src="/public/uploads/gallery/<?= @$loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" id="<?= $pic['id'] ?>" />
                                                             </li>
                                                     <?php } ?> 
                                                 </ul>
@@ -1791,7 +1791,7 @@ function previewImages() {
 $('.editpic').click(function () {
    var imgname = $(this).attr('imgname');
    var id = $(this).attr('id');
-   var foldernm = '<?php echo $loggedinUser->id;  ?>';
+   var foldernm = '<?php echo @$loggedinUser->id;  ?>';
    $('#imgId').val(id);
    $('#imgname').val(imgname);
    $(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
@@ -1899,9 +1899,13 @@ $(document).ready(function () {
 		$('#create_company_btn').click()
 	}
 	$("#resetPassword").click(function () {
+        var email1='';
+        if(Auth::user()){
+            email1 = '{{Auth::user()->email}}';
+        }
 		formdata = new FormData();
 		var token = '{{csrf_token()}}';
-		var email = '{{Auth::user()->email}}';
+		var email = email1;
 		formdata.append("_token", token);
 		formdata.append("email", email);
 		$.ajax({

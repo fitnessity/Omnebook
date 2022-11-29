@@ -292,8 +292,8 @@
         <div class="row align-items-center">
             <div class="col-lg-2">
                 <div class="comp-mark">
-                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".$UserProfileDetail['profile_pic'])))
-                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$UserProfileDetail['profile_pic']) }}" alt="images" class="img-fluid">
+                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".@$UserProfileDetail['profile_pic'])) && @$UserProfileDetail['profile_pic'] != '')
+                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$UserProfileDetail['profile_pic']) }}" alt="images" class="img-fluid">
                     @else
                     <img alt="" src="http://2.gravatar.com/avatar/?s=35&amp;d=mm&amp;r=g" srcset="http://0.gravatar.com/avatar/?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo avatar-default" height="35" width="35" loading="lazy">
                     @endif
@@ -335,7 +335,7 @@
 
             <div class="col-lg-6">
                 <div class="bnr-information">
-                    <h2 style="text-transform: capitalize;">{{$UserProfileDetail->firstname}} {{$UserProfileDetail->lastname}}</h2>
+                    <h2 style="text-transform: capitalize;">{{@$UserProfileDetail->firstname}} {{@$UserProfileDetail->lastname}}</h2>
                     <h6></h6>
                     <div class="url-copy">                  
                     </div>
@@ -393,7 +393,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12">
-                    Username: @if(isset($UserProfileDetail['username'])) {{ "@".$UserProfileDetail['username']}} @else - @endif
+                    Username: @if(isset(@$UserProfileDetail['username'])) {{ "@".@$UserProfileDetail['username']}} @else - @endif
                     </div>
                 </div>
                 <div class="row">
@@ -403,7 +403,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12">
-                    Favorite Activities: @if(isset($UserProfileDetail['favorit_activity'])){{$UserProfileDetail['favorit_activity']}}@else - @endif <a href="/personal-profile/user-profile" title="Update your activity"></a>
+                    Favorite Activities: @if(isset(@$UserProfileDetail['favorit_activity'])){{@$UserProfileDetail['favorit_activity']}}@else - @endif <a href="/personal-profile/user-profile" title="Update your activity"></a>
                     </div>
                 </div>
                 <div class="row">
@@ -430,16 +430,16 @@
                             <h1 class="red-box-font">VERIFICATION</h1>
                             <div class="veri-icon-new-1">
                                 <span>
-                                    <a href="{{'tel:'.$UserProfileDetail['phone_number']}}" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
+                                    <a href="{{'tel:'.@$UserProfileDetail['phone_number']}}" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
                                 </span>
                                 <span >
-                                    <a href="{{'mailto:'.$UserProfileDetail['email']}}" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="{{'mailto:'.@$UserProfileDetail['email']}}" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                                 </span>
                                  <span>
                                     <a href="#" title="link"  class="coemail"><i class="fa fa-link" aria-hidden="true"></i></a>
                                 </span>
                                 <span >
-                                    <a href="{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+                                    <a href="{{'http://maps.google.com/?q='.@$UserProfileDetail['address']}}" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
                                 </span>
                             </div>
                     <!--<img src="/public/img/verification.png" />-->
@@ -492,8 +492,8 @@
                     <div class="desc-text" id="mydesc">
                         <h5>About</h5>
                         <?php $gender = array('' => 'Select Gender', 'Male' => 'Male', 'Female' => 'Female'); ?>
-                        <p>@if(isset($UserProfileDetail['business_info'])) {!! nl2br(@$UserProfileDetail['business_info']) !!} @else - @endif</p>
-                        <p>@if(isset($UserProfileDetail['intro'])) {!! nl2br(@$UserProfileDetail['intro']) !!} @endif</p>
+                        <p>@if(isset(@$UserProfileDetail['business_info'])) {!! nl2br(@@$UserProfileDetail['business_info']) !!} @else - @endif</p>
+                        <p>@if(isset(@$UserProfileDetail['intro'])) {!! nl2br(@@$UserProfileDetail['intro']) !!} @endif</p>
                     </div>
 
                     <div class="gallery-box" id="photo">
@@ -769,13 +769,13 @@
                         <!--<div class="pr-verification" style="background-color:transparent;background-image:url('/public/images/get-verified.jpg');background-repeat: no-repeat;background-position: center;background-size: 360px 240px">
                             <div class="veri-icon-new" style="margin-top:112px">
                                 <span >
-                                    <a href="{{'tel:'.$UserProfileDetail['phone_number']}}" style="background-color:green;" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
+                                    <a href="{{'tel:'.@$UserProfileDetail['phone_number']}}" style="background-color:green;" title="phone" class="cophone"><i class="fa fa-phone" aria-hidden="true"></i></a>
                                 </span>
                                 <span >
-                                    <a href="{{'mailto:'.$UserProfileDetail['email']}}" style="background-color:green;" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="{{'mailto:'.@$UserProfileDetail['email']}}" style="background-color:green;" title="email"  class="coemail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                                 </span>
                                 <span >
-                                    <a href="{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}" style="background-color:green;" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+                                    <a href="{{'http://maps.google.com/?q='.@$UserProfileDetail['address']}}" style="background-color:green;" title="address" class="coaddress" target="_blank"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
                                 </span>
                             </div>
                         </div>-->
@@ -815,7 +815,7 @@
     
     $(".follower-fun").click(function () {
         var _token = $("input[name='_token']").val();
-        var followerId = '<?php echo $UserProfileDetail->id ?>';
+        var followerId = '<?php echo @$UserProfileDetail->id ?>';
         $.ajax({
             type: 'POST',
             url: '{{route("follow_profile")}}',
@@ -835,7 +835,7 @@
 
     $(".follower-fav").click(function () {
         var _token = $("input[name='_token']").val();
-        var favId = '<?php echo $UserProfileDetail->id ?>';
+        var favId = '<?php echo @$UserProfileDetail->id ?>';
         $.ajax({
             type: 'POST',
             url: '{{route("fav_profile")}}',
@@ -857,7 +857,7 @@
         var profileViewCount = '<?php echo $ProfileView; ?>';
         if(profileViewCount == 0){
         var _token = $("input[name='_token']").val();
-        var userd = '<?php echo $UserProfileDetail->id ?>';
+        var userd = '<?php echo @$UserProfileDetail->id ?>';
         $.ajax({
             type: 'POST',
             url: '{{route("profileView")}}',
