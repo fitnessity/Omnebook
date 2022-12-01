@@ -8863,6 +8863,7 @@ class UserProfileController extends Controller {
     }
 
     public function calendar(Request $request) {
+		 
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -8894,20 +8895,27 @@ class UserProfileController extends Controller {
         $UserProfileDetail['country'] = $user->country;
 
         if ($request->ajax()) {
-            $data = Event::whereDate('start', '>=', $request->start)
+            /*$data = Event::whereDate('start', '>=', $request->start)
                     ->whereDate('end', '<=', $request->end)
-                    ->get(['id', 'title', 'start', 'end']);
+                    ->get(['id', 'title', 'start', 'end']);*/
+					
+			$data = UserBookingStatus::selectRaw('user_booking_status.id, ser.program_name as title,  
+					user_booking_status.bookedtime as start')
+					->leftjoin("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
+					->join("business_services as ser", DB::raw('ser.id'), '=', 'bdetails.sport')
+					->where('user_booking_status.user_id', Auth::user()->id)
+					->whereDate('user_booking_status.bookedtime', '>=', $request->start)
+                    ->whereDate('user_booking_status.bookedtime', '<=', $request->end)->get(['id', 'title', 'start' ]);
+					
             return response()->json($data);
         }
-        
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
         
-        return view('personal-profile.calendar', ['UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+        return view('personal-profile.calendar', ['UserProfileDetail' => $UserProfileDetail, 'cart' => $cart] );
 
-        //return view('personal-profile.calendar', ['UserProfileDetail' => $UserProfileDetail]);
     }
 
     public function cajax(Request $request) {
