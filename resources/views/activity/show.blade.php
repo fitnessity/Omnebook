@@ -74,8 +74,8 @@ input:disabled{
 	use Carbon\Carbon;
     use App\StaffMembers;
 
-	$sid = $serviceid;
-	$service = BusinessServices::where('id',$serviceid)->first();
+	$sid = $serviceid = $service->id;
+	
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
         $languages = $businessSp['languages'];
