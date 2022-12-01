@@ -22090,6 +22090,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .client-info{
 	border-bottom: 2px solid #f91942;
+	margin-bottom: 10px;
 }
 .client-info a{
 	float: right;
@@ -22265,4 +22266,182 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .customer-details img{
 	width: 100% !important;
+}
+.font-red{
+	color: #ed1b24;
+}
+.scheduler-txt{
+	font-size: 21px !important;
+}
+.manage-search form{
+	display: inline-block;
+	position: relative;
+	width: 100%;
+}
+.manage-search form input {
+  background: white;
+  border: 1px solid #030303;
+  font-size: 13px;
+  padding: 8px 40px;
+  width: 100%;
+  color: #2e2e2e;
+  border-radius: 5px;
+}
+.manage-search button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  color: #f91942;
+  font-size: 15px;
+  position: absolute;
+  left: 6px;
+  top: 47%;
+  transform: translateY(-50%);
+  padding: 9px;
+  border: none;
+}
+.manage-search{
+	margin-top: 15px;
+}
+.date-activity-scheduler{
+	margin-bottom: 25px;
+	position: relative;
+}
+	
+.date-activity-scheduler label{
+	display: inline-block;
+	padding-right: 5px;
+
+}
+.date-activity-scheduler .form-control{
+	padding: 6px 10px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #000;
+	border-radius: 8px;
+	display: inline-block;
+	width: 80%;
+}
+.date-activity-scheduler i{
+	position: absolute;
+	top: 8px;
+	right: 41px;
+}
+.search-btn-sp{
+	margin-top: 15px;
+}
+.scheduler-info-box{
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, .20);
+	padding: 10px 0;
+	margin-bottom: 20px;
+	border-radius: 4px;
+}
+.scheduler-qty span{
+	background: #ed1b24;
+	padding: 10px 0;
+	width: 60px;
+	border-radius: 100%;
+	font-size: 16px;
+	height: 43px;
+	color: #fff;
+	text-align: center;
+	align-items: center;
+	display: grid;
+}
+.scheduler-table-title{
+	text-align: center;
+	margin-top: 16px;
+}
+.scheduled-activity-info{
+	text-align: center;
+	margin-top: 16px;
+}
+.scheduled-location{
+	text-align: center;
+	margin-top: 16px;
+}
+.scheduler-info-box .timeline::before{
+	content: "";
+	height: 50px;
+	left: 7px;
+	position: absolute;
+	top: 0px;
+	width: 4px;
+	background: #09b8fe;
+}
+.scheduler-info-box .timeline{
+	display: grid;
+	margin-top: 7px;
+	text-align: center;
+}
+.scheduled-btns{
+	display: grid;
+}
+.scheduled-btns .btn-edit{
+	background: #ed1b24;
+	color: #fff;
+	padding: 1px 7px;
+	border: unset;
+	font-size: 15px;
+	text-align: center;
+}
+.scheduled-btns .btn-edit.btn-sp{
+	margin-bottom: 5px;
+}
+.timeline-before::before{
+	background: #ff0b34 !important;
+}
+.scheduler-qty{
+	margin-top: 5px;
+	display: block ruby;
+	text-align: center;
+}
+.activities-details label{
+	font-weight: 400;
+	font-size: 14px;
+}
+.activities-details span{
+	margin-right: 17px;
+	font-size: 14px;
+}
+.btn-previous{
+	background: #ed1b24;
+	color: #fff;
+	padding: 5px 20px;
+	border: unset;
+	font-size: 15px;
+	text-align: center;
+	width: 30%;
+}
+.preday-arrow{
+	margin-right: 15px;
+	font-size: 15px;
+}
+.nextday-arrow{
+	margin-left: 15px;
+	font-size: 15px;
+}
+.pre-next-btns{
+	text-align: right;
+}
+.btn-previous.btn-sp{
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.plr-0{
+	padding-right: 0px;
+	padding-left: 0px;
+}
+.priceactivity-scheduler{
+	margin-bottom: 0px;
+	width: 25%;
+	display: inline-block;
+}
+.schedule-viewing{
+	display: inline-block;
+	vertical-align: bottom;
+}
+.schedule-viewing span{
+	margin-right: 20px;
+}
+.schedule-viewing label{
+	margin-bottom: 0px !important;
 }

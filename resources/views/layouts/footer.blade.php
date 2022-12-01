@@ -143,6 +143,8 @@
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
+	<script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
             // hide #back-top first
