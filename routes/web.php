@@ -628,6 +628,11 @@ Route::get('/get_serviceform/{id}', 'UserProfileController@get_serviceform');
 Route::get('/getmyservices', 'UserProfileController@getmyservices');
 Route::post('/myemail', 'Auth\AuthController@myemail');
 
+
+
+//Scheduler Controller
+Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
+
 //profile routes ends
 Route::group(['middleware' => ['auth']], function()
 {
