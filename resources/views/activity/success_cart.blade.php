@@ -11,6 +11,7 @@ use App\BusinessServicesFavorite;
 
 $total_quantity=0;
  $item_price=0;
+print_r($cart["cart_item"]);
 if(!empty($cart["cart_item"])) {
     foreach($cart['cart_item'] as $item){
         $total_quantity = count($cart["cart_item"]);
@@ -19,8 +20,8 @@ if(!empty($cart["cart_item"])) {
     $cartdata = $cart['cart_item'][$pid];
     $totalprice = $cart['cart_item'][$pid]['totalprice'];
     if ($cart['cart_item'][$pid]['image']!="") {
-    	if (File::exists(public_path("/uploads/profile_pic/thumb/" . $cart['cart_item'][$pid]['image']))) {
-    			$profilePicact = url('/public/uploads/profile_pic/thumb/' . $cart['cart_item'][$pid]['image']);
+    	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$pid]['image']))) {
+    			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$pid]['image']);
     	} else {
     			$profilePicact = url('/public/images/service-nofound.jpg');
     	}
@@ -65,8 +66,8 @@ if(!empty($cart["cart_item"])) {
 								<div class="login_links">
 									<?php 
 										if(@$companyData->logo != ''){
-	    								if (File::exists(public_path("/uploads/profile_pic/thumb/" . $companyData->logo))) {
-	    									$profilePic = url('/public/uploads/profile_pic/thumb/' . $companyData->logo);
+	    								if (File::exists(public_path("/uploads/profile_pic/" . $companyData->logo))) {
+	    									$profilePic = url('/public/uploads/profile_pic/' . $companyData->logo);
 	    								} else {
 	    									$profilePic = url('/public/images/service-nofound.jpg');
 	    								}
@@ -131,7 +132,11 @@ if(!empty($cart["cart_item"])) {
 								<a type="submit" href="{{route('activities_index')}}" class="btn btn-black mt-10" >Continue Shopping</a>
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
-								<a type="submit" href="{{route('payments_card')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								@if(Auth::user())
+									<a type="submit" href="{{route('payments_card')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								@else
+									<a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -310,7 +315,7 @@ if(!empty($cart["cart_item"])) {
 																<?php }
 															}
 														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+															if (file_exists( public_path() . '/uploads/profile_pic/' . @$pic_image) &&  @$pic_image != '' ) {
 										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
 										    				}else {
 										       				$profilePic1 = url('/public/images/service-nofound.jpg');
@@ -418,11 +423,165 @@ if(!empty($cart["cart_item"])) {
 	</div>
 </div>
 
+<!-- The Modal Checkout-->
+<div class="modal fade compare-model" id="cartcheckout">
+    <div class="modal-dialog cartcheckout">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-space">
+				<div class="row"> 
+                    <div class="col-lg-12">
+					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">Continue To Checkout</h4>
+					</div>
+					<div class="col-lg-12 btns-modal">
+						<a href="{{route('addcheckoutsession')}}" class="addbusiness-btn-modal cart-btn-width">Log in</a>
+						<a href="#" class="addbusiness-btn-modal"data-toggle="modal" data-target="#registermodal">Continue as Guest</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+
+<!-- The Modal Registraion-->
+<div class="modal fade compare-model" id="registermodal">
+    <div class="modal-dialog registermodal">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-tbm register-bg">
+				<div class="row"> 
+                    <div class="col-lg-6 col-xs-12 register-modal">
+						<div class="logo-my">
+							<a href="#"> <img src="{{url('/public/images/logo-small.jpg')}}"> </a>
+						</div>
+						<div class="manage-customer-from">
+							<form id="frmregister" method="post">
+								<div class="register-pop-title ftitle1">
+									<h3>Tell Us About You</h3>
+								</div>
+								<div id='systemMessage'></div>
+                    			<input type="hidden" name="_token" value="{{csrf_token()}}">
+								<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
+								<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
+								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
+								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
+								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)">
+								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+								<div class="row check-txt-center">
+									<div class="col-md-8">
+										<div class="terms-wrap wrap-sp">
+											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+										</div>
+                    					<div id='termserror'></div><br>
+										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Create Account</button><br>
+										<button type="button" style="margin-bottom: 10px; display: none;" class="signup-new" id="continue_cart" onclick="gotocart();">Continue</button>
+									</div>
+								</div>
+							</form>
+						</div>
+                    </div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+
 @include('layouts.footer')
 
 <script type="text/javascript">
 	$(document).ready(function () {
-	  $(document).on('click', '.serv_fav1', function(){
+
+		$("#frmregister").submit(function (e) {
+            e.preventDefault();
+            $('#frmregister').validate({
+                rules: {
+                    firstname: "required",
+                    lastname: "required",
+                    username: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    dob: {
+                        required: true,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 8,
+                        equalTo: "#password"
+                    },
+                },
+                messages: {
+                    firstname: "Enter your Firstname",
+                    lastname: "Enter your Lastname",
+                    username: "Enter your Username",
+                    email: {
+                        required: "Please enter a valid email address",
+                        minlength: "Please enter a valid email address",
+                        remote: jQuery.validator.format("{0} is already in use")
+                    },
+                    dob: {
+                        required: "Please provide your date of birth",
+                    },
+                    password: {
+                        required: "Provide a password",
+                        minlength: jQuery.validator.format("Enter at least {0} characters")
+                    },
+                    confirm_password: {
+                        required: "Repeat your password",
+                        minlength: jQuery.validator.format("Enter at least {0} characters"),
+                        equalTo: "Enter the same password as above"
+                    },
+                },
+                submitHandler: registerUser
+            });
+        });
+
+        $('#email').on('blur', function() {
+	        var posturl = '{{route("emailvalidation")}}';
+	        var formData = $("#frmregister").serialize();
+	        $.ajax({
+                url: posturl,
+                type: 'get',
+                dataType: 'json',
+                data: formData,  
+                 beforeSend: function () {
+                    $("#systemMessage").html('');
+                },             
+                success: function (response) {                    
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
+                }
+            });
+	    });
+
+	    
+
+	  	$(document).on('click', '.serv_fav1', function(){
         var ser_id = $(this).attr('ser_id');
         // var _token = $("input[name='_token']").val();
         var _token = $('meta[name="csrf-token"]'). attr('content');
@@ -445,7 +604,84 @@ if(!empty($cart["cart_item"])) {
             }
         });
     });
-  });
+  	});
+
+
+	function gotocart(){
+		window.location = '{{route("payments_card")}}'
+	}
+
+	function getAge() {
+        var dateString = document.getElementById("dob").value;
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        if(age < 13)
+        {
+            var agechk = '0';
+        } else {
+           var agechk = '1';
+        }
+        return agechk;
+    }
+
+    function registerUser() {
+
+        var valchk = getAge();
+        var validForm = $('#frmregister').valid();
+        var posturl = '/auth/postRegistration_as_guest';
+        if (!jQuery("#b_trm1").is(":checked")) {
+           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+            return false;
+        }
+        if(valchk == 1){
+            $('#register_submit').prop('disabled', true);
+            if (validForm) {
+
+                var formData = $("#frmregister").serialize();
+                $.ajax({
+                    url: posturl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: formData,
+                    beforeSend: function () {
+                        
+                        $('#register_submit').prop('disabled', true).css('background','#999999');
+                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                    },
+                    complete: function () {
+                    
+                        $('#register_submit').prop('disabled', true).css('background','#999999');
+                    },
+                    success: function (response) {
+                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                        showSystemMessages('#systemMessage', response.type, response.msg);
+                        if (response.type === 'success') {
+                        	$('#continue_cart').css('display','block');
+                            //window.location.href = response.redirecturl;
+                        } else {
+                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                        }
+                    }
+                });
+            }
+        
+        }else{
+            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+        }
+    }
+
+    function changeformate() {
+        /*alert($('#contact').val());*/
+        var con = $('#contact').val();
+        var curchr = con.length;
+        if (curchr == 3) {
+            $("#contact").val("(" + con + ")" + "-");
+        } else if (curchr == 9) {
+            $("#contact").val(con + "-");
+        }
+    }
 </script>
 <script>
 jQuery("#carousel-slider").owlCarousel({

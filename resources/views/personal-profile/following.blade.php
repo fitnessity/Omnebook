@@ -25,17 +25,19 @@ use App\UserFollow;
                     </div>
                     <div class="followers_section padding-1 white-bg border-radius1">
                         <?php 
+                        $queryUserfollowersdata = array();
+                        $queryUserfollowingdata = array();
                         if(isset($FollowDetail)) {
+
 							foreach ($FollowDetail as $data) {
 								$logo='';
 								$queryUser = User::select("firstname", "lastname", "profile_pic", "id","created_at")
 								->where("id", $data['follower_id'])
 								->first();
-								$logo=$queryUser["profile_pic"];
-                               
-                                $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", $queryUser["id"])->get();
-                                $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
-
+								$logo= @$queryUser["profile_pic"];
+                               if($queryUser != ''){
+                                    $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", @$queryUser["id"])->get();
+                                    $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",@$queryUser["id"])->get();
 							?>
                                 <div class="followers-block">
                                     <div class="followers-content">
@@ -48,28 +50,29 @@ use App\UserFollow;
 											else
 											{
 												echo '<div class="admin-img-text">';
-												$pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
+												$pf=substr(@$queryUser["firstname"], 0, 1).substr(@$queryUser["lastname"], 0, 1);
 												echo '<p>'.$pf.'</p>';
 											}
 										?>
                                         </div>
                                         <div class="followers-right-content">
-                                            <h5> <?php  echo $queryUser["firstname"] . " ".$queryUser['lastname'] ;?> </h5>
+                                            <h5> <?php  echo @$queryUser["firstname"] . " ".@$queryUser['lastname'] ;?> </h5>
                                             <ul>
                                                 <li><span>Follower</span> {{ $queryUserfollowersdata->count()}}</li>
                                                 <li><span>Member Since</span> 
-												<?php echo date('F Y',strtotime($queryUser['created_at'])); ?> </li>
-                                                <li><span>Following</span> {{ $queryUserfollowingdata->count()}}</li>
+												<?php echo date('F Y',strtotime(@$queryUser['created_at'])); ?> </li>
+                                                <li><span>Following</span> {{ @$queryUserfollowingdata->count()}}</li>
                                                 
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="followers-button">
-                                        <a href="#" class="following-btn unfollow" id="<?php  echo $queryUser['id']; ?>">Unfollow</a>
+                                        <a href="#" class="following-btn unfollow" id="<?php  echo @$queryUser['id']; ?>">Unfollow</a>
                                     </div>
         
                                 </div>
 							<?php 
+                                }
 							}
 						} else {
 						?>

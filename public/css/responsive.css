@@ -1295,7 +1295,17 @@
 	.manage-customer-search h4{margin-top: 80px;}
 	.search-modal-customer{margin-bottom: 15px;}
 	.inner-accordion-titles label {  width: 58%;}
-	
+	.mobile-scheduler{display: none !important;}
+	.scheduled-activity-info {  text-align: left; margin-top: 16px;}
+	.scheduler-qty{text-align: left;}
+	.scheduler-titles{display: inline-block;}
+	.price-mobileview .price-info {display: inline-block; width: 66%;}
+	.scheduled-location {text-align: left; margin-top: 8px;}	
+	.scheduled-btns{margin-top: 10px; display: ruby;}
+	.scheduled-btns .btn-edit{width: 50%; margin-top: 15px;}
+	.manage-cus-btn{float: left;}
+	.scheduler-info-box .timeline{display: block; text-align: left;}
+	.btn-previous{width: auto;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1572,6 +1582,8 @@
 	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
 	.modal-dialog.modal-lg.booking-receipt{width: 70% !important;}
 	.modal-dialog.manage-customer{width: 80% !important;}
+	.modal-dialog.registermodal{width: 75% !important;}
+	.scheduler-titles{display: none;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1650,6 +1662,9 @@
 	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
 	.modal-dialog.manage-customer{width: 75% !important;}
 	.customer-details img { width: 100% !important;}
+	.modal-dialog.manage-customer{width: 30% !important;}
+	.modal-dialog.registermodal{width: 70% !important;}
+	.scheduler-titles{display: none;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
@@ -2282,6 +2297,20 @@
 	.inner-accordion-titles label {  width: 100%;}
 	.padding-0{padding-left: 15px !important; padding-right: 15px !important;}
 	.mobile-custom{padding-left: 0px !important; padding-right: 0px !important;}
+	.manage-cus-btn{float: left;}
+	.manage-search.manage-space {  margin-top: 15px;}
+	.mobile-scheduler{display: none !important;}
+	.scheduled-activity-info {  text-align: left; margin-top: 16px;}
+	.scheduler-qty{text-align: left;}
+	.scheduler-titles{display: inline-block;}
+	.price-mobileview .price-info {display: inline-block; width: 73%;}
+	.scheduled-location {text-align: left; margin-top: 8px;}	
+	.scheduled-btns{margin-top: 10px; display: ruby;}
+	.scheduled-btns .btn-edit{width: 50%;}
+	.w-80 {  width: 78% !important;}
+	.priceactivity-scheduler{width: 100%;}
+	.scheduler-info-box .timeline{display: block; text-align: left;}
+	.btn-previous{width: auto;}
 }
 
 @media(max-width: 575px) {

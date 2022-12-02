@@ -65,7 +65,7 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-            eventRender: function (event, element, view) { alert('call');
+            eventRender: function (event, element, view) { //alert('call');
                 if (event.allDay === 'true') { event.allDay = true; } 
 				else { event.allDay = false; }
             },

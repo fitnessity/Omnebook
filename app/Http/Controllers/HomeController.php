@@ -422,6 +422,7 @@ class HomeController extends Controller
 
     public function addcheckoutsession() {
     	Session::put('checkoutsession', 'checkoutsession'); 	
+      	return redirect('/userlogin');
     }
 
     public function already_claim_business() {

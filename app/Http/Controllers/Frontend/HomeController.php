@@ -325,6 +325,7 @@ class HomeController extends Controller {
                 // $userObj->status = "email_activation_pending";
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
+                $userObj->isguestuser = 0;
 
                 //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);

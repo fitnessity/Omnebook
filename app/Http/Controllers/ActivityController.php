@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use App\Repositories\BookingRepository;
 use App\Repositories\SportsRepository;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use File;
 use Config;
 use Redirect;
@@ -30,14 +30,20 @@ use App\BusinessServicesFavorite;
 use App\BusinessService;
 use App\User;
 use DateTime;
-
+use App\Languages;
+use ReCaptcha\ReCaptcha;
+use Image;
+//use Illuminate\Support\Facades\Input;
+use Hash;
+use App\Api;
+use App\MailService;
 class ActivityController extends Controller {
 
 	protected $sports;
 
 
     public function __construct(UserRepository $users, BookingRepository $bookings, Request $request, SportsRepository $sports) {
-    	$this->middleware('auth', ['only' => ['show']]);
+    	//$this->middleware('auth', ['only' => ['show']]);
         $this->users = $users;
         $this->bookings = $bookings;
         $this->sports = $sports;
@@ -2554,4 +2560,98 @@ class ActivityController extends Controller {
         $stactbox .= '</select>';
         echo $stactbox; 
     }
+
+    public function postRegistration_as_guest(Request $request) {
+
+        $postArr = $request->all();
+        /*print_r($postArr);exit;*/        
+        $rules = [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+            'username' => 'unique:users'
+        ];
+
+        $validator = Validator::make($postArr, $rules);
+        if ($validator->fails()) {
+            $errMsg = array();
+            foreach ($validator->messages()->getMessages() as $field_name => $messages) {
+                $errMsg = $messages;
+            }
+            $response = array(
+                'type' => 'danger',
+                'msg' => $errMsg,
+            );
+            return Response::json($response);
+        } else {
+            if (!$this->users->validateUser($postArr['email'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Email already exists. Please select different Email',
+                );
+                return Response::json($response);
+            };
+            //check for unique user name
+            if (!$this->users->validateUser($postArr['username'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'User name already exists. Please select different Name',
+                );
+                return Response::json($response);
+            };
+
+            if (count($postArr) > 0) {
+
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+                $last_name = ($postArr['lastname']) ? $postArr['lastname'] : '';
+                $cus_name = $postArr['firstname'].' '.$last_name;
+                $customer = \Stripe\Customer::create([
+                        'name' => $cus_name,
+                        'email'=> $postArr['email'],
+                ]);
+                $stripe_customer_id = $customer->id;
+
+                $userObj = New User();
+                $userObj->firstname = $postArr['firstname'];
+                $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
+                $userObj->username = $postArr['username'];
+                $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $userObj->email = $postArr['email'];
+                $userObj->stripe_customer_id = $stripe_customer_id;
+                $userObj->role = 'customer';
+                $userObj->country = 'US';
+                $userObj->activated = 0;
+                $userObj->phone_number = $postArr['contact'];
+                $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
+                $userObj->status = "approved";
+                $userObj->buddy_key = $postArr['password'];
+                $userObj->isguestuser = 1;
+
+                //For signup confirmation 
+                $userObj->confirmation_code = Str::random(25);
+
+                $userObj->save();
+                $response = array(
+                    'type' => 'success',
+                    'msg' => 'Thank you for registering with Fitnessity. Please verify your email address.',
+                );
+                Auth::login($userObj);
+                Auth::loginUsingId($userObj->id, true);
+
+                return Response::json($response);
+				
+            } else {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Invalid email or password',
+                );
+                return Response::json($response);
+            }
+        }
+    }
+
 }
