@@ -621,12 +621,12 @@ $chk_found = '';
 	                            @if(!empty($reviews_people))
 	                                @foreach($reviews_people as $people)
 	                                	<?php $userinfo = User::find($people->user_id); ?>
-	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" data-toggle="tooltip">
-	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{@$userinfo->firstname}} {{@$userinfo->lastname}}" data-toggle="tooltip">
+	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
+	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic) }}" alt="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 	                                        @else
 	                                            <?php
-	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+	                                            $pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
 	                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
 	                                        @endif
 	                                    </a>
@@ -646,16 +646,16 @@ $chk_found = '';
 	                                <?php $userinfo = User::find($review->user_id); ?>
 								<div class="ser-rev-user">
 										<div class="col-md-2 col-sm-2 col-xs-3 pl-0 pr-0">
-											@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-	                                            <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+											@if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
+	                                            <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic) }}" alt="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 	                                        @else
 	                                            <?php
-	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+	                                            $pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
 	                                            echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
 	                                        @endif
 										</div>
 										<div class="col-md-10 col-sm-10 col-xs-9 pl-0">
-											<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
+											<h4> {{@$userinfo->firstname}} {{@$userinfo->lastname}}
 											<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}}  </div> </h4> 
 											<p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
 										</div>

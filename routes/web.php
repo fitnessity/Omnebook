@@ -22,7 +22,7 @@ use App\Http\Controllers\ActivityController;
     return "success";
 });*/
 
-Route::get('/addcheckoutsession','HomeController@addcheckoutsession');
+Route::get('/addcheckoutsession','HomeController@addcheckoutsession')->name('addcheckoutsession');
 
 
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
@@ -137,6 +137,8 @@ Route::get('/check',function(){
    return view('home.registration',compact('show_step'));
 });
 
+
+Route::post('/auth/postRegistration_as_guest', 'ActivityController@postRegistration_as_guest')->name('auth/postRegistration_as_guest');
 Route::get('/', 'Frontend\HomeController@index')->name('homepage');
 Route::get('/home', 'Frontend\HomeController@index')->name('homemy');
 Route::get('/testleft', 'Frontend\HomeController@testleft')->name('testleft');
@@ -631,11 +633,14 @@ Route::post('/myemail', 'Auth\AuthController@myemail');
 
 
 //Scheduler Controller
-Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
+
 
 //profile routes ends
 Route::group(['middleware' => ['auth']], function()
 {
+    Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
+    Route::get('scheduler-checkin', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
+    Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     //favourite routes
     Route::post('/isfavourite','UsersFavouriteController@isFavourite');
     Route::get('favourite/index', 'UsersFavouriteController@index');
@@ -727,7 +732,7 @@ Route::post('/savedirecthirerequest', 'LessonController@postSaveDirecthireReques
 Route::any('/direct-hire/cart-payment', 'LessonController@cartpayment');
 Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
-Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');
+/*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
 
 
@@ -805,7 +810,7 @@ Route::post('/getlanguage', 'UserProfileController@getlanguage');
 // network routes
 
 Route::group(['middleware' => 'auth'], function () {
-
+    Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');
     Route::post('savereviews', 'UserProfileController@savereviews')->name('savereviews');
 
     // Route::resource('network', 'NetworkController');
@@ -844,7 +849,6 @@ Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('se
 Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
 
 
-Route::get('/personal-profile/calendar', 'UserProfileController@calendar')->name('calendar');
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');

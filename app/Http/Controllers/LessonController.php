@@ -4581,6 +4581,7 @@ class LessonController extends Controller {
             
         }
        
+
         if (count($result) > 0) {
             foreach ($result as $item) {
                 $p_image = '';
@@ -4595,9 +4596,7 @@ class LessonController extends Controller {
                     }else{
                         $p_image = $item->profile_pic;
                     }
-
                 }
-
                 $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
@@ -4632,7 +4631,7 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        /*print_r($cart_item['cart_item']);exit;*/ 
+       /* print_r($cart_item['cart_item']);exit;*/
         return redirect('/success-cart/'.$pid); 
     }
 
@@ -4646,7 +4645,7 @@ class LessonController extends Controller {
         $sdata = BusinessServices::where('id',$pid)->first();
         $ser = BusinessService::where('cid', @$sdata->cid)->first();
         $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
-        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$pid)->limit(4)->get();
+        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$pid)->where('is_active', 1)->limit(4)->get();
 
         return view('activity.success_cart',[
             'pid'=> $pid,

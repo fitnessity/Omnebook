@@ -48,8 +48,8 @@
                        /*echo $totalquantity;*/
     					$item_price = $item_price + $item["totalprice"];
     					if ($item['image']!="") {
-    						if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
-    							$profilePic = url('/public/uploads/profile_pic/thumb/' . $item['image']);
+    						if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
+    							$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
     						} else {
     							$profilePic = url('/public/images/service-nofound.jpg');
     						}
@@ -683,8 +683,8 @@
                     foreach ($cart['cart_item'] as $item) {
                         $item_price = $item["price"];
 						if ($item['image']!="") {
-							if (File::exists(public_path("/uploads/profile_pic/thumb/" . $item['image']))) {
-								$profilePic = url('/public/uploads/profile_pic/thumb/' . $item['image']);
+							if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
+								$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
 							} else {
 								$profilePic = '/public/images/service-nofound.jpg';
 							}

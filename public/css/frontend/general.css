@@ -22445,3 +22445,68 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .schedule-viewing label{
 	margin-bottom: 0px !important;
 }
+.scheduler-info span{
+	margin-left: 7px;
+}
+.manage-search.manage-space{
+	margin-top: 73px;
+}
+.btns-modal {
+  text-align: center;
+}
+.modal-body.body-space{
+	padding: 35px 15px;
+}
+.cart-btn-width{
+	width: 28%;
+	margin-right: 12px;
+}
+.register-modal .logo-my {
+    text-align: center;
+    margin-bottom: 25px;
+}
+.register-modal .logo-my img {
+    max-width: 100px;
+}
+.register-modal {
+	background: #fff;
+}
+.register-bg{
+	background-image: url(http://dev.fitnessity.co//public/images/register-bg.jpg);
+	background-size: 100% 100%;
+	background-position: center;
+}
+.register-pop-title{
+	text-align: center;
+}
+.register-pop-title h3{
+	color: #04344d;
+    font-size: 24px;
+    font-family: 'bebasregular';
+    letter-spacing: 2px;
+    word-spacing: 5px;
+}
+.scheduler-border::before{
+	content: "";
+	height: 50px;
+	left: 7px;
+	position: absolute;
+	top: 0px;
+	width: 4px;
+	background: #09b8fe;
+}
+.scheduler-label label{
+	font-weight: 400;
+}
+.scheduler-label i{
+	position: absolute;
+	top: 19px;
+	left: 19px;
+	color: #ed1b24;
+}
+.checkbox-check{
+	margin-left: 25px;	
+}
+.scheduler-border-red::before{
+	background: #ff0b34;	
+}
