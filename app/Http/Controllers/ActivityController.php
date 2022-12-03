@@ -43,7 +43,6 @@ class ActivityController extends Controller {
 
 
     public function __construct(UserRepository $users, BookingRepository $bookings, Request $request, SportsRepository $sports) {
-    	//$this->middleware('auth', ['only' => ['show']]);
         $this->users = $users;
         $this->bookings = $bookings;
         $this->sports = $sports;
@@ -1101,9 +1100,11 @@ class ActivityController extends Controller {
 	public function show(Request $request ,$serviceid) {
       	$cart = [];
       	$cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
+      	$service = BusinessServices::findOrFail($serviceid);
+
        	return view('activity.show', [
         	'cart' => $cart,
-        	'serviceid' =>$serviceid
+        	'service' =>$service
       	]);
     }
 
