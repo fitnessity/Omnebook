@@ -74,7 +74,10 @@ input:disabled{
 	use Carbon\Carbon;
     use App\StaffMembers;
 
+    $activity = $service;
 	$sid = $serviceid = $service->id;
+
+
 	
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
@@ -307,6 +310,7 @@ $chk_found = '';
 			$pro_pic1 = $pro_pic;
 		}
 	}
+
 ?>
 
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
@@ -1652,14 +1656,48 @@ $(document).ready(function () {
 		});
 	}
 </script>
-
+<?php
+	$activities = BusinessActivityScheduler::where('serviceid', $activity->id)->get();
+	$result = [];
+	foreach($activities as $activity){
+		array_push($result, [$activity->starting, $activity->end_activity_date, $activity->activity_days]);
+	}
+	var_dump('ggyy');
+	var_dump($result);
+?>
 <script>
+	var active_days = JSON.parse('<?php echo json_encode($result)?>');
+	const days = [
+	  'Sunday',
+	  'Monday',
+	  'Tuesday',
+	  'Wednesday',
+	  'Thursday',
+	  'Friday',
+	  'Saturday',
+	]
 	$( function() {
 		$( "#actfildate_forcart" ).datepicker( { 
 			minDate: 0,
 			changeMonth: true,
 			changeYear:true,
-        	yearRange: "1960:2060"
+        	yearRange: "1960:2060",
+        	dateFormat: "M-dd-yy",
+        	beforeShowDay: function(date){
+        		for(var i=0; i<active_days.length; i++){
+        			start = new Date(active_days[i][0] + " 00:00:00");
+        			end = new Date(active_days[i][1] + " 00:00:00");
+
+        			if(date >= start && date <= end){
+        				if(active_days[i][2].match(days[date.getDay()])){
+        					return [1];	
+        				}
+        			}
+        		}
+        		return [0];
+        		
+        	}
+        	
 		} );
 	} );
 </script>
