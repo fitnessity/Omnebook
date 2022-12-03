@@ -1662,6 +1662,7 @@ $(document).ready(function () {
 	foreach($activities as $activity){
 		array_push($result, [$activity->starting, $activity->end_activity_date, $activity->activity_days]);
 	}
+
 ?>
 <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
