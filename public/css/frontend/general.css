@@ -22510,3 +22510,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .scheduler-border-red::before{
 	background: #ff0b34;	
 }
+.w3-red{
+	background: #ea1515;
+}
+.w3-panel.w3-red p{
+	padding: 8px;
+	color: #fff;
+	margin-top: 9px;
+}

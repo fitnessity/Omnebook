@@ -88,7 +88,7 @@ class PaymentController extends Controller {
           	[]
         );
 
-         /*  print_r($payment_intent);exit;*/
+        // print_r($payment_intent);exit;
         $data = json_decode( json_encode( $payment_intent),true);
         $amount= ($data["amount"]/100);
         $date = new DateTime("now", new DateTimeZone('America/New_York') );
@@ -135,8 +135,8 @@ class PaymentController extends Controller {
             $metadatalistItems = json_decode($data['metadata']['listItems']);
             $aduprice = $childprice = $infantprice = 0;
             $aduqnt = $childqnt = $infantqnt = 0;
-           /* print_r($cartnew);*/
-           $fit_acc_amt = 0;
+            //print_r($cartnew);
+            $fit_acc_amt = 0;
             for($i=0;$i<count($metadatapro);$i++)
             {
                 $priceid=0; $sesdate= $encodeqty ='' ;
@@ -255,19 +255,19 @@ class PaymentController extends Controller {
                 MailService::sendEmailBookingConfirmnew($BookingDetail);
             }
             
-            /*$transfer_amt_to_fit_acc = 0;
-            $transfer_amt_to_fit_acc = $fit_acc_amt + $fitness_acc_cust_fee_trans_amt;
+            // $transfer_amt_to_fit_acc = 0;
+            // $transfer_amt_to_fit_acc = $fit_acc_amt + $fitness_acc_cust_fee_trans_amt;
             
             // Create a second Transfer to another connected account (later):
-            $admin_stripeid = User::where(['id'=>1, 'role'=>'admin'])->first();
-            if(@$admin_stripeid->stripe_connect_id != ''){
-                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                $transfer_admin = \Stripe\Transfer::create([
-                    'amount' => $transfer_amt_to_fit_acc * 100,
-                    'currency' => 'usd',
-                    'destination' => $admin_stripeid->stripe_connect_id,
-                ]);
-            }*/
+            // $admin_stripeid = User::where(['id'=>1, 'role'=>'admin'])->first();
+            // if(@$admin_stripeid->stripe_connect_id != ''){
+            //     \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            //     $transfer_admin = \Stripe\Transfer::create([
+            //         'amount' => $transfer_amt_to_fit_acc * 100,
+            //         'currency' => 'usd',
+            //         'destination' => $admin_stripeid->stripe_connect_id,
+            //     ]);
+            // }
              
             session()->forget('stripepayid');
             session()->forget('stripechargeid');

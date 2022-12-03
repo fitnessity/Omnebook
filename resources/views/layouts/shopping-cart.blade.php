@@ -534,7 +534,7 @@
         						</div>
                             @endif
     						<div class="sacecard-title">OTHER PAYMENT METHODS </div>
-    						<button class="card-btns">Credit / Debit Card</button>
+    						<button class="card-btns" type="button">Credit / Debit Card</button>
     						<!-- <button class="card-btns">Paypal</button>
     						<button class="card-btns">Venmo</button> -->
                             <div > 
