@@ -50,7 +50,9 @@ class BusinessActivityScheduler extends Model
         $start_datetime = $datetime;
         $end_datetime = clone($datetime);
         $end_datetime->modify("+10 hours");
-        $business_activity_schedulers = BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start');
+        $business_activity_schedulers = BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw(" ? between `starting` and `end_activity_date`", [$end_datetime->format("y-m-d")]);
+
+
         if($start_datetime->format("Y-m-d") == $end_datetime->format("Y-m-d")){
             return $business_activity_schedulers->whereRaw("activity_days like ? and shift_start > ? and shift_start <= ?", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), $end_datetime->format("H:i")]);
         }else{
