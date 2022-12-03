@@ -493,8 +493,8 @@ if(!empty($cart["cart_item"])) {
 											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
 										</div>
                     					<div id='termserror'></div><br>
-										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Create Account</button><br>
-										<button type="button" style="margin-bottom: 10px; display: none;" class="signup-new" id="continue_cart" onclick="gotocart();">Continue</button>
+										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
+										<!-- <button type="button" style="margin-bottom: 10px; display: none;" class="signup-new" id="continue_cart" onclick="gotocart();">Continue</button> -->
 									</div>
 								</div>
 							</form>
@@ -658,8 +658,8 @@ if(!empty($cart["cart_item"])) {
                         $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
                         showSystemMessages('#systemMessage', response.type, response.msg);
                         if (response.type === 'success') {
-                        	$('#continue_cart').css('display','block');
-                            //window.location.href = response.redirecturl;
+                        	//$('#continue_cart').css('display','block');
+                            window.location.href = '{{route("carts_index")}}';
                         } else {
                             $('#register_submit').prop('disabled', false).css('background','#ed1b24');
                         }

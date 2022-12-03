@@ -35,9 +35,13 @@
         <!-- Left Sidebar End -->
 
         <div class="page-content-wrapper">
-
+            @if(@$UserProfileDetail['activated'] != 1)
+            <div class="w3-panel w3-red">
+                 <p>Please Verify Your Email.</p>
+             </div> 
+            @endif
             <div class="content-page">
-
+                
                 <div class="container-fluid">
 
                     <div class="page-title-box">

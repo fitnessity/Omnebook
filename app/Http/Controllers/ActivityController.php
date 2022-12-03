@@ -2630,19 +2630,30 @@ class ActivityController extends Controller {
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
                 $userObj->isguestuser = 1;
-
                 //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
 
-                $userObj->save();
-                $response = array(
-                    'type' => 'success',
-                    'msg' => 'Thank you for registering with Fitnessity. Please verify your email address.',
-                );
-                Auth::login($userObj);
-                Auth::loginUsingId($userObj->id, true);
+	            $userObj->save();
+                if ($userObj) {
+                 	MailService::sendEmailSignupVerification($userObj->id);
+					MailService::sendEmailVerifiedAcknowledgement($userObj->id);
+	                $response = array(
+	                    'type' => 'success',
+	                    'msg' => 'Thank you for registering with Fitnessity. Please verify your email address.',
+	                );
+	                Auth::login($userObj);
+	                Auth::loginUsingId($userObj->id, true);
 
-                return Response::json($response);
+	                return Response::json($response);
+	            }else {
+
+                    $response = array(
+                        'type' => 'danger',
+                        'msg' => 'Some wrror occured while registering. Please try again later.',
+                    );
+
+                    return Response::json($response);
+                }
 				
             } else {
                 $response = array(
