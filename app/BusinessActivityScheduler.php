@@ -46,6 +46,33 @@ class BusinessActivityScheduler extends Model
         'end_activity_date'
     ];
 
+    public function next_available_date(){
+        $start = new DateTime($this->starting);
+        $end = new DateTime($this->end_activity_date);
+
+        $current_date = new DateTime();
+        
+        if($current_date > $start && $current_date < $end){
+
+
+
+            for($i = $current_date; $i <= $end; $i->modify('+1 day')){
+                if(str_contains($this->activity_days, $i->format("l"))){
+                    return $i;
+                }
+            }
+        }elseif($start > $current_date){
+
+            for($i = $start; $i <= $end; $i->modify('+1 day')){
+                if(str_contains($this->activity_days, $i->format("l"))){
+                    return $i;
+                }
+            }
+        }else{
+            return null;
+        }
+    } 
+
     public static function next_8_hours($datetime){
         $start_datetime = $datetime;
         $end_datetime = clone($datetime);
