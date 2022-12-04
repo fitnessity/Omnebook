@@ -11,7 +11,7 @@ use App\BusinessServicesFavorite;
 
 $total_quantity=0;
  $item_price=0;
-print_r($cart["cart_item"]);
+
 if(!empty($cart["cart_item"])) {
     foreach($cart['cart_item'] as $item){
         $total_quantity = count($cart["cart_item"]);
