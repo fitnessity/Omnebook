@@ -1657,10 +1657,21 @@ $(document).ready(function () {
 	}
 </script>
 <?php
+	$next_available_date = new DateTime();
 	$activities = BusinessActivityScheduler::where('serviceid', $activity->id)->get();
 	$result = [];
-	foreach($activities as $activity){
-		array_push($result, [$activity->starting, $activity->end_activity_date, $activity->activity_days]);
+	foreach($activities as $local_activity){
+		$activity_next_available_date = $local_activity->next_available_date();
+		if($next_available_date == null){
+			$next_available_date = $activity_next_available_date;	
+		}else{
+			if($next_available_date < $activity_next_available_date){
+				$next_available_date = $activity_next_available_date;		
+			}
+		}
+		
+		
+		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
 
 ?>
@@ -1708,6 +1719,9 @@ $(document).ready(function () {
 			changeYear:true,
         	yearRange: "1960:2060"
         } );
+
+		$('#actfildate_forcart').val('{{$next_available_date->format('M-d-Y')}}');
+        updatedetail({{$companyactid}},{{$activity->id}});
 	} );
 </script>
 
