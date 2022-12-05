@@ -116,6 +116,25 @@ class ActivityController extends Controller {
 			'name'=>$name,
 
 		]);	
+    } 
+
+    public function events(Request $request){
+    	$activity_get_start_fast =  ActivtyGetStartedFast::find(4);
+
+		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'events')->with(['company_information']);
+		$name = 'Events';
+		
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+
+		return view('activity.get_started',[
+			'activity_get_start_fast'=>$activity_get_start_fast,
+			'bookschedulers' => $bookschedulers,
+			'current_date' => $current_date,
+			'allactivities'=>$activities,
+			'activities'=>$activities->get(),
+			'name'=>$name,
+		]);	
     }
 
     public function next_8_hours(Request $request){
@@ -167,9 +186,8 @@ class ActivityController extends Controller {
 		$cart = [];
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
 
-		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience' || $filtervalue == 'all' || $filtervalue == 'thismonth' || $filtervalue == 'most_popular' || $filtervalue == 'trainers_coaches' || $filtervalue == 'ways_to_workout'|| $filtervalue == 'active_wth_fun_things_to_do')
+		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience' || $filtervalue == 'all' || $filtervalue == 'thismonth' || $filtervalue == 'most_popular' || $filtervalue == 'trainers_coaches' || $filtervalue == 'ways_to_workout'|| $filtervalue == 'active_wth_fun_things_to_do' || $filtervalue == 'events_in_your_area' )
 		{
-
 			$getstarteddata = '';
 			$all_activities = BusinessServices::where('business_services.is_active', 1);
 			$todayservicedata = [];
@@ -209,6 +227,10 @@ class ActivityController extends Controller {
 				$name = 'Ways To Workout';
 				$all_activities->where('service_type','classes');
 				$nxtact->where('service_type','classes');
+			}else if ($filtervalue == 'events_in_your_area'){
+				$name = 'Events In Your Area';
+				$all_activities->where('service_type','events');
+				$nxtact->where('service_type','events');
 			}else {
 				$name = 'Active With Fun Things To Do';
 				$all_activities->where('service_type','experience');
@@ -267,6 +289,8 @@ class ActivityController extends Controller {
 
 			$Ways_To_Work_out = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'classes']);
 
+			$events_activity = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'events']);
+
 			$todayservicedata = [];
 
 			$nxtact = BusinessServices::where('business_services.is_active', 1);
@@ -297,6 +321,9 @@ class ActivityController extends Controller {
 			    $Ways_To_Work_out ->where(function ($query) use ($select_label) {
 	                $query->where('sport_activity', 'LIKE', '%'. $select_label . '%');   
 	            });
+	            $events_activity ->where(function ($query) use ($select_label) {
+	                $query->where('sport_activity', 'LIKE', '%'. $select_label . '%');   
+	            });
 	            $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
 	            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
 			}
@@ -325,6 +352,9 @@ class ActivityController extends Controller {
 					$Ways_To_Work_out->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
+					$events_activity->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->Where('ci.country', 'LIKE', '%'. $search . '%');
+	                        });
 	            }
 	        	
 	        	if($request->State != ''){
@@ -348,6 +378,9 @@ class ActivityController extends Controller {
 	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
+	                        });
+					$events_activity->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->Where('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
 	            }
@@ -375,6 +408,9 @@ class ActivityController extends Controller {
 					$Ways_To_Work_out->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
+					$events_activity->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->Where('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                        });
 	            }
 
 	        	if($request->City != ''){
@@ -395,6 +431,9 @@ class ActivityController extends Controller {
 	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
+	                        });
+					$events_activity->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->Where('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
@@ -428,6 +467,9 @@ class ActivityController extends Controller {
 			                $query->where('sport_activity', 'LIKE', '%'. $search . '%');   
 			            });
 					    $Ways_To_Work_out ->where(function ($query) use ($search) {
+			                $query->where('sport_activity', 'LIKE', '%'. $search . '%');   
+			            });
+			            $events_activity ->where(function ($query) use ($search) {
 			                $query->where('sport_activity', 'LIKE', '%'. $search . '%');   
 			            });
 		            }
@@ -470,6 +512,11 @@ class ActivityController extends Controller {
 		                    }
 		                });
 		                $Ways_To_Work_out ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $events_activity ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
 		                        $q->orWhere('service_type', 'LIKE', '%'. $data . '%');
 		                    }
@@ -527,6 +574,12 @@ class ActivityController extends Controller {
 		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
 		                    }
 		                });
+		                $events_activity->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
 		            }
 				}else {
 	            	$request->session()->forget('program_type');
@@ -569,6 +622,11 @@ class ActivityController extends Controller {
 		                    }
 		                });
 		                $Ways_To_Work_out ->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+		                $events_activity ->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
 		                        $q->orWhere('select_service_type', 'LIKE', '%'. $data . '%');
 		                    }
@@ -640,6 +698,15 @@ class ActivityController extends Controller {
 			                    }
 			                }
 			            });
+
+			            $events_activity ->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        $data = ucwords($data);
+			                        $q->orWhere('activity_for', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+			            });
 		            }
 				}else {
 	            	$request->session()->forget('activity_type');
@@ -688,6 +755,13 @@ class ActivityController extends Controller {
 		                    }
 		                });
 		                $Ways_To_Work_out->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
+		                    foreach ($search as $data) {
+		                        $data = ucwords($data);
+		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
+		                    }
+		                });
+
+		                $events_activity->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->select('business_services.*','business_price_details.membership_type')->groupby('business_services.id')->where(function($q) use ($search) {
 		                    foreach ($search as $data) {
 		                        $data = ucwords($data);
 		                        $q->orWhere('membership_type', 'LIKE', '%'. $data . '%');
@@ -783,6 +857,20 @@ class ActivityController extends Controller {
 			                }
 		                });
 		                $Ways_To_Work_out->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('activity_location', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
+		                });
+
+		                $events_activity->where(function($q) use ($search) {
 			                if(!in_array("any", $search)){
 			                    foreach ($search as $data) {
 			                        if(strpos($data,'_')!= ''){
@@ -896,6 +984,20 @@ class ActivityController extends Controller {
 			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
 			                    }
 			                }
+		                }); 
+
+		                $events_activity->where(function($q) use ($search) {
+			                if(!in_array("any", $search)){
+			                    foreach ($search as $data) {
+			                        if(strpos($data,'_')!= ''){
+			                            $data = ucwords(str_replace('_',' ', $data));
+			                        }
+			                        else{
+			                            $data = ucwords($data);
+			                        }
+			                        $q->orWhere('age_range', 'LIKE', '%'. $data . '%');
+			                    }
+			                }
 		                });
 		            }
 				}else {
@@ -926,6 +1028,9 @@ class ActivityController extends Controller {
 	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
+	                        });
+					$events_activity->join('company_informations as ci', 'business_services.userid', '=', 'ci.user_id')->select('business_services.*','ci.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->orWhere('ci.country', 'LIKE', '%'. $search . '%');
 	                        });
 	            }else {
@@ -959,6 +1064,9 @@ class ActivityController extends Controller {
 					$Ways_To_Work_out->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
 	                        });
+					$events_activity->join('company_informations as cin', 'business_services.userid', '=', 'cin.user_id')->select('business_services.*','cin.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->orWhere('cin.state', 'LIKE', '%'. $search . '%');
+	                        });
 	            }else {
 	            	$request->session()->forget('state');
 	        	}
@@ -989,6 +1097,9 @@ class ActivityController extends Controller {
 					$Ways_To_Work_out->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
 	                        });
+					$events_activity->join('company_informations as ciz', 'business_services.userid', '=', 'ciz.user_id')->select('business_services.*','ciz.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->orWhere('ciz.zip_code', 'LIKE', '%'. $search . '%');
+	                        });
 	            }else {
 	            	$request->session()->forget('zip_code');
 	        	}
@@ -1014,6 +1125,9 @@ class ActivityController extends Controller {
 	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$Ways_To_Work_out->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
+	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
+	                        });
+					$events_activity->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
 	                            $query->orWhere('cic.city', 'LIKE', '%'. $search . '%');
 	                        });
 					$nxtact->join('company_informations as cic', 'business_services.userid', '=', 'cic.user_id')->select('business_services.*','cic.*')->groupby('business_services.id')->where(function ($query) use ($search){
@@ -1060,6 +1174,7 @@ class ActivityController extends Controller {
 			$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
 			$Fun_Activities  = $Fun_Activities->limit(10)->get();
 			$Ways_To_Workout = $Ways_To_Work_out->limit(10)->get();
+			$events_activity = $events_activity->limit(10)->get();
 
 			$serviceLocation = Miscellaneous::serviceLocation();
 			$getstarteddata =  ActivtyGetStartedFast::orderby('id','asc')->get();
@@ -1076,6 +1191,7 @@ class ActivityController extends Controller {
 					'mostpopularactivity'=>$mostpopularactivity,
 					'Fun_Activities'=>$Fun_Activities,
 					'Ways_To_Workout'=>$Ways_To_Workout,
+					'events_activity'=>$events_activity,
 					'Trainers_coachesacitvity'=>$Trainers_coachesacitvity,
 					'bookschedulers' => $bookschedulers,
 					'serviceLocation'=>$serviceLocation,
@@ -2163,7 +2279,7 @@ class ActivityController extends Controller {
 						<div class="row">
 							<div class="col-md-8 col-sm-8 col-xs-7">
 								<div class="counter-titles">
-									<p class="counter-age-heading">Childern</p>
+									<p class="counter-age-heading">Children</p>
 									<p>Ages 2-12</p>
 								</div>
 							</div>

@@ -23,6 +23,7 @@ use App\Http\Controllers\ActivityController;
 });*/
 
 Route::get('/addcheckoutsession','HomeController@addcheckoutsession')->name('addcheckoutsession');
+Route::get('/senddummymail','HomeController@senddummymail')->name('senddummymail');
 
 
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
@@ -190,6 +191,7 @@ Route::group(['middleware' => ['auth']], function()
 Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
 Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
 Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
+Route::get('/activities/get_started/events','ActivityController@events')->name('get_started_activities_events');
 Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
 Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
 Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
@@ -836,17 +838,19 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::get('/authorize', 'NetworkController@getOutlooktoken');
     Route::post('/add_instructor', 'UserProfileController@add_instructor')->name('add_instructor');
 
+    Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
+    Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
+    Route::get('/personal-profile/booking-info', 'BookingController@bookinginfo')->name('bookinginfo');
+    Route::get('/personal-profile/gym-studio-info', 'BookingController@gym_studio_page')->name('gym_studio_page');
+    Route::get('/personal-profile/experience-info', 'BookingController@experience_page')->name('experience_page');
+    Route::get('/personal-profile/events-info', 'BookingController@events_page')->name('events_page');
+    Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
+    Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
+    Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
+
 });
 
 
-Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
-Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
-Route::get('/personal-profile/booking-info', 'BookingController@bookinginfo');
-Route::get('/personal-profile/gym-studio-info', 'BookingController@gym_studio_page');
-Route::get('/personal-profile/experience-info', 'BookingController@experience_page');
-Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
-Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
-Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
 
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');

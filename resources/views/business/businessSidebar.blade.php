@@ -33,7 +33,7 @@
                     <div>BOOKING DETAILS</div>
                     <a href="{{route('stripe-dashboard')}}" target="_blank"><div class="navlink1" id="tab1">Financial Dashboard</div></a>                    
                     <?php /* ?>
-                    <a href="{{route('scheduler_checkin')}}"><div class="navlink1 @if(request()->route()->uri=='scheduler-checkin') tab-active @endif" id="tab1">Manage Schedule</div></a>
+                  <!--  <a href="{{route('scheduler_checkin')}}"><div class="navlink1 @if(request()->route()->uri=='scheduler-checkin') tab-active @endif" id="tab1">Manage Schedule</div></a>-->
                     <a href="{{route('activity-scheduler')}}"><div class="navlink1 @if(request()->route()->uri=='manage-scheduler') tab-active @endif" id="tab1">Manage Bookings</div></a>
                     <a href="{{route('manage-customer')}}"><div class="navlink1 @if(request()->route()->uri=='manage-customer') tab-active @endif" id="tab1">Customers</div></a>
                     <a href="{{route('business-welcome')}}"><div class="navlink1" id="tab1">Calendar</div></a>

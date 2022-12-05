@@ -258,6 +258,72 @@ class BookingController extends Controller {
        return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
     }
 
+
+    public function events_page(Request $request){
+        $user = User::where('id', Auth::user()->id)->first();
+        $city = AddrCities::where('id', $user->city)->first();
+        $UserProfileDetail['firstname'] = $user->firstname;
+        $UserProfileDetail['lastname'] = $user->lastname;
+        $UserProfileDetail['gender'] = $user->gender;
+        $UserProfileDetail['username'] = $user->username;
+        $UserProfileDetail['phone_number'] = $user->phone_number;
+        $UserProfileDetail['address'] = $user->address;
+        $UserProfileDetail['quick_intro'] = $user->quick_intro;
+        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
+        $UserProfileDetail['email'] = $user->email;
+        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
+        $UserProfileDetail['email'] = $user->email;
+
+        $UserProfileDetail['cover_photo'] = $user->cover_photo;
+        if (empty($city)) {
+            $UserProfileDetail['city'] = $user->city;
+            ;
+        } else {
+            $UserProfileDetail['city'] = $city->city_name;
+        }
+        $state = AddrStates::where('id', $user->state)->first();
+        if (empty($state)) {
+            $UserProfileDetail['state'] = $user->state;
+            ;
+        } else {
+            $UserProfileDetail['state'] = $state->state_name;
+        }
+        $UserProfileDetail['country'] = $user->country;
+        
+        $cart = [];
+        if ($request->session()->has('cart_item')) {
+            $cart = $request->session()->get('cart_item');
+        }
+
+        $BookingDetail = [];
+        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        foreach ($bookingstatus as $key => $value) {
+            $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
+            foreach ($booking_details as $key => $book_value) {
+                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
+                if($business_services != ''){
+                    if($business_services->service_type == 'events'){
+                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+        /*print_r($BookingDetail);exit;*/
+       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+    }
+
     public function getreceiptmodel(Request $request) {
         $booking_status = UserBookingStatus::where('id',$request->orderid)->first();
         $booking_details = UserBookingDetail::where('id',$request->orderdetailid)->first();
@@ -816,8 +882,10 @@ class BookingController extends Controller {
             $pagename_type = 'individual';
         }else if($request->page == 'experience'){
             $pagename_type = 'experience';
-        }else{
+        }else if($request->page == 'gym-studio'){
             $pagename_type = 'classes';
+        }else{
+             $pagename_type = 'events';
         }
         $BookingDetail = [];
         $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
@@ -1152,8 +1220,10 @@ class BookingController extends Controller {
             $pagename_type = 'individual';
         }else if($request->page == 'experience'){
             $pagename_type = 'experience';
-        }else{
+        }else if($request->page == 'gym-studio'){
             $pagename_type = 'classes';
+        }else{
+             $pagename_type = 'events';
         }
         $BookingDetail = [];
         $business_data = CompanyInformation::where('company_name', 'like', '%'. $request->text.'%')->get();

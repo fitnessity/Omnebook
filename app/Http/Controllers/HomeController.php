@@ -19,6 +19,7 @@ use App\Languages;
 use DB;
 use App\User;
 use Session;
+use App\MailService;
 
 class HomeController extends Controller
 {
@@ -427,6 +428,12 @@ class HomeController extends Controller
 
     public function already_claim_business() {
     	return view('home.already-claim-business');
+    }
+
+    public function senddummymail(){
+    	$id = Auth::user()->id;
+    	$status = MailService::sendEmaildummy($id);
+    	echo $status;exit;
     }
 
 }

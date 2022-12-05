@@ -1000,7 +1000,8 @@ $chk_found = '';
 		                            <select id="actfilbtype{{$serviceid}}" name="actfilbtype" class="form-control activityselbtype" onchange="actFilter({{$companyactid}},{{$serviceid}})" >
 		                                <option value="">Business Type</option>
 		                                <option value="individual">Personal Trainer</option>
-		                                <option value="classes">Gym/Studio</option>
+		                                <option value="classes">Classes</option>
+		                                <option value="events">Events</option>
 		                                <option value="experience">Experience</option>
 	                            	</select>
 	                            </div>

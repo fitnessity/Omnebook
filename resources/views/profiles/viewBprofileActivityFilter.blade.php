@@ -74,7 +74,8 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     <select id="actfilbtype" name="actfilbtype" class="bd-bottom bd-right" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Business Type</option>
                         <option value="individual">Personal Trainer</option>
-                        <option value="classes">Gym/Studio</option>
+                        <option value="classes">Classes</option>
+                        <option value="events">Events</option>
                         <option value="experience">Experience</option>
                     </select>
                 </div>

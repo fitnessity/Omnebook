@@ -12,7 +12,7 @@
             <div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-6 col-xs-12 col-sm-12">
-						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | Manage Customers</div>
+						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | Booking Request</div>
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-12">
 						<div class="row">

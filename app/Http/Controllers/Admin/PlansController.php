@@ -321,11 +321,15 @@ class PlansController extends Controller
 
     public function deleteClaim($id){
         $data = BusinessCompanyDetail::where('cid',$id)->first();
-        $delete = BusinessCompanyDetail::where('id',$data->id)->delete();
-
+        if( $data != ''){
+            $delete = BusinessCompanyDetail::where('id',$data->id)->delete();
+        }
+       
         $dd = BusinessService::where('cid',$id)->first();
-        $delete2 = BusinessService::where('id',$dd->id)->delete();
-
+        if($dd != ''){
+            $delete2 = BusinessService::where('id',$dd->id)->delete();
+        }
+        
         $save = CompanyInformation::where('id',$id)->delete();
         if($save){
             session(['key' => 'success']);

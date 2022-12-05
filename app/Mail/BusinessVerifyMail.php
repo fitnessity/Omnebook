@@ -30,6 +30,6 @@ class BusinessVerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->from('info@raursoft.org')->subject('Business Verification Link')->view('emails.business-verify');
+        return $this->from(env('MAIL_FROM_ADDRESS'))->subject('Business Verification Link')->view('emails.business-verify');
     }
 }

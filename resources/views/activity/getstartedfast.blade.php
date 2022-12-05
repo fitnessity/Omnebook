@@ -308,6 +308,7 @@
 												if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 												else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
 												else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+												else if( $service['service_type']=='events' ) $service_type = 'Events';
 											}
 										@endphp
 										<div class="activity-information activites-height">

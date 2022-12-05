@@ -22518,3 +22518,39 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #fff;
 	margin-top: 9px;
 }
+.alert-label{
+	margin-left: 16px;
+}
+.btn-nxt.manage-cus-btn.cancel-modal{
+	margin-bottom: 15px;
+}
+.pre-nxt-btn-space{
+	margin-bottom: 150px;
+}
+.tab-hed.scheduler-txt a{
+	color: #000;
+}
+.overlay-activity{
+	position: inherit;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 2;
+	cursor: pointer;
+	border-radius: 4px;
+}
+.overlay-activity label{
+	position: absolute;
+	background: #fff;
+	padding: 10px;
+	z-index: 9999;
+	top: 14px;
+	left: 90px;
+	border-radius: 7px;
+	font-size: 17px;
+	width: 16%;
+	text-align: center;
+}

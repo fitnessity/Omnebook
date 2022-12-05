@@ -39,9 +39,10 @@ use App\UserFamilyDetail;
                         <div class='row'>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <ul>
-                                    <li> <a href="/personal-profile/booking-info"> Personal Trainer </a> </li>
-                                    <li> <a href="/personal-profile/gym-studio-info"> Gym/Studio </a> </li>
-                                    <li> <a href="/personal-profile/experience-info" class="active"> Experiences </a> </li>
+                                    <li> <a href="{{route('bookinginfo')}}"> Personal Trainer </a> </li>
+                                    <li> <a href="{{route('gym_studio_page')}}">Classes </a> </li>
+                                    <li> <a href="{{route('events_page')}}"> Events </a> </li>
+                                    <li> <a href="{{route('experience_page')}}"   class="active"> Experiences </a> </li>
                                   <!--   <li> <a href="#"> Products </a> </li> -->
                                 </ul>
                             </div>

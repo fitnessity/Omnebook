@@ -2903,7 +2903,7 @@
                                             <img src="/public/images/newimage/bus-gym.png" class="pro_card_img1">
                                         </div>
                                         <div class="col-md-10 col-xs-12">
-                                            <div class="tab-hed1">Gym/Studio</div>
+                                            <div class="tab-hed1">CLASSES</div>
                                             <p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
                                         </div>
                                     </div>
@@ -2922,6 +2922,23 @@
                                         <div class="col-md-10 col-xs-12">
                                             <div class="tab-hed1">Experience</div>
                                             <p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <br/>
+
+                            <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
+                                <input type="radio" id="test4" name="radio_group" {{ ($service_type=='events')?'checked':'' }} value="events">
+                                <label for="test4">
+                                    <div class="row">
+                                        <div class="col-md-2 col-xs-12">
+                                            <img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
+                                        </div>
+
+                                        <div class="col-md-10 col-xs-12">
+                                            <div class="tab-hed1">EVENTS</div>
+                                            <p>Events</p>
                                         </div>
                                     </div>
                                 </label>
@@ -2955,9 +2972,13 @@
 
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
 
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                       <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
 
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
 
                     </div>
 
@@ -3125,6 +3146,43 @@
                             </ul>
                         </div>
 
+                        <div class="col-md-8 text-justify eventsBody" style="display:{{ ($service_type=='events')?'block':'none' }}; background:url(/public/img/fitness-bg3.jpg); background-size:100% 100%;">
+
+                            <p></p>
+
+                            <h3>Recommended Tips to Do :</h3>
+
+                            <ul>
+
+                                <li>Create an experience around your activity.</li>
+
+                                <li>Make it unique and different.</li>
+
+                                <li>Think about your meet-up points and how customers will get to you.</li>
+
+                                <li>Think about what your experience includes and what your customers will need to bring.</li>
+
+                                <li>Think about your plans and think about the experience your customer will have.</li>
+
+                            </ul>
+
+                            <h3>Tips Not to Do :</h3>
+
+                            <ul>
+
+                                <li>Having no experience planned around your activity.</li>
+
+                                <li>Not having a well-planned experience.</li>
+
+                                <li>Giving incomple information is not recommended.</li>
+
+                                <li>Creating generic experiences and activities customers can easily do on their own.</li>
+
+                                <li>Offering an experience you are not qualified or skilled to host.</li>
+
+                            </ul>
+                        </div>
+
                         <div class="col-md-12">
 
                             <br>
@@ -3165,9 +3223,13 @@
 
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
 
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                       <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
 
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
 
                     </div>
 
@@ -3177,7 +3239,7 @@
 
                             <br/><br/><br/>
 
-                            <select name="frm_servicesport--commented" id="frm_servicesport--commented" class="form-control">
+                            <select name="frm_servicesport--commented" id="frm_servicesport--commented" class="form-control" autocomplete="off">
 
                                 <option value="">Choose a Sport/Activity</option>
 
@@ -3511,8 +3573,11 @@
                     <div class="tab-hed">Create Services & Prices</div>
                     <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                        <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
                     </div>
 
                     <section class="row">
@@ -3525,7 +3590,7 @@
                                         <p>Explain to your customer what this program is.</p>
                                     </div>
                                     <div class="priceactivity">
-                                        <select name="frm_servicesport" id="frm_servicesport" class="form-control">
+                                        <select name="frm_servicesport" id="frm_servicesport" class="form-control" autocomplete="off">
                                             <option value="">Choose a Sport/Activity</option>
                                             @foreach(@$sportsdata as $Sports)
                                                 <?php $optiondata = Sports::where('parent_sport_id',$Sports['id'])->get(); ?>
@@ -3673,8 +3738,11 @@
                     <div class="tab-hed">Create Services & Prices</div>
                     <div style="background: black;width: 107%;margin-left: -38px;padding: 6px;">
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                        <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
                     </div>
 
                     <section class="row">
@@ -4432,9 +4500,12 @@
 
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
 
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                       <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
 
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
 
                     </div>
 
@@ -4876,9 +4947,12 @@
 
                             <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
 
-                            <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                            <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
 
                             <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+                            <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
 
                         </div>
 
@@ -8085,9 +8159,12 @@
 
                         <span class="individualTxt nav-link1 subtab" style="{{ ($service_type=='individual')?'color:red':'' }}">PERSONAL TRAINER</span>
 
-                        <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span>
+                        <?php /* ?> <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">GYM/STUDIO</span> <?php */ ?>
+
+                       <span class="classesTxt nav-link1 subtab1" style="{{ ($service_type=='classes')?'color:red':'' }}">CLASSES</span>
 
                         <span class="experienceTxt nav-link1 subtab2" style="{{ ($service_type=='experience')?'color:red':'' }}">EXPERIENCE</span>
+                        <span class="eventsTxt nav-link1 subtab3" style="{{ ($service_type=='events')?'color:red':'' }}">EVENTS</span>
 
                     </div>
 
@@ -8097,7 +8174,7 @@
 
                             <br/><br/><br/>
 
-                            <select name="frm_servicesport1" id="frm_servicesport1" class="form-control">
+                            <select name="frm_servicesport1" id="frm_servicesport1" class="form-control" autocomplete="off">
 
                                 <option value="">Choose a Sport/Activity</option>
 
@@ -9081,94 +9158,88 @@ $('body').delegate('.timezone-round','click',function(){
 
 $('body').delegate('.subtab','click',function(){
 
-  $(".individualBody").show();
+    $(".individualBody").show();
+    $(".classesBody").hide();
+    $(".experienceBody").hide();
+    $(".eventsBody").hide();
 
-  $(".classesBody").hide();
+    $('#service_type').val('individual');
+    $(".subtab").css("color", "red");
+    $(".subtab1").css("color", "white");
+    $(".subtab2").css("color", "white");
+    $(".subtab3").css("color", "white");
 
-  $(".experienceBody").hide();
+    var curr_tab=$('#current_tab_name').val();
 
-  
+    $("#"+curr_tab).hide();
+    $("#individualDiv2").hide();
 
-  $('#service_type').val('individual');
+    $("#individualDiv0").show();
 
-  $(".subtab").css("color", "red");
-
-  $(".subtab1").css("color", "white");
-
-  $(".subtab2").css("color", "white");
-
-  var curr_tab=$('#current_tab_name').val();
-
-  $("#"+curr_tab).hide();
-
-  $("#individualDiv0").show();
-
-  $('#current_tab_name').val('individualDiv0');
-
-  
-
-  
-
+    $('#current_tab_name').val('individualDiv0');
 });
 
 $('body').delegate('.subtab1','click',function(){
 
-  $(".individualBody").hide();
+    $(".individualBody").hide();
+    $(".classesBody").show();
+    $(".experienceBody").hide();
+    $(".eventsBody").hide();
 
-  $(".classesBody").show();
+    $('#service_type').val('classes');
+    $(".subtab").css("color", "white");
+    $(".subtab1").css("color", "red");
+    $(".subtab2").css("color", "white");
+    $(".subtab3").css("color", "white");
 
-  $(".experienceBody").hide();
+    var curr_tab=$('#current_tab_name').val();
 
-  
+    $("#"+curr_tab).hide();
 
-  $('#service_type').val('classes');
+    $("#individualDiv2").hide();
+    $("#individualDiv0").show();
 
-  $(".subtab").css("color", "white");
-
-  $(".subtab1").css("color", "red");
-
-  $(".subtab2").css("color", "white");
-
-  var curr_tab=$('#current_tab_name').val();
-
-  $("#"+curr_tab).hide();
-
-  $("#individualDiv0").show();
-
-  $('#current_tab_name').val('individualDiv0');
-
-  
-
+    $('#current_tab_name').val('individualDiv0');
 });
 
 $('body').delegate('.subtab2','click',function(){
-
+    $(".individualBody").hide();
+    $(".classesBody").hide();
+    $(".experienceBody").show();
+    $(".eventsBody").hide();
   
+    $('#service_type').val('experience');
+    $(".subtab").css("color", "white");
+    $(".subtab1").css("color", "white");
+    $(".subtab2").css("color", "red");
+    $(".subtab3").css("color", "white");
 
-  $(".individualBody").hide();
+    var curr_tab=$('#current_tab_name').val();
+    $("#"+curr_tab).hide();
 
-  $(".classesBody").hide();
+    $("#individualDiv2").hide();
+    $("#individualDiv0").show();
+    $('#current_tab_name').val('individualDiv0');
+});
 
-  $(".experienceBody").show();
-
+$('body').delegate('.subtab3','click',function(){
+    $(".individualBody").hide();
+    $(".classesBody").hide();
+    $(".experienceBody").hide();
+    $(".eventsBody").show();
   
+    $('#service_type').val('events');
+    $(".subtab").css("color", "white");
+    $(".subtab1").css("color", "white");
+    $(".subtab2").css("color", "white");
+    $(".subtab3").css("color", "red");
 
-  $('#service_type').val('experience');
+    var curr_tab=$('#current_tab_name').val();
+    $("#"+curr_tab).hide();
 
-  $(".subtab").css("color", "white");
-
-  $(".subtab1").css("color", "white");
-
-  $(".subtab2").css("color", "red");
-
-  var curr_tab=$('#current_tab_name').val();
-
-  $("#"+curr_tab).hide();
-
-  $("#individualDiv0").show();
-
-  $('#current_tab_name').val('individualDiv0');
-
+    $("#individualDiv2").hide();
+    $("#individualDiv0").show();
+    $('#current_tab_name').val('individualDiv0');
 });
 
 </script>
@@ -10225,6 +10296,11 @@ $('#expiry_date').on('focusout', function(){
     splitDate($(this), $(this).val());
 });
 $(document).ready(function(){ 
+    var service_type = $("#service_type").val();
+    if(service_type != ''){
+        $(".individualTxt, .classesTxt, .experienceTxt").css("color","white");
+        $("."+service_type+"Txt").css("color","red");
+    }
     $('#quick_business_left').text(150-parseInt($("#about_company").val().length));
     $('#company_desc_left').text(1000-parseInt($("#short_description").val().length));
     $('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
@@ -10853,6 +10929,10 @@ $(document).ready(function(){
             //$("#classesDiv1").show();
             $("#experiencestype").show();
             $('#current_tab_name').val('individualDiv0');
+        } 
+        if($('#service_type').val() == 'events') {
+            $("#experiencestype").show();
+            $('#current_tab_name').val('individualDiv0');
         }
         if($('#service_type').val()=='experience') {
              $("#experiencestype").show();
@@ -11096,25 +11176,25 @@ $(document).ready(function(){
 
 	    var cid = $("#cid").val();
     	$.ajax({
-	      url: "{{url('/NewService')}}",
-	      type: 'post',
-		  data:{
-			_token: '<?php echo csrf_token(); ?>',
-			cid:cid,
-			service_type : service_type,
-		  },
-      	success: function (data) {
-        	location.reload();
-	     }
-    });
-	/*$("#individualDiv0").hide();
-    if(service_type.trim()=='experience'){
-      	$('.itenerary_div').show();
-    }
-    else
-      	$('.itenerary_div').hide();
-	    $("#individualDiv2").show();
-    	$('#current_tab_name').val('individualDiv2');*/
+    	    url: "{{url('/NewService')}}",
+    	    type: 'post',
+    		data:{
+    			_token: '<?php echo csrf_token(); ?>',
+    			cid:cid,
+    			service_type : service_type,
+    		},
+          	success: function (data) {
+            	location.reload();
+    	    }
+        });
+    	/*$("#individualDiv0").hide();
+        if(service_type.trim()=='experience'){
+          	$('.itenerary_div').show();
+        }
+        else
+          	$('.itenerary_div').hide();
+    	    $("#individualDiv2").show();
+        	$('#current_tab_name').val('individualDiv2');*/
     });
     $("#btnManageService").click(function () {
         var service_type = $("#service_type").val();
@@ -11455,27 +11535,31 @@ $(document).ready(function(){
     });
     /* Business Services Step 1 */
     $("input[name='radio_group']").click(function () {
-    var service_type=$("input[name='radio_group']:checked").val();
-    $("#service_type").val(service_type);   
-    $(".individualTxt, .classesTxt, .experiencesTxt").css("color","white");
-    $("."+service_type+"Txt").css("color","red");  
-    $(".individualBody, .classesBody, .experienceBody").hide();
-    $("."+service_type+"Body").show();
-    $("#creServicediv").hide();
-    if(service_type == 'individual') {
-        $("#individualDiv0").show();
-	    $('#current_tab_name').val('individualDiv0');
-    }
-    if(service_type == 'classes') {
-        //$("#classesDiv1").show();
-        $("#individualDiv0").show();
-	    $('#current_tab_name').val('individualDiv0');
-    }
-    if(service_type == 'experience') {
-        $("#individualDiv0").show();
-	    $('#current_tab_name').val('individualDiv0');
-    }
-});
+        var service_type=$("input[name='radio_group']:checked").val();
+        $("#service_type").val(service_type);   
+        $(".individualTxt, .classesTxt, .experienceTxt, .eventsTxt").css("color","white");
+        $("."+service_type+"Txt").css("color","red");  
+        $(".individualBody, .classesBody, .experienceBody").hide();
+        $("."+service_type+"Body").show();
+        $("#creServicediv").hide();
+        if(service_type == 'individual') {
+            $("#individualDiv0").show();
+    	    $('#current_tab_name').val('individualDiv0');
+        }
+        if(service_type == 'classes') {
+            //$("#classesDiv1").show();
+            $("#individualDiv0").show();
+    	    $('#current_tab_name').val('individualDiv0');
+        }
+        if(service_type == 'experience') {
+            $("#individualDiv0").show();
+    	    $('#current_tab_name').val('individualDiv0');
+        }
+        if(service_type == 'events') {
+            $("#individualDiv0").show();
+            $('#current_tab_name').val('individualDiv0');
+        }
+    });
 
     $("#nextservice").click(function () {
         $("#creServicediv").hide();

@@ -178,7 +178,8 @@
 						<h2>Business Type</h2>
 						<select id="service_type" name="service_type[]" class="myfilter" multiple="multiple" onchange="actFilter()">
 							<option value="individual">Personal Trainer</option>
-							<option value="classes">Gym/Studio</option>
+							<option value="classes">Classes</option>
+							<option value="events">Events</option>
 							<option value="experience">Experience</option>
 						</select>
 						<script type="text/javascript">
