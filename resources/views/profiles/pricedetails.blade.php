@@ -785,7 +785,7 @@
 				
 			<div class="row">
 				<div class="col-md-3">
-					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+					<label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
 						<input name="plan" class="payment-radio" type="radio" checked>
 						<span class="plan-details">
 							<div class="row">
@@ -804,7 +804,7 @@
 					</label>
 				</div>
 				<div class="col-md-3">
-					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+					<label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
 						<input name="plan" class="payment-radio" type="radio">
 						<span class="hidden-visually">Pro - $50 per month, 5 team members, 500 GB per month, 5 concurrent builds</span>
 						<span class="plan-details">
