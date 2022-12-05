@@ -172,5 +172,6 @@ class BusinessServices extends Model
 		if( $this->service_type =='individual' ) return 'Personal Training'; 
 		else if( $this->service_type =='classes' )	return 'Group Class'; 
 		else if( $this->service_type =='experience' ) return 'Experience'; 
+        else if( $this->service_type =='events' ) return 'Events'; 
     }
 }

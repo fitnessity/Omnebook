@@ -19,7 +19,7 @@
                     <br><br>
 
                     {!! Form::label('image', 'Image', ['class' => 'control-label']) !!}
-                    <input type="file" name="image" id="image" class="form-control" onchange="validateImage()">
+                    <input type="file" name="image" id="image" class="form-control" onchange="validateImage()" >
 
                     @if($errors->has('image'))
                         <p class="help-block">
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group {{ $errors->has('title') ? ' has-error' : '' }} ">
                     {!! Form::label('title', 'Title', ['class' => 'control-label']) !!} 
-                    {!! Form::text('title', $gfast->title, ['id' => 'title', 'class' => 'form-control', 'placeholder' => '']) !!}
+                    {!! Form::text('title', $gfast->title, ['id' => 'title', 'class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('title'))
                         <p class="help-block">
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group {{ $errors->has('small_text') ? ' has-error' : '' }} ">
                     {!! Form::label('small_text', 'Small Text', ['class' => 'control-label']) !!} 
-                    {!! Form::text('small_text', $gfast->small_text, ['small_text' => 'small_text', 'class' => 'form-control', 'placeholder' => '']) !!}
+                    {!! Form::text('small_text', $gfast->small_text, ['small_text' => 'small_text', 'class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('small_text'))
                         <p class="help-block">
@@ -61,7 +61,7 @@
                     <div class="box-footer text-center"> 
                         <input type="hidden" name="id" id="id" value="{{$gfast->id}}">         
                         <button type="submit" id="submit" class="btn btn-primary " >Submit</button>
-                        <a href="\admin\plans\membership-plan" class="btn btn-danger ">Cancel</a>
+                        <a href="{{route('activityGetStartedFast')}}" class="btn btn-danger ">Cancel</a>
                     </div>
                 </div>
             </div>

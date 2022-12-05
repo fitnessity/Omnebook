@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			@foreach($getstarteddata as $getdatafast)
-			<div class="col-md-4 col-sm-4 col-xs-12">
+			<div class="col-md-3 col-sm-4 col-xs-12">
 				<div class="instant-section-info">
 					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
 					<h4>{{$getdatafast['title']}}</h4>
@@ -44,8 +44,10 @@
 						<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
 					@elseif($getdatafast['id'] == 2)
 						<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
-					@else
+					@elseif($getdatafast['id'] == 3)
 						<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+					@else
+						<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
 					@endif
 				</div>
 			</div>
@@ -401,6 +403,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -441,8 +444,8 @@
 					<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 				</div>
 			</div> -->
-        </div>
-        @endif
+      </div>
+      @endif
 
 		@if(count($mostpopularactivity) > 0)	
 		<div class="row">
@@ -688,6 +691,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -721,7 +725,8 @@
 			</div>
 		</div>
 		@endif
-		
+
+	
 		@if(count($Trainers_coachesacitvity) > 0)
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -966,6 +971,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -1245,6 +1251,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -1526,6 +1533,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -1559,6 +1567,286 @@
 			</div>
 		</div>
 		@endif
+
+		@if(count($events_activity) > 0)	
+		<div class="row">
+			<div class="col-xs-12 col-md-6 col-sm-6">
+				<div class="title">
+					<h3>Find Events In Your Area</h3>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 col-sm-6">
+				<div class="nav-sliders-activites">
+					<label>{{count($events_activity)}} Results </label>
+					<a href="{{route('activities_index',['filtervalue'=> 'events_in_your_area'])}}">Show All </a>
+				</div>
+			</div>
+			<!--<div class="col-md-8 leftside-kickboxing" id="activitylist">-->
+			<div class="col-md-12 leftside-kickboxing" id="activitylistseven">
+				<div class="row">
+					<div class="ptb-65 float-left w-100 discover_activities" id="activitesseven">
+						<div class="container-fluid">
+							<div class="owl-slider kickboxing-slider-activites">
+								<div id="inarea-activities" class="owl-carousel">
+									<?php
+						            $companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= "";
+										$companycity = $companycountry = $pay_price  = "";
+						            if (isset($events_activity)) {
+						               $servicetype = [];
+						               foreach ($events_activity as $loop => $service) {
+						                  $company = $price = $businessSp = [];
+												$serviceid = $service['id'];
+				                        $sport_activity = $service['sport_activity'];
+				                        $servicetype[$service['service_type']] = $service['service_type'];
+				                        $area = !empty($service['area']) ? $service['area'] : 'Location';
+				                        $company = CompanyInformation::where('id', $service['cid'])->first();
+		                               if($company != '') {
+	                                    $companyid = $company->id;
+	                                    $companyaddress = $company->address;
+	                                    $companyname = $company->company_name;
+													$companycity = $company->city;
+													$companycountry = $company->country;
+													$companylogo = $company->logo;
+													$companylat = $company->latitude;
+													$companylon = $company->longitude;
+	                                 }
+			                            
+	                                 if ($service['profile_pic']!="") {
+												   if(str_contains($service['profile_pic'], ',')){
+												     $pic_image = explode(',', $service['profile_pic']);
+													    if( $pic_image[0] == ''){
+													       $p_image  = $pic_image[1];
+													    }else{
+													       $p_image  = $pic_image[0];
+													    }
+													  }else{
+													  	$pic_image = $service['profile_pic'];
+													   $p_image = $service['profile_pic'];
+													}
+
+													if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
+													   $profilePic = url('/public/uploads/profile_pic/' . $p_image);
+													}else {
+													   $profilePic = url('/public/images/service-nofound.jpg');
+													}
+												}else{ $profilePic = '/public/images/service-nofound.jpg'; }
+
+												$bookscheduler='';
+												$time='';
+												$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+												if(@$bookscheduler[0]['set_duration']!=''){
+													$tm=explode(' ',$bookscheduler[0]['set_duration']);
+													$hr=''; $min=''; $sec='';
+													if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+													if($tm[2]!=0){ $min=$tm[2].'min. '; }
+													if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+													if($hr!='' || $min!='' || $sec!='')
+													{ $time =  $hr.$min.$sec; } 
+												}
+												$pricearr = [];
+												$price_all = '';
+												$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
+												if(!empty($price_allarray)){
+													
+													foreach ($price_allarray as $key => $value) {
+														if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+															$pricearr[] = $value->adult_weekend_price_diff;
+														}else{
+															$pricearr[] = $value->adult_cus_weekly_price;
+														}
+													}
+
+												}
+												if(!empty($pricearr)){
+													$price_all = min($pricearr);
+												}
+			                    	?>
+									<div class="item">
+										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+											<div class="kickboxing-block">
+												@if(Auth::check())
+													@php
+			                                	$loggedId = Auth::user()->id;
+			                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
+                             				@endphp
+                             				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_pop{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+														<div class="serv_fav1" ser_id="{{$service['id']}}" data-id = "serfavpopular">
+															<a class="fav-fun-2" id="serfavpopular{{$service['id']}}">
+			                                    	@if( !empty($favData) )
+			                                        	<i class="fas fa-heart"></i>
+																@else
+			                                    		<i class="far fa-heart"></i>
+			                                    	@endif
+			                                     </a>
+							                     </div>
+							                     @if($price_all != '')
+															<span>From ${{$price_all}}/Person</span>
+														@endif
+													</div>
+                             			@else
+                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+														<div class="inner-owl-slider-hire">
+															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
+																<?php 
+																	$i = 0;
+																	if(is_array($pic_image)){
+																		foreach($pic_image as $img){
+																			$profilePic1 = '';
+																			if($img != ''){
+																				if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
+														           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
+																				}
+														         		} 
+
+													        				if($profilePic1 != ''){ ?>
+																				<div class="item-inner">
+																					<img src="{{$profilePic1}}" class="productImg">
+																				</div>
+																			<?php }
+																		}
+																	}else{
+																		if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
+													   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
+													    				}else {
+													       				$profilePic1 = url('/public/images/service-nofound.jpg');
+													    				} ?>
+																		<div class="item-inner">
+																			<img src="{{$profilePic1}}">
+																		</div>
+																<?php } ?>
+															</div>
+														</div>
+														<script type="text/javascript">
+															$(document).ready(function() {
+															  	$("#owl-demo-learn_pop{{$service['id']}}").owlCarousel({
+																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																   items : 1, 
+																   loop:true,
+																   nav:true,
+																   dots: false,
+															  	});
+															});
+														</script>
+			                                	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+			                                	@if($price_all != '')	
+			                                		<span>From ${{$price_all}}/Person</span>
+			                                	@endif
+				                           </div>
+                             			@endif
+                             			@php
+													$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
+													$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
+													$reviews_avg=0;
+													if($reviews_count>0)
+													{	
+														$reviews_avg= round($reviews_sum/$reviews_count,2); 
+													}
+												@endphp
+												<div class="bottom-content">
+													<div class="class-info">
+														<div class="row">
+															<div class="col-md-7 col-sm-7 col-xs-7 ratingtime">
+																<div class="activity-inner-data">
+																	<i class="fas fa-star"></i>
+																	<span>{{$reviews_avg}} ({{$reviews_count}})</span>
+																</div>
+																@if($time != '')
+																	<div class="activity-hours">
+																		<span>{{$time}}</span>
+																	</div>
+																@endif
+															</div>
+															<div class="col-md-5 col-sm-5 col-xs-5 country-instant">
+																<div class="activity-city">
+																	<span style="white-space: nowrap;">{{$companycity}}</span>
+																</div>
+															</div>
+														</div>
+													</div>
+													@php
+														$redlink = str_replace(" ","-",$companyname);
+														$service_type='';
+														if($service['service_type']!=''){
+															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
+														}
+													@endphp
+													<div class="activity-information activites-height">
+														<span><a 
+							                                @if (Auth::check())  
+							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
+							                                @else 
+							                                    href="{{ route('userlogin') }}"  
+							                                @endif
+							                                    target="_blank">{{ $service['program_name'] }}</a>
+							                         	</span>
+														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+													</div>
+													<hr>
+													<div class="all-details">
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php
+		                    		}
+			                		} ?>
+		                	    </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@endif
+		
 
 		@if(count($allactivities) > 0)
 		<div class="row">
@@ -1805,6 +2093,7 @@
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
 															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
+															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
 													@endphp
 													<div class="activity-information activites-height">
@@ -2302,6 +2591,44 @@ function viewActreview(aid)
 </script>
 <script>
 	jQuery("#popular-activities").owlCarousel({
+	  autoplay: true,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1
+	    },
+
+	    600: {
+	      items: 3
+	    },
+
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
+	});
+</script>
+<script>
+	jQuery("#inarea-activities").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,

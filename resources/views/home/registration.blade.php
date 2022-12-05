@@ -33,7 +33,8 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
-                    <input  type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)">
+                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                     <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
                     <div class="terms-wrap">
@@ -745,6 +746,14 @@
 
 
     $(document).ready(function () {
+        
+        $(".dobdate").keyup(function(){
+            if ($(this).val().length == 2){
+                $(this).val($(this).val() + "/");
+            }else if ($(this).val().length == 5){
+                $(this).val($(this).val() + "/");
+            }
+        });
 
       /*  $("#register_submit").click(function (e) {
             e.preventDefault();
@@ -916,101 +925,103 @@
 
 <script type="text/javascript">
         function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-              center: {lat: -33.8688, lng: 151.2195},
-              zoom: 13
-            });
-            var input = document.getElementById('address_sign');
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            if(document.getElementById('map') != '' && document.getElementById('map') != null){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: -33.8688, lng: 151.2195},
+                    zoom: 13
+                });
+                var input = document.getElementById('address_sign');
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
 
-            var infowindow = new google.maps.InfoWindow();
-            var marker = new google.maps.Marker({
-                map: map,
-                anchorPoint: new google.maps.Point(0, -29)
-            });
+                var infowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker({
+                    map: map,
+                    anchorPoint: new google.maps.Point(0, -29)
+                });
 
-            autocomplete.addListener('place_changed', function() {
-                infowindow.close();
-                marker.setVisible(false);
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    window.alert("Autocomplete's returned place contains no geometry");
-                    return;
-                }
-          
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-                marker.setIcon(({
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(35, 35)
-                }));
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
-            
-                var address = '';
-                var badd = '';
-                var sublocality_level_1 = '';
-                if (place.address_components) {
-                    address = [
-                      (place.address_components[0] && place.address_components[0].short_name || ''),
-                      (place.address_components[1] && place.address_components[1].short_name || ''),
-                      (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
-                }
-            
-                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-                infowindow.open(map, marker);
+                autocomplete.addListener('place_changed', function() {
+                    infowindow.close();
+                    marker.setVisible(false);
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        window.alert("Autocomplete's returned place contains no geometry");
+                        return;
+                    }
+              
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
+                    marker.setIcon(({
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(35, 35)
+                    }));
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
                 
-                // Location details
-                for (var i = 0; i < place.address_components.length; i++) {
-                    if(place.address_components[i].types[0] == 'postal_code'){
-                      $('#zipcode_sign').val(place.address_components[i].long_name);
+                    var address = '';
+                    var badd = '';
+                    var sublocality_level_1 = '';
+                    if (place.address_components) {
+                        address = [
+                          (place.address_components[0] && place.address_components[0].short_name || ''),
+                          (place.address_components[1] && place.address_components[1].short_name || ''),
+                          (place.address_components[2] && place.address_components[2].short_name || '')
+                        ].join(' ');
                     }
-               
-                    if(place.address_components[i].types[0] == 'locality'){
-                        $('#city_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                        sublocality_level_1 = place.address_components[i].long_name;
-                    }
-
-                    if(place.address_components[i].types[0] == 'country'){
-                        $('#country_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                         $('#state_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'street_number'){
-                       badd = place.address_components[i].long_name ;
-                    }
-
-                    if(place.address_components[i].types[0] == 'route'){
-                       badd += ' '+place.address_components[i].long_name ;
-                    } 
-                }
-                if(badd == ''){
-                  $('#address_sign').val(sublocality_level_1);
-                }else{
-                  $('#address_sign').val(badd);
-                }
-                $('#lat').val(place.geometry.location.lat());
-                $('#lon').val(place.geometry.location.lng());
                 
-            });
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                    infowindow.open(map, marker);
+                    
+                    // Location details
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        if(place.address_components[i].types[0] == 'postal_code'){
+                          $('#zipcode_sign').val(place.address_components[i].long_name);
+                        }
+                   
+                        if(place.address_components[i].types[0] == 'locality'){
+                            $('#city_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                            sublocality_level_1 = place.address_components[i].long_name;
+                        }
+
+                        if(place.address_components[i].types[0] == 'country'){
+                            $('#country_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                             $('#state_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'street_number'){
+                           badd = place.address_components[i].long_name ;
+                        }
+
+                        if(place.address_components[i].types[0] == 'route'){
+                           badd += ' '+place.address_components[i].long_name ;
+                        } 
+                    }
+                    if(badd == ''){
+                      $('#address_sign').val(sublocality_level_1);
+                    }else{
+                      $('#address_sign').val(badd);
+                    }
+                    $('#lat').val(place.geometry.location.lat());
+                    $('#lon').val(place.geometry.location.lng());
+                    
+                });
+            }
         }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>

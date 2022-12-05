@@ -1584,6 +1584,7 @@
 	.modal-dialog.manage-customer{width: 80% !important;}
 	.modal-dialog.registermodal{width: 75% !important;}
 	.scheduler-titles{display: none;}
+	.modal-dialog.bookingcancel{width: 30%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1665,6 +1666,7 @@
 	.modal-dialog.manage-customer{width: 30% !important;}
 	.modal-dialog.registermodal{width: 70% !important;}
 	.scheduler-titles{display: none;}
+	.modal-dialog.bookingcancel{width: 20%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){

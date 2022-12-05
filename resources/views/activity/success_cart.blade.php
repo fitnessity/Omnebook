@@ -19,6 +19,7 @@ if(!empty($cart["cart_item"])) {
     }
     $cartdata = $cart['cart_item'][$pid];
     $totalprice = $cart['cart_item'][$pid]['totalprice'];
+    $profilePicact = url('/public/images/service-nofound.jpg');
     if ($cart['cart_item'][$pid]['image']!="") {
     	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$pid]['image']))) {
     			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$pid]['image']);
@@ -483,7 +484,7 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
-								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)">
+								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">
@@ -511,6 +512,14 @@ if(!empty($cart["cart_item"])) {
 
 <script type="text/javascript">
 	$(document).ready(function () {
+
+		$(".dobdate").keyup(function(){
+            if ($(this).val().length == 2){
+                $(this).val($(this).val() + "/");
+            }else if ($(this).val().length == 5){
+                $(this).val($(this).val() + "/");
+            }
+        });
 
 		$("#frmregister").submit(function (e) {
             e.preventDefault();
