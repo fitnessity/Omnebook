@@ -20457,11 +20457,12 @@ input#zipcode {
 }
 #gallery div {
 	display: inline-block;
-	/*margin: 15px; */
 }
 #gallery img {
-	min-height: 150px;
-	max-width: 158px;
+	/*min-height: 150px;
+	max-width: 158px;*/
+	height: 155px;
+	width: 155px;
 }
 #gallery .fName, #gallery .fSize {
 	display: block;
@@ -22542,7 +22543,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	cursor: pointer;
 	border-radius: 4px;
 }
-.overlay-activity label{
+.overlay-activity-label{
 	position: absolute;
 	background: #fff;
 	padding: 10px;
@@ -22553,4 +22554,22 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 17px;
 	width: 16%;
 	text-align: center;
+}
+.priceselect.sp-select p{
+	display: inline-block;
+}
+.imagediv img{
+	margin-bottom: 8px;
+}
+.manage-customer-from form label{
+	margin: 20px auto;
+	width: 70%;
+}
+.modalregister-private{
+	width: 100% !important;
+	margin: 5px !important;
+}
+.alert-msgs{
+	width: 70%;
+	margin: 20px auto;
 }

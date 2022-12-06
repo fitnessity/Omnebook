@@ -10,6 +10,7 @@ use App\BusinessService;
 use App\BusinessActivityScheduler;
 use App\UserBookingDetail;
 use App\UserFamilyDetail;
+use App\StaffMembers;
 
 	$sc_date = "—";
 	$Datebooked = "—";
@@ -81,6 +82,13 @@ use App\UserFamilyDetail;
 	    $contact_number = @$BookingDetail1['businessuser']['contact_number'];
 	    $service_type = @$BookingDetail1['businessservices']['service_type'];
 	    $program_desc = @$BookingDetail['businessservices']['program_desc'];
+
+	    $instructor_name = @$bususername;
+	    $instructor_id = @$BookingDetail1['businessservices']['instructor_id'];
+	    if($instructor_id != ''){
+	    	$instructor_dta = StaffMembers::select('name')->where('id',$instructor_id)->first();
+	    	$instructor_name = $instructor_dta->name;
+	    }
 	}
 
 	foreach ($cart as $key => $value) {
@@ -761,7 +769,7 @@ use App\UserFamilyDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$bususername }}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$instructor_name }}</h2>
 
 																			</td>
 

@@ -102,7 +102,7 @@
 							</div>
 						</div>
 							<div class="overlay-activity">
-								<label>Activity Completed</label>
+								<label class="overlay-activity-label">Activity Completed</label>
 								<div class="scheduler-info-box">
 									<div class="row">
 										<div class="col-md-1 col-xs-12 col-sm-4">
@@ -147,7 +147,7 @@
 							</div>
 						
 							<div class="overlay-activity">
-								<label class="red-fonts">Activity Cancelled</label>
+								<label class="overlay-activity-label red-fonts">Activity Cancelled</label>
 								<div class="scheduler-info-box">
 									<div class="row">
 										<div class="col-md-1 col-xs-12 col-sm-4">

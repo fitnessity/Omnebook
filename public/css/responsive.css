@@ -1302,10 +1302,12 @@
 	.price-mobileview .price-info {display: inline-block; width: 66%;}
 	.scheduled-location {text-align: left; margin-top: 8px;}	
 	.scheduled-btns{margin-top: 10px; display: ruby;}
-	.scheduled-btns .btn-edit{width: 50%; margin-top: 15px;}
+	.scheduled-btns .btn-edit{width: 15%; margin-top: 15px; display: inline-block;}
 	.manage-cus-btn{float: left;}
 	.scheduler-info-box .timeline{display: block; text-align: left;}
 	.btn-previous{width: auto;}
+	.overlay-activity-label{left: 245px; width: 36%;}
+	.scheduler-info-box label{color: #1d1d1d;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2308,11 +2310,18 @@
 	.price-mobileview .price-info {display: inline-block; width: 73%;}
 	.scheduled-location {text-align: left; margin-top: 8px;}	
 	.scheduled-btns{margin-top: 10px; display: ruby;}
-	.scheduled-btns .btn-edit{width: 50%;}
+	.scheduled-btns .btn-edit{width: 50%; display: inline-block;}
 	.w-80 {  width: 78% !important;}
 	.priceactivity-scheduler{width: 100%;}
 	.scheduler-info-box .timeline{display: block; text-align: left;}
 	.btn-previous{width: auto;}
+	.overlay-activity-label{top: 48px; left: 9px; width: 60%;}
+	.scheduler-info-box label{color: #000;}
+	.custome-div{padding-left: 15px !important; padding-right: 15px !important;}
+	.newbuiness-txt { padding: 0 0px;}
+	#dropBox{min-width: 350px;}
+	.imagediv .more-option .more{bottom: 50px;}
+	.newbusiness-img{background-size: 100% 18% !important;}
 }
 
 @media(max-width: 575px) {
@@ -2530,6 +2539,8 @@
 	.showall-btn{padding: 5px 18px;}
 	.home-black-section label{font-size: 20px;}
 	.home-black-section i{display: none;}
+	#dropBox { min-width: 330px;}
+	
 }
 
 @media(max-width: 376px) {
@@ -2577,7 +2588,7 @@
 	.emoji-picker-icon {  right: 44%;  top: 62%;}
 	.home-black-section label{font-size: 20px;}
 	.home-black-section i{display: none;}
-	
+	#dropBox {  min-width: 300px;}
 }
 
 @media(max-width: 280px){

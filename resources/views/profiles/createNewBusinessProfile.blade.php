@@ -2863,7 +2863,7 @@
                         <span class="nav-link1 subtab2">EXPERIENCE</span>
                     </div><?php */?>
 
-                    <section class="row">
+                    <section class="row newbusiness-img">
                         <?php /*?><div class="col-md-12 text-justify">
                             <br/>
                             <p><span style="font-size: 22px;font-weight: bold;">YOU'RE ALMOST DONE!</span> This last section is where you will describe your programs, add attractive images, description, prices, taxes, terms and conditions, contracts, one-time payments, recurring payment, sessions, and more. We recommend you make sure your price sare competitive to your skill level and to what the market demands</p>
@@ -2871,79 +2871,82 @@
 
                         <div class="col-md-12 text-center">
                             <br>
-                            <span style="font-size: 20px;font-weight: bold;text-transform: uppercase;display: block;padding-bottom: 20px;">Select Your Type Of Business</span>
-                            <label>Click on the business type below that you have experience in and best represents what you do.
-                            <br /> You can always set up more than one business type later.</label><br>
+                            <span style="font-size: 20px;font-weight: bold;text-transform: uppercase;display: block;padding-bottom: 20px;">GET STARTED BY SELECTING A SERVICE YOU OFFER BELOW</span>
+                            <label class="newbuiness-txt">Click on one of the services below to start creating a service to offer. Only select the type of business that best represents the type of experiences you offer your clients. Don’t worry; you can set up more than one type of business type.</label>
                         </div>
 
-                        <div class="col-md-12 col-sm-12">
+                        <div class="col-md-12 col-sm-12 text-center">
                             <br/><br/>
-                            <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-                                <input type="radio" id="test1" name="radio_group" {{ ($service_type=='individual')?'checked':'' }} value="individual">
-                                <label for="test1">
-                                    <div class="row">
-                                        <div class="col-md-2 col-xs-12">
-                                            <img src="/public/images/newimage/bus-individual.png" class="pro_card_img1">
-                                        </div>
+                            <div class="col-md-4 col-xs-12">
+								<div class="custome-div">
+									<input type="radio" id="test1" name="radio_group" {{ ($service_type=='individual')?'checked':'' }} value="individual">
+									<label for="test1">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<img src="/public/images/newimage/bus-individual.png" class="pro_card_img1">
+											</div>
 
-                                        <div class="col-md-10 col-xs-12">
-                                            <div class="tab-hed1">Personal Trainer</div>
-                                            <p>A provider offers one-on-one personal training, coaching, nutrition advice, or instructions.</p>
-                                        </div>
-                                    </div>
-                                </label>
+											<div class="col-md-12 col-xs-12">
+												<div class="tab-hed1">Personal Trainer</div>
+												<p>A provider offers one-on-one personal training, coaching, nutrition advice, or instructions.</p>
+											</div>
+										</div>
+									</label>
+								</div>
                             </div>
-                            <br/>
 
-                            <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-                                <input type="radio" id="test2" name="radio_group" {{ ($service_type=='classes')?'checked':'' }} value="classes">
-                                <label for="test2">
-                                    <div class="row">
-                                        <div class="col-md-2 col-xs-12">
-                                            <img src="/public/images/newimage/bus-gym.png" class="pro_card_img1">
-                                        </div>
-                                        <div class="col-md-10 col-xs-12">
-                                            <div class="tab-hed1">CLASSES</div>
-                                            <p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
-                                        </div>
-                                    </div>
-                                </label>
+                            <div class="col-md-4 col-xs-12">
+								<div class="custome-div">
+									<input type="radio" id="test2" name="radio_group" {{ ($service_type=='classes')?'checked':'' }} value="classes">
+									<label for="test2">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<img src="/public/images/newimage/bus-gym.png" class="pro_card_img1">
+											</div>
+											<div class="col-md-12 col-xs-12">
+												<div class="tab-hed1">CLASSES</div>
+												<p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
+											</div>
+										</div>
+									</label>
+								</div>
                             </div>
-                            <br/>
+							
+                            <div class="col-md-4 col-xs-12">
+								<div class="custome-div">
+									<input type="radio" id="test3" name="radio_group" {{ ($service_type=='experience')?'checked':'' }} value="experience">
+									<label for="test3">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
+											</div>
 
-                            <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-                                <input type="radio" id="test3" name="radio_group" {{ ($service_type=='experience')?'checked':'' }} value="experience">
-                                <label for="test3">
-                                    <div class="row">
-                                        <div class="col-md-2 col-xs-12">
-                                            <img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
-                                        </div>
-
-                                        <div class="col-md-10 col-xs-12">
-                                            <div class="tab-hed1">Experience</div>
-                                            <p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
-                                        </div>
-                                    </div>
-                                </label>
+											<div class="col-md-12 col-xs-12">
+												<div class="tab-hed1">Experience</div>
+												<p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
+											</div>
+										</div>
+									</label>
+								</div>
                             </div>
-                            <br/>
 
-                            <div class="custome-div col-md-offset-2 col-md-8 col-xs-12 col-md-offset-2">
-                                <input type="radio" id="test4" name="radio_group" {{ ($service_type=='events')?'checked':'' }} value="events">
-                                <label for="test4">
-                                    <div class="row">
-                                        <div class="col-md-2 col-xs-12">
-                                            <img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
-                                        </div>
+                            <div class="col-md-4 col-xs-12">
+								<div class="custome-div">
+									<input type="radio" id="test4" name="radio_group" {{ ($service_type=='events')?'checked':'' }} value="events">
+									<label for="test4">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
+											</div>
 
-                                        <div class="col-md-10 col-xs-12">
-                                            <div class="tab-hed1">EVENTS</div>
-                                            <p>Events</p>
-                                        </div>
-                                    </div>
-                                </label>
+											<div class="col-md-12 col-xs-12">
+												<div class="tab-hed1">EVENTS</div>
+												<p>You offer events, seminars, races, marathons, meets, tournaments and more.</p>
+											</div>
+										</div>
+									</label>
+								</div>
                             </div>
-                            <br/><br/>
                         </div>
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -3635,7 +3638,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-7">
+                                <div class="col-md-7 col-xs-11">
                                     <div class="addphotos">
                                         <h3>Add Photos For Your Program</h3>
                                         <ul>
@@ -5346,22 +5349,28 @@
                                             @endif
 
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-12">
                                                     @if($j == 0)
                                                     <div class="priceselect sp-select">
                                                         <input type="hidden" name="cat_id_db[]" id="cat_id_db" value="{{$priceagedata['id']}}">
                                                         <label>Category Title (Give a name for this category)</label>
-                                                        <input type="text" name="category_title[]" id="category_title"  class="inputs" value="{{$priceagedata['category_title']}}" placeholder="Couples Private Lessons">
+                                                        <p>*Note: This name will be displayed on your booking schedule for customer to see. </p>
+                                                           
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <input type="text" name="category_title[]" id="category_title"  class="inputs" value="{{$priceagedata['category_title']}}" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     @endif
                                                 </div>
-                                                <div class="col-md-6">
+                                                <!-- <div class="col-md-6">
                                                     @if($j == 0)
                                                     <div class="sp-select-sche">
-                                                        <!-- <p><a onclick="setschedule();">+Set Your Schedule</a>(Schedule the times this activity will happen)</p> -->
+                                                         <p><a onclick="setschedule();">+Set Your Schedule</a>(Schedule the times this activity will happen)</p> 
                                                     </div>
                                                     @endif
-                                                </div>
+                                                </div> -->
                                             </div>
 
                                             <input type="hidden" name="price_id_db_{{$i}}{{$j}}" id="price_id_db{{$i}}{{$j}}" value="{{$price['id']}}" />
@@ -5373,7 +5382,7 @@
 
                                                         <label>Price Title</label>
 
-                                                        <input type="text" name="price_title_{{$i}}{{$j}}" id="price_title{{$i}}{{$j}}"  class="inputs" placeholder="ex. 30 Minute Section" value="{{$price_title}}" oninput="getpricetitle({{$i}},{{$j}})">
+                                                        <input type="text" name="price_title_{{$i}}{{$j}}" id="price_title{{$i}}{{$j}}"  class="inputs" placeholder="Ex: 6 month Membership" value="{{$price_title}}" oninput="getpricetitle({{$i}},{{$j}})">
 
                                                     </div>
 
@@ -6688,192 +6697,114 @@
                         <input type="hidden" name="fitnessity_fee" value="{{$fitnessity_fee}}">
 
                         <div id="pricediv0">
-
                             <input type="hidden"  name="ages_count0" id="ages_count0" value="0" />
 
                             <div id="agesmaindiv0">
-
                                 <div id="agesdiv00">
-
                                     <div class="row">
-
-                                        <div class="col-md-3">
-
+                                        <div class="col-md-12">
                                             <div class="priceselect sp-select">
                                                 <input type="hidden" name="cat_id_db[]" id="cat_id_db" value="">
-
                                                 <label>Category Title (Give a name for this category)</label>
-
-                                                <input type="text" name="category_title[]" id="category_title"  class="inputs">
-
+                                                <p>*Note: This name will be displayed on your booking schedule for customer to see. </p>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="category_title[]" id="category_title"  class="inputs" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)">
+                                                    </div>
+                                                </div>
                                             </div>
-
                                         </div>
 
                                         <div class="col-md-6">
-
                                             <div class="sp-select-sche">
-
                                                <!--  <p><a onclick="setschedule();">+Set Your Schedule</a>(Schedule the times this activity will happen)</p> -->
-
                                             </div>
-
                                         </div>
-
                                     </div>
 
-                                  
                                     <input type="hidden" name="price_id_db_00" id="price_id_db00" value="" />
                                     <div class="row mt-30">
-
                                         <div class="col-md-3 col-sm-6">
-
                                             <div class="priceselect sp-select">
-
                                                 <label>Price Title</label>
-
-                                                <input type="text" name="price_title_00" id="price_title00"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle(0,0)">
-
+                                                <input type="text" name="price_title_00" id="price_title00"  class="inputs" placeholder="Ex: 6 month Membership" oninput="getpricetitle(0,0)">
                                             </div>
-
                                         </div>
 
                                         <div class="col-md-3 col-sm-6">
-
                                             <div class="priceselect sp-select">
-
                                                 <label>Session Type</label>
-
                                                 <select name="pay_session_type_00" id="pay_session_type00" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select(0,0,this.value);">
-
                                                     <option value="">Select Value</option>
-
                                                     <option value="Single">Single</option>
-
                                                     <option value="Multiple">Multiple</option>
-
                                                     <option value="Unlimited">Unlimited</option>
-
                                                 </select>
-
                                             </div>
-
                                         </div>
 
-
-
                                         <div class="col-md-3 col-sm-6">
-
                                             <div class="priceselect sp-select">
-
                                                 <label>Number of Sessions</label>
-
                                                 <input type="text" name="pay_session_00" id="pay_session00"  class="inputs pay_session" placeholder="1" value="">
-
                                             </div>
-
                                         </div>
-
-
 
                                         <div class="col-md-3 col-sm-6">
-
                                             <div class="priceselect sp-select">
-
                                                 <label>Membership Type</label>
-
                                                 <select name="membership_type_00" id="membership_type00" class="bd-right bd-bottom membership_type">
-
                                                     <option value="Drop In">Drop In</option>
-
                                                     <option value="Semester">Semester (Long Term)</option>
-
                                                 </select>
-
                                             </div>
-
                                         </div>
-
                                     </div>
 
                                     <div class="row">
-
                                         <div class="col-md-12">
-
                                             <div class="setprice sp-select">
-
                                                 <h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3>
-
                                             </div>
-
                                         </div>
-
                                     </div>
 
                                     <div class="row">
-
                                         <div class="age-cat">
-
                                             <div class="cat-age sp-select">
-
                                                 <label>Adults</label>
-
                                                 <p>Ages 12 & Older</p>
-
                                             </div>
-
                                         </div>
 
                                         <div class="weekly-customer">
-
                                             <div class="cus-week-price sp-select">
-
                                                 <label>Weekday Price</label>
-
                                                 <p> (Monday - Friday)</p>
-
                                                 <input type="text" name="adult_cus_weekly_price_00" id="adult_cus_weekly_price00" placeholder="$"  onkeyup="adultchangeestprice(0,0);">
-
                                             </div>
-
                                         </div>
 
                                         <div class="weekend-price">
-
                                             <div class="cus-week-price sp-select">
-
                                                 <label>Weekend Price </label>
-
                                                 <p> ( Saturday & Sunday)</p>
-
                                                 <input type="text" name="adult_weekend_price_diff_00" id="adult_weekend_price_diff00" placeholder="$" onkeyup="weekendadultchangeestprice(0,0);">
-
                                             </div>
-
                                         </div>
 
                                         <div class="re-discount">
-
                                             <div class="discount sp-select">
-
                                                 <label>Any Discount? </label>
-
                                                 <p> (Recommended 10% to 15%)</p>
-
                                                 <input type="text" name="adult_discount_00" id="adult_discount00" onkeyup="adultdischangeestprice(0,0);">
-
                                             </div>
-
                                         </div>
 
                                         <div class="single-dash">
-
                                             <div class="desh sp-select">
-
                                                 <label>-</label>
-
                                             </div>
-
                                         </div>
 
                                         <div class="fit-fees">
@@ -9849,7 +9780,7 @@ $('body').delegate('.is_recurring_cls','click',function(){
 
         var ages_data = "";
 
-        ages_data +='<div id="agesdiv'+i+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-agediv fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option" onclick="remove_agediv('+i+','+cnt+');"></i></div></div><div class="row"><div class="col-md-4"> </div><div class="col-md-5"> </div></div> <input type="hidden" name="price_id_db_'+i+cnt+'" id="price_id_db'+i+cnt+'" value="" /> <div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+i+cnt+'" id="price_title'+i+cnt+'"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle('+i+','+cnt+')"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+i+cnt+'" id="pay_session_type'+i+cnt+'" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+i+','+cnt+',this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+i+cnt+'" id="pay_session'+i+cnt+'"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+i+cnt+'" id="membership_type'+i+cnt+'" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+i+cnt+'" id="adult_cus_weekly_price'+i+cnt+'" placeholder="$"  onkeyup="adultchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+i+cnt+'" id="adult_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendadultchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+i+cnt+'" id="adult_discount'+i+cnt+'" onkeyup="adultdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+i+cnt+'" id="adult_estearn'+i+cnt+'" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+i+cnt+'" id="weekend_adult_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+        ages_data +='<div id="agesdiv'+i+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-agediv fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option" onclick="remove_agediv('+i+','+cnt+');"></i></div></div><div class="row"><div class="col-md-4"> </div><div class="col-md-5"> </div></div> <input type="hidden" name="price_id_db_'+i+cnt+'" id="price_id_db'+i+cnt+'" value="" /> <div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+i+cnt+'" id="price_title'+i+cnt+'"  class="inputs" placeholder="Ex: 6 month Membership" oninput="getpricetitle('+i+','+cnt+')"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+i+cnt+'" id="pay_session_type'+i+cnt+'" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+i+','+cnt+',this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+i+cnt+'" id="pay_session'+i+cnt+'"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+i+cnt+'" id="membership_type'+i+cnt+'" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+i+cnt+'" id="adult_cus_weekly_price'+i+cnt+'" placeholder="$"  onkeyup="adultchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+i+cnt+'" id="adult_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendadultchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+i+cnt+'" id="adult_discount'+i+cnt+'" onkeyup="adultdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+i+cnt+'" id="adult_estearn'+i+cnt+'" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+i+cnt+'" id="weekend_adult_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
         var onclickadult ="'adult'";
 
         ages_data +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+i+cnt+'" name="is_recurring_adult_'+i+cnt+'" value="0" onclick="openmodelbox('+i+','+cnt+','+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+i+cnt+'" name="btn_recurring_adult_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+i+cnt+'" id="child_cus_weekly_price'+i+cnt+'" placeholder="$" onkeyup="childchangeestprice('+i+','+cnt+');"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+i+cnt+'" id="child_weekend_price_diff'+i+cnt+'" placeholder="$" onkeyup="weekendchildchangeestprice('+i+','+cnt+');"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+i+cnt+'" id="child_discount'+i+cnt+'"  onkeyup="childdischangeestprice('+i+','+cnt+');"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+i+cnt+'" id="child_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+i+cnt+'" id="weekend_child_estearn'+i+cnt+'" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
@@ -10091,7 +10022,7 @@ $("body").on("click", ".add-another-category-price", function(){
     $('#recurring_count').val(cnt);
     var service_price = "";
     service_price += '';
-    service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-3"><div class="priceselect sp-select"><input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""><label>Category Title (Give a name for this category)</label><input type="text" name="category_title[]" id="category_title"  class="inputs"></div></div><div class="col-md-6"><div class="sp-select-sche"></div></div></div><input type="hidden" name="price_id_db_'+cnt+'0" id="price_id_db'+cnt+'0" value="" /><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="ex. 30 Minute Section" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+    service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-12"><div class="priceselect sp-select"><input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""><label>Category Title (Give a name for this category)</label><p>*Note: This name will be displayed on your booking schedule for customer to see. </p><div class="row"><div class="col-md-3"><input type="text" name="category_title[]" id="category_title"  class="inputs" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"></div></div></div></div></div><input type="hidden" name="price_id_db_'+cnt+'0" id="price_id_db'+cnt+'0" value="" /><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="Ex: 6 month Membership" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><h3>You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> ( Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
 
     var onclickadult ="'adult'";
 	service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+cnt+'0" name="is_recurring_adult_'+cnt+'0" value="0" onclick="openmodelbox('+cnt+',0,'+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+cnt+'0" name="btn_recurring_adult_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Friday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="childchangeestprice('+cnt+',0);"></div></div><div class="weekend-price"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> ( Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0"  onkeyup="childdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
@@ -11539,7 +11470,7 @@ $(document).ready(function(){
         $("#service_type").val(service_type);   
         $(".individualTxt, .classesTxt, .experienceTxt, .eventsTxt").css("color","white");
         $("."+service_type+"Txt").css("color","red");  
-        $(".individualBody, .classesBody, .experienceBody").hide();
+        $(".individualBody, .classesBody, .experienceBody, .eventsBody").hide();
         $("."+service_type+"Body").show();
         $("#creServicediv").hide();
         if(service_type == 'individual') {

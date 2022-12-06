@@ -45,6 +45,56 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="schedule-add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Your Schedule</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Schedule Name:</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+           
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="schedule-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Your Schedule</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Schedule Name:</label>
+                        <input type="text" id="shedulename" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="openmodelbox()">Save Your Schedule</button>
+            </div>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
 <script>
 	$(document).ready(function () {
@@ -56,7 +106,20 @@
         });
         var calendar = $('#calendar').fullCalendar({
             editable: true,
-            events:'{{route("calendar")}}',
+           //events:'{{route("calendar")}}',
+            events:[
+                @foreach($fullary as $dt)
+                {
+                    allDay : false,
+                    id:'{{$dt["id"]}}',
+                    title:'{{$dt["title"] . ' \n '.$dt["shift_start"].' - '.$dt["time"]}}',    
+                    //start:'{{$dt["start"]}}',
+                    start:'{{$dt["start"].'T'.$dt["shift_start"]}}',
+                    end:'{{$dt["start"].'T'.$dt["shift_end"]}}',
+                },
+                @endforeach
+            ], 
+           
             displayEventTime: false,
             editable: true,
 			fixedWeekCount:false,
@@ -65,17 +128,31 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-            eventRender: function (event, element, view) { //alert('call');
+            eventRender: function (event, element, view) {
+             //alert('call');
                 if (event.allDay === 'true') { event.allDay = true; } 
 				else { event.allDay = false; }
             },
             selectable: true,
             selectHelper: true,
+
+            /*eventClick: function(events) {
+                var eventName = events.title;
+                var modal = $("#schedule-edit");
+                var inputF = document.getElementById("shedulename");
+                inputF.setAttribute('value', eventName);
+                modal.modal();
+            },*/
             
         });
     });
     function displayMessage(message) {
         toastr.success(message, 'Event');
+    }
+
+    function openmodelbox(){
+        $('#schedule-edit').modal('hide');
+        $('#schedule-add').modal('show');
     }
 </script>
 

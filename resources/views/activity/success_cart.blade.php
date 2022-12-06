@@ -477,7 +477,7 @@ if(!empty($cart["cart_item"])) {
 								<div class="register-pop-title ftitle1">
 									<h3>Tell Us About You</h3>
 								</div>
-								<div id='systemMessage'></div>
+								<div id='systemMessage' class="alert-msgs"></div>
                     			<input type="hidden" name="_token" value="{{csrf_token()}}">
 								<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
 								<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
@@ -491,7 +491,7 @@ if(!empty($cart["cart_item"])) {
 									<div class="col-md-8">
 										<div class="terms-wrap wrap-sp">
 											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+											<label class="modalregister-private" for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
 										</div>
                     					<div id='termserror'></div><br>
 										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>

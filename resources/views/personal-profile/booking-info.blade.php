@@ -33,7 +33,7 @@ use App\UserFamilyDetail;
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO</h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY</h4>
                     </div>
                     <div class="booking-info-menu">
                         <div class='row'>
