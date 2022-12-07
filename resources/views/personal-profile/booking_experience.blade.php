@@ -50,7 +50,7 @@ use App\UserFamilyDetail;
                                 <div class="booking-info-tab">
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-current-tab" data-toggle="tab" href="#nav-current" role="tab" aria-controls="nav-current" aria-selected="true" onclick="changecolor(this.id)">Current</a>
+                                        <a class="nav-item nav-link " id="nav-current-tab" data-toggle="tab" href="#nav-current" role="tab" aria-controls="nav-current" aria-selected="true" onclick="changecolor(this.id)">Current</a>
                                         
                                         <a class="nav-item nav-link" id="nav-today-tab" data-toggle="tab" href="#nav-today" role="tab" aria-controls="nav-today" aria-selected="true" onclick="changecolor(this.id)">Today</a>
                                         
@@ -59,7 +59,6 @@ use App\UserFamilyDetail;
                                         <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" href="#nav-past" role="tab" aria-controls="nav-past" aria-selected="false"  onclick="changecolor(this.id)">Past</a>
                                        
                                         <!-- <a class="nav-item nav-link" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false"  onclick="changecolor(this.id)">Pending</a> -->
-
                                     </div>
                                 </nav>
                                 </div>
@@ -71,7 +70,7 @@ use App\UserFamilyDetail;
                             <div class="tab-content" id="nav-tabContent">
 
 
-                                <div class="tab-pane active" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
+                                <div class="tab-pane " id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
                                             <div class="col-md-3 col-sm-12">
@@ -1399,7 +1398,44 @@ use App\UserFamilyDetail;
 <script>
 
     $( document ).ready(function() {
-       
+        var tabvalue = '{{$tabvalue}}';
+        if(tabvalue == 'upcoming'){
+            $('#nav-upcoming').addClass("active");
+            $('#nav-upcoming-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'past'){
+            $('#nav-past').addClass("active");
+            $('#nav-past-tab').addClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'today'){
+            $('#nav-today').addClass("active");
+            $('#nav-today-tab').addClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'pending'){
+            $('#nav-pending').addClass("active");
+            $('#nav-pending-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+        }else{
+            $('#nav-current').addClass("active");
+            $('#nav-current-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }
+
         $("input[id=dateserchfilter_today]").change(function(){
             var date = $(this).val();
             var type = 'today';

@@ -75,22 +75,14 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Edit Your Schedule</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label>Schedule Name:</label>
-                        <input type="text" id="shedulename" class="form-control">
-                    </div>
-                </form>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" onclick="openmodelbox()">Save Your Schedule</button>
+                <div class="form-group book-info">
+                    <!-- <label id="activity_name"></label>
+                    <a class="btn btn-danger" href="{{route('bookinginfo')}}">View booking details</a> -->
+                </div>
             </div>
         </div>
     </div>
@@ -104,6 +96,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var daydate = '';
         var calendar = $('#calendar').fullCalendar({
             editable: true,
            //events:'{{route("calendar")}}',
@@ -112,10 +105,10 @@
                 {
                     allDay : false,
                     id:'{{$dt["id"]}}',
-                    title:'{{$dt["title"] . ' \n '.$dt["shift_start"].' - '.$dt["time"]}}',    
+                    title:'{{$dt["title"] . ' \n '.date("h:i a", strtotime( $dt["shift_start"] )).' - '.$dt["time"]}}',    
                     //start:'{{$dt["start"]}}',
-                    start:'{{$dt["start"].'T'.$dt["shift_start"]}}',
-                    end:'{{$dt["start"].'T'.$dt["shift_end"]}}',
+                    start:'{{$dt["start"].' '.date("h:i", strtotime( $dt["shift_start"]) )}}',
+                    end:'{{$dt["start"].' '.date("h:i", strtotime( $dt["shift_end"]) )}}',
                 },
                 @endforeach
             ], 
@@ -129,6 +122,7 @@
 				right: 'month,agendaWeek,agendaDay'
 			},
             eventRender: function (event, element, view) {
+
              //alert('call');
                 if (event.allDay === 'true') { event.allDay = true; } 
 				else { event.allDay = false; }
@@ -136,13 +130,39 @@
             selectable: true,
             selectHelper: true,
 
-            /*eventClick: function(events) {
+            /*dayClick: function(date, jsEvent, view) {
+
+                alert('Clicked on: ' + date.format());
+
+                alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                alert('Current view: ' + view.name);
+
+                // change the day's background color just for fun
+                $(this).css('background-color', 'red');
+
+              }
+*/
+            eventClick: function(events) {
+                /*var time = events.start;*/
                 var eventName = events.title;
-                var modal = $("#schedule-edit");
-                var inputF = document.getElementById("shedulename");
-                inputF.setAttribute('value', eventName);
-                modal.modal();
-            },*/
+                $.ajax({
+                    type: "POST",
+                    url: '{{route("eventmodelboxdata")}}',
+                    data: "&id=" + events.id + "&start=" + events.start.toISOString(),
+                    success: function(data) {
+                        if(data != ''){
+                            $('.book-info').html(data);
+                            var modal = $("#schedule-edit");
+                            modal.modal();
+                        }
+                    }
+                });
+                
+               
+              //$('#activity_name').html(eventName);
+               
+            },
             
         });
     });
