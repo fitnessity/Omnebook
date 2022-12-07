@@ -63,7 +63,7 @@ class BookingController extends Controller {
         $this->sports = $sports;
     }
 
-    public function bookinginfo(Request $request) {
+    public function bookinginfo(Request $request ,$tabval  = null) {
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -123,10 +123,10 @@ class BookingController extends Controller {
             }
         }
      /*   print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+        return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
     }
 
-     public function gym_studio_page(Request $request){
+     public function gym_studio_page(Request $request ,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -190,10 +190,10 @@ class BookingController extends Controller {
         }
        
        /* print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
     }
 
-    public function experience_page(Request $request){
+    public function experience_page(Request $request ,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -255,11 +255,11 @@ class BookingController extends Controller {
             }
         }
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval]);
     }
 
 
-    public function events_page(Request $request){
+    public function events_page(Request $request,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -321,7 +321,7 @@ class BookingController extends Controller {
             }
         }
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
+       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
     }
 
     public function getreceiptmodel(Request $request) {

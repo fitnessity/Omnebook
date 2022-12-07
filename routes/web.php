@@ -642,7 +642,10 @@ Route::group(['middleware' => ['auth']], function()
 {
     Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
     Route::get('scheduler-checkin', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
+    Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
+    Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
+
     //favourite routes
     Route::post('/isfavourite','UsersFavouriteController@isFavourite');
     Route::get('favourite/index', 'UsersFavouriteController@index');
@@ -840,10 +843,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
-    Route::get('/personal-profile/booking-info', 'BookingController@bookinginfo')->name('bookinginfo');
-    Route::get('/personal-profile/gym-studio-info', 'BookingController@gym_studio_page')->name('gym_studio_page');
-    Route::get('/personal-profile/experience-info', 'BookingController@experience_page')->name('experience_page');
-    Route::get('/personal-profile/events-info', 'BookingController@events_page')->name('events_page');
+    Route::get('/personal-profile/booking-info/{tabval?}', 'BookingController@bookinginfo')->name('bookinginfo');
+    Route::get('/personal-profile/gym-studio-info/{tabval?}', 'BookingController@gym_studio_page')->name('gym_studio_page');
+    Route::get('/personal-profile/experience-info/{tabval?}', 'BookingController@experience_page')->name('experience_page');
+    Route::get('/personal-profile/events-info/{tabval?}', 'BookingController@events_page')->name('events_page');
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');

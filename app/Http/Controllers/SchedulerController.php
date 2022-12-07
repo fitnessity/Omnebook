@@ -41,4 +41,7 @@ class SchedulerController extends Controller
             'companyservice' => $companyservice
         ]);
     }
+     public function booking_request(){
+           return view('scheduler.booking_request');
+     }
 }
