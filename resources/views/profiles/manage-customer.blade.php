@@ -70,7 +70,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -115,7 +115,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -160,7 +160,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -205,7 +205,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -267,7 +267,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -312,7 +312,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -357,7 +357,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -419,7 +419,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -464,7 +464,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">
@@ -509,7 +509,7 @@
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
 														<div class="collapse-img">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+															<img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-8 col-sm-2">

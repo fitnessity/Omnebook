@@ -44,7 +44,7 @@
 						<div class="row">
 							<div class="col-md-2 col-sm-3">
 								<div class="manage-cust-img">
-                                    <img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+                                    <img src="/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
                                 </div>
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
