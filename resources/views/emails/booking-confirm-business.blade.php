@@ -69,6 +69,7 @@ use App\StaffMembers;
 	    }
 
 	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $company_id = @$BookingDetail1['businessuser']['id'];
 	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
 	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];
 	    $program_name = @$BookingDetail1['businessservices']['program_name'];
@@ -251,7 +252,7 @@ use App\StaffMembers;
 
 																		</tr>
 
-																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="{{$url}}/personal-profile/booking-info">VIEW BOOKINGS</a></td></tr>
+																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="{{$url}}/manage/service/{{@$company_id}}">VIEW BOOKINGS</a></td></tr>
 
                                                                     </table>
 

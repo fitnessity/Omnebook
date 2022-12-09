@@ -98,4 +98,9 @@ class BusinessPriceDetails extends Model
         'recurring_total_contract_revenue_infant',
     ];
     
+
+    public function business_price_details_ages(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
+    }
+
 }

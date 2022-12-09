@@ -13,8 +13,9 @@ class AddTableCustomers extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('customers', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('business_id')->unsigned();
             $table->string('fname',255);
             $table->string('lname',255);
             $table->string('username',255);
@@ -23,15 +24,14 @@ class AddTableCustomers extends Migration
             $table->string('email',100);
             $table->string('phone_number',20);
             $table->string('profile_pic',255);
-            $table->string('address',255);
-            $table->string('city',255);
-            $table->string('state',255);
-            $table->string('country',255);
-            $table->string('zipcode',255);
-            $table->string('password',255);
-            $table->int('status');
+            $table->string('address',255)->nullable();
+            $table->string('city',255)->nullable();
+            $table->string('state',255)->nullable();
+            $table->string('country',255)->nullable();
+            $table->string('zipcode',255)->nullable();
+            $table->string('password',255)->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
-             
         });
     }
 
@@ -42,6 +42,6 @@ class AddTableCustomers extends Migration
      */
     public function down()
     {
-         Schema::drop('customers');
+         Schema::dropIfExists('customers');
     }
 }

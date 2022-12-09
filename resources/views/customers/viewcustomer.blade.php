@@ -49,7 +49,7 @@
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
 								<div class="client-info">
-                                    <span>Eric Santana</span>
+                                    <span>{{$customerdata->fname}} {{$customerdata->lname}}</span>
 									<a> Edit </a>
                                 </div>
 								<div class="row">
@@ -57,7 +57,7 @@
 										<label>Email</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>user@email.com</span>
+										<span>{{$customerdata->email}} </span>
 									</div>
 								</div>
 								<div class="row">
@@ -65,7 +65,7 @@
 										<label>Phone Number</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>(000) 000 - 0000</span>
+										<span>{{$customerdata->phone_number}} </span>
 									</div>
 								</div>
 								<div class="row">
@@ -120,12 +120,13 @@
 										<span>New York, USA</span>
 									</div>
 								</div>
+								@php $sincedate = date('m/d/Y',strtotime($customerdata->created_at)); @endphp
 								<div class="row">
 									<div class="col-md-5 col-xs-5">
 										<label>Customers Since</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>June 2021</span>
+										<span>{{$sincedate}}</span>
 									</div>
 								</div>
 							</div>

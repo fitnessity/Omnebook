@@ -3,6 +3,8 @@
 
 @section('content')
 
+<link href="{{ url('public/css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
+
 <style>
 .avatar {
   vertical-align: middle;
@@ -26,7 +28,7 @@ input,select {
     use App\BusinessActivityScheduler;
     use App\UserBookingDetail;
 ?>
-<div class="business-offer-main" style="margin-top:50px; padding:50px; min-height:500px;">
+<div class="business-offer-main manageservice-page">
     <section class="row">
     <?php
     $companyid = $companyname = "";
@@ -103,7 +105,7 @@ input,select {
                             <div class="nw-user-detail-block">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nw-user-detail">
                                     <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1">	
+                                        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-12">	
 
                                             @if($profilePic != '')
                                                 <img src="{{ $profilePic }}" alt="Avatar" class="avatar">
@@ -116,11 +118,11 @@ input,select {
                                 			@endif
                                         </div>
                                         <?php /*?><div class="col-lg-7 col-md-7 col-sm-7"><?php */?>
-                                        <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <div class="col-xs-12 col-lg-3 col-md-3 col-sm-3">
                                             <p class="texttr">{{$cservice->program_name}} ({{$cservice->sport_activity}}) <b>{{ ($cservice->is_active==1) ? "Active" : "Inactive"}}</b></p>
                                             <p class="texttr"><b>{{ ($cservice->service_type=='individual') ? 'Personal Training' : $cservice->service_type }}</b></p>
                                         </div>
-            							<div class="col-lg-3 col-md-3 col-sm-3">
+            							<div class="col-xs-12 col-lg-2 col-md-2 col-sm-3">
             								<div class="manage-txt">
             									<label>OVERVIEW</label>
             									<span>{{$UserBookingDetailcount}} Bookings This Week   </span>
@@ -130,20 +132,23 @@ input,select {
                                                 @endif
             								</div>
             							</div>
-            							<div class="col-lg-2 col-md-2 col-sm-2">
+            							<div class="col-xs-12 col-lg-3 col-md-3 col-sm-4">
             								<div class="manage-txt">
             									<label>SCHEDULE</label>
-            									<span>{{ $cattotal}} CATEGORIES CREATED | <br> {{ count($dataarray)}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>   </span>
+            									<span>{{ $cattotal}} CATEGORIES CREATED | <br> {{ count($dataarray)}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>
+												<!-- <a href="#" data-toggle="modal" data-target="#modalviewbookings"> | VIEW BOOKINGS</a> -->
+                                                <a href="#" onclick="getbookingmodel({{$cservice->id}},'simple');"> | VIEW BOOKINGS</a>
+												</span>
             									<!--<span>{{ $cattotal}} Catagories Scheduled | <br> <a href="{{route('businesspricedetails')}}"> + Edit Schedule</a>   </span>-->
             								</div>
             							</div>
-                                        <div class="col-lg-1 col-md-1 col-sm-1">
+                                        <div class="col-xs-12 col-lg-1 col-md-1 col-sm-2">
                                             <input type="submit" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
                                         </div>
                                         <?php /*?><div class="col-lg-1 col-md-1 col-sm-1">
                                             <input type="submit" class="btn btn-black" name="btnview" id="btnview" value="View" />
                                         </div><?php */?>
-                                        <div class="col-lg-2 col-md-2 col-sm-2">
+                                        <div class="col-xs-12 col-lg-2 col-md-2 col-sm-2">
                                             <input type="submit" class="btn btn-red" name="btnactive" id="btnactive" value="{{ ($cservice->is_active==0) ? "Active" : "Inactive"}} " />
                                         </div>
                                     </div>
@@ -202,17 +207,17 @@ input,select {
                                                 } 
                                             @endphp
                                             <div class="row">
-        										<div class="col-md-4">
+        										<div class="col-md-4 col-sm-3 col-xs-12">
         											<span>{{$i}}. {{$data['category_title']}}</span><span class="schedle-separator"> | </span>
         										</div>
-        										<div class="col-md-3">
+        										<div class="col-md-3 col-sm-3 col-xs-12">
         											<span>{{ $time}}</span><span class="schedle-separator"> | </span>
         										</div>
         										
-        										<div class="col-md-3">
+        										<div class="col-md-3 col-sm-4 col-xs-12">
         											<span> {{$btdatacount}} TIMESLOTS SCHEDULED</span><span class="schedle-separator"> | </span>
         										</div>
-        										<div class="col-md-2"> 
+        										<div class="col-md-2 col-sm-3 col-xs-12"> 
         											<span> <a href="{{route('businesspricedetails', ['catid' =>$data['id'] ]) }}">+ EDIT SCHEDULE</a></span>
         										</div>
         									</div>
@@ -236,16 +241,68 @@ input,select {
         No company service records found.
     </div>
     @endif
+	<div class="modal fade compare-model" id="modalviewbookings">
+		<div class="modal-dialog schedule-model-width">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-schedule" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row" id="bookingmodel">
+					</div>
+				</div>
+			</div>
+		</div>
+   </div>
+   <!-- end modal -->
     <div class="col-md-12 text-center back-comp">
         <a href="/manage/company">Back to Manage Company</a>
     </div>
     </section>
 </div>
 
+
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 @include('layouts.footer')
 <script src="/public/js/jquery-ui.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+<script>
+
+    function getbookingmodel(sid,chk){  
+        let date = '';
+        if(chk == 'ajax'){
+            date = $('#managecalendarservice').val();
+        }else if(chk == 'simple'){
+            date = new Date().toLocaleDateString();
+            $('#bookingmodel').html('');
+        }
+ 
+        $.ajax({
+            url:"{{route('getbookingmodeldata')}}",
+            xhrFields: {
+                withCredentials: true
+            },
+            type:"get",
+            data:{
+                sid:sid,
+                date:date,
+            },
+            success:function(data){
+                $('#bookingmodel').html(data);
+                if(chk == 'simple'){
+                    $('#modalviewbookings').modal('show');
+                }
+            }
+        });
+    }  
+</script>
 <script>
 $(document).ready(function(){
     
@@ -284,6 +341,6 @@ $(document).ready(function(){
             }
         });
     });
-});    
+});  
 </script>
 @endsection

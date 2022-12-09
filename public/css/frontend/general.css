@@ -22320,7 +22320,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #000;
 	border-radius: 8px;
 	display: inline-block;
-	width: 80%;
+}
+.date-activity-scheduler .activityselect3.special-date{
+	position: relative;
+	width: 82%;
+	display: inline-block;
 }
 .date-activity-scheduler i{
 	position: absolute;
@@ -22540,7 +22544,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	right: 0;
 	bottom: 0;
 	background-color: rgba(0,0,0,0.5);
-	z-index: 2;
+	z-index: 0;
 	cursor: pointer;
 	border-radius: 4px;
 }
@@ -22548,7 +22552,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	position: absolute;
 	background: #fff;
 	padding: 10px;
-	z-index: 9999;
+	z-index: 1000;
 	top: 14px;
 	left: 90px;
 	border-radius: 7px;
@@ -23129,4 +23133,41 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .adjust-bnts{
 	text-align: center;
 	margin-bottom: 25px;
+}
+.date-info {
+  margin-top: 15px !important;
+}
+.modal-custom-header{
+	border: 1px solid #c9c9c9;
+	padding: 7px;
+	background: #df0003;
+	color: #fff;
+	text-align: center;
+}
+.modal-inner-txt.modal-table-data{
+	text-align: center;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 9px;
+}
+.schedule-modal-title.modal-mb{
+	margin-bottom: 20px;
+}
+.no-bookings{
+	text-align: center;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+.modal-inner-txt.modal-table-data.nthchildlast{
+	border-bottom: none!important;
+}
+.main-component{
+	border: 1px solid #e5e5e5;
+}
+.manage-service-display{
+	display: none;
+}
+.business-offer-main.manageservice-page{
+	margin-top:50px; 
+	padding:50px; 
+	min-height:500px;
 }

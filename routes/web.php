@@ -12,7 +12,7 @@
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
 use App\Http\Controllers\ActivityController;
-
+use App\Http\Controllers\Customers_Auth\HomeController;
 //Route::get('/home', 'HomeController@index')->name('homemy');
 //Route::get('/home', 'HomeController@index')->name('homemy');
 //Route::get('/', 'HomeController@index');
@@ -21,6 +21,8 @@ use App\Http\Controllers\ActivityController;
     $exitCode = Artisan::call('cache:clear');
     return "success";
 });*/
+
+
 
 Route::get('/addcheckoutsession','HomeController@addcheckoutsession')->name('addcheckoutsession');
 Route::get('/senddummymail','HomeController@senddummymail')->name('senddummymail');
@@ -850,6 +852,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
+    Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
 
 });
 
@@ -912,12 +915,27 @@ Route::get('createStaff','UserProfileController@createmanageStaff')->name('creat
 Route::get('staff-scheduled-activities','UserProfileController@staff_scheduled_activities')->name('staff-scheduled-activities');
 Route::get('manageproduct','UserProfileController@manageproduct')->name('manageproduct');
 Route::get('addproduct','UserProfileController@addproduct')->name('addproduct');
-Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity');
-Route::get('manage-customer','UserProfileController@manage_customer')->name('manage-customer');
-Route::get('viewcustomer','UserProfileController@viewcustomer')->name('viewcustomer');
+Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity'); 
+
 Route::get('view-customer','UserProfileController@view_customer')->name('view-customer');
 Route::get('financial-dashboard','UserProfileController@financial_dashboard')->name('financial-dashboard');
 Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashboard');
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
 
+
+//  Customers for business
+Route::namespace('Customers_Auth')->group(function(){
+    Route::get('emailvalidation_customer', 'RegistrationController@emailvalidation_customer')->name('emailvalidation_customer');
+    Route::post('/customers/registration', 'RegistrationController@postRegistrationCustomer')->name('customers.registration.post');
+    Route::post('/customers/savegender', 'RegistrationController@saveGenderCustomer')->name('customers-savegender');
+    Route::post('/customers/saveaddress', 'RegistrationController@saveaddressCustomer')->name('customers-saveaddress');
+    Route::post('/customers/savephoto', 'RegistrationController@savephotoCustomer')->name('customers-savephoto');
+
+    /*Route::group(['prefix'  =>  'customers','middleware' => ['auth:customers']], function () {
+    });*/
+});
+
+Route::get('manage-customer','CustomerController@manage_customer')->name('manage-customer');
+Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
+Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
 
