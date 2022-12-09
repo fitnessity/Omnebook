@@ -940,7 +940,7 @@
 									<div class="col-md-3">
 										<div class="photo-upload">
 											<label for="input" id="label">
-											  <img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah" id="showimg">
+											  <img src="/public/images/Upload-Icon.png" class="pro_card_img blah" id="showimg">
 											  <span id="span">Upload your file here</span>
 											  <input id="input" type="file">
 											</label>
@@ -1123,7 +1123,7 @@
 				<div class="row"> 
                     <div class="col-lg-6 col-xs-12 register-modal">
 						<div class="logo-my">
-							<a href="#"> <img src="http://dev.fitnessity.co//public/images/logo-small.jpg"> </a>
+							<a href="#"> <img src="/public/images/logo-small.jpg"> </a>
 						</div>
 						<div class="manage-customer-from">
 							<form>

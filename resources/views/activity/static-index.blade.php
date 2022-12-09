@@ -32,7 +32,7 @@
 
 <section class="instant-hire" >
 	<div class="instant-banner">
-		<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648909-tennis 1.jpg">
+		<img src="/public/uploads/discover/thumb/1649648909-tennis 1.jpg">
 		<h4>Find A Personal Training Session</h4>
 	</div>
 </section>
@@ -758,7 +758,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -795,7 +795,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -832,7 +832,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -869,7 +869,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -906,7 +906,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -943,7 +943,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -980,7 +980,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1017,7 +1017,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1081,7 +1081,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1118,7 +1118,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1155,7 +1155,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1192,7 +1192,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1229,7 +1229,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1266,7 +1266,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1303,7 +1303,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1340,7 +1340,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1404,7 +1404,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1441,7 +1441,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1478,7 +1478,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1515,7 +1515,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1552,7 +1552,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1589,7 +1589,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1626,7 +1626,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1663,7 +1663,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1727,7 +1727,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1764,7 +1764,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1801,7 +1801,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1838,7 +1838,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1875,7 +1875,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1912,7 +1912,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1949,7 +1949,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -1986,7 +1986,7 @@
 									<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2053,17 +2053,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-owl" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2103,17 +2103,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-activity" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2153,17 +2153,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-activitys" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2203,17 +2203,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-learn" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2253,17 +2253,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-learn-activites" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2303,17 +2303,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-jeck" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2353,17 +2353,17 @@
 												<div class="inner-owl-slider-hire">
 													<div id="owl-demo-yoga" class="owl-carousel owl-theme">
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035110-hip-hop-dance-class-700x400.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665035030-kung fu.jpg" class="productImg">
 														</div>
 														<div class="item-inner">
-															<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
+															<img src="/public/uploads/profile_pic/1665971623-yoga.jpg" class="productImg">
 														</div>
 													</div>
 												</div>
-												<!--<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
+												<!--<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">-->
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
@@ -2400,7 +2400,7 @@
 									<!--<div class="item">
 										<div class="kickboxing-block">
 											<div class="kickboxing-topimg-content">
-												<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
+												<img src="/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="productImg">
 												<a class="fav-fun-2" href="#"><i class="far fa-heart"></i></a>
 												<span>From $25/Person</span>
 											</div>
