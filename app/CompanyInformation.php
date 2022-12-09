@@ -83,4 +83,8 @@ class CompanyInformation extends Model {
         return $this->hasOne(UserProfessionalDetail::class, 'company_id');
     }
 
+    public function customers(){
+        return $this->belongsTo(Customer::class, 'id');
+    }
+
 }

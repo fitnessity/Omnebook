@@ -38,8 +38,10 @@
 					<div class="col-md-3 col-xs-12 col-sm-6">
 						 <div class="date-activity-scheduler">
                             <label for="">Date:</label>
-                            <input type="text"  id="" placeholder="Search By Date" class="form-control activity-scheduler-date w-80">
-                            <i class="far fa-calendar-alt"></i>
+                            <div class="activityselect3 special-date">
+								<input type="text" name="actfildate" id="managecalendar" placeholder="Date" class="form-control" onchange="actFilter" autocomplete="off" >
+								<i class="fa fa-calendar"></i>
+							</div>
                          </div>
 					</div>
 					<div class="col-md-5 col-xs-12 col-sm-6">
@@ -350,11 +352,11 @@
 
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
 <script>
- $('.activity-scheduler-date').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
+	$( function() {
+		$( "#managecalendar" ).datepicker( { minDate: 0 } );
+	} );
 </script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 @include('layouts.footer')

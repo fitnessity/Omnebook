@@ -8,6 +8,7 @@ use App\UserCustomerDetail;
 use App\AddrStates;
 use App\AddrCities;;
 use App\Repositories\BookingRepository;
+use App\Repositories\BusinessServiceRepository;
 use Validator;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
@@ -57,10 +58,11 @@ use Request as resAll;
 class BookingController extends Controller {
 
 	protected $sports;
-    public function __construct(UserRepository $users, BookingRepository $bookings, Request $request, SportsRepository $sports) {
+    public function __construct(UserRepository $users, BookingRepository $bookings, BusinessServiceRepository $businessservice, Request $request, SportsRepository $sports) {
         $this->users = $users;
         $this->bookings = $bookings;
         $this->sports = $sports;
+        $this->businessservice = $businessservice;
     }
 
     public function bookinginfo(Request $request ,$tabval  = null) {
@@ -1590,9 +1592,111 @@ class BookingController extends Controller {
         return $html;
     }
 
-    public function cancelbooking(Request $request){
-       
+    public function cancelbooking(Request $request){   
     }
 
+    public function getbookingmodeldata(Request $request){
+        $p_name = $this->businessservice->findById($request->sid)->program_name;
+        $data = $this->bookings->getbusinessbookingsdata($request->sid,$request->date);
+        $html = '';
+        $ajax = "'ajax'";
+        $html.= '<div class="col-lg-12">
+                    <div class="schedule-modal-title modal-mb">
+                        <h4 class="modal-title">View Your bookings for '.$p_name.'</h4>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="modal-inner-txt">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="date-activity-scheduler">
+                                    <label for="">Date:</label>
+                                    <div class="activityselect3 special-date">
+                                        <div class="activityselect3 special-date">
+                                            <input type="text" name="actfildate" id="managecalendarservice" placeholder="Date" class="form-control" onchange="getbookingmodel('.$request->sid.','.$ajax.');" autocomplete="off" value="'.date('m/d/Y',strtotime($request->date)).'">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="col-md-3 col-xs-12 col-sm-6">
+                                <div class="date-info">
+                                    <label>Today Date:</label><span> '.date('m/d/Y',strtotime($request->date)).'</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-12 col-sm-6">
+                                <div class="date-info">
+                                    <label>Total Bookings:</label><span>'.count($data).'</span>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="modal-inner-txt modal-custom-header">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label> Name </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label> Date Booked </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>  Whos Participating  </label>
+                            </div>
+                            <div class="col-md-2"> 
+                                <label> Category Name  </label>
+                            </div>
+                            <div class="col-md-3"> 
+                                <label>   Price Option  </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-component">';
+        if(!empty($data) && count($data)>0){
+            $count = 1;
+            foreach($data as $dt){
+                $participate =  $dt->decodeparticipate();
+                $price_title = $dt->business_price_details->price_title;
+                $catename = $dt->business_price_details->business_price_details_ages->category_title;
+                
+                $html .='<div class="modal-inner-txt modal-table-data'; 
+                    if(count($data) == $count){ 
+                        $html.= ' nthchildlast';
+                    }
+                    $html.= '">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="manage-service-display">Name: </label><span> '.$count.'. '.Auth::user()->firstname.' '.Auth::user()->lastname.' </span>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y').'   </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="manage-service-display">Whos Participating: </label><span> '. nl2br($participate).'</span>
+                                </div>
+                                <div class="col-md-2"> 
+                                    <label class="manage-service-display">Category Name: </label><span> '.$catename.'  </span>
+                                </div>
+                                <div class="col-md-3"> 
+                                    <label class="manage-service-display">Price Option: </label><span> '.$price_title .'  </span>
+                                </div>
+                            </div>
+                        </div>';
+                $count++;
+            }
+        }else{
+            $html .='<p class="no-bookings">There Are No Bookings For This Activity Today</p>';
+        }
+
+        $html .= '</div>
+                <script>
+                    $( function() {
+                        $( "#managecalendarservice" ).datepicker( { 
+                            minDate: 0,
+                            changeMonth: true,
+                            changeYear: true   
+                        } );
+                    } );
+                </script></div>';
+        return $html;
+    }
 }

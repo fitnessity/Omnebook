@@ -1308,6 +1308,10 @@
 	.btn-previous{width: auto;}
 	.overlay-activity-label{left: 245px; width: 36%;}
 	.scheduler-info-box label{color: #1d1d1d;}
+	.business-offer-main.manageservice-page{margin-top:90px;}
+	.modal-custom-header{display: none;}
+	.manage-service-display {  display: inline;}
+	.modal-inner-txt.modal-table-data{text-align: left;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2322,6 +2326,11 @@
 	#dropBox{min-width: 350px;}
 	.imagediv .more-option .more{bottom: 50px;}
 	.newbusiness-img{background-size: 100% 18% !important;}
+	.modal-dialog.schedule-model-width {  width: 95%;}
+	.modal-custom-header{display: none;}
+	.manage-service-display {  display: inline;}
+	.modal-inner-txt.modal-table-data{text-align: left;}
+	.business-offer-main.manageservice-page{padding: 14px;}
 }
 
 @media(max-width: 575px) {

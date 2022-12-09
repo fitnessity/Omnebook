@@ -12,6 +12,7 @@ use Auth;
 use App\MailService;
 use App\Fit_Cart;
 use Illuminate\Support\Facades\Log;
+
 class BookingRepository
 {
     public function __construct()
@@ -23,7 +24,7 @@ class BookingRepository
         return UserBookingStatus::where('id', $id)->first();
     }
 
-        public function saveBookingStatus($data,$cart=null,$n=null)
+    public function saveBookingStatus($data,$cart=null,$n=null)
     {
         Log::info("save booking run");
         $status = true;
@@ -67,26 +68,20 @@ class BookingRepository
             $return['msg']  = "Some error has occured while booking.";
         }else {
             DB::commit();
-            
-            
-                try {
-                    if($n="no"){
-
-                    }else{
-                     
+            try {
+                if($n="no"){
+                }else{
                     MailService::sendEmailBooking($bookingObj->id);
-}
                 }
-                catch (Exception $e) {
-                    throw new Exception("Error While sending email", 1);                
-                }
-             if($data['booking_type'] == "quick") { 
-                 
-                
+            }catch (Exception $e) {
+                throw new Exception("Error While sending email", 1);                
+            }
+
+            if($data['booking_type'] == "quick") {                 
                 MailService::sendEmailBooking($bookingObj->id);
-                
-             }
-             MailService::sendEmailBooking($bookingObj->id);
+            }
+             
+            MailService::sendEmailBooking($bookingObj->id);
             $return['type'] = 'success';
             $return['alert-type'] = 'alert-success';
             $return['msg']  = "Your booking request has been sent to Business. You will get an email once booking is  confirmed by business.";
@@ -97,32 +92,30 @@ class BookingRepository
 
     public function saveBookingDetail($data)
     {
-
-
-            $status = true;
-            $detailObj = new UserBookingDetail();
-            $detailObj->booking_id = $data['booking_id'];
-            $detailObj->sport = $data['sport'];
-            
-            if($data['booking_type'] == "direct") {
-                $detailObj->booking_detail = $data['booking_detail'];
-                $detailObj->schedule = $data['schedule'];
-                $detailObj->price = $data['price'];
-            }else {
-                $detailObj->zipcode = $data['zipcode'];
-                $detailObj->quote_by_text = $data['quote_by_text'];
-                $detailObj->quote_by_email = $data['quote_by_email'];
-            }
-            
-            if(!$detailObj->save()) {
-                $status = false;
-            }
-            
-            //save booking questions
-            if($data['booking_type'] == "quick") {
-                $status = $this->saveBookingQuestion($data);
-            }
-            return $status;
+        $status = true;
+        $detailObj = new UserBookingDetail();
+        $detailObj->booking_id = $data['booking_id'];
+        $detailObj->sport = $data['sport'];
+        
+        if($data['booking_type'] == "direct") {
+            $detailObj->booking_detail = $data['booking_detail'];
+            $detailObj->schedule = $data['schedule'];
+            $detailObj->price = $data['price'];
+        }else {
+            $detailObj->zipcode = $data['zipcode'];
+            $detailObj->quote_by_text = $data['quote_by_text'];
+            $detailObj->quote_by_email = $data['quote_by_email'];
+        }
+        
+        if(!$detailObj->save()) {
+            $status = false;
+        }
+        
+        //save booking questions
+        if($data['booking_type'] == "quick") {
+            $status = $this->saveBookingQuestion($data);
+        }
+        return $status;
     }
 
     public function saveBookingQuestion($data)
@@ -292,7 +285,7 @@ class BookingRepository
         if(isset($ti) && $ti != null)
             $query->where('created_at', '<=' ,date('Y-m-d h:i:s',strtotime(" -1 days")));
                   
-//2019-08-09 17:22:58
+        //2019-08-09 17:22:58
         if(isset($paginate) && $paginate != null)
             return $query->paginate($paginate);
 
@@ -300,14 +293,13 @@ class BookingRepository
     }
 
     public function getBookingDetail($id)
-
     {
         return $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
                                     ->with('UserBookingDetail')
                                     ->with('Jobpostquestions')
                                     ->with('user')
                                     ->with('businessuser')
-//                                    ->with('UserBookingQuote.BookingQuoteUser')
+                                //  ->with('UserBookingQuote.BookingQuoteUser')
                                     ->where('id', $id)
                                     ->first()
                                     ->toArray();
@@ -328,12 +320,6 @@ class BookingRepository
     public function getBookingDetailnewdata($id,$bdid)
     {
 		/*\DB::enableQueryLog();
-		 $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
-                                    ->with('UserBookingDetail')
-                                    ->with('user')
-                                    ->where('id', $id)
-                                    ->first()
-                                    ->toArray();
 		dd(\DB::getQueryLog());*/
         return $query =  UserBookingStatus::select('*', 'user_booking_status.id as booking_id')
                                     ->with('UserBookingDetail')
@@ -599,4 +585,8 @@ class BookingRepository
         return $return;
     }
     
+    public function getbusinessbookingsdata($sid,$date){
+       return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
+    }
+
 }
