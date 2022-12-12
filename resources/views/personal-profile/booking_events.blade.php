@@ -33,7 +33,7 @@ use App\UserFamilyDetail;
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO</h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY</h4>
                     </div>
                     <div class="booking-info-menu">
                         <div class='row'>
@@ -70,7 +70,7 @@ use App\UserFamilyDetail;
                         <div class="bookings-block">
                             <div class="tab-content" id="nav-tabContent">
 
-                                <div class="tab-pane active" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
+                                <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
                                             <div class="col-md-3 col-sm-12">
@@ -1335,7 +1335,7 @@ use App\UserFamilyDetail;
                                     </div>
                                 </div><!-- tab-pane -->
 
-                                 <div class="tab-pane" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
+                                <div class="tab-pane" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
                                             <div class="col-md-3 col-sm-12">
@@ -1419,7 +1419,44 @@ use App\UserFamilyDetail;
 <script>
 
     $( document ).ready(function() {
-       
+        var tabvalue = '{{$tabvalue}}';
+        if(tabvalue == 'upcoming'){
+            $('#nav-upcoming').addClass("active");
+            $('#nav-upcoming-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'past'){
+            $('#nav-past').addClass("active");
+            $('#nav-past-tab').addClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'today'){
+            $('#nav-today').addClass("active");
+            $('#nav-today-tab').addClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }else if(tabvalue == 'pending'){
+            $('#nav-pending').addClass("active");
+            $('#nav-pending-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-current-tab').removeClass("active");
+        }else{
+            $('#nav-current').addClass("active");
+            $('#nav-current-tab').addClass("active");
+            $('#nav-past-tab').removeClass("active");
+            $('#nav-today-tab').removeClass("active");
+            $('#nav-upcoming-tab').removeClass("active");
+            $('#nav-pending-tab').removeClass("active");
+        }
+
         $("input[id=dateserchfilter_today]").change(function(){
             var date = $(this).val();
             var type = 'today';
@@ -1527,8 +1564,6 @@ use App\UserFamilyDetail;
         });
     }
     
-
-    
     $('.booking_date1').datepicker({
         dateFormat: "mm/dd/yy"
     })
@@ -1541,8 +1576,7 @@ use App\UserFamilyDetail;
     $('.booking-date').datepicker({
         dateFormat: "mm/dd/yy"
     })
-
-    
+  
 </script>
 
 <script type="text/javascript">

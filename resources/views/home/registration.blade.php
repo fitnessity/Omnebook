@@ -281,7 +281,7 @@
                                 </div>
                                 <div>
                                     <div class="birthday_date-position">
-                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy" />
+                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
                                         <span class="error" id="err_birthday_date"></span>
                                     </div>
                                 </div>
@@ -748,6 +748,14 @@
     $(document).ready(function () {
         
         $(".dobdate").keyup(function(){
+            if ($(this).val().length == 2){
+                $(this).val($(this).val() + "/");
+            }else if ($(this).val().length == 5){
+                $(this).val($(this).val() + "/");
+            }
+        });
+
+        $(".birthday").keyup(function(){
             if ($(this).val().length == 2){
                 $(this).val($(this).val() + "/");
             }else if ($(this).val().length == 5){

@@ -478,7 +478,7 @@ if(isset($cart["cart_item"])){
                             </ul>
 							<!--<a href="{{route('pricedetails')}}" class="btn btn-list-business business-sp">Price detail</a>-->
 
-							<!-- <a href="{{route('senddummymail')}}" class="btn btn-list-business business-sp">sendMail</a> -->
+							<?php /*?><a href="{{route('senddummymail')}}" class="btn btn-list-business business-sp">sendMail</a> <?php */?>
 
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>

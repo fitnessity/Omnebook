@@ -5,10 +5,10 @@ namespace App;
 
 
 use App\User;
-
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
-
+use Carbon\Carbon;
 
 class UserBookingDetail extends Model
 
@@ -55,6 +55,12 @@ class UserBookingDetail extends Model
     public function business_services(){
 
         return $this->belongsTo(BusinessServices::class, 'sport');
+
+    }
+
+    public function business_price_details(){
+
+        return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
 
     }
 
@@ -122,5 +128,24 @@ class UserBookingDetail extends Model
         }    
     }
 
+    public function decodeparticipate(){
+        $participate =  json_decode($this->participate,true);
+        $all_pr = '';
+        if(!empty($participate) && count($participate)>0){
+            foreach($participate as $pr){
+                if($pr['from'] == "user"){
+                    $name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
+                    $all_pr .= $name.' </br> ';
+                }else{
+                    $familydata = UserFamilyDetail::select('first_name','last_name','birthday')->where('id',$pr['id'])->first();
+                    if( $familydata != ''){
+                        $name = $familydata->first_name.' '.$familydata->last_name .' ( age '. Carbon::parse($familydata->birthday)->age .' ) ';
+                        $all_pr .= $name.' </br> ';
+                    }
+                }
+            }
+        }
+        return  rtrim($all_pr,' </br> ');
+    }
 }
 

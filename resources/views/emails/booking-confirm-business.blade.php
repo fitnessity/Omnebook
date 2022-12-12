@@ -10,6 +10,7 @@ use App\BusinessService;
 use App\BusinessActivityScheduler;
 use App\UserBookingDetail;
 use App\UserFamilyDetail;
+use App\StaffMembers;
 
 	$sc_date = "—";
 	$Datebooked = "—";
@@ -68,6 +69,7 @@ use App\UserFamilyDetail;
 	    }
 
 	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $company_id = @$BookingDetail1['businessuser']['id'];
 	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
 	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];
 	    $program_name = @$BookingDetail1['businessservices']['program_name'];
@@ -81,6 +83,13 @@ use App\UserFamilyDetail;
 	    $contact_number = @$BookingDetail1['businessuser']['contact_number'];
 	    $service_type = @$BookingDetail1['businessservices']['service_type'];
 	    $program_desc = @$BookingDetail['businessservices']['program_desc'];
+
+	    $instructor_name = @$bususername;
+	    $instructor_id = @$BookingDetail1['businessservices']['instructor_id'];
+	    if($instructor_id != ''){
+	    	$instructor_dta = StaffMembers::select('name')->where('id',$instructor_id)->first();
+	    	$instructor_name = $instructor_dta->name;
+	    }
 	}
 
 	foreach ($cart as $key => $value) {
@@ -243,7 +252,7 @@ use App\UserFamilyDetail;
 
 																		</tr>
 
-																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="{{$url}}/personal-profile/booking-info">VIEW BOOKINGS</a></td></tr>
+																		<tr><td style="font-size: 20px;  text-align: center;padding-top: 42px;"><a style="border: none;font-weight: 600;border-radius: 10px;padding: 7px;color: white;background-color: #fe0000; box-shadow: 10px 10px;text-decoration: none; font-size: 18px;" href="{{$url}}/manage/service/{{@$company_id}}">VIEW BOOKINGS</a></td></tr>
 
                                                                     </table>
 
@@ -761,7 +770,7 @@ use App\UserFamilyDetail;
 
 																			<td>
 
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$bususername }}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$instructor_name }}</h2>
 
 																			</td>
 
