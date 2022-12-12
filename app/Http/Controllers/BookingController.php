@@ -1605,10 +1605,10 @@ class BookingController extends Controller {
                         <h4 class="modal-title">View Your bookings for '.$p_name.'</h4>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-sm-12">
                     <div class="modal-inner-txt">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-4">
                                 <div class="date-activity-scheduler">
                                     <label for="">Date:</label>
                                     <div class="activityselect3 special-date">
@@ -1619,12 +1619,12 @@ class BookingController extends Controller {
                                 </div>
                             </div>
 
-                            <div class="col-md-3 col-xs-12 col-sm-6">
+                            <div class="col-md-3 col-xs-12 col-sm-4">
                                 <div class="date-info">
                                     <label>Today Date:</label><span> '.date('m/d/Y',strtotime($request->date)).'</span>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-xs-12 col-sm-6">
+                            <div class="col-md-3 col-xs-12 col-sm-4">
                                 <div class="date-info">
                                     <label>Total Bookings:</label><span>'.count($data).'</span>
                                 </div>
@@ -1668,7 +1668,7 @@ class BookingController extends Controller {
                                     <label class="manage-service-display">Name: </label><span> '.$count.'. '.Auth::user()->firstname.' '.Auth::user()->lastname.' </span>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y').'   </span>
+                                    <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y',strtotime($request->date)).'   </span>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="manage-service-display">Whos Participating: </label><span> '. nl2br($participate).'</span>

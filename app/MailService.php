@@ -2,6 +2,7 @@
 namespace App;
 use Mail;
 use App\User;
+use App\Customer;
 use App\Miscellaneous;
 use App\Newsletter;
 use App\UserFamilyDetail;
@@ -632,6 +633,20 @@ class MailService
 
         });
 
+    } 
+
+    public static function sendEmailVerifiedAcknowledgementcustomer($id,$business_id)
+    {
+        $user = Customer::findOrFail($id);
+        $businessdata = CompanyInformation::findOrFail($business_id);
+        Mail::send('emails.email-verified-acknowledgement-customer-from-provider', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+        });
+        Mail::send('emails.email-verified-acknowledgement-customer-from-fitnessity', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+        });
     }
 
     public static function sendEmailSportCategoryChange($mailObj){

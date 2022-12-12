@@ -3,7 +3,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Excel;
+use App\Exports\ExportCustomer;
 use Session;
 use App\MailService;
 use Redirect;
@@ -15,6 +16,7 @@ use Hash;
 use Validator;
 use View;
 use Mail;
+use Config;
 use Carbon\Carbon;
 
 use App\Repositories\CustomerRepository;
@@ -24,6 +26,7 @@ use App\BusinessCompanyDetail;
 use App\BusinessServices;
 use App\User;
 use App\Customer;
+use App\CustomerFamilyDetail;
 
 use Request as resAll;
 
@@ -44,7 +47,7 @@ class CustomerController extends Controller {
      
     }
 
-    public function manage_customer (){
+    public function manage_customer (Request $request){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];
         if(!empty($companyId)) {
@@ -58,16 +61,112 @@ class CustomerController extends Controller {
 		foreach ($customer_data as $topic) {
 		  $orderedcustomers[strtoupper($topic['fname'][0])][] = $topic;
 		}
+        $html = '';
+        if($request->ajax()){
+            $data_cus = $this->customers->findByfname($request->inpuval); 
+            $data_cusary= array();
+            foreach ($data_cus as $topic) {
+              $data_cusary[strtoupper($topic['fname'][0])][] = $topic;
+            }
+            $html .= '<div class="total-clients">
+                        <i class="fas fa-user-circle"></i>
+                        <label>You Have '.count($data_cus).' Clients</label>
+                    </div>
+                    <div class="panel-group" id="accordion-customer">';
+                        $i= 0;
+                        foreach ($data_cusary as $section=>$cust) {
+                            $html .= '<div class="custom-panel panel panel-default">
+                            <div class="custom panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-customer" href="#collapse_'.$i.'"> '.$section.'
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_'.$i.'" class="panel-collapse collapse';
+                            if($i == 0){
+                                $html .=' show in';
+                            }
+                            $html .='" data-parent="#accordion-customer">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">';
+                                            foreach ($cust as $dt) {
+                                                $age = Carbon::parse($dt->birthdate)->age; 
+                                            $html .='<div class="collapse-inner-box mrb-2">
+                                                <div class="row">
+                                                    <div class="col-md-1 col-xs-3 col-sm-1">
+                                                        <div class="collapse-img">
+                                                            '.$dt->getimage().'
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-xs-8 col-sm-2">
+                                                        <div class="client-name">
+                                                            <span>'.$dt->fname.' '.$dt->lname.'</span>
+                                                            <p>Last Attended: 20/09/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1 col-xs-12 col-sm-1">
+                                                        <div class="client-age">
+                                                            <span>Age: '.$age.'</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-xs-12 col-sm-2">
+                                                        <div class="client-status">
+                                                            <label>Status: </label>
+                                                            
+                                                            <span class="green-fonts">';
+                                                                if($dt->status == 0)
+                                                                    $html .='InActive';
+                                                                else
+                                                                    $html .='Active';
+                                                            $html .='</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-xs-12 col-sm-3">
+                                                        <div class="client-status">
+                                                            <label>Active Memberships: </label>
+                                                            <span class="green-fonts">2</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-xs-12 col-sm-2">
+                                                        <div class="client-status">
+                                                            <label>Expiring Soon: </label>
+                                                            <span class="red-fonts">1</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1 col-xs-12 col-sm-1">
+                                                        <div class="client-status">
+                                                            <a href="'.Config::get('constants.SITE_URL').'/viewcustomer/'.$dt->id.'">View</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> ';
+                                            }                          
+                                        $html .='</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $("#collapse_'.$i.'").click(function(){
+                                $(".panel-collapse").removeClass(" show in");
+                                $("#collapse_'.$i.'").addClass(" show in");
+                            });
+                        </script>';
+                        $i++;  
+                       }
+                    $html .='</div>';
+                    return $html;
+        }
 
 		//print_r($orderedcustomers);exit;
         return view('customers.manage-customer', [
             'companyId'=>$companyId,
-             'business_details' => $business_details,
+            'business_details' => $business_details,
             'companyservice' => $companyservice,
             'customers' =>$orderedcustomers,
             'customer_count' => count($customer_data),
         ]); 
-        //return view('profiles.manage-customer');
     }
 
     public function searchcustomersaction(Request $request) {
@@ -76,7 +175,7 @@ class CustomerController extends Controller {
             $array_data=array();
             $query = $request->get('query');
           
-            $data_cus = Customer::where('fname', 'LIKE', "%{$query}%")->get();
+            $data_cus = $this->customers->findByfname($query); 
            
             foreach($data_cus as $cuss)
             {	
@@ -132,12 +231,46 @@ class CustomerController extends Controller {
         }
 
         $customerdata = $this->customers->findById($id);
+        $date =  new Carbon($customerdata->birthdate);
+        $bdate = $date->format('F jS\,  Y');
+        $sincedate = date('m/d/Y',strtotime($customerdata->created_at));
+        $location = '';
+        $address = '';
+        if($customerdata->address != ''){
+            $address .= $customerdata->address.', ';
+        }
+        if($customerdata->city != ''){
+            $address .= $customerdata->city.', ';
+        }
+        if($customerdata->state != ''){
+            $address .= $customerdata->state.' '.$customerdata->zipcode.', ';
+            $location .= $customerdata->state.', ';
+        }
+        if($customerdata->country != ''){
+            $address .= $customerdata->country;
+            $location .= $customerdata->country;
+        }
+
+        $familydata  = CustomerFamilyDetail::select('first_name','last_name','relationship','birthday')->where('cus_id',$customerdata->id)->get();
+        /*$familydata  = $customerdata->CustomerFamilyDetail();*/
+        //print_r($familydata);exit;
         return view('customers.viewcustomer', [
              'business_details' => $business_details,
             'companyservice' => $companyservice,
             'customerdata'=>$customerdata,
+            'bdate'=>$bdate,
+            'age'=>$customerdata->getcustage(),
+            'sincedate'=>$sincedate,
+            'address'=>$address,
+            'location'=>$location,
+            'familydata'=>$familydata,
         ]);
         //return view('profiles.viewcustomer');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ExportCustomer($request->id,$request->chk), 'customer.xlsx');
     }
 
 

@@ -13,7 +13,9 @@ use Str;
 use App\MailService;
 use DB;
 use Validator;
+use Input;
 use App\Customer;
+use App\CustomerFamilyDetail;
 
 use App\Miscellaneous;
 use App\Repositories\CustomerRepository;
@@ -151,7 +153,6 @@ class RegistrationController extends Controller
 
     public function saveaddressCustomer(Request $request)
     {
-        
         $customers = Customer::where('id',$request->cust_id)->first();
         $customers->address=$request->address;
         $customers->country=$request->country;
@@ -161,7 +162,8 @@ class RegistrationController extends Controller
         /*$customers->latitude=$request->lat;
         $customers->longitude=$request->lon;*/
         $customers->save();
-        $url = '/viewcustomer/'.$request->id;
+        MailService::sendEmailVerifiedAcknowledgementcustomer($customers->id,$customers->business_id);
+        $url = '/viewcustomer/'.$request->cus_id;
         return response()->json(['status'=>200,'redirecturl'=>$url]);
     }
 
@@ -170,14 +172,43 @@ class RegistrationController extends Controller
         $customers = Customer::where('id',$request->cust_id)->first();
         if ($request->hasFile('file_upload_profile')) {
             $name = $request->file('file_upload_profile')->getClientOriginalName();
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR;
+            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers' ;
+            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers';
     
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-    
-            $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('file_upload_profile'), $file_upload_path, 1, $thumb_upload_path, '415', '354');
-            $customers->profile_pic =  $image_upload['filename']; 
+            /*  $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('file_upload_profile'), $file_upload_path, 1, $thumb_upload_path, '415', '354');*/
+            //$customers->profile_pic =  $image_upload['filename']; 
         }
         $customers->save();
         return response()->json(['status'=>200]);
+    }
+
+    public function submitFamilyCustomer(Request $request) {
+        $postArr = $request->all();
+       
+        if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
+            $family = new CustomerFamilyDetail();
+        else
+            $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
+
+        $family->cus_id = Input::get('cust_id');
+        $family->first_name = Input::get('first_name');
+        $family->last_name = Input::get('last_name');
+        $family->email = Input::get('email');
+        $family->mobile = Input::get('mobile');
+        $family->gender = Input::get('gender');
+        $family->relationship = Input::get('relationship');
+        $family->emergency_contact = Input::get('emergency_contact');
+        $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
+        $family->save();
+
+        $url = '/viewcustomer/'.$request->cust_id;
+        $response = array(
+            'type' => 'success',
+            'msg' => 'Successfully added family member',
+            'redirecturl' => $url,
+        );
+
+        return Response::json($response);
+        
     }
 }

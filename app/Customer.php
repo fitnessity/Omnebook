@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notifiable;
 use App\CompanyInformation;
 use File;
 
+use Carbon\Carbon;
+
 class Customer extends Authenticatable
 {
 
@@ -59,6 +61,15 @@ class Customer extends Authenticatable
             $html = '<div class="company-list-text"><p>'.$pf.'</p></div>';
         }
         return $html;
+    }
+
+    public function getcustage(){
+        return Carbon::parse($this->birthdate)->age;
+    }
+
+    public function CustomerFamilyDetail()
+    {
+        return $this->hasMany(CustomerFamilyDetail::class, 'cus_id');
     }
     
 }

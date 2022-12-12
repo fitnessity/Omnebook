@@ -23171,3 +23171,42 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	padding:50px; 
 	min-height:500px;
 }
+
+.pac-container {
+        z-index: 1000000 ;
+    }
+.heading-step{
+    text-align: left;
+    margin: 30px;
+    color: red;
+}
+.manage-customer-from form select{
+	padding: 7px;
+	color: #04344d;
+	border: 2px solid #04344d;
+	font-size: 16px;
+	outline: none;
+	border-radius: 16px;
+	min-height: 45px;
+	display: block;
+	float: none;
+	margin: 20px auto;
+	width: 70%;
+	font-style: italic;
+	height: 15px;
+}
+.manage-customer-from-step-two .form-group input{
+	padding: 7px;
+	color: #04344d;
+	border: 2px solid #04344d;
+	font-size: 16px;
+	outline: none;
+	border-radius: 16px;
+	min-height: 45px;
+	display: block;
+	float: none;
+	margin: 20px auto;
+	width: 100%;
+	font-style: italic;
+	height: 15px;	
+}
