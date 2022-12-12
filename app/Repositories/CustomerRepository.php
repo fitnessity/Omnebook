@@ -7,6 +7,7 @@ use App\Sports;
 use App\SocialAccount;
 use DB;
 use Auth;
+use Carbon\Carbon;
 use App\UserEmploymentHistory;
 use App\UserProfessionalDetail;
 use App\CompanyInformation;
@@ -38,4 +39,10 @@ class CustomerRepository
         }
         return true;
     }
+
+    public function findByfname($query)
+    {
+        return Customer::where('fname', 'LIKE', "%{$query}%")->orderBy('fname', 'ASC')->get();
+    }
+
 }

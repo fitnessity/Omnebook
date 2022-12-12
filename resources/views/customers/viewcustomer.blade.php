@@ -2,7 +2,9 @@
 @section('content')
 @include('layouts.userHeader')
 
-
+@php 
+	use Carbon\Carbon;
+@endphp
 
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
@@ -73,7 +75,7 @@
 										<label>Address</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>123abc, New York, NY 10023, USA</span>
+										<span>{{$address}}</span>
 									</div>
 								</div>
 								<div class="row">
@@ -92,7 +94,7 @@
 											<label>Birthday</label>
 										</div>
 										<div class="col-md-7 col-xs-7">
-											<span>June 17th, 1982</span>
+											<span>{{$bdate}}</span>
 										</div>
 									</div>
 								</div>
@@ -101,7 +103,7 @@
 										<label>Age</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>30 Years Old</span>
+										<span>{{$age}} Years Old</span>
 									</div>
 								</div>
 								<div class="row">
@@ -109,7 +111,7 @@
 										<label>Gender</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>Female</span>
+										<span>{{$customerdata->gender}} </span>
 									</div>
 								</div>
 								<div class="row">
@@ -117,10 +119,9 @@
 										<label>Location</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>New York, USA</span>
+										<span>{{$location}}</span>
 									</div>
 								</div>
-								@php $sincedate = date('m/d/Y',strtotime($customerdata->created_at)); @endphp
 								<div class="row">
 									<div class="col-md-5 col-xs-5">
 										<label>Customers Since</label>
@@ -260,21 +261,24 @@
 												</div>
 											</div>
 										</div>
+										@foreach($familydata as $index=>$fdata)
+										@php $age =  Carbon::parse($fdata->birthday)->age;@endphp
 										<div class="row">
 											<div class="col-md-4 col-xs-12">
-												<span>1.</span>
+												<span>{{$index+1}}.</span>
 												<label>Name:</label>
-												<span>Erica Santana </span>
+												<span>{{$fdata->first_name}} {{$fdata->last_name}} </span>
 											</div>
 											<div class="col-md-4 col-xs-12">
 												<label>Relationship: </label>
-												<span> Wife</span>
+												<span>{{$fdata->relationship}}</span>
 											</div>
 											<div class="col-md-4 col-xs-12">
 												<label>Age</label>
-												<span>(38yrs 4mon.)</span>
+												<span>({{$age}})</span>
 											</div>
 										</div>
+										@endforeach
 									</div>
 									
 									<div class="manage-cust-box second-box-height">

@@ -1,7 +1,9 @@
 @extends('layouts.header')
 @section('content')
 @include('layouts.userHeader')
-
+@php 
+	use Carbon\Carbon;
+@endphp
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
         <div class="col-md-2 col-sm-12" style="background: black;">
@@ -20,14 +22,14 @@
 							</div>
 							<div class="col-md-5">
 								<div class="manage-search">
-									<form method="get" action="/activities/">
-										<input type="text" name="label" id="" placeholder="Search for client" autocomplete="off" value="">
-										<button id="serchbtn"><i class="fa fa-search"></i></button>
+									<form>
+										<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
+										<button><i class="fa fa-search"></i></button>
 									</form>
 								</div>
 							</div>
 							<div class="col-md-3">
-								<button type="button" class="btn-nxt search-btn-sp">Search</button>
+								<button  id="serchbtn" type="button" class="btn-nxt search-btn-sp" onclick="getcustomerlist();">Search</button>
 							</div>
 						</div>
 					</div>
@@ -43,12 +45,12 @@
 				<div class="col-md-6 col-xs-12">
 					<div class="staff-main">
 						<button type="button" class="btn-bck">Import List</button>
-						<button type="button" class="btn-nxt">Export List</button>
+						<button type="button" class="btn-nxt" onclick="exportcustomer();">Export List</button>
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12 col-xs-12">
+				<div class="col-md-12 col-xs-12" id="customerlist">
 					<div class="total-clients">
 						<i class="fas fa-user-circle"></i>
 						<label>You Have {{$customer_count}} Clients</label>
@@ -69,6 +71,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											@foreach ($cust as $dt) 
+											@php $age = $dt->getcustage(); @endphp
 											<div class="collapse-inner-box mrb-2">
 												<div class="row">
 													<div class="col-md-1 col-xs-3 col-sm-1">
@@ -85,7 +88,7 @@
 													</div>
 													<div class="col-md-1 col-xs-12 col-sm-1">
 														<div class="client-age">
-															<span>Age: 32</span>
+															<span>Age: {{$age}}</span>
 														</div>
 													</div>
 													<div class="col-md-2 col-xs-12 col-sm-2">
@@ -127,13 +130,12 @@
 						</div>
 						<script type="text/javascript">
 							$("#collapse_{{$i}}").click(function(){
-								$(".panel-collapse").removeClass('in');
-								$("#collapse_{{$i}}").addClass('in');
+								$(".panel-collapse").removeClass(' show in');
+								$("#collapse_{{$i}}").addClass(' show in');
 							});
 						</script>
 						@php  $i++;  @endphp
 						@endforeach
-						
 					</div>
 				</div>
 			</div>
@@ -162,7 +164,7 @@
 						<div class="manage-customer-from">
 							<div id="divstep1">
 								<form id="frmregister" method="post">
-									<h4 >Step 1</h4>
+									<h4 class="heading-step">Step 1</h4>
 									<div id='systemMessage' class="alert-msgs"></div>
 	                    			<input type="hidden" name="_token" value="{{csrf_token()}}">
 	                    			<input type="hidden" name="business_id" value="{{$companyId}}">
@@ -170,7 +172,7 @@
 									<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
 									<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
-									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
+									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('contact')">
 									<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 									<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 									<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
@@ -222,6 +224,7 @@
 
 							<div id="divstep3" style="display:none;">
 								<form action="#">
+									<h4 class="heading-step">Step 2</h4>
 									<input type="hidden" name="cust_id" id="cust_id" value="">
 				                    <div class="sign-step_3">
 				                        <div class="filledstep-bar">
@@ -262,6 +265,7 @@
 
 							<div id="divstep4" style="display:none;">
 								<form action="#">
+									<h4 class="heading-step">Step 3</h4>
 				                    <div class="sign-step_4">
 				                        <div class="filledstep-bar">
 				                            <div class="row">
@@ -285,29 +289,29 @@
 				                                </ul>
 				                                
 				                                <div class="tab-content">
-				                                    <div id="add_personel_info" class="tab-pane fade in active">
+				                                    <div id="add_personel_info" class="tab-pane fade in active manage-customer-from-step-two">
 				                                        <div class='error' id='systemMessage'></div>
 				                                        <div class="form-group">
-				                                            <input type="text" name="address_sign" id="address_sign" placeholder="Address" class="form-control b_address" >
+				                                        	<input type="text" class="form-control" autocomplete="nope" name="Address" id="b_address" placeholder="Address" value="">
 				                                            <span class="error" id="err_address_sign"></span>
 				                                        </div>
 				                                        <div id="map" style="display: none;"></div>
 				                                        <input type="hidden" name="lon" id="lon" value="">
 				                                        <input type="hidden" name="lat" id="lat" value="">
 				                                        <div class="form-group">
-				                                            <input type="text" name="country_sign" id="country_sign" placeholder="Country" class="form-control b_country">
+				                                            <input type="text" class="form-control" name="Country" id="b_country" size="30" placeholder="Country" value="" maxlength="20">
 				                                            <span class="error" id="err_country_sign"></span>
 				                                        </div>
 				                                        <div class="form-group">
-				                                            <input type="text" name="city_sign" id="city_sign" placeholder="City" class="form-control b_city">
+				                                            <input type="text" class="form-control" name="City" id="b_city" size="30" placeholder="City" maxlength="50" value="">
 				                                            <span class="error" id="err_city_sign"></span>
 				                                        </div>
 				                                        <div class="form-group">
-				                                            <input type="text" name="state_sign" id="state_sign" placeholder="State" class="form-control b_state">
+				                                            <input type="text" class="form-control" name="State" id="b_state" size="30" placeholder="State" maxlength="50" value="">
 				                                            <span class="error" id="err_state_sign"></span>
 				                                        </div>
 				                                        <div class="form-group">
-				                                            <input type="text" name="zipcode_sign" id="zipcode_sign" placeholder="Zipcode" class="form-control b_zipcode">
+				                                            <input type="text" class="form-control" name="ZipCode" id="b_zipcode" size="30" placeholder="Zip Code" value="" maxlength="20">
 				                                            <span class="error" id="err_zipcode_sign"></span>
 				                                        </div>
 				                                        <div class="signup-step-btn">
@@ -340,6 +344,7 @@
 
 							<div id="divstep5" style="display:none;">
 								<form action="#" enctype="multipart/form-data" id="myformprofile">
+									<h4 class="heading-step">Step 4</h4>
 				                    <div class="sign-step_4">
 				                        <div class="filledstep-bar">
 				                            <div class="row">
@@ -394,6 +399,7 @@
 
 							<div id="divstep6" style="display:none;">
 								<form action="#">
+									<h4 class="heading-step" >Step 5</h4>
 				                    <div class="sign-step_5">
 				                        <div class="filledstep-bar">
 				                            <div class="row">
@@ -420,7 +426,7 @@
 				                                </div>
 				                                <div>
 				                                    <div class="birthday_date-position">
-				                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy" />
+				                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
 				                                        <span class="error" id="err_birthday_date"></span>
 				                                    </div>
 				                                </div>
@@ -456,7 +462,6 @@
 				                                    <span class="error" id="err_gender"></span>
 				                                </div>
 				                                <div class="form-group">
-				                                    <label for="">Email</label>
 				                                    <input type="email" name="emailid" id="emailid" class="form-control email" placeholder="Email">
 				                                    <span class="error" id="err_emailid"></span>
 				                                </div>
@@ -498,8 +503,110 @@
 <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
 @include('layouts.footer')
 <script type="text/javascript">
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('b_address');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                  $('#b_country').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#b_address').val(sublocality_level_1);
+            }else{
+              $('#b_address').val(badd);
+            }
+            
+            $('#modeladdress').html('Business Address : ' + place.formatted_address);
+            $('#lat').val(place.geometry.location.lat());
+            $('#lon').val(place.geometry.location.lng());
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+
+<script type="text/javascript">
 	$(document).ready(function () {
-		$("#collapse_0").addClass('in');
+		$("#collapse_0").addClass('show in');
 
 		$("#business_name").keyup(function() {
             $.ajax({
@@ -518,6 +625,14 @@
         });
 
 		$(".dobdate").keyup(function(){
+            if ($(this).val().length == 2){
+                $(this).val($(this).val() + "/");
+            }else if ($(this).val().length == 5){
+                $(this).val($(this).val() + "/");
+            }
+        });
+
+        $(".birthday").keyup(function(){
             if ($(this).val().length == 2){
                 $(this).val($(this).val() + "/");
             }else if ($(this).val().length == 5){
@@ -634,11 +749,11 @@
 
 	    $(document).on('click', '#step4_next', function () {
         
-	        var address_sign = $('#address_sign').val();
-	        var country_sign = $('#country_sign').val();
-	        var city_sign = $('#city_sign').val();
-	        var state_sign = $('#state_sign').val();
-	        var zipcode_sign = $('#zipcode_sign').val();
+	        var address_sign = $('#b_address').val();
+	        var country_sign = $('#b_country').val();
+	        var city_sign = $('#b_city').val();
+	        var state_sign = $('#b_state').val();
+	        var zipcode_sign = $('#b_zipcode').val();
 	        var lon = $('#lon').val();
 	        var lat = $('#lat').val();
 	        
@@ -730,8 +845,152 @@
 	            }
 	        });
     	});
-  	});
 
+    	$(document).on('click', '#step5_next', function () {
+        
+	        var fname = $('#fname').val();
+	        var lname = $('#lname').val();
+	        var birthday_date = $('#birthday_date').val();
+	        var relationship = $('#relationship').val();
+	        var mphone = $('#mphone').val();
+	        var gender = $('#gender').val();
+	        var emailid = $('#emailid').val();
+	        
+	        $('#err_fname').html('');
+	        $('#err_lname').html('');
+	        $('#err_birthday_date').html('');
+	        $('#err_relationship').html('');
+	        $('#err_mphone').html('');
+	        $('#err_gender').html('');
+	        $('#err_emailid').html('');
+	        
+	        if(fname == ''){
+	            $('#err_fname').html('Please enter first name');
+	            $('#fname').focus();
+	            return false;
+	        }
+	        if(lname == ''){
+	            $('#err_lname').html('Please enter last name');
+	            $('#lname').focus();
+	            return false;
+	        }
+	        if(birthday_date == ''){
+	            $('#err_birthday_date').html('Please enter birth date');
+	            $('#birthday_date').focus();
+	            return false;
+	        }
+	        if(relationship == ''){
+	            $('#err_relationship').html('Please select relationship');
+	            $('#relationship').focus();
+	            return false;
+	        }
+	        if(mphone == ''){
+	            $('#err_mphone').html('Please enter mobile number');
+	            $('#mphone').focus();
+	            return false;
+	        }
+	        if(gender == ''){
+	            $('#err_gender').html('Please select gender');
+	            $('#gender').focus();
+	            return false;
+	        }
+	        if(emailid == ''){
+	            $('#err_emailid').html('Please enter emailid');
+	            $('#emailid').focus();
+	            return false;
+	        }
+	        
+	        var posturl = '/submitfamilyCustomer';
+	        var formdata = new FormData();
+	        formdata.append('_token', '{{csrf_token()}}')
+	        formdata.append('first_name', $('.first_name').val())
+	        formdata.append('last_name', $('.last_name').val())
+	        formdata.append('email', $('.email').val())
+	        formdata.append('relationship', $('.relationship').val())
+	        formdata.append('mobile_number', $('.mobile_number').val())
+	        formdata.append('emergency_phone', $('.emergency_phone').val())
+	        formdata.append('birthday', $('#birthday_date').val())
+	        formdata.append('gender', $('.gender').val())
+	        formdata.append('cust_id', $('#cust_id').val())
+
+	        setTimeout(function () {
+	            $.ajax({
+	                url: posturl,
+	                type: 'POST',
+	                dataType: 'json',
+	                data: formdata,
+	                processData: false,
+	                contentType: false,
+	                headers: {
+	                    'X-CSRF-TOKEN': $("#_token").val()
+	                },
+	                beforeSend: function () {
+	                    $('#step5_next').prop('disabled', true).css('background','#999999');
+	                  
+	                    $("#systemMessage").html('Please wait while we submitting the data.')
+	                },
+	                complete: function () {
+	                    $('#step5_next').prop('disabled', true).css('background','#999999');
+	                },
+	                success: function (response) {
+	                    $("#systemMessage").html(response.msg);
+	                    if (response.type === 'success') {
+	                        window.location.href = response.redirecturl;
+	                    } else {
+	                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
+	                    }
+	                }
+	            });
+	        }, 1000)
+	    });
+
+	    $(document).on('click', '#skip5_next', function () {
+	    	window.location.href = '/viewcustomer/'+$('#cust_id').val();
+	    });
+	});
+
+	function getcustomerlist(){
+		var inpuval = $('#serchclient').val();
+	
+		$.ajax({
+			url:'{{route("manage-customer")}}',
+			type:"GET",
+			data:{
+				inpuval:inpuval
+			},
+			success:function(response){
+				$('#customerlist').html(response);
+			}
+		});
+	}
+
+	function exportcustomer(){
+		var inpuval = $('#serchclient').val();
+		let chk = '';
+		let id = '';
+		/*alert(id);
+		alert(inpuval);*/
+		if(inpuval == '' || inpuval == 'undefined'){
+			chk = 'empty';
+			id = '{{$companyId}}';
+		}else{
+			chk = 'notempty';
+			id = inpuval;
+		}
+
+		$.ajax({
+			url:'{{route("export")}}',
+			type:"GET",
+			data:{
+
+				chk:chk,
+				id:id,
+			},
+			success:function(response){
+				
+			}
+		});
+	}
 
 	function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -748,7 +1007,7 @@
     }
 
     function registerUser() {
-
+    	
        /* var valchk = getAge();*/
         var validForm = $('#frmregister').valid();
         var posturl = '/customers/registration';
@@ -778,7 +1037,7 @@
                         $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
                         showSystemMessages('#systemMessage', response.type, response.msg);
                         if (response.type === 'success') {
-                        	$("#frmregister")[0].reset();
+                        	// $("#frmregister")[0].reset();
                         	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
                         	$("#divstep1").css("display","none");
                         	$("#divstep3").css("display","block");
@@ -795,122 +1054,17 @@
         }*/
     }
 
-    function searchclick(cid){
-        window.location.href = "viewcustomer/"+cid;
-    }
-
-    function changeformate() {
+    function changeformate_fami_pho(idname) {
         /*alert($('#contact').val());*/
-        var con = $('#contact').val();
+        var con = $('#'+idname).val();
         var curchr = con.length;
         if (curchr == 3) {
-            $("#contact").val("(" + con + ")" + "-");
+            $('#'+idname).val("(" + con + ")" + "-");
         } else if (curchr == 9) {
-            $("#contact").val(con + "-");
+            $('#'+idname).val(con + "-");
         }
     }
+
 </script>
-<script type="text/javascript">
-        function initMap() {
-            
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: -33.8688, lng: 151.2195},
-                    zoom: 13
-                });
-                var input = document.getElementById('address_sign');
-                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-                var autocomplete = new google.maps.places.Autocomplete(input);
-                autocomplete.bindTo('bounds', map);
-
-                var infowindow = new google.maps.InfoWindow();
-                var marker = new google.maps.Marker({
-                    map: map,
-                    anchorPoint: new google.maps.Point(0, -29)
-                });
-
-                autocomplete.addListener('place_changed', function() {
-                    infowindow.close();
-                    marker.setVisible(false);
-                    var place = autocomplete.getPlace();
-                    if (!place.geometry) {
-                        window.alert("Autocomplete's returned place contains no geometry");
-                        return;
-                    }
-              
-                    // If the place has a geometry, then present it on a map.
-                    if (place.geometry.viewport) {
-                        map.fitBounds(place.geometry.viewport);
-                    } else {
-                        map.setCenter(place.geometry.location);
-                        map.setZoom(17);
-                    }
-                    marker.setIcon(({
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(35, 35)
-                    }));
-                    marker.setPosition(place.geometry.location);
-                    marker.setVisible(true);
-                
-                    var address = '';
-                    var badd = '';
-                    var sublocality_level_1 = '';
-                    if (place.address_components) {
-                        address = [
-                          (place.address_components[0] && place.address_components[0].short_name || ''),
-                          (place.address_components[1] && place.address_components[1].short_name || ''),
-                          (place.address_components[2] && place.address_components[2].short_name || '')
-                        ].join(' ');
-                    }
-                
-                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-                    infowindow.open(map, marker);
-                    alert(place.address_components.length);
-                    // Location details
-                    for (var i = 0; i < place.address_components.length; i++) {
-                        if(place.address_components[i].types[0] == 'postal_code'){
-                          $('#zipcode_sign').val(place.address_components[i].long_name);
-                        }
-                   
-                        if(place.address_components[i].types[0] == 'locality'){
-                            $('#city_sign').val(place.address_components[i].long_name);
-                        }
-
-                        if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                            sublocality_level_1 = place.address_components[i].long_name;
-                        }
-
-                        if(place.address_components[i].types[0] == 'country'){
-                            $('#country_sign').val(place.address_components[i].long_name);
-                        }
-
-                        if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                             $('#state_sign').val(place.address_components[i].long_name);
-                        }
-
-                        if(place.address_components[i].types[0] == 'street_number'){
-                           badd = place.address_components[i].long_name ;
-                        }
-
-                        if(place.address_components[i].types[0] == 'route'){
-                           badd += ' '+place.address_components[i].long_name ;
-                        } 
-                    }
-                    if(badd == ''){
-                      $('#address_sign').val(sublocality_level_1);
-                    }else{
-                      $('#address_sign').val(badd);
-                    }
-                    $('#lat').val(place.geometry.location.lat());
-                    $('#lon').val(place.geometry.location.lng());
-                    
-                });
-            
-        }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 
 @endsection

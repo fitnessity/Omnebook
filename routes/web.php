@@ -930,6 +930,7 @@ Route::namespace('Customers_Auth')->group(function(){
     Route::post('/customers/savegender', 'RegistrationController@saveGenderCustomer')->name('customers-savegender');
     Route::post('/customers/saveaddress', 'RegistrationController@saveaddressCustomer')->name('customers-saveaddress');
     Route::post('/customers/savephoto', 'RegistrationController@savephotoCustomer')->name('customers-savephoto');
+    Route::post('/submitfamilyCustomer','RegistrationController@submitFamilyCustomer');
 
     /*Route::group(['prefix'  =>  'customers','middleware' => ['auth:customers']], function () {
     });*/
@@ -938,4 +939,5 @@ Route::namespace('Customers_Auth')->group(function(){
 Route::get('manage-customer','CustomerController@manage_customer')->name('manage-customer');
 Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
 Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
+Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
 
