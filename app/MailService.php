@@ -2,6 +2,7 @@
 namespace App;
 use Mail;
 use App\User;
+use App\Customer;
 use App\Miscellaneous;
 use App\Newsletter;
 use App\UserFamilyDetail;
@@ -21,19 +22,19 @@ class MailService
      * @return Response
      */
     public static function sendEmaildummy($id){
-       return mail('contact@valormmany.com','Testing mail','hello');
+      // return mail('contact@valormmany.com','Testing mail','hello');
        
-        //$user = User::findOrFail($id);
-        /*Mail::send('emails.dummytestmail', ['user' => $user], function ($m) use ($user) {
-            $m->from('noreply@fitnessity.co', 'Fitnessity');
-            $m->to('contact@valormmany.com')->subject('Welcome!');
+        $user = User::findOrFail($id);
+        Mail::send('emails.dummytestmail', ['user' => $user], function ($m) use ($user) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to('contact@valormmanyc.com')->subject('Welcome!');
         });
 
         if(Mail::failures()){
             return 'fail';
         }else{
             return 'success';
-        }*/
+        }
     }
 
     public static function sendEmailReminder($id)
@@ -226,7 +227,7 @@ class MailService
         foreach($BookingDetail as $bd1){
             $username = $bd1['user']['firstname'].' '.$bd1['user']['lastname'];
             $useremail  = $bd1['user']['email'];
-            $bususeremail  = $bd1['businessuser']['email'];
+            $bususeremail  = $bd1['businessuser']['business_email'];
             $bususername = $bd1['businessuser']['first_name'].' '.$bd1['businessuser']['last_name'];
         }
         Mail::send('emails.booking-confirm', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList,'useremail'=>  $useremail,'username' => $username ,'bususeremail'=>  $bususeremail,'bususername' => $bususername], function ($m) use ($BookingDetail,$sportsList,$useremail,$username,$bususeremail,$bususername) {
@@ -255,7 +256,7 @@ class MailService
         Mail::send('emails.booking-confirm-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
 
             $m->from( env('MAIL_FROM_ADDRESS') , 'Fitnessity');
-            $m->to($BookingDetail['businessuser']['email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is confirmed!');
+            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is confirmed!');
 
         });
     }
@@ -286,7 +287,7 @@ class MailService
         Mail::send('emails.business-listed-message', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
             $comname = 'Fitnessity: '.strtoupper(@$AllDetail["company_data"]["company_name"]).' IS NOW LIVE ON FITNESSITY';
             $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($AllDetail['company_data']['email'], $AllDetail['company_data']['first_name'])->subject($comname);
+            $m->to($AllDetail['company_data']['business_email'], $AllDetail['company_data']['first_name'])->subject($comname);
         });
     }
 
@@ -299,7 +300,7 @@ class MailService
             }
             $comname = 'Welcome to Fitnessity for Business';
             $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($AllDetail['company_data']['email'],  $first_name)->subject($comname);
+            $m->to($AllDetail['company_data']['business_email'],  $first_name)->subject($comname);
         });
     }
 
@@ -464,7 +465,7 @@ class MailService
 
 
 
-            $m->to($BookingDetail['businessuser']['email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is rejected');
+            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is rejected');
 
         });
 
@@ -632,6 +633,20 @@ class MailService
 
         });
 
+    } 
+
+    public static function sendEmailVerifiedAcknowledgementcustomer($id,$business_id)
+    {
+        $user = Customer::findOrFail($id);
+        $businessdata = CompanyInformation::findOrFail($business_id);
+        Mail::send('emails.email-verified-acknowledgement-customer-from-provider', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+        });
+        Mail::send('emails.email-verified-acknowledgement-customer-from-fitnessity', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+        });
     }
 
     public static function sendEmailSportCategoryChange($mailObj){

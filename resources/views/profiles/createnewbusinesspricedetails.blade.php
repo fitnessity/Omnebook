@@ -587,7 +587,7 @@
         $(".Friday").css('pointer-events', 'auto');
         $(".Saturday").css('pointer-events', 'auto');
         $(".Sunday").css('pointer-events', 'auto');
-      /*  if(activityMeet == 'Weekly') {*/
+        /*  if(activityMeet == 'Weekly') {*/
             /*if(day=='Monday') {
                 $(".Monday").css('pointer-events', 'auto');
                 $(".Tuesday").css('pointer-events', 'auto');
@@ -631,7 +631,7 @@
                 $(".Sunday").css('pointer-events', 'auto');
             }*/
             //$(".remove-week").show();
-       /* }*/
+        /* }*/
     	$(".timezone-round").removeClass('day_circle_fill');
         //$(".daycircle ."+day).addClass('day_circle_fill');
     

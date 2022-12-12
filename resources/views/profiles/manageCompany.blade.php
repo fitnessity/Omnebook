@@ -73,11 +73,13 @@ input,select {
                     $personaltrainercount = BusinessServices::where(['cid'=>$comp->id,'service_type'=>'individual'])->count(); 
                     $gymtrainercount = BusinessServices::where(['cid'=>$comp->id,'service_type'=>'classes'])->count(); 
                     $experiencetrainercount = BusinessServices::where(['cid'=>$comp->id,'service_type'=>'experience'])->count(); 
+                    $eventstrainercount = BusinessServices::where(['cid'=>$comp->id,'service_type'=>'events'])->count(); 
                     
                     $current_weekdata  = UserBookingDetail::whereBetween('bookedtime', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
                     $i = 0;
                     $y = 0;
                     $z = 0;
+                    $e = 0;
                     foreach ($current_weekdata as $key => $value) {
                       $serviceid = $value->sport;
                       $getdata = BusinessServices::where('id',$serviceid)->first();
@@ -91,11 +93,15 @@ input,select {
                       if($getdata && $getdata->cid == $comp->id && $getdata->service_type == 'experience'){
                         $z++;
                       }
+                      if($getdata && $getdata->cid == $comp->id && $getdata->service_type == 'events'){
+                        $e++;
+                      }
                     }
 
                     $personlbookingcount = $i;
                     $gymbookingcount = $y;
                     $experiencebookingcount = $z;
+                    $eventsbookingcount = $e;
                   ?>
 					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
     					<div class="manage-txt">
@@ -103,6 +109,7 @@ input,select {
     						<span>{{$personaltrainercount}} PERSONAL TRAINER SERVICES | {{$personlbookingcount}} BOOKINGS THIS WEEK | 0 PROGRAM EXPIRING SOON </span>
     						<span>{{ $gymtrainercount}} GYM / STUDIO SERVICES  | {{$gymbookingcount}} BOOKINGS THIS WEEK | 5 PROGRAM EXPIRING SOON </span>
     						<span>{{$experiencetrainercount}} EXPERIEINCE SERVICES | {{ $experiencebookingcount}} BOOKINGS THIS WEEK | 1 PROGRAM EXPIRING SOON </span>
+                <span>{{$eventstrainercount}} EVENTS SERVICES | {{ $eventsbookingcount}} BOOKINGS THIS WEEK | 1 PROGRAM EXPIRING SOON </span>
     					</div>
     				</div>
   					
