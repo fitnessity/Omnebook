@@ -17,7 +17,7 @@
 					<div class="col-md-6 col-xs-6">
 						<div class="tab-hed ">Manage Customers</div>
 					</div>
-					<div class="col-md-6 col-xs-6">
+					<!-- <div class="col-md-6 col-xs-6">
 						<div class="row">
 							<div class="col-md-4">
 								<button type="button" class="btn-nxt manage-cus-btn">Add New Client</button>
@@ -34,8 +34,7 @@
 								<button type="button" class="btn-nxt search-btn-sp">Search</button>
 							</div>
 						</div>
-						
-					</div>
+					</div> -->
 				</div>
                 <!--<div class="tab-hed">Manage Customers</div>-->
                 <hr style="border: 3px solid black; width: 115%; margin-left: -38px; margin-top: 5px;">
@@ -103,7 +102,7 @@
 										<label>Age</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>{{$age}} Years Old</span>
+										<span>@if($age != '—') {{$age}} Years Old @else {{$age}}  @endif</span>
 									</div>
 								</div>
 								<div class="row">
@@ -111,7 +110,7 @@
 										<label>Gender</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>{{$customerdata->gender}} </span>
+										<span>@if($customerdata->gender != null || $customerdata->gender != '') {{$customerdata->gender}} @else —   @endif</span>
 									</div>
 								</div>
 								<div class="row">
@@ -261,24 +260,34 @@
 												</div>
 											</div>
 										</div>
-										@foreach($familydata as $index=>$fdata)
-										@php $age =  Carbon::parse($fdata->birthday)->age;@endphp
-										<div class="row">
-											<div class="col-md-4 col-xs-12">
-												<span>{{$index+1}}.</span>
-												<label>Name:</label>
-												<span>{{$fdata->first_name}} {{$fdata->last_name}} </span>
+										@if(!empty($familydata) && count($familydata)>0)
+											@foreach($familydata as $index=>$fdata)
+											@php $age =  Carbon::parse($fdata->birthday)->age;@endphp
+											<div class="row">
+												<div class="col-md-4 col-xs-12">
+													<span>{{$index+1}}.</span>
+													<label>Name:</label>
+													<span>{{$fdata->first_name}} {{$fdata->last_name}} </span>
+												</div>
+												<div class="col-md-4 col-xs-12">
+													<label>Relationship: </label>
+													<span>{{$fdata->relationship}}</span>
+												</div>
+												<div class="col-md-4 col-xs-12">
+													<label>Age</label>
+													<span>({{$age}})</span>
+												</div>
 											</div>
-											<div class="col-md-4 col-xs-12">
-												<label>Relationship: </label>
-												<span>{{$fdata->relationship}}</span>
+											@endforeach
+										@else
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<div class="customer-info">
+														<p>Family Member Details are not available.</p>
+													</div>
+												</div>
 											</div>
-											<div class="col-md-4 col-xs-12">
-												<label>Age</label>
-												<span>({{$age}})</span>
-											</div>
-										</div>
-										@endforeach
+										@endif
 									</div>
 									
 									<div class="manage-cust-box second-box-height">

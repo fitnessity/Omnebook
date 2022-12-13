@@ -647,6 +647,12 @@ class MailService
             $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
             $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
         });
+
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
     }
 
     public static function sendEmailSportCategoryChange($mailObj){
