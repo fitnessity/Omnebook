@@ -940,4 +940,6 @@ Route::get('manage-customer','CustomerController@manage_customer')->name('manage
 Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
 Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
 Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
+Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
+Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
 

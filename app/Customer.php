@@ -64,7 +64,12 @@ class Customer extends Authenticatable
     }
 
     public function getcustage(){
-        return Carbon::parse($this->birthdate)->age;
+        if($this->birthdate != null){
+            return Carbon::parse($this->birthdate)->age;
+        }else{
+            return "—";
+        }
+        
     }
 
     public function CustomerFamilyDetail()

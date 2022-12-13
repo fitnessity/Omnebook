@@ -38,14 +38,21 @@
 				<button type="button" class="btn-nxt manage-cus-btn">Add New Client</button>-->
 				<hr style="border: 3px solid black; width: 115%; margin-left: -38px; margin-top: 5px;">
             </div>
+
+			<div id="systemMessage1" style="padding-top:10px;"></div>
 			<div class="row">
 				<div class="col-md-6 col-xs-12">
-					
 				</div>
 				<div class="col-md-6 col-xs-12">
 					<div class="staff-main">
-						<button type="button" class="btn-bck">Import List</button>
-						<button type="button" class="btn-nxt" onclick="exportcustomer();">Export List</button>
+						<button href="#" data-toggle="modal" data-target="#exampleModal"  class="btn-bck btn-black">Import List</button>
+						<form method="get" action='{{route("export")}}'>
+							<input type="hidden" name="chk" id="chk" value="empty">
+							<input type="hidden" name="id" id="id" value="{{$companyId}}">
+							<button type="submit" class="btn-nxt" >Export List</button> 
+						</form>
+						
+						<!-- <button type="button" class="btn-nxt" onclick="exportcustomer();">Export List</button> -->
 					</div>
 				</div>
 			</div>
@@ -103,7 +110,7 @@
 																@endif</span>
 														</div>
 													</div>
-													<div class="col-md-3 col-xs-12 col-sm-3">
+													<div class="col-md-2 col-xs-12 col-sm-3">
 														<div class="client-status">
 															<label>Active Memberships: </label>
 															<span class="green-fonts">2</span>
@@ -115,9 +122,10 @@
 															<span class="red-fonts">1</span>
 														</div>
 													</div>
-													<div class="col-md-1 col-xs-12 col-sm-1">
-														<div class="client-status">
-															<a href="{{ route('viewcustomer',['id'=>$dt->id]) }}">View</a>
+													<div class="col-md-2 col-xs-12 col-sm-1">
+														<div class=" scheduled-btns">
+															<button onclick="sendmail({{$dt->id}},{{$companyId}});" class="btn-edit btn-sp">Send Welcome Email</button>
+															<a href="{{ route('viewcustomer',['id'=>$dt->id]) }}" class="btn-edit">View</a>
 														</div>
 													</div>
 												</div>
@@ -141,7 +149,31 @@
 			</div>
 		</div>
 	</div>
-	
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Upload File for Customer</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+              <label>Choose File: </label>
+              <input type="file" name="file" id="file" onchange="readURL(this)" />
+              <p class='err' style="color:red;padding-top:10px;"></p>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="upload-csv" class="btn btn-secondary">Upload File</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <!-- The Modal Add Business-->
 <div class="modal fade compare-model" id="newclient">
     <div class="modal-dialog manage-customer">
@@ -325,7 +357,7 @@
 				                                        </div>
 				                                        <div class="">
 				                                            <div class="upload-img">
-				                                                <input type="file" name="file_upload" id="file" onchange="readURL(this);">
+				                                                <input type="file" name="file_upload" id="file" onchange="">
 				                                                <div class="upload-img-msg">
 				                                                    <p>Touble uploading profile photo?</p>
 				                                                </div>
@@ -377,7 +409,7 @@
 				                                        </div>
 				                                        <div class="">
 				                                            <div class="upload-img">
-				                                                <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);">
+				                                                <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="">
 				                                                <div class="upload-img-msg">
 				                                                    <p>Touble uploading profile photo?</p>
 				                                                </div>
@@ -478,12 +510,12 @@
                     </div>
 					<div class="col-lg-6 col-xs-12 space-remover manage-customer-gray-bg">
                         <div class="manage-customer-search">
-							<h4>Search For Client On Fitnessity</h4>
-							<p>"Your client could already have a profile on fitnessity"</p>
+							<h4>Search for your clients on Fitnessity</h4>
+							<p>Save time by searching for your clients on Fitnessity. They could already have a profile.</p>
 						</div>
 						<div class="row check-txt-center claimyour-business">
 							<div class="col-md-10 col-xs-10 frm-claim">
-								<input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here" />
+								<input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" />
                                 <div id="option-box">
                                 </div>
 							</div>
@@ -603,7 +635,26 @@
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script>
+  	var profile_pic_var = '';
+  	var ext = '';
 
+  	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	      const name = input.files[0].name;
+	      const lastDot = name.lastIndexOf('.');
+	      const fileName = name.substring(0, lastDot);
+	      ext = name.substring(lastDot + 1);
+	      //console.log(ext)
+	      var reader = new FileReader();
+	      reader.onload = function (e) {
+	      };
+	      profile_pic_var = input.files[0];
+	      reader.readAsDataURL(input.files[0]);
+	    }
+  	} 
+
+</script>
 <script type="text/javascript">
 	$(document).ready(function () {
 		$("#collapse_0").addClass('show in');
@@ -709,9 +760,9 @@
 
 	    $(document).on('click', '#step3_next', function () {
 	        $("#err_gender").html("");
-	        if ($('input[name="gender"]:checked').val() == '' || $('input[name="gender"]:checked').val() == 'undefined' || $('input[name="gender"]:checked').val() == undefined) {
+	        /*if ($('input[name="gender"]:checked').val() == '' || $('input[name="gender"]:checked').val() == 'undefined' || $('input[name="gender"]:checked').val() == undefined) {
 	            $("#err_gender").html('Please select your gender');
-	        } else {
+	        } else {*/
 	            if ($('input[name="gender"]:checked').val() == 'other' && $('#othergender').val() == '') {
 	                $("#err_gender").html('Please enter other gender');
 	            } else {
@@ -744,7 +795,7 @@
 	                    }
 	                });
 	            }
-	        }
+	        //}
 	    });
 
 	    $(document).on('click', '#step4_next', function () {
@@ -763,7 +814,7 @@
 	        $('#err_state_sign').html('');
 	        $('#err_zipcode_sign').html('');
 	        
-	        if(address_sign == ''){
+	        /*if(address_sign == ''){
 	            $('#err_address_sign').html('Please enter address');
 	            $('#address_sign').focus();
 	            return false;
@@ -787,7 +838,7 @@
 	            $('#err_zipcode_sign').html('Please enter zipcode');
 	            $('#zipcode_sign').focus();
 	            return false;
-	        }
+	        }*/
 
 	        var posturl = '/customers/saveaddress';
 	        var formdata = new FormData();
@@ -947,11 +998,61 @@
 	    $(document).on('click', '#skip5_next', function () {
 	    	window.location.href = '/viewcustomer/'+$('#cust_id').val();
 	    });
+
+	    $('#upload-csv').click(function(){
+          	if(profile_pic_var == ''){
+          		$('.err').html('Select file to upload.');
+          	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
+              	$('.err').html('File format is not supported.')
+          	}else{
+              	var formdata = new FormData();
+              	formdata.append('import_file',profile_pic_var);
+              	formdata.append('business_id','{{$companyId}}');
+               	formdata.append('_token','{{csrf_token()}}')
+               	$.ajax({
+                    url:'/import-customer',
+                    type:'post',
+                    dataType: 'json',
+                    enctype: 'multipart/form-data',
+                    data:formdata,
+                    processData: false,
+                    contentType: false,
+                    headers: {'X-CSRF-TOKEN': $("#_token").val()},
+                    beforeSend: function () {
+                       $('.loader').show();
+                    },
+                    complete: function () {
+                       $('.loader').hide();
+                    },
+                    success: function (response) { 
+                        if(response.status == 200){
+                            $('#exampleModal').modal('hide');
+                            $('#systemMessage1').html(response.message).addClass('alert alert-success');
+                            setTimeout(function(){
+                                window.location.reload();
+                            },2000)
+                        }
+                        else{
+                        	$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
+                            $('#file').val('')
+                            $('#exampleModal').modal('hide');
+                        }
+                    }
+              	});
+          	}
+      	})
 	});
 
 	function getcustomerlist(){
 		var inpuval = $('#serchclient').val();
-	
+		if(inpuval == ''){
+			$('#chk').val('empty');
+			$('#id').val('{{$companyId}}');
+		}else{
+			$('#chk').val('notempty');
+			$('#id').val(inpuval);
+		}
+		
 		$.ajax({
 			url:'{{route("manage-customer")}}',
 			type:"GET",
@@ -964,12 +1065,10 @@
 		});
 	}
 
-	function exportcustomer(){
+	/*function exportcustomer(){
 		var inpuval = $('#serchclient').val();
 		let chk = '';
 		let id = '';
-		/*alert(id);
-		alert(inpuval);*/
 		if(inpuval == '' || inpuval == 'undefined'){
 			chk = 'empty';
 			id = '{{$companyId}}';
@@ -982,12 +1081,43 @@
 			url:'{{route("export")}}',
 			type:"GET",
 			data:{
-
 				chk:chk,
 				id:id,
 			},
+			xhrFields: {
+			    responseType: "blob",
+			},
 			success:function(response){
-				
+				let a = document.createElement("a")
+				a.href = URL.createObjectURL(response)
+				a.download = 'customer.xlsx'
+				a.style.display = "none"
+				document.body.appendChild(a)
+				a.click()
+			}
+		});
+	}*/
+
+
+	function  sendmail(cid,bid) {
+		$.ajax({
+			url:'{{route("sendemailtocutomer")}}',
+			type:"GET",
+			xhrFields: {
+                withCredentials: true
+            },
+			data:{
+				cid:cid,
+				bid:bid,
+			},
+			success:function(response){
+				if(response == 'success'){
+                    //$('.reviewerro').html('Email Successfully Sent..');
+                  alert('Email Successfully Sent..');
+                }else{
+                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                  alert("Can't Mail on this Address. Plese Check Email..");
+                }
 			}
 		});
 	}

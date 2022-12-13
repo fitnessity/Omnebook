@@ -111,7 +111,7 @@ class RegistrationController extends Controller
                 $customerObj->save();
 
                 if ($customerObj) {                    
-                   
+                    MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
                     //MailService::sendEmailSignupVerification($customerObj->id);
 
                     $response = array(
@@ -145,8 +145,8 @@ class RegistrationController extends Controller
 
     public function saveGenderCustomer(Request $request)
     {
-        $customers = Customer::where('id',$request->cust_id)->first();
-        $customers->gender=$request->gender;
+        $customers = Customer::where('id',@$request->cust_id)->first();
+        $customers->gender=@$request->gender;
         $customers->save();
          return response()->json(['status'=>200]);
     }
@@ -154,15 +154,14 @@ class RegistrationController extends Controller
     public function saveaddressCustomer(Request $request)
     {
         $customers = Customer::where('id',$request->cust_id)->first();
-        $customers->address=$request->address;
-        $customers->country=$request->country;
-        $customers->city=$request->city;
-        $customers->state=$request->state;
-        $customers->zipcode=$request->zipcode;
+        $customers->address=@$request->address;
+        $customers->country=@$request->country;
+        $customers->city=@$request->city;
+        $customers->state=@$request->state;
+        $customers->zipcode=@$request->zipcode;
         /*$customers->latitude=$request->lat;
         $customers->longitude=$request->lon;*/
         $customers->save();
-        MailService::sendEmailVerifiedAcknowledgementcustomer($customers->id,$customers->business_id);
         $url = '/viewcustomer/'.$request->cus_id;
         return response()->json(['status'=>200,'redirecturl'=>$url]);
     }
@@ -209,6 +208,6 @@ class RegistrationController extends Controller
         );
 
         return Response::json($response);
-        
+            
     }
 }

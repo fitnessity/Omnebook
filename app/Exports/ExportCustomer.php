@@ -22,16 +22,16 @@ class ExportCustomer implements FromCollection, WithHeadings
     public function collection()
     {   /*echo   $this->chk;exit;*/
         if($this->chk == "empty"){
-            return Customer::select('fname','lname', 'birthdate', 'gender', 'email','phone_number' ,'address','city','state','country','zipcode')->where('business_id',$this->id)->get();
+            return Customer::select('lname', 'fname', 'address','city','state', 'zipcode','country', 'phone_number', 'email')->where('business_id',$this->id)->get();
         }else{
-            return Customer::select('fname','lname', 'birthdate', 'gender', 'email','phone_number' ,'address','city','state','country','zipcode')->where('fname', 'LIKE', "%{$this->id}%")->get();
+            return Customer::select('lname', 'fname', 'address','city','state','zipcode','country', 'phone_number', 'email' )->where('fname', 'LIKE', "%{$this->id}%")->get();
         }
     }
 
     public function headings(): array
     {
         return [
-          'fname','lname', 'birthdate', 'gender', 'email','phone_number' ,'address','city','state','country','zipcode'
+          'Last name' ,'First name','Address','City','State','Postal code','Country', 'Phone number' , 'Email'
         ];
     }
 }

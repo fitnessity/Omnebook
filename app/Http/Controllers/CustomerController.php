@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Excel;
 use App\Exports\ExportCustomer;
+use App\Imports\CustomerImport;
+use Maatwebsite\Excel\HeadingRowImport;
 use Session;
 use App\MailService;
 use Redirect;
@@ -39,7 +41,7 @@ class CustomerController extends Controller {
 
  	protected $customers;
  	protected $users;
-
+    public $error = '';
  	public function __construct(CustomerRepository $customers,UserRepository $users) {
         $this->customers = $customers;
         $this->middleware('auth');
@@ -229,10 +231,13 @@ class CustomerController extends Controller {
               $business_details = isset($business_details[0]) ? $business_details[0] : [];
             $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
         }
-
+         $bdate = '—';
         $customerdata = $this->customers->findById($id);
-        $date =  new Carbon($customerdata->birthdate);
-        $bdate = $date->format('F jS\,  Y');
+        if($customerdata->birthdate != null){
+            $date =  new Carbon($customerdata->birthdate);
+            $bdate = $date->format('F jS\,  Y');
+        }
+       
         $sincedate = date('m/d/Y',strtotime($customerdata->created_at));
         $location = '';
         $address = '';
@@ -249,6 +254,18 @@ class CustomerController extends Controller {
         if($customerdata->country != ''){
             $address .= $customerdata->country;
             $location .= $customerdata->country;
+        }
+
+        if($address == ''){
+            $address = '—';
+        }else if($address == 'US'){
+            $address = 'United States';
+        }
+
+        if($location == ''){
+           $location = '—'; 
+        }else if($location == 'US'){
+            $location = 'United States';
         }
 
         $familydata  = CustomerFamilyDetail::select('first_name','last_name','relationship','birthday')->where('cus_id',$customerdata->id)->get();
@@ -269,9 +286,52 @@ class CustomerController extends Controller {
     }
 
     public function export(Request $request)
-    {
+    {   
         return Excel::download(new ExportCustomer($request->id,$request->chk), 'customer.xlsx');
     }
 
+    public function sendemailtocutomer(Request $request){
+       $status =  MailService::sendEmailVerifiedAcknowledgementcustomer($request->cid,$request->bid);
+        //print_r($request->all());exit;
+       return  $status;
+    }
+    public function importcustomer(Request $request)
+    {
+        if($request->hasFile('import_file')){
+            $ext = $request->file('import_file')->getClientOriginalExtension();
+            if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
+            {
+                return response()->json(['status'=>500,'message'=>'File format is not supported.']);
+            }
+            ini_set('max_execution_time', 10000); 
+            $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
+            /*print_r($headings);*/
+            if(!empty($headings)){
+                foreach($headings as $key => $row) {
+                    $firstrow = $row[0];
+                    /*print_r($firstrow);exit;*/
+                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' 
+                        ||  $firstrow[2] != 'address'|| $firstrow[3] != 'city'|| $firstrow[4] != 'state' || $firstrow[5] != 'postal_code' || $firstrow[6] != 'country'|| $firstrow[7] != 'mobile_phone'|| $firstrow[8] != 'email') 
+                    {
+                        $this->error = 'Problem in header.';
+                        break;
+                    }
+                }
+            }
+            if($this->error != '')
+            {
+                return response()->json(['status'=>500,'message'=>$this->error]);
+            }
 
+            Excel::import(new CustomerImport($request->business_id), $request->file('import_file'));
+        }
+
+        if($this->error != '')
+        {
+            return response()->json(['status'=>500,'message'=>$this->error]);
+        }
+        else{
+            return response()->json(['status'=>200,'message'=>'File imported Successfully']);
+        }
+    }
 }
