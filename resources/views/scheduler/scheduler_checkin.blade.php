@@ -17,13 +17,14 @@
 					<div class="col-md-6 col-xs-12 col-sm-12">
 						<div class="row">
 							<div class="col-md-4 col-xs-12 col-sm-3">
-								<a href="#" class="btn-nxt manage-cus-btn">Add New Client</a>
+								<a href="#" class="btn-nxt manage-cus-btn" data-toggle="modal" data-target="#newclient">Add New Client</a>
 							</div>
-							<div class="col-md-8 col-xs-12 col-sm-6">
-								<div class="manage-search">
-									<form method="get" action="/activities/">
-										<input type="text" name="label" id="" placeholder="Search for client" autocomplete="off" value="">
-										<button id="serchbtn"><i class="fa fa-search"></i></button>
+							<div class="col-md-8">
+								<div class="manage-search serchcustomer">
+									<form>
+										<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
+										<div id="option-box1"></div>
+										<button ><i class="fa fa-search"></i></button>
 									</form>
 								</div>
 							</div>
@@ -36,19 +37,19 @@
 				<div class="row">
 					<div class="col-md-4 col-xs-12 col-sm-5">
 						 <div class="scheduler-info">
-                            <label>Program Name: </label><span>Adult kickboxing 101 </span>
+                            <label>Program Name: </label><span>{{$servicedata->program_name}} </span>
                          </div>
 						 <div class="scheduler-info">
-                            <label>Date: </label><span>Wednesday, April 07 2021 </span>
+                            <label>Date: </label><span>{{$todaydate}} </span>
                          </div>
 						 <div class="scheduler-info">
-                            <label>Time: </label><span>10:30 am - 11:00 am </span>
+                            <label>Time: </label><span>{{date('h:i A', strtotime($schedule_data->shift_start))}}  - {{date('h:i A', strtotime($schedule_data->shift_end))}}</span>
                          </div>
 						 <div class="scheduler-info">
-                            <label>Duration:  </label><span>30m</span>
+                            <label>Duration:  </label><span>{{$schedule_data->get_clean_duration()}} </span>
                          </div>
 						 <div class="scheduler-info">
-                            <label>Spots: </label><span>3/10</span>
+                            <label>Spots: </label><span>{{$schedule_data->spots_left($filter_date)}}/{{$schedule_data->spots_available}} </span>
                          </div>
 					</div>
 					<div class="col-md-3 col-sm-12 col-sm-6">
@@ -316,18 +317,14 @@
 								</div>
 							</div>
 						</div>
-						
 					</div>
-				</div>
-								
+				</div>				
 			</div>	
-			
-			
 		</div>
 	</div>
-
+	@include('includes.add_new_client')
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
 
 @endsection

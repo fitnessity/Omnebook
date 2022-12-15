@@ -22363,11 +22363,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .scheduled-activity-info{
 	text-align: center;
-	margin-top: 16px;
+	margin-top: 6px;
 }
 .scheduled-location{
 	text-align: center;
-	margin-top: 16px;
+	margin-top: 6px;
 }
 .scheduler-info-box .timeline::before{
 	content: "";
@@ -22542,7 +22542,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #000;
 }
 .overlay-activity{
-	position: inherit;
+	position: relative;
 	width: 100%;
 	top: 0px;
 	left: 0px;
@@ -22558,12 +22558,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #fff;
 	padding: 10px;
 	z-index: 1000;
-	top: 14px;
 	left: 90px;
 	border-radius: 7px;
 	font-size: 17px;
 	width: 16%;
 	text-align: center;
+    top: 15px;
 }
 .priceselect.sp-select p{
 	display: inline-block;
@@ -23214,4 +23214,31 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 100%;
 	font-style: italic;
 	height: 15px;	
+}
+
+.delcustomer{
+    margin: 20px;
+    color: red;
+    font-size: 20px;
+}
+
+
+
+.customer-list{
+    display: block;
+    left: 0px;
+    top: 34px;
+    z-index: 999 !important;
+    background-color: #ffffff;
+    position: absolute;
+    padding: 10px 0px;
+    width: 100%;
+    color: #000;
+    height: 400px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.serchcustomer #option-box1 ul li{list-style: none !important;}
+.modal-from-txt input{
+	margin-bottom: 10px;
 }

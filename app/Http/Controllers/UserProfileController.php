@@ -1200,7 +1200,6 @@ class UserProfileController extends Controller {
     
     
     public function editBusinessService(Request $request) {
-        
         $businessData = [
             'bstep' => 72,
             'cid' => $request->cid,

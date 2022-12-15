@@ -51,7 +51,7 @@
 							<div class="col-md-5 col-sm-5 col-xs-12">
 								<div class="client-info">
                                     <span>{{$customerdata->fname}} {{$customerdata->lname}}</span>
-									<a> Edit </a>
+									<a data-toggle="modal" data-target="#editbooking"> Edit </a>
                                 </div>
 								<div class="row">
 									<div class="col-md-5 col-xs-5">
@@ -237,16 +237,21 @@
 									</div>
 									
 									<div class="manage-cust-box">
-										<div class="row">
-											<div class="col-md-12 col-xs-12">
-												<label class="tab-titles">Notes</label>
+										<form action="{{route('savenotes')}}" method="POST">
+											@csrf
+											<input type="hidden" name="cus_id" value="{{$customerdata->id}}">
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<label class="tab-titles">Notes</label>
+												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-12 col-xs-12">
-												<textarea name="" rows="4" style="width: 100%;"> </textarea>
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<textarea name="notetext" rows="4" style="width: 100%;">{{$customerdata->notes}} </textarea>
+												</div>
 											</div>
-										</div>
+											<button type="submit" class="btn-nxt">Submit</button>
+										</form>
 									</div>
 								
 								</div>
@@ -683,7 +688,120 @@
 		</div>
 	</div>
 </div>
+	<!-- The Modal Add Business-->
+		<div class="modal fade compare-model" id="editbooking">
+			<div class="modal-dialog editbooking">
+				<div class="modal-content">
+					<div class="modal-header" style="text-align: right;"> 
+						<div class="closebtn">
+							<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+					</div>
 
+					<!-- Modal body -->
+					<div class="modal-body body-tbm">
+						<div class="row"> 
+							<div class="col-lg-12">
+							   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit Customer</h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	First Name</label>
+									<input class="form-control" type="text" id="fname" name="fname" placeholder="First name" value="{{$customerdata->fname}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>Last Name</label>
+									<input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" value="{{$customerdata->lname}}">
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>Email</label>
+									<input class="form-control" type="text" id="email" name="email" placeholder="Email" value="{{$customerdata->email}}">
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Phone Number </label>
+									<input class="form-control" type="text" id="name" name="pno" placeholder="Phone Number" value="{{$customerdata->phone_number}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Birthdate </label>
+									<input class="form-control" type="text" id="fname" name="pno" placeholder="Birthdate" value="{{$bdate}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Gender </label>
+									<div>
+									<input type="radio" name="gender" value="male" @if($customerdata->gender == 'male') selected @endif> Male
+									<input type="radio" name="gender" value="female" @if($customerdata->gender == 'female') selected @endif> Female
+									<input type="radio" name="gender" value="other" @if($customerdata->gender == 'other') selected @endif> Other
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	City  </label>
+									<input class="form-control" type="text" id="city" name="city" placeholder="City " value="{{$customerdata->city}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	State </label>
+									<input class="form-control" type="text" id="state" name="state" placeholder="State" value="{{$customerdata->state}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Country </label>
+									<input class="form-control" type="text" id="country" name="country" placeholder="Country" value="{{$customerdata->country}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Zipcode </label>
+									<input class="form-control" type="text" id="zipcode" name="zipcode" placeholder="Zipcode" value="{{$customerdata->zipcode}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Address </label>
+									<input class="form-control" type="text" id="address" name="address" placeholder="Address" value="{{$customerdata->address}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="modal-from-txt">
+									<label>	Profile Picture</label>
+									<form action="/action_page.php">
+									  <input type="file" id="myFile" name="filename">
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+							
+								<a href="#" class="btn-nxt manage-cus-btn cancel-modal">Submit</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end modal -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
 
 <!-- Latest compiled and minified JavaScript -->
@@ -698,7 +816,7 @@
 	$('#visitstable').dataTable( {
 		"searching": false,
 		"ordering": false,
-		"info":     false
+		"info":     false,
 		"paging":   false,
 	} );
 </script>
