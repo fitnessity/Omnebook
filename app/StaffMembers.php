@@ -25,4 +25,16 @@ class StaffMembers extends Model {
         'image',
         'description',
     ];
+
+    
+
+    public static function getinstructorname($id)
+    {
+        $name = '—';
+        $staff =  StaffMembers::select('name')->where('id', $id)->first();
+        if($staff != ''){
+            $name = $staff->name;
+        }
+        return $name;
+    }
 }

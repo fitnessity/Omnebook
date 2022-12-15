@@ -184,13 +184,16 @@ class CustomerController extends Controller {
                 $array_data [] = array(
 	                "name"=>$cuss->fname .' '.$cuss->lname , 
 	                "cus_id"=>$cuss->id,
-	                "image" => $cuss->profile_pic
+	                "image" => $cuss->profile_pic,
+                    "email" => $cuss->email,
+                    "phone_number" => $cuss->phone_number,
+                    "age" => $cuss->getcustage(),
 	            );
             }
 
             sort($array_data);
           
-            $output = '<ul id="bussiness-list">';
+            $output = '<ul class="customer-list">';
             if(!empty($array_data)){
                 foreach($array_data as $row)
                 {
@@ -204,10 +207,16 @@ class CustomerController extends Controller {
 										$pf=substr($row['name'], 0, 1);
 								$output .='<p class="img-controller">'.$pf.'</p></div>';
                             }
+                            $age = '';
+                            if($row['age'] != '—'){
+                                $age = '('.$row['age'].'  Years Old)';
+                            }
 
                             $output .='</div>
                             <div class="col-md-10 div-controller">
-                                <p class="pstyle">'.$row['name'].'</p>
+                                <p class="pstyle">'.$row['name'].' <label class="liaddress">'.$age.'<label></p>
+                                <p class="pstyle liaddress">'.$row['email'].'</p>
+                                <p class="pstyle liaddress">'.$row['phone_number'].'</p>
                             </div>
                             <input type="hidden" name="cid" id="cid" value="'.$row['cus_id'].'">
                         </div></li>';
@@ -233,27 +242,27 @@ class CustomerController extends Controller {
         }
          $bdate = '—';
         $customerdata = $this->customers->findById($id);
-        if($customerdata->birthdate != null){
+        if(@$customerdata->birthdate != null){
             $date =  new Carbon($customerdata->birthdate);
             $bdate = $date->format('F jS\,  Y');
         }
        
-        $sincedate = date('m/d/Y',strtotime($customerdata->created_at));
+        $sincedate = date('m/d/Y',strtotime(@$customerdata->created_at));
         $location = '';
         $address = '';
-        if($customerdata->address != ''){
-            $address .= $customerdata->address.', ';
+        if(@$customerdata->address != ''){
+            $address .= @$customerdata->address.', ';
         }
-        if($customerdata->city != ''){
-            $address .= $customerdata->city.', ';
+        if(@$customerdata->city != ''){
+            $address .= @$customerdata->city.', ';
         }
-        if($customerdata->state != ''){
-            $address .= $customerdata->state.' '.$customerdata->zipcode.', ';
-            $location .= $customerdata->state.', ';
+        if(@$customerdata->state != ''){
+            $address .= @$customerdata->state.' '.@$customerdata->zipcode.', ';
+            $location .= @$customerdata->state.', ';
         }
-        if($customerdata->country != ''){
-            $address .= $customerdata->country;
-            $location .= $customerdata->country;
+        if(@$customerdata->country != ''){
+            $address .= @$customerdata->country;
+            $location .= @$customerdata->country;
         }
 
         if($address == ''){
@@ -268,7 +277,8 @@ class CustomerController extends Controller {
             $location = 'United States';
         }
 
-        $familydata  = CustomerFamilyDetail::select('first_name','last_name','relationship','birthday')->where('cus_id',$customerdata->id)->get();
+        $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
+        $familydata  = CustomerFamilyDetail::select('first_name','last_name','relationship','birthday')->where('cus_id',@$customerdata->id)->get();
         /*$familydata  = $customerdata->CustomerFamilyDetail();*/
         //print_r($familydata);exit;
         return view('customers.viewcustomer', [
@@ -276,7 +286,7 @@ class CustomerController extends Controller {
             'companyservice' => $companyservice,
             'customerdata'=>$customerdata,
             'bdate'=>$bdate,
-            'age'=>$customerdata->getcustage(),
+            'age'=> $ageval,
             'sincedate'=>$sincedate,
             'address'=>$address,
             'location'=>$location,
@@ -295,6 +305,7 @@ class CustomerController extends Controller {
         //print_r($request->all());exit;
        return  $status;
     }
+
     public function importcustomer(Request $request)
     {
         if($request->hasFile('import_file')){
@@ -333,5 +344,20 @@ class CustomerController extends Controller {
         else{
             return response()->json(['status'=>200,'message'=>'File imported Successfully']);
         }
+    }
+
+
+    public function deletecustomer(Request $request){
+        $customerdata = $this->customers->findById($request->id);
+        if( $customerdata != ''){
+            Customer::where('id',$request->id)->delete();
+        }
+
+        return redirect('manage-customer');
+    }
+
+    public function savenotes(Request $request){
+        Customer::where('id',$request->cus_id)->update(["notes"=>$request->notetext]);
+        return redirect('viewcustomer/'.$request->cus_id);
     }
 }

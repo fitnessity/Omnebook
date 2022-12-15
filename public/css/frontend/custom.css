@@ -378,6 +378,7 @@ span.status::after {
     border: 3px solid #ddd;
     vertical-align: middle;
     background-color: #ea1515;
+    margin-top: 5px;
 }
 .img-controller{
 	margin: 10px 14px 10px 14px;
@@ -835,6 +836,4 @@ max-height: 300px;
 .black-border{ border: 1px solid #000 !important; }
 .detail-fil-sticky{ position: fixed; right: 0; top: 50%; }
 .activity-time{ font-size: 13px; }
-
-
 
