@@ -2522,7 +2522,7 @@
                 <?php
 
                     $service_type = $sport_activity = ""; $instant_booking = $request_booking = '';
-                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate = $beforetime = $beforetimeint= "";
+                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate = $beforetime = $beforetimeint= $cancelbefore = $cancelbeforeint = "";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
                     $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
@@ -2758,6 +2758,15 @@
 
                         if(isset($business_service['meetup_location']) && !empty($business_service['meetup_location'])) {
                             $meetup_location = $business_service['meetup_location'];
+                        }
+
+                        if(isset($business_service['cancelbefore']) && !empty($business_service['cancelbefore'])) {
+                            $cancelbefore = $business_service['cancelbefore'];
+                        }
+
+
+                        if(isset($business_service['cancelbeforeint']) && !empty($business_service['cancelbeforeint'])) {
+                            $cancelbeforeint = $business_service['cancelbeforeint'];
                         }
 
                         if(isset($company_info['business_phone']) && !empty($company_info['business_phone'])) {
@@ -3859,6 +3868,27 @@
                                         </div>
                                     </div>
                                 </div>?php */ ?>
+
+                                <div class="row">
+                                    <div class="col-md-4 col-lg-4">
+                                        <div class="">
+                                            <p>Whats the latest a customer can cancel?</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="sp-bottom">
+                                            <input type="text" class="form-control valid" name="cancelbeforeint" id="cancelbeforeint" placeholder="1" @if($cancelbeforeint != '') value="{{$cancelbeforeint}}" @else value="1" @endif>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="sp-bottom">
+                                            <select class="form-control week-section" name="cancelbefore" id="cancelbefore">
+                                                <option value="minutes"  <?=($cancelbefore=='minutes')?"selected":""?>>Minute(s)</option>
+                                                <option value="hours"  <?=($cancelbefore=='hours')?"selected":""?>>Hour(s)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-3 col-sm-6">

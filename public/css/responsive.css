@@ -1594,6 +1594,7 @@
 	.scheduler-titles{display: none;}
 	.modal-dialog.bookingcancel{width: 30%;}
 	.modal-dialog.editbooking{width: 50%;}
+	.modal-dialog.latecancel{width: 40%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1677,6 +1678,7 @@
 	.scheduler-titles{display: none;}
 	.modal-dialog.bookingcancel{width: 20%;}
 	.modal-dialog.editbooking{width: 40%;}
+	.modal-dialog.latecancel{width: 30%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
