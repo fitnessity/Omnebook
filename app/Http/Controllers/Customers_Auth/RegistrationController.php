@@ -183,22 +183,43 @@ class RegistrationController extends Controller
 
     public function submitFamilyCustomer(Request $request) {
         $postArr = $request->all();
-       
-        if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
-            $family = new CustomerFamilyDetail();
-        else
-            $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
+        
+        $customerObj = New Customer();
+        $customerObj->parent_cus_id = Input::get('cust_id');
+        $customerObj->business_id = Input::get('business_id');
+        $customerObj->fname = Input::get('first_name');
+        $customerObj->lname = Input::get('last_name');
+        $customerObj->relationship = Input::get('relationship');
+        $customerObj->email = Input::get('email');
+        $customerObj->country = 'US';
+        $customerObj->status = 0;
+        $customerObj->phone_number = Input::get('mobile');
+        $customerObj->birthdate = date('Y-m-d',strtotime(Input::get('birthday')));
+        $customerObj->emergency_contact = Input::get('emergency_contact');
+        $customerObj->gender =  Input::get('gender');
 
-        $family->cus_id = Input::get('cust_id');
-        $family->first_name = Input::get('first_name');
-        $family->last_name = Input::get('last_name');
-        $family->email = Input::get('email');
-        $family->mobile = Input::get('mobile');
-        $family->gender = Input::get('gender');
-        $family->relationship = Input::get('relationship');
-        $family->emergency_contact = Input::get('emergency_contact');
-        $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
-        $family->save();
+        $customerObj->save();
+
+        if ($customerObj) {                    
+            MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
+        }
+
+        /*  if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
+                $family = new CustomerFamilyDetail();
+            else
+                $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
+
+            $family->cus_id = Input::get('cust_id');
+            $family->first_name = Input::get('first_name');
+            $family->last_name = Input::get('last_name');
+            $family->email = Input::get('email');
+            $family->mobile = Input::get('mobile');
+            $family->gender = Input::get('gender');
+            $family->relationship = Input::get('relationship');
+            $family->emergency_contact = Input::get('emergency_contact');
+            $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
+            $family->save();
+        */
 
         $url = '/viewcustomer/'.$request->cust_id;
         $response = array(

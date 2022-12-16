@@ -45,7 +45,7 @@
 						<div class="row">
 							<div class="col-md-2 col-sm-3">
 								<div class="manage-cust-img">
-                                    <img src="http://dev.fitnessity.co/public/uploads/profile_pic/index.jpg" class="imgboxes" alt="">
+                                    {!! $customerdata->getimageforviewpage() !!}
                                 </div>
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
@@ -261,26 +261,29 @@
 											<div class="col-md-12 col-xs-12">
 												<div class="customer-info">
 													<label class="tab-titles">Family Members Added</label>
-													<a href="#">Edit</a>
+													<a href="/addcustomerfamily/{{$customerdata->id}}">Add</a>
 												</div>
 											</div>
 										</div>
 										@if(!empty($familydata) && count($familydata)>0)
 											@foreach($familydata as $index=>$fdata)
-											@php $age =  Carbon::parse($fdata->birthday)->age;@endphp
+											@php $age =  Carbon::parse($fdata->birthdate)->age;@endphp
 											<div class="row">
 												<div class="col-md-4 col-xs-12">
 													<span>{{$index+1}}.</span>
 													<label>Name:</label>
-													<span>{{$fdata->first_name}} {{$fdata->last_name}} </span>
+													<span>{{$fdata->fname}} {{$fdata->lname}} </span>
 												</div>
 												<div class="col-md-4 col-xs-12">
 													<label>Relationship: </label>
 													<span>{{$fdata->relationship}}</span>
 												</div>
-												<div class="col-md-4 col-xs-12">
+												<div class="col-md-2 col-xs-12">
 													<label>Age</label>
 													<span>({{$age}})</span>
+												</div>
+												<div class="col-md-1 col-xs-12">
+													<a href="{{route('viewcustomer',['id'=>$fdata->id])}}">View</a>
 												</div>
 											</div>
 											@endforeach
@@ -707,94 +710,100 @@
 							   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit Customer</h4>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	First Name</label>
-									<input class="form-control" type="text" id="fname" name="fname" placeholder="First name" value="{{$customerdata->fname}}">
+						<form action="{{route('update_customer')}}" method="post" enctype="multipart/form-data">
+							@csrf
+							<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	First Name</label>
+										<input class="form-control" type="text" id="fname" name="fname" placeholder="First name" value="{{$customerdata->fname}}">
+									</div>
 								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>Last Name</label>
-									<input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" value="{{$customerdata->lname}}">
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>Last Name</label>
+										<input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" value="{{$customerdata->lname}}">
+									</div>
 								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>Email</label>
-									<input class="form-control" type="text" id="email" name="email" placeholder="Email" value="{{$customerdata->email}}">
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>Email</label>
+										<input class="form-control" type="text" id="email" name="email" placeholder="Email" value="{{$customerdata->email}}">
+									</div>
 								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Phone Number </label>
-									<input class="form-control" type="text" id="name" name="pno" placeholder="Phone Number" value="{{$customerdata->phone_number}}">
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Phone Number </label>
+										<input class="form-control" type="text" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{$customerdata->phone_number}}">
+									</div>
 								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Birthdate </label>
-									<input class="form-control" type="text" id="fname" name="pno" placeholder="Birthdate" value="{{$bdate}}">
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Birthdate </label>
+										<input class="form-control" type="text" id="birthdate" name="birthdate" placeholder="Birthdate" @if($bdate != '—') value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" @endif maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+									</div>
 								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Gender </label>
-									<div>
-									<input type="radio" name="gender" value="male" @if($customerdata->gender == 'male') selected @endif> Male
-									<input type="radio" name="gender" value="female" @if($customerdata->gender == 'female') selected @endif> Female
-									<input type="radio" name="gender" value="other" @if($customerdata->gender == 'other') selected @endif> Other
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Gender </label>
+										<div>
+										<input type="radio" name="gender" value="male" @if($customerdata->gender == 'male') checked @endif> Male
+										<input type="radio" name="gender" value="female" @if($customerdata->gender == 'female') checked @endif> Female
+										<input type="radio" name="gender" value="other" @if($customerdata->gender == 'other') checked @endif> Other
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Address </label>
+										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->address}}">
+									</div>
+								</div>
+								 <div id="map" style="display: none;"></div>
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	City  </label>
+										<input class="form-control" type="text" id="city" name="city" placeholder="City " value="{{$customerdata->city}}">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	State </label>
+										<input class="form-control" type="text" id="state" name="state" placeholder="State" value="{{$customerdata->state}}">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Country </label>
+										<input class="form-control" type="text" id="country" name="country" placeholder="Country" value="{{$customerdata->country}}">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Zipcode </label>
+										<input class="form-control" type="text" id="zipcode1" name="zipcode" placeholder="Zipcode" value="{{$customerdata->zipcode}}">
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="modal-from-txt">
+										<label>	Profile Picture</label>
+										<div class="userblock">
+		                        			<div class="login_links">
+		                                		{!! $customerdata->getimage() !!}
+		                                    </div>
+		                                </div>
+										<input type="file" id="profile_pic" name="profile_pic">						
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	City  </label>
-									<input class="form-control" type="text" id="city" name="city" placeholder="City " value="{{$customerdata->city}}">
+							<div class="row">
+								<div class="col-md-12">
+									<button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</button>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	State </label>
-									<input class="form-control" type="text" id="state" name="state" placeholder="State" value="{{$customerdata->state}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Country </label>
-									<input class="form-control" type="text" id="country" name="country" placeholder="Country" value="{{$customerdata->country}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Zipcode </label>
-									<input class="form-control" type="text" id="zipcode" name="zipcode" placeholder="Zipcode" value="{{$customerdata->zipcode}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Address </label>
-									<input class="form-control" type="text" id="address" name="address" placeholder="Address" value="{{$customerdata->address}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="modal-from-txt">
-									<label>	Profile Picture</label>
-									<form action="/action_page.php">
-									  <input type="file" id="myFile" name="filename">
-									</form>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-							
-								<a href="#" class="btn-nxt manage-cus-btn cancel-modal">Submit</a>
-							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -806,6 +815,106 @@
 
 <!-- Latest compiled and minified JavaScript -->
 
+<script type="text/javascript">
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('b_address');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#zipcode').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                  $('#country').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#b_address').val(sublocality_level_1);
+            }else{
+              $('#b_address').val(badd);
+            }
+           
+            /*$('#lat').val(place.geometry.location.lat());
+            $('#lon').val(place.geometry.location.lng());*/
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 
 <script>
 	$(document).ready(function() {
@@ -813,6 +922,14 @@
 		responsive: true
 	} );	
 	
+	$("#birthdate").keyup(function(){
+      if ($(this).val().length == 2){
+          $(this).val($(this).val() + "/");
+      }else if ($(this).val().length == 5){
+          $(this).val($(this).val() + "/");
+      }
+  	});
+
 	$('#visitstable').dataTable( {
 		"searching": false,
 		"ordering": false,

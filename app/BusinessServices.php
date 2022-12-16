@@ -108,6 +108,8 @@ class BusinessServices extends Model
         'desc_location',
         'exp_lng',
         'exp_lat',
+        'cancelbefore',
+        'cancelbeforeint',
     ];
     
     public function businesscompanydetail() {

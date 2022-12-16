@@ -21,7 +21,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id'
     ];
 
     /**
@@ -54,11 +54,21 @@ class Customer extends Authenticatable
     }
     
     public function getimage(){
-        if(File::exists(public_path("/customers/images/".$this->profile_pic)) && !empty($this->profile_pic) ){
+        if(File::exists(public_path("/customers/profile_pic/".$this->profile_pic)) && !empty($this->profile_pic) ){
             $html = '<img src="'.$this->profile_pic.'" class="imgboxes" alt="">';
         }else{
             $pf=substr($this->fname, 0, 1);
             $html = '<div class="company-list-text"><p>'.$pf.'</p></div>';
+        }
+        return $html;
+    }
+
+    public function getimageforviewpage(){
+        if(File::exists(public_path("/customers/profile_pic/".$this->profile_pic)) && !empty($this->profile_pic) ){
+            $html = '<img src="'.$this->profile_pic.'" class="imgboxes" alt="">';
+        }else{
+            $pf=substr($this->fname, 0, 1);
+            $html = '<div class="company-list-text viewcustomelatterrimg"><p>'.$pf.'</p></div>';
         }
         return $html;
     }

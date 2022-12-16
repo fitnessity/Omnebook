@@ -278,9 +278,9 @@ class CustomerController extends Controller {
         }
 
         $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
-        $familydata  = CustomerFamilyDetail::select('first_name','last_name','relationship','birthday')->where('cus_id',@$customerdata->id)->get();
+        $familydata  = Customer::where('parent_cus_id',@$customerdata->id)->get();
         /*$familydata  = $customerdata->CustomerFamilyDetail();*/
-        //print_r($familydata);exit;
+        /*print_r($familydata);exit;*/
         return view('customers.viewcustomer', [
              'business_details' => $business_details,
             'companyservice' => $companyservice,
@@ -360,4 +360,47 @@ class CustomerController extends Controller {
         Customer::where('id',$request->cus_id)->update(["notes"=>$request->notetext]);
         return redirect('viewcustomer/'.$request->cus_id);
     }
+
+    public function update_customer(Request $request){
+       // print_r($request->all());
+        if($request->profile_pic != ''){
+            $filename = $request->profile_pic;
+            $name = $filename->getClientOriginalName();
+            //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
+        }
+
+        $data = $request->all();
+        if(@$data['birthdate'] != ''){
+            $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
+        }
+
+        $position = array_search(request()->_token, $data);
+        $position1 = array_search(request()->cus_id, $data);
+        unset($data[$position]);
+        unset($data[$position1]);
+        
+        $cust = Customer::find($request->cus_id);
+        $cust->update($data);
+        return redirect('viewcustomer/'.$request->cus_id);
+    }
+
+    public function addcustomerfamily ($id){
+        $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
+        $companyservice  =[];
+        $UserFamilyDetails  =[];
+        if(!empty($companyId)) {
+             $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
+              $business_details = isset($business_details[0]) ? $business_details[0] : [];
+            $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
+        }
+    
+        return view('customers.add_family', [
+            'business_details' => $business_details,
+            'companyservice' => $companyservice,
+            'UserFamilyDetails' => $UserFamilyDetails,
+            'UserFamilyDetails' => $UserFamilyDetails,
+        ]);
+        //return view('profiles.viewcustomer');
+    }
+
 }

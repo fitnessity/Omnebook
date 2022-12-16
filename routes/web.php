@@ -944,6 +944,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
     Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
+    Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
+    Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
 });
 
 

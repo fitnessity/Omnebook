@@ -2217,6 +2217,8 @@ class UserProfileController extends Controller {
                 "accessibility" =>$request->frm_accessibility,
                 "addi_info_help" =>$request->addi_info_help,
                 "desc_location" =>$request->desc_location,
+                "cancelbefore" =>$request->cancelbefore,
+                "cancelbeforeint" =>$request->cancelbeforeint,
             ];
         } else {
             $businessData = [
@@ -2239,6 +2241,8 @@ class UserProfileController extends Controller {
                 "activity_key" => $request->activity_key,
                 "cancel_value" => $request->cancel_value2,
                 "cancel_key" => $request->cancel_key2,
+                "beforetime" => $request->beforetime,
+                "beforetimeint" => $request->beforetimeint,
                 "willing_to_travel" => $request->willing_to_travel,
                 "miles" => $request->travel_miles,
                 "area" => $request->wanttowork,
@@ -2281,6 +2285,8 @@ class UserProfileController extends Controller {
                 "is_late_fee" => $request->is_late_fee,
                 "late_fee" => $request->late_fee,
                 "instructor_id"=> $request->instructor_id,
+                "cancelbefore" =>$request->cancelbefore,
+                "cancelbeforeint" =>$request->cancelbeforeint,
             ];
         }
        /*print_r($businessData); exit;*/
@@ -10153,7 +10159,7 @@ class UserProfileController extends Controller {
     public function activityimgupdate(Request $request) { 
         $serviceid = $request->serviceid;        
         $imgeiddata = BusinessServices::where('id',$serviceid)->first();
-         $profile_pic = $imgeiddata->profile_pic;
+        $profile_pic = $imgeiddata->profile_pic;
 
         if ($request->hasFile('image_post')) {
             $filename = $request->file('image_post');

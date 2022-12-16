@@ -23242,3 +23242,24 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .modal-from-txt input{
 	margin-bottom: 10px;
 }
+.form-control.feeamount{
+	width: 40%;
+	display: inline-block;
+	margin-left: 10px;
+}
+.latecancle-types select{
+	width: 58%;
+	display: inline-block;
+	margin-left: 10px;
+}
+.latecancle-types input{
+	margin-bottom: 10px;
+}
+.company-list-text.viewcustomelatterrimg{
+	  width: 150px;
+  height: 150px;
+}
+.company-list-text.viewcustomelatterrimg p{
+	  font-size: 50px;
+	  padding: 22% 0px;
+}
