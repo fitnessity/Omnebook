@@ -36,6 +36,7 @@ use File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use DB;
 use App\Fit_background_check_faq;
 use App\Fit_vetted_business_faq;
@@ -6877,20 +6878,15 @@ class UserProfileController extends Controller {
     }
     public function savemyprofilepic(Request $request)
     {
-         $loggedinUser = Auth::user();
-         $id = $request->imgId;
-         $imgname = $request->imgname;
+
+
          if($request->hasFile('galaryphoto')) {
-            $file = Input::file('galaryphoto');
-            $name = $file->getClientOriginalName();
 
-            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR ."thumb".DIRECTORY_SEPARATOR, $name);
-
-            DB::table('users_add_attachment')->where('id',$id)->update(array('attachment_name'=>$name));
+            $path = $request->file('galaryphoto')->store('gallery');
+            DB::table('users_add_attachment')->where('id',$request->imgId)->update(array('attachment_name'=>$path));
          }
 
         
-
 
 
 
