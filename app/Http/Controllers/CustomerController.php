@@ -277,10 +277,26 @@ class CustomerController extends Controller {
             $location = 'United States';
         }
 
+        $cardInfo = [];
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($customerdata->stripe_customer_id != ''){
+            $savedEvents = $stripe->customers->allSources(
+                $customerdata->stripe_customer_id,
+                ['object' => 'card' ,'limit' => 30]
+            );
+            $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            $cardInfo = $savedEvents['data'];
+        }
+
         $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
         $familydata  = Customer::where('parent_cus_id',@$customerdata->id)->get();
         /*$familydata  = $customerdata->CustomerFamilyDetail();*/
         /*print_r($familydata);exit;*/
+        $strpecarderror = '';
+        if (session()->has('strpecarderror')) {
+            $strpecarderror = Session::get('strpecarderror');
+        }
         return view('customers.viewcustomer', [
              'business_details' => $business_details,
             'companyservice' => $companyservice,
@@ -291,6 +307,8 @@ class CustomerController extends Controller {
             'address'=>$address,
             'location'=>$location,
             'familydata'=>$familydata,
+            'cardInfo'=>$cardInfo,
+            'strpecarderror'=>$strpecarderror,
         ]);
         //return view('profiles.viewcustomer');
     }
@@ -346,7 +364,6 @@ class CustomerController extends Controller {
         }
     }
 
-
     public function deletecustomer(Request $request){
         $customerdata = $this->customers->findById($request->id);
         if( $customerdata != ''){
@@ -361,46 +378,233 @@ class CustomerController extends Controller {
         return redirect('viewcustomer/'.$request->cus_id);
     }
 
-    public function update_customer(Request $request){
-       // print_r($request->all());
-        if($request->profile_pic != ''){
-            $filename = $request->profile_pic;
-            $name = $filename->getClientOriginalName();
-            //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
-        }
-
-        $data = $request->all();
-        if(@$data['birthdate'] != ''){
-            $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
-        }
-
-        $position = array_search(request()->_token, $data);
-        $position1 = array_search(request()->cus_id, $data);
-        unset($data[$position]);
-        unset($data[$position1]);
-        
-        $cust = Customer::find($request->cus_id);
-        $cust->update($data);
-        return redirect('viewcustomer/'.$request->cus_id);
-    }
-
     public function addcustomerfamily ($id){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];
         $UserFamilyDetails  =[];
         if(!empty($companyId)) {
-             $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
-              $business_details = isset($business_details[0]) ? $business_details[0] : [];
+            $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
+            $business_details = isset($business_details[0]) ? $business_details[0] : [];
             $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
         }
-    
+        $UserFamilyDetails  = Customer::where('parent_cus_id',$id)->get();
         return view('customers.add_family', [
             'business_details' => $business_details,
             'companyservice' => $companyservice,
             'UserFamilyDetails' => $UserFamilyDetails,
-            'UserFamilyDetails' => $UserFamilyDetails,
+            'companyId' => $companyId,
+            'parent_cus_id' => $id,
         ]);
         //return view('profiles.viewcustomer');
+    }
+
+    public function addFamilyMemberCustomer(Request $request) {
+        //print_r($request->all());exit;
+        $prev = $request['previous_family_count'];       
+        $request['family_count'] . "---" . '----' . $prev;
+        $request['family_count'] - $prev;
+
+        $loggedinUser = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
+        $data = '';
+
+        if ($prev == $request['family_count'] && $request['family_count'] == 0) {
+            if ($request['removed_family'][0] != 'delete') {
+                $last_name = ($request['fname'][0]) ? $request['lname'][0] : '';
+                $cus_name = $request['fname'][0].' '.$last_name;
+                $customer = \Stripe\Customer::create(
+                    [
+                        'name' => $cus_name,
+                        'email'=> $request['email'][0],
+                    ]);
+                $stripe_customer_id = $customer->id;  
+                $data = Customer::create([
+                            'business_id' => $request['business_id'],
+                            'fname' => $request['fname'][0],
+                            'lname' => $request['lname'][0],
+                            'email' => $request['email'][0],
+                            'phone_number' => $request['mobile'][0],
+                            'emergency_contact' => $request['emergency_contact'][0],
+                            'relationship' => $request['relationship'][0],
+                            'gender' => $request['gender'][0],
+                            'birthdate' => date('Y-m-d',strtotime($request['birthdate'][0])),
+                            'parent_cus_id' => $request['parent_cus_id'],
+                            'stripe_customer_id' => $stripe_customer_id,
+                        ]);
+            }           
+        } else {          
+            for ($i = 0; $i < $prev; $i++) {
+                if ($request['removed_family'][$i] != 'delete') {
+                    $last_name = ($request['fname'][$i]) ? $request['lname'][$i] : '';
+                    $cus_name = $request['fname'][$i].' '.$last_name;
+                    $customer = \Stripe\Customer::create(
+                        [
+                            'name' => $cus_name,
+                            'email'=> $request['email'][$i],
+                        ]);
+                    $stripe_customer_id = $customer->id; 
+                    $cat = Customer::find($request['cus_id'][$i]);
+                    $cat->business_id = $request['business_id'];
+                    $cat->fname = $request['fname'][$i];
+                    $cat->lname = $request['lname'][$i];
+                    $cat->email = $request['email'][$i];
+                    $cat->phone_number = $request['mobile'][$i];
+                    $cat->emergency_contact = $request['emergency_contact'][$i];
+                    $cat->relationship = $request['relationship'][$i];
+                    $cat->gender = $request['gender'][$i];
+                    $cat->birthdate = date('Y-m-d',strtotime($request['birthdate'][$i]));
+                    $cat->stripe_customer_id  = $stripe_customer_id ;
+                    $data = $cat->update();
+                } else {
+                    $data = Customer::where('id', $request['cus_id'][$i])->delete();
+                }
+            }            
+            for ($j = $prev; $j < $request['family_count']; $j++) {
+                if ($request['removed_family'][$j] != 'delete') {
+                    $last_name = ($request['fname'][$j]) ? $request['lname'][$j] : '';
+                    $cus_name = $request['fname'][$j].' '.$last_name;
+                    $customer = \Stripe\Customer::create(
+                        [
+                            'name' => $cus_name,
+                            'email'=> $request['email'][$j],
+                        ]);
+                    $stripe_customer_id = $customer->id;
+                    $data = Customer::create([
+                                'business_id' => $request['business_id'],
+                                'fname' => $request['fname'][$j],
+                                'lname' => $request['lname'][$j],
+                                'email' => $request['email'][$j],
+                                'phone_number' => $request['mobile'][$j],
+                                'emergency_contact' => $request['emergency_contact'][$j],
+                                'relationship' => $request['relationship'][$j],
+                                'gender' => $request['gender'][$j],
+                                'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
+                                'parent_cus_id' => $request['parent_cus_id'],
+                                'stripe_customer_id' => $stripe_customer_id,
+                            ]);
+                }
+            }
+        }
+        if ($data)
+            return Redirect::back()->with('success', 'Family details has been updated successfully.');
+        else
+            return Redirect::back()->with('error', 'Problem in updating family details.');
+    }
+
+    public function removefamilyCustomer(Request $request) {
+        DB::delete('DELETE FROM customers WHERE id = "' . $request->rm . '"');
+        return Redirect::back()->with('success', 'Family Member Delete.');
+    }
+
+    public function update_customer(Request $request){
+      //print_r($request->all());exit;
+        session()->forget('strpecarderror');
+        if($request->chk == 'update_billing'){
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            
+            $customerdata = Customer::find($request->cus_id);
+            // /echo $customerdata;exit();
+            if($customerdata->stripe_customer_id == ''){
+                $last_name = ($customerdata->firstname) ? $customerdata->lastname : '';
+                $cus_name = $customerdata->firstname.' '.$last_name;
+                $customer = \Stripe\Customer::create(
+                    [
+                        'name' => $cus_name,
+                        'email'=> $customerdata->email,
+                    ]);
+                $stripe_customer_id = $customer->id;
+                $data1 = array(
+                    'stripe_customer_id'=>$stripe_customer_id,
+                );
+                $cust = Customer::find($request->cus_id);
+                $cust->update($data1);
+            }else{
+                $stripe_customer_id = $customerdata->stripe_customer_id;
+            }
+
+            if($request->payment_type == 'update'){
+                $stripval = $stripe->customers->deleteSource(
+                    $stripe_customer_id,
+                    $customerdata->card_stripe_id,
+                    []
+                );
+                
+            }
+
+            try{
+                if($request->card_month == ''){
+                    $request->card_month = $request->card_monthhidden;
+                }
+
+                if($request->card_year == ''){
+                    $request->card_year = $request->card_yearhidden;
+                }
+                $carddetails = $stripe->tokens->create([
+                    'card' => [
+                        'number' => $request->cardNumber,
+                        'exp_month' =>  $request->card_month,
+                        'exp_year' =>  $request->card_year,
+                        'cvc' =>  $request->cvv,
+                        'name' =>  $request->owner,
+                    ],
+                ]);
+                print_r($carddetails);
+                $customer_source = $stripe->customers->createSource(
+                    $stripe_customer_id,
+                    [ 'source' =>$carddetails->id]
+                );
+
+               /* print_r($carddetails);exit;*/
+                $cust = Customer::find($request->cus_id);
+                $data = array(
+                    "card_stripe_id"=>$carddetails['card']->id,
+                    "card_token_id"=> $carddetails->id,
+                );
+                $cust = Customer::find($request->cus_id);
+                $cust->update($data);
+            }catch(\Stripe\Exception\CardException $e) {
+              // Since it's a decline, \Stripe\Exception\CardException will be caught
+              $statusmsg= $e->getError()->message ;
+              Session::put('strpecarderror', $statusmsg);
+            }   
+        }elseif($request->chk == 'update_personal'){
+            if($request->profile_pic != ''){
+                $filename = $request->profile_pic;
+                $name = $filename->getClientOriginalName();
+                //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
+            }
+
+            $data = $request->all();
+            if(@$data['birthdate'] != ''){
+                $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
+            }
+
+            $position = array_search(request()->_token, $data);
+            $position1 = array_search(request()->cus_id, $data);
+            unset($data[$position]);
+            unset($data[$position1]);
+            
+            $cust = Customer::find($request->cus_id);
+            $cust->update($data);
+        }
+        
+        return redirect('viewcustomer/'.$request->cus_id);
+    }
+
+    public function paymentdeletecustomer(Request $request) {
+        /*print_r($request->all());*/
+        $customer = Customer::where('id', $request->cus_id)->first();
+        if($customer != ''){
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $stripval = $stripe->customers->deleteSource(
+                $customer->stripe_customer_id,
+                $request->cardid,
+                []
+            );
+            echo $stripval;
+        }
     }
 
 }

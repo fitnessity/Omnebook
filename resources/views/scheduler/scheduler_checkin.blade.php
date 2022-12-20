@@ -55,7 +55,7 @@
 					<div class="col-md-3 col-sm-12 col-sm-6">
                         <div class="manage-search manage-space">
 							<form method="get" action="/activities/">
-								<input type="text" name="label" id="" placeholder="Search for client" autocomplete="off" value="">
+								<input type="text" name="bookingclient" id="bookingclient" placeholder="Search for client" autocomplete="off" value="">
 								<button id="serchbtn"><i class="fa fa-search"></i></button>
 							</form>
 						</div>
@@ -98,225 +98,65 @@
 							</div>
 						</div>
 						
-						<div class="scheduler-info-box">
-							<div class="row">
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduler-border scheduler-label">
-										<a><i class="fas fa-times"></i></a>
-										<div class="checkbox-check">
-											<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-											<label for="vehicle1"> Check In</label><br>
-											<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-											<label for="vehicle2"> Late Cancel</label><br>
-											<a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
+						<div id="schedulelist">
+							@if(!empty($bookingdata) && count($bookingdata) > 0)
+							@foreach($bookingdata as $bd)
+							<div class="scheduler-info-box">
+								<div class="row">
+									<div class="col-md-2 col-xs-12 col-sm-4">
+										<div class="scheduler-border scheduler-label">
+											<a><i class="fas fa-times"></i></a>
+											<div class="checkbox-check">
+												<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+												<label for="vehicle1"> Check In</label><br>
+												<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+												<label for="vehicle2"> Late Cancel</label><br>
+												<a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-md-1 col-xs-3 col-sm-4">	
-									<div class="scheduler-qty">
-										<span> AL </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-9 col-sm-4">
-									<div class="scheduled-activity-info">
-										<label class="scheduler-titles">Client Name: </label> <span> Adam Ladd </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-activity-info">
-										<div class="price-mobileview">
-											<label class="scheduler-titles">Price Title:</label>
-											<select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">
-												 <option value="">1 year kickboxing (Recurring)</option>
-												 <option>11</option>
-												 <option>22</option>
-												 <option>33</option>
-											</select>
+									<div class="col-md-1 col-xs-3 col-sm-4">	
+										<div class="scheduler-qty">
+											<span> {{$bd->booking->user->firstname[0]}}{{$bd->booking->user->lastname[0]}}</span>
 										</div>
 									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Remaining: </label> <span> 99945/100000 </span>
+									<div class="col-md-2 col-xs-9 col-sm-4">
+										<div class="scheduled-activity-info">
+											<label class="scheduler-titles">Client Name: </label> <span>{{$bd->booking->user->firstname}} {{$bd->booking->user->lastname}}</span>
+										</div>
 									</div>
-								</div>
-								<div class="col-md-1 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Expiration: </label><span> 12/15/2022 </span>
+									<div class="col-md-2 col-xs-12 col-sm-4">
+										<div class="scheduled-activity-info">
+											<div class="price-mobileview">
+												<label class="scheduler-titles">Price Title:</label>
+												<select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">
+													@foreach($pricrdropdown as $bp)
+													 <option value="{{$bp['id']}}" @if($bd->priceid == $bp['id']) selected @endif>{{$bp['price_title']}}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-12">
-									<div class="scheduled-btns">
-										<button type="button" class="btn-edit btn-sp">Purchase</button>
-										<button type="button" class="btn-edit">View Account</button>
+									<div class="col-md-2 col-xs-12 col-sm-4">
+										<div class="scheduled-location">
+											<label class="scheduler-titles">Remaining: </label> <span>{{$schedule_data->spots_left($filter_date)}}/{{$schedule_data->spots_available}}</span>
+										</div>
+									</div>
+									<div class="col-md-1 col-xs-12 col-sm-4">
+										<div class="scheduled-location">
+											<label class="scheduler-titles">Expiration: </label><span> {{date('m/d/Y',strtotime($schedule_data->end_activity_date))}} </span>
+										</div>
+									</div>
+									<div class="col-md-2 col-xs-12 col-sm-12">
+										<div class="scheduled-btns">
+											<a href="{{route('activity_purchase')}}" class="btn-edit btn-sp">Purchase</a>
+											<button type="button" class="btn-edit">View Account</button>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						
-						<div class="scheduler-info-box">
-							<div class="row">
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduler-border scheduler-border-red scheduler-label">
-										<a><i class="fas fa-times"></i></a>
-										<div class="checkbox-check">
-											<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-											<label for="vehicle1"> Check In</label><br>
-											<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-											<label for="vehicle2"> Late Cancel</label><br>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-3 col-sm-4">	
-									<div class="scheduler-qty">
-										<span> AM </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-9 col-sm-4">
-									<div class="scheduled-activity-info">
-										<label class="scheduler-titles">Client Name: </label> <span> Amber Morgan </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-activity-info">
-										<div class="price-mobileview">
-											<label class="scheduler-titles">Price Title:</label>
-											<select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">
-												 <option value="">10 Pack Drop In </option>
-												 <option>11</option>
-												 <option>22</option>
-												 <option>33</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Remaining: </label> <span>  4/10 </span>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Expiration: </label><span> 11/27/2022 </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-12">
-									<div class="scheduled-btns">
-										<button type="button" class="btn-edit btn-sp">Purchase</button>
-										<button type="button" class="btn-edit">View Account</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="scheduler-info-box">
-							<div class="row">
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduler-border scheduler-label">
-										<a><i class="fas fa-times"></i></a>
-										<div class="checkbox-check">
-											<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-											<label for="vehicle1"> Check In</label><br>
-											<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-											<label for="vehicle2"> Late Cancel</label><br>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-3 col-sm-4">	
-									<div class="scheduler-qty">
-										<span> AN </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-9 col-sm-4">
-									<div class="scheduled-activity-info">
-										<label class="scheduler-titles">Client Name: </label> <span> Allan Nolan </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-activity-info">
-										<div class="price-mobileview">
-											<label class="scheduler-titles">Price Title:</label>
-											<select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">
-												 <option value="">6 Month  Membership </option>
-												 <option>11</option>
-												 <option>22</option>
-												 <option>33</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Remaining: </label> <span> 99945/100000 </span>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Expiration: </label><span> 12/15/2022 </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-12">
-									<div class="scheduled-btns">
-										<button type="button" class="btn-edit btn-sp">Purchase</button>
-										<button type="button" class="btn-edit">View Account</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="scheduler-info-box">
-							<div class="row">
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduler-border scheduler-border-red scheduler-label">
-										<a><i class="fas fa-times"></i></a>
-										<div class="checkbox-check">
-											<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-											<label for="vehicle1"> Check In</label><br>
-											<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-											<label for="vehicle2"> Late Cancel</label><br>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-3 col-sm-4">	
-									<div class="scheduler-qty">
-										<span> AW </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-9 col-sm-4">
-									<div class="scheduled-activity-info">
-										<label class="scheduler-titles">Client Name: </label> <span> Alex Wilson </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-activity-info">
-										<div class="price-mobileview">
-											<label class="scheduler-titles">Price Title:</label>
-											<select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">
-												 <option value="">20 Pack Drop In </option>
-												 <option>11</option>
-												 <option>22</option>
-												 <option>33</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Remaining: </label> <span>  9/20  </span>
-									</div>
-								</div>
-								<div class="col-md-1 col-xs-12 col-sm-4">
-									<div class="scheduled-location">
-										<label class="scheduler-titles">Expiration: </label><span> 12/15/2022 </span>
-									</div>
-								</div>
-								<div class="col-md-2 col-xs-12 col-sm-12">
-									<div class="scheduled-btns">
-										<button type="button" class="btn-edit btn-sp">Purchase</button>
-										<button type="button" class="btn-edit">View Account</button>
-									</div>
-								</div>
-							</div>
+							@endforeach
+							@endif
 						</div>
 					</div>
 				</div>				
@@ -382,12 +222,30 @@
           beforeSend: function() {
               //$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
           },
-          success: function(data) {
-              $("#option-box").show();
-              $("#option-box").html(data);
-              $("#business_name").css("background", "#FFF");
+          success: function(data) {  
+          		$("#option-box").show();
+              	$("#option-box").html(data);
+              	$("#business_name").css("background", "#FFF");
           }
       });
+  	});
+
+  	$("#bookingclient").keyup(function() {
+      	$.ajax({
+          	type: "POST",
+          	url: "/searchcustomerbooking",
+          	data: { 
+          		query: $(this).val(),  
+          		_token: '{{csrf_token()}}', 
+          		sid: '{{@$schedule_data->id}}', 
+          	},
+          	beforeSend: function() {
+              	//$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+          	},
+          	success: function(data) {
+              	$("#schedulelist").html(data);
+          	}
+      	});
   	});
 
 	function registerUser() {

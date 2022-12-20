@@ -9,6 +9,7 @@ use App\BusinessServices;
 use App\UserBookingStatus;
 use App\BusinessActivityScheduler;
 use App\StaffMembers;
+use App\UserBookingDetail;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -17,13 +18,21 @@ use Config;
 use DateInterval;
 use App\Repositories\BusinessServiceRepository;
 
+use App\Repositories\CustomerRepository;
+use App\Repositories\UserRepository;
+
 class SchedulerController extends Controller
 {    
      protected $business_service_repo;
-     public function __construct(BusinessServiceRepository $business_service_repo)
+     protected $customers;
+     protected $users;
+     public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users)
      {        
           $this->business_service_repo = $business_service_repo;
+          $this->users = $users;
+          $this->customers = $customers;
      }
+
      public function index(Request $request)
      {
           $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
@@ -150,17 +159,188 @@ class SchedulerController extends Controller
           $filter_date = new DateTime();
           $schedule_data = BusinessActivityScheduler::findById($sid);
           $servicedata = $this->business_service_repo->findById(@$schedule_data->serviceid);
+     
+          $pricrdropdown = BusinessServices::find(@$schedule_data->serviceid)->price_details;
+          $bookingdata = UserBookingDetail::where('sport',@$schedule_data->serviceid)->where('act_schedule_id',$sid)->where('bookedtime',date('Y-m-d'))->get();
           return view('scheduler.scheduler_checkin', [
                'business_details' => $business_details,
                'companyId' => $companyId,
                'schedule_data' =>$schedule_data,
                'servicedata' =>$servicedata,
                'filter_date' => $filter_date,
+               'bookingdata' => $bookingdata,
+               'pricrdropdown' => $pricrdropdown,
                'todaydate'=>$filter_date->format('l, F j , Y'),
           ]);
      }
 
+     public function searchcustomerbooking(Request $request) {
+          $filter_date = new DateTime();
+          if($request->get('query'))
+          {
+               $array_data=array();
+               $query = $request->get('query');
+          
+               $data_cus = $this->customers->findByfname($query); 
+
+               $data_user = $this->users->findByfname($query); 
+               
+               foreach($data_cus as $cuss)
+               {  
+                    $array_data [] = $cuss->id;
+               }
+
+               foreach($data_user as $user)
+               {  
+                    $array_data [] = $user->id;
+               }
+
+               sort($array_data);
+          }
+
+          $schedule_data = BusinessActivityScheduler::findById($request->sid);
+          $servicedata = $this->business_service_repo->findById(@$schedule_data->serviceid);
+
+          $pricrdropdown = BusinessServices::find(@$schedule_data->serviceid)->price_details;
+          $bookingdata = UserBookingDetail::where('sport',@$schedule_data->serviceid)->where('act_schedule_id',$request->sid)->where('bookedtime',date('Y-m-d'))->get();
+          $output = '';
+
+          if(!empty($bookingdata) && count($bookingdata) > 0){
+               foreach($bookingdata as $bd){
+                    if($request->get('query') != ''){
+                         if(in_array($bd->booking->user->id ,$array_data)){
+                              $output .='<div class="scheduler-info-box">
+                                   <div class="row">
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduler-border scheduler-label">
+                                                  <a><i class="fas fa-times"></i></a>
+                                                  <div class="checkbox-check">
+                                                       <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                                       <label for="vehicle1"> Check In</label><br>
+                                                       <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                                       <label for="vehicle2"> Late Cancel</label><br>
+                                                       <a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-3 col-sm-4">     
+                                             <div class="scheduler-qty">
+                                                  <span> '.$bd->booking->user->firstname[0].''.$bd->booking->user->lastname[0].'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-9 col-sm-4">
+                                             <div class="scheduled-activity-info">
+                                                  <label class="scheduler-titles">Client Name: </label> <span>'.$bd->booking->user->firstname.' '.$bd->booking->user->lastname.'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduled-activity-info">
+                                                  <div class="price-mobileview">
+                                                       <label class="scheduler-titles">Price Title:</label>
+                                                       <select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">';
+                                                            foreach($pricrdropdown as $bp){
+                                                                 $output .='<option value="'.$bp["id"].'"';
+                                                                 if($bd->priceid == $bp["id"]){
+                                                                      $output .='selected';
+                                                                 } 
+                                                                 $output .='>'.$bp["price_title"].'</option>';
+                                                            }
+                                                       $output .='</select>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduled-location">
+                                                  <label class="scheduler-titles">Remaining: </label> <span>'.$schedule_data->spots_left($filter_date).'/'.$schedule_data->spots_available.'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-12 col-sm-4">
+                                             <div class="scheduled-location">
+                                                  <label class="scheduler-titles">Expiration: </label><span> '.date('m/d/Y',strtotime($schedule_data->end_activity_date)).' </span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-12">
+                                             <div class="scheduled-btns">
+                                                  <a href="'.route('activity_purchase').'" class="btn-edit btn-sp">Purchase</a>
+                                                  <button type="button" class="btn-edit">View Account</button>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>';
+                         }
+                    }else{
+                         $output .='<div class="scheduler-info-box">
+                                   <div class="row">
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduler-border scheduler-label">
+                                                  <a><i class="fas fa-times"></i></a>
+                                                  <div class="checkbox-check">
+                                                       <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                                       <label for="vehicle1"> Check In</label><br>
+                                                       <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                                       <label for="vehicle2"> Late Cancel</label><br>
+                                                       <a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-3 col-sm-4">     
+                                             <div class="scheduler-qty">
+                                                  <span> '.$bd->booking->user->firstname[0].''.$bd->booking->user->lastname[0].'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-9 col-sm-4">
+                                             <div class="scheduled-activity-info">
+                                                  <label class="scheduler-titles">Client Name: </label> <span>'.$bd->booking->user->firstname.' '.$bd->booking->user->lastname.'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduled-activity-info">
+                                                  <div class="price-mobileview">
+                                                       <label class="scheduler-titles">Price Title:</label>
+                                                       <select name="frm_servicesport" id="frm-servicesport" class="form-control valid price-info">';
+                                                            foreach($pricrdropdown as $bp){
+                                                                 $output .='<option value="'.$bp["id"].'"';
+                                                                 if($bd->priceid == $bp["id"]){
+                                                                      $output .='selected';
+                                                                 } 
+                                                                 $output .='>'.$bp["price_title"].'</option>';
+                                                            }
+                                                       $output .='</select>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                             <div class="scheduled-location">
+                                                  <label class="scheduler-titles">Remaining: </label> <span>'.$schedule_data->spots_left($filter_date).'/'.$schedule_data->spots_available.'</span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-12 col-sm-4">
+                                             <div class="scheduled-location">
+                                                  <label class="scheduler-titles">Expiration: </label><span> '.date('m/d/Y',strtotime($schedule_data->end_activity_date)).' </span>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-12">
+                                             <div class="scheduled-btns">
+                                                  <a href="'.route('activity_purchase').'" class="btn-edit btn-sp">Purchase</a>
+                                                  <button type="button" class="btn-edit">View Account</button>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>';
+                    }
+                    
+               }
+          }
+          return $output;
+     }
+
+
+
      public function booking_request(){
           return view('scheduler.booking_request');
+     }
+
+     public function activity_purchase(){
+          return view('scheduler.activity_purchase');
      }
 }

@@ -946,6 +946,11 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
+    Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
+    Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
+
+    Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
+    
 });
 
 
@@ -956,4 +961,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
     Route::get('scheduler-checkin/{sid?}', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
+    Route::get('activity_purchase', 'SchedulerController@activity_purchase')->name('activity_purchase');
+    Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
 });

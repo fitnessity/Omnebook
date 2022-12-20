@@ -96,6 +96,18 @@ class RegistrationController extends Controller
 
             if (count($postArr) > 0) {
 
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+                $last_name = ($postArr['firstname']) ? $postArr['lastname'] : '';
+                $cus_name = $postArr['firstname'].' '.$last_name;
+                $customer = \Stripe\Customer::create(
+                    [
+                        'name' => $cus_name,
+                        'email'=> $postArr['email'],
+                    ]);
+                $stripe_customer_id = $customer->id;  
+
                 $customerObj = New Customer();
                 $customerObj->business_id = $postArr['business_id'];
                 $customerObj->fname = $postArr['firstname'];
@@ -107,10 +119,12 @@ class RegistrationController extends Controller
                 $customerObj->status = 0;
                 $customerObj->phone_number = $postArr['contact'];
                 $customerObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
+                $customerObj->stripe_customer_id = $stripe_customer_id;
 
                 $customerObj->save();
 
-                if ($customerObj) {                    
+                if ($customerObj) {    
+                                  
                     MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
                     //MailService::sendEmailSignupVerification($customerObj->id);
 
