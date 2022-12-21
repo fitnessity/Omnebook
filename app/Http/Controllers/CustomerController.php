@@ -225,7 +225,7 @@ class CustomerController extends Controller {
             else
             {
                 $output .= '<li class="liimage"> ';
-                $output .= "Looks like there's no cutomer with that name listed on Fitnessity.</li>";
+                $output .= "Looks like there's no client with that name listed.</li>";
             }
            
             echo $output;
