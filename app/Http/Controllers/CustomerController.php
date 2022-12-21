@@ -172,12 +172,14 @@ class CustomerController extends Controller {
     }
 
     public function searchcustomersaction(Request $request) {
+
         if($request->get('query'))
         {
             $array_data=array();
             $query = $request->get('query');
           
-            $data_cus = $this->customers->findByfname($query); 
+            // $data_cus = $this->customers->findByfname($query); 
+            $data_cus = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
            
             foreach($data_cus as $cuss)
             {	
@@ -197,7 +199,7 @@ class CustomerController extends Controller {
             if(!empty($array_data)){
                 foreach($array_data as $row)
                 {
-                    $output .= '<li class="searchclick" onClick="searchclick('.$row['cus_id'].')">
+                    $output .= '<li class="searchclick" >
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
                             if($row['image'] != ''){
