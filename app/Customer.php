@@ -84,7 +84,19 @@ class Customer extends Authenticatable
 
     public function CustomerFamilyDetail()
     {
-        return $this->hasMany(CustomerFamilyDetail::class, 'cus_id');
+        return $this->hasMany(Customer::class, 'parent_cus_id');
+    }
+
+    public function get_families()
+    {
+        if($this->parent_cus_id){
+            $parent = Customer::where('id',$this->parent_cus_id)->first();
+            $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
+            $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
+            return $familes;
+        }else{
+            return Customer::where('parent_cus_id',$this->id)->get();
+        }
     }
     
 }
