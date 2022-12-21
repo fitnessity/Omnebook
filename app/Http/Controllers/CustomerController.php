@@ -290,9 +290,8 @@ class CustomerController extends Controller {
         }
 
         $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
-        $familydata  = Customer::where('parent_cus_id',@$customerdata->id)->get();
-        /*$familydata  = $customerdata->CustomerFamilyDetail();*/
-        /*print_r($familydata);exit;*/
+        $familydata = $customerdata->get_families();
+
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
