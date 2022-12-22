@@ -84,7 +84,11 @@ class CompanyInformation extends Model {
     }
 
     public function customers(){
-        return $this->belongsTo(Customer::class, 'id');
+        return $this->hasMany(Customer::class, 'business_id');
+    }
+
+    public function business_services(){
+        return $this->hasMany(BusinessServices::class, 'cid');
     }
 
 }

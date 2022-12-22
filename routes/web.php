@@ -933,13 +933,19 @@ Route::namespace('Customers_Auth')->group(function(){
     /*Route::group(['prefix'  =>  'customers','middleware' => ['auth:customers']], function () {
     });*/
 });
+Route::group(['middleware' => ['auth']], function(){
+    Route::prefix('/business/{business_id}')->group(function () {
+        Route::get('/customers','CustomerController@index')->name('business_customer_index');
+        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+    });
+});
 
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('manage-customer','CustomerController@manage_customer')->name('manage-customer');
+    // Route::get('/manage_customer','CustomerController@manage_customer')->name('manage-customer');
     Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
     Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
-    Route::get('deletecustomer/{id}','CustomerController@deletecustomer')->name('deletecustomer');
+    
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
