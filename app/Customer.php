@@ -43,6 +43,17 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['age'];
+
+
+    public function getAgeAttribute()
+    {
+        if($this->birthdate != null){
+            return Carbon::parse($this->birthdate)->age;
+        }else{
+            return null;
+        }
+    }
 
     public function company_information()
     {
@@ -71,15 +82,6 @@ class Customer extends Authenticatable
             $html = '<div class="company-list-text viewcustomelatterrimg"><p>'.$pf.'</p></div>';
         }
         return $html;
-    }
-
-    public function getcustage(){
-        if($this->birthdate != null){
-            return Carbon::parse($this->birthdate)->age;
-        }else{
-            return "—";
-        }
-        
     }
 
     public function CustomerFamilyDetail()

@@ -40,135 +40,48 @@ class CustomerController extends Controller {
      */
 
  	protected $customers;
- 	protected $users;
+    protected $company;
     public $error = '';
+
  	public function __construct(CustomerRepository $customers,UserRepository $users) {
-        $this->customers = $customers;
         $this->middleware('auth');
-        $this->users = $users;
-     
+        $this->customers = $customers;
     }
 
-    public function manage_customer (Request $request){
-        $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
-        $companyservice  =[];
-        if(!empty($companyId)) {
-             $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
-              $business_details = isset($business_details[0]) ? $business_details[0] : [];
-            $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
+    public function index(Request $request, $business_id){
+
+        $user = Auth::user();
+        $company = $user->businesses->find($business_id);
+
+        $customers = $company->customers()->orderBy('fname');
+        if($request->fname){
+            $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
         }
 
-        $customer_data = Customer::getcustomerofthiscompany($companyId );
-        $orderedcustomers= array();
-		foreach ($customer_data as $topic) {
-		  $orderedcustomers[strtoupper($topic['fname'][0])][] = $topic;
+        $customer_count = $customers->count();
+        $customers = $customers->get();
+
+        $grouped_customers= array();
+		foreach ($customers as $customer) {
+		  $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
 		}
-        $html = '';
-        if($request->ajax()){
-            $data_cus = $this->customers->findByfname($request->inpuval); 
-            $data_cusary= array();
-            foreach ($data_cus as $topic) {
-              $data_cusary[strtoupper($topic['fname'][0])][] = $topic;
-            }
-            $html .= '<div class="total-clients">
-                        <i class="fas fa-user-circle"></i>
-                        <label>You Have '.count($data_cus).' Clients</label>
-                    </div>
-                    <div class="panel-group" id="accordion-customer">';
-                        $i= 0;
-                        foreach ($data_cusary as $section=>$cust) {
-                            $html .= '<div class="custom-panel panel panel-default">
-                            <div class="custom panel-heading">
-                                <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-customer" href="#collapse_'.$i.'"> '.$section.'
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapse_'.$i.'" class="panel-collapse collapse';
-                            if($i == 0){
-                                $html .=' show in';
-                            }
-                            $html .='" data-parent="#accordion-customer">
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-12">';
-                                            foreach ($cust as $dt) {
-                                                $age = Carbon::parse($dt->birthdate)->age; 
-                                            $html .='<div class="collapse-inner-box mrb-2">
-                                                <div class="row">
-                                                    <div class="col-md-1 col-xs-3 col-sm-1">
-                                                        <div class="collapse-img">
-                                                            '.$dt->getimage().'
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2 col-xs-8 col-sm-2">
-                                                        <div class="client-name">
-                                                            <span>'.$dt->fname.' '.$dt->lname.'</span>
-                                                            <p>Last Attended: 20/09/2019</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-1 col-xs-12 col-sm-1">
-                                                        <div class="client-age">
-                                                            <span>Age: '.$age.'</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2 col-xs-12 col-sm-2">
-                                                        <div class="client-status">
-                                                            <label>Status: </label>
-                                                            
-                                                            <span class="green-fonts">';
-                                                                if($dt->status == 0)
-                                                                    $html .='InActive';
-                                                                else
-                                                                    $html .='Active';
-                                                            $html .='</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-12 col-sm-3">
-                                                        <div class="client-status">
-                                                            <label>Active Memberships: </label>
-                                                            <span class="green-fonts">2</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2 col-xs-12 col-sm-2">
-                                                        <div class="client-status">
-                                                            <label>Expiring Soon: </label>
-                                                            <span class="red-fonts">1</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-1 col-xs-12 col-sm-1">
-                                                        <div class="client-status">
-                                                            <a href="'.Config::get('constants.SITE_URL').'/viewcustomer/'.$dt->id.'">View</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> ';
-                                            }                          
-                                        $html .='</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            $("#collapse_'.$i.'").click(function(){
-                                $(".panel-collapse").removeClass(" show in");
-                                $("#collapse_'.$i.'").addClass(" show in");
-                            });
-                        </script>';
-                        $i++;  
-                       }
-                    $html .='</div>';
-                    return $html;
-        }
 
-		//print_r($orderedcustomers);exit;
-        return view('customers.manage-customer', [
-            'companyId'=>$companyId,
-            'business_details' => $business_details,
-            'companyservice' => $companyservice,
-            'customers' =>$orderedcustomers,
-            'customer_count' => count($customer_data),
+
+        if ($request->ajax()) {
+            return response()->json($customers);
+        }
+        return view('customers.index', [
+            'company' => $company,
+            'grouped_customers' => $grouped_customers,
+            'customer_count' => $customer_count,
         ]); 
+    }
+
+    public function delete(Request $request, $business_id){
+        $customerdata = $this->customers->findById($request->id);
+        if( $customerdata != ''){
+            Customer::where('id',$request->id)->delete();
+        }
     }
 
     public function searchcustomersaction(Request $request) {
@@ -365,14 +278,7 @@ class CustomerController extends Controller {
         }
     }
 
-    public function deletecustomer(Request $request){
-        $customerdata = $this->customers->findById($request->id);
-        if( $customerdata != ''){
-            Customer::where('id',$request->id)->delete();
-        }
-
-        return redirect('manage-customer');
-    }
+    
 
     public function savenotes(Request $request){
         Customer::where('id',$request->cus_id)->update(["notes"=>$request->notetext]);

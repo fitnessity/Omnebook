@@ -227,7 +227,7 @@
 				
 			</div>	
 		</div>
-		@include('includes.add_new_client')
+
 		<!-- The Modal Add Business-->
 		<div class="modal fade compare-model" id="bookingcancel">
 			<div class="modal-dialog bookingcancel">
@@ -412,26 +412,7 @@
     }
 
     function getcustomerlist(){
-		$('#option-box1').hide();
-		var inpuval = $('#serchclient').val();
-		if(inpuval == ''){
-			$('#chk').val('empty');
-			$('#id').val('{{$companyId}}');
-		}else{
-			$('#chk').val('notempty');
-			$('#id').val(inpuval);
-		}
-		
-		$.ajax({
-			url:'{{route("manage-customer")}}',
-			type:"GET",
-			data:{
-				inpuval:inpuval
-			},
-			success:function(response){
-				$('#customerlist').html(response);
-			}
-		});
+
 	}
 
 	function searchclick(cid){
