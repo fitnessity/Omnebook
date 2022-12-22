@@ -277,7 +277,7 @@
 												</div>
 											</div>
 										</div>
-										@if(!empty($familydata) && count($familydata)>0)
+										@if(!empty($familydata))
 											@foreach($familydata as $index=>$fdata)
 											@php $age =  Carbon::parse($fdata->birthdate)->age;@endphp
 											<div class="row">

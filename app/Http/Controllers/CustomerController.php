@@ -173,12 +173,14 @@ class CustomerController extends Controller {
     }
 
     public function searchcustomersaction(Request $request) {
+
         if($request->get('query'))
         {
             $array_data=array();
             $query = $request->get('query');
           
-            $data_cus = $this->customers->findByfname($query); 
+            // $data_cus = $this->customers->findByfname($query); 
+            $data_cus = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
            
             foreach($data_cus as $cuss)
             {	
@@ -198,7 +200,7 @@ class CustomerController extends Controller {
             if(!empty($array_data)){
                 foreach($array_data as $row)
                 {
-                    $output .= '<li class="searchclick" onClick="searchclick('.$row['cus_id'].')">
+                    $output .= '<li class="searchclick" >
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
                             if($row['image'] != ''){
@@ -226,7 +228,7 @@ class CustomerController extends Controller {
             else
             {
                 $output .= '<li class="liimage"> ';
-                $output .= "Looks like there's no cutomer with that name listed on Fitnessity.</li>";
+                $output .= "Looks like there's no client with that name listed.</li>";
             }
            
             echo $output;
@@ -294,9 +296,8 @@ class CustomerController extends Controller {
         }
 
         $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
-        $familydata  = Customer::where('parent_cus_id',@$customerdata->id)->get();
-        /*$familydata  = $customerdata->CustomerFamilyDetail();*/
-        /*print_r($familydata);exit;*/
+        $familydata = $customerdata->get_families();
+
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
