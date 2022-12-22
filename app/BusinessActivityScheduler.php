@@ -105,6 +105,11 @@ class BusinessActivityScheduler extends Model
         return $this->hasMany(UserBookingDetail::class, 'act_schedule_id');
     }
 
+    public function activity_cancel()
+    {
+        return $this->hasMany(ActivityCancel::class, 'schedule_id');
+    }
+
     public function get_clean_duration() {
         $string = "";
         $duration = date_parse(" +".$this->set_duration);
@@ -197,8 +202,16 @@ class BusinessActivityScheduler extends Model
         }           
     }
 
-    public static function alldayschedule($datetime){
-        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);                                   
+    public static function alldayschedule($datetime,$chkval){
+        if($chkval != ''){
+            return BusinessActivityScheduler::with([ 'company_information'])
+                        ->whereHas('business_service', function ($query) use ($chkval) {
+                              $query->where('service_type',$chkval);
+                        })->orderBy('shift_start')->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);
+        }else{
+            return BusinessActivityScheduler::with(['business_service','company_information'])->orderBy('shift_start')->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);
+        }
+                                           
     }
 
     public function spots_reserved($current_time){
@@ -215,5 +228,11 @@ class BusinessActivityScheduler extends Model
                 $totalquantity += $item['infant'];
         }
         return $totalquantity;
+    }
+
+    public function getcanceldata($date,$sid){
+        $activity_cancel = ActivityCancel::where('cancel_date', $date->format("Y-m-d"))->where('schedule_id',$sid)->first();
+
+        return @$activity_cancel->act_cancel_chk;
     }
 }

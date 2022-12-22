@@ -109,12 +109,17 @@
 											<div class="checkbox-check">
 												<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
 												<label for="vehicle1"> Check In</label><br>
-												<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+												<input type="checkbox" id="late_cancel" name="late_cancel" value="Car" onclick='handleClick(this);'>
 												<label for="vehicle2"> Late Cancel</label><br>
-												<a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
+												<a class="btn-edit" data-toggle="modal" data-target="#latecancel" id="modelopen" style="display:none;">Modal</a>
 											</div>
 										</div>
 									</div>
+									<script>
+										function handleClick(cb) {
+										  	$('#modelopen').click();
+										}
+									</script>
 									<div class="col-md-1 col-xs-3 col-sm-4">	
 										<div class="scheduler-qty">
 											<span> {{$bd->booking->user->firstname[0]}}{{$bd->booking->user->lastname[0]}}</span>

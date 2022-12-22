@@ -937,7 +937,7 @@ Route::namespace('Customers_Auth')->group(function(){
 Route::group(['middleware' => ['auth']], function()
 {
     Route::get('manage-customer','CustomerController@manage_customer')->name('manage-customer');
-    Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
+    Route::post('searchcustomersaction','CustomerController@searchcustomersaction')->name('searchcustomersaction');
     Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
     Route::get('deletecustomer/{id}','CustomerController@deletecustomer')->name('deletecustomer');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
@@ -963,4 +963,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::get('activity_purchase', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
+    Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
+    Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
 });
+
+Route::get('email', 'SchedulerController@email')->name('email');
