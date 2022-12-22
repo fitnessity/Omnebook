@@ -50,7 +50,11 @@
 						<div class="row">
 							<div class="col-md-2 col-sm-3">
 								<div class="manage-cust-img">
-                                    {!! $customerdata->getimageforviewpage() !!}
+									@if($customerdata->profile_pic)
+										<img src="{{Storage::Url($customerdata->profile_pic)}}" class="imgboxes" alt="">
+									@else
+										<div class="company-list-text"><p>{{$customerdata->fname[0]}}</p></div>
+									@endif
                                 </div>
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
@@ -803,7 +807,11 @@
 										<label>	Profile Picture</label>
 										<div class="userblock">
 		                        			<div class="login_links">
-		                                		{!! $customerdata->getimage() !!}
+		                                		@if($customerdata->profile_pic)
+		                                			<img src="{{Storage::Url($customerdata->profile_pic)}}" class="imgboxes" alt="">
+		                                		@else
+		                                			<div class="company-list-text"><p>{{$customerdata->fname[0]}}</p></div>
+		                                		@endif
 		                                    </div>
 		                                </div>
 										<input type="file" id="profile_pic" name="profile_pic">						
