@@ -124,7 +124,7 @@ class UserBookingDetail extends Model
             }
             
 
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
         }    
     }
 

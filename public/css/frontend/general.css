@@ -22483,7 +22483,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #fff;
 }
 .register-bg{
-	background-image: url(http://dev.fitnessity.co//public/images/register-bg.jpg);
+	background-image: url(/public/images/register-bg.jpg);
 	background-size: 100% 100%;
 	background-position: center;
 }
