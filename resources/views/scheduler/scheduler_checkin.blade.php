@@ -109,9 +109,8 @@
 											<div class="checkbox-check">
 												<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
 												<label for="vehicle1"> Check In</label><br>
-												<input type="checkbox" id="late_cancel" name="late_cancel" value="Car" onclick='handleClick(this);'>
+												<input type="checkbox" id="vehicle2" name="vehicle2" value="Car" data-behavior="show_latecancel">
 												<label for="vehicle2"> Late Cancel</label><br>
-												<a class="btn-edit" data-toggle="modal" data-target="#latecancel" id="modelopen" style="display:none;">Modal</a>
 											</div>
 										</div>
 									</div>
@@ -219,6 +218,12 @@
 @include('layouts.footer')
 
 <script type="text/javascript">
+	$(document).on('change', 'input[data-behavior="show_latecancel"]', function(){
+		if($(this).is(':checked')){
+			$('#latecancel').modal('show')	
+		}
+		
+	})
 	$("#business_name").keyup(function() {
       $.ajax({
           type: "POST",
@@ -248,7 +253,7 @@
               	//$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
           	},
           	success: function(data) {
-              	$("#schedulelist").html(data);
+              	// $("#schedulelist").html(data);
           	}
       	});
   	});

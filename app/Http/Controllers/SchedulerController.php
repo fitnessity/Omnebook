@@ -305,9 +305,8 @@ class SchedulerController extends Controller
                                                   <div class="checkbox-check">
                                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
                                                        <label for="vehicle1"> Check In</label><br>
-                                                       <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                                       <input type="checkbox" id="vehicle2" name="vehicle2" value="Car" data-behavior="show_latecancel">
                                                        <label for="vehicle2"> Late Cancel</label><br>
-                                                       <a class="btn-edit" data-toggle="modal" data-target="#latecancel">Modal</a>
                                                   </div>
                                              </div>
                                         </div>
