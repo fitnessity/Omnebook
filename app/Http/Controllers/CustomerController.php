@@ -29,6 +29,7 @@ use App\BusinessServices;
 use App\User;
 use App\Customer;
 use App\CustomerFamilyDetail;
+use App\BusinessTerms;
 
 use Request as resAll;
 
@@ -151,11 +152,14 @@ class CustomerController extends Controller {
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];
         if(!empty($companyId)) {
-             $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
-              $business_details = isset($business_details[0]) ? $business_details[0] : [];
+            $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
+            $business_details = isset($business_details[0]) ? $business_details[0] : [];
             $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
         }
-         $bdate = '—';
+
+        $terms = BusinessTerms::where('cid',$companyId)->first();
+        $bdate = '—';
+
         $customerdata = $this->customers->findById($id);
         if(@$customerdata->birthdate != null){
             $date =  new Carbon($customerdata->birthdate);
@@ -223,6 +227,7 @@ class CustomerController extends Controller {
             'familydata'=>$familydata,
             'cardInfo'=>$cardInfo,
             'strpecarderror'=>$strpecarderror,
+            'terms'=> $terms ,
         ]);
         //return view('profiles.viewcustomer');
     }
@@ -404,7 +409,7 @@ class CustomerController extends Controller {
     }
 
     public function update_customer(Request $request){
-      //print_r($request->all());exit;
+      /*print_r($request->all());exit;*/
         session()->forget('strpecarderror');
         if($request->chk == 'update_billing'){
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
@@ -476,17 +481,31 @@ class CustomerController extends Controller {
               Session::put('strpecarderror', $statusmsg);
             }   
         }elseif($request->chk == 'update_personal'){
-            if($request->profile_pic != ''){
-                $filename = $request->profile_pic;
-                $name = $filename->getClientOriginalName();
-                //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
+            if($request->has('profile_pic')){
+                if($request->profile_pic != ''){
+                    $filename = $request->profile_pic;
+                    $name = $filename->getClientOriginalName();
+                    //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
+                }
             }
-
+            
             $data = $request->all();
             if(@$data['birthdate'] != ''){
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }
 
+            if(@$data['terms_covid'] != ''){
+                $data['terms_covid'] = date('Y-m-d');
+            }
+
+            if(@$data['terms_liability'] != ''){
+                $data['terms_liability'] = date('Y-m-d');
+            }
+
+            if(@$data['terms_contract'] != ''){
+                $data['terms_contract'] = date('Y-m-d');
+            }
+            
             $position = array_search(request()->_token, $data);
             $position1 = array_search(request()->cus_id, $data);
             unset($data[$position]);
