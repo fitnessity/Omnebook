@@ -1314,6 +1314,9 @@
 	.modal-inner-txt.modal-table-data{text-align: left;}
 	.date-activity-scheduler .activityselect3.special-date{width: 75%;}
 	.date-info {  margin-top: 10px !important;}
+	.division-hight {  height: auto;}
+	.check-client-info {  margin-top: 15px;}
+	
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2337,6 +2340,12 @@
 	.manage-service-display {  display: inline;}
 	.modal-inner-txt.modal-table-data{text-align: left;}
 	.business-offer-main.manageservice-page{padding: 14px;}
+	.border-spare-tor-right {  border-right: none;}
+	.division-hight { height: auto; }
+	.price-txt input { margin-top: 0px; }
+	.check-client-info{margin-top: 15px;}
+	.select0service { text-align: left;	}
+	.btn-search-checkout {  width: 100%;	}
 }
 
 @media(max-width: 575px) {

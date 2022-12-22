@@ -64,6 +64,12 @@ class UserBookingDetail extends Model
 
     }
 
+    public function business_activity_scheduler(){
+
+        return $this->belongsTo(BusinessActivityScheduler::class, 'act_schedule_id');
+
+    }
+
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
     }

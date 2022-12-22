@@ -114,6 +114,11 @@
 											</div>
 										</div>
 									</div>
+									<script>
+										function handleClick(cb) {
+										  	$('#modelopen').click();
+										}
+									</script>
 									<div class="col-md-1 col-xs-3 col-sm-4">	
 										<div class="scheduler-qty">
 											<span> {{$bd->booking->user->firstname[0]}}{{$bd->booking->user->lastname[0]}}</span>

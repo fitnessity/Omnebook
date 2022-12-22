@@ -58,6 +58,15 @@
 							<label>Schedule Viewing Date: </label>
 							<span id="spandate">{{$todaydate}}</span>
 						</div>
+						<div class="priceactivity-scheduler">
+                            <select name="frm_servicesport" id="frm-servicesport" class="form-control valid" onchange="getscheduledata('stype',this.value);">
+                                 <option value="all"> Show All Activities </option>
+								 <option value="individual">Personal Trainer</option>
+								 <option value="classes">Classes</option>
+								 <option value="events">Events</option>
+								 <option value="experience">Experience</option>
+                            </select>
+                       </div>
 					</div>
 				</div>
 				<hr style="border: 1px solid #efefef; width: 115%; margin-left: -15px; margin-top: 5px;">
@@ -96,50 +105,6 @@
 							</div>
 						</div>
 
-						<!-- <div class="overlay-activity">
-							<label class="overlay-activity-label red-fonts">Activity Cancelled</label>
-							<div class="scheduler-info-box">
-								<div class="row">
-									<div class="col-md-1 col-xs-12 col-sm-4">
-										<div class="timeline timeline-before">
-											<label class="scheduler-titles">Time: </label> <span> 10:00 AM </span>
-											<span> 10:45 AM </span>
-										</div>
-									</div>
-									<div class="col-md-1 col-xs-12 col-sm-4">	
-										<a href="{{route('scheduler_checkin')}}" class="scheduler-qty">
-											<label class="scheduler-titles">QTY: </label> <span> 1/20 </span>
-										</a>
-									</div>
-									<div class="col-md-1 col-xs-12 col-sm-4">
-										<div class="scheduled-activity-info">
-											<label class="scheduler-titles"> Duration: </label> <span> 45 Min. </span>
-										</div>
-									</div>
-									<div class="col-md-3 col-xs-12 col-sm-4">
-										<div class="scheduled-activity-info">
-											<label class="scheduler-titles"> Scheduled Activity: </label> <span> Brazilian Jujitsu Class </span>
-										</div>
-									</div>
-									<div class="col-md-2 col-xs-12 col-sm-4">
-										<div class="scheduled-location">
-											<label class="scheduler-titles"> Location: </label> <span> At Business </span>
-										</div>
-									</div>
-									<div class="col-md-2 col-xs-12 col-sm-4">
-										<div class="scheduled-location">
-											<label class="scheduler-titles"> Instructor: </label> <span> Dan Covel </span>
-										</div>
-									</div>
-									<div class="col-md-2 col-xs-12 col-sm-12">
-										<div class="scheduled-btns">
-											<button type="button" class="btn-edit btn-sp">Edit</button>
-											<a class="btn-edit"  data-toggle="modal" data-target="#bookingcancel">Cancel</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> -->
 						<div id="bindscheduledata">
 							@php $total_reservations = 0; @endphp
 							@if(!empty($bookschedulers) && count($bookschedulers)>0)
@@ -147,13 +112,18 @@
 									@php $total_reservations += $bookscheduler->spots_reserved($filter_date);
 										$date1 = date('H:i',strtotime($bookscheduler['shift_end']));
 										$date2 = date('H:i');
+										$cancel_chk = $bookscheduler->getcanceldata( $filter_date, $bookscheduler->id);
 									 @endphp
 
-									@if($date1 < $date2)
+									@php if($date1 < $date2){ @endphp
 										<div class="overlay-activity">
 										<label class="overlay-activity-label">Activity Completed</label>
-									@endif
-									
+									@php } else if($cancel_chk == 1) { @endphp
+										<div class="overlay-activity">
+										<label class="overlay-activity-label red-fonts">Activity Cancelled</label>
+									@php } @endphp
+
+	
 									<div class="scheduler-info-box">
 										<div class="row">
 											<div class="col-md-1 col-xs-12 col-sm-4">
@@ -195,15 +165,23 @@
 									                    <input type="hidden" name="cid" value="{{ $bookscheduler->business_service->cid }}" style="width:50px" />
 									                    <input type="hidden" name="serviceid" value="{{ $bookscheduler->business_service->serviceid }}" style="width:50px" />
 														<button type="submit" class="btn-edit btn-sp">Edit</button>
-														<a class="btn-edit"  data-toggle="modal" data-target="#bookingcancel">Cancel</a>
+														@if($date1 < $date2 )
+															<button type="button" class="btn-edit" disabled>Cancel</button>
+														@else
+															<a class="btn-edit" onclick="getcancellationdata({{$bookscheduler->id}},'{{$bookscheduler->spots_reserved($filter_date)}}','{{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}');">Cancel</a>
+														@endif
+														
 													</div>
 												</form>
 											</div>
 										</div>
 									</div>
-									@if($date1 < $date2)
+									@php if($date1 < $date2){ @endphp
 										</div>
-									@endif
+										
+									@php }else if($cancel_chk == 1) { @endphp
+										</div>
+									@php } @endphp
 								@endforeach
 							@endif
 						</div>
@@ -229,7 +207,7 @@
 		</div>
 
 		<!-- The Modal Add Business-->
-		<div class="modal fade compare-model" id="bookingcancel">
+		<div class="modal fade compare-model in" id="bookingcancelmodel">
 			<div class="modal-dialog bookingcancel">
 				<div class="modal-content">
 					<div class="modal-header" style="text-align: right;"> 
@@ -248,31 +226,7 @@
 							</div>
 						</div>
 						<hr style="border: 3px solid #ed1b24; width: 107%; margin-left: -15px; margin-top: 5px;">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="">
-									<input type="checkbox" id="" name="" value="">
-									<label for="vehicle1"> Cancel this activity for today only</label><br>
-									<input type="checkbox" id="" name="" value="">
-									<label for="vehicle2">Show cancellation on schedule</label><br>
-									<input type="checkbox" id="" name="" value="">
-									<label for="vehicle3">Hide cancellation on schedule</label><br>
-								</div>
-							</div>
-						</div>
-						<hr style="border: 1px solid #efefef; width: 107%; margin-left: -15px; margin-top: 15px;">
-						<div class="row">
-							<div class="col-md-12">
-								 <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 500; font-size: 15px; margin-bottom: 15px">Alert others of the cancellations</h4> 
-								<div class="">
-									<input type="checkbox" id="" name="" value="">
-									<label for="vehicle1">Email {Instructor Name}</label><br>
-									<input type="checkbox" id="" name="" value="">
-									<label for="vehicle2">You have {4} clients registered </label><br>
-									<label class="alert-label"> Alert registed clients with an email</label><br>
-								</div>
-								<a href="#" class="btn-nxt manage-cus-btn cancel-modal">Submit</a>
-							</div>
+						<div id="cancellationdata">
 						</div>
 					</div>
 				</div>
@@ -284,6 +238,60 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+	jQuery.noConflict();
+	function getcancellationdata(val,clientcnt,insname){
+		date = $('#managecalendarservice').val();
+		$.ajax({
+			url:'{{route("cancelbookingmodel")}}',
+			type:"POST",
+			data:{
+				date:date,
+				sid: val,
+				clientcnt: clientcnt,
+				insname: insname,
+				_token: '{{csrf_token()}}',
+			},
+			success:function(response){
+				$("#bookingcancelmodel").modal('show')
+				$('#cancellationdata').html(response);
+			}
+		});
+	}
+
+	function  getscheduledata(chk,val) {
+		date = $('#managecalendarservice').val();
+		$.ajax({
+			url:'{{route("activity-scheduler")}}',
+			type:"GET",
+			data:{
+				date:date,
+				chk:chk,
+				dropval:val,
+			},
+			success:function(response){
+				var data = response.split('~');
+				var data1 = data[0].split('^^');
+				var data2 = data1[0].split('^');
+
+				var data3 = data[1].split('$!^');
+				$('#sccount').html(data2[1]);
+				$('#rescount').html(data1[1]);
+				$('#bindscheduledata').html(data2[0]);
+				$('#spandate').html(data3[0]);
+				if(data3[1] == 'notodaydate'){
+					$('#btn-pre').prop('disabled', false);
+					$('#btn-pre').css('background','#ed1b24');
+				}else{
+					$('#btn-pre').prop('disabled',true );
+					$('#btn-pre').css('background','darkgray');
+				}
+			}
+		});
+	}
+</script>
+
 <script>
     $( function() {
         $( "#managecalendarservice" ).datepicker( { 
@@ -301,39 +309,6 @@
 </script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 
-
-<script type="text/javascript">
-
-	function  getscheduledata(chk) {
-		date = $('#managecalendarservice').val();
-		$.ajax({
-			url:'{{route("activity-scheduler")}}',
-			type:"GET",
-			data:{
-				date:date,
-				chk:chk,
-			},
-			success:function(response){
-				var data = response.split('~');
-				var data1 = data[0].split('^^');
-				var data2 = data1[0].split('^');
-
-				var data3 = data[1].split('$!^');
-				$('#sccount').html(data2[1]);
-				$('#rescount').html(data1[1]);
-				$('#bindscheduledata').html(data2[0]);
-				$('#spandate').html(data3[0]);
-				if(data3[1] == 'notoday'){
-					$('#btn-pre').prop('disabled', false);
-					$('#btn-pre').css('background','#ed1b24');
-				}else{
-					$('#btn-pre').prop('disabled',true );
-					$('#btn-pre').css('background','darkgray');
-				}
-			}
-		});
-	}
-</script>
 
 <script type="text/javascript">
 	$("#business_name").keyup(function() {
