@@ -66,7 +66,11 @@
 													<div class="row">
 														<div class="col-md-1 col-xs-3 col-sm-1">
 															<div class="collapse-img">
-																{!! $customer->getimage() !!}
+																@if($customer->profile_pic)
+																	<img src="{{Storage::Url($customer->profile_pic)}}" class="imgboxes" alt="">
+																@else
+																	<div class="company-list-text"><p>{{$customer->fname[0]}}</p></div>
+																@endif
 															</div>
 														</div>
 														<div class="col-md-2 col-xs-8 col-sm-2">

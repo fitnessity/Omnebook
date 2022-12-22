@@ -208,7 +208,7 @@ class CustomerController extends Controller {
             $cardInfo = $savedEvents['data'];
         }
 
-        $ageval = ($customerdata != '') ? @$customerdata->getcustage() : "—";
+        $ageval = ($customerdata != '') ? @$customerdata->age : "—";
         $familydata = $customerdata->get_families();
 
         $strpecarderror = '';
@@ -481,15 +481,13 @@ class CustomerController extends Controller {
               Session::put('strpecarderror', $statusmsg);
             }   
         }elseif($request->chk == 'update_personal'){
-            if($request->has('profile_pic')){
-                if($request->profile_pic != ''){
-                    $filename = $request->profile_pic;
-                    $name = $filename->getClientOriginalName();
-                    //$filestatus = $filename->move(public_path().DIRECTORY_SEPARATOR.'customers'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
-                }
-            }
+            
             
             $data = $request->all();
+
+            if($request->hasFile('profile_pic')){
+                $data['profile_pic'] = $request->file('profile_pic')->store('customer');
+            }
             if(@$data['birthdate'] != ''){
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }

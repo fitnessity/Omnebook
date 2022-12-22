@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\CompanyInformation;
 use File;
-
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class Customer extends Authenticatable
@@ -43,8 +43,16 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age'];
+    protected $appends = ['age', 'profile_pic_url'];
 
+
+    public function getProfilePicUrlAttribute()
+    {
+        if($this->profile_pic){
+            return Storage::url($this->profile_pic);
+        }
+        // return Storage::url($this->profile_pic);
+    }
 
     public function getAgeAttribute()
     {
@@ -67,26 +75,6 @@ class Customer extends Authenticatable
 
     public static function getcustomerofthiscompany($companyId){
         return Customer::where('business_id', $companyId)->orderBy('fname', 'ASC')->get();
-    }
-    
-    public function getimage(){
-        if(File::exists(public_path("/customers/profile_pic/".$this->profile_pic)) && !empty($this->profile_pic) ){
-            $html = '<img src="'.$this->profile_pic.'" class="imgboxes" alt="">';
-        }else{
-            $pf=substr($this->fname, 0, 1);
-            $html = '<div class="company-list-text"><p>'.$pf.'</p></div>';
-        }
-        return $html;
-    }
-
-    public function getimageforviewpage(){
-        if(File::exists(public_path("/customers/profile_pic/".$this->profile_pic)) && !empty($this->profile_pic) ){
-            $html = '<img src="'.$this->profile_pic.'" class="imgboxes" alt="">';
-        }else{
-            $pf=substr($this->fname, 0, 1);
-            $html = '<div class="company-list-text viewcustomelatterrimg"><p>'.$pf.'</p></div>';
-        }
-        return $html;
     }
 
     public function CustomerFamilyDetail()
