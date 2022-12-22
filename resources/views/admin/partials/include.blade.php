@@ -67,7 +67,7 @@
   
 <!--Slimselect-->
 
-<link rel="stylesheet" type="text/css" href="http://dev.fitnessity.co/public/css/slimselect.min.css" />
+<link rel="stylesheet" type="text/css" href="/public/css/slimselect.min.css" />
 
 
 
@@ -111,4 +111,4 @@
 
   <!-- slimselect -->
 
-<script type="text/javascript" src="http://dev.fitnessity.co/public/js/slimselect.min.js"></script>
+<script type="text/javascript" src="/public/js/slimselect.min.js"></script>
