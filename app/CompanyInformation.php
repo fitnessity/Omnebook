@@ -87,4 +87,8 @@ class CompanyInformation extends Model {
         return $this->belongsTo(Customer::class, 'id');
     }
 
+    public function BusinessTerms() {
+        return $this->belongsTo(BusinessTerms::class, 'cid');
+    }
+
 }
