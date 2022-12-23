@@ -8,9 +8,14 @@ use App\BusinessCompanyDetail;
 use App\BusinessServices;
 use App\UserBookingStatus;
 use App\BusinessActivityScheduler;
+use App\BusinessPriceDetailsAges;
+use App\BusinessPriceDetails;
 use App\StaffMembers;
 use App\UserBookingDetail;
 use App\ActivityCancel;
+use App\UserFamilyDetail;
+use App\BusinessSubscriptionPlan;
+use App\Customer;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -19,7 +24,7 @@ use Config;
 use DateInterval;
 use App\MailService;
 use App\Repositories\BusinessServiceRepository;
-
+use App\Repositories\BookingRepository;
 use App\Repositories\CustomerRepository;
 use App\Repositories\UserRepository;
 
@@ -28,11 +33,14 @@ class SchedulerController extends Controller
      protected $business_service_repo;
      protected $customers;
      protected $users;
-     public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users)
+     protected $booking_repo;
+
+     public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users,BookingRepository $booking_repo)
      {        
           $this->business_service_repo = $business_service_repo;
           $this->users = $users;
           $this->customers = $customers;
+          $this->booking_repo = $booking_repo;
      }
 
      public function index(Request $request)
@@ -365,10 +373,71 @@ class SchedulerController extends Controller
           return view('scheduler.booking_request');
      }
 
-     public function activity_purchase(){
-          return view('scheduler.activity_purchase');
-     }
+     public function activity_purchase($book_id){
 
+          $cart_item = [];
+          if (session()->has('cart_item')) {
+               $cart_item = session()->get('cart_item');
+          }
+         // print_r($cart_item);exit;
+          $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
+          $companyservice  =[];
+          if(!empty($companyId)) {
+               $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
+               $business_details = isset($business_details[0]) ? $business_details[0] : [];
+          }
+
+          $tax = BusinessSubscriptionPlan::where('id',1)->first();
+
+          $book_data = UserBookingDetail::getbyid($book_id);
+          $userfamilydata = [];
+          $username = $address = ''; 
+          if($book_data->booking->user_type == 'user'){
+               $username = $book_data->booking->user->firstname.' '.$book_data->booking->user->lastname;
+               $age = Carbon::parse($book_data->booking->user->birthdate)->age; 
+               $user_data = $book_data->booking->user;
+               $activated = $book_data->booking->user->activated;
+               $userfamilydata = $book_data->booking->user->user_family_details;
+          }else{
+               $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
+               $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
+               $user_data = $book_data->booking->customer;
+               $activated = $book_data->booking->customer->status;
+               $userfamilydata = Customer::where('parent_cus_id',$book_data->booking->customer->id)->get();
+          }    
+          if($activated == 0){
+               $status = "InActive";
+          }else{
+               $status = "Active";
+          }
+          $book_cnt = $this->booking_repo->getbookingbyUserid( $user_data->id);
+          $last_book_data = $this->booking_repo->lastbookingbyUserid( $user_data->id);
+          $address = $user_data->getaddress();
+
+          $last_book = explode("~~", $last_book_data);
+          $purchasefor  = @$last_book[0];
+          $price_title  = @$last_book[1];
+          $program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $companyId])->get();
+
+          return view('scheduler.activity_purchase', [
+               'business_details' => $business_details,
+               'companyId' => $companyId,
+               'book_id' => $book_id,
+               'book_data' => $book_data,
+               'book_cnt' => $book_cnt,
+               'address' => $address,
+               'username' => $username,
+               'age' => $age,
+               'purchasefor' => $purchasefor,
+               'price_title' => $price_title,
+               'status' => $status,
+               'program_list' => $program_list,
+               'cart'=> $cart_item,
+               'userfamily'=> $userfamilydata,
+               'user_data'=> $user_data,
+               'tax'=>  $tax,
+          ]);
+     }
 
      public function cancelbookingmodel(Request $request){
           $ac_data = ActivityCancel::where('cancel_date',date('y-m-d' , strtotime($request->date)))->where('schedule_id',$request->sid)->first();
@@ -499,6 +568,68 @@ class SchedulerController extends Controller
          
           /*print_r($databooked);exit;*/
           return redirect('manage-scheduler');
+     }
+
+     public function activity_schedule(){
+          return view('scheduler.activity_schedule');
+     }
+
+     public function getdropdowndata(Request $request){
+          $output = '';
+          if($request->chk == 'program'){
+               $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$request->sid)->get();
+               $output = '<option value="">Selct Category</option>';
+               foreach($catelist as $cl){
+                    $output .= '<option value="'.$cl->id.'">'.$cl->category_title.'</option>';
+               }
+          }else if($request->chk == 'category'){
+               $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',$request->sid)->get();
+               $output = '<option value="">Selct Price Title</option>';
+               foreach($pricelist as $pl){
+                    $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
+               }
+          }else if($request->chk == 'priceopt'){
+               $pricelist = BusinessPriceDetails::select('id','membership_type')->where('id',$request->sid)->get();
+               $output = '<option value="">Selct Price Title</option>';
+               foreach($pricelist as $pl){
+                    $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
+               }
+          }else if($request->chk == 'participat'){
+               $data = explode('~~',$request->sid);
+               $data1 = explode('^^',$data[1]);
+               if($request->user_type == 'user'){
+                    if($data1[0] == 'user'){
+                         $user = User::select('birthdate','firstname','lastname')->where('id',$data[0])->first();
+                         $username = $user->firstname.' '. $user->lastname;
+                         $relation = '';
+                         $date = $user->birthdate;
+                    }else{
+                         $user = UserFamilyDetail::select('birthday','relationship','last_name','first_name')->where('id',$data[0])->first();
+                         $username = $user->first_name.' '. $user->last_name;
+                         $relation = $user->relationship;
+                         $date = $user->birthday;
+                    }
+               }else{
+                    $user = Customer::select('birthdate','relationship','lname','fname')->where('id',$data[0])->first();
+                    $username = $user->fname.' '. $user->lname;
+                    $relation = $user->relationship;
+                    $date = $user->birthdate;
+               }
+               $age = Carbon::parse($date)->age;
+               if($age < 18){
+                    $output .= $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')';
+               }else{
+                    $output .= $username .' ('.$age .' yrs)';
+               }
+               
+          }    
+          
+         
+          return $output;
+     }
+
+     public function checkout_register(Request $request){
+          //echo "hii";
      }
 
      /*public function email(){

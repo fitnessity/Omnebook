@@ -23534,3 +23534,90 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: block;
 	margin-bottom: 0px;
 }
+.inner-top-activity{
+	margin-top: 85px;
+}
+.valor-mix-title{
+	text-align: center;
+}
+.valor-mix-title h2{
+	font-size: 30px;
+	padding: 15px 0;
+	font-weight: 600;
+}
+.valor-mix-title p{
+	font-size: 20px;
+}
+.member-txt p{
+	text-align: center;
+}
+.member-txt a{
+	text-decoration: underline;
+}
+.activity-schedule-tabs{
+	margin-top: 25px;
+}
+.activity-schedule-tabs ul{
+	background: #d1d0d0;
+}
+.activity-schedule-tabs ul li a{
+	color: #000;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a:hover{
+	color: #000;
+}
+.activity-schedule-tabs .tab-content .tab-pane .tab-data{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a:active{
+	color: #ed1b24;
+}
+.classes-info h2{
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+.classes-info label{
+	font-weight: 500;
+}
+.classes-info{
+	border-right: 1px solid #d1d0d0;
+}
+.post-btn.activity-scheduler{
+	width: 100%;
+	background: #ed1b24;
+	border-radius: 0px;
+}
+.classes-time{
+	display: grid;
+	text-align: center;
+}
+.classes-time label{
+	font-weight: 400;
+	margin-top: 5px;
+	font-size: 13px;
+}
+.col-md-offset-3-custom{
+	margin-left: 22%;
+}
+.weeks-name ul{
+	background: white;
+	display: flex;
+}
+.weeks-name ul li{
+	width: 25%;
+	list-style-type: none !important;
+	text-align: center;
+}
+.weeks-name{
+	margin-top: 23px;
+}
+.disable{
+	color: #d0d0d0 !important;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a{
+	color: #f91942;
+	border: none !important;
+	font-weight: 600;
+}

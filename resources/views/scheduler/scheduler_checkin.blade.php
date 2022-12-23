@@ -12,7 +12,7 @@
             <div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-6 col-xs-12 col-sm-12">
-						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | Booking Request</div>
+						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | <a href="{{route('booking_request')}}">Booking Request </a></div>
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-12">
 						<div class="row">
@@ -153,7 +153,7 @@
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-12">
 										<div class="scheduled-btns">
-											<a href="{{route('activity_purchase')}}" class="btn-edit btn-sp">Purchase</a>
+											<a href="{{route('activity_purchase',['book_id'=>$bd->id])}}" class="btn-edit btn-sp">Purchase</a>
 											<button type="button" class="btn-edit">View Account</button>
 										</div>
 									</div>

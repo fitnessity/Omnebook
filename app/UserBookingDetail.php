@@ -70,6 +70,10 @@ class UserBookingDetail extends Model
 
     }
 
+    public static function getbyid($book_id){
+        return UserBookingDetail::where('id',$book_id)->first();
+    }
+
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
     }

@@ -589,4 +589,28 @@ class BookingRepository
        return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
     }
 
+    public function getbookingbyUserid($userid){
+        $book_cnt = 0;
+        $status = UserBookingStatus::where('user_id',$userid)->get();
+        if(!empty($status) && count($status)>0){
+            foreach($status as $st){
+                $book_cnt += UserBookingDetail::where('booking_id',$st->id)->count();
+            }
+        }
+        return  $book_cnt;
+    }
+
+    public function lastbookingbyUserid($userid){
+        $data = '';
+        $status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
+        if($status != ''){
+            $price  =  $status->amount;
+            $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','Desc')->first();
+            $programname = $book_data->business_services->program_name;
+            $price_title = $book_data->business_price_details->price_title;
+            $purchasefor =  $programname.' $'.$price;
+        }
+        return  $purchasefor.'~~'.$price_title;
+    }
+
 }

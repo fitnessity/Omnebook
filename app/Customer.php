@@ -103,6 +103,27 @@ class Customer extends Authenticatable
             return Customer::where('parent_cus_id',$this->id)->get();
         }
     }
+
+    public function getaddress(){
+        $address = '';
+        if($this->address != ''){
+            $address .= $this->address.',';
+        }
+        if($this->city != ''){
+            $address .= $this->city.', ';
+        }
+        if($this->state != ''){
+            $address .= $this->state.', ';
+        }
+        if($this->country != ''){
+            $address .= $this->country.', ';
+        }
+        if($this->zipcode != ''){
+            $address .= $this->zipcode;
+        }
+        return $address;
+
+    }
     
 }
    
