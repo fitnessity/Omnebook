@@ -22,7 +22,7 @@
 									<h4 class="heading-step">Step 1</h4>
 									<div id='systemMessage' class="alert-msgs"></div>
 	                    			<input type="hidden" name="_token" value="{{csrf_token()}}">
-	                    			<input type="hidden" name="business_id" value="{{$company->id}}">
+	                    			<input type="hidden" name="business_id" value="{{$business_id}}">
 									<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
 									<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
 									<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">

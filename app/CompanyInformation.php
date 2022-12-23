@@ -91,8 +91,8 @@ class CompanyInformation extends Model {
         return $this->hasMany(BusinessServices::class, 'cid');
     }
 
-    public function BusinessTerms() {
-        return $this->belongsTo(BusinessTerms::class, 'cid');
+    public function business_terms() {
+        return $this->hasMany(BusinessTerms::class, 'cid');
     }
 
 }

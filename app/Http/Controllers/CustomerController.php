@@ -85,6 +85,27 @@ class CustomerController extends Controller {
         }
     }
 
+    public function show($business_id, $id){
+        $user = Auth::user();
+        $company = $user->businesses->find($business_id);
+
+        $terms = $company->business_terms->first();
+
+        $customerdata = $company->customers->find($id);
+
+
+        $strpecarderror = '';
+        if (session()->has('strpecarderror')) {
+            $strpecarderror = Session::get('strpecarderror');
+        }
+        return view('customers.show', [
+            'customerdata'=>$customerdata,
+            'cardInfo'=>$customerdata->get_stripe_card_info(),
+            'strpecarderror'=>$strpecarderror,
+            'terms'=> $terms ,
+        ]);
+    }
+
     public function searchcustomersaction(Request $request) {
 
         if($request->get('query'))
@@ -146,90 +167,6 @@ class CustomerController extends Controller {
            
             echo $output;
         }
-    }
-
-    public function viewcustomer ($id){
-        $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
-        $companyservice  =[];
-        if(!empty($companyId)) {
-            $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
-            $business_details = isset($business_details[0]) ? $business_details[0] : [];
-            $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
-        }
-
-        $terms = BusinessTerms::where('cid',$companyId)->first();
-        $bdate = '—';
-
-        $customerdata = $this->customers->findById($id);
-        if(@$customerdata->birthdate != null){
-            $date =  new Carbon($customerdata->birthdate);
-            $bdate = $date->format('F jS\,  Y');
-        }
-       
-        $sincedate = date('m/d/Y',strtotime(@$customerdata->created_at));
-        $location = '';
-        $address = '';
-        if(@$customerdata->address != ''){
-            $address .= @$customerdata->address.', ';
-        }
-        if(@$customerdata->city != ''){
-            $address .= @$customerdata->city.', ';
-        }
-        if(@$customerdata->state != ''){
-            $address .= @$customerdata->state.' '.@$customerdata->zipcode.', ';
-            $location .= @$customerdata->state.', ';
-        }
-        if(@$customerdata->country != ''){
-            $address .= @$customerdata->country;
-            $location .= @$customerdata->country;
-        }
-
-        if($address == ''){
-            $address = '—';
-        }else if($address == 'US'){
-            $address = 'United States';
-        }
-
-        if($location == ''){
-           $location = '—'; 
-        }else if($location == 'US'){
-            $location = 'United States';
-        }
-
-        $cardInfo = [];
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if($customerdata->stripe_customer_id != ''){
-            $savedEvents = $stripe->customers->allSources(
-                $customerdata->stripe_customer_id,
-                ['object' => 'card' ,'limit' => 30]
-            );
-            $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            $cardInfo = $savedEvents['data'];
-        }
-
-        $ageval = ($customerdata != '') ? @$customerdata->age : "—";
-        $familydata = $customerdata->get_families();
-
-        $strpecarderror = '';
-        if (session()->has('strpecarderror')) {
-            $strpecarderror = Session::get('strpecarderror');
-        }
-        return view('customers.viewcustomer', [
-             'business_details' => $business_details,
-            'companyservice' => $companyservice,
-            'customerdata'=>$customerdata,
-            'bdate'=>$bdate,
-            'age'=> $ageval,
-            'sincedate'=>$sincedate,
-            'address'=>$address,
-            'location'=>$location,
-            'familydata'=>$familydata,
-            'cardInfo'=>$cardInfo,
-            'strpecarderror'=>$strpecarderror,
-            'terms'=> $terms ,
-        ]);
-        //return view('profiles.viewcustomer');
     }
 
     public function export(Request $request)

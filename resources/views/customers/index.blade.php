@@ -117,7 +117,7 @@
 														<div class="col-md-2 col-xs-12 col-sm-1">
 															<div class=" scheduled-btns">
 																<button onclick="sendmail({{$customer->id}},{{$company->id}});" class="btn-edit btn-sp">Send Welcome Email</button>
-																<a href="{{ route('viewcustomer',['id'=>$customer->id]) }}" class="btn-edit">View</a>
+																<a href="{{ route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]) }}" class="btn-edit">View</a>
 															</div>
 														</div>
 														<div class="col-md-1 col-xs-12 col-sm-1">
@@ -163,17 +163,13 @@
               <p class='err' style="color:red;padding-top:10px;"></p>
           </form>
         </div>
-        <div class="modal-footer">$orderedcustomers
+        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" id="upload-csv" class="btn btn-secondary">Upload File</button>
         </div>
       </div>
     </div>
 </div>
-
-<!-- The Modal Add Business-->
-@include('includes.add_new_client')
-<!-- end modal -->
 </div>
 
 

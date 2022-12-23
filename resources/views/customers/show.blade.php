@@ -83,7 +83,7 @@
 										<label>Address</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>{{$address}}</span>
+										<span>{{$customerdata->full_address()}}</span>
 									</div>
 								</div>
 								<div class="row">
@@ -102,7 +102,7 @@
 											<label>Birthday</label>
 										</div>
 										<div class="col-md-7 col-xs-7">
-											<span>{{$bdate}}</span>
+											<span>{{date('m/d/Y',strtotime($customerdata->birthdate))}}</span>
 										</div>
 									</div>
 								</div>
@@ -111,7 +111,7 @@
 										<label>Age</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>@if($age != '—') {{$age}} Years Old @else {{$age}}  @endif</span>
+										<span>@if($customerdata->age) {{$customerdata->age}} Years Old @else -  @endif</span>
 									</div>
 								</div>
 								<div class="row">
@@ -127,7 +127,7 @@
 										<label>Location</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>{{$location}}</span>
+										<span>{{$customerdata->country}}</span>
 									</div>
 								</div>
 								<div class="row">
@@ -135,7 +135,7 @@
 										<label>Customers Since</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>{{$sincedate}}</span>
+										<span>{{date('m/d/Y',strtotime($customerdata->created_at))}}</span>
 									</div>
 								</div>
 							</div>
@@ -165,7 +165,7 @@
 									<div class="manage-cust-box">
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
-												<label class="tab-titles">Quick Stats</label>
+												<label class="tab-titles">Quick Stats (TBD)</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
@@ -281,29 +281,7 @@
 												</div>
 											</div>
 										</div>
-										@if(!empty($familydata))
-											@foreach($familydata as $index=>$fdata)
-											@php $age =  Carbon::parse($fdata->birthdate)->age;@endphp
-											<div class="row">
-												<div class="col-md-4 col-xs-12">
-													<span>{{$index+1}}.</span>
-													<label>Name:</label>
-													<span>{{$fdata->fname}} {{$fdata->lname}} </span>
-												</div>
-												<div class="col-md-4 col-xs-12">
-													<label>Relationship: </label>
-													<span>{{$fdata->relationship}}</span>
-												</div>
-												<div class="col-md-2 col-xs-12">
-													<label>Age</label>
-													<span>({{$age}})</span>
-												</div>
-												<div class="col-md-1 col-xs-12">
-													<a href="{{route('viewcustomer',['id'=>$fdata->id])}}">View</a>
-												</div>
-											</div>
-											@endforeach
-										@else
+										@if(empty($customerdata->get_families()))
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
 													<div class="customer-info">
@@ -311,6 +289,27 @@
 													</div>
 												</div>
 											</div>
+										@else
+											@foreach($customerdata->get_families() as $index=>$family_member)
+												<div class="row">
+													<div class="col-md-4 col-xs-12">
+														<span>{{$index+1}}.</span>
+														<label>Name:</label>
+														<span>{{$family_member->fname}} {{$family_member->lname}} </span>
+													</div>
+													<div class="col-md-4 col-xs-12">
+														<label>Relationship: </label>
+														<span>{{$family_member->relationship}}</span>
+													</div>
+													<div class="col-md-2 col-xs-12">
+														<label>Age</label>
+														<span>({{$family_member->age}})</span>
+													</div>
+													<div class="col-md-1 col-xs-12">
+														<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}">View</a>
+													</div>
+												</div>
+											@endforeach
 										@endif
 									</div>
 									
@@ -757,7 +756,7 @@
 								<div class="col-md-6">
 									<div class="modal-from-txt">
 										<label>	Birthdate </label>
-										<input class="form-control" type="text" id="birthdate" name="birthdate" placeholder="Birthdate" @if($bdate != '—') value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" @endif maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+										<input class="form-control" type="text" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -773,7 +772,7 @@
 								<div class="col-md-6">
 									<div class="modal-from-txt">
 										<label>	Address </label>
-										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->address}}">
+										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->full_address()}}">
 									</div>
 								</div>
 								 <div id="map" style="display: none;"></div>
