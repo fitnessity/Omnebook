@@ -937,6 +937,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+        Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
     });
 });
 

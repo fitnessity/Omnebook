@@ -39,7 +39,7 @@
                     <?php  ?>
                   <!--  <a href="{{route('scheduler_checkin')}}"><div class="navlink1 @if(Route::current()->getName()=='scheduler-checkin') tab-active @endif" id="tab1">Manage Schedule</div></a>-->
                     <a href="{{route('activity-scheduler')}}"><div class="navlink1 @if(Route::current()->getName()=='manage-scheduler') tab-active @endif" id="tab1">Manage Bookings</div></a>
-                    <a href="{{route('business_customer_index', ['business_id' => $companyId])}}"><div class="navlink1 @if(Route::current()->getName() == 'business_customer_index') tab-active @endif" id="tab1">Customers</div></a>
+                    <a href="{{route('business_customer_index', ['business_id' => $companyId])}}"><div class="navlink1 @if(Route::current()->getName() == 'business_customer_index' || Route::current()->getName() == 'business_customer_show') tab-active @endif" id="tab1">Customers</div></a>
                     <!--<a href="{{route('business-welcome')}}"><div class="navlink1" id="tab1">Calendar</div></a>
 
                     <a href="{{route('business-welcome')}}"><div class="navlink1" id="tab1">Checkout Register</div></a>-->

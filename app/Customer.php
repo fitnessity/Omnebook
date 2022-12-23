@@ -93,6 +93,52 @@ class Customer extends Authenticatable
             return Customer::where('parent_cus_id',$this->id)->get();
         }
     }
+
+    public function get_stripe_card_info(){
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+        if($this->stripe_customer_id != ''){
+            $savedEvents = $stripe->customers->allSources(
+                $this->stripe_customer_id,
+                ['object' => 'card' ,'limit' => 30]
+            );
+            $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            return $savedEvents['data'];
+        }
+        return [];
+    }
+
+    public function full_address(){
+        $location = '';
+        $address = '';
+        if($this->address != ''){
+            $address .= $this->address.', ';
+        }
+        if($this->city != ''){
+            $address .= $this->city.', ';
+        }
+        if($this->state != ''){
+            $address .= $this->state.' '.$this->zipcode.', ';
+            $location .= $this->state.', ';
+        }
+        if($this->country != ''){
+            $address .= $this->country;
+            $location .= $this->country;
+        }
+
+        if($address == ''){
+            $address = '—';
+        }else if($address == 'US'){
+            $address = 'United States';
+        }
+
+        if($location == ''){
+           $location = '—'; 
+        }else if($location == 'US'){
+            $location = 'United States';
+        }
+        return $address;
+    }
     
 }
    

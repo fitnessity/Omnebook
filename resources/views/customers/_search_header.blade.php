@@ -21,6 +21,7 @@
 		</div>
 	</div>
 </form>
+@include('customers._add_new_client_modal', ['business_id' => $company_id])
 
 <script>
 
@@ -46,7 +47,6 @@ $(document).on('keyup', '#serchclient', function() {
               '<p class="pstyle liaddress">' + customer.email +'</p>' + 
               '<p class="pstyle liaddress">' + customer.phone_number + '</p></div>');
           
-          console.log(customer);
         })
 
         $("#option-box1 .customer-list").append(customer_row);

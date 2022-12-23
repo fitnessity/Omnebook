@@ -167,7 +167,6 @@
 			</div>	
 		</div>
 	</div>
-	@include('includes.add_new_client')
 </div>
 <!-- The Modal Add Business-->
 		<div class="modal fade compare-model" id="latecancel">
