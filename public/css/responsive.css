@@ -1313,10 +1313,11 @@
 	.manage-service-display {  display: inline;}
 	.modal-inner-txt.modal-table-data{text-align: left;}
 	.date-activity-scheduler .activityselect3.special-date{width: 75%;}
-	.date-info {  margin-top: 10px !important;}
-	.division-hight {  height: auto;}
-	.check-client-info {  margin-top: 15px;}
-	
+	.date-info { margin-top: 10px !important;}
+	.division-hight { height: auto;}
+	.check-client-info { margin-top: 15px;}
+	.inner-top-activity { margin-top: 125px;}
+	.col-md-offset-3-custom { margin-left: 0; }
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2345,7 +2346,10 @@
 	.price-txt input { margin-top: 0px; }
 	.check-client-info{margin-top: 15px;}
 	.select0service { text-align: left;	}
-	.btn-search-checkout {  width: 100%;	}
+	.btn-search-checkout {  width: 100%;}
+	.col-md-offset-3-custom {  margin-left: 0;}
+	.inner-top-activity {  margin-top: 0px;}
+	.classes-info { border-right: none;}
 }
 
 @media(max-width: 575px) {

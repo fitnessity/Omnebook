@@ -28,7 +28,7 @@
 									<form>
 										<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
 										<div id="option-box1"></div>
-										<button ><i class="fa fa-search"></i></button>
+										<button type="button"><i class="fa fa-search"></i></button>
 									</form>
 								</div>
 							</div>

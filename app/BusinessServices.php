@@ -116,6 +116,10 @@ class BusinessServices extends Model
         return $this->hasMany(BusinessCompanyDetail::class, 'cid');
     }
 
+    public function BusinessPriceDetailsAges() {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid');
+    }
+
 	public function user()
     {
         return $this->belongsTo(User::class, 'userid');

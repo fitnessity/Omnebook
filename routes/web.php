@@ -746,7 +746,7 @@ Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentins
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
 Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
-Route::any('/removetocart', 'LessonController@removeToCart');
+Route::any('/removetocart', 'LessonController@removeToCart')->name('removetocart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 
 //booking status and details
@@ -961,10 +961,13 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
     Route::get('scheduler-checkin/{sid?}', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
-    Route::get('activity_purchase', 'SchedulerController@activity_purchase')->name('activity_purchase');
+    Route::get('activity_purchase/{book_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
     Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
     Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
+    Route::get('activity_schedule', 'SchedulerController@activity_schedule')->name('activity_schedule');
+    Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
+    Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
 });
 
 Route::get('email', 'SchedulerController@email')->name('email');
