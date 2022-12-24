@@ -21246,7 +21246,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
   --radio-size: 1.5em;
 }
 .plan-details img{
-	max-width: 60px;
+	width: 40px;
+	margin-bottom: 5px;
 }
 .cart-name span{
 	float: left
@@ -23620,4 +23621,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #f91942;
 	border: none !important;
 	font-weight: 600;
+}
+.checkout-card{
+	padding: 1px;
+}
+.checkout-cart{
+	text-align: center;
+	font-size: 13px;
 }
