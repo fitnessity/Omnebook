@@ -1199,7 +1199,7 @@
 		}
 		
 		$.ajax({
-			url:'{{route("manage-customer")}}',
+			url:'{{route("business_customer_index", ["business_id" => $companyId])}}',
 			type:"GET",
 			data:{
 				inpuval:inpuval
