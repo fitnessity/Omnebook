@@ -245,7 +245,10 @@ class User extends Authenticatable
         }else{
             return "—";
         }
-        
+    }
+
+    public function businesses(){
+        return $this->hasMany(CompanyInformation::class, 'user_id');
     }
 
 }

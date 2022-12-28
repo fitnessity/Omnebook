@@ -19,21 +19,10 @@
 						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | <a href="{{route('booking_request')}}">Booking Request </a></div>
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-12">
-						<div class="row">
-							<div class="col-md-4 col-xs-12 col-sm-3">
-								<a href="#" class="btn-nxt manage-cus-btn" data-toggle="modal" data-target="#newclient">Add New Client</a>
-							</div>
-							<div class="col-md-8">
-								<div class="manage-search serchcustomer">
-									<form>
-										<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
-										<div id="option-box1"></div>
-										<button type="button"><i class="fa fa-search"></i></button>
-									</form>
-								</div>
-							</div>
-						</div>
+						@include('customers._search_header', ['company_id' => $companyId])
 					</div>
+	 					
+	 				</div>
 				</div>
 				<hr style="border: 3px solid black; width: 125%; margin-left: -38px; margin-top: 5px;">
 			  </div>
@@ -205,7 +194,7 @@
 				
 			</div>	
 		</div>
-		@include('includes.add_new_client')
+
 		<!-- The Modal Add Business-->
 		<div class="modal fade compare-model in" id="bookingcancelmodel">
 			<div class="modal-dialog bookingcancel">
@@ -387,26 +376,7 @@
     }
 
     function getcustomerlist(){
-		$('#option-box1').hide();
-		var inpuval = $('#serchclient').val();
-		if(inpuval == ''){
-			$('#chk').val('empty');
-			$('#id').val('{{$companyId}}');
-		}else{
-			$('#chk').val('notempty');
-			$('#id').val(inpuval);
-		}
-		
-		$.ajax({
-			url:'{{route("manage-customer")}}',
-			type:"GET",
-			data:{
-				inpuval:inpuval
-			},
-			success:function(response){
-				$('#customerlist').html(response);
-			}
-		});
+
 	}
 
 	function searchclick(cid){

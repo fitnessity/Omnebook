@@ -22281,12 +22281,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .scheduler-txt{
 	font-size: 21px !important;
 }
-.manage-search form{
+.manage-search .sub{
 	display: inline-block;
 	position: relative;
 	width: 100%;
 }
-.manage-search form input {
+.manage-search .sub input {
   background: white;
   border: 1px solid #030303;
   font-size: 13px;
@@ -22295,7 +22295,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   color: #2e2e2e;
   border-radius: 5px;
 }
-.manage-search button {
+.manage-search .sub button {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   color: #f91942;
   font-size: 15px;
@@ -22484,7 +22484,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #fff;
 }
 .register-bg{
-	background-image: url(http://dev.fitnessity.co//public/images/register-bg.jpg);
+	background-image: url(/public/images/register-bg.jpg);
 	background-size: 100% 100%;
 	background-position: center;
 }
