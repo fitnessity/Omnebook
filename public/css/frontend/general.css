@@ -23629,3 +23629,40 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	text-align: center;
 	font-size: 13px;
 }
+.payment-selection h3{
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+.close-div{
+	position: relative;
+}
+.close-div .close-cross{
+	position: absolute;
+	left: 0px;
+	color: #ed1b24;
+}
+.changecalce label{
+	margin-left: 30px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+.cash-tend{
+	margin-left: 30px;
+	margin-top: 5px;
+}
+.cash-tend-option{
+	margin-top: 5px;
+}
+.visa-info{
+	margin-left: 100px;
+}
+.options-payment{
+	margin-top: 15px;
+}
+.mathod-display{
+	display: grid;
+}
+.card-space{
+	margin-top: 15px;
+}

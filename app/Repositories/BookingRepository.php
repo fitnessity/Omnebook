@@ -6,6 +6,8 @@ use App\UserBookingStatus;
 use App\UserBookingDetail;
 use App\Jobpostquestions;
 use App\UserBookingQuote;
+use App\BusinessServices;
+use App\CompanyInformation;
 use App\User;
 use DB;
 use Auth;
@@ -22,6 +24,40 @@ class BookingRepository
     public function findById($id)
     {
         return UserBookingStatus::where('id', $id)->first();
+    }
+
+    public function getbooking_data_by_bid($bid){
+        return UserBookingDetail::where('booking_id',$bid)->get();
+    }
+
+    public function getcurrenttabdata($type){
+        $BookingDetail = [];
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'checkout_register'])->orderBy('created_at','desc')->get();
+        foreach ($bookingstatus as $key => $value) {
+            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
+            foreach ($booking_details as $key => $book_value) {
+                $business_services = BusinessServices::where('id',$book_value->sport)->first();
+                if($business_services != ''){
+                    if($business_services->service_type == $type){
+                        $BookingDetail_1 = $this->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                            }
+                        }    
+                    }
+                }
+            }
+        }
+
+        return $BookingDetail;
     }
 
     public function saveBookingStatus($data,$cart=null,$n=null)

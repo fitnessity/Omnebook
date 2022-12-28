@@ -4581,7 +4581,11 @@ class LessonController extends Controller {
             $parti_from_chkout_regi = array();
         }
 
-
+        if($request->has('chk')){
+            $chk = $request->chk;
+        }else{
+            $chk = '';
+        }
 
 
         //$tax = BusinessSubscriptionPlan::select('site_tax')->where('id',1)->first();
@@ -4631,7 +4635,7 @@ class LessonController extends Controller {
                         $p_image = $item->profile_pic;
                     }
                 }
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'taxchk'=>$taxchk,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'qty_from_checkout_regi'=>$checkount_qty,'participate_from_checkout_regi'=> $parti_from_chkout_regi));
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'taxchk'=>$taxchk,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'qty_from_checkout_regi'=>$checkount_qty,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
@@ -4641,6 +4645,7 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
                                 $cart_item["cart_item"][$k]["taxchk"] = $taxchk;
                                 $cart_item["cart_item"][$k]["qty_from_checkout_regi"] = $checkount_qty;
+                                $cart_item["cart_item"][$k]["chk"] = $chk ;
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
                                 $cart_item["cart_item"][$k]["priceid"] = $request->priceid;

@@ -94,10 +94,15 @@
 												<div class="select0service">
 													<label>Who's Participating </label>
 													<select name="program_list" id="program_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
-														<option value="{{$user_data->id}}~~user">{{$username}}(me)</option>
+														@php  
+															$pc_regi_id = $user_data->id;
+															$pc_value = $username.'(me)';
+															$pc_user_tp = $book_data->booking->user_type;
+														@endphp
+														<option value="{{$user_data->id}}~~{{$book_data->booking->user_type}}">{{$username}}(me)</option>
 														@if(!empty($userfamily))
 														@foreach($userfamily as $ufd)
-															<option value="{{$ufd->id}}~~{{$book_data->booking->user_type}}family^^{{$username}}">{{$ufd->first_name}} {{$ufd->last_name}} </option>
+															<option value="{{$ufd->id}}~~family^^{{$username}}">{{$ufd->first_name}} {{$ufd->last_name}} </option>
 														@endforeach
 														@endif
 													</select>
@@ -229,7 +234,7 @@
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
-													<label>Date This Activates?</label>
+													<label>Date This Activaties?</label>
 													<div class="date-activity-scheduler date-activity-check">
 														<input type="text"  id="managecalendarservice" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate();">
 													</div>
@@ -256,9 +261,9 @@
 										<input type="hidden" name="pricetotal" id="pricetotal" value="" class="product-price">
 										<input type="hidden" name="tip_amt_val" id="tip_amt_val" value="" class="product-price">
 										<input type="hidden" name="dis_amt_val" id="dis_amt_val" value="" class="product-price">
-										<input type="hidden" name="pc_regi_id" id="pc_regi_id" value="" class="product-price">
-										<input type="hidden" name="pc_user_tp" id="pc_user_tp" value="" class="product-price">
-										<input type="hidden" name="pc_value" id="pc_value" value="" class="product-price">
+										<input type="hidden" name="pc_regi_id" id="pc_regi_id" value="{{$pc_regi_id}}" class="product-price">
+										<input type="hidden" name="pc_user_tp" id="pc_user_tp" value="{{$pc_user_tp}}" class="product-price">
+										<input type="hidden" name="pc_value" id="pc_value" value="{{$pc_value}}" class="product-price">
 										<div class="check-client-info">
 											<div class="row payment-detials">
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
@@ -367,194 +372,217 @@
 							<div class="ticket-summery ticket-title">
 								<h4>Order Summary</h4>
 							</div>
-							
-							<div class="row">
-								<div class="col-md-12">
-									<div class="check-client-info-box">
-										@php $i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; @endphp
-										@if(!empty($cart))
-										@foreach($cart['cart_item'] as $item)
-										@php 
-											$taxval = 0;
-											$subtotal += $item['totalprice'] * @$item['qty_from_checkout_regi'];
-											$tip += $item['tip'] * @$item['qty_from_checkout_regi'];
-											$discount += $item['discount'] * @$item['qty_from_checkout_regi'];
-											if($item["taxchk"] != 0){
-												$taxval = $tax->site_tax;
-											}
-											$participate = $item["participate_from_checkout_regi"]['pc_name'];
-											$taxes += $taxval;
-											$act = BusinessServices::where('id', $item["code"])->first();
-											$serprice = BusinessPriceDetails::where('id', $item['priceid'])->first();
-											$serpricecate = BusinessPriceDetailsAges::where('id',$serprice->category_id)->first();
+							<form method="post" action="{{route('checkout_register')}}">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="check-client-info-box">
+											@php $i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0; @endphp
+											@if(!empty($cart))
+											@foreach($cart['cart_item'] as $item)
+											@if($item['chk'] != '')
+											@php 
+												$checkout_btun_chk = 1;
+												if ($item['image']!="") {
+						    						if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
+						    							$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
+						    						} else {
+						    							$profilePic = url('/public/images/service-nofound.jpg');
+						    						}
+						    					}else{ 
+						    						$profilePic = url('/public/images/service-nofound.jpg');
+						    					}
+												$taxval = 0;
+												$subtotal += $item['totalprice'] * @$item['qty_from_checkout_regi'];
+												$tip += $item['tip'] * @$item['qty_from_checkout_regi'];
+												$discount += $item['discount'] * @$item['qty_from_checkout_regi'];
+												if($item["taxchk"] != 0){
+													$taxval = $tax->site_tax;
+												}
+												$participate = $item["participate_from_checkout_regi"]['pc_name'];
+												$taxes += $taxval;
+												$act = BusinessServices::where('id', $item["code"])->first();
+												$serprice = BusinessPriceDetails::where('id', $item['priceid'])->first();
+												$serpricecate = BusinessPriceDetailsAges::where('id',$serprice->category_id)->first();
 
-											$total = $item['qty_from_checkout_regi'] *($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
-										@endphp
-											<div class="close-cross-icon"> 
-												<i class="fas fa-pencil-alt"></i>
-											</div>
-											<div class="close-cross-icon-trash">
-												<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase'])}}" class="p-red-color">
-												<i class="fas fa-trash-alt"></i></a>
-											</div>
-											<div class="ticket-summery-details">
-												<div class="row">
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Program Name </label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{$act->program_name}} </span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Catagory: </label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{$serpricecate->category_title}}</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Price Option:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Membership Option:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{@$serprice['membership_type']}}</span>
-													</div>
-
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Participant Quantity:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{@$item['qty_from_checkout_regi']}}</span>
-													</div>
-
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Who's Participating:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{@$participate}}</span>
-													</div>
-
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Duration:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{$item['actscheduleid']}}</span>
-													</div>
-
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Starts On:</label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label class="total0spretor">Tip Amount </label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span class="total0spretor">${{$item['tip'] * @$item['qty_from_checkout_regi']}}</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Discount </label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>${{$item['discount'] * @$item['qty_from_checkout_regi']}}</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<label>Taxes (NYC) </label>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<span>${{$taxval}}</span>
-													</div>
-													
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<h2>Total </h2>
-													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<h2 class="total-amount"> ${{$total}}</h2>
-													</div>
-													@if($i != count($cart['cart_item']))
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="checkout-sapre-tor">
+												$total = $item['qty_from_checkout_regi'] *($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
+												$iprice = number_format($total,0, '.', '');
+											@endphp
+												<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
+							                    <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
+							                    <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
+							                    <input type="hidden" name="itemqty[]" value="1" />
+							                    <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
+							                   
+							                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
+												<div class="close-cross-icon"> 
+													<i class="fas fa-pencil-alt"></i>
+												</div>
+												<div class="close-cross-icon-trash">
+													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase'])}}" class="p-red-color">
+													<i class="fas fa-trash-alt"></i></a>
+												</div>
+												<div class="ticket-summery-details">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Program Name </label>
 														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{$act->program_name}} </span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Catagory: </label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{$serpricecate->category_title}}</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Price Option:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Membership Option:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{@$serprice['membership_type']}}</span>
+														</div>
+
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Participant Quantity:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{@$item['qty_from_checkout_regi']}}</span>
+														</div>
+
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Who's Participating:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{@$participate}}</span>
+														</div>
+
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Duration:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{$item['actscheduleid']}}</span>
+														</div>
+
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Starts On:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label class="total0spretor">Tip Amount </label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span class="total0spretor">${{$item['tip'] * @$item['qty_from_checkout_regi']}}</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Discount </label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>${{$item['discount'] * @$item['qty_from_checkout_regi']}}</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Taxes (NYC) </label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>${{$taxval}}</span>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<h2>Total </h2>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<h2 class="total-amount"> ${{$total}}</h2>
+														</div>
+														@if($i != count($cart['cart_item']))
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="checkout-sapre-tor">
+															</div>
+														</div>
+														@endif
 													</div>
-													@endif
 												</div>
-											</div>
-										@php $i++;@endphp
-										@endforeach
-										@endif
-									</div>
-								</div>
-							</div>
-							@php  	$service_fee= ($subtotal * $tax->service_fee)/100; 
-							 		$grand_total  = 0 ;
-							 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
-							@endphp
-							<div class="row">
-								<div class="col-md-12">
-									<div class="check-client-info total-checkout">
-										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<h3 class="total0spretor-bt">Subtotal </h3>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<h3 class="total0spretor-bt total-amount">${{$subtotal}} </h3>
-											</div>
-											
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<label>Tip</label>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<span>${{$tip}}</span>
-											</div>
-											
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<label>Discount </label>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<span>${{$discount}}</span>
-											</div>
-											
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<label>Tax </label>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<span>${{$taxes}}</span>
-											</div>
-											
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<label>Service Fee: {{$tax->service_fee}}% </label>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<span> ${{$service_fee}}</span>
-											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<div class="checkout-sapre-tor">
-												</div>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<h2>Grandtotal</h2>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<h2 class="total-amount">${{$grand_total}}</h2>
-											</div>
-											
+											@php $i++;@endphp
+											@endif
+											@endforeach
+											@endif
 										</div>
 									</div>
 								</div>
-							</div>
-							<form method="post" action="{{route('checkout_register')}}">
+								@php  	
+									$service_fee= ($subtotal * $tax->service_fee)/100; 
+							 		$grand_total  = 0 ;
+							 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
+							 		$grand_total = number_format($grand_total,0, '.', '');
+								@endphp
+								<div class="row">
+									<div class="col-md-12">
+										<div class="check-client-info total-checkout">
+											<div class="row">
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<h3 class="total0spretor-bt">Subtotal </h3>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<h3 class="total0spretor-bt total-amount">${{$subtotal}} </h3>
+												</div>
+												
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<label>Tip</label>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<span>${{$tip}}</span>
+												</div>
+												
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<label>Discount </label>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<span>${{$discount}}</span>
+												</div>
+												
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<label>Tax </label>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<span>${{$taxes}}</span>
+												</div>
+												
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<label>Service Fee: {{$tax->service_fee}}% </label>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<span> ${{$service_fee}}</span>
+												</div>
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<div class="checkout-sapre-tor">
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<h2>Grandtotal</h2>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<h2 class="total-amount">${{$grand_total}}</h2>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							
 								@csrf
+								
 								<input type="hidden" name="grand_total" value="{{$grand_total}}">
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
@@ -563,30 +591,282 @@
 										</div>
 									</div>
 									<div class="col-md-4 col-sm-4 col-xs-12">
-										<div class="check-client-info payment-method-img">
-											<img src="../public/images/cash-icon.png" alt="img" class="w-100" width="100">
-											<label>Cash</label>
-										</div>
+										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+										<input name="cardinfo" class="payment-radio" type="radio" value="cash" >
+											<span class="plan-details checkout-card">
+	                                            <div class="row">
+	                                               <div class="col-md-12">
+	                                                  <div class="payment-method-img">
+	                                                      <img src="../public/images/cash-icon.png" alt="img" class="w-100" width="100">
+	                                                  </div>
+	                                               </div>
+	                                               <div class="col-md-12">
+														<div class="cart-name checkout-cart">
+	                                                        <span>Cash</span>
+	                                                    </div>
+	                                                    <div class="cart-num checkout-cart">
+	                                                       <span></span>
+	                                                    </div>
+	                                               </div>
+	                                            </div>
+	                                       </span>
+	                                     </label>
+									</div>
+									@if(!empty($cardInfo)) 
+									 	@foreach($cardInfo as $card) 
+	                                    	@php $brandname = ucfirst($card['brand']); @endphp
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+		                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="{{$brandname }}: XXXX{{$card['last4']}}  Exp. {{$card['exp_month']}}/{{$card['exp_year']}}" card-id="{{$card['id']}}">
+		                                            <span class="plan-details checkout-card">
+		                                                <div class="row">
+		                                                    <div class="col-md-12">
+		                                                        <div class="payment-method-img">
+		                                                            <img src="../public/images/cc-on-file.png" alt="img" class="w-100" width="100">
+		                                                        </div>
+		                                                    </div>
+		                                                    <div class="col-md-12">
+																<div class="cart-name checkout-cart">
+		                                                           <span>CC (On File)</span>
+		                                                         </div>
+		                                                         <div class="cart-num checkout-cart">
+		                                                            <span>{{$brandname}} XX{{$card['last4']}}</span>
+		                                                         </div>
+		                                                    </div>
+		                                                </div>
+		                                           </span>
+		                                       </label>
+											</div>
+										@endforeach
+									@endif
+									
+									<div class="col-md-4 col-sm-4 col-xs-12">
+										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+	                                    <input name="cardinfo" class="payment-radio" type="radio" value="newcard">
+	                                        <span class="plan-details checkout-card">
+	                                            <div class="row">
+	                                                <div class="col-md-12">
+	                                                    <div class="payment-method-img">
+	                                                        <img src="../public/images/input-cc.png" alt="img" class="w-100" width="100">
+	                                                    </div>
+	                                                </div>
+	                                                <div class="col-md-12">
+														<div class="cart-name checkout-cart">
+	                                                        <span>CC (Input Cart)</span>
+	                                                    </div>
+	                                                    <div class="cart-num checkout-cart">
+	                                                        <span></span>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                        </span>
+	                                   </label>
 									</div>
 
 									<div class="col-md-4 col-sm-4 col-xs-12">
-										<div class="check-client-info payment-method-img">
-											<img src="../public/images/cc-on-file.png" alt="img" class="w-100" width="100">
-											<label>CC (On File)</label>
+										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+                                        <input name="cardinfo" class="payment-radio" type="radio" value="check">
+                                            <span class="plan-details checkout-card">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="payment-method-img">
+                                                            <img src="../public/images/check.png" alt="img" class="w-100" width="100">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+														<div class="cart-name checkout-cart">
+                                                           <span>Check</span>
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                           </span>
+                                       </label>
+									</div>
+									
+									<div class="col-md-4 col-sm-4 col-xs-12">
+										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+                                        <input name="cardinfo" class="payment-radio" type="radio"  value="comp">
+                                            <span class="plan-details checkout-card">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="payment-method-img">
+                                                            <img src="../public/images/comp.png" alt="img" class="w-100" width="100">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+														<div class="cart-name checkout-cart">
+                                                           <span>Comp</span>
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                           </span>
+                                       </label>
+									</div>
+
+									<div class="col-md-12">
+										<div class="check-client-info mathod-display">
+											<div class="payment-selection">
+												<h3>Payment Method Selected</h3>
+											</div>
+											<div id="addpmtmethods">
+												<div class="row" id="cashdiv" style="display: none;">
+													<div class="col-md-1">
+														<div class="close-div">
+															<div class="close-cross"> 
+																<i class="fas fa-times"></i>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-3">
+														<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="{{$grand_total}}">
+													</div>
+													<div class="col-md-8">
+														<label>Cash</label>
+													</div>
+													
+													<div class="col-md-12">
+														<div class="changecalce">
+															<label>Change Calculator</label>
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="cash-tend">
+															<span>Cash tendered</span>
+														</div>
+													</div>
+													<div class="col-md-3 nopadding">
+														<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00" >
+													</div>
+													<div class="col-md-2 nopadding">
+														<div class="cash-tend-option">
+															<span>(Optional)</span>
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="cash-tend">
+															<span>Cash Change:</span>
+														</div>
+													</div>
+
+													<div class="col-md-2 nopadding">
+														<div class="cash-tend-option">
+															<label id="cash_amt_change">$0.00</label>
+														</div>
+													</div>
+
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<div class="checkout-sapre-tor">
+														</div>
+													</div>
+												</div>
+											
+												<div class="row" id="ccfilediv"  style="display: none;">
+													<div class="col-md-1">
+														<div class="close-div">
+															<div class="close-cross"> 
+																<i class="fas fa-times"></i>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-3">
+														<input type="text" class="form-control valid" id="cc_amt" name="cc_amt" placeholder="0.00" >
+													</div>
+													<div class="col-md-8">
+														<label>CC(Key/Stored)</label>
+													</div>
+													
+													<div class="col-md-12">
+														<div class="options-payment">
+															<form action="">
+																<input type="radio" id="html" name="fav_language" value="" checked>
+															 	<label for="html">Option 1 :</label> 
+																<span>Use billing information on  file.</span><br>
+																<span class="visa-info"></span><br>
+															</form>
+														</div>
+													</div>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<div class="checkout-sapre-tor">
+														</div>
+													</div>
+												</div>	
+
+												<div id="ccnewdiv"  style="display: none;"> 
+													<div class="col-md-1">
+														<div class="close-div">
+															<div class="close-cross"> 
+																<i class="fas fa-times"></i>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-3">
+														<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" >
+													</div>
+													<div class="col-md-8">
+														<label>CC(Input Card)</label>
+													</div>
+													<div class="col-md-12">
+						        						<div class="row" >
+						        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  required">
+						        								<div id="card-number-field" class="card-space">
+						        									<label for="cardNumber">Card Number</label>
+						        									<input  type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control card-num" > 
+						        								</div>
+						        							</div>
+						        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 required" >
+						        								<div id="" class="card-space">
+						        									<label for="owner">Name On Card</label>
+						                                            <input type="text" name="owner" id="owner" placeholder="ENTER YOUR NAME HERE" class="form-control">
+						        								</div>
+						        							</div>
+						        						</div>
+						        						<div class="row">
+						        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
+						        								<div id="expiration-date" class="card-space">
+						        									<label for="owner">Exp Month</label>
+						                                            <input type="text" name="month" id="month" placeholder="MM" class="form-control card-expiry-month">
+						        								</div>
+						        							</div>
+						                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
+						                                        <div id="expiration-date" class="card-space">
+						                                            <label for="owner">Exp Year</label>
+						                                            <input  type="text" name="year" id="year" placeholder="YYYY" class="form-control card-expiry-year">
+						                                        </div>
+						                                    </div>
+						        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 cvc required">
+						        								<div id="" class="card-space">
+						        									<label for="cvv">CVV</label>
+						                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
+						        								</div>
+						        							</div>
+						                                    
+						                                    <div class='form-row row'>
+						                                        <div class='col-md-12 hide error form-group'>
+						                                            <div class='alert-danger alert'>Fix the errors before you begin.</div>
+						                                        </div>
+						                                    </div>
+						        						</div> 
+						        						<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="checkout-sapre-tor">
+															</div>
+														</div>
+						        					</div>
+					                            </div>
+											</div>
 										</div>
 									</div>
 
-									<div class="col-md-4 col-sm-4 col-xs-12">
-										<div class="check-client-info payment-method-img">
-											<img src="../public/images/input-cc.png" alt="img" class="w-100" width="100">
-											<label>CC (On File)</label>
-										</div>
+									<input type="hidden" name="cash_change" id="cash_change" value="">
+									<input type="hidden" name="card_id" id="card_id" value="">
+									<div class="col-md-6 col-sm-6 col-xs-12 ">
+										<button type="button" class="btn-bck activity-purchase mb-00" id="total_remaing">Total Amount Remaining $0.00</button>
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-										<button type="submit" class="btn-nxt activity-purchase mb-00">Complete Payment</button>
+
+									<div class="col-md-6 col-sm-6 col-xs-12 ">
+										<button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button>
 									</div>
 								</div>
-							</form>							
+							</form>				
 						</div>
 					</div>
 				</div>
@@ -736,24 +1016,98 @@
 		}
 	}   
 
-	function changeamt(chk){
-		if(chk == 'dis_amt'){
-			var dis = $('#dis_amt_drop').val();
-			if(dis == '' || dis == '%'){
-				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
-			}else{
-				$('#dis_amt_span').html($('#dis_amt').val() + ' $');
-			}
+	$('.close-div').click(function() {
+		var name = $(this).parent('div').parent('div').attr('id');
+		$("#"+name).css('display','none');
+		if(name == 'cashdiv'){
+			$('#cash_amt_tender').val(0);
+			//$('#cash_amt').val('');
+			$('#cash_amt_change').html('$0.00');
+		}else if(name == 'ccfilediv'){
+			$('#cc_amt').val(0);
+			$('#card_id').val('');
+		}else if(name == 'newcard'){
+			$('#cc_new_card_amt').val(0);
 		}
-		if(chk == 'tip_amt'){
-			var tip = $('#tip_amt_drop').val();
-			if(tip == '' || tip == '%'){
-				$('#tip_amt_span').html($('#tip_amt').val() + ' %');
+		
+		myMethod();
+	});
+
+	$('input[type=radio][name=cardinfo]').change(function() {
+	    if (this.value == 'cash') {
+	    	$('#cashdiv').css('display','block');
+	    }else if(this.value == 'check'){
+
+	    }else if(this.value == 'newcard'){
+	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden")) {
+	    		$('#cc_new_card_amt').val('{{$grand_total}}');
+	    	}
+	    	$('#ccnewdiv').css('display','block');
+	    	myMethod();
+	    }else if(this.value == 'cardonfile'){
+	    	if($('#cashdiv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
+	    		$('#cc_amt').val('{{$grand_total}}');
+	    	}
+	    	$('#card_id').val($(this).attr("card-id"));
+	    	$('.visa-info').html($(this).attr("extra-data"));
+	        $('#ccfilediv').css('display','block');
+	        myMethod();
+	    }else{
+
+	    }
+	});
+
+	document.getElementById("cash_amt").onkeyup = function() {myMethod()};
+
+	document.getElementById("cash_amt_tender").onkeyup = function() {myMethod()};
+
+	function myMethod() {
+		var cash_amt_tender = parseFloat($('#cash_amt_tender').val());
+		var cash_amt = parseFloat($('#cash_amt').val());
+		var tot =0;
+		if($('#cash_amt_tender').val()!= ''  && $('#cash_amt').val()!= ''){
+			tot  = Math.abs(Number(cash_amt-cash_amt_tender));
+			if(cash_amt_tender < cash_amt){
+				tot_btn  = tot;
+				if($('#ccfilediv').is(':visible')){
+					$('#cc_amt').val(tot_btn);
+				}
+				if($('#ccnewdiv').is(':visible')){
+					$('#cc_new_card_amt').val(tot_btn);
+				}
+				$('#cash_change').val('0');
 			}else{
-				$('#tip_amt_span').html($('#tip_amt').val() + ' $');
+				tot_btn  = '0.00';
+				if($('#ccfilediv').is(':visible')){
+					$('#cc_amt').val(0);
+				}
+				if($('#ccnewdiv').is(':visible')){
+					$('#cc_new_card_amt').val(0);
+				}
+				$('#cash_change').val(tot);
 			}
+			if($('#ccfilediv').is(':visible')){
+				var cash = cash_amt_tender + parseFloat($('#cc_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				}
+			}else if($('#ccnewdiv').is(':visible')){
+				var cash = cash_amt_tender + parseFloat($('#cc_new_card_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				}
+			}else{
+				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+			}
+			$('#cash_amt_change').html('$'+ tot);
 		}
 	}
+
+	
 
 </script>
 
