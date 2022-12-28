@@ -512,7 +512,7 @@
                                     @foreach($cardInfo as $card) 
                                         @php $brandname = strtolower($card['brand']); @endphp
                                         <div class="col-md-6">
-                                            <label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+                                            <label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
                                                 <input name="cardinfo" class="payment-radio" type="radio" value ="{{$card['id']}}">
                                                 <span class="plan-details">
                                                     <div class="row">
