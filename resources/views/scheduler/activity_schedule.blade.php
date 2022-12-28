@@ -33,7 +33,21 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="tabs-1" role="tabpanel">
 						<div class="row">
-							<div class="col-md-12 col-xs-12">
+							@foreach ($days as $date)
+								@php
+									$hint_class = ($filter_date->format('Y-m-d') == $date->format('Y-m-d')) ? 'pairets' : 'pairets-inviable';
+								@endphp
+							
+								<div class="col-md-2 col-sm-2 col-xs-6">
+
+
+									<div class="{{$hint_class}}">
+										<!-- <div class="pairets-inviable"> -->
+										<a href="" class="calendar-btn">{{$date->format("D d")}}</a>
+									</div>
+								</div>
+							@endforeach
+							<!-- <div class="col-md-12 col-xs-12">
 								<div class="weeks-name">
 									<ul>
 										<li><a>SUN 4</a></li>
@@ -45,18 +59,19 @@
 										<li><a>SAT 10</a></li>
 									</ul>
 								</div>
-							</div>
+							</div> -->
+
 						</div>
 						<div class="tab-data">
 							<div class="row">
-								<div class="col-md-4 col-sm-4 col-xs-12">
+								<div class="col-md-3 col-sm-4 col-xs-12">
 									<div class="checkout-sapre-tor">
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-12">
-									<label>Classes on Sunday, December 4</label>
+								<div class="col-md-6 col-sm-4 col-xs-12 valor-mix-title">
+									<label>Classes on {{$filter_date->format("l, F j")}}</label>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-12">
+								<div class="col-md-3 col-sm-4 col-xs-12">
 									<div class="checkout-sapre-tor">
 									</div>
 								</div>
