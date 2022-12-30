@@ -331,7 +331,7 @@
 		}
 		
 		$.ajax({
-			url:'',
+			url:'{{route("business_customer_index", ["business_id" => $companyId])}}',
 			type:"GET",
 			data:{
 				inpuval:inpuval
@@ -796,8 +796,6 @@
             }else{
               $('#b_address').val(badd);
             }
-            
-        
            /* $('#lat').val(place.geometry.location.lat());
             $('#lon').val(place.geometry.location.lng());*/
         });

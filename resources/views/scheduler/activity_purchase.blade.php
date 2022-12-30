@@ -1303,7 +1303,11 @@
 		}
 		
 		$.ajax({
+<<<<<<< HEAD
 			url:'',
+=======
+			url:'{{route("business_customer_index", ["business_id" => $companyId])}}',
+>>>>>>> d5b69c6f719c6bc7b6dedd8c8f6edee37f23e331
 			type:"GET",
 			data:{
 				inpuval:inpuval
