@@ -104,6 +104,22 @@ class User extends Authenticatable
         ]);
         $this->stripe_customer_id = $customer->id;
         $this->save();
+
+        return $customer->id;
+    }
+
+    public function get_stripe_card_info(){
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+        if($this->stripe_customer_id != ''){
+            $savedEvents = $stripe->customers->allSources(
+                $this->stripe_customer_id,
+                ['object' => 'card' ,'limit' => 30]
+            );
+            $savedEvents  = json_decode( json_encode( $savedEvents),true);
+            return $savedEvents['data'];
+        }
+        return [];
     }
 
 

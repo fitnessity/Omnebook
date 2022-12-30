@@ -39,13 +39,16 @@
 									<a href="#" class="btn-nxt manage-cus-btn search-add-client" data-toggle="modal" data-target="#newclient">Add New Client</a>
 									<!-- <button type="button" class="btn-nxt manage-search search-add-client" id="">Add New Client </button> -->
 								</div>
-								<div class="col-md-5 col-sm-12 col-xs-12">
-									<div class="manage-search search-checkout">
-										<form>
-											<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
-											<div id="option-box1"></div>
-											<button type="button" ><i class="fa fa-search"></i></button>
-										</form>
+								<div class="col-md-5 col-sm-12 col-xs-12 ">
+									<div class="manage-search serchcustomer">
+										<div class="sub">
+											<input type="text" id="serchclient" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">
+											<div id="option-box1" style="display:none;">
+						                        <ul class="customer-list">
+						                        </ul>
+						                    </div>
+											<button ><i class="fa fa-search"></i></button>
+										</div>
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-12 col-xs-12">
@@ -59,7 +62,7 @@
 												<label>Client Quick Stats</label>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
-												<label>Client Name: </label><span> {{$username}} ({{$age}} yrs Old)</span>
+												<label>Client Name: </label><span> @if($username !='') {{$username}} ({{$age}} yrs Old) @endif</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
 												<label>Location: </label><span> {{$address}}</span>
@@ -92,14 +95,27 @@
 										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
+													<label>Participant Quantity </label>
+													<div class="choose-tip">
+														<select name="qty_dropdown" id="qty_dropdown" class="form-control"onchange="gettotal('qty',this.value);">
+															<option value="1" >Select </option>
+															@for($i=1;$i<15;$i++)
+															<option value="{{$i}}">{{$i}}</option>
+															@endfor
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<div class="select0service">
 													<label>Who's Participating </label>
 													<select name="program_list" id="program_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
 														@php  
-															$pc_regi_id = $user_data->id;
+															$pc_regi_id = @$user_data->id;
 															$pc_value = $username.'(me)';
-															$pc_user_tp = $book_data->booking->user_type;
+															$pc_user_tp = $user_type;
 														@endphp
-														<option value="{{$user_data->id}}~~{{$book_data->booking->user_type}}">{{$username}}(me)</option>
+														<option value="{{@$user_data->id}}~~{{$pc_user_tp}}">{{$username}}(me)</option>
 														@if(!empty($userfamily))
 														@foreach($userfamily as $ufd)
 															<option value="{{$ufd->id}}~~family^^{{$username}}">{{$ufd->first_name}} {{$ufd->last_name}} </option>
@@ -152,7 +168,7 @@
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
 													<label>Price </label>
-													<input type="text" class="form-control valid" id="price" placeholder="$1200.00" onkeyup="gettotal('','');">
+													<input type="text" class="form-control valid" id="price" placeholder="$0.00" onkeyup="gettotal('','');">
 												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
@@ -202,16 +218,12 @@
 										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
-													<label>Participant Quantity </label>
-													<div class="choose-tip">
-														<select name="qty_dropdown" id="qty_dropdown" class="form-control"onchange="gettotal('qty',this.value);">
-															<option value="1" >Select </option>
-															@for($i=1;$i<15;$i++)
-															<option value="{{$i}}">{{$i}}</option>
-															@endfor
-														</select>
+													<div class="date-activity-scheduler date-activity-check paynowset">
+														<input type="checkbox" id="paynow" name="paynow" value="1" checked>
+														<label for="paynow"> Pay Now</label>
 													</div>
 												</div>
+												
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
@@ -241,17 +253,16 @@
 												</div>
 											</div>
 										</div>
-
-										<input type="checkbox" id="paynow" name="paynow" value="1" checked>
-										<label for="paynow"> Pay Now</label>
 									</div>
 								</div>
 								
 								<div class="col-md-12">
 									<div class="check-out-steps"><label><h2 class="color-red">Step 3: </h2> Check Your Booking Summary</label></div>
-									<form method="post" action="/addtocart">
+									<form method="post" action="{{route('addtocart')}}">
 										@csrf
 										<input type="hidden" name="chk" value="activity_purchase">
+										<input type="hidden" name="value_tax" id="value_tax" value="0">
+										<input type="hidden" name="type" value="{{$user_type}}">
 										<input type="hidden" name="pageid" value="{{$book_id}}">
 										<input type="hidden" name="pid" id="pid" value="">
 										<input type="hidden" name="checkount_qty" id="checkount_qty" value="">
@@ -331,14 +342,14 @@
 													<label>Tip Amount</label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
-													<span id="tip_amt_span"></span>
+													<span id="tip_amt_span">$0.00</span>
 												</div>
 												
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
 													<label>Discount </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
-													<span id="dis_amt_span"></span>
+													<span id="dis_amt_span">$0.00</span>
 												</div>
 												
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
@@ -349,14 +360,14 @@
 													</div>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
-													<span></span>
+													<span id="taxvalspan">$0.00</span>
 												</div>
 												
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
 													<h2>Total</h2>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
-													<h2 class="total-amount" id="total_amount"></h2>
+													<h2 class="total-amount" id="total_amount">$0.00</h2>
 												</div>
 											</div>
 										</div>
@@ -379,7 +390,7 @@
 											@php $i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0; @endphp
 											@if(!empty($cart))
 											@foreach($cart['cart_item'] as $item)
-											@if($item['chk'] != '')
+											@if($item['chk'] == 'activity_purchase')
 											@php 
 												$checkout_btun_chk = 1;
 												if ($item['image']!="") {
@@ -391,13 +402,11 @@
 						    					}else{ 
 						    						$profilePic = url('/public/images/service-nofound.jpg');
 						    					}
-												$taxval = 0;
+
 												$subtotal += $item['totalprice'] * @$item['qty_from_checkout_regi'];
 												$tip += $item['tip'] * @$item['qty_from_checkout_regi'];
 												$discount += $item['discount'] * @$item['qty_from_checkout_regi'];
-												if($item["taxchk"] != 0){
-													$taxval = $tax->site_tax;
-												}
+												$taxval = $item["tax"];
 												$participate = $item["participate_from_checkout_regi"]['pc_name'];
 												$taxes += $taxval;
 												$act = BusinessServices::where('id', $item["code"])->first();
@@ -418,7 +427,7 @@
 													<i class="fas fa-pencil-alt"></i>
 												</div>
 												<div class="close-cross-icon-trash">
-													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase'])}}" class="p-red-color">
+													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
 													<i class="fas fa-trash-alt"></i></a>
 												</div>
 												<div class="ticket-summery-details">
@@ -583,7 +592,8 @@
 							
 								@csrf
 								
-								<input type="hidden" name="grand_total" value="{{$grand_total}}">
+								<input type="hidden" name="user_id" value="{{@$user_data->id}}">
+								<input type="hidden" name="user_type" value="{{@$user_type}}">
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<div class="payment-method">
@@ -597,7 +607,7 @@
 	                                            <div class="row">
 	                                               <div class="col-md-12">
 	                                                  <div class="payment-method-img">
-	                                                      <img src="../public/images/cash-icon.png" alt="img" class="w-100" width="100">
+	                                                      <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100">
 	                                                  </div>
 	                                               </div>
 	                                               <div class="col-md-12">
@@ -622,7 +632,7 @@
 		                                                <div class="row">
 		                                                    <div class="col-md-12">
 		                                                        <div class="payment-method-img">
-		                                                            <img src="../public/images/cc-on-file.png" alt="img" class="w-100" width="100">
+		                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
 		                                                        </div>
 		                                                    </div>
 		                                                    <div class="col-md-12">
@@ -647,7 +657,7 @@
 	                                            <div class="row">
 	                                                <div class="col-md-12">
 	                                                    <div class="payment-method-img">
-	                                                        <img src="../public/images/input-cc.png" alt="img" class="w-100" width="100">
+	                                                        <img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100">
 	                                                    </div>
 	                                                </div>
 	                                                <div class="col-md-12">
@@ -670,7 +680,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="payment-method-img">
-                                                            <img src="../public/images/check.png" alt="img" class="w-100" width="100">
+                                                            <img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -690,7 +700,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="payment-method-img">
-                                                            <img src="../public/images/comp.png" alt="img" class="w-100" width="100">
+                                                            <img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -791,6 +801,33 @@
 													</div>
 												</div>	
 
+												<div class="row" id="checkdiv"  style="display: none;">
+													<div class="col-md-1">
+														<div class="close-div">
+															<div class="close-cross"> 
+																<i class="fas fa-times"></i>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-3">
+														<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" >
+													</div>
+													<div class="col-md-8">
+														<label>Check</label>
+													</div>
+													<div class="col-md-12">
+														<div class="row">
+															<div class="cash-tend">
+																<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
+															</div>
+														</div>
+													</div>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<div class="checkout-sapre-tor">
+														</div>
+													</div>
+												</div>	
+
 												<div id="ccnewdiv"  style="display: none;"> 
 													<div class="col-md-1">
 														<div class="close-div">
@@ -839,7 +876,12 @@
 						                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
 						        								</div>
 						        							</div>
-						                                    
+						                                    <div class="col-md-12">
+						                                        <div class="save-pmt-checkbox">
+						                                            <input type="checkbox" id="save_card" name="save_card" value="1">
+						                                            <label>Save for future payments</label>
+						                                        </div>
+						                                    </div>
 						                                    <div class='form-row row'>
 						                                        <div class='col-md-12 hide error form-group'>
 						                                            <div class='alert-danger alert'>Fix the errors before you begin.</div>
@@ -852,10 +894,12 @@
 														</div>
 						        					</div>
 					                            </div>
+
 											</div>
 										</div>
 									</div>
 
+									<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
 									<input type="hidden" name="cash_change" id="cash_change" value="">
 									<input type="hidden" name="card_id" id="card_id" value="">
 									<div class="col-md-6 col-sm-6 col-xs-12 ">
@@ -874,7 +918,7 @@
 		</div>
 	</div>
 
-	@include('includes.add_new_client')
+	
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -933,7 +977,7 @@
 			data:  {
 				'sid':id,
 				'chk':chk,
-				'user_type':'{{$book_data->booking->user_type}}',
+				'user_type':'{{$user_type}}',
 			},
 			success:function(data){
 				if(chk == 'program'){
@@ -960,13 +1004,13 @@
 		var tip_val = 0;
 		var sub_tot = 0;
 		var sub_tot_tip = 0;
-		var sub_tot_dis = 0;
+		var sub_tot_dis = tax = 0;
 		var price = parseInt($('#price').val());
 		var dis = $('#dis_amt_drop').val();
 	 	var tip = $('#tip_amt_drop').val();
 	 	dis_val  = parseInt($('#dis_amt').val());
 		tip_val =parseInt($('#tip_amt').val());
-
+		tax = parseFloat($('#value_tax').val());
 		if(tip != undefined){
 	 		if($('#tip_amt').val() != ''){
 		 		if(tip == '' || tip == '%'){
@@ -1006,7 +1050,8 @@
 	 			tot = $('#qty_dropdown').val() * tot;
 	 		}
 	 		
-	 		$('#total_amount').html('$'+tot);
+	 		tot = tax + tot ; 
+	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(price);
 	 	}
 
@@ -1028,6 +1073,8 @@
 			$('#card_id').val('');
 		}else if(name == 'newcard'){
 			$('#cc_new_card_amt').val(0);
+		}else if(name == 'checkdiv'){
+			$('#check_amt').val(0);
 		}
 		
 		myMethod();
@@ -1037,7 +1084,11 @@
 	    if (this.value == 'cash') {
 	    	$('#cashdiv').css('display','block');
 	    }else if(this.value == 'check'){
-
+	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
+	    		$('#check_amt').val('{{$grand_total}}');
+	    	}
+	        $('#checkdiv').css('display','block');
+	        myMethod();
 	    }else if(this.value == 'newcard'){
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden")) {
 	    		$('#cc_new_card_amt').val('{{$grand_total}}');
@@ -1107,7 +1158,60 @@
 		}
 	}
 
-	
+    $(document).on('keyup', '#serchclient', function() {
+    	var _token = '{{csrf_token()}}';
+	  	$.ajax({
+	      	type: "GET",
+	      	url: "{{route("business_customer_index", ['business_id' => $companyId])}}",
+	      	data: { fname: $(this).val(),  _token: _token, },
+	      	success: function(data) {
+	        	$("#option-box1 .customer-list").html('');
+	        	console.log(data);
+	        	$.each(data, function(index, customer){
+
+	        		let customer_row = $('<li class="searchclick" onClick="searchclick(' + customer.id + ')"><input type="hidden" name="_token" value="'+_token+'"><div class="row rowclass-controller"></div>');
+		          	let content = customer_row.find('.rowclass-controller');
+		          	let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+		          	if(customer.profile_pic_url){
+		            	profile_img = '<img src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50">';            
+		          	}
+		          	customer_row.append('<div class="col-md-2">' + profile_img + '</div>');
+		          	customer_row.append('<div class="col-md-10 div-controller">' + 
+		              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
+		              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
+		              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div></li>');
+		          	$("#option-box1 .customer-list").append(customer_row);
+		        })
+	        	$("#option-box1").show();
+	      	}
+	  	});
+	});
+
+	$("#tax").click(function () {
+		var tax = '';
+        if ($("#tax").is(":checked")) {
+        	if($('#price').val() != ''){
+        		tax = '$' + (parseFloat($('#price').val()) * '{{ $tax->site_tax}}')/100 ;
+        		$('#value_tax').val((parseFloat($('#price').val()) * '{{ $tax->site_tax}}')/100 );
+        	}else{
+        		tax = '$0.00';
+        		$('#value_tax').val(0);
+        	}
+            $("#taxvalspan").html(tax);
+        } else {
+            $("#taxvalspan").html('$0.00');
+            $('#value_tax').val(0);
+        }
+        gettotal('','');
+    });
+
+    function searchclick(cid){
+    	var url = '{{env("APP_URL")}}';
+    	//document.getElementById("myForm").submit();
+    	var url = url+'/activity_purchase/0/'+cid;
+	 	window.location.href = url;
+	}
 
 </script>
 
@@ -1199,7 +1303,7 @@
 		}
 		
 		$.ajax({
-			url:'{{route("manage-customer")}}',
+			url:'',
 			type:"GET",
 			data:{
 				inpuval:inpuval
@@ -1210,13 +1314,9 @@
 		});
 	}
 
-	function searchclick(cid){
-	  	$url = '{{env("APP_URL")}}';
-	  	//window.location.href = "viewcustomer/"+cid;
-	     window.open($url + "viewcustomer/"+cid, "_blank");
-	}
+	
 
-	$("#serchclient").keyup(function() {
+	/*$("#serchclient").keyup(function() {
       $.ajax({
           type: "POST",
           url: "/searchcustomersaction",
@@ -1230,7 +1330,7 @@
               $("#serchclient").css("background", "#FFF");
           }
       });
-    });
+    });*/
 
     $(".dobdate").keyup(function(){
       if ($(this).val().length == 2){

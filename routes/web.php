@@ -966,14 +966,15 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
     Route::get('scheduler-checkin/{sid?}', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
-    Route::get('activity_purchase/{book_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
+    Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
     Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
     Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
     Route::get('activity_schedule', 'SchedulerController@activity_schedule')->name('activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
-    Route::get('confirmpaymentscheckout_register', 'SchedulerController@confirmpaymentscheckout_register')->name('confirmpaymentscheckout_register');
+    Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
+    Route::post('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
 });
 
 Route::get('email', 'SchedulerController@email')->name('email');
