@@ -107,18 +107,14 @@
 										<div class="scheduler-border scheduler-label">
 											<a><i class="fas fa-times"></i></a>
 											<div class="checkbox-check">
-												<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-												<label for="vehicle1"> Check In</label><br>
-												<input type="checkbox" id="vehicle2" name="vehicle2" value="Car" data-behavior="show_latecancel">
-												<label for="vehicle2"> Late Cancel</label><br>
+												<input type="checkbox" id="check_in" name="check_in" value="Bike">
+												<label for="check_in"> Check In</label><br>
+												<input type="checkbox" id="late_cancel" name="late_cancel" value="Car" data-behavior="show_latecancel" data-oid="{{$bd->id}}" data-bookingid="{{$bd->booking_id}}">
+												<label for="late_cancel"> Late Cancel</label><br>
 											</div>
 										</div>
 									</div>
-									<script>
-										function handleClick(cb) {
-										  	$('#modelopen').click();
-										}
-									</script>
+									
 									<div class="col-md-1 col-xs-3 col-sm-4">	
 										<div class="scheduler-qty">
 											<span> {{$bd->booking->user->firstname[0]}}{{$bd->booking->user->lastname[0]}}</span>
@@ -188,25 +184,17 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
-								<div class="latecancle-types">
-									<input type="radio" id="nothing" name="fav_language" value="nothing">
-									<label for="nothing">Nothing</label><br>
-									
-									<input type="radio" id="fee" name="fav_language" value="fee">
-									<label for="fee">Charge Fee on Card</label><input type="text" class="form-control feeamount" name="frm_programname" id="" placeholder="$ Fee Amount"><br>
-									
-									<input type="radio" id="javascript" name="fav_language" value="JavaScript">
-									<label for="javascript">Deduct from membership</label> 
-									<select class="form-control" name="membership" id="">
-									  <option value="membership">Choose from membership options </option>
-									  <option value="saab">1</option>
-									  <option value="mercedes">2</option>
-									  <option value="audi">3</option>
-									</select>
+							<form method="post" action="{{route('booking_activity_cancel')}}">
+								@csrf
+								<input type="hidden" name="booking_id" id="booking_id" value="">
+								<input type="hidden" name="pageid" id="pageid" value="{{@$schedule_data->id}}">
+								<input type="hidden" name="order_detail_id" id="order_detail_id" value="">
+								<div class="col-md-12">
+									<div class="latecancle-types" >
+									</div>
+									<button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</button>
 								</div>
-								<a href="#" class="btn-nxt manage-cus-btn cancel-modal">Submit</a>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -219,7 +207,22 @@
 <script type="text/javascript">
 	$(document).on('change', 'input[data-behavior="show_latecancel"]', function(){
 		if($(this).is(':checked')){
-			$('#latecancel').modal('show')	
+			$.ajax({
+					url:"/getbookingcancelmodel",
+					type: "POST",
+					data:{
+							_token: '{{csrf_token()}}', 
+							oid:$(this).attr("data-oid"),
+							order_detail_id:$(this).attr("data-bookingid"),
+					},
+					success:function(response) {
+							$('.latecancle-types').html(response);
+							$('#latecancel').modal('show');
+					}
+			});
+			$('#booking_id').val($(this).attr("data-oid"));
+			$('#order_detail_id').val($(this).attr("data-bookingid"));
+			
 		}
 		
 	})
@@ -328,7 +331,7 @@
 		}
 		
 		$.ajax({
-			url:'{{route("manage-customer")}}',
+			url:'',
 			type:"GET",
 			data:{
 				inpuval:inpuval

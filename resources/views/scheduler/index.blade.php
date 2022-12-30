@@ -25,7 +25,7 @@
 	 				</div>
 				</div>
 				<hr style="border: 3px solid black; width: 125%; margin-left: -38px; margin-top: 5px;">
-			  </div>
+			  
 			  <div class="container-fluid plr-0">
 				<div class="row">
 					<div class="col-md-3 col-xs-12 col-sm-6">
@@ -194,7 +194,7 @@
 				
 			</div>	
 		</div>
-
+</div>
 		<!-- The Modal Add Business-->
 		<div class="modal fade compare-model in" id="bookingcancelmodel">
 			<div class="modal-dialog bookingcancel">

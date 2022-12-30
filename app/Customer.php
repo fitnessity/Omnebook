@@ -93,6 +93,18 @@ class Customer extends Authenticatable
             return Customer::where('parent_cus_id',$this->id)->get();
         }
     }
+
+    function create_stripe_customer_id(){
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $customer = \Stripe\Customer::create([
+            'name' => $this->firstname . ' '. $this->lastname,
+            'email'=> $this->email,
+        ]);
+        $this->stripe_customer_id = $customer->id;
+        $this->save();
+        return $customer->id;
+    }
+
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
@@ -137,6 +149,15 @@ class Customer extends Authenticatable
             $location = 'United States';
         }
         return $address;
+    }
+
+    public function getlastbooking(){
+        $bddata = '';
+        $status = UserBookingStatus::where('user_id',$this->id)->orderby('created_at','desc')->first();
+        if($status != ''){
+           $bddata =  UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','desc')->first();
+        }
+        return  $bddata ;
     }
     
 }

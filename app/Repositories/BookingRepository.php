@@ -638,6 +638,8 @@ class BookingRepository
 
     public function lastbookingbyUserid($userid){
         $data = '';
+        $purchasefor = '';
+        $price_title = '';
         $status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
         if($status != ''){
             $price  =  $status->amount;

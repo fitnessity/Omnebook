@@ -37,6 +37,11 @@ class UserBookingDetail extends Model
 
      */
 
+
+    public function BookingActivityCancel(){
+        return $this->hasMany(BookingActivityCancel::class,'order_detail_id');
+    }
+
     public function UserBookingStatus()
 
     {
