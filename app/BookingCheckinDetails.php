@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Carbon\Carbon;
 
-class BookingActivityCancel extends Model
+class BookingCheckinDetails extends Model
 
 { 
 	
@@ -25,9 +25,9 @@ class BookingActivityCancel extends Model
      */
 
     public $timestamps = false;
-    protected $table = 'booking_activity_cancel';
+    protected $table = 'booking_checkin_details';
 	protected $fillable = [
-        'booking_id', 'order_detail_id','cancel_charge_action','cancel_charge_amt','stripe_id'
+        'booking_id', 'order_detail_id','checkin','checkin_date'
     ];
 
      /**

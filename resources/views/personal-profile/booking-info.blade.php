@@ -150,7 +150,7 @@ use App\UserFamilyDetail;
                                                 $tip = $extra_fees['tip'];
                                                 $discount = $extra_fees['discount'];
                                             }
-                                            $main_total = (@$book_details['user_booking_detail']['price']  + $tip - $discount ) + (((@$book_details['user_booking_detail']['price']  + $tip - $discount ) * $tax ) /100);
+                                            $main_total = round((@$book_details['user_booking_detail']['price']  + $tip - $discount ) + (((@$book_details['user_booking_detail']['price']  + $tip - $discount ) * $tax ) /100));
                                         ?>
                                             <div class="col-md-4 col-sm-6 ">
                                                 <div class="boxes_arts">
@@ -205,7 +205,7 @@ use App\UserFamilyDetail;
                                                     
                                                         <p>
                                                             <span>BOOKED BY:</span>
-                                                            <span>{{$book_details['user']['firstname'] }} {{ $book_details['user']['lastname'] }}</span>
+                                                            <span>{{$book_details['customer']['fname'] }} {{ $book_details['customer']['lname'] }}</span>
                                                         </p>
 
                                                         <p>

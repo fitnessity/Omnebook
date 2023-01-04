@@ -975,6 +975,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::post('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
+    Route::post('check_in_activity', 'SchedulerController@check_in_activity')->name('check_in_activity');
 });
 
 Route::get('email', 'SchedulerController@email')->name('email');
