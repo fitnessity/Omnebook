@@ -23669,3 +23669,17 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .paynowset{
 	margin-top: 27px;
 }
+.setprice-custom{
+	text-align: left !important;
+	margin-top: 0px;
+}
+
+.setprice label{
+    margin-right: 10px;
+}
+
+.companyalink{
+    font-size: 16px;
+    color: #f91942 !important;
+    font-weight: 600;
+}

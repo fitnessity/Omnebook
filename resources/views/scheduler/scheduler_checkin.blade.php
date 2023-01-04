@@ -2,7 +2,6 @@
 @section('content')
 @include('layouts.userHeader')
 
-
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
         <div class="col-md-2 col-sm-12" style="background: black;">
@@ -63,6 +62,11 @@
 				</div>
 				
 				<hr style="border: 1px solid #efefef; width: 115%; margin-left: -15px; margin-top: 5px;">
+				@if(session('success'))
+			     <span class="alert alert-success" role="alert" style=" padding: 6px;">
+			         <strong>{{ session('success') }}</strong>
+			     </span>
+				@endif
 				<div class="row">
 					<div class="col-md-12">
 						<div class="row mobile-scheduler">
@@ -101,15 +105,18 @@
 						<div id="schedulelist">
 							@if(!empty($bookingdata) && count($bookingdata) > 0)
 							@foreach($bookingdata as $bd)
+				
 							<div class="scheduler-info-box">
 								<div class="row">
 									<div class="col-md-2 col-xs-12 col-sm-4">
 										<div class="scheduler-border scheduler-label">
 											<a><i class="fas fa-times"></i></a>
 											<div class="checkbox-check">
-												<input type="checkbox" id="check_in" name="check_in" value="Bike">
+												
+												<input type="checkbox" id="check_in" name="check_in" value="1" data-oid="{{$bd->id}}" data-bookingid="{{$bd->booking_id}}"  @if($bd->getBookingCheckinDetails() == 1) checked @endif >
 												<label for="check_in"> Check In</label><br>
-												<input type="checkbox" id="late_cancel" name="late_cancel" value="Car" data-behavior="show_latecancel" data-oid="{{$bd->id}}" data-bookingid="{{$bd->booking_id}}">
+												
+												<input type="checkbox" id="late_cancel" name="late_cancel" value="1" data-behavior="show_latecancel" data-bookingid="{{$bd->id}}" data-oid="{{$bd->booking_id}}">
 												<label for="late_cancel"> Late Cancel</label><br>
 											</div>
 										</div>
@@ -224,8 +231,45 @@
 			$('#order_detail_id').val($(this).attr("data-bookingid"));
 			
 		}
-		
-	})
+	});
+
+	$(document).on('change', 'input[id="check_in"]', function(){
+			var checkin  = '';
+			if($(this).is(':checked')){
+				 checkin = '1';
+			}else{
+					checkin = '0';
+			}
+
+			$.ajax({
+					url:"{{route('check_in_activity')}}",
+					type: "POST",
+					data:{
+							_token: '{{csrf_token()}}', 
+							oid:$(this).attr("data-bookingid"),
+							order_detail_id:$(this).attr("data-oid"),
+							checkin:checkin,
+					},
+					success:function(response) {
+							window.location.reload();
+					}
+			});
+	});
+
+	$(document).on('click', 'input[name="cancel_charge_action"]', function(){
+				if($(this).val() == 'charge_fee_on_card'){
+        	$('#cardinfodiv').css('display','block');
+        	$("#cancel_charge_amt").attr('required', ''); 
+        }else{
+					$('#cardinfodiv').css('display','none');
+        }
+		});
+
+		$(document).on('click', 'input[name="cardinfo"]', function(){
+			$('#card_idval').val($(this).attr("card-id"));        	
+		})
+
+
 	$("#business_name").keyup(function() {
       $.ajax({
           type: "POST",

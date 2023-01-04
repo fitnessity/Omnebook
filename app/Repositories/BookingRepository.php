@@ -9,6 +9,7 @@ use App\UserBookingQuote;
 use App\BusinessServices;
 use App\CompanyInformation;
 use App\User;
+use App\Customer;
 use DB;
 use Auth;
 use App\MailService;
@@ -32,16 +33,19 @@ class BookingRepository
 
     public function getcurrenttabdata($type){
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'checkout_register'])->orderBy('created_at','desc')->get();
+        $bookingstatus = UserBookingStatus::where(['order_type'=>'checkout_register','user_type'=>'customer'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
+            $customer = Customer::where('id',$value['user_id'])->first();
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services != ''){
+                if(@$business_services->cid ==  @$customer->business_id ){
                     if($business_services->service_type == $type){
                         $BookingDetail_1 = $this->getBookingDetailnew($value->id);
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
                         $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $customers['customer'] = $customer;
+                        $customers = json_decode(json_encode($customers), true);
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
                         foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
@@ -49,7 +53,7 @@ class BookingRepository
                                 if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
                                     $BookingDetail_1['user_booking_detail'] = $details;
                                 }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
                             }
                         }    
                     }
@@ -57,6 +61,7 @@ class BookingRepository
             }
         }
 
+        //print_r($BookingDetail);exit;
         return $BookingDetail;
     }
 

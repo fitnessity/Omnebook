@@ -17,6 +17,7 @@ use App\UserFamilyDetail;
 use App\BusinessSubscriptionPlan;
 use App\Customer;
 use App\BookingActivityCancel;
+use App\BookingCheckinDetails;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -642,9 +643,9 @@ class SchedulerController extends Controller
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
           }else if($request->chk == 'priceopt'){
-               $pricelist = BusinessPriceDetails::select('id','membership_type')->where('id',$request->sid)->get();
-               $output = '<option value="">Selct Price Title</option>';
-               foreach($pricelist as $pl){
+               $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$request->sid)->get();
+               $output = '<option value="">Selct Membership Type</option>';
+               foreach($membershiplist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
                }
           }else if($request->chk == 'participat'){
@@ -919,7 +920,7 @@ class SchedulerController extends Controller
                               )),
                               'act_schedule_id' =>$act_schedule_id,
                               'payment_number' =>$encodepayment_number,
-                              'participate' =>$encodeparticipate,
+                              'participate' => '['.$encodeparticipate.']',
                               'transfer_provider_status' =>'unpaid',
                          );
                          $status = UserBookingDetail::create($act);
@@ -1028,16 +1029,60 @@ class SchedulerController extends Controller
      }
 
      public function booking_activity_cancel(Request $request){
+          //print_r($request->all());exit;
+          $stripeid = '';
+          $name  = '';
+          $successmsg  = '';
+          $booking_data = UserBookingStatus::where('id',$request->booking_id)->first();
+          /*print_r( $booking_data);exit;*/
+          if($booking_data->user_type == 'customer'){
+               $name = $booking_data->customers->fname.' '.$booking_data->customers->lname;
+               $stripe_customer_id = $booking_data->customers->stripe_customer_id;
+          }else{
+               $name = $booking_data->user->firstname.' '.$booking_data->user->lastname;
+               $stripe_customer_id = $booking_data->user->stripe_customer_id;
+          }
+          if($request->cancel_charge_action == 'charge_fee_on_card'){
+               $totalprice = $request->cancel_charge_amt;
 
-          $data = $request->all();
-
-          $position = array_search(request()->_token, $data);
-          $position1 = array_search(request()->pageid, $data);
-          $cancel_id = array_search(request()->cancel_id, $data);
-          unset($data[$position]);
-          unset($data[$position1]);
-          unset($data[$cancel_id]);
-
+               \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+               $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+               $carddetails = $stripe->customers->retrieveSource(
+                    $stripe_customer_id,
+                    $request->card_idval,
+                    []
+               );
+               $payment_method = $carddetails->id;
+               $pmtintent = \Stripe\PaymentIntent::create([
+                    'amount' =>  round($totalprice *100),
+                    'currency' => 'usd',
+                    'customer' => $stripe_customer_id,
+                    'payment_method' =>  $payment_method ,
+                    'off_session' => true,
+                    'confirm' => true,
+               ]);
+               $payid = $pmtintent->id;
+               $payment_intent = $stripe->paymentIntents->retrieve(
+                    $payid,
+                    []
+               );
+               $data = json_decode( json_encode( $payment_intent),true);
+               if($data['status']=='succeeded')
+               {
+                    $stripeid = $payid;
+                    $successmsg = $name.' ,You Paid Late Cancels Charge Succefully.';
+               }
+          }else{
+               $successmsg = 'Succefully Cancel your Activity';
+          }
+          
+          $data = array(
+                    "booking_id"=> $request->booking_id,
+                    "order_detail_id"=> $request->order_detail_id,
+                    "cancel_charge_action"=> $request->cancel_charge_action,
+                    "cancel_charge_amt"=> @$request->cancel_charge_amt,
+                    "stripe_id" => $stripeid,
+               );
           if($request->cancel_id != ''){
                BookingActivityCancel::where('id',request()->cancel_id)->update($data);
           }else{
@@ -1045,17 +1090,27 @@ class SchedulerController extends Controller
           }
           
         /*  print_r($request->all());exit;*/
-          return redirect('/scheduler-checkin/'.$request->pageid);
+          return redirect('/scheduler-checkin/'.$request->pageid)->with('success', $successmsg);   ;
      }
 
      public function getbookingcancelmodel(Request $request){
+          $booking_data = UserBookingStatus::where('id',$request->oid)->first();
+          $bookingdetail_data = UserBookingDetail::where('id',$request->order_detail_id)->first();
+          $cardInfo = [];
+          if($booking_data->user_type == 'customer'){
+               $cardInfo = $booking_data->customers->get_stripe_card_info();
+          }else{
+               $cardInfo = $booking_data->user->get_stripe_card_info();
+          }
+          //print_r($cardInfo);exit;
           $data = BookingActivityCancel::where(['booking_id'=> $request->oid,'order_detail_id'=> $request->order_detail_id])->first();
           $cancel_charge_amt = '';
           $html = '';
-          $html .='<input type="hidden" name="cancel_id" id="cancel_id" value="'.$data->id.'">
+          $html .=' <input type="hidden" name="card_idval" id="card_idval" value="">
+                    <input type="hidden" name="cancel_id" id="cancel_id" value="'.@$data->id.'">
                     <input type="radio" id="nothing" name="cancel_charge_action" value="nothing" ';
                     if(@$data->cancel_charge_action == 'nothing') {
-                          $html .='checked';
+                         $html .='checked';
                     }
 
                     $html .='>
@@ -1063,27 +1118,70 @@ class SchedulerController extends Controller
                     
                     <input type="radio" id="fee" name="cancel_charge_action" value="charge_fee_on_card"';
                     if(@$data->cancel_charge_action == 'charge_fee_on_card') {
-                          $html .='checked';
-                          $cancel_charge_amt = @$data->cancel_charge_amt;
+                         $html .='checked';
+                         $cancel_charge_amt = @$data->cancel_charge_amt;
                     }
 
                     $html .='>
                     <label for="fee">Charge Fee on Card</label>
-                    <input type="text" class="form-control feeamount" name="cancel_charge_amt" id="cancel_charge_amt" placeholder="$ Fee Amount" value="'.@$cancel_charge_amt.'"><br>
+                    <input type="text" class="form-control feeamount" name="cancel_charge_amt" id="cancel_charge_amt" placeholder="$ Fee Amount" value="'.@$cancel_charge_amt.'">
+                    <div class="row" id="cardinfodiv" style="display:none">';
+                    if(!empty($cardInfo)) {
+                         foreach($cardInfo as $card) {
+                              $brandname = ucfirst($card['brand']);
+                              $html .='<div class="col-md-4 col-sm-4 col-xs-12">
+                                             <label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+                                                  <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="'.$brandname .': XXXX'.$card['last4'].'  Exp. '.$card['exp_month'].'/'.$card['exp_year'].'" card-id="'.$card['id'].'">
+                                                  <span class="plan-details checkout-card">
+                                                       <div class="row">
+                                                            <div class="col-md-12">
+                                                                 <div class="payment-method-img">
+                                                                      <img src="'.asset('/public/images/cc-on-file.png').'" alt="img" class="w-100" width="100">
+                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                 <div class="cart-name checkout-cart">
+                                                                      <span>CC (On File)</span>
+                                                                 </div>
+                                                                 <div class="cart-num checkout-cart">
+                                                                      <span>'.$brandname .' XX'.$card['last4'].'</span>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </span>
+                                             </label>
+                                        </div>';
+                         }
+                    }
+                                         
+                    $html .='</div><br>
                     
                     <input type="radio" id="cancel_charge_action" name="cancel_charge_action" value="deduct_membership"';
-                    if(@$data->cancel_charge_action == 'cancel_charge_action') {
+                    if(@$data->cancel_charge_action == 'deduct_membership') {
                          $html .='checked';
                     }
 
                     $html .='>
                     <label for="javascript">Deduct from membership</label> 
-                    <select class="form-control" name="" id="membership">
+                    <select class="form-control" name="membership" id="membership">
                       <option value="">Choose from membership options </option>
-                      <option value="saab">1</option>
-                      <option value="mercedes">2</option>
-                      <option value="audi">3</option>
+                      <option value="'.$bookingdetail_data->business_price_details->membership_type.'" selected>'.$bookingdetail_data->business_price_details->membership_type.'</option>
                     </select>';
           return $html;
+     }
+
+     public function check_in_activity(Request $request){
+         
+          $bd = BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->whereMonth('checkin_date', date('m'))->first();
+          if($bd == ''){
+               $data = array(
+                    "booking_id"=> $request->oid,
+                    "order_detail_id"=> $request->order_detail_id,
+                    "checkin"=> $request->checkin,
+                    "checkin_date"=> date('Y-m-d')
+               ); 
+               BookingCheckinDetails::create($data); 
+          }else{ BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->update(['checkin'=>$request->checkin, "checkin_date"=> date('Y-m-d')]); 
+          }   
      }
 }

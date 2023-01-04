@@ -193,9 +193,13 @@ class BookingController extends Controller {
                 }
             }
         }
+
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('classes');
        
        /* print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
+        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
     public function experience_page(Request $request ,$tabval  = null){
@@ -259,8 +263,13 @@ class BookingController extends Controller {
                 }
             }
         }
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('experience');
+       
+        //print_r($currentbookingstatus);exit;
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval]);
+       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
 
@@ -325,8 +334,11 @@ class BookingController extends Controller {
                 }
             }
         }
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('events');
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
+       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
     public function getreceiptmodel(Request $request) {

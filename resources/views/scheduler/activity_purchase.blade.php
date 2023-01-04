@@ -2,6 +2,7 @@
 @section('content')
 @include('layouts.userHeader')
 
+
 @php 
 	use Carbon\Carbon;
 	use App\UserBookingDetail;
@@ -109,7 +110,7 @@
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
 													<label>Who's Participating </label>
-													<select name="program_list" id="program_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
+													<select name="participate_list" id="participate_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
 														@php  
 															$pc_regi_id = @$user_data->id;
 															$pc_value = $username.'(me)';
@@ -424,7 +425,9 @@
 							                   
 							                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 												<div class="close-cross-icon"> 
-													<i class="fas fa-pencil-alt"></i>
+													<a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['code']}}">
+													<!-- <a class="p-red-color" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" > -->
+													<i class="fas fa-pencil-alt"></i></a>
 												</div>
 												<div class="close-cross-icon-trash">
 													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
@@ -525,6 +528,210 @@
 												</div>
 											@php $i++;@endphp
 											@endif
+							<div class="modal fade compare-model" id="editcartitem{{$item['code']}}">
+							    <div class="modal-dialog manage-customer">
+							        <div class="modal-content">
+										<div class="modal-header" style="text-align: right;"> 
+										  	<div class="closebtn">
+												<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">×</span>
+												</button>
+											</div>
+										</div>
+										@php 
+											$catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$item['code'])->get(); 
+											$pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$serpricecate->id)->get();
+											$membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',@$serprice['id'])->get();
+										@endphp
+							            <!-- Modal body -->
+							            <div class="modal-body body-tbm">
+											<div class="row"> 
+							                    <div class="col-lg-12 col-xs-12 space-remover">
+													<div class="manage-customer-modal-title">
+														<h4>Edit Cart Item</h4>
+													</div>
+													<div class="manage-customer-from">
+														<div class="row">
+															<div class="col-md-12 col-sm-12">
+															<div class="check-out-steps"><label><h2 class="color-red">Step 1: </h2> Select Service</label></div>
+															<div class="check-client-info-box">
+																<div class="row">
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Participant Quantity </label>
+																			<div class="choose-tip">
+																				<select name="qty_dropdownajax" id="qty_dropdownajax" class="form-control"onchange="gettotal('qty',this.value);">
+																					<option value="1" >Select </option>
+																					@for($i=1;$i<15;$i++)
+																					<option value="{{$i}}">{{$i}}</option>
+																					@endfor
+																				</select>
+																			</div>
+																		</div>
+																	</div>
+																	<input type="hidden" name="pc_regi_id" value="{{@$item['participate_from_checkout_regi']['id']}}">
+																	<input type="hidden" name="pc_user_tp" value="{{@$item['participate_from_checkout_regi']['pc_user_tp']}}">
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Who's Participating </label>
+																			<select name="pc_value" id="participate_listajax" class="form-control">
+																				<option value="{{@$item['participate_from_checkout_regi']['id']}}">{{@$participate}}</option>
+																			</select>
+																		</div>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Select Program </label>
+																			<select name="program_listajax" id="program_listajax" class="form-control">
+																				<option value="">Select</option>
+																				@if(!empty(@$program_list))
+																				@foreach($program_list as $pl)
+																					<option value="{{$pl->id}}" @if($item['code'] == $pl->id) selected @endif>{{$pl->program_name}}</option>
+																				@endforeach
+																				@endif
+																			</select>
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<label>Select Catagory </label>
+																		<select name="category_listajax" id="category_listajax" class="form-control">	<option value="">Select Category</option>
+																			@if(!empty(@$catelist))
+																			@foreach($catelist as $cl){
+																			<option value="{{$cl->id}}" @if(@$serpricecate->id == $cl->id) selected @endif>{{$cl->category_title}}</option>
+																			@endforeach
+																			@endif
+																		</select>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<label>Select Price Option  </label>
+																		<select name="priceopt_listajax" id="priceopt_listajax" class="form-control">
+																			<option value="">Select Price Title</option>
+																			@if(!empty(@$pricelist))
+																			@foreach($pricelist as $pl){
+																			<option value="{{$pl->id}}" @if(@$serprice['id'] == $pl->id) selected @endif>{{$pl->price_title}}</option>
+																			@endforeach
+																			@endif
+																		</select>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<label> Membership Option</label>
+																		<select name="membership_opt_listajax" id="membership_opt_listajax" class="form-control">
+																			<option value="">Select Membership Type</option>
+																			@if(!empty(@$membershiplist))
+																			@foreach($membershiplist as $mp){
+																			<option value="{{$mp->id}}" @if(@$serprice['membership_type'] == $mp->membership_type) selected @endif>{{$mp->membership_type}}</option>
+																			@endforeach
+																			@endif
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-md-12">
+															<div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
+															<div class="check-client-info-box">
+																<div class="row">
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Price </label>
+																			<input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="{{$item['totalprice']}}">
+																		</div>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Discount</label>
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<div class="choose-tip">
+																						<select name="dis_amt_drop" id="dis_amt_dropajax" class="form-control">
+																							<option value="">Choose $ or % </option>
+																							<option value="$" selected>$</option>
+																							<option value="%">%</option>
+																						</select>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<div class="choose-tip">
+																						<input type="text" class="form-control valid" id="dis_amtajax" name="dis_amtajax" placeholder="Enter Amount" value="{{$item['discount']}}">
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Tip Amount</label>
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<div class="choose-tip">
+																						<select name="tip_amt_dropajax" id="tip_amt_dropajax" class="form-control" >
+																							<option value="">Choose $ or % </option>
+																							<option value="$" selected>$</option>
+																							<option value="%">%</option>
+																						</select>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<div class="choose-tip">
+																						<input type="text" class="form-control valid" id="tip_amtajax" name="tip_amtajax" placeholder="Enter Amount" value=" {{$item['tip']}}">
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																
+																<div class="row">
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="col-md-6 col-sm-6 col-xs-6"> 
+																			<div class="tax-check">
+																				<label>Tax </label>
+																				<input type="checkbox" id="taxajax" name="taxajax" value="1">
+																				<label for="tax"> No Tax</label><br>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Duration</label>
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<input type="text" class="form-control valid" id="duration_intajax" name=duration_intajax placeholder="12" value="1">
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+																					<div class="choose-tip">
+																						<select name="duration_dropdownajax" id="duration_dropdownajax" class="form-control">
+																							<option value="Day">Day(s) </option>
+																							<option value="Hour">Hour(s)</option>
+																							<option value="Minute">Minute(s)</option>
+																						</select>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-4 col-sm-4 col-xs-12">
+																		<div class="select0service">
+																			<label>Date This Activaties?</label>
+																			<div class="date-activity-scheduler date-activity-check">
+																				<input type="text"  id="managecalendarserviceajax" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" >
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														</div>
+													</div>
+							                    </div>
+											 </div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
 											@endforeach
 											@endif
 										</div>
@@ -918,13 +1125,11 @@
 		</div>
 	</div>
 
-	
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
 <script type="text/javascript">
-
+	
 	function changevalue(){
 		$('#duration').html($('#duration_int').val() +' '+ $('#duration_dropdown').val());
 		$('#actscheduleid').html($('#duration_int').val() +' '+ $('#duration_dropdown').val());
@@ -936,6 +1141,7 @@
 	}
 
 	function loaddropdown(chk,val,id){
+		//alert('hii');
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pid').val(id);
@@ -1162,7 +1368,7 @@
     	var _token = '{{csrf_token()}}';
 	  	$.ajax({
 	      	type: "GET",
-	      	url: "{{route("business_customer_index", ['business_id' => $companyId])}}",
+	      	url: "{{route('business_customer_index', ['business_id' => $companyId])}}",
 	      	data: { fname: $(this).val(),  _token: _token, },
 	      	success: function(data) {
 	        	$("#option-box1 .customer-list").html('');
@@ -1303,11 +1509,7 @@
 		}
 		
 		$.ajax({
-<<<<<<< HEAD
-			url:'',
-=======
 			url:'{{route("business_customer_index", ["business_id" => $companyId])}}',
->>>>>>> d5b69c6f719c6bc7b6dedd8c8f6edee37f23e331
 			type:"GET",
 			data:{
 				inpuval:inpuval
@@ -1784,6 +1986,15 @@
             changeYear: true   
         } );
     } );
+
+    $( function() {
+        $( "#managecalendarserviceajax" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } );
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
@@ -1805,7 +2016,20 @@
     })
 </script>
 
-
 @include('layouts.footer')
+
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$( document ).ready(function() {
+	    jQuery.noConflict();
+
+	    
+	});
+	
+	function editcart(sid,category){
+			$('#editcartitem'+sid).model('show');
+		}
+
+</script>
 
 @endsection

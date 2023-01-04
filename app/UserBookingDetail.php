@@ -37,6 +37,14 @@ class UserBookingDetail extends Model
 
      */
 
+    public function getBookingCheckinDetails(){
+       $data = BookingCheckinDetails::where('order_detail_id',$this->id)->whereMonth('checkin_date', date('m'))->first();
+       return @$data->checkin;
+    }
+
+    public function BookingCheckinDetails(){
+        return $this->hasMany(BookingCheckinDetails::class,'order_detail_id');
+    }
 
     public function BookingActivityCancel(){
         return $this->hasMany(BookingActivityCancel::class,'order_detail_id');
