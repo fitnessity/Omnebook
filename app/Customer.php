@@ -68,6 +68,11 @@ class Customer extends Authenticatable
         return $this->belongsTo(CompanyInformation::class, 'business_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
+
     public function BookingStatus()
     {
         return $this->hasMany(UserBookingStatus::class,'user_id');
@@ -158,6 +163,29 @@ class Customer extends Authenticatable
            $bddata =  UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','desc')->first();
         }
         return  $bddata ;
+    }
+
+    public function active_memberships(){
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        if($user){
+            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+                $query->select('id')
+                      ->from('business_services')
+                      ->where('cid', $company->id);
+            })->whereIn('booking_id', function($query) use ($customer, $user){
+                $query->select('id')
+                      ->from('user_booking_status')
+                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+            });
+            return $result->get();
+            // return 'yes';    
+
+            // UserBookingDetail::where('booking_id')
+        }
+
+        
     }
     
 }
