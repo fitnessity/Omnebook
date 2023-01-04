@@ -9846,7 +9846,7 @@ $('body').delegate('.is_recurring_cls','click',function(){
         $("#agesmaindiv"+i).append(ages_data);
     }
 
-    /*function add_another_price_duplicate_category(i){
+    function add_another_price_duplicate_category(i){
         alert('hii');
         var fitnessity_fee = '{{$fitnessity_fee}}';
 
@@ -9865,7 +9865,7 @@ $('body').delegate('.is_recurring_cls','click',function(){
         $('#price_id_db'+cnt+i).val('');
         $('#agesdiv'+cnt+i).find("input[name='cat_id_db']").val('');
 
-    }*/
+    }
 
     function getpricetitle(i,j){
 
