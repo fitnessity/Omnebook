@@ -96,6 +96,18 @@ class RegistrationController extends Controller
 
             if (count($postArr) > 0) {
 
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+                $last_name = ($postArr['firstname']) ? $postArr['lastname'] : '';
+                $cus_name = $postArr['firstname'].' '.$last_name;
+                $customer = \Stripe\Customer::create(
+                    [
+                        'name' => $cus_name,
+                        'email'=> $postArr['email'],
+                    ]);
+                $stripe_customer_id = $customer->id;  
+
                 $customerObj = New Customer();
                 $customerObj->business_id = $postArr['business_id'];
                 $customerObj->fname = $postArr['firstname'];
@@ -107,11 +119,13 @@ class RegistrationController extends Controller
                 $customerObj->status = 0;
                 $customerObj->phone_number = $postArr['contact'];
                 $customerObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
+                $customerObj->stripe_customer_id = $stripe_customer_id;
 
                 $customerObj->save();
 
-                if ($customerObj) {                    
-                   
+                if ($customerObj) {    
+                                  
+                    MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
                     //MailService::sendEmailSignupVerification($customerObj->id);
 
                     $response = array(
@@ -145,8 +159,8 @@ class RegistrationController extends Controller
 
     public function saveGenderCustomer(Request $request)
     {
-        $customers = Customer::where('id',$request->cust_id)->first();
-        $customers->gender=$request->gender;
+        $customers = Customer::where('id',@$request->cust_id)->first();
+        $customers->gender=@$request->gender;
         $customers->save();
          return response()->json(['status'=>200]);
     }
@@ -154,15 +168,14 @@ class RegistrationController extends Controller
     public function saveaddressCustomer(Request $request)
     {
         $customers = Customer::where('id',$request->cust_id)->first();
-        $customers->address=$request->address;
-        $customers->country=$request->country;
-        $customers->city=$request->city;
-        $customers->state=$request->state;
-        $customers->zipcode=$request->zipcode;
+        $customers->address=@$request->address;
+        $customers->country=@$request->country;
+        $customers->city=@$request->city;
+        $customers->state=@$request->state;
+        $customers->zipcode=@$request->zipcode;
         /*$customers->latitude=$request->lat;
         $customers->longitude=$request->lon;*/
         $customers->save();
-        MailService::sendEmailVerifiedAcknowledgementcustomer($customers->id,$customers->business_id);
         $url = '/viewcustomer/'.$request->cus_id;
         return response()->json(['status'=>200,'redirecturl'=>$url]);
     }
@@ -184,22 +197,43 @@ class RegistrationController extends Controller
 
     public function submitFamilyCustomer(Request $request) {
         $postArr = $request->all();
-       
-        if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
-            $family = new CustomerFamilyDetail();
-        else
-            $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
+        
+        $customerObj = New Customer();
+        $customerObj->parent_cus_id = Input::get('cust_id');
+        $customerObj->business_id = Input::get('business_id');
+        $customerObj->fname = Input::get('first_name');
+        $customerObj->lname = Input::get('last_name');
+        $customerObj->relationship = Input::get('relationship');
+        $customerObj->email = Input::get('email');
+        $customerObj->country = 'US';
+        $customerObj->status = 0;
+        $customerObj->phone_number = Input::get('mobile');
+        $customerObj->birthdate = date('Y-m-d',strtotime(Input::get('birthday')));
+        $customerObj->emergency_contact = Input::get('emergency_contact');
+        $customerObj->gender =  Input::get('gender');
 
-        $family->cus_id = Input::get('cust_id');
-        $family->first_name = Input::get('first_name');
-        $family->last_name = Input::get('last_name');
-        $family->email = Input::get('email');
-        $family->mobile = Input::get('mobile');
-        $family->gender = Input::get('gender');
-        $family->relationship = Input::get('relationship');
-        $family->emergency_contact = Input::get('emergency_contact');
-        $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
-        $family->save();
+        $customerObj->save();
+
+        if ($customerObj) {                    
+            MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
+        }
+
+        /*  if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
+                $family = new CustomerFamilyDetail();
+            else
+                $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
+
+            $family->cus_id = Input::get('cust_id');
+            $family->first_name = Input::get('first_name');
+            $family->last_name = Input::get('last_name');
+            $family->email = Input::get('email');
+            $family->mobile = Input::get('mobile');
+            $family->gender = Input::get('gender');
+            $family->relationship = Input::get('relationship');
+            $family->emergency_contact = Input::get('emergency_contact');
+            $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
+            $family->save();
+        */
 
         $url = '/viewcustomer/'.$request->cust_id;
         $response = array(
@@ -209,6 +243,6 @@ class RegistrationController extends Controller
         );
 
         return Response::json($response);
-        
+            
     }
 }

@@ -452,7 +452,7 @@
     			$tax= ($item_price * $fees->site_tax)/100;
     			$total_amount = $item_price + $service_fee + $tax;
     		?>
-    		
+    		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
     		<div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
     			<div class="ord-summary">
     				<h3>Order Summary</h3>

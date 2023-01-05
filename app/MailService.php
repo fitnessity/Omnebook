@@ -242,6 +242,29 @@ class MailService
         });
     }
 
+    public static function sendEmailforcancelschedule($userdata , $businessdata ,$companydata,$time,$date,$usertype,$mail_type)
+    {
+
+        if($mail_type == 'cancel'){
+            $send = "emails.activity-schedule-cancel";
+            $msg = 'Fitnessity: Activity Has Been Cancelled!';
+        }else{
+            $send = "emails.activity-reschedule";
+            $msg = 'Fitnessity: Activity Has Been Rescheduled!';
+        }
+
+        Mail::send($send, ['userdata' => $userdata, 'businessdata' => $businessdata , 'companydata' => $companydata ,'time' =>$time ,'date' =>$date ,'usertype' =>$usertype,'msg'=>$msg], function ($m) use ($userdata,$businessdata,$companydata,$time,$date,$usertype,$msg) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($userdata->email)->subject($msg);
+        });
+
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
     public static function sendEmailBookingConfirm($BookingDetail)
     {   
         $sportsRepo = new SportsRepository;
@@ -647,6 +670,12 @@ class MailService
             $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
             $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
         });
+
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
     }
 
     public static function sendEmailSportCategoryChange($mailObj){

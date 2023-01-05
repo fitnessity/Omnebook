@@ -37,6 +37,19 @@ class UserBookingDetail extends Model
 
      */
 
+    public function getBookingCheckinDetails(){
+       $data = BookingCheckinDetails::where('order_detail_id',$this->id)->whereMonth('checkin_date', date('m'))->first();
+       return @$data->checkin;
+    }
+
+    public function BookingCheckinDetails(){
+        return $this->hasMany(BookingCheckinDetails::class,'order_detail_id');
+    }
+
+    public function BookingActivityCancel(){
+        return $this->hasMany(BookingActivityCancel::class,'order_detail_id');
+    }
+
     public function UserBookingStatus()
 
     {
@@ -62,6 +75,16 @@ class UserBookingDetail extends Model
 
         return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
 
+    }
+
+    public function business_activity_scheduler(){
+
+        return $this->belongsTo(BusinessActivityScheduler::class, 'act_schedule_id');
+
+    }
+
+    public static function getbyid($book_id){
+        return UserBookingDetail::where('id',$book_id)->first();
     }
 
     public function provider_get_total(){

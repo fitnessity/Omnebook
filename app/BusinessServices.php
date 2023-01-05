@@ -108,10 +108,16 @@ class BusinessServices extends Model
         'desc_location',
         'exp_lng',
         'exp_lat',
+        'cancelbefore',
+        'cancelbeforeint',
     ];
     
     public function businesscompanydetail() {
         return $this->hasMany(BusinessCompanyDetail::class, 'cid');
+    }
+
+    public function BusinessPriceDetailsAges() {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid');
     }
 
 	public function user()

@@ -17,15 +17,26 @@ class UserBookingStatus extends Model
 	
 	protected $fillable = [
         'booking_type', 'user_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
-		'currency_code','amount', 'order_id', 'bookedtime'
+		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
     ];
 
     /**
      * Get the user that owns the task.
      */
+
+    public function BookingActivityCancel(){
+        return $this->hasMany(BookingActivityCancel::class,'booking_id');
+    }
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class,'user_id');
     }
 
     public function businessuser()

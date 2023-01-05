@@ -1313,7 +1313,11 @@
 	.manage-service-display {  display: inline;}
 	.modal-inner-txt.modal-table-data{text-align: left;}
 	.date-activity-scheduler .activityselect3.special-date{width: 75%;}
-	.date-info {  margin-top: 10px !important;}
+	.date-info { margin-top: 10px !important;}
+	.division-hight { height: auto;}
+	.check-client-info { margin-top: 15px;}
+	.inner-top-activity { margin-top: 125px;}
+	.col-md-offset-3-custom { margin-left: 0; }
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1593,6 +1597,8 @@
 	.modal-dialog.registermodal{width: 75% !important;}
 	.scheduler-titles{display: none;}
 	.modal-dialog.bookingcancel{width: 30%;}
+	.modal-dialog.editbooking{width: 50%;}
+	.modal-dialog.latecancel{width: 40%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1675,6 +1681,8 @@
 	.modal-dialog.registermodal{width: 70% !important;}
 	.scheduler-titles{display: none;}
 	.modal-dialog.bookingcancel{width: 20%;}
+	.modal-dialog.editbooking{width: 40%;}
+	.modal-dialog.latecancel{width: 30%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
@@ -2333,6 +2341,15 @@
 	.manage-service-display {  display: inline;}
 	.modal-inner-txt.modal-table-data{text-align: left;}
 	.business-offer-main.manageservice-page{padding: 14px;}
+	.border-spare-tor-right {  border-right: none;}
+	.division-hight { height: auto; }
+	.price-txt input { margin-top: 0px; }
+	.check-client-info{margin-top: 15px;}
+	.select0service { text-align: left;	}
+	.btn-search-checkout {  width: 100%;}
+	.col-md-offset-3-custom {  margin-left: 0;}
+	.inner-top-activity {  margin-top: 0px;}
+	.classes-info { border-right: none;}
 }
 
 @media(max-width: 575px) {

@@ -100,7 +100,7 @@ class BookingController extends Controller {
         }
         
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
             foreach ($booking_details as $key => $book_value) {
@@ -124,8 +124,11 @@ class BookingController extends Controller {
                 }
             }
         }
-     /*   print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('individual');
+       //print_r($currentbookingstatus );exit;
+        /*   print_r($BookingDetail);exit;*/
+        return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
      public function gym_studio_page(Request $request ,$tabval  = null){
@@ -165,7 +168,7 @@ class BookingController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
@@ -190,9 +193,13 @@ class BookingController extends Controller {
                 }
             }
         }
+
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('classes');
        
        /* print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
+        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
     public function experience_page(Request $request ,$tabval  = null){
@@ -232,7 +239,7 @@ class BookingController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
@@ -256,8 +263,13 @@ class BookingController extends Controller {
                 }
             }
         }
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('experience');
+       
+        //print_r($currentbookingstatus);exit;
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval]);
+       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
 
@@ -298,7 +310,7 @@ class BookingController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
@@ -322,8 +334,11 @@ class BookingController extends Controller {
                 }
             }
         }
+
+        $currentbookingstatus =[];
+        $currentbookingstatus = $this->bookings->getcurrenttabdata('events');
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval]);
+       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
     }
 
     public function getreceiptmodel(Request $request) {
@@ -345,7 +360,7 @@ class BookingController extends Controller {
 
         $SpotsLeftdis = 0;
         $SpotsLeft = [];
-        $SpotsLeft = UserBookingDetail::where('act_schedule_id' ,@$booking_details->act_schedule_id)->whereDate('bookedtime', '=', @$booking_details->bookedtime)->get()->toArray();
+        $SpotsLeft = UserBookingDetail::where(['act_schedule_id'=>@$booking_details->act_schedule_id])->whereDate('bookedtime', '=', @$booking_details->bookedtime)->get()->toArray();
         
         $totalquantity = 0;
         foreach($SpotsLeft as $data1){
@@ -890,7 +905,7 @@ class BookingController extends Controller {
              $pagename_type = 'events';
         }
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->get();
         foreach ($bookingstatus as $key => $value) {
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
             foreach ($booking_details as $key => $book_value) {
@@ -1230,9 +1245,9 @@ class BookingController extends Controller {
         $BookingDetail = [];
         $business_data = CompanyInformation::where('company_name', 'like', '%'. $request->text.'%')->get();
         if(!empty($business_data) && count($business_data) > 0){
-            $bookingstatus = UserBookingStatus::where('user_id',Auth::user()->id)->get();
+            $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->get();
         }else{
-            $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id, 'order_id'=>$request->text])->get();
+            $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id, 'order_id'=>$request->text,'order_type'=>'simpleorder'])->get();
         }
 
         

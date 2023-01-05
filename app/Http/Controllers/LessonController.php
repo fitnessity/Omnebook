@@ -42,6 +42,7 @@ use App\UserFavourite;
 use App\BusinessServicesFavorite;
 use App\BusinessServiceReview;
 use App\BusinessActivityScheduler;
+use App\BusinessSubscriptionPlan;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
@@ -4545,10 +4546,49 @@ class LessonController extends Controller {
     }
     
     public function addToCart(Request $request) {
+        //print_r($request->all());exit;
         $cart_item = [];
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');
         }
+
+        if($request->has('value_tax')){
+            $tax=  $request->value_tax;
+        }else{
+            $tax = 0;
+        }
+
+        if($request->has('tip_amt_val') != ''){
+            $tip_amt_val = $request->tip_amt_val;
+        }else{
+            $tip_amt_val = 0;
+        }
+        if($request->has('dis_amt_val') != ''){
+            $dis_amt_val = $request->dis_amt_val;
+        }else{
+            $dis_amt_val = 0;
+        }
+
+        if($request->has('checkount_qty') != ''){
+            $checkount_qty = $request->checkount_qty;
+        }else{
+            $checkount_qty = 0;
+        }
+
+        if($request->has('pc_value') != ''){
+            $parti_from_chkout_regi = array('id'=>$request->pc_regi_id, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value);
+        }else{
+            $parti_from_chkout_regi = array();
+        }
+
+        if($request->has('chk')){
+            $chk = $request->chk;
+        }else{
+            $chk = '';
+        }
+
+
+        //$tax = BusinessSubscriptionPlan::select('site_tax')->where('id',1)->first();
         $pid = isset($request->pid) ? $request->pid : 0;
         $price = isset($request->price) ? $request->price : 0;
         $pricetotal = isset($request->pricetotal) ? $request->pricetotal : 0;
@@ -4571,14 +4611,12 @@ class LessonController extends Controller {
             $tot_qty += $request->infantquantity;
         }
 
-
         for ($i=0; $i < $tot_qty; $i++) { 
             if(Auth::check()){
                 $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
             }else{
                 $totparticipate[] = array('id'=>'', 'from'=>"user");
-            }
-            
+            } 
         }
        
 
@@ -4597,12 +4635,17 @@ class LessonController extends Controller {
                         $p_image = $item->profile_pic;
                     }
                 }
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'qty_from_checkout_regi'=>$checkount_qty,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
                             if($request->pid == $k) {
                                 $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
+                                $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
+                                $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
+                                $cart_item["cart_item"][$k]["tax"] = $tax;
+                                $cart_item["cart_item"][$k]["qty_from_checkout_regi"] = $checkount_qty;
+                                $cart_item["cart_item"][$k]["chk"] = $chk ;
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
                                 $cart_item["cart_item"][$k]["priceid"] = $request->priceid;
@@ -4632,7 +4675,16 @@ class LessonController extends Controller {
             $request->session()->forget('cart_item');
         }
        /* print_r($cart_item['cart_item']);exit;*/
-        return redirect('/success-cart/'.$pid); 
+        if($request->chk == 'activity_purchase'){
+            if($request->type == 'customer'){
+                return redirect('activity_purchase/0/'.$request->pageid);
+            }else{
+                return redirect('activity_purchase/'.$request->pageid);
+            }
+        }else{
+            return redirect('/success-cart/'.$pid); 
+        }
+       
     }
 
     public function successcart($pid)
@@ -4680,7 +4732,15 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        return redirect('/payments/card'); 
+        if($request->chk == 'purchase'){
+            if($request->user_type == 'customer'){
+                return redirect('activity_purchase/0/'.$request->pageid);
+            }else{
+                return redirect('activity_purchase/'.$request->pageid);
+            }
+        }else{
+            return redirect('/payments/card'); 
+        }
     }
     
     public function emptyCart(Request $request) {

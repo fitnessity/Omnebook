@@ -1201,7 +1201,6 @@ class UserProfileController extends Controller {
     
     
     public function editBusinessService(Request $request) {
-        
         $businessData = [
             'bstep' => 72,
             'cid' => $request->cid,
@@ -2219,6 +2218,8 @@ class UserProfileController extends Controller {
                 "accessibility" =>$request->frm_accessibility,
                 "addi_info_help" =>$request->addi_info_help,
                 "desc_location" =>$request->desc_location,
+                "cancelbefore" =>$request->cancelbefore,
+                "cancelbeforeint" =>$request->cancelbeforeint,
             ];
         } else {
             $businessData = [
@@ -2241,6 +2242,8 @@ class UserProfileController extends Controller {
                 "activity_key" => $request->activity_key,
                 "cancel_value" => $request->cancel_value2,
                 "cancel_key" => $request->cancel_key2,
+                "beforetime" => $request->beforetime,
+                "beforetimeint" => $request->beforetimeint,
                 "willing_to_travel" => $request->willing_to_travel,
                 "miles" => $request->travel_miles,
                 "area" => $request->wanttowork,
@@ -2283,6 +2286,8 @@ class UserProfileController extends Controller {
                 "is_late_fee" => $request->is_late_fee,
                 "late_fee" => $request->late_fee,
                 "instructor_id"=> $request->instructor_id,
+                "cancelbefore" =>$request->cancelbefore,
+                "cancelbeforeint" =>$request->cancelbeforeint,
             ];
         }
        /*print_r($businessData); exit;*/
@@ -2525,6 +2530,62 @@ class UserProfileController extends Controller {
                             $cat_new_id = $create->id;
                         }
 
+                         $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  NULL; 
+                        if($request->input('sectiondisplay'.$i.$y) == 'freeprice'){
+                            $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0;
+                        }else{
+                            if($request->input('adult_cus_weekly_price_'.$i.$y) != 0){
+                                $adult_cus_weekly_price =  $request->input('adult_cus_weekly_price_'.$i.$y);
+                            }
+
+                            if($request->input('adult_weekend_price_diff_'.$i.$y) != 0){
+                                $adult_weekend_price_diff =  $request->input('adult_weekend_price_diff_'.$i.$y);
+                            }
+                            if($request->input('adult_discount_'.$i.$y) != 0){    
+                                $adult_discount = $request->input('adult_discount_'.$i.$y);
+                            }
+
+                            if($request->input('adult_estearn_'.$i.$y) != 0){    
+                                $adult_estearn = $request->input('adult_estearn_'.$i.$y);
+                            }
+
+                            if($request->input('weekend_adult_estearn_'.$i.$y) != 0){    
+                                $weekend_adult_estearn = $request->input('weekend_adult_estearn_'.$i.$y);
+                            }
+                            if($request->input('child_cus_weekly_price_'.$i.$y) != 0){    
+                                $child_cus_weekly_price = $request->input('child_cus_weekly_price_'.$i.$y);
+                            }
+                            if($request->input('child_discount_'.$i.$y) != 0){    
+                                $child_discount = $request->input('child_discount_'.$i.$y);
+                            }
+                            if($request->input('child_weekend_price_diff_'.$i.$y) != 0){    
+                                $child_weekend_price_diff = $request->input('child_weekend_price_diff_'.$i.$y);
+                            }
+                            if($request->input('child_estearn_'.$i.$y) != 0){    
+                                $child_estearn = $request->input('child_estearn_'.$i.$y);
+                            }
+
+                            if($request->input('weekend_child_estearn_'.$i.$y) != 0){    
+                                $weekend_child_estearn = $request->input('weekend_child_estearn_'.$i.$y);
+                            }
+                            if($request->input('infant_cus_weekly_price_'.$i.$y) != 0){    
+                                $infant_cus_weekly_price = $request->input('infant_cus_weekly_price_'.$i.$y);
+                            }
+                            if($request->input('infant_weekend_price_diff_'.$i.$y) != 0){    $infant_weekend_price_diff = $request->input('infant_weekend_price_diff_'.$i.$y);
+                            }
+
+                            if($request->input('infant_discount_'.$i.$y) != 0){    
+                                $infant_discount = $request->input('infant_discount_'.$i.$y);
+                            }
+
+                            if($request->input('infant_estearn_'.$i.$y) != 0){    $infant_estearn =  $request->input('infant_estearn_'.$i.$y);
+                            }
+
+                            if($request->input('weekend_infant_estearn_'.$i.$y) != 0){    $weekend_infant_estearn =  $request->input('weekend_infant_estearn_'.$i.$y);
+                            }
+
+                        }
+
                         $businessPayment = [
                             "category_id" => $cat_new_id,
                             "business_service_id"=>$bid,
@@ -2585,21 +2646,21 @@ class UserProfileController extends Controller {
                             "membership_type" =>  $request->input('membership_type_'.$i.$y),
                             "pay_session" => $request->input('pay_session_'.$i.$y),
                             "price_title" => $request->input('price_title_'.$i.$y),
-                            "adult_cus_weekly_price" => $request->input('adult_cus_weekly_price_'.$i.$y),
-                            "adult_weekend_price_diff" =>  $request->input('adult_weekend_price_diff_'.$i.$y),
-                            "adult_discount" => $request->input('adult_discount_'.$i.$y), 
-                            "adult_estearn" => $request->input('adult_estearn_'.$i.$y),
-                            "weekend_adult_estearn" => $request->input('weekend_adult_estearn_'.$i.$y),
-                            "child_cus_weekly_price" => $request->input('child_cus_weekly_price_'.$i.$y) ,
-                            "child_discount" => $request->input('child_discount_'.$i.$y),
-                            "child_weekend_price_diff" => $request->input('child_weekend_price_diff_'.$i.$y),
-                            "child_estearn" => $request->input('child_estearn_'.$i.$y),
-                            "weekend_child_estearn" => $request->input('weekend_child_estearn_'.$i.$y),
-                            "infant_cus_weekly_price" => $request->input('infant_cus_weekly_price_'.$i.$y) ,
-                            "infant_weekend_price_diff" => $request->input('infant_weekend_price_diff_'.$i.$y), 
-                            "infant_discount" => $request->input('infant_discount_'.$i.$y), 
-                            "infant_estearn" =>  $request->input('infant_estearn_'.$i.$y),  
-                            "weekend_infant_estearn" =>  $request->input('weekend_infant_estearn_'.$i.$y),  
+                            "adult_cus_weekly_price" => $adult_cus_weekly_price,
+                            "adult_weekend_price_diff" =>  $adult_weekend_price_diff,
+                            "adult_discount" => $adult_discount, 
+                            "adult_estearn" => $adult_estearn,
+                            "weekend_adult_estearn" => $weekend_adult_estearn,
+                            "child_cus_weekly_price" => $child_cus_weekly_price ,
+                            "child_discount" => $child_discount,
+                            "child_weekend_price_diff" => $child_weekend_price_diff,
+                            "child_estearn" => $child_estearn,
+                            "weekend_child_estearn" => $weekend_child_estearn,
+                            "infant_cus_weekly_price" => $infant_cus_weekly_price,
+                            "infant_weekend_price_diff" => $infant_weekend_price_diff, 
+                            "infant_discount" => $infant_discount, 
+                            "infant_estearn" =>  $infant_estearn,  
+                            "weekend_infant_estearn" =>  $weekend_infant_estearn,  
                         ];
                        /* print_r($businessPayment);*/
                         if($request->input('price_id_db_'.$i.$y) != ''){
@@ -10150,7 +10211,7 @@ class UserProfileController extends Controller {
     public function activityimgupdate(Request $request) { 
         $serviceid = $request->serviceid;        
         $imgeiddata = BusinessServices::where('id',$serviceid)->first();
-         $profile_pic = $imgeiddata->profile_pic;
+        $profile_pic = $imgeiddata->profile_pic;
 
         if ($request->hasFile('image_post')) {
             $filename = $request->file('image_post');
