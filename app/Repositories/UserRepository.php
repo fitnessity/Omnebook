@@ -20,7 +20,12 @@ class UserRepository
     {
         return User::where('id', $id)->first();
     }
-    
+
+    public function findByfname($query)
+    {
+        return User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->orderBy('firstname', 'ASC')->get();
+    }
+
     public function findByEmail($email)
     {
         return User::where('email', $email)->get();
@@ -584,29 +589,29 @@ class UserRepository
                      //->where('users.id', '!=', $user_id);
                   
         $query = CompanyInformation::with('employmenthistory',
-'education',
-'users',
-'certification',
-'service',
-'skill',
-'ProfessionalDetail');
+            'education',
+            'users',
+            'certification',
+            'service',
+            'skill',
+            'ProfessionalDetail');
 
-if(isset($selected_zipcode) && $selected_zipcode != NULL) {
-    $query->where('zip_code',$selected_zipcode);
-}
+        if(isset($selected_zipcode) && $selected_zipcode != NULL) {
+            $query->where('zip_code',$selected_zipcode);
+        }
 
-if(isset($selected_label) && $selected_label != NULL) {
-    $sport_id = Sports::where('sport_name',$selected_label)->first();
-    if(!empty($sport_id)){
-        $query->whereHas('service', function ($query2 )  use ($sport_id) {
-            $query2->where('sport',$sport_id->id);
-        });
-    }
-}
+        if(isset($selected_label) && $selected_label != NULL) {
+            $sport_id = Sports::where('sport_name',$selected_label)->first();
+            if(!empty($sport_id)){
+                $query->whereHas('service', function ($query2 )  use ($sport_id) {
+                    $query2->where('sport',$sport_id->id);
+                });
+            }
+        }
 
-if(isset($selected_location) && $selected_location != NULL) {
-    $query->where('city',$selected_location);
-}
+        if(isset($selected_location) && $selected_location != NULL) {
+            $query->where('city',$selected_location);
+        }
                
              
       // dd($query->get()->toArray());die;

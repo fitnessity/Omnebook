@@ -166,7 +166,6 @@ class ActivityController extends Controller {
     	$business_services;
     	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
 
-
     	return view('activity.next_8_hours',[
     		'bookschedulers' => $bookschedulers,
     		'filter_date' => $filter_date,

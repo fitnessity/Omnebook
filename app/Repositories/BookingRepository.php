@@ -6,7 +6,10 @@ use App\UserBookingStatus;
 use App\UserBookingDetail;
 use App\Jobpostquestions;
 use App\UserBookingQuote;
+use App\BusinessServices;
+use App\CompanyInformation;
 use App\User;
+use App\Customer;
 use DB;
 use Auth;
 use App\MailService;
@@ -22,6 +25,44 @@ class BookingRepository
     public function findById($id)
     {
         return UserBookingStatus::where('id', $id)->first();
+    }
+
+    public function getbooking_data_by_bid($bid){
+        return UserBookingDetail::where('booking_id',$bid)->get();
+    }
+
+    public function getcurrenttabdata($type){
+        $BookingDetail = [];
+        $bookingstatus = UserBookingStatus::where(['order_type'=>'checkout_register','user_type'=>'customer'])->orderBy('created_at','desc')->get();
+        foreach ($bookingstatus as $key => $value) {
+            $customer = Customer::where('id',$value['user_id'])->first();
+            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
+            foreach ($booking_details as $key => $book_value) {
+                $business_services = BusinessServices::where('id',$book_value->sport)->first();
+                if(@$business_services->cid ==  @$customer->business_id ){
+                    if($business_services->service_type == $type){
+                        $BookingDetail_1 = $this->getBookingDetailnew($value->id);
+                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
+                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
+                        $customers['customer'] = $customer;
+                        $customers = json_decode(json_encode($customers), true);
+                        $businessuser = json_decode(json_encode($businessuser), true);
+                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                            if($details['sport'] == $book_value->sport){
+                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
+                                    $BookingDetail_1['user_booking_detail'] = $details;
+                                }
+                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
+                            }
+                        }    
+                    }
+                }
+            }
+        }
+
+        //print_r($BookingDetail);exit;
+        return $BookingDetail;
     }
 
     public function saveBookingStatus($data,$cart=null,$n=null)
@@ -587,6 +628,32 @@ class BookingRepository
     
     public function getbusinessbookingsdata($sid,$date){
        return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
+    }
+
+    public function getbookingbyUserid($userid){
+        $book_cnt = 0;
+        $status = UserBookingStatus::where('user_id',$userid)->get();
+        if(!empty($status) && count($status)>0){
+            foreach($status as $st){
+                $book_cnt += UserBookingDetail::where('booking_id',$st->id)->count();
+            }
+        }
+        return  $book_cnt;
+    }
+
+    public function lastbookingbyUserid($userid){
+        $data = '';
+        $purchasefor = '';
+        $price_title = '';
+        $status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
+        if($status != ''){
+            $price  =  $status->amount;
+            $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','Desc')->first();
+            $programname = $book_data->business_services->program_name;
+            $price_title = $book_data->business_price_details->price_title;
+            $purchasefor =  $programname.' $'.$price;
+        }
+        return  $purchasefor.'~~'.$price_title;
     }
 
 }

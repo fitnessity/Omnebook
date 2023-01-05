@@ -21246,7 +21246,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
   --radio-size: 1.5em;
 }
 .plan-details img{
-	max-width: 60px;
+	width: 40px;
+	margin-bottom: 5px;
 }
 .cart-name span{
 	float: left
@@ -22002,6 +22003,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .staff-main{
 	float: right;
 	margin-bottom: 15px;
+    display: flex;
+    margin-top: 10px;
+}
+.btn-black{
+    margin-right: 13px;
 }
 .total-clients i{
 	font-size: 20px;
@@ -22275,12 +22281,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .scheduler-txt{
 	font-size: 21px !important;
 }
-.manage-search form{
+.manage-search .sub{
 	display: inline-block;
 	position: relative;
 	width: 100%;
 }
-.manage-search form input {
+.manage-search .sub input {
   background: white;
   border: 1px solid #030303;
   font-size: 13px;
@@ -22289,7 +22295,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   color: #2e2e2e;
   border-radius: 5px;
 }
-.manage-search button {
+.manage-search .sub button {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   color: #f91942;
   font-size: 15px;
@@ -22358,11 +22364,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .scheduled-activity-info{
 	text-align: center;
-	margin-top: 16px;
+	margin-top: 6px;
 }
 .scheduled-location{
 	text-align: center;
-	margin-top: 16px;
+	margin-top: 6px;
 }
 .scheduler-info-box .timeline::before{
 	content: "";
@@ -22537,7 +22543,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #000;
 }
 .overlay-activity{
-	position: inherit;
+	position: relative;
 	width: 100%;
 	top: 0px;
 	left: 0px;
@@ -22553,12 +22559,13 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #fff;
 	padding: 10px;
 	z-index: 1000;
-	top: 14px;
-	left: 90px;
+	left: 80%;
 	border-radius: 7px;
-	font-size: 17px;
-	width: 16%;
+	font-size: 13px;
+	width: 100px;
 	text-align: center;
+    top: 5px;
+    opacity: 1;
 }
 .priceselect.sp-select p{
 	display: inline-block;
@@ -23209,4 +23216,470 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 100%;
 	font-style: italic;
 	height: 15px;	
+}
+
+.delcustomer{
+    margin: 20px;
+    color: red;
+    font-size: 20px;
+}
+
+
+
+.customer-list{
+    display: block;
+    left: 0px;
+    top: 34px;
+    z-index: 999 !important;
+    background-color: #ffffff;
+    position: absolute;
+    padding: 10px 0px;
+    width: 100%;
+    color: #000;
+    height: 400px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.serchcustomer #option-box1 ul li{list-style: none !important;}
+.modal-from-txt input{
+	margin-bottom: 10px;
+}
+.form-control.feeamount{
+	width: 40%;
+	display: inline-block;
+	margin-left: 10px;
+}
+.latecancle-types select{
+	width: 58%;
+	display: inline-block;
+	margin-left: 10px;
+}
+.latecancle-types input{
+	margin-bottom: 10px;
+}
+.company-list-text.viewcustomelatterrimg{
+	  width: 150px;
+  height: 150px;
+}
+.company-list-text.viewcustomelatterrimg p{
+	  font-size: 50px;
+	  padding: 22% 0px;
+}
+
+
+.dob label {
+    background-color: lightblue;
+    padding: 3px;
+    color: white;
+    margin-right: -3px;
+    z-index: 999999;
+    position: relative;
+    float: left;
+    border-top: solid 1px #000;
+    border-bottom: solid 1px #000;
+    border-left: solid 1px #000;
+}
+
+.savecard-block {
+  margin-bottom: 35px;
+}
+.sacecard-title {
+  color: #999;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.cards-block {
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+}
+.cards-block .cards-content {
+  padding: 17px 20px;
+  border-radius: 15px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 10px 15px 0px #cfd7e2;
+  min-height: 154px;
+}
+.cards-block .cards-content img {
+  max-width: 60px;
+}
+.cards-block .cards-content span {
+  color: #fff;
+  font-size: 14px;
+}
+.cards-block .cards-content p {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 8px;
+  opacity: .85;
+  margin-bottom: 45px;
+}
+.cards-block .cards-content span {
+  color: #fff;
+  font-size: 14px;
+}
+.cards-block.block-resize{
+	width: 45%;
+}
+
+.transparent{
+    opacity: 0.2;
+}
+.search-checkout{
+	margin-bottom: 15px;
+}
+.search-add-client{
+	width: 100%;
+}
+.btn-search-checkout{
+	width: 30%;
+}
+.check-client-info{
+	background: #e9e9e9;
+	padding: 7px 15px;
+	margin-bottom: 15px;
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, .20);
+	border-radius: 10px;
+}
+.check-client-info-box{
+	background: #fff;
+	padding: 7px 15px;
+	margin-bottom: 15px;
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, .20);
+	border-radius: 10px;
+}
+.color-grey{
+	color: #888;
+}
+.price-txt input{
+	margin-top: 20px; 
+}
+.choose-tip label{
+	margin-bottom: 0px;
+}
+.participant-qty{
+	margin-top: 10px;
+}
+.division-hight{
+	height: 400px;
+}
+.summery-details h3{
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 25px;
+}
+.payment-detials{
+	display: grid;
+}
+.payment-detials label{
+	font-weight: 400;
+}
+.payment-detials h2{
+	font-size: 17px;
+	font-weight: 600;
+}
+.payment-detials span{
+	float: right;
+}
+.total-amount{
+	float: right;
+}
+.nopadding{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.activity_purchase-box{
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, .20);
+	border-radius: 10px;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+.mb-00{
+	margin-bottom: 15px;
+}
+.ticket-summery h4{
+	font-size: 25px;
+	font-weight: 600;
+	padding: 15px;
+}
+.ticket-summery-details{
+	margin-top: 30px;
+}
+.ticket-summery-details label{
+	font-weight: 400;
+	font-size: 14px;
+}
+.ticket-summery-details span{
+	text-align: right;
+	display: block;
+}
+.ticket-summery-details h2{
+	font-size: 17px;
+	font-weight: 600;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.close-cross-icon{
+	position: relative;
+}
+.close-cross-icon i{
+	position: absolute;
+	top: 7px;
+	color: #f91942;
+	right: 37px;
+}
+.close-cross-icon-trash{
+	position: relative;
+}
+.close-cross-icon-trash i{
+  position: absolute;
+  top: 1px;
+  color: #fff;
+  right: 0px;
+  background: #f91942;
+  padding: 6px;
+  border-radius: 4px;
+}
+.ticket-title{
+	margin-top: 0px !important;
+}
+.check-client-info.total-checkout label{
+	font-weight: 400;
+	font-size: 14px;
+}
+.check-client-info.total-checkout h3{
+	font-size: 17px;
+	font-weight: 600;
+}
+.check-client-info.total-checkout span{
+	float: right;
+}
+.check-client-info.total-checkout h2{
+	font-size: 20px;
+	font-weight: 600;
+}
+.check-client-info.total-checkout{
+	margin-bottom: 0px;
+}
+.checkout-client-info{
+	background-color: #d2d2d2;
+	padding: 5px;
+}
+.activity-purchase{
+	width: 100%;
+}
+.check-out-steps label{
+	display: inline-block;
+}
+.check-out-steps h2{
+	display: inline-block;
+	font-size: 17px;
+	font-weight: 600;
+}
+.select0service select{
+	margin-bottom: 15px;
+}
+.select0service{
+	text-align: center;
+}
+.date-activity-check .form-control{
+	border-radius: 4px;
+}
+.checkout-sapre-tor{
+	border-bottom: 1px solid #000;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.tax-check label{
+	display: inline-block;
+}
+.tax-check form{
+	display: inline-block;
+}
+.total0spretor{
+	margin-top: 20px;
+}
+.total0spretor-bt{
+	margin-bottom: 20px;
+}
+.modal-checkbox input{
+	display: inline-block;
+}
+.modal-checkbox form label{
+	display: inline-block;
+}
+.modal-terms{
+	font-size: 14px;
+	padding-left: 5px;
+	padding-bottom: 10px;
+}
+.modal-terms-wrap{
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	margin-top: 20px;
+}
+.payment-method label{
+	padding: 15px 0px;
+}
+.check-client-info img{
+	width: 40px;
+	height: 40px;
+}
+.payment-method-img{
+	text-align: center;
+}
+.check-client-info.payment-method-img label{
+	display: block;
+	margin-bottom: 0px;
+}
+.inner-top-activity{
+	margin-top: 85px;
+}
+.valor-mix-title{
+	text-align: center;
+}
+.valor-mix-title h2{
+	font-size: 30px;
+	padding: 15px 0;
+	font-weight: 600;
+}
+.valor-mix-title p{
+	font-size: 20px;
+}
+.member-txt p{
+	text-align: center;
+}
+.member-txt a{
+	text-decoration: underline;
+}
+.activity-schedule-tabs{
+	margin-top: 25px;
+}
+.activity-schedule-tabs ul{
+	background: #d1d0d0;
+}
+.activity-schedule-tabs ul li a{
+	color: #000;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a:hover{
+	color: #000;
+}
+.activity-schedule-tabs .tab-content .tab-pane .tab-data{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a:active{
+	color: #ed1b24;
+}
+.classes-info h2{
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+.classes-info label{
+	font-weight: 500;
+}
+.classes-info{
+	border-right: 1px solid #d1d0d0;
+}
+.post-btn.activity-scheduler{
+	width: 100%;
+	background: #ed1b24;
+	border-radius: 0px;
+}
+.classes-time{
+	display: grid;
+	text-align: center;
+}
+.classes-time label{
+	font-weight: 400;
+	margin-top: 5px;
+	font-size: 13px;
+}
+.col-md-offset-3-custom{
+	margin-left: 22%;
+}
+.weeks-name ul{
+	background: white;
+	display: flex;
+}
+.weeks-name ul li{
+	width: 25%;
+	list-style-type: none !important;
+	text-align: center;
+}
+.weeks-name{
+	margin-top: 23px;
+}
+.disable{
+	color: #d0d0d0 !important;
+}
+.activity-schedule-tabs .nav-tabs > li.active > a{
+	color: #f91942;
+	border: none !important;
+	font-weight: 600;
+}
+.checkout-card{
+	padding: 1px;
+}
+.checkout-cart{
+	text-align: center;
+	font-size: 13px;
+}
+.payment-selection h3{
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+.close-div{
+	position: relative;
+}
+.close-div .close-cross{
+	position: absolute;
+	left: 0px;
+	color: #ed1b24;
+}
+.changecalce label{
+	margin-left: 30px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+.cash-tend{
+	margin-left: 30px;
+	margin-top: 5px;
+}
+.cash-tend-option{
+	margin-top: 5px;
+}
+.visa-info{
+	margin-left: 100px;
+}
+.options-payment{
+	margin-top: 15px;
+}
+.mathod-display{
+	display: grid;
+}
+.card-space{
+	margin-top: 15px;
+}
+.paynowset{
+	margin-top: 27px;
+}
+.setprice-custom{
+	text-align: left !important;
+	margin-top: 0px;
+}
+
+.setprice label{
+    margin-right: 10px;
+}
+
+.companyalink{
+    font-size: 16px;
+    color: #f91942 !important;
+    font-weight: 600;
 }

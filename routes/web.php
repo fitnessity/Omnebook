@@ -642,9 +642,6 @@ Route::post('/myemail', 'Auth\AuthController@myemail');
 //profile routes ends
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
-    Route::get('scheduler-checkin', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
-    Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
 
@@ -749,7 +746,7 @@ Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentins
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
 Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
-Route::any('/removetocart', 'LessonController@removeToCart');
+Route::any('/removetocart', 'LessonController@removeToCart')->name('removetocart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 
 //booking status and details
@@ -924,6 +921,7 @@ Route::get('show-all-list','LessonController@showalllist')->name('show-all-list'
 
 
 //  Customers for business
+
 Route::namespace('Customers_Auth')->group(function(){
     Route::get('emailvalidation_customer', 'RegistrationController@emailvalidation_customer')->name('emailvalidation_customer');
     Route::post('/customers/registration', 'RegistrationController@postRegistrationCustomer')->name('customers.registration.post');
@@ -935,9 +933,49 @@ Route::namespace('Customers_Auth')->group(function(){
     /*Route::group(['prefix'  =>  'customers','middleware' => ['auth:customers']], function () {
     });*/
 });
+Route::group(['middleware' => ['auth']], function(){
+    Route::prefix('/business/{business_id}')->group(function () {
+        Route::get('/customers','CustomerController@index')->name('business_customer_index');
+        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+        Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
+    });
+});
 
-Route::get('manage-customer','CustomerController@manage_customer')->name('manage-customer');
-Route::post('searchcustomersaction','CustomerController@searchcustomersaction');
-Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
-Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
+Route::group(['middleware' => ['auth']], function()
+{
+    Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
+    
+    Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
+    Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
+    Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
+    Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
+    Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
+    Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
+    Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
+    Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
 
+    Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
+    
+});
+
+
+//  Scheduler 
+
+Route::group(['middleware' => ['auth']], function()
+{
+    Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
+    Route::get('scheduler-checkin/{sid?}', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
+    Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
+    Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
+    Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
+    Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
+    Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
+    Route::get('activity_schedule', 'SchedulerController@activity_schedule')->name('activity_schedule');
+    Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
+    Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
+    Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
+    Route::post('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
+    Route::post('check_in_activity', 'SchedulerController@check_in_activity')->name('check_in_activity');
+});
+
+Route::get('email', 'SchedulerController@email')->name('email');

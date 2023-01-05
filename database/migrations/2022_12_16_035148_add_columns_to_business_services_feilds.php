@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnBusinessServices extends Migration
+class AddColumnsToBusinessServicesFeilds extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,8 @@ class AddColumnBusinessServices extends Migration
     public function up()
     {
         Schema::table('business_services', function (Blueprint $table) {
-            $table->string('beforetime', 45)->nullable()->after('request_booking');
-            $table->integer('beforetimeint')->nullable()->after('beforetime');
-             
+            $table->string('cancelbefore')->nullable();
+            $table->integer('cancelbeforeint')->unsigned()->nullable();
         });
     }
 
@@ -28,8 +27,8 @@ class AddColumnBusinessServices extends Migration
     public function down()
     {
         Schema::table('business_services', function (Blueprint $table) {
-              $table->dropColumn('beforetime');
-              $table->dropColumn('beforetimeint'); 
+             $table->string('cancelbefore')->nullable();
+             $table->integer('cancelbeforeint')->unsigned()->nullable();
         });
     }
 }
