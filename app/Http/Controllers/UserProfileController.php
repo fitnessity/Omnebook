@@ -2029,7 +2029,7 @@ class UserProfileController extends Controller {
 
 
         $request->servicepic = rtrim($profile_picture,',');
-       /* print_r($request->file('imgUpload'));
+        /* print_r($request->file('imgUpload'));
         echo $request->servicepic ;exit;*/
         $instant = $reserve = 0;
         
@@ -2067,7 +2067,7 @@ class UserProfileController extends Controller {
         }
         
         $servicetype1 = $servicelocation1 = $programfor1 = $agerange1 = $experiencelevel1 = $teachingstyle1 = $servicefocuses1 =  $included_thing = $notincluded_thing = $frm_wear= "";  
-       $days_dayplanpic = "";
+        $days_dayplanpic = "";
         if(isset($request->frm_lservice) && !empty($request->frm_lservice)) {
             $servicetype1 = @implode(",",$request->frm_lservice);    
         }
@@ -2220,6 +2220,7 @@ class UserProfileController extends Controller {
                 "desc_location" =>$request->desc_location,
                 "cancelbefore" =>$request->cancelbefore,
                 "cancelbeforeint" =>$request->cancelbeforeint,
+                "know_before_you_go"=>$request->know_before_you_go,
             ];
         } else {
             $businessData = [
@@ -2288,6 +2289,7 @@ class UserProfileController extends Controller {
                 "instructor_id"=> $request->instructor_id,
                 "cancelbefore" =>$request->cancelbefore,
                 "cancelbeforeint" =>$request->cancelbeforeint,
+                "know_before_you_go"=>$request->know_before_you_go,
             ];
         }
        /*print_r($businessData); exit;*/
@@ -2418,6 +2420,8 @@ class UserProfileController extends Controller {
                     "cid" => $request->cid,
                     "userid" => $request->userid,
                     "serviceid" => $serid_pay,
+                    "dues_tax" => isset($request->dues_tax[$i]) ? $request->dues_tax[$i] : '',
+                    "sales_tax" => isset($request->sales_tax[$i]) ? $request->sales_tax[$i] : '',
                 ];
                 if($request->cat_id_db[$i] != ''){
                     $db_status = 'update';

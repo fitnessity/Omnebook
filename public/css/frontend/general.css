@@ -23683,3 +23683,79 @@ span.Zebra_DatePicker_Icon_Wrapper {
     color: #f91942 !important;
     font-weight: 600;
 }
+.modal-banner .single-banner {
+  width: 100%;
+  margin-right: 5px;
+  text-align: center;
+  padding: 0px 150px;
+}
+.modal-banner .single-banner img {
+  width: 100%;
+  height: 390px;
+  display: block;
+}
+.toolwidth{
+	width: 85% !important;
+}
+.dual-banner{
+	width: 100%;
+	margin-right: 5px;
+	text-align: center;
+}
+.modal-banner .dual-banner img {
+  width: 100%;
+  height: 300px;
+  display: block;
+}
+.three-banner{
+	width: 100%;
+	margin-right: 5px;
+	text-align: center;
+}
+.modal-banner .three-banner img {
+  width: 100%;
+  height: 300px;
+  display: block;
+}
+
+.qty .count {
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 22px;
+    line-height: 30px;
+    padding: 0 2px
+    ;min-width: 35px;
+    text-align: center;
+}
+.qty .plus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 30px;
+    color: #000;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    }
+.qty .minus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    color: #000;
+    height: 30px;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    background-clip: padding-box;
+}
+.bg-darkbtn {
+    border: 1px solid #000;
+}
+
+.count {  
+    border: 0;
+    width: 2%;
+}

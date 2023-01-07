@@ -1677,13 +1677,13 @@
                                         Give your customers THINGS TO KNOW and information on how and what to prepare before they book.
                                     </p>
                                     <br/><br/>
-                                    <div class="form-group">
-                                        <label for="house_rules">Know Before You Go <!-- <span id="star">*</span> --></label>
+                                    <!-- <div class="form-group">
+                                        <label for="house_rules">Know Before You Go </label>
                                         <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="houserules" id="house_rules" cols="30" rows="6" class="form-control" maxlength="1000">{{ $houserules }}</textarea>
                                         <span class="error" id="err_house_rules"></span>
 
                                         <div class="text-right"><span id="house_rules_left">1000</span> Characters Left</div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group">
                                         <label for="cancelation_policy">Cancelation Policy <!-- <span id="star">*</span> --></label>
@@ -2522,7 +2522,7 @@
                 <?php
 
                     $service_type = $sport_activity = ""; $instant_booking = $request_booking = '';
-                    $program_name = $program_desc = $profile_pic = $meetup_location = $frm_min_participate = $beforetime = $beforetimeint= $cancelbefore = $cancelbeforeint = "";
+                    $program_name = $program_desc = $knowbeforeugo = $profile_pic = $meetup_location = $frm_min_participate = $beforetime = $beforetimeint= $cancelbefore = $cancelbeforeint = "";
                     $notice_value = $notice_key = $advance_value = $advance_key = $activity_value = $activity_key = $cancel_value = $cancel_key = $willing_to_travel = $miles = $area = "";
                     $select_service_type = $activity_location = $activity_for = $age_range = $group_size = $difficult_level = $activity_experience = $instructor_habit = $is_late_fee ="";
                     $late_fee = $bring_wear = $notincluded_items=$included_items=$req_safety = $days_plan_title = $days_plan_desc=''; $days_plan_img= $day_pic = $old_pic ='';
@@ -2556,6 +2556,10 @@
 
                         if(isset($business_service['program_desc']) && !empty($business_service['program_desc'])) {
                             $program_desc = $business_service['program_desc'];
+                        }
+
+                        if(isset($business_service['know_before_you_go']) && !empty($business_service['know_before_you_go'])) {
+                            $knowbeforeugo = $business_service['know_before_you_go'];
                         }
 
                         if(isset($business_service['instructor_id']) && !empty($business_service['instructor_id'])) {
@@ -3630,6 +3634,15 @@
                                         <span class="error" id="err_frm_programdesc"></span>
                                         <div class="text-right"><span id="frm_programdesc_left">500</span> Characters Left</div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="house_rules">Give your customers THINGS TO KNOW and information on how and what to prepare before they book</label>
+                                        <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="know_before_you_go" id="house_rules" cols="30" rows="6" class="form-control" maxlength="2000">{{ $knowbeforeugo }}</textarea>
+                                        <span class="error" id="err_house_rules"></span>
+
+                                        <div class="text-right"><span id="house_rules_left">1000</span> Characters Left</div>
+                                    </div> 
+
                                     <?php $staffdata = StaffMembers::where('user_id',Auth::user()->id)->get(); ?>
                                     <div class="selectinstructor">  
                                         <h3>Choose Instructor</h3> <a href="" data-toggle="modal" data-target="#addins" class="modelbox-edit-link">Add Instructor</a>
@@ -5068,7 +5081,7 @@
                                             if(isset($business_price_details) && count($business_price_details) > 0) {/*print_r($business_price_details);*/
                                                 $j=0;
                                                 foreach($business_price_details as $price){ 
-                                                    $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $price_title = $recurring_run_auto_pay_adult  = 
+                                                    $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $dues_tax = $sales_tax = $price_title = $recurring_run_auto_pay_adult  = 
 
                                                     $is_recurring_adult =
 
@@ -5389,6 +5402,16 @@
                                                         <div class="row">
                                                             <div class="col-md-3">
                                                                 <input type="text" name="category_title[]" id="category_title"  class="inputs" value="{{$priceagedata['category_title']}}" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)">
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <input type="text" name="sales_tax[]" id="sales_tax"  class="inputs toolwidth" value="{{$priceagedata['sales_tax']}}" placeholder="Sales Tax">
+                                                                <label> %  <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used when charging for apparel, products, rentals, equipment, food, or snacks."></i></label>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <input type="text" name="dues_tax[]" id="dues_tax"  class="inputs toolwidth" value="{{$priceagedata['dues_tax']}}" placeholder="Dues Tax">
+                                                                <label> %  <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used for all membership type fees."></i></label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -6727,6 +6750,15 @@
                                                 <div class="row">
                                                     <div class="col-md-3">
                                                         <input type="text" name="category_title[]" id="category_title"  class="inputs" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="sales_tax[]" id="sales_tax"  class="inputs" value="" placeholder="Sales Tax">
+                                                        <label> % <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used when charging for apparel, products, rentals, equipment, food, or snacks."></i></label>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="dues_tax[]" id="dues_tax"  class="inputs" value="" placeholder="Dues Tax">
+                                                        <label> %  <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used for all membership type fees."></i></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -9956,7 +9988,7 @@ $("body").on("click", ".add-another-category-price", function(){
     $('#recurring_count').val(cnt);
     var service_price = "";
     service_price += '';
-    service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-12"><div class="priceselect sp-select"><input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""><label>Category Title (Give a name for this category)</label><p>*Note: This name will be displayed on your booking schedule for customer to see. </p><div class="row"><div class="col-md-3"><input type="text" name="category_title[]" id="category_title"  class="inputs" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"></div></div></div></div></div><input type="hidden" name="price_id_db_'+cnt+'0" id="price_id_db'+cnt+'0" value="" /><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="Ex: 6 month Membership" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><div class="row"> <div class="col-md-12"><input type="radio" id="freeprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);" value="freeprice"> <label class="recurring-pmt">Free</label> <input type="radio" id="weekdayprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);"  value="weekdayprice"> <label class="recurring-pmt">Everyday Price</label> <input type="radio" id="weekendprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);" checked  value="weekendprice"> <label class="recurring-pmt">Weekend Price</label></div></div></div></div></div><div id="displaysectiondiv'+cnt+'0"><div class="row"><div class="col-md-12"><div class="setprice sp-select"><div class="row"><div class="col-md-2"><label id="showlessmore'+cnt+'0" onclick="showlessmore('+cnt+',0);">Show Less</label> </div><div class="col-md-10"><h3 class="setprice-custom">You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3> </div> </div> </div></div></div> <div id="showmorehide'+cnt+'0"><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Sunday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> (Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
+    service_price +='<div id="pricediv'+cnt+'"><div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div><input type="hidden" name="ages_count'+cnt+'" id="ages_count'+cnt+'" value="0"><div id="agesmaindiv'+cnt+'"><div id="agesdiv'+cnt+'0"><div class="row"><div class="col-md-12"><div class="priceselect sp-select"><input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""><label>Category Title (Give a name for this category)</label><p>*Note: This name will be displayed on your booking schedule for customer to see. </p><div class="row"><div class="col-md-3"><input type="text" name="category_title[]" id="category_title"  class="inputs" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"></div><div class="col-md-3"><input type="text" name="sales_tax[]" id="sales_tax"  class="inputs toolwidth" value="" placeholder="Sales Tax"><label> %  <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used when charging for apparel, products, rentals, equipment, food, or snacks."></i></label></div><div class="col-md-3"><input type="text" name="dues_tax[]" id="dues_tax"  class="inputs toolwidth" value="" placeholder="Dues Tax"><label> %  <i class="fas fa-question-circle info-tooltip" id="tooltipex" data-placement="top" title="Typically used for all membership type fees."></i></label></div></div></div></div></div><input type="hidden" name="price_id_db_'+cnt+'0" id="price_id_db'+cnt+'0" value="" /><div class="row mt-30"><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Price Title</label><input type="text" name="price_title_'+cnt+'0" id="price_title'+cnt+'0"  class="inputs" placeholder="Ex: 6 month Membership" oninput="getpricetitle('+cnt+',0)"></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Session Type</label><select name="pay_session_type_'+cnt+'0" id="pay_session_type'+cnt+'0" class="bd-right bd-bottom pay_session_type" onchange="pay_session_select('+cnt+',0,this.value);"><option value="">Select Value</option><option value="Single">Single</option><option value="Multiple">Multiple</option><option value="Unlimited">Unlimited</option></select></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Number of Sessions</label><input type="text" name="pay_session_'+cnt+'0" id="pay_session'+cnt+'0"  class="inputs pay_session" placeholder="1" value=""></div></div><div class="col-md-3 col-sm-6"><div class="priceselect sp-select"><label>Membership Type</label><select name="membership_type_'+cnt+'0" id="membership_type'+cnt+'0" class="bd-right bd-bottom membership_type"><option value="Drop In">Drop In</option><option value="Semester">Semester (Long Term)</option></select></div></div></div><div class="row"><div class="col-md-12"><div class="setprice sp-select"><div class="row"> <div class="col-md-12"><input type="radio" id="freeprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);" value="freeprice"> <label class="recurring-pmt">Free</label> <input type="radio" id="weekdayprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);"  value="weekdayprice"> <label class="recurring-pmt">Everyday Price</label> <input type="radio" id="weekendprice'+cnt+'0" name="sectiondisplay'+cnt+'0" onclick="showdiv('+cnt+',0);" checked  value="weekendprice"> <label class="recurring-pmt">Weekend Price</label></div></div></div></div></div><div id="displaysectiondiv'+cnt+'0"><div class="row"><div class="col-md-12"><div class="setprice sp-select"><div class="row"><div class="col-md-2"><label id="showlessmore'+cnt+'0" onclick="showlessmore('+cnt+',0);">Show Less</label> </div><div class="col-md-10"><h3 class="setprice-custom">You can set your prices to be the same or different based on age, the weekday or the weekend.To add prices for children or infants, click on the box.</h3> </div> </div> </div></div></div> <div id="showmorehide'+cnt+'0"><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Adults</label><p>Ages 12 & Older</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Sunday)</p><input type="text" name="adult_cus_weekly_price_'+cnt+'0" id="adult_cus_weekly_price'+cnt+'0" placeholder="$"  onkeyup="adultchangeestprice('+cnt+',0);"></div></div><div class="weekend-price Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Price </label><p> (Saturday & Sunday)</p><input type="text" name="adult_weekend_price_diff_'+cnt+'0" id="adult_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendadultchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount? </label><p> (Recommended 10% to 15%)</p><input type="text" name="adult_discount_'+cnt+'0" id="adult_discount'+cnt+'0" onkeyup="adultdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee </label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings </label><input type="text" name="adult_estearn_'+cnt+'0" id="adult_estearn'+cnt+'0" placeholder="$"></div></div><div class="estimated-earn Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_adult_estearn_'+cnt+'0" id="weekend_adult_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
 
     var onclickadult ="'adult'";
     service_price +='<input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult'+cnt+'0" name="is_recurring_adult_'+cnt+'0" value="0" onclick="openmodelbox('+cnt+',0,'+onclickadult+');" ><label>Is This A Recurring Payment? Set the monthly payment terms for Adults</label><button style="display:none" id="btn_recurring_adult'+cnt+'0" name="btn_recurring_adult_'+cnt+'0[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult'+cnt+'0" onclick="recurrint_id('+cnt+',0,'+onclickadult+');">Launch demo modal</button></div></div></div><div class="row"><div class="age-cat"><div class="cat-age sp-select"><label>Children</label><p>Ages 2 to 12</p></div></div><div class="weekly-customer"><div class="cus-week-price sp-select"><label>Weekday Price</label><p> (Monday - Sunday)</p><input type="text" name="child_cus_weekly_price_'+cnt+'0" id="child_cus_weekly_price'+cnt+'0" placeholder="$" onkeyup="childchangeestprice('+cnt+',0);"></div></div><div class="weekend-price Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Price</label><p> (Saturday & Sunday)</p><input type="text" name="child_weekend_price_diff_'+cnt+'0" id="child_weekend_price_diff'+cnt+'0" placeholder="$" onkeyup="weekendchildchangeestprice('+cnt+',0);"></div></div><div class="re-discount"><div class="discount sp-select"><label>Any Discount?</label><p> (Recommended 10% to 15%)</p><input type="text" name="child_discount_'+cnt+'0" id="child_discount'+cnt+'0"  onkeyup="childdischangeestprice('+cnt+',0);"></div></div><div class="single-dash"><div class="desh sp-select"><label>-</label></div></div><div class="fit-fees"><div class="fees sp-select"><label>Fitnessity Fee</label><p> {{$fitnessity_fee}}%</p></div></div><div class="single-equal"><div class="equal sp-select"><label>=</label></div></div><div class="estimated-earn"><div class="cus-week-price sp-select"><label>Weekday Estimated Earnings</label><input type="text" name="child_estearn_'+cnt+'0" id="child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="estimated-earn Weekend'+cnt+'0"><div class="cus-week-price sp-select"><label>Weekend Estimated Earnings</label><input type="text" name="weekend_child_estearn_'+cnt+'0" id="weekend_child_estearn'+cnt+'0" placeholder="$" ></div></div><div class="col-md-12"><div class="priceselect sp-select modelmargin">';
@@ -10324,7 +10356,7 @@ $(document).ready(function(){
     $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
     $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
    /* $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));*/
-    $('#house_rules_left').text(1000-parseInt($("#house_rules").val().length));
+    $('#house_rules_left').text(2000-parseInt($("#house_rules").val().length));
     $('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
     $('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
     $('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
@@ -10373,7 +10405,7 @@ $(document).ready(function(){
         $('#frm_programdesc1_left').text(150-parseInt(this.value.length));
     });*/
     $("#house_rules").on('input', function() {
-        $('#house_rules_left').text(1000-parseInt(this.value.length));
+        $('#house_rules_left').text(2000-parseInt(this.value.length));
     });
     $("#cancelation_policy").on('input', function() {
         $('#cancelation_policy_left').text(1000-parseInt(this.value.length));
