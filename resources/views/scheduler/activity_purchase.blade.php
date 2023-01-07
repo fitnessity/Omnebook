@@ -1,7 +1,25 @@
 @extends('layouts.header')
 @section('content')
 @include('layouts.userHeader')
+<style type="text/css">
 
+/*Prevent text selection*/
+span{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input:disabled{
+    background-color:white;
+}
+   
+</style>
 
 @php 
 	use Carbon\Carbon;
@@ -96,19 +114,6 @@
 										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
-													<label>Participant Quantity </label>
-													<div class="choose-tip">
-														<select name="qty_dropdown" id="qty_dropdown" class="form-control"onchange="gettotal('qty',this.value);">
-															<option value="1" >Select </option>
-															@for($i=1;$i<15;$i++)
-															<option value="{{$i}}">{{$i}}</option>
-															@endfor
-														</select>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-4 col-sm-4 col-xs-12">
-												<div class="select0service">
 													<label>Who's Participating </label>
 													<select name="participate_list" id="participate_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
 														@php  
@@ -138,19 +143,27 @@
 													</select>
 												</div>
 											</div>
-										</div>
-										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<label>Select Catagory </label>
 												<select name="category_list" id="category_list" class="form-control" onchange="loaddropdown('category',this,this.value);">
 													<option value="">Select</option>
 												</select>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<label>Select Price Option  </label>
 												<select name="priceopt_list" id="priceopt_list" class="form-control" onchange="loaddropdown('priceopt',this,this.value);">
 													<option value="">Select</option>
 												</select>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<div class="select0service">
+													<div class="date-activity-scheduler date-activity-check paynowset">
+														<button type="button" data-toggle="modal" data-target="#addpartcipate">Participant Quantity </button>
+													</div>
+													
+												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<label> Membership Option</label>
@@ -169,7 +182,7 @@
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
 													<label>Price </label>
-													<input type="text" class="form-control valid" id="price" placeholder="$0.00" onkeyup="gettotal('','');">
+													<input type="text" class="form-control valid" id="price" placeholder="$0.00" disabled>
 												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
@@ -249,7 +262,7 @@
 												<div class="select0service">
 													<label>Date This Activaties?</label>
 													<div class="date-activity-scheduler date-activity-check">
-														<input type="text"  id="managecalendarservice" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate();">
+														<input type="text"  id="managecalendarservice" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
 													</div>
 												</div>
 											</div>
@@ -266,7 +279,17 @@
 										<input type="hidden" name="type" value="{{$user_type}}">
 										<input type="hidden" name="pageid" value="{{$book_id}}">
 										<input type="hidden" name="pid" id="pid" value="">
+										<input type="hidden" name="categoryid" id="categoryid" value="">
 										<input type="hidden" name="checkount_qty" id="checkount_qty" value="">
+
+										<input type="hidden" name="aduquantity" id="adupricequantity" value="" class="product-quantity"/>
+										<input type="hidden" name="childquantity" id="childpricequantity" value="" class="product-quantity"/>
+										<input type="hidden" name="infantquantity" id="infantpricequantity" value="" class="product-quantity"/>
+
+										<input type="hidden" name="cartaduprice" id="cartaduprice" value="" class="product-quantity"/>
+										<input type="hidden" name="cartchildprice" id="cartchildprice" value="" class="product-quantity"/>
+										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="" class="product-quantity"/>
+
 										<input type="hidden" name="priceid" value="" id="priceid">
 										<input type="hidden" name="actscheduleid" value="1 Day(s)" id="actscheduleid">
 										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate">
@@ -404,9 +427,9 @@
 						    						$profilePic = url('/public/images/service-nofound.jpg');
 						    					}
 
-												$subtotal += $item['totalprice'] * @$item['qty_from_checkout_regi'];
-												$tip += $item['tip'] * @$item['qty_from_checkout_regi'];
-												$discount += $item['discount'] * @$item['qty_from_checkout_regi'];
+												$subtotal += $item['totalprice'] ;
+												$tip += $item['tip'];
+												$discount += $item['discount'];
 												$taxval = $item["tax"];
 												$participate = $item["participate_from_checkout_regi"]['pc_name'];
 												$taxes += $taxval;
@@ -414,8 +437,9 @@
 												$serprice = BusinessPriceDetails::where('id', $item['priceid'])->first();
 												$serpricecate = BusinessPriceDetailsAges::where('id',$serprice->category_id)->first();
 
-												$total = $item['qty_from_checkout_regi'] *($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
+												$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
 												$iprice = number_format($total,0, '.', '');
+												
 											@endphp
 												<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
 							                    <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
@@ -425,8 +449,9 @@
 							                   
 							                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 												<div class="close-cross-icon"> 
-													<a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['code']}}">
-													<!-- <a class="p-red-color" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" > -->
+													<?php /*?><a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['code']}}"><?php */?>
+													<!--  <a class="p-red-color editcartitemaks" data-toggle="modal" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" >  -->
+													<a class="p-red-color editcartitemaks" data-toggle="modal" data-code="{{$item['code']}}" data-pageid="{{$book_id}}"> 
 													<i class="fas fa-pencil-alt"></i></a>
 												</div>
 												<div class="close-cross-icon-trash">
@@ -467,7 +492,9 @@
 															<label>Participant Quantity:</label>
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
-															<span>{{@$item['qty_from_checkout_regi']}}</span>
+															<span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult : {{$item['adult']['quantity']}} @endif @endif</span> 
+				                                            <span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children : {{$item['child']['quantity']}} @endif @endif</span>
+				                                            <span>@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant : {{$item['infant']['quantity'] }} @endif @endif</span>
 														</div>
 
 														<div class="col-md-6 col-sm-6 col-xs-6">
@@ -495,14 +522,14 @@
 															<label class="total0spretor">Tip Amount </label>
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
-															<span class="total0spretor">${{$item['tip'] * @$item['qty_from_checkout_regi']}}</span>
+															<span class="total0spretor">${{$item['tip'] }}</span>
 														</div>
 														
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<label>Discount </label>
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
-															<span>${{$item['discount'] * @$item['qty_from_checkout_regi']}}</span>
+															<span>${{$item['discount'] }}</span>
 														</div>
 														
 														<div class="col-md-6 col-sm-6 col-xs-6">
@@ -528,210 +555,7 @@
 												</div>
 											@php $i++;@endphp
 											@endif
-							<div class="modal fade compare-model" id="editcartitem{{$item['code']}}">
-							    <div class="modal-dialog manage-customer">
-							        <div class="modal-content">
-										<div class="modal-header" style="text-align: right;"> 
-										  	<div class="closebtn">
-												<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">×</span>
-												</button>
-											</div>
-										</div>
-										@php 
-											$catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$item['code'])->get(); 
-											$pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$serpricecate->id)->get();
-											$membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',@$serprice['id'])->get();
-										@endphp
-							            <!-- Modal body -->
-							            <div class="modal-body body-tbm">
-											<div class="row"> 
-							                    <div class="col-lg-12 col-xs-12 space-remover">
-													<div class="manage-customer-modal-title">
-														<h4>Edit Cart Item</h4>
-													</div>
-													<div class="manage-customer-from">
-														<div class="row">
-															<div class="col-md-12 col-sm-12">
-															<div class="check-out-steps"><label><h2 class="color-red">Step 1: </h2> Select Service</label></div>
-															<div class="check-client-info-box">
-																<div class="row">
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Participant Quantity </label>
-																			<div class="choose-tip">
-																				<select name="qty_dropdownajax" id="qty_dropdownajax" class="form-control"onchange="gettotal('qty',this.value);">
-																					<option value="1" >Select </option>
-																					@for($i=1;$i<15;$i++)
-																					<option value="{{$i}}">{{$i}}</option>
-																					@endfor
-																				</select>
-																			</div>
-																		</div>
-																	</div>
-																	<input type="hidden" name="pc_regi_id" value="{{@$item['participate_from_checkout_regi']['id']}}">
-																	<input type="hidden" name="pc_user_tp" value="{{@$item['participate_from_checkout_regi']['pc_user_tp']}}">
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Who's Participating </label>
-																			<select name="pc_value" id="participate_listajax" class="form-control">
-																				<option value="{{@$item['participate_from_checkout_regi']['id']}}">{{@$participate}}</option>
-																			</select>
-																		</div>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Select Program </label>
-																			<select name="program_listajax" id="program_listajax" class="form-control">
-																				<option value="">Select</option>
-																				@if(!empty(@$program_list))
-																				@foreach($program_list as $pl)
-																					<option value="{{$pl->id}}" @if($item['code'] == $pl->id) selected @endif>{{$pl->program_name}}</option>
-																				@endforeach
-																				@endif
-																			</select>
-																		</div>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<label>Select Catagory </label>
-																		<select name="category_listajax" id="category_listajax" class="form-control">	<option value="">Select Category</option>
-																			@if(!empty(@$catelist))
-																			@foreach($catelist as $cl){
-																			<option value="{{$cl->id}}" @if(@$serpricecate->id == $cl->id) selected @endif>{{$cl->category_title}}</option>
-																			@endforeach
-																			@endif
-																		</select>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<label>Select Price Option  </label>
-																		<select name="priceopt_listajax" id="priceopt_listajax" class="form-control">
-																			<option value="">Select Price Title</option>
-																			@if(!empty(@$pricelist))
-																			@foreach($pricelist as $pl){
-																			<option value="{{$pl->id}}" @if(@$serprice['id'] == $pl->id) selected @endif>{{$pl->price_title}}</option>
-																			@endforeach
-																			@endif
-																		</select>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<label> Membership Option</label>
-																		<select name="membership_opt_listajax" id="membership_opt_listajax" class="form-control">
-																			<option value="">Select Membership Type</option>
-																			@if(!empty(@$membershiplist))
-																			@foreach($membershiplist as $mp){
-																			<option value="{{$mp->id}}" @if(@$serprice['membership_type'] == $mp->membership_type) selected @endif>{{$mp->membership_type}}</option>
-																			@endforeach
-																			@endif
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>
-														
-														<div class="col-md-12">
-															<div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
-															<div class="check-client-info-box">
-																<div class="row">
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Price </label>
-																			<input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="{{$item['totalprice']}}">
-																		</div>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Discount</label>
-																			<div class="row">
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<div class="choose-tip">
-																						<select name="dis_amt_drop" id="dis_amt_dropajax" class="form-control">
-																							<option value="">Choose $ or % </option>
-																							<option value="$" selected>$</option>
-																							<option value="%">%</option>
-																						</select>
-																					</div>
-																				</div>
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<div class="choose-tip">
-																						<input type="text" class="form-control valid" id="dis_amtajax" name="dis_amtajax" placeholder="Enter Amount" value="{{$item['discount']}}">
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Tip Amount</label>
-																			<div class="row">
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<div class="choose-tip">
-																						<select name="tip_amt_dropajax" id="tip_amt_dropajax" class="form-control" >
-																							<option value="">Choose $ or % </option>
-																							<option value="$" selected>$</option>
-																							<option value="%">%</option>
-																						</select>
-																					</div>
-																				</div>
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<div class="choose-tip">
-																						<input type="text" class="form-control valid" id="tip_amtajax" name="tip_amtajax" placeholder="Enter Amount" value=" {{$item['tip']}}">
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																
-																<div class="row">
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="col-md-6 col-sm-6 col-xs-6"> 
-																			<div class="tax-check">
-																				<label>Tax </label>
-																				<input type="checkbox" id="taxajax" name="taxajax" value="1">
-																				<label for="tax"> No Tax</label><br>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Duration</label>
-																			<div class="row">
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<input type="text" class="form-control valid" id="duration_intajax" name=duration_intajax placeholder="12" value="1">
-																				</div>
-																				<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-																					<div class="choose-tip">
-																						<select name="duration_dropdownajax" id="duration_dropdownajax" class="form-control">
-																							<option value="Day">Day(s) </option>
-																							<option value="Hour">Hour(s)</option>
-																							<option value="Minute">Minute(s)</option>
-																						</select>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-md-4 col-sm-4 col-xs-12">
-																		<div class="select0service">
-																			<label>Date This Activaties?</label>
-																			<div class="date-activity-scheduler date-activity-check">
-																				<input type="text"  id="managecalendarserviceajax" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" >
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														</div>
-													</div>
-							                    </div>
-											 </div>
-							            </div>
-							        </div>
-							    </div>
-							</div>
+							
 											@endforeach
 											@endif
 										</div>
@@ -1125,23 +949,434 @@
 		</div>
 	</div>
 
+
+	<div class="modal fade compare-model" role="dialog" id="editcartitempp" >
+		<div class="modal-dialog manage-customer">
+			<div class="modal-content">
+            	<div class="modal-header" style="text-align: right;"> 
+				  	<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<div class="modal-body body-tbm editcartdiv">
+
+				</div>
+            </div>
+		</div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="addpartcipateajax" tabindex="-1">
+        <div class="modal-dialog counter-modal-size">
+            <div class="modal-content">
+               <div class="modal-header"> 
+                        <div class="closebtn">
+                             <button type="button" class="close close-btn-design participateclosebtnajax" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">×</span>
+                             </button>
+                        </div>
+                   </div>  
+                <div class="modal-body conuter-body" id="Countermodalbodyajax">
+               	</div>            
+                <div class="modal-footer conuter-body">
+                    <button type="button" onclick="saveparticipateajax();" class="btn btn-primary rev-submit-btn">Save</button>
+                </div>
+         </div>                                                                       
+        </div>                                          
+    </div>
+
+    <div class="modal fade" role="dialog" id="addpartcipate" tabindex="-1">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	           <div class="modal-header"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design participateclosebtn" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>  
+	            <div class="modal-body conuter-body" id="Countermodalbody">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                        	<h4 class="modal-title partcipate-model">Select The Number of Participants</h4>
+                    	</div>
+                    	<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="row">
+								<div class="col-md-8 col-sm-8 col-xs-7">
+									<div class="counter-titles">
+										<p class="counter-age-heading">Adults</p>
+										<p>Ages 13 & Up</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-5">
+									<div class="qty mt-5 counter-txt">
+										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly>
+										<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+							</div>
+                    	</div>
+                    	<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="row">
+								<div class="col-md-8 col-sm-8 col-xs-7">
+									<div class="counter-titles">
+										<p class="counter-age-heading">Children</p>
+										<p>Ages 2-12</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-5">
+									<div class="qty mt-5 counter-txt">
+										<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly>
+										<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+							</div>
+	                    </div>
+	                    <div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="row">
+								<div class="col-md-8 col-sm-8 col-xs-7">
+									<div class="counter-titles">
+										<p class="counter-age-heading">Infants</p>
+										<p>Under 2</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-5">
+									<div class="qty mt-5 counter-txt">
+										<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly>
+										<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i>
+	                            		</span>
+									</div>
+								</div>
+							</div>
+	                    </div>
+	                    <div id="pricediv">
+	                    	
+	                    </div>
+	                </div>
+	            </div>            
+	            <div class="modal-footer conuter-body">
+	                <button type="button" onclick="saveparticipate();" class="btn btn-primary rev-submit-btn">Save</button>
+	            </div>
+	    	</div>                                                                       
+	    </div>                                          
+	</div>
+
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+
+<script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
+<script type="text/javascript">
+<?php /*?>$(window).load(function() {
+    $('#editcartitempp').modal('show');
+});<?php */?>
+</script>
+
+<script>
+	$(document).ready(function () {
+	    $('#adultcnt').prop('readonly', true);
+		$(document).on('click','.adultplus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
+			if ($('#adultcnt').val() <= 0) {
+				$('#adultcnt').val(0);
+			}
+	    });
+
+	    $('#childcnt').prop('readonly', true);
+		$(document).on('click','.childplus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+		});
+    	$(document).on('click','.childminus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
+			if ($('#childcnt').val() <= 0) {
+				$('#childcnt').val(0);
+			}
+	    }); 
+
+	    $('#infantcnt').prop('disabled', true);
+		$(document).on('click','.infantplus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+		});
+    	$(document).on('click','.infantminus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
+			if ($('#infantcnt').val() <= 0) {
+				$('#infantcnt').val(0);
+			}
+	    });
+	});
+
+</script>
+
+<script>
+	$(document).ready(function () {
+	    $('#adultcntajax').prop('readonly', true);
+		$(document).on('click','.adultplus',function(){
+			$('#adultcntajax').val(parseInt($('#adultcntajax').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#adultcntajax').val(parseInt($('#adultcntajax').val()) - 1 );
+			if ($('#adultcntajax').val() <= 0) {
+				$('#adultcntajax').val(0);
+			}
+	    });
+
+	    $('#childcntajax').prop('readonly', true);
+		$(document).on('click','.childplus',function(){
+			$('#childcntajax').val(parseInt($('#childcntajax').val()) + 1 );
+		});
+    	$(document).on('click','.childminus',function(){
+			$('#childcntajax').val(parseInt($('#childcntajax').val()) - 1 );
+			if ($('#childcntajax').val() <= 0) {
+				$('#childcntajax').val(0);
+			}
+	    }); 
+
+	    $('#infantcntajax').prop('disabled', true);
+		$(document).on('click','.infantplus',function(){
+			$('#infantcntajax').val(parseInt($('#infantcntajax').val()) + 1 );
+		});
+    	$(document).on('click','.infantminus',function(){
+			$('#infantcntajax').val(parseInt($('#infantcntajax').val()) - 1 );
+			if ($('#infantcntajax').val() <= 0) {
+				$('#infantcntajax').val(0);
+			}
+	    });
+	});
+
+</script>
+
 <script type="text/javascript">
 	
+	$(document).on('click', '.editcartitemaks', function () {
+		var code = $(this).attr('data-code');
+		var pageid = $(this).attr('data-pageid');
+		//alert(code);
+		$.ajax({
+			url: '{{route("editcartmodel")}}',
+			type: 'post',
+			data:  {
+				'code':code,
+				'pageid':pageid,
+				'companyId': '{{$companyId}}',
+				_token: '{{csrf_token()}}', 
+			},
+			success:function(response){
+				var data = response.split('~~');
+				$('.editcartdiv').html(data[0]);
+				$('#Countermodalbodyajax').html(data[1]);
+				$('#editcartitempp').modal('show');
+			}
+		});
+
+	});
+
+	function editcart(sid,category){
+		alert('call');
+		jQuery.noConflict();
+		$('#editcartitempp').modal('show');
+		//jQuery('#editcartitempp').model('show');
+		//$('#editcartitem'+sid).model('show');
+	}
+
+</script>
+<script type="text/javascript">
+	function saveparticipate(){
+		$('#qty').html('');
+		var aducnt = $('#adultcnt').val();
+		var chilcnt = $('#childcnt').val();
+		var infcnt = $('#infantcnt').val();
+		if(typeof(aducnt) == 'undefined'){
+			aducnt = 0;
+		}
+		if(typeof(chilcnt) == 'undefined'){
+			chilcnt = 0;
+		}
+		if(typeof(infcnt) == 'undefined'){
+			infcnt = 0;
+		}
+
+		var adult = '';
+		var child = '';
+		var infant = '';
+
+		var totalprice = 0;
+		var totalpriceadult = 0;
+		var totalpricechild = 0;
+		var totalpriceinfant = 0; 
+		var aduprice = $('#adultprice').val();
+		var childprice = $('#childprice').val();
+		var infantprice = $('#infantprice').val();
+	
+		if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
+			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+			if(aducnt != 0){
+				adult = '<span>Adults x '+aducnt+'</span><br>';
+			}
+		}
+
+		if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
+			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
+			if(chilcnt != 0){
+				child = '<span>Kids x  '+chilcnt+'</span><br>';
+			}
+		}
+		if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
+			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+			if(infcnt != 0){
+				infant = '<span>Infants x  '+infcnt+'</span>';
+			}
+		}
+		
+		$('#adupricequantity').val(aducnt);
+		$('#childpricequantity').val(chilcnt);
+		$('#infantpricequantity').val(infcnt);
+		$('#cartaduprice').val(aduprice);
+		$('#cartinfantprice').val(infantprice);
+		$('#cartchildprice').val(childprice);
+
+		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+	
+		$('#price').val(totalprice);
+		$('#qty').html(adult+' '+child+' '+infant);
+		$('.participateclosebtn').click();
+		gettotal('','')
+		/*$("#addpartcipate").modal('hide');
+		$("#addpartcipate").removeClass('show');*/
+	}
+
+	function saveparticipateajax (){
+		var aducnt = $('#adultcntajax').val();
+		var chilcnt = $('#childcntajax').val();
+		var infcnt = $('#infantcntajax').val();
+		if(typeof(aducnt) == 'undefined'){
+			aducnt = 0;
+		}
+		if(typeof(chilcnt) == 'undefined'){
+			chilcnt = 0;
+		}
+		if(typeof(infcnt) == 'undefined'){
+			infcnt = 0;
+		}
+
+		var adult = '';
+		var child = '';
+		var infant = '';
+
+		var adult = '';
+		var child = '';
+		var infant = '';
+
+		var totalprice = 0;
+		var totalpriceadult = 0;
+		var totalpricechild = 0;
+		var totalpriceinfant = 0; 
+		var aduprice = $('#adultpriceajax').val();
+		var childprice = $('#childpriceajax').val();
+		var infantprice = $('#infantpriceajax').val();
+	
+		if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
+			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+		}
+
+		if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
+			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
+		}
+		if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
+			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+		}
+		
+		$('#adupricequantityajax').val(aducnt);
+		$('#childpricequantityajax').val(chilcnt);
+		$('#infantpricequantityajax').val(infcnt);
+		$('#cartadupriceajax').val(aduprice);
+		$('#cartinfantpriceajax').val(infantprice);
+		$('#cartchildpriceajax').val(childprice);
+
+		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+	
+		$('#priceajax').val(totalprice);
+		$('#pricetotalajax').val(totalprice);
+		$('.participateclosebtnajax').click();
+	}
+
 	function changevalue(){
 		$('#duration').html($('#duration_int').val() +' '+ $('#duration_dropdown').val());
 		$('#actscheduleid').html($('#duration_int').val() +' '+ $('#duration_dropdown').val());
 	}
 
-	function changedate(){
-		$('#date').html($('#managecalendarservice').val());
-		$('#sesdate').val($('#managecalendarservice').val());
+	function changedate(chk){
+		if(chk == 'simple'){
+			$('#date').html($('#managecalendarservice').val());
+			$('#sesdate').val($('#managecalendarservice').val());
+		}else{
+			$('#sesdateajax').val($('#managecalendarserviceajax').val());
+		}
+	}
+
+	function loaddropdownajax(chk,val,id){
+		var selectedText = val.options[val.selectedIndex].innerHTML;
+		if(chk == 'program'){
+			$('#pidajax').val(id);
+			$('#category_listajax').html('');
+			$('#priceopt_listajax').html('');
+			$('#membership_opt_listajax').html('');
+		}
+		if(chk == 'category'){
+			$('#categoryidajax').val(id);
+			$('#priceopt_listajax').html('');
+			$('#membership_opt_listajax').html('');
+		}
+		if(chk == 'priceopt'){
+			$('#priceidajax').val(id);
+			$('#membership_opt_listajax').html('');
+		}
+		if(chk == 'duration'){
+			$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ selectedText);
+		}
+
+		$.ajax({
+			url: '{{route("getdropdowndata")}}',
+			type: 'get',
+			data:  {
+				'sid':id,
+				'chk':chk,
+				'type':'ajax',
+				'user_type':'{{$user_type}}',
+			},
+			success:function(data){
+				if(chk == 'program'){
+					$('#category_listajax').html(data);
+				}
+				if(chk == 'category'){
+					$('#priceopt_listajax').html(data);
+				}
+				if(chk == 'priceopt'){
+					$('#pricedivajax').html('');
+					var data1 = data.split('~~');
+					$('#membership_opt_listajax').html(data1[0]);
+					$('#pricedivajax').html(data1[1]);
+				}
+				
+				/*if(chk != 'participat' && chk != 'mpopt'){
+					$('#adultcnt').val(0);
+					$('#childcnt').val(0);
+					$('#infantcnt').val(0);
+					$('#price').val(0);
+				}*/
+			}
+		});
+
 	}
 
 	function loaddropdown(chk,val,id){
 		//alert('hii');
+
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pid').val(id);
@@ -1154,6 +1389,7 @@
 			$('#c_name').html(selectedText);
 			$('#priceopt_list').html('');
 			$('#membership_opt_list').html('');
+			$('#categoryid').val(id);
 		}
 		if(chk == 'priceopt'){
 			$('#priceid').val(id);
@@ -1183,6 +1419,7 @@
 			data:  {
 				'sid':id,
 				'chk':chk,
+				'type':'simple',
 				'user_type':'{{$user_type}}',
 			},
 			success:function(data){
@@ -1193,14 +1430,22 @@
 					$('#priceopt_list').html(data);
 				}
 				if(chk == 'priceopt'){
-					$('#membership_opt_list').html(data);
+					var data1 = data.split('~~');
+					$('#membership_opt_list').html(data1[0]);
+					$('#pricediv').html(data1[1]);
+				}
+				
+				if(chk != 'participat' && chk != 'mpopt'){
+					$('#adultcnt').val(0);
+					$('#childcnt').val(0);
+					$('#infantcnt').val(0);
+					$('#price').val(0);
 				}
 
 				if(chk == 'participat'){
 					$('#participate').html(data);
 					$('#pc_value').val(data);
 				}
-				
 			}
 		});
 	}
@@ -1214,9 +1459,11 @@
 		var price = parseInt($('#price').val());
 		var dis = $('#dis_amt_drop').val();
 	 	var tip = $('#tip_amt_drop').val();
+	 	
 	 	dis_val  = parseInt($('#dis_amt').val());
 		tip_val =parseInt($('#tip_amt').val());
 		tax = parseFloat($('#value_tax').val());
+		
 		if(tip != undefined){
 	 		if($('#tip_amt').val() != ''){
 		 		if(tip == '' || tip == '%'){
@@ -1249,11 +1496,11 @@
 	 	
 
 	 	if($('#price').val() != ''){
+
 	 		var tot = price + sub_tot_tip - sub_tot_dis;
+	 		//alert(tot);
 	 		if(dropval !=''){
 	 			tot = dropval * tot;
-	 		}else{
-	 			tot = $('#qty_dropdown').val() * tot;
 	 		}
 	 		
 	 		tot = tax + tot ; 
@@ -1266,6 +1513,45 @@
 			$('#checkount_qty').val(dropval);
 		}
 	}   
+
+	function getdis(){
+		var dis_val = 0;
+		var tip_val = 0;
+		var sub_tot = 0;
+		var sub_tot_tip = 0;
+		var sub_tot_dis = tax = 0;
+		var price = parseInt($('#priceajax').val());
+		var dis = $('#dis_amt_dropajax').val();
+	 	var tip = $('#tip_amt_dropajax').val();
+	 	
+	 	dis_val  = parseInt($('#dis_amtajax').val());
+		tip_val =parseInt($('#tip_amtajax').val());
+		if(tip != undefined){
+	 		if($('#tip_amtajax').val() != ''){
+		 		if(tip == '' || tip == '%'){
+		 			sub_tot_tip = (price * tip_val) /100;
+		 		}else{
+		 			sub_tot_tip = tip_val;
+		 		}
+		 		$('#tip_amt_valajax').val(sub_tot_tip);
+		 	}else{
+		 		$('#tip_amt_valajax').val('');
+		 	}
+	 	}
+
+	 	if(dis != undefined){
+	 		if($('#dis_amtajax').val() != ''){
+	 			if(dis == '' || dis == '%'){
+	 				sub_tot_dis = (price * dis_val) /100;
+		 		}else{
+		 			sub_tot_dis = dis_val;
+		 		}
+		 		$('#dis_amt_valajax').val(sub_tot_dis);
+	 		}else{
+	 			$('#dis_amt_valajax').val('');
+	 		}
+	 	}
+	}
 
 	$('.close-div').click(function() {
 		var name = $(this).parent('div').parent('div').attr('id');
@@ -2018,18 +2304,7 @@
 
 @include('layouts.footer')
 
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-	$( document ).ready(function() {
-	    jQuery.noConflict();
+<?php /*?><script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><?php */?>
 
-	    
-	});
-	
-	function editcart(sid,category){
-			$('#editcartitem'+sid).model('show');
-		}
-
-</script>
 
 @endsection

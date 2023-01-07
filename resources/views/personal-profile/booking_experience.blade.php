@@ -149,7 +149,34 @@ use App\UserFamilyDetail;
                                                 $tip = $extra_fees['tip'];
                                                 $discount = $extra_fees['discount'];
                                             }
-                                            $main_total = round((@$book_details['user_booking_detail']['price']  + $tip - $discount ) + (((@$book_details['user_booking_detail']['price']  + $tip - $discount ) * $tax ) /100));
+
+                                            $qty = '';
+                                            $totprice_for_this = 0;
+                                            
+                                            $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
+                                            $aprice_adu = $aprice_chi = $aprice_inf = 0;
+                                            if( !empty($aprice['adult']) ){ 
+                                                $aprice_adu = $aprice['adult']; 
+                                            }
+                                            if( !empty($aprice['child']) ){
+                                                $aprice_chi = $aprice['child']; 
+                                            }
+                                            if( !empty($aprice['infant']) ){
+                                                $aprice_inf = $aprice['infant']; 
+                                            }
+
+                                            $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
+                                            if( !empty($a['adult']) ){ 
+                                                $totprice_for_this += $aprice_adu * $a['adult'];
+                                            }
+                                            if( !empty($a['child']) ){
+                                                $totprice_for_this += $aprice_chi * $a['child'];
+                                            }
+                                            if( !empty($a['infant']) ){
+                                                $totprice_for_this += $aprice_inf * $a['infant'];
+                                            }
+
+                                            $main_total =  $totprice_for_this;
                                         ?>
                                             <div class="col-md-4 col-sm-6 ">
                                                 <div class="boxes_arts">
@@ -242,7 +269,11 @@ use App\UserFamilyDetail;
                                                        
                                                         <p>
                                                             <span>PARTICIPANTS:</span>
-                                                            <span>{{$book_details['user_booking_detail']['qty']}}
+                                                            <span><?php $a = json_decode($book_details['user_booking_detail']['qty']);
+                                                                if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+                                                            ?>
                                                             </span>
                                                         </p>
                                                         <p>

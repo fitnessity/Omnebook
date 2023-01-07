@@ -4569,11 +4569,6 @@ class LessonController extends Controller {
             $dis_amt_val = 0;
         }
 
-        if($request->has('checkount_qty') != ''){
-            $checkount_qty = $request->checkount_qty;
-        }else{
-            $checkount_qty = 0;
-        }
 
         if($request->has('pc_value') != ''){
             $parti_from_chkout_regi = array('id'=>$request->pc_regi_id, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value);
@@ -4581,7 +4576,17 @@ class LessonController extends Controller {
             $parti_from_chkout_regi = array();
         }
 
+        if($request->has('categoryid') != ''){
+            $categoryid = $request->categoryid;
+        }else{
+            $categoryid = '';
+        }
+
         if($request->has('chk')){
+            if($request->deletepid != $request->pid){
+                unset($cart_item["cart_item"][$request->deletepid]);
+            } 
+
             $chk = $request->chk;
         }else{
             $chk = '';
@@ -4635,7 +4640,7 @@ class LessonController extends Controller {
                         $p_image = $item->profile_pic;
                     }
                 }
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'qty_from_checkout_regi'=>$checkount_qty,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ));
+                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
@@ -4644,7 +4649,6 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
                                 $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
                                 $cart_item["cart_item"][$k]["tax"] = $tax;
-                                $cart_item["cart_item"][$k]["qty_from_checkout_regi"] = $checkount_qty;
                                 $cart_item["cart_item"][$k]["chk"] = $chk ;
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;

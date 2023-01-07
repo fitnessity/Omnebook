@@ -2,52 +2,13 @@
 @extends('layouts.header')
 @section('content')
 <style type="text/css">
-.qty .count {
-    color: #000;
-    display: inline-block;
-    vertical-align: top;
-    font-size: 22px;
-    line-height: 30px;
-    padding: 0 2px
-    ;min-width: 35px;
-    text-align: center;
-}
-.qty .plus {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    width: 30px;
-    height: 30px;
-    color: #000;
-    font: 30px/1 Arial,sans-serif;
-    text-align: center;
-    border-radius: 50%;
-    }
-.qty .minus {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    width: 30px;
-	color: #000;
-    height: 30px;
-    font: 30px/1 Arial,sans-serif;
-    text-align: center;
-    border-radius: 50%;
-    background-clip: padding-box;
-}
-.bg-darkbtn {
-    border: 1px solid #000;
-}
 /*Prevent text selection*/
 span{
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
 }
-.count {  
-    border: 0;
-    width: 2%;
-}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -55,8 +16,7 @@ input::-webkit-inner-spin-button {
 }
 input:disabled{
     background-color:white;
-}
-   
+}  
 </style>
 <?php
 	use App\UserBookingDetail;
@@ -331,31 +291,39 @@ $chk_found = '';
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
-					@php $i=0; @endphp
+					@php $i=0; $newary= []; @endphp
 					@if(is_array(@$pro_pic1))
 	                    @if(!empty(@$pro_pic1))
+	                    	@foreach(@$pro_pic1 as $img)
+	                    		@if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+	                    	 		@php $newary [] = $img; @endphp
+	                    	 	@endif
+	                    	@endforeach
 	                        @foreach(@$pro_pic1 as $img)
 	                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
-
-	                            <div class="bannar-size" @if($i>4) style="display:none" @endif>
-			                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-									<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
-									@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
-			                        </a>
-								</div>	                            
-								
+		                            <div @if(count(@$newary) == 1) class="single-banner" @elseif(count(@$newary) == 2) class="dual-banner" @elseif(count(@$newary) == 3) class="three-banner"  @else class="bannar-size" @endif @if($i>3) style="display:none" @endif>
+				                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+										<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
+										@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
+				                        </a>
+									</div>	                            
 								@endif
 								@php $i++; @endphp
 	                        @endforeach
 	                    @endif
 	                @else
 	                	@if(!empty($pro_pic1) && File::exists(public_path("/uploads/profile_pic/".$pro_pic1)))
-						<div class="bannar-size">
+	                	<div class="single-banner">
+							<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+								<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
+				            </a>
+						</div>
+						<!-- <div class="bannar-size">
 	                    	<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
 							<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
 							<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> 
 	                        </a>
-						</div>
+						</div> -->
                         @endif
                     @endif
               
@@ -1274,6 +1242,9 @@ $(document).ready(function() {
 	$('.showphotos').on('click', function(e) {
 		$('.firstfancyimg').click();
 	});
+});
+$('.firstfancyimg').click(function(){
+  $.fancybox.close();
 });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>

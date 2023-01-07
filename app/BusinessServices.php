@@ -110,6 +110,7 @@ class BusinessServices extends Model
         'exp_lat',
         'cancelbefore',
         'cancelbeforeint',
+        'know_before_you_go',
     ];
     
     public function businesscompanydetail() {
