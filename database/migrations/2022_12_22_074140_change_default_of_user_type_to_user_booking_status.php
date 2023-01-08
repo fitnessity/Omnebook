@@ -13,8 +13,9 @@ class ChangeDefaultOfUserTypeToUserBookingStatus extends Migration
      */
     public function up()
     {
+        DB::connection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         Schema::table('user_booking_status', function (Blueprint $table) {
-            $table->string('user_type')->default('user')->after('user_id');
+            $table->string('user_type')->default('user')->change();
         });
     }
 
@@ -25,8 +26,9 @@ class ChangeDefaultOfUserTypeToUserBookingStatus extends Migration
      */
     public function down()
     {
+        DB::connection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         Schema::table('user_booking_status', function (Blueprint $table) {
-             $table->string('user_type')->default('user')->after('user_id');
+             $table->string('user_type')->default('user')->change();
         });
     }
 }
