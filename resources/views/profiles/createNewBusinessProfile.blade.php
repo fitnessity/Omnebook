@@ -9918,6 +9918,27 @@ $('body').delegate('.subtab3','click',function(){
         $("#agesmaindiv"+i).append(ages_data);
     }
 
+    function add_another_price_duplicate_category(i){
+        alert('hii');
+        var fitnessity_fee = '{{$fitnessity_fee}}';
+
+        var cnt=$('#recurring_count').val();
+        /*alert(cnt);*/
+        var cnt_old=cnt;
+
+        cnt++;
+        alert(i)
+        alert(cnt)
+        $('#recurring_count').val(cnt);
+        $('#pricediv'+cnt_old).clone().attr('id', 'pricediv' + cnt).insertAfter('#pricediv'+cnt_old+':last');
+        $("#ext_int_div_1").clone(false).find("*[id]").andSelf().each(function() { $(this).attr("id", $(this).attr("id") + clone.id); });
+        
+        $('#pricediv' + cnt).prepend('<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div>'); 
+        $('#price_id_db'+cnt+i).val('');
+        $('#agesdiv'+cnt+i).find("input[name='cat_id_db']").val('');
+
+    }
+
     function getpricetitle(i,j){
 
         var x = document.getElementById("price_title"+i+j).value;

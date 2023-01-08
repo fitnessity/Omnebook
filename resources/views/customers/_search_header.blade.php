@@ -42,10 +42,10 @@ $(document).on('keyup', '#serchclient', function() {
             profile_img = '<img src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50">';            
           }
           customer_row.append('<div class="col-md-2">' + profile_img + '</div>');
-          customer_row.append('<div class="col-md-10 div-controller">' + 
+          customer_row.append('<div class="col-md-10 div-controller"><a style="color: black;" href="/business/' + {{$company_id}} +'/customers/'+ customer.id + '">' + 
               '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
               '<p class="pstyle liaddress">' + customer.email +'</p>' + 
-              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div>');
+              '<p class="pstyle liaddress">' + customer.phone_number + '</p></a></div>');
           
         })
 
