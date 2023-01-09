@@ -14,20 +14,7 @@
 						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | <a href="{{route('booking_request')}}">Booking Request </a></div>
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-12">
-						<div class="row">
-							<div class="col-md-4 col-xs-12 col-sm-3">
-								<a href="#" class="btn-nxt manage-cus-btn" data-toggle="modal" data-target="#newclient">Add New Client</a>
-							</div>
-							<div class="col-md-8">
-								<div class="manage-search serchcustomer">
-									<form>
-										<input type="text" name="serchclient" id="serchclient" placeholder="Search for client" autocomplete="off" value="">
-										<div id="option-box1"></div>
-										<button ><i class="fa fa-search"></i></button>
-									</form>
-								</div>
-							</div>
-						</div>
+						@include('customers._search_header', ['company_id' => $companyId])
 					</div>
 				</div>
 				<hr style="border: 3px solid black; width: 123%; margin-left: -38px; margin-top: 5px;">
@@ -146,12 +133,12 @@
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-4">
 										<div class="scheduled-location">
-											<label class="scheduler-titles">Remaining: </label> <span>{{$schedule_data->spots_left($filter_date)}}/{{$schedule_data->spots_available}}</span>
+											<label class="scheduler-titles">Remaining: </label> <span>{{$bd->pay_session}}/{{$schedule_data->spots_available}}</span>
 										</div>
 									</div>
 									<div class="col-md-1 col-xs-12 col-sm-4">
 										<div class="scheduled-location">
-											<label class="scheduler-titles">Expiration: </label><span> {{date('m/d/Y',strtotime($schedule_data->end_activity_date))}} </span>
+											<label class="scheduler-titles">Expiration: </label><span> {{date('m/d/Y',strtotime($bd->expired_at))}} </span>
 										</div>
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-12">
@@ -251,7 +238,7 @@
 							checkin:checkin,
 					},
 					success:function(response) {
-							window.location.reload();
+							// window.location.reload();
 					}
 			});
 	});

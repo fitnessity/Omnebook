@@ -35,6 +35,7 @@ use App\UserBookingDetail;
 use App\BusinessCompanyDetail;
 use App\Fit_Cart;
 use App\Sports;
+use App\Customer;
 use App\Payment;
 use App\UserFamilyDetail;
 use App\MailService;
@@ -111,6 +112,7 @@ class PaymentController extends Controller {
                 'bookedtime' =>$date->format('Y-m-d'),
             ); 
             $status = UserBookingStatus::create($orderdata);
+
             $lastid=$status->id;
             $businessuser =[];
             $cart = session()->get('cart_item');
@@ -208,13 +210,16 @@ class PaymentController extends Controller {
                 }
 
                 $activitylocation = BusinessServices::where('id',$pidval)->first();
-                
+                $price_detail = BusinessPriceDetails::find($priceid);
+                $activity_scheduler = BusinessActivityScheduler::find($act_schedule_id);
                 $act = array(
                     'booking_id' => $lastid,
                     'sport' => $pidval,
                     'price' => $encodeprice,
                     'qty' =>$encodeqty ,
                     'priceid' => $priceid,
+                    'pay_session' => $price_detail->pay_session,
+                    'expired_at' => $activity_scheduler->end_activity_date,
                     'bookedtime' =>date('Y-m-d',strtotime($sesdate)),
                     'booking_detail' => json_encode(array(
                             'activitytype' => $activitylocation->service_type,
@@ -233,6 +238,26 @@ class PaymentController extends Controller {
                     'transfer_provider_status' =>'unpaid',
                 );
                 $status = UserBookingDetail::create($act);
+
+                $customer = Customer::where(['business_id' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
+
+                if(!$customer){
+                    $customer = Customer::create([
+                        'business_id' => $activitylocation->cid,
+                        'fname' => Auth::user()->firstname,
+                        'lname' => (Auth::user()->lastname) ? Auth::user()->lastname : '',
+                        'username' => Auth::user()->username,
+                        'email' => Auth::user()->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => Auth::user()->phone_number,
+                        'birthdate' => Auth::user()->birthdate,
+                    ]);
+
+                    $customer->create_stripe_customer_id();
+                }
+
+
                 $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
                 $businessuser['businessuser'] = CompanyInformation::where('id', $activitylocation->cid)->first();
                 $businessuser = json_decode(json_encode($businessuser), true); 
@@ -254,6 +279,8 @@ class PaymentController extends Controller {
 
                 MailService::sendEmailBookingConfirmnew($BookingDetail);
             }
+
+
             
             // $transfer_amt_to_fit_acc = 0;
             // $transfer_amt_to_fit_acc = $fit_acc_amt + $fitness_acc_cust_fee_trans_amt;

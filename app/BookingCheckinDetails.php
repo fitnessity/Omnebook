@@ -43,4 +43,17 @@ class BookingCheckinDetails extends Model
         return $this->belongsTo(UserBookingDetail::class,'order_detail_id');
     }
 
+    public function order_detail(){
+        return $this->belongsTo(UserBookingDetail::class,'order_detail_id');
+    }
+
+    public function status_term(){
+        switch($this->checkin){
+            case 0:
+                return 'Unchecked';
+            case 1:
+                return 'Checked In';
+        }
+    }
+
 }

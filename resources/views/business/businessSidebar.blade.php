@@ -48,3 +48,11 @@
                	</div>
 			   <?php }?>
             </div>
+<script>
+  function linkJump(bstep) {
+      var cid = '<?=$companyId?>';
+     // if(cid!='') {
+          location.href = '/businessjumps/'+bstep+'/'+cid;
+     // }
+  }
+</script>

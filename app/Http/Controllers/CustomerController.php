@@ -92,7 +92,7 @@ class CustomerController extends Controller {
         $terms = $company->business_terms->first();
 
         $customerdata = $company->customers->find($id);
-
+        $visits = $customerdata->visits()->get();
 
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
@@ -102,7 +102,8 @@ class CustomerController extends Controller {
             'customerdata'=>$customerdata,
             'cardInfo'=>$customerdata->get_stripe_card_info(),
             'strpecarderror'=>$strpecarderror,
-            'terms'=> $terms ,
+            'terms'=> $terms,
+            'visits' => $visits,
         ]);
     }
 
