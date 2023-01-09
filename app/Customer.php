@@ -155,6 +155,25 @@ class Customer extends Authenticatable
         return  $bddata ;
     }
 
+    public function memberships(){
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        if($user){
+            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+                $query->select('id')
+                      ->from('business_services')
+                      ->where('cid', $company->id);
+            })->whereIn('booking_id', function($query) use ($customer, $user){
+                $query->select('id')
+                      ->from('user_booking_status')
+                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+            });
+            return $result->count();
+        }
+        return 0;
+    }
+
     public function active_memberships(){
         $user = $this->user;
         $customer = $this;
@@ -205,6 +224,50 @@ class Customer extends Authenticatable
         $this->save();
 
         return $customer->id;
+    }
+
+    public function total_spend(){
+        
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : null;
+
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+        });
+
+        return $booking_details->sum('provider_amount');
+    }
+
+    public function visits_count(){
+        
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : null;
+
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+        });
+        $booking_detail_ids = $booking_details->get()->map(function($item){
+            return $item->id;
+        });
+
+
+        return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checkin', 1)->count();
     }
 
     public function get_last_seen(){
