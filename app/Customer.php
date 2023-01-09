@@ -99,17 +99,6 @@ class Customer extends Authenticatable
         }
     }
 
-    function create_stripe_customer_id(){
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $customer = \Stripe\Customer::create([
-            'name' => $this->firstname . ' '. $this->lastname,
-            'email'=> $this->email,
-        ]);
-        $this->stripe_customer_id = $customer->id;
-        $this->save();
-        return $customer->id;
-    }
-
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
@@ -186,6 +175,22 @@ class Customer extends Authenticatable
         }
 
         
+    }
+
+    function create_stripe_customer_id(){
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $customer = \Stripe\Customer::create([
+            'name' => $this->fname . ' '. $this->lname,
+            'email'=> $this->email,
+        ]);
+        $this->stripe_customer_id = $customer->id;
+        $this->save();
+
+        return $customer->id;
+    }
+
+    public function get_last_seen(){
+        return $this->user;
     }
     
 }
