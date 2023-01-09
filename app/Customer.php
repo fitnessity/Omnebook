@@ -168,14 +168,31 @@ class Customer extends Authenticatable
                 $query->select('id')
                       ->from('user_booking_status')
                       ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
-            });
-            return $result->get();
-            // return 'yes';    
-
-            // UserBookingDetail::where('booking_id')
+            })->whereRaw('pay_session > 0');
+            return $result->count();
         }
+        return 0;
+    }
 
-        
+    public function expired_soon(){
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $now = Carbon::now();
+
+        if($user){
+            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+                $query->select('id')
+                      ->from('business_services')
+                      ->where('cid', $company->id);
+            })->whereIn('booking_id', function($query) use ($customer, $user){
+                $query->select('id')
+                      ->from('user_booking_status')
+                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+            })->whereDate('expired_at', '<',  $now->addDays(14));
+            return $result->count();
+        }
+        return 0;
     }
 
     function create_stripe_customer_id(){

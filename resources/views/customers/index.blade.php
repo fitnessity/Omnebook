@@ -111,7 +111,7 @@
 														<div class="col-md-1 col-xs-12 col-sm-2">
 															<div class="client-status">
 																<label>Expiring Soon: </label>
-																<span class="red-fonts">1 (TBD)</span>
+																<span class="red-fonts">{{$customer->expired_soon()}}</span>
 															</div>
 														</div>
 														<div class="col-md-2 col-xs-12 col-sm-1">
