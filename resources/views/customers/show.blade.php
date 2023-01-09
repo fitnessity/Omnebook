@@ -91,7 +91,7 @@
 										<label>Last Visited</label>
 									</div>
 									<div class="col-md-7 col-xs-7">
-										<span>04/07/2021</span>
+										<span>{{$customerdata->get_last_seen()}}</span>
 									</div>
 								</div>
 							</div>
@@ -165,7 +165,7 @@
 									<div class="manage-cust-box">
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
-												<label class="tab-titles">Quick Stats (TBD)</label>
+												<label class="tab-titles">Quick Stats</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
@@ -179,7 +179,7 @@
 												<label>Activities Booked</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span>5</span>
+												<span>{{$customerdata->memberships()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -187,7 +187,7 @@
 												<label>Money Spent</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span>$5,459</span>
+												<span>$ {{$customerdata->total_spend()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -195,7 +195,7 @@
 												<label>Number of Visits</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span>50</span>
+												<span>{{$customerdata->visits_count()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -203,7 +203,7 @@
 												<label>Active Memberships</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span class="green-fonts">1</span>
+												<span class="green-fonts">{{$customerdata->active_memberships()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -211,7 +211,7 @@
 												<label>Expiring Memberships</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span>0</span>
+												<span>{{$customerdata->expired_soon()}}</span>
 											</div>
 										</div>
 									</div>
