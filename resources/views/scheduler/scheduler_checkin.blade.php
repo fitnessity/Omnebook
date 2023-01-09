@@ -146,12 +146,12 @@
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-4">
 										<div class="scheduled-location">
-											<label class="scheduler-titles">Remaining: </label> <span>{{$schedule_data->spots_left($filter_date)}}/{{$schedule_data->spots_available}}</span>
+											<label class="scheduler-titles">Remaining: </label> <span>{{$bd->pay_session}}/{{$schedule_data->spots_available}}</span>
 										</div>
 									</div>
 									<div class="col-md-1 col-xs-12 col-sm-4">
 										<div class="scheduled-location">
-											<label class="scheduler-titles">Expiration: </label><span> {{date('m/d/Y',strtotime($schedule_data->end_activity_date))}} </span>
+											<label class="scheduler-titles">Expiration: </label><span> {{date('m/d/Y',strtotime($bd->expired_at))}} </span>
 										</div>
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-12">
@@ -251,7 +251,7 @@
 							checkin:checkin,
 					},
 					success:function(response) {
-							window.location.reload();
+							// window.location.reload();
 					}
 			});
 	});
