@@ -210,13 +210,16 @@ class PaymentController extends Controller {
                 }
 
                 $activitylocation = BusinessServices::where('id',$pidval)->first();
-                
+                $price_detail = BusinessPriceDetails::find($priceid);
+                $activity_scheduler = BusinessActivityScheduler::find($act_schedule_id);
                 $act = array(
                     'booking_id' => $lastid,
                     'sport' => $pidval,
                     'price' => $encodeprice,
                     'qty' =>$encodeqty ,
                     'priceid' => $priceid,
+                    'pay_session' => $price_detail->pay_session,
+                    'expired_at' => $activity_scheduler->end_activity_date,
                     'bookedtime' =>date('Y-m-d',strtotime($sesdate)),
                     'booking_detail' => json_encode(array(
                             'activitytype' => $activitylocation->service_type,
