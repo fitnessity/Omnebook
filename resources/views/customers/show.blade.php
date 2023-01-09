@@ -4,6 +4,7 @@
 
 @php 
 	use Carbon\Carbon;
+	use App\StaffMembers;
 @endphp
 
 
@@ -347,9 +348,7 @@
 										<div class="col-md-12 col-xs-12">
 											<div class="visit-table-data">
 												<label>Total Number of Visits:</label>
-												<span>50</span>
-												<label>Total Number of Hours:</label>
-												<span>125 hrs.</span>
+												<span>{{$customerdata->visits_count()}}</span>
 											</div>
 										</div>
 									</div>
@@ -358,39 +357,28 @@
 											<table id="visitstable" class="table table-striped table-bordered" style="width:100%">
 												<thead>
 													<tr>
-														<th> Date </th>
-														<th>Time </th>
+														<th>Date</th>
+														<th>Time</th>
 														<th>Program Name </th>
 														<th>Program Title </th>
 														<th>Status</th>
-														<th> Instructor</th>
+														<th>Instructor</th>
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>11/25/2022 </td>
-														<td>9:00 am</td>
-														<td> Valor MMA Personal Training Sessions</td>
-														<td>45 Minute Session</td>
-														<td> Checked In </td>
-														<td>Darryl Phipps</td>
-													</tr>
-													<tr>
-														<td>11/23/2022</td>
-														<td>9:30 am</td>
-														<td> Valor MMA Personal Training Sessions</td>
-														<td>45 Minute Session</td>
-														<td> Checked In </td>
-														<td>Darryl Phipps</td>
-													</tr>
-													<tr>
-														<td>11/20/2022 </td>
-														<td>12:00 pm</td>
-														<td> Valor MMA Personal Training Sessions</td>
-														<td>45 Minute Session</td>
-														<td> Checked In </td>
-														<td>Darryl Phipps</td>
-													</tr>
+													@foreach($visits as $visit)
+														<tr>
+															<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
+															<td>{{date('h:i A', strtotime($visit->order_detail->business_activity_scheduler->shift_start))}}</td>
+															<td>{{$visit->order_detail->business_services->program_name}}</td>
+															<td>{{$visit->order_detail->business_price_details->price_title}}</td>
+															
+															<td>
+															{{$visit->status_term()}}
+															</td>
+															<td>{{StaffMembers::getinstructorname($visit->order_detail->business_services->instructor_id)}}</td>
+														</tr>
+													@endforeach
 												</tbody>
 											</table>
 										</div>
