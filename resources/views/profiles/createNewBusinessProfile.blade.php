@@ -11929,12 +11929,6 @@ $("#frm_servicetitle_two1").on("change", function() {
             return false;
         }
     });    
-    function linkJump(bstep) {
-        var cid = '<?=$companyId?>';
-       // if(cid!='') {
-            location.href = '/businessjumps/'+bstep+'/'+cid;
-       // }
-    }
     $('#bck-nxt1').click(function () {
         $("#bstep2").val(1);
         $('#companyDetail').attr('action', '{{route('addbstep')}}');

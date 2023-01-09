@@ -15,6 +15,8 @@ use DB;
 use Validator;
 use Input;
 use App\Customer;
+use App\UserBookingDetail;
+use App\User;
 use App\CustomerFamilyDetail;
 
 use App\Miscellaneous;
@@ -54,6 +56,9 @@ class RegistrationController extends Controller
 
 	public function postRegistrationCustomer(Request $request) {
         $postArr = $request->all();
+        $user = Auth::user();
+        $company = $user->businesses->find($request->business_id);
+
         //print_r($postArr);exit;
         $rules = [
             'firstname' => 'required',
@@ -109,7 +114,7 @@ class RegistrationController extends Controller
                 $stripe_customer_id = $customer->id;  
 
                 $customerObj = New Customer();
-                $customerObj->business_id = $postArr['business_id'];
+                $customerObj->business_id = $company->id;
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $customerObj->username = $postArr['username'];
@@ -121,6 +126,24 @@ class RegistrationController extends Controller
                 $customerObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
                 $customerObj->stripe_customer_id = $stripe_customer_id;
 
+                $fitnessity_user = User::where('email', $postArr['email'])->first();
+
+                if($fitnessity_user){
+                    $ids = $fitnessity_user->orders()->get()->map(function($item){
+                        return $item->id;
+                    });
+
+                    $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+                        $query->select('id')
+                              ->from('business_services')
+                              ->where('cid', $company->id);
+                    })->whereIn('booking_id', $ids)->exists();
+
+                    if($result){
+                        $customerObj->user_id = $fitnessity_user->id;
+                    }
+                }
+                
                 $customerObj->save();
 
                 if ($customerObj) {    
