@@ -1578,7 +1578,7 @@ class SchedulerController extends Controller
                                                             <div class="select0service">
                                                                  <label>Date This Activaties?</label>
                                                                  <div class="date-activity-scheduler date-activity-check">
-                                                                      <input type="text"  id="managecalendarserviceajax" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="'.date("m/d/Y",strtotime($cart['sesdate'])).'" onchange="changedate('.$dtval.');">
+                                                                      <input type="text"  name="actfildate"  id="managecalendarserviceajax" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="'.date("m/d/Y",strtotime($cart['sesdate'])).'" onchange="changedate('.$dtval.');">
                                                                  </div>
                                                             </div>
                                                        </div>
@@ -1614,7 +1614,17 @@ class SchedulerController extends Controller
                               <input type="hidden" name="chk" value="activity_purchase">
                               <button type="submit" class="btn-nxt " >Submit</a>
                          </div>
-                    </div>';
+                    </div>
+                    <script type="text/javascript">
+                         $( function() {
+                            $( "#managecalendarserviceajax" ).datepicker( { 
+                              autoclose: true,
+                                minDate: 0,
+                                changeMonth: true,
+                                changeYear: true   
+                            } );
+                        } );
+                    </script>';
 
                $result .= '<div class="row">
                               <div class="col-lg-12">
