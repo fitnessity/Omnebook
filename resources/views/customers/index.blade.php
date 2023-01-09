@@ -76,7 +76,7 @@
 														<div class="col-md-2 col-xs-8 col-sm-2">
 															<div class="client-name">
 																<span>{{$customer->fname}} {{$customer->lname}}</span>
-																<p>Last Attended: 20/09/2019 (TBD)</p>
+																<p>Last Attended: {{$customer->get_last_seen()}}</p>
 															</div>
 														</div>
 														<div class="col-md-1 col-xs-12 col-sm-1">
@@ -329,7 +329,7 @@
                     },
                     complete: function () {
                     
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
+                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
                     },
                     success: function (response) {
                         $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
@@ -686,7 +686,7 @@
     });
 
     $(document).on('click', '#skip5_next', function () {
-    	window.location.href = '/viewcustomer/'+$('#cust_id').val();
+    	window.location.href = '/business/{{$company->id}}/customers/'+$('#cust_id').val();
     });
 
     function getAge() {

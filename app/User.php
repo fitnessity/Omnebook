@@ -208,6 +208,10 @@ class User extends Authenticatable
          return $this->hasMany(UserBookingStatus::class);
     }
 
+    public function orders(){
+        return $this->hasMany(UserBookingStatus::class, 'user_id')->where('user_type', 'user');   
+    }
+
     public function Review()
     {
         return $this->hasMany(Review::class);

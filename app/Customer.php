@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\CompanyInformation;
+use App\BookingCheckinDetails;
 use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -70,7 +71,7 @@ class Customer extends Authenticatable
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'email', 'email');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function BookingStatus()
@@ -190,7 +191,30 @@ class Customer extends Authenticatable
     }
 
     public function get_last_seen(){
-        return $this->user;
+        
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : null;
+
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+        });
+        $booking_detail_ids = $booking_details->get()->map(function($item){
+            return $item->id;
+        });
+
+
+        $checkin = BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->first();
+        if($checkin){
+            return $checkin->checkin_date;
+        }
     }
     
 }
