@@ -164,16 +164,19 @@ use App\UserFamilyDetail;
                                             if( !empty($aprice['infant']) ){
                                                 $aprice_inf = $aprice['infant']; 
                                             }
-
-                                            $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
-                                            if( !empty($a['adult']) ){ 
-                                                $totprice_for_this += $aprice_adu * $a['adult'];
-                                            }
-                                            if( !empty($a['child']) ){
-                                                $totprice_for_this += $aprice_chi * $a['child'];
-                                            }
-                                            if( !empty($a['infant']) ){
-                                                $totprice_for_this += $aprice_inf * $a['infant'];
+                                            
+                                            $pmt_json = json_decode(@$book_details['pmt_json'],true);
+                                            if($pmt_json['pmt_by_comp'] == 0){
+                                                $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
+                                                if( !empty($a['adult']) ){ 
+                                                    $totprice_for_this += $aprice_adu * $a['adult'];
+                                                }
+                                                if( !empty($a['child']) ){
+                                                    $totprice_for_this += $aprice_chi * $a['child'];
+                                                }
+                                                if( !empty($a['infant']) ){
+                                                    $totprice_for_this += $aprice_inf * $a['infant'];
+                                                }
                                             }
 
                                             $main_total =  $totprice_for_this;
@@ -290,7 +293,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="{{route('activity_schedule',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
+                                                            <a href="{{route('activity_schedule',['odid' => $book_details['user_booking_detail']['id'] ])}}" target="_blank">Schedule</a>
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
                                                         <!-- <div class="icon">

@@ -656,4 +656,20 @@ class BookingRepository
         return  $purchasefor.'~~'.$price_title;
     }
 
+    public function gettotalbooking($sid,$date){
+        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$sid)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($date)))->get();
+        $totalquantity = 0;
+        if(!empty($SpotsLeft) && count($SpotsLeft)>0){
+            foreach($SpotsLeft as $data){
+                $item = json_decode($data['qty'],true);
+                if($item['adult'] != '')
+                    $totalquantity += $item['adult'];
+                if($item['child'] != '')
+                    $totalquantity += $item['child'];
+                if($item['infant'] != '')
+                    $totalquantity += $item['infant'];
+            }
+        }
+        return $totalquantity;
+    }
 }

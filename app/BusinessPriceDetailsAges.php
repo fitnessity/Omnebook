@@ -28,4 +28,8 @@ class BusinessPriceDetailsAges extends Model
         'serviceid',
     ];
     
+    public function BusinessActivityScheduler()
+    {
+        return $this->hasMany(BusinessActivityScheduler::class ,'category_id');
+    }
 }

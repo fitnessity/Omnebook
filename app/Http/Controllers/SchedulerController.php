@@ -609,7 +609,9 @@ class SchedulerController extends Controller
           return redirect('manage-scheduler');
      }
 
-     public function activity_schedule(Request $request){
+     public function activity_schedule(Request $request, $odid = null){
+          $orderdata = UserBookingDetail::where('id',$odid)->first();
+          $service_data  =  $this->business_service_repo->findById($orderdata->sport);
           $filter_date = new DateTime();
           $shift = 1;
           if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -626,6 +628,9 @@ class SchedulerController extends Controller
           return view('scheduler.activity_schedule',[
                'days' => $days,
                'filter_date' => $filter_date,
+               'service_data' => $service_data,
+               'orderdata' => $orderdata,
+               /*'catelist' => $catelist,*/
           ]);
      }
 
@@ -639,11 +644,22 @@ class SchedulerController extends Controller
                     $output .= '<option value="'.$cl->id.'">'.$cl->category_title.'</option>';
                }
           }else if($request->chk == 'category'){
-               $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',$request->sid)->get();
+               $catedata = BusinessPriceDetailsAges::where('id',$request->sid)->first();
+               $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
                $output = '<option value="">Selct Price Title</option>';
                foreach($pricelist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
+               $dues_tax = $sales_tax = 0;
+               if($catedata->dues_tax != ''){
+                    $dues_tax = $catedata->dues_tax;
+               }
+
+               if($catedata->sales_tax != ''){
+                    $sales_tax = $catedata->sales_tax;
+               }
+
+               $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
           }else if($request->chk == 'priceopt'){
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
                $output = '<option value="">Selct Membership Type</option>';
@@ -673,9 +689,7 @@ class SchedulerController extends Controller
                
                $html .='<input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
                          <input type="hidden" name="childprice" id="'.$childtid.'" value="'.$total_price_val_child.'" >
-                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >';
-               
-              
+                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >'; 
           }else if($request->chk == 'participat'){
                $data = explode('~~',$request->sid);
                $data1 = explode('^^',$data[1]);
@@ -702,8 +716,7 @@ class SchedulerController extends Controller
                     $output .= $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')';
                }else{
                     $output .= $username .' ('.$age .' yrs)';
-               }
-               
+               }    
           }    
           
           if($html != ''){
@@ -1029,13 +1042,13 @@ class SchedulerController extends Controller
                               'price' => $invidualprice,
                               'qty' =>$qty ,
                               'priceid' => $priceid,
-                              'bookedtime' =>date('Y-m-d',strtotime($sesdate)),
+                              'contract_date' =>date('Y-m-d',strtotime($sesdate)),
                               'booking_detail' => json_encode(array(
                                       'activitytype' => $activitylocation->service_type,
                                       'numberofpersons' => 1,
                                       'activitylocation' => $activitylocation->activity_location,
                                       'whoistraining' => 'me',
-                                      'sessiondate' => $sesdate,
+                                      'sessiondate' => '',
                               )),
                               'extra_fees' => json_encode(array(
                                   'service_fee' => $service_fee,
@@ -1045,7 +1058,7 @@ class SchedulerController extends Controller
                                   'discount' => $discount,
 
                               )),
-                              'act_schedule_id' =>$act_schedule_id,
+                              'expired_duration' =>$act_schedule_id,
                               'payment_number' =>$encodepayment_number,
                               'participate' => '['.$encodeparticipate.']',
                               'transfer_provider_status' =>'unpaid',
@@ -1058,11 +1071,29 @@ class SchedulerController extends Controller
                     session()->forget('stripechargeid');
                     session()->forget('cart_item');
                }
-          }else if($request->cardinfo  == 'cash'){
+          }else{
+
                $retrun_cash = 0;
-               if($request->cash_amt_tender > $request->cash_amt ){
-                    $retrun_cash = $request->cash_change;
+               $cash_amt_tender = 0;
+               $pmt_by_check = 0;
+               $pmt_by_comp = 0;
+               $checknumber = '';
+               $grandtotal = $request->grand_total;
+               if($request->cardinfo == 'check'){
+                    $pmt_by_check = $request->check_amt;
+                    $checknumber  = $request->check_number;
+
+               }else if($request->cardinfo  == 'cash'){
+                    if($request->cash_amt_tender > $request->cash_amt ){
+                         $retrun_cash = $request->cash_change;
+                    }
+                    $cash_amt_tender = $request->cash_amt_tender;
+               }else{
+                    $pmt_by_comp = $grandtotal;
+                    $grandtotal = 0;
                }
+               
+              
                $date = new DateTime("now", new DateTimeZone('America/New_York') );
                $oid = $date->format('YmdHis');
                $digits = 3;
@@ -1075,17 +1106,18 @@ class SchedulerController extends Controller
                     'currency_code' => 'usd',
                     'stripe_id' => '',
                     'stripe_status' => '',
-                    'amount' => $request->grand_total,
+                    'amount' => $grandtotal,
                     'order_id' => $orderid,
                     'order_type' => 'checkout_register',
                     'bookedtime' =>$date->format('Y-m-d'),
                     'retrun_cash' =>$retrun_cash,
                     'pmt_json' =>json_encode(array(
-                                 'pmt_by_card' => 0,
-                                 'pmt_by_cash' =>   $request->cash_amt_tender ,
-                                 'pmt_by_check' => 0,
-                                 'pmt_by_comp' => 0,
-                         )),
+                         'pmt_by_card' => 0,
+                         'pmt_by_cash' =>   $cash_amt_tender ,
+                         'pmt_by_check' => $pmt_by_check,
+                         'pmt_by_comp' => $pmt_by_comp,
+                         'check_no' => $checknumber,
+                    )),
                );
                $status = UserBookingStatus::create($orderdata);
                $lastid=$status->id; 
@@ -1150,13 +1182,13 @@ class SchedulerController extends Controller
                          'price' => $encodeprice,
                          'qty' =>$encodeqty ,
                          'priceid' => $crt['priceid'],
-                         'bookedtime' =>date('Y-m-d',strtotime($crt['sesdate'])),
+                         'contract_date' =>date('Y-m-d',strtotime($crt['sesdate'])),
                          'booking_detail' => json_encode(array(
                               'activitytype' => @$activitylocation->service_type,
                               'numberofpersons' => 1,
                               'activitylocation' => @$activitylocation->activity_location,
                               'whoistraining' => 'me',
-                              'sessiondate' => $crt['sesdate'],
+                              'sessiondate' => '',
                          )),
                          'extra_fees' => json_encode(array(
                              'service_fee' => $service_fee,
@@ -1165,7 +1197,7 @@ class SchedulerController extends Controller
                              'tip' => $crt['tip'],
                              'discount' => $crt['discount'],
                          )),
-                         'act_schedule_id' =>$crt['actscheduleid'],
+                         'expired_duration' =>$crt['actscheduleid'],
                          'participate' =>'['.$encodeparticipate.']',
                          'transfer_provider_status' =>'unpaid',
                          'payment_number'=>$encodepayment_number,
@@ -1337,12 +1369,6 @@ class SchedulerController extends Controller
                BookingCheckinDetails::create($data); 
           }else{ BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->update(['checkin'=>$request->checkin, "checkin_date"=> date('Y-m-d')]); 
           }   
-          $booking_detail = UserBookingDetail::find($request->order_detail_id);
-          if($request->checkin == '1'){
-               $booking_detail->update(['pay_session' => $booking_detail->pay_session - 1]);
-          }else{
-               $booking_detail->update(['pay_session' => $booking_detail->pay_session + 1]);
-          }
      }
 
      public function editcartmodel(Request $request){
@@ -1352,11 +1378,13 @@ class SchedulerController extends Controller
           }
 
           $html = '';
+          $salestaxajax = 0;
+          $duestaxajax = 0;
           $result = '';
           $cart = [];
           if(in_array($request->code, array_keys($cart_item["cart_item"]))) {
                $cart = $cart_item["cart_item"][$request->code];
-              /* print_r( $cart);*/
+               //print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
                $program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $request->companyId])->get();
@@ -1374,6 +1402,13 @@ class SchedulerController extends Controller
                     $infantprice =  @$cartselectedpriceid['infant_cus_weekly_price']; 
                }
 
+               if($cartselectedcategoryid->sales_tax != ''){
+                    $salestaxajax = $cartselectedcategoryid->sales_tax ;
+               }
+
+               if($cartselectedcategoryid->dues_tax != ''){
+                    $duestaxajax = $cartselectedcategoryid->dues_tax ;
+               }
                if(!empty($cart['adult'])) {
                     if($cart['adult']['quantity']  != 0){
                         $aduqty  = $cart['adult']['quantity'];
@@ -1391,6 +1426,8 @@ class SchedulerController extends Controller
                         $aduqty  = $cart['infant']['quantity'];
                     }
                }
+
+               $actscheduleid = explode(' ' ,$cart["actscheduleid"]);
                $participate = $cart["participate_from_checkout_regi"]['pc_name'];
                $html='<div class="row">
                          <form method="post" action="'.route("addtocart").'">
@@ -1500,8 +1537,11 @@ class SchedulerController extends Controller
                                              <div class="check-client-info-box">
                                                   <div class="row">
                                                        <div class="col-md-4 col-sm-4 col-xs-12">
-                                                            <div class="select0service">
+                                                            <div class="select0service pricedollar">
                                                                  <label>Price </label>
+																 <div class="set-price">
+																	<i class="fas fa-dollar-sign"></i>
+																 </div>
                                                                  <input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="'.$cart["totalprice"].'" disabled>
                                                             </div>
                                                        </div>
@@ -1547,32 +1587,55 @@ class SchedulerController extends Controller
                                                                  </div>
                                                             </div>
                                                        </div>
-                                                  </div>
-                                                  
-                                                  <div class="row">
+                                                  </div>';
+                                                  $dval = "'duration',this,this.value";
+                                                  $html .='<div class="row">
                                                        <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <div class="col-md-6 col-sm-6 col-xs-6"> 
                                                                  <div class="tax-check">
                                                                       <label>Tax </label>
-                                                                      <input type="checkbox" id="taxajax" name="taxajax" value="1">
+                                                                      <input type="checkbox" id="taxajax" name="taxajax" value="1"';
+                                                                      if($cart["tax"] == 0 && $cart["tax"] == ''){
+                                                                           $html .='checked';
+                                                                      }
+                                                                      $html .='>
                                                                       <label for="tax"> No Tax</label><br>
                                                                  </div>
                                                             </div>
+                                                            <input type="hidden" name="duestax" id="duestaxajax" value="'.$duestaxajax.'">
+                                                            <input type="hidden" name="salestax" id="salestaxajax" value="'.$salestaxajax.'">
                                                        </div>
                                                        <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <div class="select0service">
                                                                  <label>Duration</label>
                                                                  <div class="row">
                                                                       <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                           <input type="text" class="form-control valid" id="duration_intajax" name=duration_intajax placeholder="12" value="1">
-                                                                      </div>';
-                                                                      $dval = "'duration',this,this.value";
-                                                                      $html .='<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
+                                                                           <input type="text" class="form-control valid" id="duration_intajax" name=duration_intajax placeholder="1" value="'.@$actscheduleid[0].'" onkeyup="changeduration();">
+                                                                      </div>
+                                                                      
+                                                                      <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
                                                                            <div class="choose-tip">
                                                                                 <select name="duration_dropdownajax" id="duration_dropdownajax" class="form-control" onchange="loaddropdownajax('.$dval.');">
-                                                                                     <option value="Day">Day(s) </option>
-                                                                                     <option value="Hour">Hour(s)</option>
-                                                                                     <option value="Minute">Minute(s)</option>
+                                                                                     <option value="Day(s)"';
+                                                                                     if(@$actscheduleid[1] == "Day(s)"){
+                                                                                      $html .='selected';
+                                                                                     }
+                                                                                     $html .='>Day(s) </option>
+                                                                                     <option value="Week(s)s"';
+                                                                                     if(@$actscheduleid[1] == "Week(s)"){
+                                                                                      $html .='selected';
+                                                                                     }
+                                                                                     $html .='>Week(s)</option>
+                                                                                     <option value="Month(s)"';
+                                                                                     if(@$actscheduleid[1] == "Month(s)"){
+                                                                                      $html .='selected';
+                                                                                     }
+                                                                                     $html .='>Month(s) </option>
+                                                                                     <option value="Year(s)"';
+                                                                                     if(@$actscheduleid[1] == "Year(s)"){
+                                                                                      $html .='selected';
+                                                                                     }
+                                                                                     $html .='>Year(s) </option>
                                                                                 </select>
                                                                            </div>
                                                                       </div>
@@ -1618,9 +1681,12 @@ class SchedulerController extends Controller
                               <input type="hidden" name="deletepid" id="deletepid" value="'.$cart['code'].'">
                               <input type="hidden" name="categoryid" id="categoryidajax" value="'.$cart['categoryid'].'">
                               <input type="hidden" name="chk" value="activity_purchase">
+                              <input type="hidden" name="value_tax" id="value_taxajax" value="'.$cart['tax'].'">
                               <button type="submit" class="btn-nxt " >Submit</a>
                          </div>
                     </div>
+                    <script src="{{ url(\'public/js/jquery-ui.min.js\') }}"></script>
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
                     <script type="text/javascript">
                          $( function() {
                             $( "#managecalendarserviceajax" ).datepicker( { 
@@ -1630,7 +1696,11 @@ class SchedulerController extends Controller
                                 changeYear: true   
                             } );
                         } );
-                    </script>';
+                         $("#taxajax").click(function () {
+                              get_total_ajax();
+                         });
+                    </script>
+                    ';
 
                $result .= '<div class="row">
                               <div class="col-lg-12">
@@ -1696,5 +1766,10 @@ class SchedulerController extends Controller
                          </div>';
           }
           return $html.'~~'.$result;
+     }
+
+
+     public function updateorderdetails(Request $request){
+
      }
 }
