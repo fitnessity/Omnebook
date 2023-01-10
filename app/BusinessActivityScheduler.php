@@ -46,6 +46,9 @@ class BusinessActivityScheduler extends Model
         'end_activity_date'
     ];
 
+    public function BusinessPriceDetailsAges(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
+    }
 
     public static function findById($id){
         return BusinessActivityScheduler::where('id',$id)->first();
@@ -234,5 +237,30 @@ class BusinessActivityScheduler extends Model
         $activity_cancel = ActivityCancel::where('cancel_date', $date->format("Y-m-d"))->where('schedule_id',$sid)->first();
 
         return @$activity_cancel->act_cancel_chk;
+    }
+
+    public function get_duration() {
+        $string = "";
+        $duration = date_parse(" +".$this->set_duration);
+        if($duration['relative']){
+            foreach($duration['relative'] as $key => $value){
+                if($value > 0){
+                    if($key == 'hour'){
+                        $key = 'hr';
+                    }
+
+                    if($key == 'minute'){
+                        $key = 'min';
+                    }
+
+                    if($key == 'second'){
+                        $key = 'sec';
+                    }
+                    $string .= " ".$value." ".$key;
+                }
+            }
+        }
+
+        return trim($string);
     }
 }

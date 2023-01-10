@@ -180,8 +180,11 @@ input:disabled{
 									<div class="check-client-info-box">
 										<div class="row">
 											<div class="col-md-4 col-sm-4 col-xs-12">
-												<div class="select0service">
+												<div class="select0service pricedollar">
 													<label>Price </label>
+													<div class="set-price">
+														<i class="fas fa-dollar-sign"></i>
+													</div>
 													<input type="text" class="form-control valid" id="price" placeholder="$0.00" disabled>
 												</div>
 											</div>
@@ -249,9 +252,10 @@ input:disabled{
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
 															<div class="choose-tip">
 																<select name="duration_dropdown" id="duration_dropdown" class="form-control" onchange="loaddropdown('duration',this,this.value);">
-																	<option value="Day">Day(s) </option>
-																	<option value="Hour">Hour(s)</option>
-																	<option value="Minute">Minute(s)</option>
+																	<option value="Day(s)">Day(s) </option>
+																	<option value="Week(s)">Week(s)</option>
+																	<option value="Month(s)">Month(s) </option>
+																	<option value="Year(s)">Year(s) </option>
 																</select>
 															</div>
 														</div>
@@ -383,6 +387,8 @@ input:disabled{
 														<label for="tax"> No Tax</label><br>
 													</div>
 												</div>
+												<input type="hidden" name="duestax" id="duestax" value="">
+                     							<input type="hidden" name="salestax" id="salestax" value="">
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
 													<span id="taxvalspan">$0.00</span>
 												</div>
@@ -961,7 +967,6 @@ input:disabled{
 					</div>
 				</div>
 				<div class="modal-body body-tbm editcartdiv">
-
 				</div>
             </div>
 		</div>
@@ -1110,7 +1115,6 @@ input:disabled{
 			}
 	    });
 	});
-
 </script>
 
 <script>
@@ -1148,11 +1152,9 @@ input:disabled{
 			}
 	    });
 	});
-
 </script>
 
 <script type="text/javascript">
-	
 	$(document).on('click', '.editcartitemaks', function () {
 		var code = $(this).attr('data-code');
 		var pageid = $(this).attr('data-pageid');
@@ -1175,16 +1177,8 @@ input:disabled{
 		});
 
 	});
-
-	function editcart(sid,category){
-		alert('call');
-		jQuery.noConflict();
-		$('#editcartitempp').modal('show');
-		//jQuery('#editcartitempp').model('show');
-		//$('#editcartitem'+sid).model('show');
-	}
-
 </script>
+
 <script type="text/javascript">
 	function saveparticipate(){
 		$('#qty').html('');
@@ -1303,6 +1297,32 @@ input:disabled{
 		$('#priceajax').val(totalprice);
 		$('#pricetotalajax').val(totalprice);
 		$('.participateclosebtnajax').click();
+		get_total_ajax();
+	}
+
+	function get_total_ajax() {
+		tax =salestax= duestax= 0;
+		salestax = $('#salestaxajax').val();
+		duestax = $('#duestaxajax').val();
+		if(salestax == ''){
+			salestax = 0;
+		}
+		if(duestax == ''){
+			duestax = 0;
+		}
+		var price = parseInt($('#priceajax').val());
+		if($("#taxajax").is(":checked")){
+ 			tax = 0;
+ 			$('#value_taxajax').val(0);
+ 		}else{
+ 			if(duestax != 0){
+	 			tax += (price*duestax)/100;
+	 		}
+	 		if(salestax != 0){
+	 			tax += (price*salestax)/100;
+	 		}
+	 		$('#value_taxajax').val(tax);
+ 		}
 	}
 
 	function changevalue(){
@@ -1319,7 +1339,11 @@ input:disabled{
 		}
 	}
 
+	function  changeduration() {
+		$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ $('#duration_dropdownajax').val());
+	}
 	function loaddropdownajax(chk,val,id){
+		alert(chk);
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pidajax').val(id);
@@ -1354,7 +1378,12 @@ input:disabled{
 					$('#category_listajax').html(data);
 				}
 				if(chk == 'category'){
-					$('#priceopt_listajax').html(data);
+					var data1 = data.split('~~');
+					$('#priceopt_listajax').html(data1[0]);
+
+					var splittax =  data1[1].split('^^');
+					$('#duestaxajax').val(splittax[0]);
+					$('#salestaxajax').val(splittax[1]);
 				}
 				if(chk == 'priceopt'){
 					$('#pricedivajax').html('');
@@ -1427,7 +1456,13 @@ input:disabled{
 					$('#category_list').html(data);
 				}
 				if(chk == 'category'){
-					$('#priceopt_list').html(data);
+					var data1 = data.split('~~');
+					$('#priceopt_list').html(data1[0]);
+
+					var splittax =  data1[1].split('^^');
+					$('#duestax').val(splittax[0]);
+					$('#salestax').val(splittax[1]);
+
 				}
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
@@ -1455,15 +1490,21 @@ input:disabled{
 		var tip_val = 0;
 		var sub_tot = 0;
 		var sub_tot_tip = 0;
-		var sub_tot_dis = tax = 0;
+		var sub_tot_dis = tax =salestax= duestax= 0;
 		var price = parseInt($('#price').val());
 		var dis = $('#dis_amt_drop').val();
 	 	var tip = $('#tip_amt_drop').val();
 	 	
 	 	dis_val  = parseInt($('#dis_amt').val());
 		tip_val =parseInt($('#tip_amt').val());
-		tax = parseFloat($('#value_tax').val());
-		
+		salestax = $('#salestax').val();
+		duestax = $('#duestax').val();
+		if(salestax == ''){
+			salestax = 0;
+		}
+		if(duestax == ''){
+			duestax = 0;
+		}
 		if(tip != undefined){
 	 		if($('#tip_amt').val() != ''){
 		 		if(tip == '' || tip == '%'){
@@ -1496,7 +1537,20 @@ input:disabled{
 	 	
 
 	 	if($('#price').val() != ''){
-
+	 		if($("#tax").is(":checked")){
+	 			tax = 0;
+	 			$('#value_tax').val(0);
+	 		}else{
+	 			if(duestax != 0){
+		 			tax += (price*duestax)/100;
+		 		}
+		 		if(salestax != 0){
+		 			tax += (price*salestax)/100;
+		 		}
+		 		$('#value_tax').val(tax);
+	 		}
+	 		
+	 		$('#taxvalspan').html('$'+tax);
 	 		var tot = price + sub_tot_tip - sub_tot_dis;
 	 		//alert(tot);
 	 		if(dropval !=''){
@@ -1681,20 +1735,6 @@ input:disabled{
 	});
 
 	$("#tax").click(function () {
-		var tax = '';
-        if ($("#tax").is(":checked")) {
-        	if($('#price').val() != ''){
-        		tax = '$' + (parseFloat($('#price').val()) * '{{ $tax->site_tax}}')/100 ;
-        		$('#value_tax').val((parseFloat($('#price').val()) * '{{ $tax->site_tax}}')/100 );
-        	}else{
-        		tax = '$0.00';
-        		$('#value_tax').val(0);
-        	}
-            $("#taxvalspan").html(tax);
-        } else {
-            $("#taxvalspan").html('$0.00');
-            $('#value_tax').val(0);
-        }
         gettotal('','');
     });
 
@@ -2263,6 +2303,7 @@ input:disabled{
         });
     }
 </script>
+
 <script>
     $( function() {
         $( "#managecalendarservice" ).datepicker( { 
@@ -2272,16 +2313,8 @@ input:disabled{
             changeYear: true   
         } );
     } );
-
-    $( function() {
-        $( "#managecalendarserviceajax" ).datepicker( { 
-        	autoclose: true,
-            minDate: 0,
-            changeMonth: true,
-            changeYear: true   
-        } );
-    } );
 </script>
+
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 

@@ -970,13 +970,14 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
     Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
     Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
-    Route::get('activity_schedule', 'SchedulerController@activity_schedule')->name('activity_schedule');
+    Route::any('activity_schedule/{odid?}', 'SchedulerController@activity_schedule')->name('activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::post('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
     Route::post('check_in_activity', 'SchedulerController@check_in_activity')->name('check_in_activity');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
+    Route::post('updateorderdetails', 'SchedulerController@updateorderdetails')->name('updateorderdetails');
 });
 
 Route::get('email', 'SchedulerController@email')->name('email');

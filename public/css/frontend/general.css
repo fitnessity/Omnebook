@@ -23759,3 +23759,15 @@ span.Zebra_DatePicker_Icon_Wrapper {
     border: 0;
     width: 2%;
 }
+.pricedollar{
+	position: relative;
+}
+.pricedollar .set-price{
+	position: absolute;
+	top: 32px;
+	left: 10px;
+	font-size: 13px;
+}
+.select0service.pricedollar input{
+	padding: 6px 20px;
+}
