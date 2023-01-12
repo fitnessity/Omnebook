@@ -119,18 +119,22 @@ class PaymentController extends Controller {
             $cartnew = [];
                 
             $cnt=0;
-            foreach($cart['cart_item'] as $c)
+            foreach($cart['cart_item'] as $key=>$c)
             {
-                $cartnew[$cnt]['name']= $c['name'];
-                $cartnew[$cnt]['code']= $c['code'];
-                $cartnew[$cnt]['priceid']= $c['priceid'];
-                $cartnew[$cnt]['sesdate']= $c['sesdate'];
-                $cartnew[$cnt]['adult']= $c['adult'];
-                $cartnew[$cnt]['child']= $c['child'];
-                $cartnew[$cnt]['infant']= $c['infant'];
-                $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
-                $cartnew[$cnt]['participate']= $c['participate'];
-                $cnt++;
+                if($c['chk'] != 'activity_purchase') {
+                    $cartnew[$cnt]['name']= $c['name'];
+                    $cartnew[$cnt]['code']= $c['code'];
+                    $cartnew[$cnt]['priceid']= $c['priceid'];
+                    $cartnew[$cnt]['sesdate']= $c['sesdate'];
+                    $cartnew[$cnt]['adult']= $c['adult'];
+                    $cartnew[$cnt]['child']= $c['child'];
+                    $cartnew[$cnt]['infant']= $c['infant'];
+                    $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
+                    $cartnew[$cnt]['participate']= $c['participate'];
+                    $cnt++;
+
+                    unset($cart['cart_item'][$key]);
+                }
             }   
            
             $metadatapro = json_decode($data['metadata']['pro_id']);
@@ -298,7 +302,7 @@ class PaymentController extends Controller {
              
             session()->forget('stripepayid');
             session()->forget('stripechargeid');
-            session()->forget('cart_item');
+            //session()->forget('cart_item');
         }
 
             
@@ -352,18 +356,21 @@ class PaymentController extends Controller {
            $cart = session()->get('cart_item');
            $cartnew = [];
            $cnt=0;
-           foreach($cart['cart_item'] as $c)
-           {
-                $cartnew[$cnt]['name']= $c['name'];
-                $cartnew[$cnt]['code']= $c['code'];
-                $cartnew[$cnt]['priceid']= $c['priceid'];
-                $cartnew[$cnt]['sesdate']= $c['sesdate'];
-                $cartnew[$cnt]['adult']= $c['adult'];
-                $cartnew[$cnt]['child']= $c['child'];
-                $cartnew[$cnt]['infant']= $c['infant'];
-                $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
-                $cartnew[$cnt]['participate']= $c['participate'];
-                $cnt++;
+           foreach($cart['cart_item'] as $key=>$c)
+           {    
+                if($c['chk'] != 'activity_purchase') {
+                    $cartnew[$cnt]['name']= $c['name'];
+                    $cartnew[$cnt]['code']= $c['code'];
+                    $cartnew[$cnt]['priceid']= $c['priceid'];
+                    $cartnew[$cnt]['sesdate']= $c['sesdate'];
+                    $cartnew[$cnt]['adult']= $c['adult'];
+                    $cartnew[$cnt]['child']= $c['child'];
+                    $cartnew[$cnt]['infant']= $c['infant'];
+                    $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
+                    $cartnew[$cnt]['participate']= $c['participate'];
+                    $cnt++;
+                    unset($cart['cart_item'][$key]);
+                }
            } 
 
            foreach($cartnew as $crt){
@@ -443,7 +450,7 @@ class PaymentController extends Controller {
 
            session()->forget('stripepayid');
            session()->forget('stripechargeid');
-           session()->forget('cart_item');
+           //session()->forget('cart_item');
            return view('jobpost.confirm-payment-instant');
         }else{
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));

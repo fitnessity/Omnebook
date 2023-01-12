@@ -971,6 +971,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
     Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
     Route::any('activity_schedule/{odid?}', 'SchedulerController@activity_schedule')->name('activity_schedule');
+    Route::any('all_activity_schedule', 'SchedulerController@all_activity_schedule')->name('all_activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');

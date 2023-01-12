@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-7 col-md-offset-3-custom">
 			<div class="valor-mix-title">
-				<h2>{{$orderdata->business_services->program_name}}</h2>
+				<h2></h2>
 				<p>Booking Schedule</p>
 			</div>
 			<div class="member-txt">
@@ -20,14 +20,14 @@
 			<div class="activity-schedule-tabs">
 				<ul class="nav nav-tabs" role="tablist">
 					@foreach($service_type_ary as $st)
-					<li @if($orderdata->business_services->service_type == $st ) class="active" @endif>
-						<a class="nav-link" data-toggle="tab" href="#tabs-{{$st}}" role="tab" aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
+					<li @if($servicetype == $st ) class="active" @endif>
+						<a class="nav-link" href="{{$request->fullUrlWithQuery(['stype' => $st])}}"  aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
 					</li>
 					@endforeach
 				</ul>
 				<div class="tab-content">
 					@foreach($service_type_ary as $st)
-					<div class="tab-pane @if($orderdata->business_services->service_type == $st ) active @endif" id="tabs-{{$st}}" role="tabpanel">
+					<div class="tab-pane @if($servicetype == $st ) active @endif" id="tabs-{{$st}}" role="tabpanel">
 						<div class="row">
 							@foreach ($days as $date)
 								@php
@@ -55,9 +55,10 @@
 									</div>
 								</div>
 							</div>
-							@if($orderdata->business_services->service_type == $st ) 
+							@if($servicetype == $st )
+								@foreach($orderdata as $odt)
 								@php 
-									$catelist = $orderdata->business_price_details->business_price_details_ages;
+									$catelist = $odt->business_price_details->business_price_details_ages;
 									$sche_ary = [];
 									foreach($catelist->BusinessActivityScheduler as $sc){
 										if($sc->end_activity_date > $filter_date->format('Y-m-d')){
@@ -67,20 +68,19 @@
 										}
 									} 
 								@endphp
-								@if( $orderdata->act_schedule_id == '' )
-							 	<div class="row">
+								<div class="row">
 									<div class="col-md-6 col-sm-6 col-xs-12">
 										<div class="classes-info">
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
-													<h2>{{$orderdata->business_services->sport_activity}}</h2>
-													<label>Program Name: </label> <span> {{$orderdata->business_services->program_name}}</span>
+													<h2>{{$odt->business_services->sport_activity}}</h2>
+													<label>Program Name: </label> <span> {{$odt->business_services->program_name}}</span>
 												</div>
 												<div class="col-md-12 col-xs-12">
 													<label>Category Name: </label> <span>{{$catelist->category_title}}</span>
 												</div>
 												<div class="col-md-12 col-xs-12">
-													<label>Instructor: </label> <span>@if($orderdata->business_services->StaffMembers != '') {{$orderdata->business_services->StaffMembers->name}} @endif</span>
+													<label>Instructor: </label> <span>@if($odt->business_services->StaffMembers != '') {{$odt->business_services->StaffMembers->name}} @endif</span>
 												</div>
 											</div>
 										</div>
@@ -98,7 +98,7 @@
 												@endphp
 														<div class="col-md-4 col-xs-12">
 															<div class="classes-time">
-																<button class="post-btn activity-scheduler"  onclick="addtimedate({{$scary->id}});">{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
+																<button class="post-btn activity-scheduler"  onclick="addtimedate({{$scary->id}},{{$odt->id}});">{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
 																<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
 															</div>
 														</div>
@@ -112,8 +112,8 @@
 										<div class="checkout-sapre-tor">
 										</div>
 									</div>
-								</div>
-								@endif
+								</div> 
+								@endforeach
 							@endif
 						</div>
 					</div>
@@ -130,7 +130,7 @@
 		$( this ).parent( 'li' ).addClass( 'active' );
 	});
 
-	function addtimedate(sid){
+	function addtimedate(sid,odid){
 		let text = "Are You Sure To Book This Date And Time?";
 		if (confirm(text) == true) {
 		   	$.ajax({
@@ -144,7 +144,7 @@
 					type: 'POST',
 					date:'{{$filter_date->format("Y-m-d")}}',
 					timeid:sid,
-					odid:'{{$odid}}',
+					odid:odid,
 				},
 				success: function (response) { /*alert(response);*/
 					window.location.reload();

@@ -16,7 +16,7 @@ class UserBookingStatus extends Model
     protected $table = 'user_booking_status';
 	
 	protected $fillable = [
-        'booking_type', 'user_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
+        'booking_type', 'user_id', 'customer_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
 		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
     ];
 

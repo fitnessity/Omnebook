@@ -67,32 +67,7 @@ class BookingController extends Controller {
 
     public function bookinginfo(Request $request ,$tabval  = null) {
         $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
         
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -100,209 +75,57 @@ class BookingController extends Controller {
         }
         
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
-            foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if($business_services != ''){
-                    if($business_services->service_type == 'individual'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                            }
-                        }    
-                    }
-                }
-            }
-        }
+        $BookingDetail =  $this->bookings->getalldata('individual');
         $currentbookingstatus =[];
         $currentbookingstatus = $this->bookings->getcurrenttabdata('individual');
        //print_r($currentbookingstatus );exit;
         /*   print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking-info', [ 'BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
+        return view('personal-profile.booking-info', [ 'Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 
-     public function gym_studio_page(Request $request ,$tabval  = null){
+    public function gym_studio_page(Request $request ,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        
+    
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
-            foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
-                if($business_services != ''){
-                    if($business_services->service_type == 'classes'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id,$book_value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }
-
+        $BookingDetail =  $this->bookings->getalldata('classes');
 
         $currentbookingstatus =[];
         $currentbookingstatus = $this->bookings->getcurrenttabdata('classes');
        
        /* print_r($BookingDetail);exit;*/
-        return view('personal-profile.booking_gym_studio', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
+        return view('personal-profile.booking_gym_studio', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 
     public function experience_page(Request $request ,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
+       
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
-            foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
-                if($business_services != ''){
-                    if($business_services->service_type == 'experience'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                            }
-                        }
-                    } 
-                }
-            }
-        }
+        $BookingDetail =  $this->bookings->getalldata('experience');
 
         $currentbookingstatus =[];
         $currentbookingstatus = $this->bookings->getcurrenttabdata('experience');
        
         //print_r($currentbookingstatus);exit;
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_experience', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
+       return view('personal-profile.booking_experience', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 
 
     public function events_page(Request $request,$tabval  = null){
         $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
         
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -310,270 +133,30 @@ class BookingController extends Controller {
         }
 
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'simpleorder'])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->get(); 
-            foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->orderBy('created_at','desc')->first();
-                if($business_services != ''){
-                    if($business_services->service_type == 'events'){
-                        $BookingDetail_1 = $this->bookings->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $book_value->sport){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                            }
-                        }
-                    } 
-                }
-            }
-        }
-
+        $BookingDetail =  $this->bookings->getalldata('events');
+    
         $currentbookingstatus =[];
         $currentbookingstatus = $this->bookings->getcurrenttabdata('events');
         /*print_r($BookingDetail);exit;*/
-       return view('personal-profile.booking_events', ['BookingDetail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbookingstatus'=>$currentbookingstatus]);
+       return view('personal-profile.booking_events', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 
     public function getreceiptmodel(Request $request) {
-        $booking_status = UserBookingStatus::where('id',$request->orderid)->first();
-        $booking_details = UserBookingDetail::where('id',$request->orderdetailid)->first();
-        $business_services = BusinessServices::where('id',@$booking_details->sport)->first();
-        $businessuser= CompanyInformation::where('id', @$business_services->cid)->first();
-        $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$booking_details->priceid,'serviceid' =>@$booking_details->sport])->first();
-        $schedulerdata = BusinessActivityScheduler::where(['serviceid' => @$booking_details->sport ,'id' =>@$booking_details->act_schedule_id ])->first();
-
-        if(@$businessuser->logo != "") {
-            if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$businessuser->logo)) {
-               $com_pic = url('/public/uploads/profile_pic/thumb/' . @$businessuser->logo);
-            }else {
-               $com_pic = url('/public/images/service-nofound.jpg');
-            }
-
-        }else{ $com_pic = '/public/images/service-nofound.jpg'; }
-
-        $SpotsLeftdis = 0;
-        $SpotsLeft = [];
-        $SpotsLeft = UserBookingDetail::where(['act_schedule_id'=>@$booking_details->act_schedule_id])->whereDate('bookedtime', '=', @$booking_details->bookedtime)->get()->toArray();
-        
-        $totalquantity = 0;
-        foreach($SpotsLeft as $data1){
-           
-            $item = json_decode($data1['qty'],true);
-            if($item['adult'] != '')
-                $totalquantity += $item['adult'];
-            if($item['child'] != '')
-                $totalquantity += $item['child'];
-            if($item['infant'] != '')
-                $totalquantity += $item['infant'];
-        }
-        if( @$schedulerdata['spots_available'] != ''){
-            $SpotsLeftdis =  @$schedulerdata['spots_available'] - $totalquantity;
-        }
-
-        $time='';
-        if(@$schedulerdata->set_duration != ''){
-            $tm = explode(' ',$schedulerdata->set_duration);
-            $hr=''; $min=''; $sec='';
-            if($tm[0]!=0){ $hr=$tm[0].' hour '; }
-            if($tm[2]!=0){ $min=$tm[2].' minutes '; }
-            if($tm[4]!=0){ $sec=$tm[4].' seconds'; }
-            if($hr!='' || $min!='' || $sec!='')
-            { $time =  $hr.$min.$sec; } 
-        }
-
-
-        $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$request->orderid)->get();
-        $sub_totprice = 0;
-        foreach( $booking_details_for_sub_total as $bds){
-            $aprice = json_decode($bds->price,true); 
-            $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
-            if( !empty($aprice['adult']) ){ 
-                $sub_price_adu = $aprice['adult']; 
-            }
-            if( !empty($aprice['child']) ){
-                $sub_price_chi = $aprice['child']; 
-            }
-            if( !empty($aprice['infant']) ){
-                $sub_price_inf = $aprice['infant']; 
-            }
-
-            $a = json_decode($bds->qty,true);
-            if( !empty($a['adult']) ){  
-                $sub_totprice += $sub_price_adu * $a['adult'];
-            }
-            if( !empty($a['child']) ){
-                $sub_totprice += $sub_price_chi * $a['child'];
-            }
-            if( !empty($a['infant']) ){ 
-                $sub_totprice += $sub_price_inf * $a['infant'];
-            }
-        }
-
-        $tot_amount_cart = 0;
-        if(@$booking_status->amount != ''){
-            $tot_amount_cart = @$booking_status->amount;
-        }
-        
-        $taxval = 0;
-        $taxval = $tot_amount_cart - $sub_totprice; 
-        
-        $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
-
-        $aprice = json_decode(@$booking_details->price,true); 
-        $aprice_adu = $aprice_chi = $aprice_inf = 0;
-        if( !empty($aprice['adult']) ){ 
-            $aprice_adu = $aprice['adult']; 
-        }
-        if( !empty($aprice['child']) ){
-            $aprice_chi = $aprice['child']; 
-        }
-        if( !empty($aprice['infant']) ){
-            $aprice_inf = $aprice['infant']; 
-        }
-
-        $qty = '';
-        $totprice_for_this = 0;
-        $a = json_decode(@$booking_details->qty,true);
-        if( !empty($a['adult']) ){ 
-            $qty .= 'Adult: '.$a['adult']; 
-            $totprice_for_this += $aprice_adu * $a['adult'];
-        }
-        if( !empty($a['child']) ){
-            $qty .= '<br> Child: '.$a['child']; 
-            $totprice_for_this += $aprice_chi * $a['child'];
-        }
-        if( !empty($a['infant']) ){
-            $qty .= '<br>Infant: '.$a['infant']; 
-            $totprice_for_this += $aprice_inf * $a['infant'];
-        }
-
-        $main_total =  $tax_for_this + $totprice_for_this;
-
-        $parti_data = '';
-        $ap = json_decode(@$booking_details->participate,true); 
-        if(!empty($ap)){
-            foreach($ap as $data){
-                if($data['from'] == 'family'){
-                    $family = UserFamilyDetail::where('id',$data['id'])->first();
-                    $parti_data .= @$family->first_name.' '.@$family->last_name.'<br>';
-                }else{ 
-                    $parti_data .= Auth::user()->firstname.' '.Auth::user()->lastname.'<br>'; 
-                } 
-            } 
-        }
-
-
-        if(@$booking_status->order_id != ''){
-            $order_id = @$booking_status->order_id;
-        }else{ 
-           $order_id =  "—"; 
-        }
-
-        if(@$schedulerdata->spots_available != ''){
-            $to_rem = $SpotsLeftdis.' / '.@$schedulerdata->spots_available;
-        }else{ 
-            $to_rem = "—"; 
-        }
-
-        if(@$business_services->program_name != ''){
-            $program_name = @$business_services->program_name;
-        }else{
-            $program_name = "—"; 
-        }
-
-        if(@$schedulerdata->end_activity_date != ''){
-            $end_activity_date = date('d-m-Y', strtotime(@$schedulerdata->end_activity_date));
-        }else{ 
-            $end_activity_date = "—"; 
-        }
-
-        if(@$booking_details->created_at != ''){
-            $created_at = date('d-m-Y', strtotime(@$booking_details->created_at));
-        }else{ 
-            $created_at = "—"; 
-        }
-
-        if(@$booking_details->bookedtime != ''){
-            $bookedtime = date('d-m-Y', strtotime(@$booking_details->bookedtime));
-        }else{ 
-            $bookedtime = "—"; 
-        }
-
-        if(Auth::user()->firstname != '' && Auth::user()->lastname != ''){
-            $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
-        }else{ 
-            $nameofbookedby = "—"; 
-        }
-
-        if(@$business_services->sport_activity != ''){
-            $sport_activity = $business_services->sport_activity;
-        }else{ 
-            $sport_activity=  "—"; 
-        } 
-
-        if(@$business_services->select_service_type != ''){
-            $select_service_type = $business_services->select_service_type;
-        }else{ 
-            $select_service_type=  "—"; 
-        }
-        if(@$business_services->activity_for != ''){
-            $activity_for = $business_services->activity_for;
-        }else{ 
-            $activity_for=  "—"; 
-        }
-        if(@$business_services->activity_location != ''){
-            $activity_location = $business_services->activity_location;
-        }else{ 
-            $activity_location=  "—"; 
-        }
-
-        if(@$business_services->activity_location != ''){
-            $price_opt = @$BusinessPriceDetails->price_title.' - '.@$BusinessPriceDetails->pay_session.' Sessions';
-        }else{ 
-            $price_opt=  "—"; 
-        }
-
-        if(@$schedulerdata->shift_start != ''){
-            $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
-        }else{
-            $shift_start=  "—"; 
-        }
-
-        $stripe = new \Stripe\StripeClient(
-            config('constants.STRIPE_KEY')
-        );
-
-        if(@$booking_status->stripe_id != ''){
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $booking_status->stripe_id,
-                []
-            );
-        }
-
-        $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
-        
-
+        $odt = $this->bookings->getorderdetailsfromodid($request->orderid,$request->orderdetailid);
         $html = '';
         $html .= '<div class="row"> 
                     <div class="col-lg-4 bg-sidebar">
                        <div class="your-booking-page side-part">
                             <figure>
-                                <img src="'.$com_pic.'" alt="Fitnessity">
+                                <img src="'.$odt['com_pic'].'" alt="Fitnessity">
                             </figure>
                             <div class="booking-page-meta">
-                                <a href="#" title="" class="underline">'.@$businessuser->company_name.'</a>
+                                <a href="#" title="" class="underline">'.$odt['company_name'].'</a>
                             </div>
                             <div class="box-subtitle">
                                 <h4>Transaction Complete</h4>
                                 <div class="modal-inner-box">
-                                    <label>'.$nameofbookedby.'</label>
+                                    <label>'.$odt['nameofbookedby'].'</label>
                                     <h3>Email Receipt</h3>
                                     <div class="form-group">
                                         <input type="text" name="email" id="email"  placeholder="youremail@abc.com" class="form-control">
@@ -603,7 +186,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $order_id.'</span>
+                                            <span>'. $odt['confirm_id'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -616,7 +199,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>$'. $totprice_for_this.'</span>
+                                            <span>$'.$odt['totprice_for_this'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -629,7 +212,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $price_opt.'</span>
+                                            <span>'.$odt['price_opt'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -642,7 +225,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $to_rem.'</span>
+                                            <span>'. $odt['to_rem'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -655,7 +238,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $program_name.'</span>
+                                            <span>'. $odt['program_name'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -668,7 +251,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $end_activity_date.'</span>
+                                            <span>'. $odt['end_activity_date'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -681,7 +264,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $created_at.'</span>
+                                            <span>'. $odt['created_at'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -694,7 +277,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $bookedtime.'</span>
+                                            <span>'. $odt['bookedtime'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -707,7 +290,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $nameofbookedby.'</span>
+                                            <span>'. $odt['nameofbookedby'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -720,7 +303,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $bookedtime.'</span>
+                                            <span>'. $odt['bookedtime'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -733,7 +316,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $shift_start.'</span>
+                                            <span>'. $odt['shift_start'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -746,7 +329,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $sport_activity.'</span>
+                                            <span>'. $odt['sport_activity'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -759,7 +342,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $select_service_type.'</span>
+                                            <span>'. $odt['select_service_type'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -772,7 +355,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $activity_location.'</span>
+                                            <span>'. $odt['activity_location'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -785,7 +368,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $time.'</span>
+                                            <span>'. $odt['time'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -798,7 +381,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $activity_for.'</span>
+                                            <span>'. $odt['activity_for'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -811,7 +394,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $qty.'</span>
+                                            <span>'. $odt['qty'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -823,7 +406,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $parti_data.'</span>
+                                            <span>'. $odt['parti_data'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -837,7 +420,7 @@ class BookingController extends Controller {
                                 </div>
                                 <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
-                                        <span>CC ending in ********'.$last4.'</span>
+                                        <span>CC ending in ********'.$odt['last4'].'</span>
                                     </div>
                                 </div>
                             </div>
@@ -850,7 +433,7 @@ class BookingController extends Controller {
                                 </div>
                                 <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
-                                        <span>$'.$totprice_for_this.'</span>
+                                        <span>$'.$odt['totprice_for_this'].'</span>
                                     </div>
                                 </div>
                                 
@@ -863,7 +446,7 @@ class BookingController extends Controller {
                                 </div>
                                 <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
-                                        <span>$'.$tax_for_this.'</span>
+                                        <span>$'.$odt['tax_for_this'].'</span>
                                     </div>
                                 </div>
                             </div>
@@ -875,7 +458,7 @@ class BookingController extends Controller {
                                 </div>
                                 <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
-                                        <span>$'.$main_total.'</span>
+                                        <span>$'.$odt['main_total'].'</span>
                                     </div>
                                 </div>
                             </div>
