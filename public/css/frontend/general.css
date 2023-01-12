@@ -158,6 +158,7 @@ html {
 .liaddress{
     font-size: 10px !important;
     font-weight: 500;
+	margin-bottom: 0px;
 }
 .container {
     padding-right: 15px;
@@ -23770,4 +23771,49 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .select0service.pricedollar input{
 	padding: 6px 20px;
+}
+.quick-none{
+	display: none;
+}
+.customer-list li{
+	border-bottom: 1px solid black;
+}
+.collapse-img{
+	text-align: center;
+	margin-top: 4px;
+}
+.searchbox-img{
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	border-radius: 100%;
+	overflow: hidden;
+	border: 3px solid #ddd;
+	vertical-align: middle;
+	background-color: #ea1515;
+	margin-top: 4px;
+}
+.customer-list li:hover{
+	background-color: #e6e4e4;
+	cursor: pointer;
+}
+.black-sparetor{
+	border: 1px solid #000;
+	margin-top: 15px;
+}
+.noschedule{
+	margin: 35px;
+    text-align: center;
+}
+.pay-confirm{
+	font-size: 20px;
+	padding: 5px;
+	font-weight: 500;
+}
+.booking-pmt-close{
+	position: absolute;
+	right: 10px;
+}
+.booking-pmt-close-btn{
+	right: 7px !important;
 }

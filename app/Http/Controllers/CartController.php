@@ -30,11 +30,16 @@ class CartController extends Controller {
 
 	    
 	    $cardInfo = $savedEvents['data'];
-
-    	
+	    $cart = [];
+	    $cartdata  =  $request->session()->get('cart_item', []);
+	    foreach($cartdata['cart_item'] as $key=>$dt){
+	    	if($dt['chk'] != 'activity_purchase'){
+	    		$cart['cart_item'] [$key]= $dt;
+	    	}
+	    }
 
     	return view('cart.index',[
-	        'cart' => $request->session()->get('cart_item', []),
+	        'cart' => $cart,
 	        'cardInfo' => $cardInfo,
     	]);
     }

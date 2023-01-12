@@ -55,10 +55,10 @@ input:disabled{
 						<div class="activity_purchase-box">
 							<div class="row">
 								<div class="col-md-4 col-sm-12 col-xs-12">
-									<a href="#" class="btn-nxt manage-cus-btn search-add-client" data-toggle="modal" data-target="#newclient">Add New Client</a>
+									<a href="#" class="btn-nxt manage-cus-btn search-add-client text-center search-checkout" data-toggle="modal" data-target="#newclient">Add New Client</a>
 									<!-- <button type="button" class="btn-nxt manage-search search-add-client" id="">Add New Client </button> -->
 								</div>
-								<div class="col-md-5 col-sm-12 col-xs-12 ">
+								<div class="col-md-5 col-sm-12 col-xs-12 nopadding">
 									<div class="manage-search serchcustomer">
 										<div class="sub">
 											<input type="text" id="serchclient" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">
@@ -71,7 +71,7 @@ input:disabled{
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-12 col-xs-12">
-									<button type="button" class="btn-bck manage-search search-add-client"> Quick Sale </button>
+									<button type="button" class="btn-bck manage-search search-add-client quick-none"> Quick Sale </button>
 								</div>
 								
 								<div class="col-md-12">
@@ -124,7 +124,7 @@ input:disabled{
 														<option value="{{@$user_data->id}}~~{{$pc_user_tp}}">{{$username}}(me)</option>
 														@if(!empty($userfamily))
 														@foreach($userfamily as $ufd)
-															<option value="{{$ufd->id}}~~family^^{{$username}}">{{$ufd->first_name}} {{$ufd->last_name}} </option>
+															<option value="{{$ufd->id}}~~family^^{{$username}}">@if($pc_user_tp == 'customer'){{$ufd->fname}} {{$ufd->lname}} @else {{$ufd->first_name}} {{$ufd->last_name}} @endif</option>
 														@endforeach
 														@endif
 													</select>
@@ -159,10 +159,8 @@ input:disabled{
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="select0service">
-													<div class="date-activity-scheduler date-activity-check paynowset">
-														<button type="button" data-toggle="modal" data-target="#addpartcipate">Participant Quantity </button>
-													</div>
-													
+													<label>Participant Quantity </label>
+													<button type="button" data-toggle="modal" data-target="#addpartcipate" class="btn-nxt search-add-client"> Select </button>
 												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
@@ -252,10 +250,10 @@ input:disabled{
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
 															<div class="choose-tip">
 																<select name="duration_dropdown" id="duration_dropdown" class="form-control" onchange="loaddropdown('duration',this,this.value);">
-																	<option value="Day(s)">Day(s) </option>
-																	<option value="Week(s)">Week(s)</option>
-																	<option value="Month(s)">Month(s) </option>
-																	<option value="Year(s)">Year(s) </option>
+																	<option value="Days">Day(s) </option>
+																	<option value="Weeks">Week(s)</option>
+																	<option value="Months">Month(s) </option>
+																	<option value="Years">Year(s) </option>
 																</select>
 															</div>
 														</div>
@@ -524,6 +522,10 @@ input:disabled{
 															<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
 														</div>
 														
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="black-sparetor"></div>
+														</div>
+														
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<label class="total0spretor">Tip Amount </label>
 														</div>
@@ -543,6 +545,10 @@ input:disabled{
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<span>${{$taxval}}</span>
+														</div>
+														
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="black-sparetor"></div>
 														</div>
 														
 														<div class="col-md-6 col-sm-6 col-xs-6">
@@ -1343,7 +1349,6 @@ input:disabled{
 		$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ $('#duration_dropdownajax').val());
 	}
 	function loaddropdownajax(chk,val,id){
-		alert(chk);
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pidajax').val(id);
@@ -1361,7 +1366,7 @@ input:disabled{
 			$('#membership_opt_listajax').html('');
 		}
 		if(chk == 'duration'){
-			$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ selectedText);
+			$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ id);
 		}
 
 		$.ajax({
@@ -1389,7 +1394,12 @@ input:disabled{
 					$('#pricedivajax').html('');
 					var data1 = data.split('~~');
 					$('#membership_opt_listajax').html(data1[0]);
-					$('#pricedivajax').html(data1[1]);
+					var part = data1[1].split('^^');
+					$('#pricedivajax').html(part[0]);
+					var second = part[1].split('!!');
+					$('#duration_intajax').val(second[0]);
+					$('#duration_dropdownajax').val(second[1]);
+					$('#actscheduleidajax').val(second[0]+ ' ' + second[1]);
 				}
 				
 				/*if(chk != 'participat' && chk != 'mpopt'){
@@ -1431,7 +1441,7 @@ input:disabled{
 
 		if(chk == 'duration'){
 			$('#duration').html($('#duration_int').val() +' '+ selectedText);
-			$('#actscheduleid').val($('#duration_int').val() +' '+ selectedText);
+			$('#actscheduleid').val($('#duration_int').val() +' '+ id);
 		}
 
 		if(chk == 'participat'){
@@ -1467,7 +1477,13 @@ input:disabled{
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
 					$('#membership_opt_list').html(data1[0]);
-					$('#pricediv').html(data1[1]);
+					var part = data1[1].split('^^');
+					$('#pricediv').html(part[0]);
+					var second = part[1].split('!!');
+					$('#duration_int').val(second[0]);
+					$('#duration_dropdown').val(second[1]);
+					$('#duration').html(second[0]+ ' ' +second[1]);
+					$('#actscheduleid').val(second[0]+ ' ' +second[1]);
 				}
 				
 				if(chk != 'participat' && chk != 'mpopt'){
@@ -1720,10 +1736,10 @@ input:disabled{
 		          	let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
 
 		          	if(customer.profile_pic_url){
-		            	profile_img = '<img src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50">';            
+		            	profile_img = '<img class="searchbox-img" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="">';            
 		          	}
-		          	customer_row.append('<div class="col-md-2">' + profile_img + '</div>');
-		          	customer_row.append('<div class="col-md-10 div-controller">' + 
+		          	customer_row.append('<div class="col-md-3 nopadding text-center">' + profile_img + '</div>');
+		          	customer_row.append('<div class="col-md-9 div-controller">' + 
 		              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
 		              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
 		              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div></li>');

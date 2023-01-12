@@ -1178,7 +1178,6 @@ class UserProfileController extends Controller {
     }
     
     public function editBusinessProfile(Request $request) {
-
         if($request->btnedit == 'Edit') {
             User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $request->cid, 'serviceid' => $request->serviceid]);
             return redirect()->route('createNewBusinessProfile');
@@ -1291,7 +1290,7 @@ class UserProfileController extends Controller {
         $business_veri = BusinessVerified::where('cid', $companyId)->get();
         $business_veri = isset($business_veri[0]) ? $business_veri[0] : [];
         
-        $business_service = BusinessServices::where('cid', $companyId)->where('serviceid', $serviceId)->get();
+        $business_service = BusinessServices::where('cid', $companyId)->where('id', $serviceId)->get();
         $business_service = isset($business_service[0]) ? $business_service[0] : [];
       
         if(!empty($business_service)){
@@ -9836,10 +9835,9 @@ class UserProfileController extends Controller {
         $user = BusinessServices::where('id', $request->sid)->first();
         $businessData = [
             'bstep' => 72,
-            'serviceid' => $user['serviceid'],
+            'serviceid' => $user['id'],
             'servicetype' => $user['service_type']
         ];
-        
         User::where('id', Auth::user()->id)->update($businessData);
         echo 'success';
     }

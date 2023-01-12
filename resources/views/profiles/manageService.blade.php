@@ -98,7 +98,7 @@ input,select {
                 <div class="col-md-12">
                     @csrf
                     <input type="hidden" name="cid" value="{{ $cservice->cid }}" style="width:50px" />
-                    <input type="hidden" name="serviceid" value="{{ $cservice->serviceid }}" style="width:50px" />
+                    <input type="hidden" name="serviceid" value="{{ $cservice->id }}" style="width:50px" />
                     <input type="hidden" name="service_type" value="{{ $cservice->service_type }}" style="width:50px" />
                     <div class="network_block nw-profile_block">
                         <div class="row">

@@ -611,7 +611,6 @@ class SchedulerController extends Controller
 
      public function activity_schedule(Request $request, $odid = null){
           $orderdata = UserBookingDetail::where('id',$odid)->first();
-          $service_data  =  $this->business_service_repo->findById($orderdata->sport);
           $filter_date = new DateTime();
           $shift = 1;
           if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -628,9 +627,45 @@ class SchedulerController extends Controller
           return view('scheduler.activity_schedule',[
                'days' => $days,
                'filter_date' => $filter_date,
-               'service_data' => $service_data,
                'orderdata' => $orderdata,
-               /*'catelist' => $catelist,*/
+               'odid' => $odid,
+          ]);
+     }
+
+     public function all_activity_schedule(Request $request){
+          $order = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'checkout_register'])->get();
+          $servicetype = 'classes';
+          if($request->stype){
+               $servicetype = $request->stype;
+          }
+          $orderdata = [];
+          foreach($order as $odt){
+               $orderdetaildata = UserBookingDetail::where('booking_id',$odt->id)->get();
+               foreach($orderdetaildata as $odetail){
+                    if($odetail->business_services->service_type ==   $servicetype && $odetail->act_schedule_id == ''){
+                         $orderdata []= $odetail;
+                    }
+               }
+          }
+
+          $filter_date = new DateTime();
+          $shift = 1;
+          if($request->date && (new DateTime($request->date)) > $filter_date){
+               $filter_date = new DateTime($request->date); 
+               $shift = 0;
+          }
+
+          $days = [];
+          $days[] = new DateTime(date('Y-m-d'));
+          for($i = 0; $i<=4; $i++){
+               $d = clone($filter_date);
+               $days[] = $d->modify('+'.($i+$shift).' day');
+          }
+          return view('scheduler.all_activity_schedule',[
+               'days' => $days,
+               'filter_date' => $filter_date,
+               'orderdata' => $orderdata,
+               'servicetype' => $servicetype,
           ]);
      }
 
@@ -669,7 +704,7 @@ class SchedulerController extends Controller
 
                //print_r( $membershiplist);exit;
 
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
+               if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
                     $total_price_val_adult =  @$membershiplist[0]['adult_weekend_price_diff'];
                     $total_price_val_child =  @$membershiplist[0]['child_weekend_price_diff'];
                     $total_price_val_infant =  @$membershiplist[0]['infant_weekend_price_diff'];
@@ -689,7 +724,7 @@ class SchedulerController extends Controller
                
                $html .='<input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
                          <input type="hidden" name="childprice" id="'.$childtid.'" value="'.$total_price_val_child.'" >
-                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >'; 
+                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >^^'.$membershiplist[0]['pay_setnum'].'!!'.$membershiplist[0]['pay_setduration']; 
           }else if($request->chk == 'participat'){
                $data = explode('~~',$request->sid);
                $data1 = explode('^^',$data[1]);
@@ -723,83 +758,7 @@ class SchedulerController extends Controller
                return $output.'~~'.$html;
           }else{
                return $output;
-          }
-          
-     }
-
-     public function getdropdowndataajax(Request $request){
-          $output = '';
-          $html = '';
-          if($request->chk == 'program'){
-               $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$request->sid)->get();
-               $output = '<option value="">Selct Category</option>';
-               foreach($catelist as $cl){
-                    $output .= '<option value="'.$cl->id.'">'.$cl->category_title.'</option>';
-               }
-          }else if($request->chk == 'category'){
-               $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',$request->sid)->get();
-               $output = '<option value="">Selct Price Title</option>';
-               foreach($pricelist as $pl){
-                    $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
-               }
-          }else if($request->chk == 'priceopt'){
-               $membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
-               $output = '<option value="">Selct Membership Type</option>';
-               foreach($membershiplist as $pl){
-                    $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
-               }
-
-               //print_r( $membershiplist);exit;
-
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
-                    $total_price_val_adult =  @$membershiplist[0]['adult_weekend_price_diff'];
-                    $total_price_val_child =  @$membershiplist[0]['child_weekend_price_diff'];
-                    $total_price_val_infant =  @$membershiplist[0]['infant_weekend_price_diff'];
-               }else{
-                    $total_price_val_adult =  @$membershiplist[0]['adult_cus_weekly_price'];
-                    $total_price_val_child =  @$membershiplist[0]['child_cus_weekly_price'];
-                    $total_price_val_infant =  @$membershiplist[0]['infant_cus_weekly_price']; 
-               }
-
-               $html .='<input type="hidden" name="adultprice" id="adultprice" value="'.$total_price_val_adult.'" >
-                         <input type="hidden" name="childprice" id="childprice" value="'.$total_price_val_child.'" >
-                         <input type="hidden" name="infantprice" id="infantprice" value="'.$total_price_val_infant.'" >';
-          }else if($request->chk == 'participat'){
-               $data = explode('~~',$request->sid);
-               $data1 = explode('^^',$data[1]);
-               if($request->user_type == 'user'){
-                    if($data1[0] == 'user'){
-                         $user = User::select('birthdate','firstname','lastname')->where('id',$data[0])->first();
-                         $username = $user->firstname.' '. $user->lastname;
-                         $relation = '';
-                         $date = $user->birthdate;
-                    }else{
-                         $user = UserFamilyDetail::select('birthday','relationship','last_name','first_name')->where('id',$data[0])->first();
-                         $username = $user->first_name.' '. $user->last_name;
-                         $relation = $user->relationship;
-                         $date = $user->birthday;
-                    }
-               }else{
-                    $user = Customer::select('birthdate','relationship','lname','fname')->where('id',$data[0])->first();
-                    $username = $user->fname.' '. $user->lname;
-                    $relation = $user->relationship;
-                    $date = $user->birthdate;
-               }
-               $age = Carbon::parse($date)->age;
-               if($age < 18){
-                    $output .= $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')';
-               }else{
-                    $output .= $username .' ('.$age .' yrs)';
-               }
-               
-          }    
-          
-          if($html != ''){
-               return $output.'~~'.$html;
-          }else{
-               return $output;
-          }
-          
+          }   
      }
 
      public function checkout_register(Request $request){
@@ -946,11 +905,19 @@ class SchedulerController extends Controller
                if($amount1 != $data["amount"]/100 ){
                     $pmt_by_cash = $amount1 - $data["amount"]/100;
                }
-                
+               if($request->user_type == 'user'){
+                    $user_id = $request->user_id;
+                    $customerid = '';
+               }else{
+                    $customerid = $request->user_id;
+                    $user_id = Auth::user()->id;
+               }
+
                if($data['status']=='succeeded')
                {
                     $orderdata = array(
-                         'user_id' => $request->user_id,
+                         'user_id' =>  $user_id ,
+                         'customer_id' =>  $customerid ,
                          'user_type' => $request->user_type,
                          'status' => 'confirmed',
                          'currency_code' => $data["currency"],
@@ -974,7 +941,7 @@ class SchedulerController extends Controller
                     $cartnew = [];
                      
                     $cnt=0;
-                    foreach($cart['cart_item'] as $c)
+                    foreach($cart['cart_item'] as $key=>$c)
                     {    
                          if($c['chk'] == 'activity_purchase') {
                               $cartnew[$cnt]['name']= $c['name'];
@@ -991,6 +958,7 @@ class SchedulerController extends Controller
                               $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
                               $cartnew[$cnt]['invidualprice']= $c['totalprice'];
                               $cnt++;
+                              unset($cart['cart_item'][$key]);
                          }
                     }   
                 
@@ -1069,7 +1037,7 @@ class SchedulerController extends Controller
                
                     session()->forget('stripepayid');
                     session()->forget('stripechargeid');
-                    session()->forget('cart_item');
+                    //session()->forget('cart_item');
                }
           }else{
 
@@ -1093,14 +1061,22 @@ class SchedulerController extends Controller
                     $grandtotal = 0;
                }
                
-              
                $date = new DateTime("now", new DateTimeZone('America/New_York') );
                $oid = $date->format('YmdHis');
                $digits = 3;
                $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
                $orderid= 'FS_'.$oid.$rand;
+
+               if($request->user_type == 'user'){
+                    $user_id = $request->user_id;
+                    $customerid = '';
+               }else{
+                    $customerid = $request->user_id;
+                    $user_id = Auth::user()->id;
+               }
                $orderdata = array(
-                    'user_id' => $request->user_id,
+                    'user_id' =>  $user_id ,
+                    'customer_id' =>  $customerid ,
                     'user_type' => $request->user_type,
                     'status' => 'confirmed',
                     'currency_code' => 'usd',
@@ -1126,7 +1102,7 @@ class SchedulerController extends Controller
                $cart = session()->get('cart_item');
                $cartnew = [];
                $cnt=0;
-               foreach($cart['cart_item'] as $c)
+               foreach($cart['cart_item'] as $key=>$c)
                {    
                     if($c['chk'] == 'activity_purchase') {
                          $cartnew[$cnt]['name']= $c['name'];
@@ -1143,6 +1119,7 @@ class SchedulerController extends Controller
                          $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
                          $cartnew[$cnt]['invidualprice']= $c['totalprice'];
                          $cnt++;
+                         unset($cart['cart_item'][$key]);
                     }
                } 
 
@@ -1208,7 +1185,7 @@ class SchedulerController extends Controller
 
                session()->forget('stripepayid');
                session()->forget('stripechargeid');
-               session()->forget('cart_item');
+               //session()->forget('cart_item');
           }
 
           return view('scheduler.checkout_register_success');
@@ -1417,13 +1394,13 @@ class SchedulerController extends Controller
 
                if(!empty($cart['child'])) {
                     if($cart['child']['quantity']  != 0){
-                        $aduqty  = $cart['child']['quantity'];
+                        $childqty  = $cart['child']['quantity'];
                     }
                } 
 
                if(!empty($cart['infant'])) {
                     if($cart['infant']['quantity']  != 0){
-                        $aduqty  = $cart['infant']['quantity'];
+                        $infantqty  = $cart['infant']['quantity'];
                     }
                }
 
@@ -1595,7 +1572,7 @@ class SchedulerController extends Controller
                                                                  <div class="tax-check">
                                                                       <label>Tax </label>
                                                                       <input type="checkbox" id="taxajax" name="taxajax" value="1"';
-                                                                      if($cart["tax"] == 0 && $cart["tax"] == ''){
+                                                                      if($cart["tax"] == 0 || $cart["tax"] == ''){
                                                                            $html .='checked';
                                                                       }
                                                                       $html .='>
@@ -1616,23 +1593,23 @@ class SchedulerController extends Controller
                                                                       <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
                                                                            <div class="choose-tip">
                                                                                 <select name="duration_dropdownajax" id="duration_dropdownajax" class="form-control" onchange="loaddropdownajax('.$dval.');">
-                                                                                     <option value="Day(s)"';
-                                                                                     if(@$actscheduleid[1] == "Day(s)"){
+                                                                                     <option value="Days"';
+                                                                                     if(@$actscheduleid[1] == "Days"){
                                                                                       $html .='selected';
                                                                                      }
                                                                                      $html .='>Day(s) </option>
-                                                                                     <option value="Week(s)s"';
-                                                                                     if(@$actscheduleid[1] == "Week(s)"){
+                                                                                     <option value="Weeks"';
+                                                                                     if(@$actscheduleid[1] == "Weeks"){
                                                                                       $html .='selected';
                                                                                      }
                                                                                      $html .='>Week(s)</option>
-                                                                                     <option value="Month(s)"';
-                                                                                     if(@$actscheduleid[1] == "Month(s)"){
+                                                                                     <option value="Months"';
+                                                                                     if(@$actscheduleid[1] == "Months"){
                                                                                       $html .='selected';
                                                                                      }
                                                                                      $html .='>Month(s) </option>
-                                                                                     <option value="Year(s)"';
-                                                                                     if(@$actscheduleid[1] == "Year(s)"){
+                                                                                     <option value="Years"';
+                                                                                     if(@$actscheduleid[1] == "Years"){
                                                                                       $html .='selected';
                                                                                      }
                                                                                      $html .='>Year(s) </option>
@@ -1768,8 +1745,10 @@ class SchedulerController extends Controller
           return $html.'~~'.$result;
      }
 
-
      public function updateorderdetails(Request $request){
-
+          $data =  UserBookingDetail::where('id',$request->odid)->first();
+          $array = json_decode($data['booking_detail'],true);
+          $array['sessiondate'] = $request->date;
+          UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
      }
 }
