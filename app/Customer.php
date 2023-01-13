@@ -79,6 +79,7 @@ class Customer extends Authenticatable
         return $this->hasMany(UserBookingStatus::class,'user_id');
     }
 
+
     public static function getcustomerofthiscompany($companyId){
         return Customer::where('business_id', $companyId)->orderBy('fname', 'ASC')->get();
     }
@@ -244,6 +245,30 @@ class Customer extends Authenticatable
         });
 
         return $booking_details->sum('provider_amount');
+    }
+
+    public function booking_details(){
+        
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : null;
+
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+        });
+        
+
+
+
+
+        return $booking_details;
     }
 
     public function visits(){
