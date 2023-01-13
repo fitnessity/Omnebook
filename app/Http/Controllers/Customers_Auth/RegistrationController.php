@@ -200,7 +200,7 @@ class RegistrationController extends Controller
         $customers->longitude=$request->lon;*/
         $customers->save();
         $url = '/viewcustomer/'.$request->cus_id;
-        return response()->json(['status'=>200,'redirecturl'=>$url]);
+        return response()->json(['status'=>200,'redirecturl'=>route('business_customer_show',['business_id' => $customers->company_information->id, 'id'=>$customers->id])]);
     }
 
     public function savephotoCustomer(Request $request)
