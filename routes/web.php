@@ -943,7 +943,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('viewcustomer/{id}','CustomerController@viewcustomer')->name('viewcustomer');
     
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
