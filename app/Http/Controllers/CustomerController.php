@@ -93,7 +93,8 @@ class CustomerController extends Controller {
 
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
-        $booking_details = $customerdata->booking_details()->get();
+        $active_booking_details = $customerdata->active_booking_details()->get();
+        $complete_booking_details = $customerdata->complete_booking_details()->get();
 
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
@@ -105,7 +106,8 @@ class CustomerController extends Controller {
             'strpecarderror'=>$strpecarderror,
             'terms'=> $terms,
             'visits' => $visits,
-            'booking_details' => $booking_details,
+            'active_booking_details' => $active_booking_details,
+            'complete_booking_details' => $complete_booking_details
         ]);
     }
 

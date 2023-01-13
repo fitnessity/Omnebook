@@ -247,7 +247,7 @@ class Customer extends Authenticatable
         return $booking_details->sum('provider_amount');
     }
 
-    public function booking_details(){
+    public function active_booking_details(){
         
         $user = $this->user;
         $customer = $this;
@@ -262,10 +262,28 @@ class Customer extends Authenticatable
             $query->select('id')
                   ->from('user_booking_status')
                   ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
-        });
+        })->whereRaw('pay_session > 0 or pay_session is not null');
+
+
+        return $booking_details;
+    }
+
+    public function complete_booking_details(){
         
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : null;
 
-
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+        })->whereRaw('pay_session <= 0 or pay_session is null');
 
 
         return $booking_details;

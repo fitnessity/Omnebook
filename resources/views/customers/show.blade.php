@@ -407,18 +407,18 @@
 													<div class="inner-arrow panel-heading">
 														<h4 class="panel-title">
 															<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-															Active Bookings (1)   
+															Active Bookings ({{$active_booking_details->count()}})   
 															</a>
 														</h4>
 													</div>
 													<div id="collapseOne" class="panel-collapse collapse in">
 														<div class="panel-body">
-															@foreach ($booking_details as $booking_detail)
+															@foreach ($active_booking_details as $booking_detail)
 																<div class="row">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
-																			<label> Kickboxing for Adults</label>	
-																			<span>Remaining 4/15 <i class="far fa-file-alt"></i></span>
+																			<label> {{$booking_detail->business_services->program_name}}</label>	
+																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} <i class="far fa-file-alt"></i></span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -448,7 +448,7 @@
 																					<label>TOTAL REMAINING:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->pay_session}}/15</span>
+																					<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -461,15 +461,16 @@
 																				<div class="col-md-6 col-xs-6">
 																					<label>EXPIRATION DATE:	</label>
 																				</div>
+
 																				<div class="col-md-6 col-xs-6">
-																					<span> 06/1/2021</span>
+																					<span> {{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>DATE BOOKED:	</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>04/07/2021</span>
+																					<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -483,55 +484,36 @@
 																					<label>BOOKING TIME: </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> 12:00 PM EST</span>
+																					<span> {{date('h:i A', strtotime($booking_detail->business_services->shift_start))}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>BOOKED BY:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>Darryl Phipps</span>
+																					<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>CHECK IN DATE: </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> 04/10/2021</span>
+																					<span> {{date('m/d/Y', strtotime($booking_detail->getBookingCheckinDetails()))}}</span>
 																				</div>
 																				
-																				<div class="col-md-6 col-xs-6">
-																					<label>CHECK IN TIME: </label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span> 12:15pm EST</span>
-																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>ACTIVITY TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>Kickboxing</span>
+																					<span>{{$booking_detail->business_services->sport_activity}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>SERVICE TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>Personal Training</span>
-																				</div>
-																			</div>
-																		</div>
-																		
-																		<div class="row">
-																			<div class="col-md-6 col-xs-6">
-																				<div class="view-visits">
-																					<a> View Visits </a>
-																				</div>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<div class="edit-booking">
-																					<a> Edit Booking  </a>
+																					<span>{{$booking_detail->business_services->formal_service_types()}}</span>
 																				</div>
 																			</div>
 																		</div>
@@ -549,135 +531,134 @@
 													<div class="inner-arrow panel-heading">
 														<h4 class="panel-title">
 															<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-															Completed  Bookings (2)
+															Completed  Bookings ({{$complete_booking_details->count()}})
 															</a>
 														</h4>
 													</div>
 													<div id="collapseTwo" class="panel-collapse collapse">
 														<div class="panel-body">
-															<div class="row">
-																<div class="col-md-12 col-xs-12">
-																	<div class="inner-accordion-titles">
-																		<label> Kickboxing for Adults</label>	
-																		<span>Remaining 4/15 <i class="far fa-file-alt"></i></span>
-																		
-																	</div>
-																	<div class="customer-profile-info">
-																		<div class="row">
-																			<div class="col-md-6 col-xs-6">
-																				<label>BOOKING # </label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 3004 </span>
-																			</div>
-																		
-																			<div class="col-md-6 col-xs-6">
-																				<label>TOTAL PRICE </label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>  $1,200 </span>
-																			</div>
+															@foreach ($complete_booking_details as $booking_detail)
+																<?php
+																	if (!$booking_detail->booking){
+																		continue;
+																	}
+																?>	
+																<div class="row">
+																	<div class="col-md-12 col-xs-12">
+																		<div class="inner-accordion-titles">
+																			@if ($booking_detail->business_services)
+																				<label> {{$booking_detail->business_services->program_name}}</label>	
+																			@endif
 																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>PAYMENT TYPE:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>15 Sessions </span>
-																			</div>
-																		
-																			<div class="col-md-6 col-xs-6">
-																				<label>TOTAL REMAINING:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>14/15</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>PROGRAM NAME:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>Kickboxing for Adults</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>EXPIRATION DATE:	</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 06/1/2021</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>DATE BOOKED:	</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>04/07/2021</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>RESERVED DATE: 	</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 04/10/2021</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>BOOKING TIME: </label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 12:00 PM EST</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>BOOKED BY:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>Darryl Phipps</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>CHECK IN DATE: </label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 04/10/2021</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>CHECK IN TIME: </label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span> 12:15pm EST</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>ACTIVITY TYPE:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>Kickboxing</span>
-																			</div>
-																			
-																			<div class="col-md-6 col-xs-6">
-																				<label>SERVICE TYPE:</label>
-																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<span>Personal Training</span>
-																			</div>
 																		</div>
-																	</div>
-																	
-																	<div class="row">
-																		<div class="col-md-6 col-xs-6">
-																			<div class="view-visits">
-																				<a> View Visits </a>
-																			</div>
-																		</div>
-																		<div class="col-md-6 col-xs-6">
-																			<div class="edit-booking">
-																				<a> Edit Booking  </a>
+																		<div class="customer-profile-info">
+																			<div class="row">
+																				<div class="col-md-6 col-xs-6">
+																					<label>BOOKING # </label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span> {{$booking_detail->booking->order_id}} </span>
+																				</div>
+																			
+																				<div class="col-md-6 col-xs-6">
+																					<label>TOTAL PRICE </label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span>  ${{$booking_detail->booking->amount}} </span>
+																				</div>
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>PAYMENT TYPE:</label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span>15 Sessions </span>
+																				</div>
+																				@if ($booking_detail->business_price_details)
+																					<div class="col-md-6 col-xs-6">
+																						<label>TOTAL REMAINING:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}}</span>
+																					</div>
+																				@endif
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>PROGRAM NAME:</label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					@if ($booking_detail->business_services)
+																					<span>{{$booking_detail->business_services->program_name}} </span>
+																					}
+																					@endif
+																				</div>
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>EXPIRATION DATE:	</label>
+																				</div>
+
+																				<div class="col-md-6 col-xs-6">
+																					<span> {{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
+																				</div>
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>DATE BOOKED:	</label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
+																				</div>
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>RESERVED DATE: 	</label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span> 04/10/2021</span>
+																				</div>
+																				@if ($booking_detail->business_services)
+																					<div class="col-md-6 col-xs-6">
+																						<label>BOOKING TIME: </label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span> {{date('h:i A', strtotime($booking_detail->business_services->shift_start))}}</span>
+																					</div>
+																				@endif
+																				@if ($booking_detail->booking->user)
+																					<div class="col-md-6 col-xs-6">
+																						<label>BOOKED BY:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}}</span>
+																					</div>
+																				@endif
+																				
+																				<div class="col-md-6 col-xs-6">
+																					<label>CHECK IN DATE: </label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span> {{date('m/d/Y', strtotime($booking_detail->getBookingCheckinDetails()))}}</span>
+																				</div>
+																				
+																				@if ($booking_detail->business_services)
+																					<div class="col-md-6 col-xs-6">
+																						<label>ACTIVITY TYPE:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->business_services->sport_activity}}</span>
+																					</div>
+																				@endif
+																				
+																				@if ($booking_detail->business_services)
+																				<div class="col-md-6 col-xs-6">
+																					<label>SERVICE TYPE:</label>
+																				</div>
+																				<div class="col-md-6 col-xs-6">
+																					<span>{{$booking_detail->business_services->formal_service_types()}}</span>
+																				</div>
+																				@endif
 																			</div>
 																		</div>
 																	</div>
 																</div>
-															</div>
+															@endforeach
 														</div>
 													</div>
 												</div>
