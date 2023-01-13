@@ -262,7 +262,7 @@ class RegistrationController extends Controller
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully added family member',
-            'redirecturl' => $url,
+            'redirecturl' => route('business_customer_show',['business_id' => $customerObj->company_information->id, 'id'=>$customerObj->id])
         );
 
         return Response::json($response);
