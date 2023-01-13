@@ -225,7 +225,8 @@ class CustomerController extends Controller {
 
     public function savenotes(Request $request){
         Customer::where('id',$request->cus_id)->update(["notes"=>$request->notetext]);
-        return redirect('viewcustomer/'.$request->cus_id);
+        
+        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
     }
 
     public function addcustomerfamily ($id){
@@ -451,7 +452,7 @@ class CustomerController extends Controller {
             $cust->update($data);
         }
         
-        return redirect('viewcustomer/'.$request->cus_id);
+        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$cust->id]);
     }
 
     public function paymentdeletecustomer(Request $request) {
