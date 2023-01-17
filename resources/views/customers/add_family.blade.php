@@ -27,7 +27,7 @@
 	                    <div class="addfmaily_content">
 
 	                        <div class="row">
-	                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-bottom:10px">
+	                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12" style="padding-bottom:10px">
 	                                @if(session()->has('success'))
 	                                <div class="alert alert-success fade in alert-dismissible show">
 	                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
@@ -65,20 +65,20 @@
 	                                $emergency_contact = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $emergency_contact_num);
 	                            }@endphp
 	                        <div class="row" id="familydiv{{$fam_cnt}}">	
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="hidden" name="cus_id[{{$fam_cnt}}]" id="cus_id[{{$fam_cnt}}]"  value="{{$family->id}}">
 	                                    <input type="text" name="fname[{{$fam_cnt}}]" id="fname[{{$fam_cnt}}]" placeholder="First Name" class="form-control" required="required" value="{{$family->fname}}" >
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="lname[{{$fam_cnt}}]" id="lname[{{$fam_cnt}}]" placeholder="Last Name" class="form-control" required="required" value="{{$family->lname}}" >
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <select name="gender[{{$fam_cnt}}]" id="gender[{{$fam_cnt}}]" class="form-control" required="required" >
 	                                        <option value="" hidden>Select Gender</option>
@@ -88,13 +88,13 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control" value="{{$family->email}}">
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <select name="relationship[{{$fam_cnt}}]" id="relationship[{{$fam_cnt}}]" class="form-control" required="required" >
 	                                        <option value="" hidden>Select Relationship</option>
@@ -111,7 +111,7 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group dob">
 	                                    <label>mm/dd/yyyy</label>
 	                                    <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control birthdate_{{$fam_cnt}} dobcustomerfamily" value="{{date('m/d/Y',strtotime('$family->birthdate'))}}" required="required" maxlength="10">
@@ -133,12 +133,12 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile{{$fam_cnt}}')">
 	                                </div>
 	                            </div>
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('emergency_contact{{$fam_cnt}}')">
 	                                    <input type="hidden" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" >
@@ -153,19 +153,19 @@
 	                        @endforeach
 	                        @else
 	                        <div class="row" id="familydiv{{$fam_cnt}}" >
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="fname[{{$fam_cnt}}]" id="fname[{{$fam_cnt}}]" placeholder="First Name" class="form-control" required="required" onkeypress='return event.charCode >= 65 && event.charCode <= 120'>
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="lname[{{$fam_cnt}}]" id="lname[{{$fam_cnt}}]" placeholder="Last Name" class="form-control" required="required" onkeypress='return event.charCode >= 65 && event.charCode <= 120'>
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <select name="gender[{{$fam_cnt}}]" id="gender[{{$fam_cnt}}]" class="form-control" required="required" >
 	                                        <option value="" hidden>Select Gender</option>
@@ -175,13 +175,13 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control">
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <select name="relationship[{{$fam_cnt}}]" id="relationship[{{$fam_cnt}}]" class="form-control" required="required" >
 	                                        <option value="" hidden>Select Relationship</option>
@@ -198,7 +198,7 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group dob">
 	                                    <label>mm/dd/yyyy</label>
 	                                    <input type="text"  name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class=" form-control birthdate_{{$fam_cnt}}" required="required" maxlength="10">
@@ -221,13 +221,13 @@
 	                                </div>
 	                            </div>
 
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('mobile{{$fam_cnt}}')">
 	                                </div>
 	                            </div>
 	                            
-	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
 	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('emergency_contact[{{$fam_cnt}}]')" >										
 	                                    <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" />

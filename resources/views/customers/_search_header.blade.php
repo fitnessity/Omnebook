@@ -1,9 +1,9 @@
 <form action="{{route("business_customer_index", ['business_id' => $company_id])}}">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<a href="#" class="btn-nxt manage-cus-btn" data-toggle="modal" data-target="#newclient">Add New Client</a>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<div class="manage-search serchcustomer">
 				<div class="sub">
 					<input type="text" id="serchclient" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">

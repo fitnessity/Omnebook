@@ -21632,7 +21632,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #a8a8a8;
 	height: auto !important;
 	box-shadow: none;
-	border: none;
+	border: none !important;
 }
 .btn-modal-booking{
 	width: 100%;
@@ -22040,11 +22040,14 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .custom.panel-heading{
 	background-color: #fff;
 }
-.collapse-img img{
-	width: 50px;
-	height: 50px;
-	float: left;
-	border-radius: 100%;
+.collapse-img img{	
+  float: left;
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  overflow: hidden;
+  border: 3px solid #ddd;
+
 }
 .client-name span{
 	font-size: 16px;
@@ -22179,11 +22182,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #fff;
 }
 .inner-accordion-titles label{
-	width: 73%;
+	width: 50%;
 }
 .inner-accordion-titles span{
-	width: 15%;
-	display: inline;
+	width: 49%;
+	display: inline-block;
+	text-align: end;
 }
 .inner-accordion-titles span i{
 	font-size: 20px;
@@ -23816,4 +23820,69 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .booking-pmt-close-btn{
 	right: 7px !important;
+}
+.scheduled-custom{
+	display: flex;
+	width: 100%;
+}
+.edit-costume{
+	width: 100%;
+	margin-left: 5px;
+}
+.close-btn-design.participateclosebtn{
+	right: 21px !important;
+}
+.gry-cancel{
+	background: #868585 !important;
+}
+.cancel-activity{
+	margin-left: 8px;
+	font-size: 17px;
+	font-weight: 600;
+	color: #ed1b24;
+}
+.visiting-view{
+	color: #333;
+	font-size: 15px;
+	float: right;
+	margin-bottom: 6px;
+}
+.visiting-view:hover{
+	color: #ea1515;
+}
+.edit-booking-customer{
+	color: #333;
+	font-size: 15px;
+	margin-bottom: 6px;
+}
+.edit-booking-customer:hover{
+	color: #ea1515;
+}
+.edit-booking-title{
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+}
+.title-sp-customer{
+	margin-bottom: 40px;
+}
+.remaining-number span{
+	float: right;
+	font-weight: 600;
+}
+.sub-info-customer label{
+	font-weight: 400;
+}
+.sub-info-customer span{
+	float: right;
+}
+.tip-xp{
+	margin-top: 30px;
+}
+.title-middle-part{
+	margin-bottom: 20px;
+}
+.side-border-right{
+	border-right: 1px solid black;
+	padding-right: 11px;
 }

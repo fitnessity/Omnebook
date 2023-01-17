@@ -108,7 +108,7 @@ input:disabled{
 									</div>
 								</div>
 								
-								<div class="col-md-12 col-sm-12">
+								<div class="col-md-12 col-sm-12 col-xs-12">
 									<div class="check-out-steps"><label><h2 class="color-red">Step 1: </h2> Select Service</label></div>
 									<div class="check-client-info-box">
 										<div class="row">
@@ -173,7 +173,7 @@ input:disabled{
 									</div>
 								</div>
 								
-								<div class="col-md-12">
+								<div class="col-md-12 col-xs-12">
 									<div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
 									<div class="check-client-info-box">
 										<div class="row">
@@ -279,7 +279,7 @@ input:disabled{
 										<input type="hidden" name="chk" value="activity_purchase">
 										<input type="hidden" name="value_tax" id="value_tax" value="0">
 										<input type="hidden" name="type" value="{{$user_type}}">
-										<input type="hidden" name="pageid" value="{{$book_id}}">
+										<input type="hidden" name="pageid" value="{{$pageid}}">
 										<input type="hidden" name="pid" id="pid" value="">
 										<input type="hidden" name="categoryid" id="categoryid" value="">
 										<input type="hidden" name="checkount_qty" id="checkount_qty" value="">
@@ -411,9 +411,9 @@ input:disabled{
 							<div class="ticket-summery ticket-title">
 								<h4>Order Summary</h4>
 							</div>
-							<form method="post" action="{{route('checkout_register')}}">
+							<form action="{{route('checkout_register')}}" method="POST" class="validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-12 col-xs-12">
 										<div class="check-client-info-box">
 											@php $i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0; @endphp
 											@if(!empty($cart))
@@ -435,7 +435,7 @@ input:disabled{
 												$tip += $item['tip'];
 												$discount += $item['discount'];
 												$taxval = $item["tax"];
-												$participate = $item["participate_from_checkout_regi"]['pc_name'];
+												$participate = @$item["participate_from_checkout_regi"]['pc_name'];
 												$taxes += $taxval;
 												$act = BusinessServices::where('id', $item["code"])->first();
 												$serprice = BusinessPriceDetails::where('id', $item['priceid'])->first();
@@ -455,11 +455,11 @@ input:disabled{
 												<div class="close-cross-icon"> 
 													<?php /*?><a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['code']}}"><?php */?>
 													<!--  <a class="p-red-color editcartitemaks" data-toggle="modal" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" >  -->
-													<a class="p-red-color editcartitemaks" data-toggle="modal" data-code="{{$item['code']}}" data-pageid="{{$book_id}}"> 
+													<a class="p-red-color editcartitemaks" data-toggle="modal" data-code="{{$item['code']}}" data-pageid="{{$pageid}}"> 
 													<i class="fas fa-pencil-alt"></i></a>
 												</div>
 												<div class="close-cross-icon-trash">
-													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$book_id,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
+													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$pageid,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
 													<i class="fas fa-trash-alt"></i></a>
 												</div>
 												<div class="ticket-summery-details">
@@ -521,6 +521,19 @@ input:disabled{
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
 														</div>
+														@php  $expired_at = '';
+														 	$explodetime = explode(' ',$item['actscheduleid']);
+														 	if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+									                            $daynum = '+'.$explodetime[0].' '.strtolower($explodetime[1]);
+									                            $expired_at  = date('m/d/Y', strtotime($item['sesdate']. $daynum ));
+									                    	} 
+														@endphp
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Expires On:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{$expired_at}}</span>
+														</div>
 														
 														<div class="col-md-12 col-sm-12 col-xs-12">
 															<div class="black-sparetor"></div>
@@ -580,7 +593,7 @@ input:disabled{
 							 		$grand_total = number_format($grand_total,0, '.', '');
 								@endphp
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-12 col-xs-12">
 										<div class="check-client-info total-checkout">
 											<div class="row">
 												<div class="col-md-6 col-sm-6 col-xs-6">
@@ -643,17 +656,17 @@ input:disabled{
 											<label>Select Payment Method</label>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="col-md-4 col-sm-4 col-xs-6">
 										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
 										<input name="cardinfo" class="payment-radio" type="radio" value="cash" >
 											<span class="plan-details checkout-card">
 	                                            <div class="row">
-	                                               <div class="col-md-12">
+	                                               <div class="col-md-12 col-xs-12">
 	                                                  <div class="payment-method-img">
 	                                                      <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100">
 	                                                  </div>
 	                                               </div>
-	                                               <div class="col-md-12">
+	                                               <div class="col-md-12 col-xs-12">
 														<div class="cart-name checkout-cart">
 	                                                        <span>Cash</span>
 	                                                    </div>
@@ -668,17 +681,17 @@ input:disabled{
 									@if(!empty($cardInfo)) 
 									 	@foreach($cardInfo as $card) 
 	                                    	@php $brandname = ucfirst($card['brand']); @endphp
-											<div class="col-md-4 col-sm-4 col-xs-12">
+											<div class="col-md-4 col-sm-4 col-xs-6">
 												<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
 		                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="{{$brandname }}: XXXX{{$card['last4']}}  Exp. {{$card['exp_month']}}/{{$card['exp_year']}}" card-id="{{$card['id']}}">
 		                                            <span class="plan-details checkout-card">
 		                                                <div class="row">
-		                                                    <div class="col-md-12">
+		                                                    <div class="col-md-12 col-xs-12">
 		                                                        <div class="payment-method-img">
 		                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
 		                                                        </div>
 		                                                    </div>
-		                                                    <div class="col-md-12">
+		                                                    <div class="col-md-12 col-xs-12">
 																<div class="cart-name checkout-cart">
 		                                                           <span>CC (On File)</span>
 		                                                         </div>
@@ -693,17 +706,17 @@ input:disabled{
 										@endforeach
 									@endif
 									
-									<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="col-md-4 col-sm-4 col-xs-6">
 										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
 	                                    <input name="cardinfo" class="payment-radio" type="radio" value="newcard">
 	                                        <span class="plan-details checkout-card">
 	                                            <div class="row">
-	                                                <div class="col-md-12">
+	                                                <div class="col-md-12 col-xs-12">
 	                                                    <div class="payment-method-img">
 	                                                        <img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100">
 	                                                    </div>
 	                                                </div>
-	                                                <div class="col-md-12">
+	                                                <div class="col-md-12 col-xs-12">
 														<div class="cart-name checkout-cart">
 	                                                        <span>CC (Input Cart)</span>
 	                                                    </div>
@@ -716,17 +729,17 @@ input:disabled{
 	                                   </label>
 									</div>
 
-									<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="col-md-4 col-sm-4 col-xs-6">
 										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
                                         <input name="cardinfo" class="payment-radio" type="radio" value="check">
                                             <span class="plan-details checkout-card">
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 col-xs-12">
                                                         <div class="payment-method-img">
                                                             <img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 col-xs-12">
 														<div class="cart-name checkout-cart">
                                                            <span>Check</span>
                                                          </div>
@@ -736,17 +749,17 @@ input:disabled{
                                        </label>
 									</div>
 									
-									<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="col-md-4 col-sm-4 col-xs-6">
 										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
                                         <input name="cardinfo" class="payment-radio" type="radio"  value="comp">
                                             <span class="plan-details checkout-card">
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 col-xs-12">
                                                         <div class="payment-method-img">
                                                             <img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 col-xs-12">
 														<div class="cart-name checkout-cart">
                                                            <span>Comp</span>
                                                          </div>
@@ -756,52 +769,52 @@ input:disabled{
                                        </label>
 									</div>
 
-									<div class="col-md-12">
+									<div class="col-md-12 col-xs-12">
 										<div class="check-client-info mathod-display">
 											<div class="payment-selection">
 												<h3>Payment Method Selected</h3>
 											</div>
 											<div id="addpmtmethods">
 												<div class="row" id="cashdiv" style="display: none;">
-													<div class="col-md-1">
+													<div class="col-md-1 col-xs-1 col-sm-1">
 														<div class="close-div">
 															<div class="close-cross"> 
 																<i class="fas fa-times"></i>
 															</div>
 														</div>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-3 col-xs-6 col-sm-3">
 														<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="{{$grand_total}}">
 													</div>
-													<div class="col-md-8">
+													<div class="col-md-8 col-xs-4 col-sm-3">
 														<label>Cash</label>
 													</div>
 													
-													<div class="col-md-12">
+													<div class="col-md-12 col-xs-12">
 														<div class="changecalce">
 															<label>Change Calculator</label>
 														</div>
 													</div>
-													<div class="col-md-5">
+													<div class="col-md-5 col-sm-4 col-xs-12">
 														<div class="cash-tend">
 															<span>Cash tendered</span>
 														</div>
 													</div>
-													<div class="col-md-3 nopadding">
+													<div class="col-md-3 col-sm-4 col-xs-6 nopadding">
 														<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00" >
 													</div>
-													<div class="col-md-2 nopadding">
+													<div class="col-md-2 col-sm-4 col-xs-6 nopadding">
 														<div class="cash-tend-option">
 															<span>(Optional)</span>
 														</div>
 													</div>
-													<div class="col-md-5">
+													<div class="col-md-5 col-sm-5 col-xs-12">
 														<div class="cash-tend">
 															<span>Cash Change:</span>
 														</div>
 													</div>
 
-													<div class="col-md-2 nopadding">
+													<div class="col-md-2 col-sm-4 nopadding">
 														<div class="cash-tend-option">
 															<label id="cash_amt_change">$0.00</label>
 														</div>
@@ -845,20 +858,20 @@ input:disabled{
 												</div>	
 
 												<div class="row" id="checkdiv"  style="display: none;">
-													<div class="col-md-1">
+													<div class="col-md-1 col-sm-1 col-xs-2">
 														<div class="close-div">
 															<div class="close-cross"> 
 																<i class="fas fa-times"></i>
 															</div>
 														</div>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-3 col-sm-4 col-xs-6">
 														<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" >
 													</div>
-													<div class="col-md-8">
+													<div class="col-md-8 col-sm-4 col-xs-2">
 														<label>Check</label>
 													</div>
-													<div class="col-md-12">
+													<div class="col-md-12 col-sm-12 col-xs-12">
 														<div class="row">
 															<div class="cash-tend">
 																<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
@@ -872,20 +885,20 @@ input:disabled{
 												</div>	
 
 												<div id="ccnewdiv"  style="display: none;"> 
-													<div class="col-md-1">
+													<div class="col-md-1 col-sm-1 col-xs-2">
 														<div class="close-div">
 															<div class="close-cross"> 
 																<i class="fas fa-times"></i>
 															</div>
 														</div>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-3 col-sm-4 col-xs-10">
 														<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" >
 													</div>
-													<div class="col-md-8">
+													<div class="col-md-8 col-sm-4 col-xs-12">
 														<label>CC(Input Card)</label>
 													</div>
-													<div class="col-md-12">
+													<div class="col-md-12 col-xs-12">
 						        						<div class="row" >
 						        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  required">
 						        								<div id="card-number-field" class="card-space">
@@ -919,7 +932,7 @@ input:disabled{
 						                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
 						        								</div>
 						        							</div>
-						                                    <div class="col-md-12">
+						                                    <div class="col-md-12 col-xs-12">
 						                                        <div class="save-pmt-checkbox">
 						                                            <input type="checkbox" id="save_card" name="save_card" value="1">
 						                                            <label>Save for future payments</label>
@@ -937,7 +950,6 @@ input:disabled{
 														</div>
 						        					</div>
 					                            </div>
-
 											</div>
 										</div>
 									</div>
@@ -946,11 +958,14 @@ input:disabled{
 									<input type="hidden" name="cash_change" id="cash_change" value="">
 									<input type="hidden" name="card_id" id="card_id" value="">
 									<div class="col-md-6 col-sm-6 col-xs-12 ">
-										<button type="button" class="btn-bck activity-purchase mb-00" id="total_remaing">Total Amount Remaining $0.00</button>
+										<button type="button" class="btn-bck activity-purchase mb-00" id="total_remaing">Total Amount Remaining ${{$grand_total}}</button>
 									</div>
 
 									<div class="col-md-6 col-sm-6 col-xs-12 ">
-										<button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button>
+										<div class="btn-ord-txt">
+				                            <button class="post-btn-red" type="submit" id="checkout-button">Complete Payment</button>
+				                        </div>
+										<!-- <button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button> -->
 									</div>
 								</div>
 							</form>				
@@ -1014,13 +1029,13 @@ input:disabled{
                     	</div>
                     	<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="row">
-								<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="col-md-8 col-sm-8 col-xs-6">
 									<div class="counter-titles">
 										<p class="counter-age-heading">Adults</p>
 										<p>Ages 13 & Up</p>
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="col-md-4 col-sm-4 col-xs-6">
 									<div class="qty mt-5 counter-txt">
 										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
 										<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly>
@@ -1031,13 +1046,13 @@ input:disabled{
                     	</div>
                     	<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="row">
-								<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="col-md-8 col-sm-8 col-xs-6">
 									<div class="counter-titles">
 										<p class="counter-age-heading">Children</p>
 										<p>Ages 2-12</p>
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="col-md-4 col-sm-4 col-xs-6">
 									<div class="qty mt-5 counter-txt">
 										<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
 										<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly>
@@ -1048,13 +1063,13 @@ input:disabled{
 	                    </div>
 	                    <div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="row">
-								<div class="col-md-8 col-sm-8 col-xs-7">
+								<div class="col-md-8 col-sm-8 col-xs-6">
 									<div class="counter-titles">
 										<p class="counter-age-heading">Infants</p>
 										<p>Under 2</p>
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-5">
+								<div class="col-md-4 col-sm-4 col-xs-6">
 									<div class="qty mt-5 counter-txt">
 										<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
 										<input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly>
@@ -1075,19 +1090,105 @@ input:disabled{
 	    	</div>                                                                       
 	    </div>                                          
 	</div>
-
 </div>
+
+<div class="modal" id="bookingreceipt" role="dialog">
+    <div class="modal-dialog modal-lg booking-receipt">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: right;"> 
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                       <label class="pay-confirm"> Booking & Payment Confirmed</label>
+                    </div>
+                    <div class="closebtn booking-pmt-close">
+                        <button type="button" class="close close-btn-design booking-pmt-close-btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="receiptbody">
+				{!! $modeldata !!}
+            </div>
+        </div>
+    </div>
+</div> 
 
 
 <script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
+
+<script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
+
+<!-- <script src="{{ url('public/js/creditcard.js') }}"></script> -->
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  
 <script type="text/javascript">
-<?php /*?>$(window).load(function() {
-    $('#editcartitempp').modal('show');
-});<?php */?>
+	$(function() {
+	    var $form = $(".validation");
+	    $('form.validation').bind('submit', function(e) {
+	        var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
+	       
+	        if(cardinfoRadio == 'newcard') {
+	            var $form  = $(".validation"),
+	                inputVal = ['input[type=email]', 'input[type=password]',
+	                                 'input[type=text]', 'input[type=file]',
+	                                 'textarea'].join(', '),
+	                $inputs       = $form.find('.required').find(inputVal),
+	                $errorStatus = $form.find('div.error'),
+	                valid         = true;
+	                $errorStatus.addClass('hide');
+	         
+	            $('.has-error').removeClass('has-error');
+	            $inputs.each(function(i, el) {
+	                var $input = $(el);
+	                if ($input.val() === '') {
+	                    $input.parent().addClass('has-error');
+	                    $errorStatus.removeClass('hide');
+	                    e.preventDefault();
+	                }
+	            });      
+	            if (!$form.data('cc-on-file')) {
+	                e.preventDefault();
+	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+	                Stripe.createToken({
+	                    number: $('.card-num').val(),
+	                    cvc: $('.card-cvc').val(),
+	                    exp_month: $('.card-expiry-month').val(),
+	                    exp_year: $('.card-expiry-year').val()
+	                }, stripeHandleResponse);
+	            }
+	        }
+	    });
+	  
+	    function stripeHandleResponse(status, response) {
+	        if (response.error) {
+	            $('.error')
+	                .removeClass('hide')
+	                .find('.alert')
+	                .text(response.error.message);
+	        } else {
+	            var token = response['id'];
+	            $form.find('input[type=text]').empty();
+	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+	            $form.get(0).submit();
+	        }
+	    }
+	});
 </script>
 
 <script>
 	$(document).ready(function () {
+		var modelchk = '{{$modelchk}}';
+		if(modelchk == 1){	
+ 			/*var modeldata = '<?php htmlspecialchars_decode($modeldata)?>';
+ 			alert(modeldata);
+ 			$('#receiptbody').html(modeldata);	*/
+ 			$("#bookingreceipt").modal('show');
+		}
+
 	    $('#adultcnt').prop('readonly', true);
 		$(document).on('click','.adultplus',function(){
 			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
@@ -1218,6 +1319,7 @@ input:disabled{
 			if(aducnt != 0){
 				adult = '<span>Adults x '+aducnt+'</span><br>';
 			}
+			$('#adupricequantity').val(aducnt);
 		}
 
 		if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
@@ -1225,17 +1327,16 @@ input:disabled{
 			if(chilcnt != 0){
 				child = '<span>Kids x  '+chilcnt+'</span><br>';
 			}
+			$('#childpricequantity').val(chilcnt);
 		}
 		if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
 			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
 			if(infcnt != 0){
 				infant = '<span>Infants x  '+infcnt+'</span>';
 			}
+			$('#infantpricequantity').val(infcnt);
 		}
-		
-		$('#adupricequantity').val(aducnt);
-		$('#childpricequantity').val(chilcnt);
-		$('#infantpricequantity').val(infcnt);
+	
 		$('#cartaduprice').val(aduprice);
 		$('#cartinfantprice').val(infantprice);
 		$('#cartchildprice').val(childprice);
@@ -1348,6 +1449,7 @@ input:disabled{
 	function  changeduration() {
 		$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ $('#duration_dropdownajax').val());
 	}
+
 	function loaddropdownajax(chk,val,id){
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
@@ -1645,18 +1747,19 @@ input:disabled{
 	$('input[type=radio][name=cardinfo]').change(function() {
 	    if (this.value == 'cash') {
 	    	$('#cashdiv').css('display','block');
+	    	$('#check_amt').val(0);
+	    	$('#cc_amt').val(0);
+	    	$('#cc_new_card_amt').val(0);
 	    }else if(this.value == 'check'){
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
 	    		$('#check_amt').val('{{$grand_total}}');
 	    	}
 	        $('#checkdiv').css('display','block');
-	        myMethod();
 	    }else if(this.value == 'newcard'){
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden")) {
 	    		$('#cc_new_card_amt').val('{{$grand_total}}');
 	    	}
 	    	$('#ccnewdiv').css('display','block');
-	    	myMethod();
 	    }else if(this.value == 'cardonfile'){
 	    	if($('#cashdiv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
 	    		$('#cc_amt').val('{{$grand_total}}');
@@ -1664,10 +1767,8 @@ input:disabled{
 	    	$('#card_id').val($(this).attr("card-id"));
 	    	$('.visa-info').html($(this).attr("extra-data"));
 	        $('#ccfilediv').css('display','block');
-	        myMethod();
-	    }else{
-
 	    }
+	    myMethod();
 	});
 
 	document.getElementById("cash_amt").onkeyup = function() {myMethod()};

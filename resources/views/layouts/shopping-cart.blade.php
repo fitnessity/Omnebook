@@ -790,7 +790,7 @@ $(function() {
     $('form.validation').bind('submit', function(e) {
         var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
         var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
-       
+    
         if(save_cardRadio == null) {
             $('#save_card').val(0);
         }else{
