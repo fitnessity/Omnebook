@@ -134,7 +134,7 @@ if(!empty($cart["cart_item"])) {
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
 								@if(Auth::user())
-									<a type="submit" href="{{route('payments_card')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
+									<a type="submit" href="{{route('carts_index')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
 								@else
 									<a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
 								@endif

@@ -3,7 +3,7 @@
 @section('content')
 @include('layouts.userHeader')
 
-@php $service_type_ary = array("classes","individual","events","experience");@endphp
+@php use App\ActivityCancel; $service_type_ary = array("classes","individual","events","experience");@endphp
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
 		<div class="col-md-7 col-md-offset-3-custom">
@@ -73,7 +73,7 @@
 										<div class="classes-info">
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
-													<h2>{{$orderdata->business_services->sport_activity}}</h2>
+													<h2>{{$orderdata->business_services->sport_activity}}<label class="cancel-activity" style="display:none;">Activity Cancelled</label></h2>
 													<label>Program Name: </label> <span> {{$orderdata->business_services->program_name}}</span>
 												</div>
 												<div class="col-md-12 col-xs-12">
@@ -95,10 +95,13 @@
 													$bs = new  \App\Repositories\BookingRepository;
 													$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
 													$SpotsLeftdis = $scary->spots_available - $bookedspot;
+													$cancel_chk = 0;
+											        
+											        $canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
 												@endphp
 														<div class="col-md-4 col-xs-12">
 															<div class="classes-time">
-																<button class="post-btn activity-scheduler"  onclick="addtimedate({{$scary->id}});">{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
+																<button class="post-btn activity-scheduler @if($canceldata != '') gry-cancel @endif"  onclick="addtimedate({{$scary->id}});" @if($canceldata != '') disabled @endif>{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
 																<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
 															</div>
 														</div>

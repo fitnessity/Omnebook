@@ -299,7 +299,8 @@ class PaymentController extends Controller {
             //         'destination' => $admin_stripeid->stripe_connect_id,
             //     ]);
             // }
-             
+
+            session()->put('cart_item', $cart);
             session()->forget('stripepayid');
             session()->forget('stripechargeid');
             //session()->forget('cart_item');
@@ -450,6 +451,7 @@ class PaymentController extends Controller {
 
            session()->forget('stripepayid');
            session()->forget('stripechargeid');
+           session()->put('cart_item', $cart);
            //session()->forget('cart_item');
            return view('jobpost.confirm-payment-instant');
         }else{

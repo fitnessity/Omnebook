@@ -92,7 +92,17 @@
 						<div id="schedulelist">
 							@if(!empty($bookingdata) && count($bookingdata) > 0)
 							@foreach($bookingdata as $bd)
-				
+							@php 
+								if($bd->booking->user_type == 'user'){
+									$name = $bd->booking->user->firstname.' '.$bd->booking->user->lastname;
+									$firstlatter = $bd->booking->user->firstname[0].''.$bd->booking->user->lastname[0];
+									$route = '';
+								}else{
+									$name = $bd->booking->customer->fname.' '.$bd->booking->customer->lname;
+									$firstlatter = $bd->booking->customer->fname[0].''.$bd->booking->customer->lname[0];
+									$route = 'route("business_customer_show",["id"=> $bd->booking->customer->id])';
+								}
+							@endphp
 							<div class="scheduler-info-box">
 								<div class="row">
 									<div class="col-md-2 col-xs-12 col-sm-4">
@@ -111,12 +121,12 @@
 									
 									<div class="col-md-1 col-xs-3 col-sm-4">	
 										<div class="scheduler-qty">
-											<span> {{$bd->booking->user->firstname[0]}}{{$bd->booking->user->lastname[0]}}</span>
+											<span> {{$firstlatter}}</span>
 										</div>
 									</div>
 									<div class="col-md-2 col-xs-9 col-sm-4">
 										<div class="scheduled-activity-info">
-											<label class="scheduler-titles">Client Name: </label> <span>{{$bd->booking->user->firstname}} {{$bd->booking->user->lastname}}</span>
+											<label class="scheduler-titles">Client Name: </label> <span>{{$name}}</span>
 										</div>
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-4">
@@ -133,7 +143,7 @@
 									</div>
 									<div class="col-md-2 col-xs-12 col-sm-4">
 										<div class="scheduled-location">
-											<label class="scheduler-titles">Remaining: </label> <span>{{$bd->pay_session}}/{{$schedule_data->spots_available}}</span>
+											<label class="scheduler-titles">Remaining: </label> <span>{{$bd->getremainingsession()}}/{{$bd->pay_session}}</span>
 										</div>
 									</div>
 									<div class="col-md-1 col-xs-12 col-sm-4">
@@ -144,7 +154,11 @@
 									<div class="col-md-2 col-xs-12 col-sm-12">
 										<div class="scheduled-btns">
 											<a href="{{route('activity_purchase',['book_id'=>$bd->id])}}" class="btn-edit btn-sp">Purchase</a>
-											<button type="button" class="btn-edit">View Account</button>
+											@if($bd->booking->user_type == 'user')
+												<button type="button" class="btn-edit">View Account</a>
+											@else
+												<a href="{{route('business_customer_show',['business_id' => $bd->booking->customer->business_id, 'id'=> $bd->booking->customer->id])}}" class="btn-edit" target="_blank">View Account</a>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -238,7 +252,7 @@
 							checkin:checkin,
 					},
 					success:function(response) {
-							// window.location.reload();
+							window.location.reload();
 					}
 			});
 	});

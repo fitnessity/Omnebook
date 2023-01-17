@@ -10141,6 +10141,7 @@ class UserProfileController extends Controller {
             'image' => $images,
             'description' => $request->insdescription,
             'user_id' => Auth::user()->id,
+            'email'=>$request->insemail,
         ]; 
         
         $create = StaffMembers::create($staff_mem);

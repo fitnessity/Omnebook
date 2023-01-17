@@ -126,9 +126,9 @@
 													<label class="scheduler-titles">QTY: </label> <span> {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}} </span>
 												</a>
 											</div>
-											<div class="col-md-1 col-xs-12 col-sm-4">
+											<div class="col-md-1 col-xs-12 col-sm-4 nopadding">
 												<div class="scheduled-activity-info">
-													<label class="scheduler-titles"> Duration: </label> <span>{{$bookscheduler->get_clean_duration()}} </span>
+													<label class="scheduler-titles"> Duration: </label> <span>{{$bookscheduler->get_duration()}} </span>
 												</div>
 											</div>
 											<div class="col-md-3 col-xs-12 col-sm-4">
@@ -149,15 +149,15 @@
 											<div class="col-md-2 col-xs-12 col-sm-12">
 												<form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('editBusinessService')}}">
 													@csrf
-													<div class="scheduled-btns">
+													<div class="scheduled-btns scheduled-custom">
 														<input type="hidden" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
 									                    <input type="hidden" name="cid" value="{{ $bookscheduler->business_service->cid }}" style="width:50px" />
 									                    <input type="hidden" name="serviceid" value="{{ $bookscheduler->business_service->serviceid }}" style="width:50px" />
-														<button type="submit" class="btn-edit btn-sp">Edit</button>
+														<button type="submit" class="btn-edit edit-costume">Edit</button>
 														@if($date1 < $date2 )
 															<button type="button" class="btn-edit" disabled>Cancel</button>
 														@else
-															<a class="btn-edit" onclick="getcancellationdata({{$bookscheduler->id}},'{{$bookscheduler->spots_reserved($filter_date)}}','{{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}');">Cancel</a>
+															<a class="btn-edit edit-costume" onclick="getcancellationdata({{$bookscheduler->id}},'{{$bookscheduler->spots_reserved($filter_date)}}','{{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}');">Cancel</a>
 														@endif
 														
 													</div>

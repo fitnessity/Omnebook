@@ -36,7 +36,7 @@ class UserBookingStatus extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class,'user_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 
     public function businessuser()
@@ -63,4 +63,37 @@ class UserBookingStatus extends Model
     {
         return $this->hasMany(Jobpostbidding::class, 'jobid');
     }
+
+    public function getstripedata(){
+        $stripe = new \Stripe\StripeClient(
+            config('constants.STRIPE_KEY')
+        );
+
+        $last4 = '';
+        $pmt_type = '';
+        $stripe_id = $this->stripe_id;
+        if($stripe_id != ''){
+            $payment_intent = $stripe->paymentIntents->retrieve(
+                $stripe_id,
+                []
+            );
+            $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
+        }
+
+        if($last4 == ''){
+            $pmt_type_json = json_decode($this->pmt_json,true);
+            if($pmt_type_json['pmt_by_check'] != 0){
+                $pmt_type = 'Check No: '.$pmt_type_json['check_no'];
+            }else if($pmt_type_json['pmt_by_comp'] != 0){
+                $pmt_type = 'Comp';
+            }else{
+                $pmt_type = 'Cash';
+            }
+        }else{
+            $pmt_type =  'CC ending in ********'.$last4;
+        }
+
+        return $pmt_type;
+    }
+
 }

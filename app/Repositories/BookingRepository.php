@@ -244,7 +244,8 @@ class BookingRepository
                     $tip = $extra_fees['tip'];
                     $discount = $extra_fees['discount'];
                     $service_fee = $extra_fees['service_fee'];
-                    $main_total = $tip + $tax + $totprice_for_this - $discount + (($totprice_for_this * $service_fee )/100);
+                    $service_fee = ($totprice_for_this * $service_fee )/100;
+                    $main_total = $tip + $tax + $totprice_for_this - $discount + $service_fee;
                     $name =  @$book_details['customer']['fname'].' '.@$book_details['customer']['lname'];
                 }
 
@@ -283,7 +284,7 @@ class BookingRepository
     public function getdeepdetailofcurrentorder($BookingDetail){
         $full_ary = [];
         foreach($BookingDetail as $book_details){
-            $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid']])->first();
+            $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
             if(@$book_details['businessservices']['service_type']=='individual')
             { 
                 $b_type = 'Personal Training'; 
@@ -309,35 +310,17 @@ class BookingRepository
                 $discount = $extra_fees['discount'];
                 $service_fee = $extra_fees['service_fee'];
             }
-            $qty = '';
-            $totprice_for_this = 0;
-            $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
-            $aprice_adu = $aprice_chi = $aprice_inf = 0;
-            if( !empty($aprice['adult']) ){ 
-                $aprice_adu = $aprice['adult']; 
-            }
-            if( !empty($aprice['child']) ){
-                $aprice_chi = $aprice['child']; 
-            }
-            if( !empty($aprice['infant']) ){
-                $aprice_inf = $aprice['infant']; 
-            }
-
-            $pmt_json = json_decode(@$book_details['pmt_json'],true);
-            if($pmt_json['pmt_by_comp'] == 0){
-                $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
-                if( !empty($a['adult']) ){ 
-                    $totprice_for_this += $aprice_adu * $a['adult'];
-                }
-                if( !empty($a['child']) ){
-                    $totprice_for_this += $aprice_chi * $a['child'];
-                }
-                if( !empty($a['infant']) ){
-                    $totprice_for_this += $aprice_inf * $a['infant'];
-                }
-            }
+            $bookingdetail = UserBookingDetail::where('id',@$book_details['user_booking_detail']['id'])->first();
+            $totprice_for_this = @$bookingdetail->total();
             $name = $book_details['customer']['fname'].' '. $book_details['customer']['lname'];
             $main_total =  $totprice_for_this   + $tax + $tip - $discount + (($totprice_for_this * $service_fee )/100);
+
+            $pmt_json = json_decode(@$book_details['pmt_json'],true);
+            if($pmt_json['pmt_by_comp'] != 0){
+                $totprice_for_this = 0;
+                $main_total = 0;
+            }
+
             $one_array = array (
                     "pro_pic" => $pro_pic,
                     "orderid" => $book_details["id"],
@@ -368,10 +351,11 @@ class BookingRepository
     public function getorderdetailsfromodid($oid,$orderdetailid){
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
-                $business_services = BusinessServices::where('id',@$booking_details->sport)->first();
-        $businessuser= CompanyInformation::where('id', @$business_services->cid)->first();
-        $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$booking_details->priceid,'serviceid' =>@$booking_details->sport])->first();
-        $schedulerdata = BusinessActivityScheduler::where(['serviceid' => @$booking_details->sport ,'id' =>@$booking_details->act_schedule_id ])->first();
+        $business_services = $booking_details->business_services;
+        $businessuser= $booking_details->business_services->company_information;
+        $BusinessPriceDetails = $booking_details->business_price_details;
+        $categoty_name = $BusinessPriceDetails->business_price_details_ages->category_title;
+        $schedulerdata = $booking_details->business_activity_scheduler;
 
         if(@$businessuser->logo != "") {
             if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$businessuser->logo)) {
@@ -383,61 +367,27 @@ class BookingRepository
         }else{ $com_pic = '/public/images/service-nofound.jpg'; }
 
         $SpotsLeftdis = 0;
-        $SpotsLeft = [];
-        $SpotsLeft = UserBookingDetail::where(['act_schedule_id'=>@$booking_details->act_schedule_id])->whereDate('bookedtime', '=', @$booking_details->bookedtime)->get()->toArray();
-        
-        $totalquantity = 0;
-        foreach($SpotsLeft as $data1){
            
-            $item = json_decode($data1['qty'],true);
-            if($item['adult'] != '')
-                $totalquantity += $item['adult'];
-            if($item['child'] != '')
-                $totalquantity += $item['child'];
-            if($item['infant'] != '')
-                $totalquantity += $item['infant'];
-        }
+        $totalquantity = $this->gettotalbooking(@$booking_details->act_schedule_id,@$booking_details->bookedtime);
         if( @$schedulerdata['spots_available'] != ''){
             $SpotsLeftdis =  @$schedulerdata['spots_available'] - $totalquantity;
         }
 
-        $time='—';
+        $time='';
         if(@$schedulerdata->set_duration != ''){
-            $tm = explode(' ',$schedulerdata->set_duration);
-            $hr=''; $min=''; $sec='';
-            if($tm[0]!=0){ $hr=$tm[0].' hour '; }
-            if($tm[2]!=0){ $min=$tm[2].' minutes '; }
-            if($tm[4]!=0){ $sec=$tm[4].' seconds'; }
-            if($hr!='' || $min!='' || $sec!='')
-            { $time =  $hr.$min.$sec; } 
+            $time = $schedulerdata->get_clean_duration();
+        }
+        $expdate = '';
+        if($time == ''){
+            $expdate  = $booking_details->expired_at;
+            $time = $booking_details->expired_duration;
         }
 
 
-        $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$orderdetailid)->get();
+        $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$booking_status->id)->get();
         $sub_totprice = 0;
         foreach( $booking_details_for_sub_total as $bds){
-            $aprice = json_decode($bds->price,true); 
-            $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
-            if( !empty($aprice['adult']) ){ 
-                $sub_price_adu = $aprice['adult']; 
-            }
-            if( !empty($aprice['child']) ){
-                $sub_price_chi = $aprice['child']; 
-            }
-            if( !empty($aprice['infant']) ){
-                $sub_price_inf = $aprice['infant']; 
-            }
-
-            $a = json_decode($bds->qty,true);
-            if( !empty($a['adult']) ){  
-                $sub_totprice += $sub_price_adu * $a['adult'];
-            }
-            if( !empty($a['child']) ){
-                $sub_totprice += $sub_price_chi * $a['child'];
-            }
-            if( !empty($a['infant']) ){ 
-                $sub_totprice += $sub_price_inf * $a['infant'];
-            }
+            $sub_totprice += $bds->total();
         }
 
         $tot_amount_cart = 0;
@@ -445,46 +395,23 @@ class BookingRepository
             $tot_amount_cart = @$booking_status->amount;
         }
         
-    
-        $aprice = json_decode(@$booking_details->price,true); 
-        $aprice_adu = $aprice_chi = $aprice_inf = 0;
-        if( !empty($aprice['adult']) ){ 
-            $aprice_adu = $aprice['adult']; 
-        }
-        if( !empty($aprice['child']) ){
-            $aprice_chi = $aprice['child']; 
-        }
-        if( !empty($aprice['infant']) ){
-            $aprice_inf = $aprice['infant']; 
-        }
-
-        $qty = '';
-        $totprice_for_this = 0;
-        $a = json_decode(@$booking_details->qty,true);
-        if( !empty($a['adult']) ){ 
-            $qty .= 'Adult: '.$a['adult']; 
-            $totprice_for_this += $aprice_adu * $a['adult'];
-        }
-        if( !empty($a['child']) ){
-            $qty .= '<br> Child: '.$a['child']; 
-            $totprice_for_this += $aprice_chi * $a['child'];
-        }
-        if( !empty($a['infant']) ){
-            $qty .= '<br>Infant: '.$a['infant']; 
-            $totprice_for_this += $aprice_inf * $a['infant'];
-        }
-    
+        $qty = $booking_details->getparticipate();
+        $discount =  $service_fee = $tax_for_this = $tip =0;
+        $totprice_for_this = $booking_details->total();
         if(@$booking_status->user_type == 'user'){
             $taxval = $tot_amount_cart - $sub_totprice; 
             $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
             $main_total =  $tax_for_this + $totprice_for_this;
+            $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
         }else{  
             $extra_fees = json_decode(@$booking_details->extra_fees,true); 
             $tax_for_this = $extra_fees['tax'];
             $tip = $extra_fees['tip'];
             $discount = $extra_fees['discount'];
             $service_fee = $extra_fees['service_fee'];
-            $main_total = $tip + $tax_for_this + $totprice_for_this - $discount + (($totprice_for_this * $service_fee )/100);
+            $service_fee = ($totprice_for_this * $service_fee )/100;
+            $main_total = $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee;
+            $nameofbookedby = $booking_status->customer->fname.' '.$booking_status->customer->lname;
         }
 
         $parti_data = '';
@@ -493,20 +420,9 @@ class BookingRepository
             $qty = "—";
         }
 
-        $ap = json_decode(@$booking_details->participate,true); 
-        if(!empty($ap)){
-            foreach($ap as $data){
-                if($data['from'] == 'family'){
-                    $family = UserFamilyDetail::where('id',$data['id'])->first();
-                    $parti_data .= @$family->first_name.' '.@$family->last_name.'<br>';
-                }else{ 
-                    $parti_data .= Auth::user()->firstname.' '.Auth::user()->lastname.'<br>'; 
-                } 
-            } 
-        }
-
+        $parti_data = $booking_details->decodeparticipate();
         $to_rem = 0;
-        $created_at = $order_id =  $program_name = $end_activity_date = $bookedtime = $nameofbookedby = $sport_activity = $select_service_type = $activity_for = $activity_location = $price_opt = $shift_start = "—"; 
+        $created_at = $order_id =  $program_name = $end_activity_date = $bookedtime = $sport_activity = $select_service_type = $activity_for = $activity_location = $price_opt = $shift_start = "—"; 
         if(@$booking_status->order_id != ''){
             $order_id = @$booking_status->order_id;
         }
@@ -532,10 +448,6 @@ class BookingRepository
             $bookedtime = date('d-m-Y', strtotime(@$booking_details->bookedtime));
         }
 
-        if(Auth::user()->firstname != '' && Auth::user()->lastname != ''){
-            $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
-        }
-
         if(@$business_services->sport_activity != ''){
             $sport_activity = $business_services->sport_activity;
         }
@@ -552,7 +464,7 @@ class BookingRepository
             $activity_location = $business_services->activity_location;
         }
 
-        if(@$business_services->activity_location != ''){
+        if(@$BusinessPriceDetails->price_title != ''){
             $price_opt = @$BusinessPriceDetails->price_title.' - '.@$BusinessPriceDetails->pay_session.' Sessions';
         }
 
@@ -560,18 +472,8 @@ class BookingRepository
             $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
         }
 
-        $stripe = new \Stripe\StripeClient(
-            config('constants.STRIPE_KEY')
-        );
-
-        $last4 = '';
-        if(@$booking_status->stripe_id != ''){
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $booking_status->stripe_id,
-                []
-            );
-            $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
-        }
+        $pmt_type = $booking_status->getstripedata();
+        $last4 = $pmt_type;
 
         $one_array = array (
             "com_pic" => $com_pic,
@@ -588,14 +490,21 @@ class BookingRepository
             "qty" => $qty,
             "parti_data" => $parti_data,
             "last4" => $last4,
+            "pmt_type" => $pmt_type,
             "shift_start" => $shift_start,
             "main_total" => @$main_total,
             "tax_for_this" => @$tax_for_this,
             "price_opt" => @$price_opt ,
+            "BusinessPriceDetails" => $BusinessPriceDetails,
             "to_rem" => @$to_rem ,
             "totprice_for_this" => $totprice_for_this,
             "nameofbookedby" => $nameofbookedby,
             "company_name" =>  @$businessuser->company_name,
+            "amount" =>   $booking_status->amount,
+            "discount" =>  $discount ,
+            "tip" =>  $tip,
+            "service_fee" =>  $service_fee,
+            "categoty_name" =>   $categoty_name,
         );
         return $one_array;
     }

@@ -250,11 +250,11 @@ class BusinessActivityScheduler extends Model
                     }
 
                     if($key == 'minute'){
-                        $key = 'min';
+                        $key = 'Min';
                     }
 
                     if($key == 'second'){
-                        $key = 'sec';
+                        $key = 'Sec';
                     }
                     $string .= " ".$value." ".$key;
                 }

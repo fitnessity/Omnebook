@@ -13,10 +13,10 @@
       <div class="container-fluid p-0">
 	 			
 	 			<div class="row">
-	 				<div class="col-md-4 col-xs-6">
+	 				<div class="col-md-4 col-xs-12">
 	 					<div class="tab-hed ">Manage Customers</div>
 	 				</div>
-	 				<div class="col-md-8 col-xs-6">
+	 				<div class="col-md-8 col-xs-12">
 	 					@include('customers._search_header', ['company_id' => $company->id])
 	 				</div>
 	 			</div>
@@ -64,7 +64,7 @@
 												@foreach ($customers as $customer) 
 												<div class="collapse-inner-box mrb-2">
 													<div class="row">
-														<div class="col-md-1 col-xs-3 col-sm-1">
+														<div class="col-md-1 col-xs-4 col-sm-2">
 															<div class="collapse-img">
 																@if($customer->profile_pic)
 																	<img src="{{Storage::Url($customer->profile_pic)}}" class="imgboxes" alt="">
@@ -114,13 +114,13 @@
 																<span class="red-fonts">{{$customer->expired_soon()}}</span>
 															</div>
 														</div>
-														<div class="col-md-2 col-xs-12 col-sm-1">
+														<div class="col-md-2 col-xs-12 col-sm-6">
 															<div class=" scheduled-btns">
 																<button onclick="sendmail({{$customer->id}},{{$company->id}});" class="btn-edit btn-sp">Send Welcome Email</button>
 																<a href="{{ route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]) }}" class="btn-edit">View</a>
 															</div>
 														</div>
-														<div class="col-md-1 col-xs-12 col-sm-1">
+														<div class="col-md-1 col-xs-12 col-sm-6">
 															<div class=" scheduled-btns">
 																<a href="{{ route('business_customer_delete',['business_id' =>$company->id, 'id'=>$customer->id]) }}" class="delcustomer">
 																	<i class="fa fa-trash"></i></a>

@@ -151,6 +151,19 @@ class UserBookingDetail extends Model
         }    
     }
 
+    public function getparticipate(){
+        $participate = '';
+        $qty =  json_decode($this->qty);
+        if(!empty($qty)){
+            foreach(['adult', 'child', 'infant'] as $key){
+                if($qty->$key != 0 && $qty->$key != ''){
+                    $participate .=  $key.':'.$qty->$key.'</br>';
+                }
+            }
+        }
+        return rtrim($participate,' </br> ');
+    }
+
     public function decodeparticipate(){
         $participate =  json_decode($this->participate,true);
         $all_pr = '';
@@ -158,6 +171,9 @@ class UserBookingDetail extends Model
             foreach($participate as $pr){
                 if($pr['from'] == "user"){
                     $name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
+                    $all_pr .= $name.' </br> ';
+                }else if($pr['from'] == "customer"){
+                    $name = str_replace('(me)','',$pr['pc_name']);
                     $all_pr .= $name.' </br> ';
                 }else{
                     $familydata = UserFamilyDetail::select('first_name','last_name','birthday')->where('id',$pr['id'])->first();
@@ -169,6 +185,13 @@ class UserBookingDetail extends Model
             }
         }
         return  rtrim($all_pr,' </br> ');
+    }
+
+    public function getremainingsession(){
+        $pay_session = $this->pay_session;
+        $checkindetailscnt = BookingCheckinDetails::where(['order_detail_id'=> $this->id,'checkin'=>1])->count();
+        $remaining = $pay_session - $checkindetailscnt;
+        return $remaining;
     }
 }
 
