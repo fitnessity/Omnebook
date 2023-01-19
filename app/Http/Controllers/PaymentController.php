@@ -159,7 +159,6 @@ class PaymentController extends Controller {
                     $priceid = $cartnew[$i]['priceid'];
                     $sesdate = $cartnew[$i]['sesdate'];
                     $pidval = $cartnew[$i]['code'];
-                    $qty = $cartnew[$i]['code'];
                     $act_schedule_id = $cartnew[$i]['actscheduleid'];
                     if(!empty($cartnew[$i]['adult'])){
                         $aduqnt = $cartnew[$i]['adult']['quantity'];

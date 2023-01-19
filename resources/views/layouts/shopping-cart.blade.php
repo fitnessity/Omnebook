@@ -11,6 +11,7 @@
     use App\BusinessTerms;
     use App\BusinessSubscriptionPlan;
 	use Carbon\Carbon;
+    use App\Repositories\BookingRepository;
 
     if(Auth::user()){
         $username = Auth::user()->firstname.' '.Auth::user()->lastname ;
@@ -19,9 +20,11 @@
     }
    /* echo"<pre>";*/  /*print_r($cart['cart_item']);*/ /*exit();*/
     $ajaxname = '';
-     $totalquantity = 0;
 
     $fees = BusinessSubscriptionPlan::where('id',1)->first();
+
+    $soldout_chk = 0;
+    $bookings = new BookingRepository ;
 ?>
 
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/creditcard.css') }}">
@@ -35,17 +38,32 @@
     	<div class="row">
     		<div class="col-sm-6 col-md-7 col-lg-7 ord-details">
     			<h3>Order Details</h3>
-                <?php $item_price=0; 
+                <?php $item_price = $discount =0;  
     				foreach ($cart['cart_item'] as $item) {
-                    $totalquantity = 0; 
+                        $totalquantity = 0;
+                        $Sold_out = '';
+                        $serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+                        $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
                       /*  print_r($item);exit();*/
-                        if(!empty($item['adult']))
+                        if(!empty($item['adult'])){
                             $totalquantity += $item['adult']['quantity'];
-                        if(!empty($item['child']))
+                            /*echo $serprice[0]['adult_discount'];
+                            echo $item['adult']['price'];*/
+                            $discount += ($item['adult']['price'] *$serprice[0]['adult_discount'])/100; 
+                        }
+                        if(!empty($item['child'])){
                             $totalquantity += $item['child']['quantity'];
-                        if(!empty($item['infant']))
+                           /* echo $serprice[0]['child_discount'];
+                            echo $item['child']['price'];*/
+                            $discount += ($item['child']['price'] *$serprice[0]['child_discount'])/100;
+                        }
+                        if(!empty($item['infant'])){
                             $totalquantity += $item['infant']['quantity'];
-                       /*echo $totalquantity;*/
+                            /*echo $serprice[0]['infant_discount'];
+                            echo $item['infant']['price'];*/
+                            $discount += ($item['infant']['price'] *$serprice[0]['infant_discount'])/100;
+                        }
+
     					$item_price = $item_price + $item["totalprice"];
     					if ($item['image']!="") {
     						if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
@@ -57,6 +75,12 @@
     					
     					/*$bookscheduler = BusinessActivityScheduler::where('serviceid', $item["code"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();*/
                         $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+
+                        $tot_cart_qty = ($db_totalquantity + $totalquantity);
+                        if( $bookscheduler[0]['spots_available'] <  $tot_cart_qty ){
+                            $soldout_chk = 1;
+                            $Sold_out = "Sold Out";
+                        }
     					$act = BusinessServices::where('id', $item["code"])->get()->toArray();
     					//DB::enableQueryLog();
     					$ser = BusinessService::where('cid', $act[0]["cid"])->get()->toArray();
@@ -68,7 +92,7 @@
                         $covidtext = @$BusinessTerms->covidtext;
                         $refundpolicytext = @$BusinessTerms->refundpolicytext;
     					//dd(\DB::getQueryLog());
-    					$serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+    					
     					//print_r($ser[0]);
     					$service_fee= ($item["totalprice"] * $fees->service_fee)/100;
     					$tax= ($item["totalprice"] * $fees->site_tax)/100;
@@ -83,6 +107,9 @@
                     <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
                     <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
                     <div class="row">
+                        <div class="col-md-12">
+                            <label class="soldout-text">{{$Sold_out}}</label>
+                        </div> 
                         <div class="col-lg-3">	
                             <div class="ord-img"> 
                                 <img src="<?php echo $profilePic; ?>" alt="">
@@ -195,7 +222,7 @@
                                         <a class="send-mesg" href="#" title="" data-toggle="tooltip" data-original-title="Send Message"><i class="fa fa-comment"></i></a>
                                         <span class="pipe"> | </span>-->
                                       <!--   <i class="fas fa-pencil-alt p-red-color"></i> -->
-                                        <a href="/removetocart?code=<?php echo $item["code"]; ?>" class="p-red-color">
+                                        <a href="/removetocart?priceid=<?php echo $item["priceid"]; ?>" class="p-red-color">
                                         <i class="fas fa-trash-alt p-red-color"></i></a>
                                     </div>
                                     <!--<div class="gift-activity">
@@ -450,7 +477,7 @@
             <?php
     			$service_fee= ($item_price * $fees->service_fee)/100;
     			$tax= ($item_price * $fees->site_tax)/100;
-    			$total_amount = $item_price + $service_fee + $tax;
+    			$total_amount = $item_price + $service_fee + $tax - $discount;
     		?>
     		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
     		<div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
@@ -464,6 +491,7 @@
     								<label>Subtotal </label>
     								<label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label>
     								<label>Tax: </label>
+                                    <label>Discount: </label>
     								<label>Shpping:</label>
     							</div>
     						</div>
@@ -473,7 +501,8 @@
     								<span> <?php echo "$ " . number_format($item_price, 2); ?> </span>
     								<span> <?php echo "$ " .number_format($service_fee,2); ?> </span>
     								<span> <?php echo "$ " .number_format($tax,2); ?> </span>
-    								<span> $0 </span>
+    								<span> {{number_format($discount,2)}} </span>
+                                    <span> $0 </span>
     							</div>
     						</div>
     					</div>
@@ -587,7 +616,7 @@
                             </div>
     					</div>
                         <div class="btn-ord-txt">
-                            <button class="post-btn-red" type="submit" id="checkout-button">Check Out</button>
+                            <button class="post-btn-red" type="submit" id="checkout-button" @if($soldout_chk == 1) disabled @endif>Check Out</button>
                         </div>
     				</div>
     			</div>
@@ -618,12 +647,14 @@
                                     <label>Subtotal </label>
                                     <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label>
                                     <label>Tax: </label>
+                                    <label>Discount: </label>
                                     <label>Shpping:</label>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
                                 <div class="inner-box-right"> 
                                     <span> 0 </span>
+                                    <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>

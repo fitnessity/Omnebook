@@ -48,7 +48,7 @@
 													<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
 														<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
 
-															<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+															<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i></a>
 													</div>
 												@endauth
 												@guest
@@ -83,7 +83,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> 
 					</div>
 				@endforeach
 			</div>

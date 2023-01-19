@@ -1677,13 +1677,13 @@
                                         Give your customers THINGS TO KNOW and information on how and what to prepare before they book.
                                     </p>
                                     <br/><br/>
-                                    <!-- <div class="form-group">
+                                    <div class="form-group">
                                         <label for="house_rules">Know Before You Go </label>
-                                        <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="houserules" id="house_rules" cols="30" rows="6" class="form-control" maxlength="1000">{{ $houserules }}</textarea>
+                                        <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="houserules" id="house_rules_terms" cols="30" rows="6" class="form-control" maxlength="1000">{{ $houserules }}</textarea>
                                         <span class="error" id="err_house_rules"></span>
 
-                                        <div class="text-right"><span id="house_rules_left">1000</span> Characters Left</div>
-                                    </div> -->
+                                        <div class="text-right"><span id="house_rules_terms_left">1000</span> Characters Left</div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="cancelation_policy">Cancelation Policy <!-- <span id="star">*</span> --></label>
@@ -3640,7 +3640,7 @@
                                         <textarea  placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly." name="know_before_you_go" id="house_rules" cols="30" rows="6" class="form-control" maxlength="2000">{{ $knowbeforeugo }}</textarea>
                                         <span class="error" id="err_house_rules"></span>
 
-                                        <div class="text-right"><span id="house_rules_left">1000</span> Characters Left</div>
+                                        <div class="text-right"><span id="house_rules_left">2000</span> Characters Left</div>
                                     </div> 
 
                                     <?php $staffdata = StaffMembers::where('user_id',Auth::user()->id)->get(); ?>
@@ -10381,6 +10381,7 @@ $(document).ready(function(){
     $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
    /* $('#frm_programdesc1_left').text(150-parseInt($("#frm_programdesc1").val().length));*/
     $('#house_rules_left').text(2000-parseInt($("#house_rules").val().length));
+    $('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
     $('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
     $('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
     $('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
@@ -10430,6 +10431,10 @@ $(document).ready(function(){
     });*/
     $("#house_rules").on('input', function() {
         $('#house_rules_left').text(2000-parseInt(this.value.length));
+    });
+
+    $("#house_rules_terms").on('input', function() {
+        $('#house_rules_terms_left').text(1000-parseInt(this.value.length));
     });
     $("#cancelation_policy").on('input', function() {
         $('#cancelation_policy_left').text(1000-parseInt(this.value.length));
