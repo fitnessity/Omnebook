@@ -1301,8 +1301,8 @@
 	.scheduler-titles{display: inline-block;}
 	.price-mobileview .price-info {display: inline-block; width: 66%;}
 	.scheduled-location {text-align: left; margin-top: 8px;}	
-	.scheduled-btns{margin-top: 10px; display: ruby;}
-	.scheduled-btns .btn-edit{width: 15%; margin-top: 15px; display: inline-block;}
+	.scheduled-btns{margin-top: 10px; display: inline-block; width: 100%;}
+	.scheduled-btns .btn-edit{width: 49%; display: inline-block;}
 	.manage-cus-btn{float: left;}
 	.scheduler-info-box .timeline{display: block; text-align: left;}
 	.btn-previous{width: auto;}
@@ -1318,6 +1318,11 @@
 	.check-client-info { margin-top: 15px;}
 	.inner-top-activity { margin-top: 125px;}
 	.col-md-offset-3-custom { margin-left: 0; }
+	.delcustomer{margin: 0px;}
+	.collapse-img img {float: left;  width: 70px;  height: 70px; border-radius: 100%; overflow: hidden; border: 3px solid #ddd;}
+	.cash-tend{width: 100%;}
+	.nopadding {  padding-left: 15px;  padding-right: 15px;}
+	.post-btn-red{width: 100%; margin-top: 0px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1599,6 +1604,7 @@
 	.modal-dialog.bookingcancel{width: 30%;}
 	.modal-dialog.editbooking{width: 50%;}
 	.modal-dialog.latecancel{width: 40%;}
+	.modal-dialog.booking0customer{width: 95%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1683,6 +1689,7 @@
 	.modal-dialog.bookingcancel{width: 20%;}
 	.modal-dialog.editbooking{width: 40%;}
 	.modal-dialog.latecancel{width: 30%;}
+	.modal-dialog.booking0customer{width: 95%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
@@ -2323,8 +2330,8 @@
 	.scheduler-titles{display: inline-block;}
 	.price-mobileview .price-info {display: inline-block; width: 73%;}
 	.scheduled-location {text-align: left; margin-top: 8px;}	
-	.scheduled-btns{margin-top: 10px; display: ruby;}
-	.scheduled-btns .btn-edit{width: 50%; display: inline-block;}
+	.scheduled-btns{margin-top: 10px; display: grid;}
+	.scheduled-btns .btn-edit{width: 100%; display: inline-block; margin-bottom: 5px;}
 	.w-80 {  width: 78% !important;}
 	.priceactivity-scheduler{width: 100%;}
 	.scheduler-info-box .timeline{display: block; text-align: left;}
@@ -2350,6 +2357,18 @@
 	.col-md-offset-3-custom {  margin-left: 0;}
 	.inner-top-activity {  margin-top: 0px;}
 	.classes-info { border-right: none;}
+	.nopadding{padding-left: 15px; padding-right: 15px;}
+	.changecalce label{margin-left: 0;}
+	.cash-tend{margin-left: 0px;}
+	.edit-costume{margin-left: 0px;}
+	.terms-wrap{padding-left: 0px;}
+	.terms-wrap #terms_condition{min-height: 17px; width: 19%;}
+	.modal-banner .single-banner{padding: 0 0px;}
+	.delcustomer{margin: 0px;}
+	.customer-profile-info span{text-align: end;}
+	.cash-tend{width: 100%;}
+	.save-pmt-checkbox{display: block ruby;}
+	.post-btn-red{width: 100%; margin-top: 0px;}
 }
 
 @media(max-width: 575px) {
