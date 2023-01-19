@@ -407,18 +407,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -702,18 +694,10 @@
 													@endphp
 													<div class="activity-information activites-height">
 
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank" class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -988,18 +972,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -1274,18 +1250,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}" 
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -1562,18 +1530,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}" 
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -1847,18 +1807,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
@@ -2134,18 +2086,10 @@
 														}
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+														<span><a  href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a 
-							                                @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                @else 
-							                                    href="{{ route('userlogin') }}"  
-							                                @endif
+							                                href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                    target="_blank">{{ $service['program_name'] }}</a>
 							                         	</span>
 														<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>

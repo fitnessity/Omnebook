@@ -1267,6 +1267,14 @@ $chk_found = '';
 </div>
 </div>
 
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+  <div class="container">
+    <p class="navbar-text navbar-right">
+    	<a href="#check_availability" class="showall-btn" href="http://lvh.me:8080/activities/get_started/events">Check Availablity</a>
+    </p>
+  </div>
+</nav>
+
 @include('layouts.footer')
 
 <script>
