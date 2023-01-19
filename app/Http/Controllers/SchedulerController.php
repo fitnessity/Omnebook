@@ -378,17 +378,16 @@ class SchedulerController extends Controller
 
      public function activity_purchase($book_id = null,$cus_id =null){
           /*echo  $book_id;
-          echo  $cus_id;
-          print_r($request->all());*/
+          echo  $cus_id;exit;*/         
           $cart_item = [];
           if (session()->has('cart_item')) {
                $cart_item = session()->get('cart_item');
           }
 
-          // /print_r($cart_item);exit;
+          //print_r($cart_item);exit;
           $cardInfo = $userfamilydata= [];
           $book_cnt = $activated =0;
-          $book_id = $book_data =  $address = $username = $age = $purchasefor = $price_title = $status=  $user_data = $tax = $user_type = '';
+          $book_data =  $address = $username = $age = $purchasefor = $price_title = $status=  $user_data = $tax = $user_type = '';
 
           $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
           $companyservice  =[];
@@ -401,6 +400,7 @@ class SchedulerController extends Controller
           $tax = BusinessSubscriptionPlan::where('id',1)->first();
           $userfamilydata = [];
           $username = $address = ''; 
+         
           if($book_id != '' && $book_id != '0'){
                $book_data = UserBookingDetail::getbyid($book_id);
                $user_type = @$book_data->booking->user_type ;
@@ -412,6 +412,7 @@ class SchedulerController extends Controller
                     $userfamilydata = $book_data->booking->user->user_family_details;
                     $cardInfo = $book_data->booking->user->get_stripe_card_info();
                     $address = $user_data->getaddress();
+                    $pageid =  $book_data->booking->user->id;
                }else if(@$book_data->booking->user_type == 'customer'){
                     $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
                     $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
@@ -420,13 +421,14 @@ class SchedulerController extends Controller
                     $userfamilydata = Customer::where('parent_cus_id',$book_data->booking->customer->id)->get();
                     $cardInfo = $book_data->booking->customer->get_stripe_card_info();
                     $address = $user_data->full_address();
+                    $pageid =  $book_data->booking->customer->id;
                } 
 
                $book_cnt = $this->booking_repo->getbookingbyUserid( $user_data->id);
                $last_book_data = $this->booking_repo->lastbookingbyUserid( $user_data->id);
                $last_book = explode("~~", $last_book_data);
                $purchasefor  = @$last_book[0];
-               $price_title  = @$last_book[1];   
+               $price_title  = @$last_book[1];  
           }else if($cus_id != ''){
                $user_type = 'customer';
                $customerdata = $this->customers->findById($cus_id);
@@ -444,6 +446,7 @@ class SchedulerController extends Controller
                $last_book = explode("~~", $last_book_data);
                $purchasefor  = @$last_book[0];
                $price_title  = @$last_book[1];
+               $pageid = $cus_id;
           }
 
           if($activated == 0){
@@ -451,11 +454,22 @@ class SchedulerController extends Controller
           }else{
                $status = "Active";
           }
-
           
-
           $program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $companyId])->get();
-			
+
+          $modelchk = 0;
+          $modeldata = '';
+          
+          //$ordermodelary = array("630");
+          $ordermodelary = session()->get('ordermodelary');
+          if(!empty($ordermodelary)){
+               $modelchk = 1;
+               $modeldata = $this->getmultipleodermodel($ordermodelary);
+               session()->forget('ordermodelary');
+          }
+
+		
+          //print_r($modeldata);exit;
           return view('scheduler.activity_purchase', [
                'business_details' => $business_details,
                'companyId' => $companyId,
@@ -475,7 +489,456 @@ class SchedulerController extends Controller
                'tax'=>  $tax, 
                'cardInfo' => $cardInfo,
                'user_type' => $user_type,
+               'modelchk' => $modelchk,
+               'modeldata' => $modeldata,
+               'pageid' => $pageid,
           ]);
+     }
+
+     public function getmultipleodermodel($array)
+     {    
+          $html = '';
+          $totaltax = 0;
+          $subtotaltax = 0;
+          $tot_dis = 0;
+          $tot_tip = 0;
+          $service_fee = 0;
+
+          $html .= '<div class="row"> 
+                         <div class="col-lg-4 bg-sidebar">
+                              <div class="your-booking-page side-part">
+                                   <div class="booking-page-meta">
+                                     <a href="#" title="" class="underline"></a>
+                                   </div>
+                                   <div class="box-subtitle">
+                                     <h4>Transaction Complete</h4>
+                                     <div class="modal-inner-box">
+                                         <label></label>
+                                         <h3>Email Receipt</h3>
+                                         <div class="form-group">
+                                             <input type="text" name="email" id="email"  placeholder="youremail@abc.com" class="form-control">
+                                         </div>
+                                         <button class="submit-btn btn-modal-booking post-btn-red" 
+                                         onclick="sendemail();">Send Email Receipt</button>
+                                         <div class="reviewerro" id="reviewerro"></div>
+                                     </div>
+                                   </div>
+                                   <div class="powered-img">
+                                     <label>Powered By</label>
+                                     <div class="booking-modal-logo">
+                                         <img src="'.url("/public/images/fitnessity_logo1.png").'">
+                                     </div>
+                                   </div>
+                               </div>
+                         </div>
+                         <div class="col-lg-8">
+                              <div class="modal-booking-info">
+                                   <h3>Booking Receipt</h3>';
+                    
+          foreach($array as $or){
+               $order_detail = UserBookingDetail::where('id',$or)->first();
+               $odt = $this->booking_repo->getorderdetailsfromodid($order_detail->booking_id,$or);
+               $totaltax += $odt['tax_for_this'];
+               $tot_dis += $odt['discount'];
+               $tot_tip += $odt['tip'];
+               $service_fee += $odt['service_fee'];
+               $total = ($odt['totprice_for_this'] - $odt['discount']);
+               $subtotaltax += $total;
+               $per_total = $total; 
+               $html .= '<div class="row">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>BOOKING#</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['confirm_id'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>PROVIDER COMPANY NAME:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['company_name'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>PROGRAM NAME:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['program_name'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>CATEGORY:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['categoty_name'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>PRICE OPTION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.@$odt['BusinessPriceDetails']['price_title'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>NUMBER OF SESSIONS:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.@$odt['BusinessPriceDetails']['pay_session'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>MEMBERSHIP OPTION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.$odt['BusinessPriceDetails']['membership_type'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>PARTICIPANT QUANTITY:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'. $odt['qty'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>WHO IS PRATICIPATING?</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['parti_data'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>ACTIVITY TYPE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['sport_activity'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>SERVICE TYPE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['select_service_type'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>MEMBERSHIP DURATION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.$order_detail->expired_duration.'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>PURCHASE DATE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.$odt['created_at'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>MEMBERSHIP ACTIVATION DATE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.date('d-m-Y',strtotime($order_detail->contract_date)).'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>MEMBERSHIP EXPIRATION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <span>'.date('d-m-Y',strtotime($order_detail->expired_at)).'</span>
+                                   </div>
+                              </div>';
+
+                         /*   <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>TOTAL REMAINNIG:</label>
+                                   </div>
+                               </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span></span>
+                                   </div>
+                               </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>EXPIRATION DATE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['expdate'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <label>DATE BOOKED:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['created_at'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>RESERVED DATE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span></span>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>BOOKED BY:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <span>'. $odt['nameofbookedby'].'</span>
+                                   </div>
+                              </div>'
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>CHECK IN DATE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <span></span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <label>CHECK IN TIME:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                        <span></span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>ACTIVITY LOCATION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['activity_location'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>ACTIVITY DURATION:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['time'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <label>GREAT FOR:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>'. $odt['activity_for'].'</span>
+                                   </div>
+                              </div>
+                         */
+
+                              $html .='<div class="col-md-6 col-xs-6">
+                                   <div class="">
+                                   <label>PRICE:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>$'.$odt['totprice_for_this'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                   <label style="color:#fe0000">DISCOUNT:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>$'.$odt['discount'].'</span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="">
+                                   <label>TOTAL:</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="booking-page-meta-info">
+                                       <span>$'.$per_total.'</span>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="col-md-12 col-sm-12 col-xs-12">
+                              <div class="black-sparetor"></div>
+                         </div>';
+          }
+
+         /* print_r($odt);exit;*/
+          $html .= '    <div class="row border-xx mg-tp">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>PAYMENT METHOD</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>'. $odt['pmt_type'].'</span>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row border-xx">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>TIP AMOUNT</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>$'.$tot_tip.'</span>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="row border-xx">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>DISCOUNT</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>$'.$tot_dis.'</span>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row border-xx">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>TAX</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>$'. $totaltax .'</span>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="row border-xx">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>FEES</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>$'.$service_fee.'</span>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row border-xx">
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <label>TOTAL AMOUNT PAID</label>
+                                   </div>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                   <div class="total-titles">
+                                        <span>$'.$odt['amount'].'</span>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>';
+
+         return $html;
      }
 
      public function cancelbookingmodel(Request $request){
@@ -554,11 +1017,8 @@ class SchedulerController extends Controller
                }
                $position = array_search(request()->_token, $data);
                unset($data[$position]);
-
                ActivityCancel::create($data);
-
           }else{
-               echo "else";
                if($request->has('show_cancel_on_schedule')){
                     $show_cancel_on_schedule = 1;
                }else{
@@ -589,7 +1049,6 @@ class SchedulerController extends Controller
           if($request->has('email_clients')){
               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
                foreach($databooked as $db){
-                    $data = [];
                     if($db->booking->user_type == 'user'){
                          $userdata = $db->booking->user;
                     }elseif($db->booking->user_type == 'customer'){
@@ -604,7 +1063,22 @@ class SchedulerController extends Controller
                } 
           }
 
-         
+          /*if($request->has('email_Instructor')){
+               echo "hii";
+               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
+               //print_r($databooked);
+               foreach($databooked as $db){
+                    $insdata = $db->booking->business_services->StaffMembers();
+                    print_r($insdata);exit;
+                    $businessdata = $db->business_services;
+                    $companydata = $db->business_services->company_information;
+                    $time = date('h:i a',strtotime($db->business_activity_scheduler->shift_start));
+                    $date = $request->cancel_date;
+                    $status = MailService::sendEmailforcancelschedule($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
+               } 
+          }*/
+
+         //exit;
           /*print_r($databooked);exit;*/
           return redirect('manage-scheduler');
      }
@@ -624,6 +1098,7 @@ class SchedulerController extends Controller
                $d = clone($filter_date);
                $days[] = $d->modify('+'.($i+$shift).' day');
           }
+
           return view('scheduler.activity_schedule',[
                'days' => $days,
                'filter_date' => $filter_date,
@@ -762,16 +1237,15 @@ class SchedulerController extends Controller
      }
 
      public function checkout_register(Request $request){
-
-          //print_r($request->all()); exit;
+          //print_r($request->all()); 
+          $bookidarray = [];
           $fitnessity_fee= 0;
           $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
           $fitnessity_fee = $bspdata->fitnessity_fee;
           $service_fee = $bspdata->service_fee;
           $tax = $bspdata->site_tax;
 
-          if($request->cardinfo == 'cardonfile' || $request->cardinfo == 'newcard'){
-
+          if(($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != '') || ($request->cc_amt != 0 && $request->cc_amt != '' )){
                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                $customer='';
@@ -826,7 +1300,7 @@ class SchedulerController extends Controller
                $prodata = json_encode($proid); 
                $listItems = json_encode($listItems);
 
-               if($request->cardinfo == 'newcard'){
+               if($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != ''){
 
                     $cc_new_card_amt = $request->cc_new_card_amt;
                     $totalprice = $cc_new_card_amt;
@@ -956,7 +1430,6 @@ class SchedulerController extends Controller
                               $cartnew[$cnt]['child']= $c['child'];
                               $cartnew[$cnt]['infant']= $c['infant'];
                               $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
-                              $cartnew[$cnt]['invidualprice']= $c['totalprice'];
                               $cnt++;
                               unset($cart['cart_item'][$key]);
                          }
@@ -975,11 +1448,9 @@ class SchedulerController extends Controller
                               $priceid = $cartnew[$i]['priceid'];
                               $sesdate = $cartnew[$i]['sesdate'];
                               $pidval = $cartnew[$i]['code'];
-                              $qty = $cartnew[$i]['qty'];
                               $tip = $cartnew[$i]['tip'];
                               $discount = $cartnew[$i]['discount'];
                               $act_schedule_id = $cartnew[$i]['actscheduleid'];
-                              $invidualprice = $cartnew[$i]['invidualprice'];
                               if(!empty($cartnew[$i]['adult'])){
                                   $aduqnt = $cartnew[$i]['adult']['quantity'];
                                   $aduprice = $cartnew[$i]['adult']['price'];
@@ -993,23 +1464,44 @@ class SchedulerController extends Controller
                                   $infantprice = $cartnew[$i]['infant']['price'];
                               }    
 
-                              $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,
-                        'infant'=>$infantqnt); 
-                              $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
-                        'infant'=>$infantprice);
+                              $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,'infant'=>$infantqnt); 
+                              $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,'infant'=>$infantprice);
                               $encodeparticipate = json_encode($cartnew[$i]['participate']);
                               $payment_number_c = array();
                               $encodepayment_number = json_encode($payment_number_c);
+                              $encodeqty = json_encode($qty_c);
+                              $encodeprice = json_encode($price_c);
                          }
 
                          $activitylocation = BusinessServices::where('id',$pidval)->first();
-
+                         $price_detail = BusinessPriceDetails::find($priceid);
+                         $time = $act_schedule_id;
+                         $contract_date = date('Y-m-d',strtotime($sesdate));
+                         $explodetime = explode(' ',$time);
+                         $expired_at = '';
+                         if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+                              if($explodetime[1] == 'Months'){
+                                   $daynum = '+'.$explodetime[0].' month';
+                                   $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                              }else if($explodetime[1] == 'Days'){
+                                   $daynum = '+'.$explodetime[0].' days';
+                                   $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                              }else if($explodetime[1] == 'Weeks'){
+                                   $daynum = '+'.$explodetime[0].' weeks';
+                                   $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                              }else {
+                                   $daynum = '+'.$explodetime[0].' years';
+                                   $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                              }
+                         }
                          $act = array(
                               'booking_id' => $lastid,
                               'sport' => $pidval,
-                              'price' => $invidualprice,
-                              'qty' =>$qty ,
+                              'price' => $encodeprice,
+                              'qty' =>$encodeqty ,
                               'priceid' => $priceid,
+                              'pay_session' => $price_detail->pay_session,
+                              'expired_at' => $expired_at,
                               'contract_date' =>date('Y-m-d',strtotime($sesdate)),
                               'booking_detail' => json_encode(array(
                                       'activitytype' => $activitylocation->service_type,
@@ -1032,15 +1524,12 @@ class SchedulerController extends Controller
                               'transfer_provider_status' =>'unpaid',
                          );
                          $status = UserBookingDetail::create($act);
+                         $bookidarray [] = $status->id;
                           //$status->transfer_to_provider();
                     }
-               
-                    session()->forget('stripepayid');
-                    session()->forget('stripechargeid');
                     //session()->forget('cart_item');
                }
           }else{
-
                $retrun_cash = 0;
                $cash_amt_tender = 0;
                $pmt_by_check = 0;
@@ -1117,7 +1606,6 @@ class SchedulerController extends Controller
                          $cartnew[$cnt]['child']= $c['child'];
                          $cartnew[$cnt]['infant']= $c['infant'];
                          $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
-                         $cartnew[$cnt]['invidualprice']= $c['totalprice'];
                          $cnt++;
                          unset($cart['cart_item'][$key]);
                     }
@@ -1128,7 +1616,8 @@ class SchedulerController extends Controller
                     $aduqnt = $childqnt = $infantqnt = 0;
                     $taxval = $crt['tax'];
                     $activitylocation = BusinessServices::where('id',$crt['code'])->first();
-                     $payment_number_c = array( 'adult'=>0 ,'child' => 0,
+                    $price_detail = BusinessPriceDetails::find($crt['priceid']);
+                    $payment_number_c = array( 'adult'=>0 ,'child' => 0,
                         'infant'=> 0);
                     $encodepayment_number = json_encode($payment_number_c);
                     $encodeparticipate = json_encode($crt['participate']);
@@ -1152,6 +1641,25 @@ class SchedulerController extends Controller
                         'infant'=>$infantprice);
                     $encodeqty = json_encode($qty_c);
                     $encodeprice = json_encode($price_c);
+                    $time = $crt['actscheduleid'];
+                    $contract_date = date('Y-m-d',strtotime($crt['sesdate']));
+                    $explodetime = explode(' ',$time);
+                    $expired_at = '';
+                    if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+                         if($explodetime[1] == 'Months'){
+                              $daynum = '+'.$explodetime[0].' month';
+                              $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                         }else if($explodetime[1] == 'Days'){
+                              $daynum = '+'.$explodetime[0].' days';
+                              $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                         }else if($explodetime[1] == 'Weeks'){
+                              $daynum = '+'.$explodetime[0].' weeks';
+                              $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                         }else {
+                              $daynum = '+'.$explodetime[0].' years';
+                              $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                         }
+                    }
 
                     $act = array(
                          'booking_id' => $lastid,
@@ -1159,6 +1667,7 @@ class SchedulerController extends Controller
                          'price' => $encodeprice,
                          'qty' =>$encodeqty ,
                          'priceid' => $crt['priceid'],
+                         'pay_session' => $price_detail->pay_session,
                          'contract_date' =>date('Y-m-d',strtotime($crt['sesdate'])),
                          'booking_detail' => json_encode(array(
                               'activitytype' => @$activitylocation->service_type,
@@ -1181,14 +1690,19 @@ class SchedulerController extends Controller
                     );
                
                     $status = UserBookingDetail::create($act);
+                    $bookidarray [] = $status->id;
                }
-
-               session()->forget('stripepayid');
-               session()->forget('stripechargeid');
                //session()->forget('cart_item');
           }
+         
+          session()->put('cart_item', $cart);
+          session()->put('ordermodelary', $bookidarray);
 
-          return view('scheduler.checkout_register_success');
+          if($request->user_type == 'customer'){
+               return redirect('activity_purchase/0/'.$request->user_id);
+          }else{
+               return redirect('activity_purchase/'.$request->user_id);
+          }
      }
 
      public function booking_activity_cancel(Request $request){

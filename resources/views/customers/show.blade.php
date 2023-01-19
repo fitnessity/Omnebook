@@ -517,6 +517,14 @@
 																				</div>
 																			</div>
 																		</div>
+																		<div class="row">
+																			<div class="col-md-6 col-xs-6">
+																				<a class="visiting-view"> View Visits </a>
+																			</div>
+																			<div class="col-md-6 col-xs-6">
+																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer"> Edit Booking </a>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 															@endforeach
@@ -702,37 +710,37 @@
 							<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
 							<input type="hidden" id="chk" name="chk" value="update_personal">
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	First Name</label>
 										<input class="form-control" type="text" id="fname" name="fname" placeholder="First name" value="{{$customerdata->fname}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>Last Name</label>
 										<input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" value="{{$customerdata->lname}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>Email</label>
 										<input class="form-control" type="text" id="email" name="email" placeholder="Email" value="{{$customerdata->email}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Phone Number </label>
 										<input class="form-control" type="text" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{$customerdata->phone_number}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Birthdate </label>
 										<input class="form-control" type="text" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Gender </label>
 										<div>
@@ -742,39 +750,39 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Address </label>
 										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->full_address()}}">
 									</div>
 								</div>
 								 <div id="map" style="display: none;"></div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	City  </label>
 										<input class="form-control" type="text" id="city" name="city" placeholder="City " value="{{$customerdata->city}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	State </label>
 										<input class="form-control" type="text" id="state" name="state" placeholder="State" value="{{$customerdata->state}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Country </label>
 										<input class="form-control" type="text" id="country" name="country" placeholder="Country" value="{{$customerdata->country}}">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Zipcode </label>
 										<input class="form-control" type="text" id="zipcode1" name="zipcode" placeholder="Zipcode" value="{{$customerdata->zipcode}}">
 									</div>
 								</div>
 								
-								<div class="col-md-6">
+								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Profile Picture</label>
 										<div class="userblock">
@@ -871,22 +879,22 @@
 
 																		<div class="row">
 
-																			<div class="col-xl-9 col-lg-9 col-md-9 col-sm-8 col-12 form-group">
+																			<div class="col-xl-9 col-lg-9 col-md-9 col-sm-8 col-xs-12 col-12 form-group">
 																				<label for="owner">Name On Card</label>
 																				<input required type="text" name="owner" id="owner" placeholder="" class="form-control">
 																			</div>
 
-																			<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-12 form-group">
+																			<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-xs-12 col-12 form-group">
 																				<label for="cvv">CVV</label>
 																				<input required type="text" name="cvv" id="cvv" placeholder="" class="form-control">
 																			</div>
 
-																			<div id="card-number-field" class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 form-group">
+																			<div id="card-number-field" class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-12 col-12 form-group">
 																				<label for="cardNumber">Card Number</label>
 																				<input required type="text" name="cardNumber" id="cardNumber" placeholder="" class="form-control">
 																			</div>
 																			
-																			<div id="expiration-date" class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 form-group">
+																			<div id="expiration-date" class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 form-group">
 																				<input type="hidden" name="card_monthhidden" id="card_monthhidden" value="">
 																				<input type="hidden" name="card_yearhidden" id="card_yearhidden" value="">
 																				<select required id="card_month" name="card_month">
@@ -1015,6 +1023,314 @@
 								</div>
 							</div>
 						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- end modal -->
+	
+	
+	<!-- The Modal Edit Booking -->
+		<div class="modal fade compare-model" id="bookingcustomer">
+			<div class="modal-dialog booking0customer">
+				<div class="modal-content">
+					<div class="modal-header" style="text-align: right;"> 
+						<div class="closebtn">
+							<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+					</div>
+
+					<!-- Modal body -->
+					<div class="modal-body body-tbm">
+						<div class="row"> 
+							<div class="col-lg-6">
+							   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit info for membership {Program Name} </h4>
+							</div>
+							<div class="col-lg-6">
+							   <h4 class="modal-title" style="text-align: end; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;"> | Membership Status: <span class="green-fonts"> Active </span> </h4>
+							</div>
+							<div class="col-lg-12">
+								<div class="client-info"></div>
+							</div>
+							
+							<div class="col-md-12 col-xs-12 mobile-custom">
+								<div class="view-customer">
+									<ul class="nav nav-tabs" id="CustTab" role="tablist">
+									  <li class="nav-item active">
+										<a class="nav-link active" id="edit-details-info-tab" data-toggle="tab" href="#edit-details" role="tab" aria-controls="customer-info" aria-selected="true" aria-expanded="true">Edit Details</a>
+									  </li>
+									  <li class="nav-item">
+										<a class="nav-link" id="visits-tab" data-toggle="tab" href="#visits" role="tab" aria-controls="visits" aria-selected="false" aria-expanded="false">Void or Refund </a>
+									  </li>
+									  <li class="nav-item">
+										<a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false" aria-expanded="false">Suspend or Terminate</a>
+									  </li>
+									</ul>
+								</div>
+								<div class="tab-custom tab-content" id="myTabContent">
+									<div class="tab-pane fade active" id="edit-details" role="tabpanel" aria-labelledby="edit-details-info-tab">
+										<div class="row">
+											<div class="col-md-5">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Current Booking Details</h4>
+													<p class="text-center">Review the membership details before any changes</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-6">
+															<label>Total Remaining</label>
+														</div>
+														<div class="col-md-6">
+															<div class="remaining-number">
+																<span>5/10</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Booking # </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>0000000000001 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Program Name: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Tennis Lessons</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Catagory: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Private Lessons 30 Min ( 1 Person)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Price Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>30 Minute Private</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Number of Sessions:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>10 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Membership Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Drop In</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Participant Quantity:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Adult x 1</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Who's Participating:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Darryl Phipps (23)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Activity Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Tennis</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Service Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>Personal Training</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Membership Duration:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>12 Months</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Purchase Date:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Membership Activation Date: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Membership Expiration: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer tip-xp">
+																<label>Tip Amount: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer tip-xp">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Discount: </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<label>Tax:</label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6">
+															<div class="tip-xp">
+																<label>Total Amount Paid </label>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="remaining-number tip-xp">
+																<span>$95</span>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-3 nopadding">
+												<div class="title-middle-part">
+													<h4 class="edit-booking-title">Edit Section </h4>
+													<p class="text-center">Use this section to edit the membership details you need below</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-12">
+															<label>Number of sessions</label>
+															<input class="form-control" type="text" id="num" name="num" placeholder="20" value="20">
+														</div>
+														<div class="col-md-12">
+															<label>Membership Activation Date  </label>
+															<input class="form-control" type="text" id="num" name="num" placeholder="20" value="20">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="visits" role="tabpanel" aria-labelledby="visits-tab">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<div class="row">
+													<div class="col-md-12 col-xs-12">
+														<div class="visit-table-data">
+															<label>Total Number of Visits:</label>
+															<span>0</span>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					
+						
 					</div>
 				</div>
 			</div>
