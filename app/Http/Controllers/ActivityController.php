@@ -2231,19 +2231,23 @@ class ActivityController extends Controller {
                 $totalquantity += $item['infant'];
 		}
         $SpotsLeftdis= 0;
+
         if( @$actscheduledata->spots_available != ''){
             $SpotsLeftdis = $actscheduledata->spots_available - $totalquantity;
         }
-        $dayval = date('l',strtotime($request->dateval));
-        if($dayval == 'Saturday' || $dayval == 'Sunday'){ 
+
+        $current_day = date('l',strtotime($request->dateval));
+        if($current_day == 'Saturday' || $current_day == 'Sunday'){ 
+
             $total_price_val_adult =  @$pricedata['adult_weekend_price_diff'];
-            $total_price_val_child =  @$pricedata['child_weekend_price_diff'];
+            $total_price_val_child =  $pricedata['child_weekend_price_diff'];
             $total_price_val_infant =  @$pricedata['infant_weekend_price_diff'];
         }else{
             $total_price_val_adult =  @$pricedata['adult_cus_weekly_price'];
-            $total_price_val_child =  @$pricedata['child_cus_weekly_price'];
+            $total_price_val_child =  $pricedata['child_cus_weekly_price'];
             $total_price_val_infant =  @$pricedata['infant_cus_weekly_price']; 
         }
+        
 
         $stactbox.='<div class="row"><div class="col-lg-12">
                         <h4 class="modal-title partcipate-model">Select The Number of Participants</h4>
