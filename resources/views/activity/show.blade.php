@@ -701,7 +701,7 @@ $chk_found = '';
 			</div>	
 				
 	        <div class="col-lg-5 col-sm-12 col-xs-12">
-            	<h3 class="subtitle details-sp mb-30"> Check Availability </h3>
+            	<h3 class="subtitle details-sp mb-30" id="check_availability"> Check Availability </h3>
             	<div class="mainboxborder black-border">	
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
@@ -1269,7 +1269,7 @@ $chk_found = '';
 
 <nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
   <div class="container">
-    <p class="navbar-text navbar-right">
+    <p class="navbar-text navbar-right" style="text-align:center;">
     	<a href="#check_availability" class="showall-btn" href="http://lvh.me:8080/activities/get_started/events">Check Availablity</a>
     </p>
   </div>
