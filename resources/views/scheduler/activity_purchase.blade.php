@@ -61,7 +61,7 @@ input:disabled{
 								<div class="col-md-5 col-sm-12 col-xs-12 nopadding">
 									<div class="manage-search serchcustomer">
 										<div class="sub">
-											<input type="text" id="serchclient" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">
+											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{Request::get('fname')}}">
 											<div id="option-box1" style="display:none;">
 						                        <ul class="customer-list">
 						                        </ul>
@@ -591,6 +591,8 @@ input:disabled{
 							 		$grand_total  = 0 ;
 							 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
 							 		$grand_total = number_format($grand_total,0, '.', '');
+							 		$tax_ser_fees = ($service_fee + $taxes);
+							 		//echo $tax_ser_fees;
 								@endphp
 								<div class="row">
 									<div class="col-md-12 col-xs-12">
@@ -618,18 +620,18 @@ input:disabled{
 												</div>
 												
 												<div class="col-md-6 col-sm-6 col-xs-6">
-													<label>Tax </label>
+													<label>Taxes & Fees </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6">
-													<span>${{$taxes}}</span>
+													<span>${{$tax_ser_fees}}</span>
 												</div>
 												
-												<div class="col-md-6 col-sm-6 col-xs-6">
+												<!-- <div class="col-md-6 col-sm-6 col-xs-6">
 													<label>Service Fee: {{$tax->service_fee}}% </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6">
 													<span> ${{$service_fee}}</span>
-												</div>
+												</div> -->
 												<div class="col-md-12 col-sm-12 col-xs-12">
 													<div class="checkout-sapre-tor">
 													</div>

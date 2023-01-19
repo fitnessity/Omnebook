@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\BusinessCompanyDetail;
+use App\CompanyInformation;
 use App\BusinessServices;
 use App\UserBookingStatus;
 use App\BusinessActivityScheduler;
@@ -391,16 +392,17 @@ class SchedulerController extends Controller
 
           $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
           $companyservice  =[];
-		  $business_details='';
+          $company_info = '';
+		$business_details='';
           if(!empty($companyId)) {
+               $company_info = CompanyInformation::where('id', $companyId)->first();
                $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
                $business_details = isset($business_details[0]) ? $business_details[0] : [];
           }
-
           $tax = BusinessSubscriptionPlan::where('id',1)->first();
           $userfamilydata = [];
           $username = $address = ''; 
-         
+          $pageid  =0;
           if($book_id != '' && $book_id != '0'){
                $book_data = UserBookingDetail::getbyid($book_id);
                $user_type = @$book_data->booking->user_type ;
@@ -471,6 +473,7 @@ class SchedulerController extends Controller
 		
           //print_r($modeldata);exit;
           return view('scheduler.activity_purchase', [
+               'company_info' => $company_info,
                'business_details' => $business_details,
                'companyId' => $companyId,
                'book_id' => $book_id,

@@ -745,7 +745,7 @@ Route::post('/form_participate', 'PaymentController@form_participate')->name('fo
 Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
-Route::any('/success-cart/{pid}', 'LessonController@successcart')->name('successcart');
+Route::any('/success-cart/{priceid}', 'LessonController@successcart')->name('successcart');
 Route::any('/removetocart', 'LessonController@removeToCart')->name('removetocart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 

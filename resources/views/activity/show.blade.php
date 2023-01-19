@@ -46,6 +46,9 @@ input:disabled{
 
     $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
     $email = $companylat = $companylon  = $companylogo = '';
+
+    $houserules = $service['know_before_you_go'];
+    
     $comp_data = CompanyInformation::where('id', $service['cid'])->first();
     $address = '';
 	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
@@ -81,7 +84,6 @@ input:disabled{
 	if(!empty($BusinessTerms)){
 		$cancelation = $BusinessTerms->cancelation;
 		$cleaning = $BusinessTerms->cleaning;
-		$houserules = $BusinessTerms->houserules;
 	}
 
 	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
@@ -330,7 +332,7 @@ $chk_found = '';
 				</div>
 			</div>
 
-			<div class="col-lg-7 col-xs-12 pr-100">
+			<div class="col-lg-6 col-xs-12">
 				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
 				<h3 class="details-titles">{{@$service['program_name']}}</h3>
 				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
@@ -361,20 +363,19 @@ $chk_found = '';
 								<label>Duration: </label>
 								<span> </span>
 							</div> -->
-							<div>
+							<div class="mb-10">
 								<label>Service Type: </label>
 								<span> {{@$service['select_service_type']}}  </span>
 							</div>
-							<div>
+							<div class="mb-10">
 								<label>Service For: </label>
 								<span> {{@$service['activity_for']}}  </span>
 							</div>
-							<div>
+							<div class="mb-10">
 								<label>Language:</label>
 								<span> {{@$languages}}</span>
 							</div>
-
-							<div>
+							<div class="mb-10">
 								<label>Instructor:</label>
 								<span>@if(@$staffdata->name != '') {{@$staffdata->name }} @else — @endif </span>
 							</div>
@@ -386,19 +387,19 @@ $chk_found = '';
 								<label>Spots Left:</label>
 								<span> </span>
 							</div> -->
-							<div>
+							<div class="mb-10">
 								<label>Activity: </label>
 								<span>{{@$service['sport_activity']}}</span>
 							</div>
-							<div>
+							<div class="mb-10">
 								<label>  Age: </label>
-								<span>  {{@$service['age_range'] }} </span>
+								<span>{{@$service['age_range'] }} </span>
 							</div>
-							<div>
+							<div class="mb-10">
 								<label> Skill Level: </label>
 								<span>{{@$service['difficult_level']}} </span>
 							</div>
-							<div>
+							<div class="mb-10">
 								<label>  Activity Location: </label>
 								<span>{{@$service['activity_location'] }}</span>
 							</div>
@@ -412,23 +413,23 @@ $chk_found = '';
 				
 				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
 				@if($houserules != '')
-					<p>{{$houserules}}</p>
+					<p class="mb-20">{{$houserules}}</p>
 				@else
-					<p>No Details Found</p>
+					<p class="mb-20">No Details Found</p>
 				@endif
 				
 				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
 				@if($cancelation != '')
-					<p>{{$cancelation}}</p>
+					<p class="mb-20">{{$cancelation}}</p>
 				@else
-					<p>No Details Found</p>
+					<p class="mb-20">No Details Found</p>
 				@endif
 				
 				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
 				@if($cleaning != '')
-					<p>{{$cleaning}}</p>
+					<p class="mb-20">{{$cleaning}}</p>
 				@else
-					<p>No Details Found</p>
+					<p class="mb-20">No Details Found</p>
 				@endif
 				
 				<div class="row">
@@ -459,18 +460,24 @@ $chk_found = '';
 								
 							?>
 							<div class="map-info">
+                            	@if(@$comp_address != '')
 								<span>
 									<i class="fas fa-map-marker-alt map-fa"></i>
 									<p>{{$comp_address}}</p>
 								</span>
+                                @endif
+                                @if(@$Phonenumber != '')
 								<span>
 									<i class="fas fa-phone-alt map-fa"></i>
 									<p>{{$Phonenumber}}</p>
 								</span>
+                                @endif
+                                @if(@$email != '')
 								<span>
 									<i class="fa fa-envelope map-fa"></i>
 									<p>{{$email}}</p>
 								</span>
+                                @endif
 							</div>
 						</div>
 					</div>
@@ -668,8 +675,9 @@ $chk_found = '';
 				</div>	
 			</div>	
 				
-	        <div class="col-lg-5 col-sm-12 col-xs-12">
+	        <div class="col-lg-6 col-sm-12 col-xs-12">
             	<h3 class="subtitle details-sp mb-30"> Check Availability </h3>
+            	<div class="activered" id="spoterror"></div>
             	<div class="mainboxborder black-border">	
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
@@ -691,6 +699,7 @@ $chk_found = '';
 							</div>
 						</div>
 						@php $date = date('l').', '.date('F d,  Y'); @endphp 
+						<?php /*?><button id="submitcartbtn">submitcart</button><?php */?>
 						<div id="updatefilterforcart">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="choose-calendar-time">
@@ -725,6 +734,7 @@ $chk_found = '';
 										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
 										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
 										?>
+										
 										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
 											<div class="membership-details">
 												<h3 class="date-title">Booking Details</h3>
@@ -764,6 +774,7 @@ $chk_found = '';
 															
 													@endif
 												</div>
+												<h3 class="date-title book-summary-border">Booking Summary</h3>
 												<div id="book<?php echo $service["id"].$service["id"]; ?>" >
 													
 													<div class="price-cat pt-20">
@@ -808,7 +819,7 @@ $chk_found = '';
 														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
 													</div>
 													
-													<div class="mt-20">
+													<div class="mt-20 cartstotal">
 														<label>Total </label>
 														@if(@$total_price_val != '')
 															<span id="totalprice">
@@ -834,7 +845,7 @@ $chk_found = '';
 
 									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
 
-									<form method="post" action="{{route('addtocart')}}" id="{{$serviceid}}">
+									<form action="" id="addtocartform">
 										@csrf
 										<input type="hidden" name="pid" value="{{$serviceid}}"  />
 										<input type="hidden" name="persontype" id="persontype" value="adult"/>
@@ -862,14 +873,12 @@ $chk_found = '';
 											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
 										@else
                                             @if( @$total_price_val !='' && $timedata != '')
-												<div id="addcartdiv">
-													<div class="btn-cart-modal">
-														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
-													</div>
-													<div class="btn-cart-modal instant-detail-booknow">
-														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
-													</div>
-												</div>
+                                            	<div id="addcartdiv">
+                                                    <button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button>
+                                                    <!-- <div class="btn-cart-modal instant-detail-booknow">
+                                                        <input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
+                                                    </div> -->
+                                                </div>
 										  	@endif
 										@endif
 										</div>
@@ -879,7 +888,6 @@ $chk_found = '';
 						</div>
 					</div>  
 				</div>
-            
 	        </div>	
             
             <div class="col-md-12 col-xs-12 mb-80">
@@ -1172,73 +1180,142 @@ $chk_found = '';
 					</div>
 				</div>
             </div>
-            
-            
+  
 		</div>
    	</div>            
 <!-- end modal -->
 
 
-<div class="modal fade" id="Countermodal">
-    <div class="modal-dialog counter-modal-size">
-        <div class="modal-content">
-           <div class="modal-header"> 
-				<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-			</div>  
-            <div class="modal-body conuter-body" id="Countermodalbody">
-            </div>            
-            <div class="modal-footer conuter-body">
-                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
-            </div>
-    	</div>                                                                       
-    </div>                                          
-</div>
+	<div class="modal fade" id="Countermodal">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	           <div class="modal-header"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>  
+	            <div class="modal-body conuter-body" id="Countermodalbody">
+	            </div>            
+	            <div class="modal-footer conuter-body">
+	                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
+	            </div>
+	    	</div>                                                                       
+	    </div>                                          
+	</div>
 
-<div id="busireview" class="modal modalbusireview" tabindex="-1">
-    <div class="modal-dialog rating-star" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="padding:10px 36px 10px 11px!important; text-align: right;min-height: 40px;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-			</div>
-            <div class="modal-body">
-            	<div class="rev-post-box">
-                	<form method="post" enctype="multipart/form-data" name="sreview{{$sid}}" id="sreview{{$sid}}" >
-                    @csrf
-							<div class="clearfix"></div>
-							<input type="hidden" name="serviceid{{$sid}}" id="serviceid{{$sid}}" value="{{$sid}}">
-	                        <input type="hidden" name="rating" id="rating" value="0">
-                            <div class="rvw-overall-rate rvw-ex-mrgn">
-								<span>Rating</span>
-								<div id="stars" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
-							</div>
-							<input type="text" name="rtitle{{$sid}}" id="rtitle{{$sid}}" placeholder="Review Title" class="inputs" />
-	                    	<textarea placeholder="Write your review" name="review{{$sid}}" id="review{{$sid}}"></textarea>
-	                        <input type="file" name="rimg{{$sid}}[]" id="rimg{{$sid}}" class="inputs" multiple="multiple" />
-	                        <div class="reviewerro" id="reviewerro{{$sid}}"> </div>
-	                    	<input type="button" onclick="submit_rating({{$sid}})" value="Submit" class="btn rev-submit-btn mt-10">
-	                    	<script>
-							 $('#stars').on('starrr:change', function(e, value){
-								$('#rating').val(value);
-							 });
-							</script>
-					</form>
+	<div id="busireview" class="modal modalbusireview" tabindex="-1">
+	    <div class="modal-dialog rating-star" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding:10px 36px 10px 11px!important; text-align: right;min-height: 40px;">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
 				</div>
-            </div> <!--body-->
+	            <div class="modal-body">
+	            	<div class="rev-post-box">
+	                	<form method="post" enctype="multipart/form-data" name="sreview{{$sid}}" id="sreview{{$sid}}" >
+	                    @csrf
+								<div class="clearfix"></div>
+								<input type="hidden" name="serviceid{{$sid}}" id="serviceid{{$sid}}" value="{{$sid}}">
+		                        <input type="hidden" name="rating" id="rating" value="0">
+	                            <div class="rvw-overall-rate rvw-ex-mrgn">
+									<span>Rating</span>
+									<div id="stars" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
+								</div>
+								<input type="text" name="rtitle{{$sid}}" id="rtitle{{$sid}}" placeholder="Review Title" class="inputs" />
+		                    	<textarea placeholder="Write your review" name="review{{$sid}}" id="review{{$sid}}"></textarea>
+		                        <input type="file" name="rimg{{$sid}}[]" id="rimg{{$sid}}" class="inputs" multiple="multiple" />
+		                        <div class="reviewerro" id="reviewerro{{$sid}}"> </div>
+		                    	<input type="button" onclick="submit_rating({{$sid}})" value="Submit" class="btn rev-submit-btn mt-10">
+		                    	<script>
+								 $('#stars').on('starrr:change', function(e, value){
+									$('#rating').val(value);
+								 });
+								</script>
+						</form>
+					</div>
+	            </div> <!--body-->
+			</div>
 		</div>
 	</div>
-</div>
+
+	<div class="modal fade " id="confirmredirection">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	            <div class="modal-body conuter-body">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                     		<h4 class="modal-title partcipate-model">Almost Done! Before we add this to the cart, would you like to add another person to this booking? </h4>
+                    	</div>
+                    </div>
+                </div>          
+        		<div class="modal-footer conuter-body">
+        			<div class="btns-modal"> 
+        			</div>
+        		</div>
+			</div>                                                                       
+		</div>                                          
+	</div>
 </div>
 
 @include('layouts.footer')
 
 <script>
 $(document).ready(function() {
+	
+	/*$(document).on("click", "#btnaddcart", function(){
+		alert("The button is clicked in Ajax content!!");
+	}); */
+	
+	$(document).on("click", "#btnaddcart", function(){
+		$('#spoterror').html('');
+		var form = $("#addtocartform");
+        var url = '{{route("addtocart")}}';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function(data) {
+                if(data == 'no_spots'){
+                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
+                }else{
+                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
+                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
+                }
+                // Ajax call completed successfully
+                //alert("Form Submited Successfully");
+            },
+            error: function(data) {
+                  
+                // Some error in ajax call
+                //alert("some Error");
+            }
+        });
+	}); 
+	<?php /*?>$("#addtocartfor111").on("submit", function(event){
+		alert('hii');
+		return false;
+        var form = $("#addtocartform");
+        var url = '{{route("addtocart")}}';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function(data) {
+                  
+                // Ajax call completed successfully
+                alert("Form Submited Successfully");
+            },
+            error: function(data) {
+                  
+                // Some error in ajax call
+                alert("some Error");
+            }
+        });
+    });<?php */?>
+
 	$('.showphotos').on('click', function(e) {
 		$('.firstfancyimg').click();
 	});
@@ -1502,7 +1579,7 @@ $(document).ready(function () {
 
 			$('#pricetotal'+sid+sid).val(totalprice);
 			$("#Countermodal").modal('hide');
-			$('#cartadd').html('<div id="addcartdiv"><div class="btn-cart-modal"><input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div></div>');
+			$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');
 		}
 	}
 
@@ -1980,7 +2057,7 @@ $(document).ready(function () {
 	            	}else{
 	            		$('#timeschedule').html(setime);
 	            		$('#time_hidden'+main+aid).val(timedata);
-						$('#cartadd').html('<div id="addcartdiv" ><div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div></div>');
+						$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');
 	            	}
 	            	$('#actscheduleid'+aid).val(id);
 	            	$("#actfiloffer_forcart option:selected").prop("selected", false);

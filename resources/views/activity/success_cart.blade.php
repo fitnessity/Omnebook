@@ -17,12 +17,13 @@ if(!empty($cart["cart_item"])) {
         $total_quantity = count($cart["cart_item"]);
         $item_price = $item_price + $item["totalprice"];
     }
-    $cartdata = $cart['cart_item'][$pid];
-    $totalprice = $cart['cart_item'][$pid]['totalprice'];
+    $cartdata = $cart['cart_item'][$priceid];
+    $pid = $cart['cart_item'][$priceid]['code'];
+    $totalprice = $cart['cart_item'][$priceid]['totalprice'];
     $profilePicact = url('/public/images/service-nofound.jpg');
-    if ($cart['cart_item'][$pid]['image']!="") {
-    	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$pid]['image']))) {
-    			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$pid]['image']);
+    if ($cart['cart_item'][$priceid]['image']!="") {
+    	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$priceid]['image']))) {
+    			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$priceid]['image']);
     	} else {
     			$profilePicact = url('/public/images/service-nofound.jpg');
     	}
