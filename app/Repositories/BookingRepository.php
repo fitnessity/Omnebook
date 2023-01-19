@@ -81,7 +81,9 @@ class BookingRepository
             }
                
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
+           // print_r( $booking_details);
             foreach ($booking_details as $key => $book_value) {
+               // echo "jii<br>";
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
                 if(@$business_services != '' && $book_value['act_schedule_id'] != ''){
                     if(@$business_services->service_type == $type){
@@ -270,13 +272,15 @@ class BookingRepository
                     "membership_type" => $BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
+                    "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
                 );
 
-                $full_ary []=$one_array;
+                $full_ary []= $one_array;
             }   
         }
-        return $full_ary;
+        $arayy =array_values(array_unique($full_ary, SORT_REGULAR));
+        return $arayy;
        // print_r($full_ary);                            
         //exit;
     }
@@ -340,12 +344,14 @@ class BookingRepository
                     "membership_type" => $BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
+                    "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
                 );
 
                 $full_ary []=$one_array;
         }
-        return $full_ary;
+        $arayy =array_values(array_unique($full_ary, SORT_REGULAR));
+        return $arayy;
     }
 
     public function getorderdetailsfromodid($oid,$orderdetailid){
@@ -506,7 +512,8 @@ class BookingRepository
             "service_fee" =>  $service_fee,
             "categoty_name" =>   $categoty_name,
         );
-        return $one_array;
+       $arayy =array_values(array_unique($one_array, SORT_REGULAR));
+        return $arayy;
     }
 
     public function saveBookingStatus($data,$cart=null,$n=null)

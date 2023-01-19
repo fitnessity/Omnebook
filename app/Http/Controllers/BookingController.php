@@ -79,7 +79,7 @@ class BookingController extends Controller {
         $currentbookingstatus =[];
         $currentbookingstatus = $this->bookings->getcurrenttabdata('individual');
        //print_r($currentbookingstatus );exit;
-        /*   print_r($BookingDetail);exit;*/
+        /*print_r($BookingDetail);exit;*/
         return view('personal-profile.booking-info', [ 'Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 

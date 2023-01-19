@@ -224,6 +224,10 @@ use App\UserFamilyDetail;
                                                             <a href="{{route('activity_schedule',['odid' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
+                                                        <div class="threebtn_fboxes anothertwobtn">
+                                                           <!--  <a href="" target="_blank">View Account</a> -->
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
+                                                        </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
                                                             <span><img src="{{ url('public/img/message.png') }}" alt=""></span>

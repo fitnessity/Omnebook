@@ -429,7 +429,7 @@ span.status::after {
 .btn-black:hover{ background-color: #ea1515; border-color: #ea1515; color: #ffffff !important; }
 .border-radius6 { border-radius: 6px; }
 .businessprofile-navigationlink a { float: left; width: 100%; color: #fff; font-size: 16px; }
-.businessprofile-navigationlink div { padding: 12px 0; color: white; }
+.businessprofile-navigationlink div { padding: 12px 0; color: white;}
 .following-tag{ background-color: #f91942; padding: 5px 10px; border: 1px solid #f91942; border-radius: 5px; }
 .back-comp{ padding-top: 30px; clear: both; }
 .back-comp a{ color: #ea1515; }
@@ -836,4 +836,61 @@ max-height: 300px;
 .black-border{ border: 1px solid #000 !important; }
 .detail-fil-sticky{ position: fixed; right: 0; top: 50%; }
 .activity-time{ font-size: 13px; }
-
+.sidebar-title{border-bottom: 1px solid #ed1b24;  text-align: center; width: 100%;}
+.businessprofile-navigationlink img{
+	margin-right: 9px;
+	width: 22px;
+	height: 20px;
+}
+.sidebar-menu-custom ul{
+	list-style: none;
+	padding-left: 0;
+	margin-bottom: 0;
+}
+.sidebar-menu-custom ul li{
+	display: block;
+	padding: 5px 0px;
+	color: #fff;
+	font-size: 15px;
+	font-weight: 400;
+	text-align: left;
+}
+.sidebar-menu-custom ul li a{
+	color: #fff;
+	font-size: 15px;
+	font-weight: 500;
+	float: none;
+}
+.navbar1 .navlink1{
+	margin-left: 45px;
+	color: #fff !important;
+	font-weight: 400;
+}
+.navlink1.service-price{
+	margin-left: 25px;
+	display: contents;
+	font-weight: 500;
+	color: #fff !important;
+}
+.navbar1 {
+  padding: 20px 0px 20px 7px !important;
+}
+a.active{
+	border: none !important;
+}
+.advertise{
+	background: #494949;
+	padding: 13px 0;
+	border-radius: 10px;
+	margin-bottom: 15px;
+}
+.advertise label{
+	color: #fff;
+}
+.advertise span{
+	color: #fff;
+}
+.advertise span a{
+	color: #fff;
+	text-decoration: underline;
+}

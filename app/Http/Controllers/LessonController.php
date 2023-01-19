@@ -4592,6 +4592,7 @@ class LessonController extends Controller {
             $chk = '';
         }
 
+        $msg = '';
 
         //$tax = BusinessSubscriptionPlan::select('site_tax')->where('id',1)->first();
         $pid = isset($request->pid) ? $request->pid : 0;
@@ -4640,11 +4641,11 @@ class LessonController extends Controller {
                         $p_image = $item->profile_pic;
                     }
                 }
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ));
+                $itemArray = array($request->priceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ));
                 if(!empty($cart_item["cart_item"])) {
-                    if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
+                    if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
-                            if($request->pid == $k) {
+                            if($request->priceid == $k) {
                                 $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
                                 $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
                                 $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
@@ -4665,8 +4666,44 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
                             }
                         }
-                    } else {
-                        $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                    }else {
+                        /*echo "hii";*/
+                        $tot_qty_cart = 0;
+                        $final_qty_cart = 0;
+                        $remaing  = 0;
+                        $chk_item = 0;
+                        foreach($cart_item["cart_item"] as $k => $v){
+                            if($cart_item["cart_item"][$k]["actscheduleid"] == $actscheduleid &&  $cart_item["cart_item"][$k]["sesdate"] == $sesdate){
+                                $chk_item =1;
+                                if(!empty($cart_item["cart_item"][$k]['adult'])){
+                                    $tot_qty_cart += $cart_item["cart_item"][$k]['adult']["quantity"];
+                                }
+                                if(!empty($cart_item["cart_item"][$k]['child'])){
+                                    $tot_qty_cart += $cart_item["cart_item"][$k]['child']["quantity"];
+                                }
+                                if(!empty($cart_item["cart_item"][$k]['infant'])){
+                                    $tot_qty_cart += $cart_item["cart_item"][$k]['infant']["quantity"];
+                                }
+                                $db_totalquantity = $this->bookings->gettotalbooking($actscheduleid,$sesdate);
+                                $bookscheduler = BusinessActivityScheduler::where('id', $actscheduleid)->first();
+                                $remaing = ($bookscheduler->spots_available - $db_totalquantity ); 
+                                /*echo $bookscheduler->spots_available.'<br>';
+                                echo $db_totalquantity .'<br>';*/
+                            }
+                        }
+                        if($chk_item == 1){
+                            $final_qty_cart = ($tot_qty +  $tot_qty_cart);
+                            /*echo $remaing ;
+                            echo $final_qty_cart ;exit;*/
+                            if($remaing >= $final_qty_cart){
+                                $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                            }else{
+                                $msg = "no_spots";
+                            }
+                        }else {
+                            $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                        }
+                        
                     }
                 }else {
                     $cart_item["cart_item"] = $itemArray;
@@ -4678,7 +4715,7 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-       /* print_r($cart_item['cart_item']);exit;*/
+        //print_r($cart_item['cart_item']);exit;
         if($request->chk == 'activity_purchase'){
             if($request->type == 'customer'){
                 return redirect('activity_purchase/0/'.$request->pageid);
@@ -4686,25 +4723,30 @@ class LessonController extends Controller {
                 return redirect('activity_purchase/'.$request->pageid);
             }
         }else{
-            return redirect('/success-cart/'.$pid); 
+            if($msg == ''){
+                $msg = config('app.url').'/success-cart/'.$priceid;
+            }
+            return $msg;
+            //return redirect('/success-cart/'.$priceid); 
         }
        
     }
 
-    public function successcart($pid)
+    public function successcart($priceid)
     {   
         $total_quantity=0;
         $cart_item = [];
         if (session()->has('cart_item')) {
             $cart_item = session()->get('cart_item');
         }
-        $sdata = BusinessServices::where('id',$pid)->first();
+        $pricedetails = BusinessPriceDetails::find($priceid);
+        $sdata = BusinessServices::where('id',$pricedetails->serviceid)->first();
         $ser = BusinessService::where('cid', @$sdata->cid)->first();
         $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
-        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$pid)->where('is_active', 1)->limit(4)->get();
+        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$sdata->id)->where('is_active', 1)->limit(4)->get();
 
         return view('activity.success_cart',[
-            'pid'=> $pid,
+            'priceid'=> $priceid,
             'cart'=> $cart_item,
             'companyData'=> $companyData,
             'sdata'=> $sdata,
@@ -4722,12 +4764,11 @@ class LessonController extends Controller {
         if(!empty($cart_item["cart_item"])) {
             foreach($cart_item["cart_item"] as $k => $v) {
                 //echo $v['code'].'----'.$_GET['code'].'....<br/>';
-                if($_GET["code"] == $v['code']) {
+                if($_GET["priceid"] == $v['priceid']) {
                     unset($cart_item["cart_item"][$k]);
                 }
                 //if(empty($cart_item["cart_item"]))
                 //unset($cart_item["cart_item"]);
-                
             }
         }
         
@@ -4743,7 +4784,7 @@ class LessonController extends Controller {
                 return redirect('activity_purchase/'.$request->pageid);
             }
         }else{
-            return redirect('/payments/card'); 
+            return redirect('/carts'); 
         }
     }
     
