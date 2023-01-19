@@ -1977,6 +1977,7 @@ class ActivityController extends Controller {
                                                 $reccuringval = ' (Recurring)';
                                             }
                                             $actbox .= '</div>
+                                            <h3 class="date-title book-summary-border">Booking Summary</h3>
                                             <div id="book'.$serviceid.$serviceid.'">';
                                             if(@$sercatefirst['category_title'] != ''){
                                                 $actbox .= '<div class="price-cat">
@@ -2015,7 +2016,7 @@ class ActivityController extends Controller {
                                                 <span>Infants x '.$infant_cnt.' = $'.$infant_price.'</span>
                                             </div>';
                                             if(@$total_price_val != ''){
-                                                $actbox .= '<div>
+                                                $actbox .= '<div class="cartstotal mt-20">
                                                     <label>Total </label>
                                                     <span id="totalprice">$'.@$total_price_val.' USD</span>
                                                 </div>';
@@ -2040,8 +2041,7 @@ class ActivityController extends Controller {
                                     if(@$servicePrfirst['membership_type'] != ''){
                                         $actbox .= '<input type="hidden" name="memtype_hidden" id="memtype_hidden'.$serviceid.$serviceid.'"  value="'.@$servicePrfirst['membership_type'].$reccuringval.'">';
                                     }
-
-                                    $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
+                                    $actbox .= '<form method="post" id="addtocartform">
                                      	<input name="_token" type="hidden" value="'.csrf_token().'">
                                         <input type="hidden" name="pid" value="'.$serviceid.'"  />
                                         <input type="hidden" name="persontype" id="persontype" value="adult"/>
@@ -2073,13 +2073,8 @@ class ActivityController extends Controller {
                                         }else{
                                             if(@$total_price_val !='' && $timedata != '') {
                                                 $actbox .= '<div id="addcartdiv">
-                                                    <div class="btn-cart-modal">
-                                                        <input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
-                                                    </div>
-                                                    <div class="btn-cart-modal instant-detail-booknow">
-                                                        <input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
-                                                    </div>
-                                                </div>';
+                                                    <button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button>
+                                                    </div>';
                                                 
                                             }
                                         }
@@ -2129,7 +2124,7 @@ class ActivityController extends Controller {
                                             if(@$servicePrfirst['is_recurring_adult'] == 1){
                                                 $reccuringval = ' (Recurring)';
                                             }
-                                            $actbox .= '
+                                            $actbox .= '<h3 class="date-title book-summary-border">Booking Summary</h3>
                                             <div id="book'.$serviceid.$serviceid.'">';
                                             
                                                 $actbox .= '<div class="price-cat">
@@ -2167,7 +2162,7 @@ class ActivityController extends Controller {
                                                 <span>Infants x 0 = $0</span>
                                             </div>';
                                            
-                                            $actbox .= '<div>
+                                            $actbox .= '<div class="cartstotal mt-20">
                                                     <label>Total </label>
                                                     <span id="totalprice">$0 USD</span>
                                                 </div>';
@@ -2188,8 +2183,8 @@ class ActivityController extends Controller {
                                
                                 $actbox .= '<input type="hidden" name="memtype_hidden" id="memtype_hidden'.$serviceid.$serviceid.'"  value="">';
                                 
-                                $actbox .= '<form method="post" action="/addtocart" id="'.$serviceid.'">
-                                 	<input name="_token" type="hidden" value="'.csrf_token().'">
+                                $actbox .= '<form method="post" id="addtocartform">
+                                	<input name="_token" type="hidden" value="'.csrf_token().'">
                                     <input type="hidden" name="pid" value="'.$serviceid.'"  />
                                     <input type="hidden" name="persontype" id="persontype" value="adult"/>
                                     <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$serviceid.'" value="1" class="product-quantity"/>
@@ -2391,7 +2386,7 @@ class ActivityController extends Controller {
         </div>';
         
         if(@$total_price_val_adult != ''){
-            $bookdata .=' <div>
+            $bookdata .=' <div class="cartstotal mt-20">
                 <label>Total </label>
                 <span id="totalprice">$'.@$total_price_val_adult.' USD</span>
             </div>';
@@ -2588,7 +2583,7 @@ class ActivityController extends Controller {
         </div>';
         
         if(@$total_price_val != ''){
-           $bookdata .= '<div>
+           $bookdata .= '<div class="cartstotal mt-20">
                 <label>Total </label>
                 <span id="totalprice">$ '.@$total_price_val.' USD</span>
             </div>';

@@ -1294,7 +1294,7 @@
 	.inner_top {  margin-top: 119px;}
 	.manage-customer-search h4{margin-top: 80px;}
 	.search-modal-customer{margin-bottom: 15px;}
-	.inner-accordion-titles label {  width: 58%;}
+	.inner-accordion-titles label {  width: 50%;}
 	.mobile-scheduler{display: none !important;}
 	.scheduled-activity-info {  text-align: left; margin-top: 16px;}
 	.scheduler-qty{text-align: left;}
@@ -1323,6 +1323,12 @@
 	.cash-tend{width: 100%;}
 	.nopadding {  padding-left: 15px;  padding-right: 15px;}
 	.post-btn-red{width: 100%; margin-top: 0px;}
+	.membership-save { margin-top: 20px;}
+	.title-middle-part{margin-top: 20px;}
+	.side-border-right { border-right: none;  padding-right: 0;}
+	.inner-accordion-titles span{width: 47%;}
+	.refund-note p {  font-size: 15px;  margin-top: 0px;}
+	.suspend { float: right; margin-top: 3px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2369,6 +2375,21 @@
 	.cash-tend{width: 100%;}
 	.save-pmt-checkbox{display: block ruby;}
 	.post-btn-red{width: 100%; margin-top: 0px;}
+	.title-middle-part{margin-top: 20px;}
+	.side-border-right { border-right: none;  padding-right: 0;}
+	.activation-date .date-activity-check input{width: 100% !important;}
+	.membership-save { margin-top: 20px;}
+	.title-sp-customer{margin-top: 25px;}
+	.void-transaction{width: 100%;}
+	.refund-date {  width: 50%; }
+	.refund-amount input {  width: 44%; }
+	.refund-method select { width: 42%;}
+	.start-date{width: 44%; margin-bottom: 5px;}
+	.suspend{float: right; margin-top: 5px;}
+	.refund-note p {  font-size: 15px;  margin-top: 9px; }
+	.modal-banner .three-banner img{height: 170px;}
+	.modal-banner .single-banner img{height: 170px;}
+	.modal-banner .dual-banner img{height: 170px;}
 }
 
 @media(max-width: 575px) {

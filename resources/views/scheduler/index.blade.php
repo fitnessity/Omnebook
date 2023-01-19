@@ -16,7 +16,7 @@
             <div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-6 col-xs-12 col-sm-12">
-						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | <a href="{{route('booking_request')}}">Booking Request </a></div>
+						<div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> <!-- | <a href="{{route('booking_request')}}">Booking Request </a> --> </div> 
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-12">
 						@include('customers._search_header', ['company_id' => $companyId])
