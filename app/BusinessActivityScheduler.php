@@ -82,7 +82,7 @@ class BusinessActivityScheduler extends Model
         if($start_datetime->format("Y-m-d") == $end_datetime->format("Y-m-d")){
             return $business_activity_schedulers->whereRaw("activity_days like ? and shift_start > ? and shift_start <= ?", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), $end_datetime->format("H:i")]);
         }else{
-            return $business_activity_schedulers->whereRaw("(activity_days like ? and shift_start > ?) or ((activity_days like ? and shift_start <= ?))", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), '%'.$end_datetime->format('l').'%', $end_datetime->format("H:i")]);
+            return $business_activity_schedulers->whereRaw("((activity_days like ? and shift_start > ?) or ((activity_days like ? and shift_start <= ?)))", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), '%'.$end_datetime->format('l').'%', $end_datetime->format("H:i")]);
         }
                                        
     }
