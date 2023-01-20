@@ -42,26 +42,26 @@
     				foreach ($cart['cart_item'] as $item) {
                         $totalquantity = 0;
                         $Sold_out = '';
-                        $serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+                        $serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->first();
                         $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
                       /*  print_r($item);exit();*/
                         if(!empty($item['adult'])){
                             $totalquantity += $item['adult']['quantity'];
-                            /*echo $serprice[0]['adult_discount'];
+                            /*echo $serprice['adult_discount'];
                             echo $item['adult']['price'];*/
-                            $discount += ($item['adult']['price'] *$serprice[0]['adult_discount'])/100; 
+                            $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
                         }
                         if(!empty($item['child'])){
                             $totalquantity += $item['child']['quantity'];
-                           /* echo $serprice[0]['child_discount'];
+                           /* echo $serprice['child_discount'];
                             echo $item['child']['price'];*/
-                            $discount += ($item['child']['price'] *$serprice[0]['child_discount'])/100;
+                            $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
                         }
                         if(!empty($item['infant'])){
                             $totalquantity += $item['infant']['quantity'];
-                            /*echo $serprice[0]['infant_discount'];
+                            /*echo $serprice['infant_discount'];
                             echo $item['infant']['price'];*/
-                            $discount += ($item['infant']['price'] *$serprice[0]['infant_discount'])/100;
+                            $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
                         }
 
     					$item_price = $item_price + $item["totalprice"];
@@ -81,11 +81,9 @@
                             $soldout_chk = 1;
                             $Sold_out = "Sold Out";
                         }
-    					$act = BusinessServices::where('id', $item["code"])->get()->toArray();
+    					$act = BusinessServices::where('id', $item["code"])->first();
     					//DB::enableQueryLog();
-    					$ser = BusinessService::where('cid', $act[0]["cid"])->get()->toArray();
-    					$company = CompanyInformation::where('id', $act[0]["cid"])->get()->toArray();
-                        $BusinessTerms = BusinessTerms::where('cid',$act[0]["cid"])->first();
+                        $BusinessTerms = BusinessTerms::where('cid',$act["cid"])->first();
                         $termcondfaqtext = @$BusinessTerms->termcondfaqtext;
                         $contracttermstext = @$BusinessTerms->contracttermstext;
                         $liabilitytext = @$BusinessTerms->liabilitytext;
@@ -93,7 +91,6 @@
                         $refundpolicytext = @$BusinessTerms->refundpolicytext;
     					//dd(\DB::getQueryLog());
     					
-    					//print_r($ser[0]);
     					$service_fee= ($item["totalprice"] * $fees->service_fee)/100;
     					$tax= ($item["totalprice"] * $fees->site_tax)/100;
     					$total_amount = $item["totalprice"] + $service_fee + $tax;
@@ -125,23 +122,26 @@
                                             <span>Day Tour</label>
                                         </div>	-->
                                         <div class="info-display">
-                                            <label>Date Reserved:</label>
-                                            <span><?php 
-    											if($item["sesdate"]!='' && $item["sesdate"]!='0')
-    											{
-    												echo date('l jS \of F Y', strtotime( $item["sesdate"] ));
-    											}
-    											else{ echo date('l jS \of F Y'); }
-    										 ?></label>
+                                            <label>Date Scheduled:</label>
+                                            <span>@if($item["sesdate"]!='' && $item["sesdate"]!='0') {{date('m-d-Y',strtotime($item["sesdate"]))}} @endif</span>
                                         </div>
                                         <?php
+                                        if(@$bookscheduler[0]['set_duration']!=''){
+                                            $tm=explode(' ',$bookscheduler[0]['set_duration']);
+                                            $hr=''; $min=''; $sec='';
+                                            if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+                                            if($tm[2]!=0){ $min=$tm[2].'min. '; }
+                                            if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+                                            if($hr!='' || $min!='' || $sec!='')
+                                            { $timeval = $hr.$min.$sec; } 
+                                        }
                                         if(@$bookscheduler[0]['shift_end']!=''){
-    										echo '<div class="info-display"><label>Time:</label><span>'.date('h:ia', strtotime( $bookscheduler[0]['shift_start'] )).' to '.date('h:ia', strtotime( $bookscheduler[0]['shift_end'] )).'</span></label></div>';
+    										echo '<div class="info-display"><label>Time & Duration:</label> <span>'.date('h:ia', strtotime( $bookscheduler[0]['shift_start'] )).' to '.date('h:ia', strtotime( $bookscheduler[0]['shift_end'] )).' | '.$timeval.'</span></label></div>';
     									} 
     									?>
                                         
                                         <?php
-                                        if(@$bookscheduler[0]['set_duration']!=''){
+                                        /*if(@$bookscheduler[0]['set_duration']!=''){
     										$tm=explode(' ',$bookscheduler[0]['set_duration']);
     										$hr=''; $min=''; $sec='';
     										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
@@ -149,59 +149,95 @@
     										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
     										if($hr!='' || $min!='' || $sec!='')
     										{ echo '<div class="info-display"><label>Duration:</label><span>'.$hr.$min.$sec.'</span></label></div>'; } 
-    									} ?>
+    									} */?>
                                         <div class="info-display">
-                                            <label>Participant : </label>
-                                            <span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult : {{$item['adult']['quantity']}} @endif @endif</span> 
-                                            <span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children : {{$item['child']['quantity']}} @endif @endif</span>
-                                            <span>@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant : {{$item['infant']['quantity'] }} @endif @endif</span></label>
+                                            <label>Category:</label>
+                                            <span>{{ @$serprice->business_price_details_ages->category_title}}</label>
                                         </div>
                                         <div class="info-display">
                                             <label>Price Option: </label>
-                                            <span><?php echo @$serprice[0]['price_title'].' - '.@$serprice[0]['pay_session'].' Sessions'; ?></label>
+                                            <span>{{@$serprice['price_title']}}</label>
+                                        </div>
+                                        <div class="info-display">
+                                            <label>Date Booked: </label>
+                                            <span>{{date('m-d-Y')}}</label>
+                                        </div>
+
+                                        <div class="info-display">
+                                            <label>Number of Sessions: </label>
+                                            <span>{{@$serprice['pay_session']}} Sessions</label>
+                                        </div>
+
+                                        <div class="info-display">
+                                            <label>Membership Option: </label>
+                                            <span>{{@$serprice['membership_type']}}</label>
+                                        </div>
+
+                                        <div class="info-display">
+                                            <label>Participant Quantity: </label>
+                                            <span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult x {{$item['adult']['quantity']}} @endif @endif</span> 
+                                            <span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children x {{$item['child']['quantity']}} @endif @endif</span>
+                                            <span>@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant x {{$item['infant']['quantity'] }} @endif @endif</span></label>
+                                        </div>
+                                       
+                                        <div class="info-display">
+                                            <label>Activity Type:</label>
+                                            <span>{{@$act['sport_activity']}}</label>
                                         </div>
                                         <div class="info-display">
                                             <label>Service Type:</label>
-                                            <span> <?php echo @$act[0]['select_service_type']; ?></label>
+                                            <span> <?php echo @$act['select_service_type']; ?></label>
                                         </div>
                                         <div class="info-display">
-                                            <label>Activity:</label>
-                                            <span><?php echo @$act[0]['sport_activity']; ?></label>
+                                            <label>Membership Duration: </label>
+                                            <span>{{@$serprice['pay_setnum']}} {{@$serprice['pay_setduration']}}</label>
                                         </div>
+
                                         <div class="info-display">
+                                            <label>Purchase Date: </label>
+                                            <span></label>
+                                        </div>
+
+                                        <div class="info-display">
+                                            <label>Membership Activation Date: </label>
+                                            <span></label>
+                                        </div>
+
+                                        <div class="info-display">
+                                            <label>Membership Expiration: </label>
+                                            <span></label>
+                                        </div>
+                                        <!-- <div class="info-display">
                                             <label>Activity Location:</label>
-                                            <span><?php echo @$act[0]['activity_location']; ?></label>
+                                            <span>{{@$act['activity_location']}}</label>
                                         </div>
                                         
                                         <div class="info-display">
                                             <label>Great For: </label>
-                                            <span><?php echo @$act[0]['activity_for']; ?></label>
+                                            <span>{{@$act['activity_for']}}</label>
                                         </div>
                                         <div class="info-display">
                                             <label>Age: </label>
-                                            <span><?php echo @$act[0]['age_range']; ?></label>
+                                            <span>{{@$act['age_range']}}</label>
                                         </div>
                                         <div class="info-display">
                                             <label>Language: </label>
-                                            <span><?php echo @$ser[0]['languages']; ?></label>
+                                            <span></label>
                                         </div>
                                         <div class="info-display">
                                             <label>Skill Level: </label>
-                                            <span><?php echo @$act[0]['difficult_level']; ?></label>
+                                            <span>{{@$act['difficult_level']}}</label>
                                         </div>
-                                        <div class="info-display">
-                                            <label>Membership Type: </label>
-                                            <span><?php echo @$serprice[0]['membership_type']; ?></label>
-                                        </div>
+                                        
                                         <div class="info-display">
                                             <label>Business Type: </label>
                                             <span><?php
-    											if($act[0]['service_type']=='individual'){ echo 'Personal Training'; }
-    											else { echo ucfirst(@$act[0]['service_type']); } ?></label>
-                                        </div>
+    											/*if($act['service_type']=='individual'){ echo 'Personal Training'; }
+    											else { echo ucfirst(@$act['service_type']); }*/ ?></label>
+                                        </div> -->
                                         <div class="info-display">
-                                            <label>Company: </label>
-                                            <span><?php echo $company[0]['company_name']; ?></label>
+                                            <label>Provider Company: </label>
+                                            <span>{{$act->company_information->company_name}}</label>
                                         </div><!--
                                         <div class="info-display">
                                             <label>Instructor: </label>
@@ -216,8 +252,7 @@
                                         <h4><?= "$ " . number_format($item["totalprice"], 2); ?></h4>
                                     </div>
                                     <div class="invite-share">
-                                    	<!--
-                                        <span>Invite Others</span>
+                                    	<!--<span>Invite Others</span>
                                         <i class="fas fa-envelope email-icon-share"></i>
                                         <a class="send-mesg" href="#" title="" data-toggle="tooltip" data-original-title="Send Message"><i class="fa fa-comment"></i></a>
                                         <span class="pipe"> | </span>-->
@@ -230,14 +265,15 @@
                                     </div>-->
                                     
                                     <?php if (Auth::user()) { ?>
-                                    <div class="mtp-15">
+                                    <label class="text-center">Select Who's Participating</label>
+                                    <div class="">
                                     	<?php
     										$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
     										
     										for($i=0; $i<$totalquantity ; $i++)
     										{ ?>
                                             <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
-                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">Who is participating?</option>
+                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">Choose or Add Participant</option>
                                                 <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
                                                 <?php foreach($family as $fa){ 
 
@@ -273,24 +309,32 @@
                                     </div>
                                     <?php } 
                                     ?>
+                                    <div>
+                                        <input class="payfor" type="checkbox" id="payforcheckbox" name="payforcheckbox" value="">
+                                        <i class="fas fa-share-alt payfor-share"></i>
+                                        <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
+                                        <p class="payfor-ptag">Share the booking details with them</p>
+                                    </div>
                                 </div>
     						</div>
     						<div class="row">
                                 <div class="col-md-12 divmargin cart-terms-dis">
                                     @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
-                                    	<h4> Terms: </h4>
-                                        @if($termcondfaqtext != '')
-                                            <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act[0]['cid']}}">Terms, Conditions, FAQ</a> | @endif 
-                                        
-                                        @if($liabilitytext != '')
-                                            <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{$act[0]['cid']}}">Liability Waiver</a> | @endif 
-                                        @if($covidtext != '')
-                                            <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{$act[0]['cid']}}">Covid - 19 Protocols</a> |
-                                        @endif
-                                        @if($contracttermstext != '')
-                                            <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{$act[0]['cid']}}">Contract Terms</a> | @endif 
-                                        @if($refundpolicytext != '')
-                                            <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{$act[0]['cid']}}">Refund Policy</a> @endif 
+                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails"> View the terms and conditions from this provider below </span>
+                                        <div>
+                                            @if($termcondfaqtext != '')
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
+                                            
+                                            @if($liabilitytext != '')
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{$act['cid']}}">Liability Waiver</a> | @endif 
+                                            @if($covidtext != '')
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{$act['cid']}}">Covid - 19 Protocols</a> |
+                                            @endif
+                                            @if($contracttermstext != '')
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{$act['cid']}}">Contract Terms</a> | @endif 
+                                            @if($refundpolicytext != '')
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{$act['cid']}}">Refund Policy</a> @endif
+                                        </div> 
                                     @endif
                                 </div>
                             </div>
@@ -344,7 +388,7 @@
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
-                    <div class="modal fade compare-model" id="termsModal_{{$act[0]['cid']}}">
+                    <div class="modal fade compare-model" id="termsModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -369,7 +413,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="contractModal_{{$act[0]['cid']}}">
+                    <div class="modal fade compare-model" id="contractModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
@@ -394,7 +438,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="liabilityModal_{{$act[0]['cid']}}">
+                    <div class="modal fade compare-model" id="liabilityModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -419,7 +463,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="covidModal_{{$act[0]['cid']}}">
+                    <div class="modal fade compare-model" id="covidModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
@@ -444,7 +488,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="refundModal_{{$act[0]['cid']}}">
+                    <div class="modal fade compare-model" id="refundModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
@@ -471,7 +515,7 @@
 
     			<?php } ?>
         			<div class="btn-ord-txt">
-                    	<a href="/activities" class="post-btn-red">Add Activity or Product + </a>
+                    	<a href="/activities" class="post-btn-red">Book Another Activity</a>
     			    </div>
     		</div>
             <?php
@@ -489,8 +533,8 @@
     							<div class="inner-box-left"> 
     								<label>Bookings</label>
     								<label>Subtotal </label>
-    								<label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label>
-    								<label>Tax: </label>
+    								<!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
+    								<label>Taxes & Fees: </label>
                                     <label>Discount: </label>
     								<label>Shpping:</label>
     							</div>
@@ -499,8 +543,8 @@
     							<div class="inner-box-right"> 
     								<span> <?php echo count($cart['cart_item']); ?> </span>
     								<span> <?php echo "$ " . number_format($item_price, 2); ?> </span>
-    								<span> <?php echo "$ " .number_format($service_fee,2); ?> </span>
-    								<span> <?php echo "$ " .number_format($tax,2); ?> </span>
+    								<!-- <span> <?php /*echo "$ " .number_format($service_fee,2);*/ ?> </span> -->
+    								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
     								<span> {{number_format($discount,2)}} </span>
                                     <span> $0 </span>
     							</div>
@@ -645,8 +689,8 @@
                                 <div class="inner-box-left"> 
                                     <label>Bookings</label>
                                     <label>Subtotal </label>
-                                    <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label>
-                                    <label>Tax: </label>
+                                    <!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
+                                    <label>Taxes & Fees:</label>
                                     <label>Discount: </label>
                                     <label>Shpping:</label>
                                 </div>
@@ -655,7 +699,7 @@
                                 <div class="inner-box-right"> 
                                     <span> 0 </span>
                                     <span> $ 0.00 </span>
-                                    <span> $ 0.00 </span>
+                                   <!--  <span> $ 0.00 </span> -->
                                     <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>
                                     <span> $0 </span>

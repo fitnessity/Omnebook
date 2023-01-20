@@ -20591,7 +20591,7 @@ input#zipcode {
 	margin-bottom: 20px;
 }
 .priceoption{
-    margin-bottom: 51px;
+    margin-bottom: 20px;
 }
 .modal-dialog.rating-star{
 	width: 550px;
@@ -20763,8 +20763,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .price-cat{
 	margin-top: 17px;
 }
-.price-cat span, #timeduration span{ font-size: 13px; }
-.price-cat label, #timeduration label{ font-size: 13px; margin-bottom: 0px; }
+.price-cat span{ font-size: 13px; }
+.price-cat label{ font-size: 13px; margin-bottom: 0px; }
 #book115115 div span { font-size: 13px; }
 #book115115 div label { font-size: 13px; }
 .cartstotal label, .cartstotal span{ font-size: 16px !important; }
@@ -24001,7 +24001,32 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .noborder{
     border: none;
 }
-.date-title.book-summary-border{
-	border-top: 1px solid #000;
-	padding-top: 10px;
+.termsdetails{
+	display: inline-block;
+}
+.payfor{
+	display: inline;
+	width: 10%;
+}
+.payfor-label{
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  width: 75%;
+  margin-bottom: 2px;
+}
+.payfor-share{
+	width: 9%;
+}
+.payfor-ptag{
+	font-size: 11px;
+	margin-left: 24%;
+}
+.custom-fitnessity{
+	padding-right: 0px;
+padding-left: 0px;
+}
+.calender-wrapper{
+	padding-left: 0px !important;
 }

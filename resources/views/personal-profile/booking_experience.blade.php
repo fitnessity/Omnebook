@@ -226,6 +226,10 @@ use App\UserFamilyDetail;
                                                             <a href="{{route('activity_schedule',['odid' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                            <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
+                                                        </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
                                                             <span><img src="{{ url('public/img/message.png') }}" alt=""></span>
@@ -239,11 +243,13 @@ use App\UserFamilyDetail;
                                                                 $("#current_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#current_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
                                                                 $("#viewless_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                                 $("#viewmore_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                             });
                                                         </script>
                                                     </div>
@@ -412,6 +418,10 @@ use App\UserFamilyDetail;
                                                            <!--  <a href="#">Check In</a> -->
                                                            <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
+                                                            <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                        </div>
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
                                                         </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
@@ -426,11 +436,13 @@ use App\UserFamilyDetail;
                                                                 $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
                                                                 $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                                 $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                             });
                                                         </script>
                                                     </div>
@@ -598,6 +610,10 @@ use App\UserFamilyDetail;
                                                            <!--  <a href="#">Check In</a> -->
                                                            <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
+                                                           <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                        </div>
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
                                                         </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
@@ -612,11 +628,13 @@ use App\UserFamilyDetail;
                                                                 $("#upcoming_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#upcoming_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
                                                                 $("#viewless<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                                 $("#viewmore<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                             });
                                                         </script>
                                                     </div>
@@ -786,6 +804,10 @@ use App\UserFamilyDetail;
                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Rebook</a>
                                                             <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}pa_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                            <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
+                                                        </div>
                                                         <!-- <div class="icon">
                                                             <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
                                                             <span><img src="{{ url('public/img/message.png') }}" alt=""></span>
@@ -799,11 +821,13 @@ use App\UserFamilyDetail;
                                                                 $("#past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#anothertwobtn<?php echo $i.'pa_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
                                                                 $("#viewless_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
                                                                 $("#viewmore_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'pa_'.$book_details['businessservices']['id']; ?>").hide();
                                                             });
                                                         </script>
                                                     </div>
