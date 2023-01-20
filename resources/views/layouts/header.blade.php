@@ -1,15 +1,6 @@
 <?php
 use App\User;
 $total_quantity = 0;
-
-
-// exit();
-if(isset($cart["cart_item"])){
-    foreach($cart["cart_item"] as $item){
-    	$total_quantity = count($cart["cart_item"]);
-        /*$total_quantity += (int)$item["quantity"];*/
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -484,11 +475,20 @@ if(isset($cart["cart_item"])){
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
+							<div  class="cartitmclass">
+								<?php 
+									if(isset($cart["cart_item"])){
+									    foreach($cart["cart_item"] as $item){
+									    	$total_quantity = count($cart["cart_item"]);
+									        /*$total_quantity += (int)$item["quantity"];*/
+									    }
+									} ?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">0</span>
+								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">
+									 {{$total_quantity}}</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
-							
+							</div>
                         	@if(Auth::check())
 						 	<div class="userblock">
                         		<div class="login_links" onclick="openNav()">
@@ -617,7 +617,7 @@ if(isset($cart["cart_item"])){
                         	@endif
                             
 							<script>
-                                $("#cart-item").html('<?=$total_quantity?>');
+                                //$("#cart-item").html('<?=$total_quantity?>');
                             </script>
                     	</div>
 					

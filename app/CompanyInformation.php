@@ -71,6 +71,11 @@ class CompanyInformation extends Model {
     /*public function service() {
         return $this->hasMany(UserService::class, 'company_id');
     }*/
+
+    public function business_service() {
+        return $this->belongsTo(BusinessService::class, 'id');
+    }
+
 	public function service() {
         return $this->hasMany(BusinessServices::class, 'cid');
     }
@@ -93,6 +98,10 @@ class CompanyInformation extends Model {
 
     public function business_terms() {
         return $this->hasMany(BusinessTerms::class, 'cid');
+    }
+
+    public function businessterms() {
+        return $this->belongsTo(BusinessTerms::class, 'cid');
     }
 
 }

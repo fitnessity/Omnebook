@@ -1329,6 +1329,8 @@
 	.inner-accordion-titles span{width: 47%;}
 	.refund-note p {  font-size: 15px;  margin-top: 0px;}
 	.suspend { float: right; margin-top: 3px;}
+	.show-all .table-inner-data-sec .p-name{width: 75%;}
+	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2390,6 +2392,9 @@
 	.modal-banner .three-banner img{height: 170px;}
 	.modal-banner .single-banner img{height: 170px;}
 	.modal-banner .dual-banner img{height: 170px;}
+	.fsth-0 { margin-top: 30px;}
+	.show-all .table-inner-data-sec .p-name{width: 79%;}
+	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 }
 
 @media(max-width: 575px) {
