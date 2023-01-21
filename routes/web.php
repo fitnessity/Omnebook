@@ -642,9 +642,6 @@ Route::post('/myemail', 'Auth\AuthController@myemail');
 //profile routes ends
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
-    Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
-
     //favourite routes
     Route::post('/isfavourite','UsersFavouriteController@isFavourite');
     Route::get('favourite/index', 'UsersFavouriteController@index');
@@ -980,4 +977,9 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('updateorderdetails', 'SchedulerController@updateorderdetails')->name('updateorderdetails');
 });
 
-Route::get('email', 'SchedulerController@email')->name('email');
+Route::group(['middleware' => ['auth']], function()
+{
+    Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
+    Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
+    Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
+});

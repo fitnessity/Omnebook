@@ -157,6 +157,11 @@ class User extends Authenticatable
         return $this->hasMany(CompanyInformation::class);
     }
 
+    public function current_company()
+    {
+        return $this->belongsTo(CompanyInformation::class,'cid');
+    }
+
     public function education()
     {
         return $this->hasMany(UserEducation::class);

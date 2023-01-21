@@ -1,6 +1,6 @@
 <div class="navbar1">
                 <div class="row businessprofile-navigationlink">
-                <div class="sidebar-title">{{@$company_info->company_name}}</div>
+                <div class="sidebar-title">{{Auth::user()->current_company->company_name}}</div>
                 <?php
 				$companyId = $Companyname = $Address = $City = $State = $ZipCode = $Country = $EINnumber = $Establishmentyear = $Businessusername = $Profilepic = $Firstnameb = $Lastnameb = $Emailb = $Phonenumber = $Aboutcompany = $Shortdescription = $EmbedVideo = "";
 
@@ -24,7 +24,7 @@
 					<ul>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/home.png" alt="Fitnessity"></span>
-							<a>DASHBOARD</a>
+							<a href="">DASHBOARD</a>
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/company-set-up.png" alt="Fitnessity"></span>
@@ -42,15 +42,15 @@
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/manage-company.png" alt="Fitnessity"></span>
 							<a>MANAGE</a>
-							<a href="{{route('activity-scheduler')}}"><div class="navlink1 @if(Route::current()->getName()=='manage-scheduler') tab-active @endif" id="tab1">Manage Bookings</div></a>
-							<a ><div class="navlink1" id="">Manage Company</div></a>
-							<a ><div class="navlink1" id="">Manage Service</div></a>
+							<a href="{{route('activity-scheduler')}}"><div class="navlink1 @if(Route::current()->getName()=='activity-scheduler') tab-active @endif" id="tab9">Manage Bookings</div></a>
+							<a href="{{route('manageCompany')}}"><div class="navlink1" id="">Manage Company</div></a>
+							<a href="{{route('manageService',['company_id'=>Auth::user()->current_company->id])}}"><div class="navlink1" id="">Manage Service</div></a>
 							<a ><div class="navlink1" id="">Add/Manage Product</div></a>
 							<a ><div class="navlink1" id="">Add/Manage Staff</div></a>
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/clients.png" alt="Fitnessity"></span>
-							<a href="{{route('business_customer_index', ['business_id' => $companyId])}}"><div class="navlink1 service-price @if(Route::current()->getName() == 'business_customer_index' || Route::current()->getName() == 'business_customer_show') tab-active @endif" id="tab1">CLIENTS</div></a>
+							<a href="{{route('business_customer_index', ['business_id' => Auth::user()->current_company->id])}}" class="@if(Route::current()->getName() == 'business_customer_index' || Route::current()->getName() == 'business_customer_show') tab-active @endif"><div class="navlink1 service-price " id="tab12">CLIENTS</div></a>
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/email1.png" alt="Fitnessity"></span>
@@ -58,7 +58,7 @@
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/calender.png" alt="Fitnessity"></span>
-							<a>CALENDER</a>
+							<a href="{{route('provider_calendar')}}" class="@if(Route::current()->getName() == 'provider_calendar' ) tab-active @endif">CALENDAR</a>
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/financial-dash.png" alt="Fitnessity"></span>
@@ -66,7 +66,7 @@
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/checkout-register.png" alt="Fitnessity"></span>
-							<a href="{{route('activity_purchase',['book_id'=>0])}}"><div class="navlink1 service-price @if(Route::current()->getName()=='manage-scheduler') tab-active @endif" id="tab1">CHECKOUT REGISTER</div></a>
+							<a href="{{route('activity_purchase',['book_id'=>0])}}" class="@if(Route::current()->getName()=='activity_purchase') tab-active @endif"><div class="navlink1 service-price " id="tab1">CHECKOUT REGISTER</div></a>
 						</li>
 						<li>
 							<span><img src="http://dev.fitnessity.co/public/img/salesreports.png" alt="Fitnessity"></span>
@@ -103,7 +103,7 @@
 		   </div>
 			
 		   <div class="advertise text-center">
-				<label>{{@$company_info->company_name}}</label>
+				<label>{{Auth::user()->current_company->company_name}}</label>
 				<label>BUSINESS MEMBERSHIP TYPE</label>
 				<span>Pay-As-You Go <a href="{{route('manageCompany')}}">(Change)</a> </span> 
 			</div>
