@@ -1918,17 +1918,13 @@ class ActivityController extends Controller {
                                                 $actbox .= $selectval; 
                                             $actbox .= '</select>
                                         </div>  
-                                    </div>';
-                                    $SpotsLeftdis = 0;
-                                   
-                                    $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
-            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();/*
-                                   	print_r( $bschedule);exit;*/
-                                    $actbox .= '<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-                                        <div class="membership-details">
-                                            <h3 class="date-title">Booking Details</h3>
-                                            <label>Step: 4 </label> <span class=""> Select Time</span>
-                                            <div class="row" id="timeschedule">';
+
+                                        <label>Step: 4 </label> <span class=""> Select Time</span>
+                                        <div class="row" id="timeschedule">';
+		                                    $SpotsLeftdis = 0;
+		                                    $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
+		            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
+		            						/*print_r( $bschedule);exit;*/
                                             $i=1;
                                             if(!empty(@$bschedule) && count(@$bschedule)>0){
                                                 foreach(@$bschedule as $bdata){
@@ -1977,10 +1973,14 @@ class ActivityController extends Controller {
                                                 $reccuringval = ' (Recurring)';
                                             }
                                             $actbox .= '</div>
-                                            <h3 class="date-title book-summary-border">Booking Summary</h3>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
+                                        <div class="membership-details">
+                                            <h3 class="date-title ">Booking Summary</h3>
                                             <div id="book'.$serviceid.$serviceid.'">';
                                             if(@$sercatefirst['category_title'] != ''){
-                                                $actbox .= '<div class="price-cat">
+                                                $actbox .= '<div class="pt-20">
                                                     <label>Category:</label>
                                                     <span>'.@$sercatefirst['category_title'].'</span>
                                                 </div>';
@@ -2110,24 +2110,23 @@ class ActivityController extends Controller {
                                                 $actbox .= $selectval; 
                                             $actbox .= '</select>
                                         </div>  
+
+                                        <label>Step: 4 </label> <span class=""> Select Time</span>
+                                        <div class="row" id="timeschedule">
+                                        	<p class="notimeoption">No time option available Select category to view available times</p>
+                                        </div>
                                     </div>';
                                     
                                     $actbox .= '<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-                                        <div class="membership-details">
-                                            <h3 class="date-title">Booking Details</h3>
-                                            <label>Step: 4 </label> <span class=""> Select Time</span>
-                                            <div class="row" id="timeschedule">
-
-                                            	<p class="notimeoption">No time option available Select category to view available times</p></div>';
-                                            
-
+                                        <div class="membership-details">';
+                                           
                                             if(@$servicePrfirst['is_recurring_adult'] == 1){
                                                 $reccuringval = ' (Recurring)';
                                             }
-                                            $actbox .= '<h3 class="date-title book-summary-border">Booking Summary</h3>
+                                            $actbox .= '<h3 class="date-title ">Booking Summary</h3>
                                             <div id="book'.$serviceid.$serviceid.'">';
                                             
-                                                $actbox .= '<div class="price-cat">
+                                                $actbox .= '<div class="">
                                                     <label>Category:</label>
                                                     <span></span>
                                                 </div>';
@@ -2343,7 +2342,7 @@ class ActivityController extends Controller {
         $bookdata = '';
         $categorydata = BusinessPriceDetailsAges::where('id',$actscheduledata->category_id)->first();
         if(@$categorydata['category_title'] != ''){
-            $bookdata .='<div class="price-cat">
+            $bookdata .='<div class="">
                 <label>Category:</label>
                 <span>'.@$categorydata['category_title'].'</span>
             </div>';
@@ -2489,7 +2488,7 @@ class ActivityController extends Controller {
                 $mem_ary [] =  $pr['membership_type'];
             }
             $mem_ary = array_unique($mem_ary);
-            $mbox .='<select id="actfilmtype'.$sid.'" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre">';
+            $mbox .='<select id="actfilmtype'.$sid.'" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember('.$sid.');">';
                 foreach ($mem_ary as  $pr) {
                     $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
                 }
@@ -2545,7 +2544,7 @@ class ActivityController extends Controller {
         }
         $bookdata ='';
         if($catetitle != ''){
-            $bookdata .= '<div class="price-cat"><label>Category: </label><span> '.$catetitle.'</span></div>';
+            $bookdata .= '<div class="pt-20"><label>Category: </label><span> '.$catetitle.'</span></div>';
         }
 
         if($timedata != ''){

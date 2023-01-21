@@ -549,10 +549,8 @@
 </section>
 
 <section class="instant-hire-home">
-	<div class="row">
-		<div class="col-md-12">
-			@include('includes.next_8_hours_home') 
-		</div>
+	<div class="col-md-12 col-xs-12 custom-fitnessity">
+		@include('includes.next_8_hours_home') 
 	</div>
 </section>
 

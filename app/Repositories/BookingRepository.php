@@ -15,6 +15,7 @@ use App\BusinessActivityScheduler;
 use App\BusinessPriceDetails;
 use DB;
 use Auth;
+use config;
 use App\MailService;
 use App\Fit_Cart;
 use Illuminate\Support\Facades\Log;
@@ -174,7 +175,7 @@ class BookingRepository
                 }
 
                 $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
-                $language = $language_name->languages;
+                $language = @$language_name->languages;
 
                 $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$book_details['user_booking_detail']['booking_id'])->get();
                 $sub_totprice = 0;
@@ -235,12 +236,16 @@ class BookingRepository
                 }
 
                 if(@$book_details['user_type'] == 'user'){
+                    $userdata = User::where('id',$data->user_id)->first();
+                    $acc_url = config('app.url').'/userprofile/'.$userdata->username;
                     $taxval = $tot_amount_cart - $sub_totprice; 
                     $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
                     $main_total =  $tax_for_this + $totprice_for_this;
 
                     $name =  @$book_details['user']['firstname'].' '.@$book_details['user']['lastname'];
                 }else{  
+                    $userdata = Customer::where('id',$data->customer_id)->first();
+                    $acc_url = config('app.url').'/business/'.$userdata->business_id.'/customers/'.$userdata->id;
                     $extra_fees = json_decode(@$book_details['user_booking_detail']['extra_fees'],true); 
                     $tax = $extra_fees['tax'];
                     $tip = $extra_fees['tip'];
@@ -274,6 +279,7 @@ class BookingRepository
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
+                    "acc_url" =>  $acc_url,
                 );
 
                 $full_ary []= $one_array;
@@ -317,6 +323,7 @@ class BookingRepository
             $bookingdetail = UserBookingDetail::where('id',@$book_details['user_booking_detail']['id'])->first();
             $totprice_for_this = @$bookingdetail->total();
             $name = $book_details['customer']['fname'].' '. $book_details['customer']['lname'];
+            $acc_url = config('app.url').'/business/'.$book_details['customer']['business_id'].'/customers/'.$book_details['customer']['id'];
             $main_total =  $totprice_for_this   + $tax + $tip - $discount + (($totprice_for_this * $service_fee )/100);
 
             $pmt_json = json_decode(@$book_details['pmt_json'],true);
@@ -346,6 +353,7 @@ class BookingRepository
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
+                    "acc_url" =>  $acc_url,
                 );
 
                 $full_ary []=$one_array;

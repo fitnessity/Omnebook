@@ -730,54 +730,55 @@ $chk_found = '';
 													<?php echo $selectval; ?>
 												</select>
 											</div>	
+											<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
+												$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
+												?>
+											<label>Step: 4 </label> <span class=""> Select Time</span>
+											<div class="row" id="timeschedule">
+												<?php $i=1;$totalquantity = 0;?>
+												@if(!empty(@$bschedule) && count(@$bschedule)>0 &&  $chk_found =='Not')
+												@foreach(@$bschedule as $bdata)
+												<?php $SpotsLeftdis = 0; ?>
+												<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
+													$totalquantity = 0;
+													foreach($SpotsLeft as $data){
+														$item = json_decode($data['qty'],true);
+														if($item['adult'] != '')
+								                            $totalquantity += $item['adult'];
+								                        if($item['child'] != '')
+								                            $totalquantity += $item['child'];
+								                        if($item['infant'] != '')
+								                            $totalquantity += $item['infant'];
+													}
+												if( $bdata['spots_available'] != ''){
+    												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
+    											} ?>
+												<div class="col-md-6">
+													<div class="donate-now">
+														<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
+														@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
+															<label for="{{$bdata['id']}}" >
+                                                            <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
+                                                            </label>
+															<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
+													</div>
+												</div>
+												@endforeach
+												@else 
+													<p class="notimeoption">No time option available Select category to view available times</p>
+														
+												@endif
+											</div>
 										</div>
-										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
-										?>
 										
 										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
 											<div class="membership-details">
-												<h3 class="date-title">Booking Details</h3>
-												<label>Step: 4 </label> <span class=""> Select Time</span>
-												<div class="row" id="timeschedule">
-													<?php $i=1;$totalquantity = 0;?>
-													@if(!empty(@$bschedule) && count(@$bschedule)>0 &&  $chk_found =='Not')
-													@foreach(@$bschedule as $bdata)
-													<?php $SpotsLeftdis = 0; ?>
-													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
-														$totalquantity = 0;
-														foreach($SpotsLeft as $data){
-															$item = json_decode($data['qty'],true);
-															if($item['adult'] != '')
-									                            $totalquantity += $item['adult'];
-									                        if($item['child'] != '')
-									                            $totalquantity += $item['child'];
-									                        if($item['infant'] != '')
-									                            $totalquantity += $item['infant'];
-														}
-													if( $bdata['spots_available'] != ''){
-        												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
-        											} ?>
-													<div class="col-md-6">
-														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
-															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
-																<label for="{{$bdata['id']}}" >
-                                                                <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
-                                                                </label>
-																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
-														</div>
-													</div>
-													@endforeach
-													@else 
-														<p class="notimeoption">No time option available Select category to view available times</p>
-															
-													@endif
-												</div>
-												<h3 class="date-title book-summary-border">Booking Summary</h3>
+												<!-- <h3 class="date-title">Booking Details</h3> -->
+												
+												<h3 class="date-title">Booking Summary</h3>
 												<div id="book<?php echo $service["id"].$service["id"]; ?>" >
 													
-													<div class="price-cat pt-20">
+													<div class=" pt-20">
 														<label>Category:</label>
 														@if(@$sercatefirst['category_title'] != '')
 															<span>{{@$sercatefirst['category_title']}}</span>
@@ -1292,6 +1293,7 @@ $(document).ready(function() {
                 	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
                 	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
                 }
+                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
                 // Ajax call completed successfully
                 //alert("Form Submited Successfully");
             },
