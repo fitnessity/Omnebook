@@ -166,7 +166,7 @@ class AuthController extends Controller
          $user->latitude=$request->lat;
          $user->longitude=$request->lon;
          $user->save();
-         $url = '/profile/viewProfile';
+         $url = '/';
          return response()->json(['status'=>200,'redirecturl'=>$url]);
      }
 
@@ -894,7 +894,7 @@ class AuthController extends Controller
                     //Login
                     // Auth::loginUsingId($user->id);
                     // $request->session()->flash('alert-success', 'Your email has been successfully verified. Please login to access Fitnessity.');
-$s= Api::create_users($user);
+                    $s= Api::create_users($user);
                     Auth::login($user);
                     
                     Auth::loginUsingId($user->id, true);

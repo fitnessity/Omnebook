@@ -296,8 +296,8 @@ input:disabled{
 										<input type="hidden" name="actscheduleid" value="1 Day(s)" id="actscheduleid">
 										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate">
 										<input type="hidden" name="pricetotal" id="pricetotal" value="" class="product-price">
-										<input type="hidden" name="tip_amt_val" id="tip_amt_val" value="" class="product-price">
-										<input type="hidden" name="dis_amt_val" id="dis_amt_val" value="" class="product-price">
+										<input type="hidden" name="tip_amt_val" id="tip_amt_val" value="0" class="product-price">
+										<input type="hidden" name="dis_amt_val" id="dis_amt_val" value="0" class="product-price">
 										<input type="hidden" name="pc_regi_id" id="pc_regi_id" value="{{$pc_regi_id}}" class="product-price">
 										<input type="hidden" name="pc_user_tp" id="pc_user_tp" value="{{$pc_user_tp}}" class="product-price">
 										<input type="hidden" name="pc_value" id="pc_value" value="{{$pc_value}}" class="product-price">
@@ -453,9 +453,9 @@ input:disabled{
 							                   
 							                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 												<div class="close-cross-icon"> 
-													<?php /*?><a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['code']}}"><?php */?>
+													<?php /*?><a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['priceid']}}"><?php */?>
 													<!--  <a class="p-red-color editcartitemaks" data-toggle="modal" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" >  -->
-													<a class="p-red-color editcartitemaks" data-toggle="modal" data-code="{{$item['code']}}" data-pageid="{{$pageid}}"> 
+													<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}"> 
 													<i class="fas fa-pencil-alt"></i></a>
 												</div>
 												<div class="close-cross-icon-trash">
@@ -1265,14 +1265,14 @@ input:disabled{
 
 <script type="text/javascript">
 	$(document).on('click', '.editcartitemaks', function () {
-		var code = $(this).attr('data-code');
+		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
 		//alert(code);
 		$.ajax({
 			url: '{{route("editcartmodel")}}',
 			type: 'post',
 			data:  {
-				'code':code,
+				'priceid':priceid,
 				'pageid':pageid,
 				'companyId': '{{$companyId}}',
 				_token: '{{csrf_token()}}', 
@@ -1636,7 +1636,7 @@ input:disabled{
 		 		}
 		 		$('#tip_amt_val').val(sub_tot_tip);
 		 	}else{
-		 		$('#tip_amt_val').val('');
+		 		$('#tip_amt_val').val(0);
 		 	}
 	 	}
 
@@ -1651,7 +1651,7 @@ input:disabled{
 		 		}
 		 		$('#dis_amt_val').val(sub_tot_dis);
 	 		}else{
-	 			$('#dis_amt_val').val('');
+	 			$('#dis_amt_val').val(0);
 	 		}
 	 	}
 	 	
@@ -1802,6 +1802,7 @@ input:disabled{
 				}
 				$('#cash_change').val(tot);
 			}
+
 			if($('#ccfilediv').is(':visible')){
 				var cash = cash_amt_tender + parseFloat($('#cc_amt').val());
 				if( cash === cash_amt){
@@ -1820,6 +1821,24 @@ input:disabled{
 				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
 			}
 			$('#cash_amt_change').html('$'+ tot);
+		}else{
+			if($('#ccfilediv').is(':visible')){
+				var cash = parseFloat($('#cc_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				}
+			}else if($('#ccnewdiv').is(':visible')){
+				var cash = parseFloat($('#cc_new_card_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				}
+			}else{
+				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+			}
 		}
 	}
 

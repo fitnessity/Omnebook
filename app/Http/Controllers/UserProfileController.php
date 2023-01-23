@@ -5595,7 +5595,7 @@ class UserProfileController extends Controller {
 
         Auth::loginUsingId(Auth::user()->id, true);
 
-        $url = '/profile/viewProfile';
+        $url = '/';
 
         $response = array(
             'type' => 'success',
