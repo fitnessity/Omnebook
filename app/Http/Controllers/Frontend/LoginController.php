@@ -123,7 +123,8 @@ class LoginController extends Controller {
                 }else if($checkoutsession != ''){
                     return redirect('/payments/card');
                 }else{
-                    return redirect()->route('profile-viewProfile');
+                    //return redirect()->route('profile-viewProfile');
+                    return redirect()->route('homepage');
                 }
 
                /* return Response::json($response);*/

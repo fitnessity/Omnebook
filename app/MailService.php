@@ -242,7 +242,7 @@ class MailService
         });
     }
 
-    public static function sendEmailforcancelschedule($userdata , $businessdata ,$companydata,$time,$date,$usertype,$mail_type)
+    public static function sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,$usertype,$mail_type)
     {
 
         if($mail_type == 'cancel'){
@@ -256,6 +256,29 @@ class MailService
         Mail::send($send, ['userdata' => $userdata, 'businessdata' => $businessdata , 'companydata' => $companydata ,'time' =>$time ,'date' =>$date ,'usertype' =>$usertype,'msg'=>$msg], function ($m) use ($userdata,$businessdata,$companydata,$time,$date,$usertype,$msg) {
             $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
             $m->to($userdata->email)->subject($msg);
+        });
+
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
+    public static function sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type)
+    {
+
+        if($mail_type == 'cancel'){
+            $send = "emails.activity-schedule-cancel-instructor";
+            $msg = 'Fitnessity: Activity Has Been Cancelled!';
+        }else{
+            $send = "emails.activity-reschedule-instructor";
+            $msg = 'Fitnessity: Activity Has Been Rescheduled!';
+        }
+
+        Mail::send($send, ['insdata' => $insdata, 'businessdata' => $businessdata , 'companydata' => $companydata ,'time' =>$time ,'date' =>$date ,'msg'=>$msg], function ($m) use ($insdata,$businessdata,$companydata,$time,$date,$msg) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($insdata->email)->subject($msg);
         });
 
         if(Mail::failures()){

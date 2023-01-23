@@ -461,8 +461,8 @@ class SchedulerController extends Controller
 
           $modelchk = 0;
           $modeldata = '';
-          
-          //$ordermodelary = array("630");
+          //session()->forget('ordermodelary');
+          //$ordermodelary = array("646");
           $ordermodelary = session()->get('ordermodelary');
           if(!empty($ordermodelary)){
                $modelchk = 1;
@@ -903,17 +903,17 @@ class SchedulerController extends Controller
                          <div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
-                                        <label>TAX</label>
+                                        <label>TAXES AND FEES</label>
                                    </div>
                               </div>
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
-                                        <span>$'. $totaltax .'</span>
+                                        <span>$'. ($totaltax +  $service_fee ).'</span>
                                    </div>
                               </div>
-                         </div>
+                         </div>';
 
-                         <div class="row border-xx">
+                         /*<div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
                                         <label>FEES</label>
@@ -924,8 +924,8 @@ class SchedulerController extends Controller
                                         <span>$'.$service_fee.'</span>
                                    </div>
                               </div>
-                         </div>
-                         <div class="row border-xx">
+                         </div>*/
+                         $html .='<div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
                                         <label>TOTAL AMOUNT PAID</label>
@@ -1022,7 +1022,7 @@ class SchedulerController extends Controller
                unset($data[$position]);
                ActivityCancel::create($data);
           }else{
-               if($request->has('show_cancel_on_schedule')){
+              if($request->has('show_cancel_on_schedule')){
                     $show_cancel_on_schedule = 1;
                }else{
                     $show_cancel_on_schedule = 0;
@@ -1062,24 +1062,25 @@ class SchedulerController extends Controller
                     $companydata = $db->business_services->company_information;
                     $time = date('h:i a',strtotime($db->business_activity_scheduler->shift_start));
                     $date = $request->cancel_date;
-                    $status = MailService::sendEmailforcancelschedule($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
+                    $status = MailService::sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
                } 
           }
 
-          /*if($request->has('email_Instructor')){
-               echo "hii";
-               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
+          if($request->has('email_Instructor')){
+               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->first();
                //print_r($databooked);
-               foreach($databooked as $db){
-                    $insdata = $db->booking->business_services->StaffMembers();
-                    print_r($insdata);exit;
-                    $businessdata = $db->business_services;
-                    $companydata = $db->business_services->company_information;
-                    $time = date('h:i a',strtotime($db->business_activity_scheduler->shift_start));
+               
+               $insdata = $databooked->business_services->StaffMembers;
+               if($insdata != ''){
+                    $businessdata = $databooked->business_services;
+                    $companydata = $databooked->business_services->company_information;
+                    $time = date('h:i a',strtotime($databooked->business_activity_scheduler->shift_start));
                     $date = $request->cancel_date;
-                    $status = MailService::sendEmailforcancelschedule($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
-               } 
-          }*/
+                    if($insdata->email != ''){
+                         $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
+                    }
+               }
+          }
 
          //exit;
           /*print_r($databooked);exit;*/
@@ -1870,14 +1871,14 @@ class SchedulerController extends Controller
           if (session()->has('cart_item')) {
                $cart_item = session()->get('cart_item');
           }
-
+          //print_r( $cart_item);exit;
           $html = '';
           $salestaxajax = 0;
           $duestaxajax = 0;
           $result = '';
           $cart = [];
-          if(in_array($request->code, array_keys($cart_item["cart_item"]))) {
-               $cart = $cart_item["cart_item"][$request->code];
+          if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
+               $cart = $cart_item["cart_item"][$request->priceid];
                //print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
@@ -1958,9 +1959,9 @@ class SchedulerController extends Controller
                                                                       if(!empty(@$program_list)){
                                                                            foreach($program_list as $pl){
                                                                                 $html .='<option value="'.$pl->id.'"';
-                                                                           if($request->code == $pl->id){$html .='selected'; 
+                                                                           if($cart['code'] == $pl->id){$html .='selected'; 
                                                                            }
-                                                                           $html .='>'.$pl->program_name.'.</option>';
+                                                                           $html .='>'.$pl->program_name.'</option>';
                                                                            }
                                                                       }
                                                                  $html .='</select>
@@ -2151,13 +2152,13 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>
-                              <input type="hidden" name="aduquantity" id="adupricequantityajax" value="" class="product-quantity"/>
-                              <input type="hidden" name="childquantity" id="childpricequantityajax" value="" class="product-quantity"/>
-                              <input type="hidden" name="infantquantity" id="infantpricequantityajax" value="" class="product-quantity"/>
+                              <input type="hidden" name="aduquantity" id="adupricequantityajax" value="'.$aduqty.'" class="product-quantity"/>
+                              <input type="hidden" name="childquantity" id="childpricequantityajax" value="'.$childqty.'" class="product-quantity"/>
+                              <input type="hidden" name="infantquantity" id="infantpricequantityajax" value="'.$infantqty.'" class="product-quantity"/>
 
-                              <input type="hidden" name="cartaduprice" id="cartadupriceajax" value="" class="product-quantity"/>
-                              <input type="hidden" name="cartchildprice" id="cartchildpriceajax" value="" class="product-quantity"/>
-                              <input type="hidden" name="cartinfantprice" id="cartinfantpriceajax" value="" class="product-quantity"/>
+                              <input type="hidden" name="cartaduprice" id="cartadupriceajax" value="'.$aduprice.'" class="product-quantity"/>
+                              <input type="hidden" name="cartchildprice" id="cartchildpriceajax" value="'.$childprice.'" class="product-quantity"/>
+                              <input type="hidden" name="cartinfantprice" id="cartinfantpriceajax" value="'.$infantprice.'" class="product-quantity"/>
 
                               <input type="hidden" name="type" value="customer">
                               <input type="hidden" name="pageid" value="'.$request->pageid.'">
