@@ -418,7 +418,12 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} <i class="far fa-file-alt"></i></span>
+																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} 
+																				<a data-id="{{$booking_detail->booking->id}}" data-behavior="send_receipt" href="#">
+																					<i class="far fa-file-alt"  ></i>	
+																				</a>
+																				
+																			</span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -1078,6 +1083,16 @@
 </script>
 
 <script type="text/javascript">
+	$(document).on('click', '[data-behavior~=send_receipt]', function(e){
+		e.preventDefault()
+		console.log('send receipt');
+		$.ajax({
+			url: "{{route('sendemailofreceipt')}}/?order_id=" + $(this).data('id'),
+			success: function(){
+				alert('receipt sent');
+			}
+		})
+	})
 
     $(document).ready(function() {
     	$('.cards-block').click();
