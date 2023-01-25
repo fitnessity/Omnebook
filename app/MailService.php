@@ -319,6 +319,18 @@ class MailService
         }
     }
 
+    public static function sendEmailReceiptFromCheckoutRegister($email_detail){
+        Mail::send('emails.checkout-register-customer-mail', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($email_detail['email'],'')->subject('BOOKING CONFIRMATION');
+        });
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
     public static function sendEmailBusinesslist($AllDetail){
         
         //send mail to Business email address

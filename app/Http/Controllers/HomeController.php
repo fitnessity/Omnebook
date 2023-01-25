@@ -13,6 +13,7 @@ use App\AddrStates;
 use App\AddrCities;
 use App\AddrCountries;
 use App\CompanyInformation;
+use App\BusinessServices;
 use App\BusinessClaim;
 use App\Miscellaneous;
 use App\Languages;
@@ -199,7 +200,13 @@ class HomeController extends Controller
 			{
 				$array_data[]=$user_data->firstname." ".$user_data->lastname."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
 			}
-			
+
+			$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
+			foreach($data_activity as $name)
+			{
+				$array_data[]=$name->program_name."~~activity_page"."~~".$name->id;
+			}
+
 			sort($array_data);
 			$output = '<ul id="country-list">';
 			if(!empty($array_data)){
@@ -209,7 +216,9 @@ class HomeController extends Controller
 					if(@$exp[1]=='personal_profile')
 						$url= "/userprofile/".$exp[2];
 					else if(@$exp[1]=='business_profile')
-						$url= "/businessprofile/".$exp[2];	
+						$url= "/businessprofile/".$exp[2];
+					else if(@$exp[1]=='activity_page')
+						$url= "/activity-details/".$exp[2];	
 					else
 						$url= "/activities/activity_type=".$row;
 					$output .= '<li class="searchclick" onClick="selectSearch(\''.$url.'\');" data-num="'.trim($exp[0]).'">'.$exp[0].'</li>';
@@ -273,6 +282,12 @@ class HomeController extends Controller
 				foreach($user_name as $name)
 				{
 					$array_data[]=$name->username;
+				}
+
+				$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
+				foreach($data_activity as $name)
+				{
+					$array_data[]=$name->program_name;
 				}
 				sort($array_data);
 				$output = '<ul id="country-list">';

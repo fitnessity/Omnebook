@@ -330,8 +330,8 @@
 										</div>
 										<hr>
 										<div class="all-details">
-											<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
-											<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+											<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">Book Now</a> -->
+											<a class="showall-btn" href="/activity-details/{{$serviceid}}">Book Now</a>
 											<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 										</div>
 									</div>

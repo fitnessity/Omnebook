@@ -115,7 +115,7 @@
 											<span><a  @if (Auth::check())  href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
 											<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 										</div>
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
@@ -418,7 +418,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -705,7 +705,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -983,7 +983,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1261,7 +1261,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1541,7 +1541,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1818,7 +1818,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -2097,7 +2097,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">More Details</a>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>

@@ -91,7 +91,7 @@ class BusinessActivityScheduler extends Model
     }
 
     public static function allday($datetime){
-        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw("activity_days like ? and shift_start > ? ", ['%'.$datetime->format('l').'%', $datetime->format("H:i")]);                               
+        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw("activity_days like ? and shift_start > ? ", ['%'.$datetime->format('l').'%', $datetime->format("H:i")])->whereDate('end_activity_date' ,'>=', $datetime->format("Y-m-d"));                               
     }
     
     public function business_service()

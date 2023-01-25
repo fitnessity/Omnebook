@@ -429,7 +429,7 @@ span.status::after {
 .btn-black:hover{ background-color: #ea1515; border-color: #ea1515; color: #ffffff !important; }
 .border-radius6 { border-radius: 6px; }
 .businessprofile-navigationlink a { float: left; width: 100%; color: #fff; font-size: 16px; }
-.businessprofile-navigationlink div { padding: 12px 0; color: white;}
+.businessprofile-navigationlink div { padding: 4px 0; color: white;}
 .following-tag{ background-color: #f91942; padding: 5px 10px; border: 1px solid #f91942; border-radius: 5px; }
 .back-comp{ padding-top: 30px; clear: both; }
 .back-comp a{ color: #ea1515; }
@@ -893,4 +893,8 @@ a.active{
 .advertise span a{
 	color: #fff;
 	text-decoration: underline;
+}
+.tab-active {
+    background: #ed1b24;
+    color: #fae3e2 !important;
 }

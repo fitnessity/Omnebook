@@ -167,6 +167,7 @@
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
 												<label class="tab-titles">Quick Stats</label>
+												<a data-toggle="modal" data-target="#calenderevent">Edit</a>
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
@@ -686,6 +687,109 @@
 		</div>
 	</div>
 </div>
+<!-- The Calendar Modal -->
+	<div class="modal fade compare-model" id="calenderevent">
+		<div class="modal-dialog eventcalender">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
+						<div class="col-lg-12">
+							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Event</h4>
+						</div>
+					</div>
+					<div class="modal-box-selection" data-toggle="modal" data-target="#bookclienttraining">
+						<div class="row"> 
+							<div class="col-md-3">
+								<div class="schedule-client">
+									<img src="http://dev.fitnessity.co/public/img/schedule-client.png">
+								</div>								
+							</div>
+							<div class="col-md-9">
+								<div class="event-info text-center">
+									<label>Schedule A Client</label>
+									<p>Set up a schedule to train a client</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-box-selection" data-toggle="modal" data-target="">
+						<div class="row"> 
+							<div class="col-md-3">
+								<div class="schedule-client">
+									<img src="http://dev.fitnessity.co/public/img/schedule-meetings.png">
+								</div>								
+							</div>
+							<div class="col-md-9">
+								<div class="event-info text-center">
+									<label>Schedule Meetings</label>
+									<p>Schedule appointments and meetings</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-box-selection" data-toggle="modal" data-target="">
+						<div class="row"> 
+							<div class="col-md-3">
+								<div class="schedule-client">
+									<img src="http://dev.fitnessity.co/public/img/blockoff.png">
+								</div>								
+							</div>
+							<div class="col-md-9">
+								<div class="event-info text-center">
+									<label>Block Off Dates Or A Time Period</label>
+									<p>Tell cleints when your not available</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- end modal -->
+<!-- The Calendar Modal -->
+	<div class="modal fade compare-model" id="bookclienttraining">
+		<div class="modal-dialog book-client-training">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
+						<div class="col-lg-12">
+							<h4 class="modal-title" style="text-align: center; color: #df0003; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 0px;">Schedule A Client</h4>
+							<p class="text-center">Book a client for training</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-5">
+							<div class="side-border-right">
+								<div class="r">
+									<label class="red-fonts">Step 1: </label><label> Plan Your Session</label>				
+								</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- end modal -->
+
 	<!-- The Modal Add personal info-->
 		<div class="modal fade compare-model" id="editbooking">
 			<div class="modal-dialog editbooking">

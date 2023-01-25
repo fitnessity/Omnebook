@@ -74,8 +74,8 @@
 				</div>
 				<hr>
 				<div class="all-details">
-					<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">More Details</a> -->
-					<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $activity->id])}}">More Details</a>
+					<!-- <a class="showall-btn" data-toggle="modal" data-target="#mykickboxing3">Book Now</a> -->
+					<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $activity->id])}}">Book Now</a>
 					<p class="addToCompare" id='compid{{$activity->id}}' title="Add to Compare">COMPARE SIMILAR +</p>
 				</div>
 			</div>

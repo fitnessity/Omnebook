@@ -28,8 +28,8 @@
         <div class="col-md-2" style="background: black;">
            @include('business.businessSidebar')
         </div>
-        <div class="col-md-10">
-            <div class="page-wrapper inner_top" id="wrapper">
+        <div class="col-md-10 nopadding">
+            <div class="page-wrapper " id="wrapper">
             <div class="page-container">
                 <!-- Left Sidebar End -->
                 <div class="page-content-wrapper calender-wrapper">
@@ -37,6 +37,28 @@
                         <div class="container-fluid">
                             <div class="page-title-box">
                                 <h4 class="page-title">Calendar</h4>
+								<div class="btn-txt">
+        <!-- 									<a href="#" class="showall-btn" data-toggle="modal" data-target="#schedule-edita">Add A Business</a> -->
+									
+										<!-- The Modal Add Business-->
+										<div class="modal fade" id="schedule-edita">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<!-- Modal Header -->
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal">&times;</button>
+													</div>
+													<!-- Modal body -->
+													<div class="modal-body">
+														<div class="form-group book-info">
+															<!-- <label id="activity_name"></label>
+															<a class="btn btn-danger" href="{{route('bookinginfo')}}">View booking details</a> -->
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+								</div>
                             </div>
                             <div class="edit_profile_section padding-1 white-bg border-radius1">
                                 <div id='calendar'>
@@ -97,7 +119,10 @@
         </div>
     </div>
 </div>
+
+
 @include('layouts.footer')
+
 <script>
 	$(document).ready(function () {
 		var SITEURL = "{{ url('/') }}";
@@ -125,12 +150,14 @@
            
             displayEventTime: false,
             editable: true,
+            eventLimit: true,
 			fixedWeekCount:false,
 			header: {
 				left: 'prev,next today',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
+            defaultView: "month", 
             eventRender: function (event, element, view) {
 
              //alert('call');
@@ -140,21 +167,8 @@
             selectable: true,
             selectHelper: true,
 
-            /*dayClick: function(date, jsEvent, view) {
-
-                alert('Clicked on: ' + date.format());
-
-                alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-                alert('Current view: ' + view.name);
-
-                // change the day's background color just for fun
-                $(this).css('background-color', 'red');
-
-              }
-*/
             eventClick: function(events) {
-                /*var time = events.start;*/
+                //var time = events.start;
                 var eventName = events.title;
                 $.ajax({
                     type: "POST",
@@ -173,6 +187,31 @@
               //$('#activity_name').html(eventName);
                
             },
+
+            /*select: function(start, end, allDay) {
+                var check = $.fullCalendar.formatDate(start,'yyyy-MM-dd');
+                var today = $.fullCalendar.formatDate(new Date(),'yyyy-MM-dd');
+                if(check < today)
+                {
+                    // Previous Day. show message if you want otherwise do nothing.
+                    // So it will be unselectable
+                }
+                else
+                {
+                    // Its a right date
+                    // Do something
+                }
+              },*/
+
+            /*dayClick: function(date,allDay,  jsEvent, view) {
+                alert('hii');
+                //alert('Clicked on: ' + date.format());
+
+                /*alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                alert('Current view: ' + view.name);
+
+            }*/
             
         });
     });

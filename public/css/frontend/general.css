@@ -23183,7 +23183,6 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: none;
 }
 .business-offer-main.manageservice-page{
-	margin-top:50px; 
 	padding:50px; 
 	min-height:500px;
 }
@@ -24041,4 +24040,70 @@ padding-left: 0px;
 .select-sparetor{
 	border-top: 2px solid #c90000;
 	margin-top: 8px;
+}
+.activity-title-img img{
+	width: 100%;
+	min-height: 95px;
+}
+.activity-details h3{
+	font-size: 17px;
+	color: #000;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+.gift-comments label{
+	font-size: 12px;
+	color: #000;
+	font-weight: normal;
+}
+.gift-comments {
+	margin-top: 10px;
+}
+.gift-comments.email input{
+	margin-top: 37px;
+	margin-bottom: 7px;
+}
+.addnewemail{
+	color: #0087ff;
+	text-decoration: underline;
+}
+.addnewemail:hover{
+	color: #0087ff;
+	text-decoration: underline;
+}
+.booking-checkbox input{
+	margin-top: 13px;
+}
+.show-more-cart{
+	text-align: center;
+	border-bottom: 1px solid #000;
+}
+.show-more-cart a{
+	color: #000 !important;
+	text-decoration: none !important;
+}
+.hide-part{
+    display: none;
+}
+.show-part{
+    display: block;
+}
+.modal-box-selection{
+	border: 1px solid #000;
+	border-radius: 6px;
+	margin-bottom: 15px;
+	cursor: pointer;
+	padding: 10px 0px 10px 6px;
+}
+.schedule-client img{
+	width: 92px;
+	max-height: 100px;
+}
+.event-info label{
+	font-size: 20px;
+	color: #000;
+	margin-top: 15px;
+}
+.event-info p{
+	font-size: 19px;
 }

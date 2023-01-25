@@ -12139,46 +12139,55 @@ $("#frm_servicetitle_two1").on("change", function() {
         $('#b_short').html('');
         
         if(b_companyname == ''){
+            alert('1');
             $('#b_cmpo').html('Company Name is required');
             $('#b_companyname').focus();
             return false;
         }
         if(b_address == ''){
+             alert('2');
             $('#b_addr').html('Address is required');
             $('#b_address').focus();
             return false;
         }
         if(b_city == ''){
+             alert('3');
            $('#b_ct').html('City is required');
            $('#b_city').focus();
            return false;
         }
         if(!str.test(b_city)){
+             alert('4');
             $('#b_ct').html('City Name is not Valid');
             $('#b_city').focus();
             return false;
         }
         if(b_state == ''){
+             alert('5');
             $('#b_sta').html('State is required');
             $('#b_state').focus();
             return false;
         }
         if(!str.test(b_state)){
+             alert('6');
             $('#b_sta').html('State Name is not Valid');
             $('#b_state').focus();
             return false;
         }
         if(b_zipcode == ''){
+             alert('7');
             $('#b_zip').html('Zipcode is required');
             $('#b_zipcode').focus();
             return false;
         }
         if(b_country == ''){
+             alert('8');
             $('#b_cont').html('Country is required');
             $('#b_country').focus();
             return false;
         }
         if(!str.test(b_country)){
+             alert('9');
             $('#b_cont').html('Country Name is not Valid');
             $('#b_country').focus();
             return false;
@@ -12189,36 +12198,43 @@ $("#frm_servicetitle_two1").on("change", function() {
             return false;
         }*/
         if(b_Establishmentyear == ''){
+             alert('10');
             $('#b_estb').html('Establishment Year is required');
             $('#b_Establishmentyear').focus();
             return false;
         }
-        if(!filter.test(b_Establishmentyear)){
+        /*if(!filter.test(b_Establishmentyear)){
+             alert('11');
             $('#b_estb').html('Establishment Year Not Valid');
             $('#b_Establishmentyear').focus();
             return false;
-        }
+        }*/
         if(b_business_user_tag == ''){
+             alert('12');
             $('#b_usertag').html('Business Username is required');
             $('#b_business_user_tag').focus();
             return false;
         }
         if(b_firstname == ''){
+             alert('13');
             $('#b_firstnm').html('Company First Name is required');
             $('#b_firstname').focus();
             return false;
         }
         if(b_lastname == ''){
+             alert('14');
             $('#b_lastnm').html('Company Last Name is required');
             $('#b_lastname').focus();
             return false;
         }
-        if(b_email == ''){
+        /*if(b_email == ''){
+             alert('15');
             $('#b_eml').html('Email is required');
             $('#b_email').focus();
             return false;
-        }
-        if(!regex.test(b_email)){
+        }*/
+        if(b_email != '' && !regex.test(b_email)){
+             alert('16');
             $('#b_eml').html('Email is Not Valid');
             $('#b_email').focus();
             return false;
@@ -12230,6 +12246,7 @@ $("#frm_servicetitle_two1").on("change", function() {
         }*/
 
        if (filter.test(b_contact)) {
+         alert('17');
             if(b_contact.length > 9 || b_contact.length < 9){
                 $('#b_cot').html('Contact Number is not Valid');
                 $('#b_contact').focus();

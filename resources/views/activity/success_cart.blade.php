@@ -405,7 +405,7 @@ if(!empty($cart["cart_item"])) {
 											</div>
 											<hr>
 											<div class="all-details">
-												<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+												<a class="showall-btn" href="/activity-details/{{$serviceid}}">Book Now</a>
 											</div>
 										</div>
 									</div>

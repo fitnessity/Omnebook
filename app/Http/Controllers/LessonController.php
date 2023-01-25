@@ -4673,24 +4673,29 @@ class LessonController extends Controller {
                         $remaing  = 0;
                         $chk_item = 0;
                         foreach($cart_item["cart_item"] as $k => $v){
-                            if($cart_item["cart_item"][$k]["actscheduleid"] == $actscheduleid &&  $cart_item["cart_item"][$k]["sesdate"] == $sesdate){
-                                $chk_item =1;
-                                if(!empty($cart_item["cart_item"][$k]['adult'])){
-                                    $tot_qty_cart += $cart_item["cart_item"][$k]['adult']["quantity"];
+                            if($cart_item["cart_item"][$k]["chk"] == ''){
+                                if($cart_item["cart_item"][$k]["actscheduleid"] == $actscheduleid &&  $cart_item["cart_item"][$k]["sesdate"] == $sesdate){
+                                    $chk_item =1;
+                                    if(!empty($cart_item["cart_item"][$k]['adult'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['adult']["quantity"];
+                                    }
+                                    if(!empty($cart_item["cart_item"][$k]['child'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['child']["quantity"];
+                                    }
+                                    if(!empty($cart_item["cart_item"][$k]['infant'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['infant']["quantity"];
+                                    }
+                                    $db_totalquantity = $this->bookings->gettotalbooking($actscheduleid,$sesdate);
+                                    $bookscheduler = BusinessActivityScheduler::where('id', $actscheduleid)->first();
+                                    if($bookscheduler!= ''){
+                                        $remaing = ($bookscheduler->spots_available - $db_totalquantity ); 
+                                    }
+                                    /*echo $bookscheduler->spots_available.'<br>';
+                                    echo $db_totalquantity .'<br>';*/
                                 }
-                                if(!empty($cart_item["cart_item"][$k]['child'])){
-                                    $tot_qty_cart += $cart_item["cart_item"][$k]['child']["quantity"];
-                                }
-                                if(!empty($cart_item["cart_item"][$k]['infant'])){
-                                    $tot_qty_cart += $cart_item["cart_item"][$k]['infant']["quantity"];
-                                }
-                                $db_totalquantity = $this->bookings->gettotalbooking($actscheduleid,$sesdate);
-                                $bookscheduler = BusinessActivityScheduler::where('id', $actscheduleid)->first();
-                                $remaing = ($bookscheduler->spots_available - $db_totalquantity ); 
-                                /*echo $bookscheduler->spots_available.'<br>';
-                                echo $db_totalquantity .'<br>';*/
                             }
                         }
+
                         if($chk_item == 1){
                             $final_qty_cart = ($tot_qty +  $tot_qty_cart);
                             /*echo $remaing ;
