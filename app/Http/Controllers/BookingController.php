@@ -28,6 +28,7 @@ use DB;
 use App\Fit_background_check_faq;
 use App\Fit_vetted_business_faq;
 use App\MailService;
+use App\SGMailService;
 use App\Evident;
 use App\Evidents;
 use App\Sports;
@@ -474,6 +475,8 @@ class BookingController extends Controller {
             'oid' => $request->oid,
             'email' => $request->email);
         $status = MailService::sendEmailReceipt($email_detail);
+
+        SGMailService::sendBookingReceipt($request->order_id);
         return $status;
     }
 

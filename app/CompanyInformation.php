@@ -127,4 +127,8 @@ class CompanyInformation extends Model {
         return $comp_address;
     }
 
+    public function business_activity_schedulers() {
+        return $this->hasMany(BusinessActivityScheduler::class, 'cid');
+    }
+
 }

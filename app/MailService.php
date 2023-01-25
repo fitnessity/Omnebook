@@ -746,4 +746,16 @@ class MailService
 
     }
 
+    public static function sendSGEmailReceipt($email_detail){
+        Mail::send('emails.email-order-receipt', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->to($email_detail['email'],'')->subject('Booking Receipt');
+        });
+        if(Mail::failures()){
+            return 'fail';
+        }else{
+            return 'success';
+        }
+    }
+
 }
