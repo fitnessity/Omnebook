@@ -277,7 +277,7 @@ class BookingController extends Controller {
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         <div class="booking-page-meta-info">
-                                            <span>'. $odt['bookedtime'].'</span>
+                                            <span>'. $odt['created_at'].'</span>
                                         </div>
                                     </div>
                                 </div>
@@ -420,7 +420,7 @@ class BookingController extends Controller {
                                 </div>
                                 <div class="col-md-6 col-xs-6">
                                     <div class="total-titles">
-                                        <span>CC ending in ********'.$odt['last4'].'</span>
+                                        <span>'.$odt['last4'].'</span>
                                     </div>
                                 </div>
                             </div>
