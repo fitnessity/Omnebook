@@ -73,7 +73,8 @@
                         <a href="{{ Config::get('constants.SITE_URL') }}/discover">Discover</a>
                         <a href="{{ Config::get('constants.SITE_URL') }}/hire-trainer">Hire Trainer</a><?php */?>
                         <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy">Privacy Policy</a>
-                        <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition">Terms & Condition</a>                                              
+                        <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition">Terms & Condition</a>
+                        <a href="{{ Config::get('constants.SITE_URL') }}/about-us">About Us</a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

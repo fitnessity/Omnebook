@@ -1613,6 +1613,9 @@
 	.modal-dialog.editbooking{width: 50%;}
 	.modal-dialog.latecancel{width: 40%;}
 	.modal-dialog.booking0customer{width: 95%;}
+	.modal-dialog.modal-lg.giftsmodals{width: 50%;}
+	.modal-dialog.eventcalender{width: 40%;}
+	.modal-dialog.book-client-training{width: 80%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1698,6 +1701,9 @@
 	.modal-dialog.editbooking{width: 40%;}
 	.modal-dialog.latecancel{width: 30%;}
 	.modal-dialog.booking0customer{width: 95%;}
+	.modal-dialog.modal-lg.giftsmodals{width: 40% !important;}
+	.modal-dialog.eventcalender{width: 30%;}
+	.modal-dialog.book-client-training{width: 70%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){

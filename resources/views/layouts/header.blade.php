@@ -477,12 +477,17 @@ $total_quantity = 0;
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
 							<div  class="cartitmclass">
 								<?php 
+									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
 									    foreach($cart["cart_item"] as $item){
-									    	$total_quantity = count($cart["cart_item"]);
+									    	if($item['chk'] == ''){
+									    		$newcart['cart_item'] [] = $item;
+									    		//$total_quantity = count($cart["cart_item"]);
+									    	}
 									        /*$total_quantity += (int)$item["quantity"];*/
 									    }
-									} ?>
+									} 
+									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
 								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>

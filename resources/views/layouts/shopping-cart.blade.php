@@ -212,6 +212,8 @@
 											</div>
 										</div>
 
+										<div class="hide-part"> 
+										
 										<div class="row">
 											<div class="col-md-6">
 												<div class="info-display">
@@ -357,6 +359,9 @@
 												</div>
 											</div>
 										</div>
+										</div>
+										<div class="show-more-cart"><a class="show-more">Show More</a></div>
+										
 											<!--
                                         <div class="info-display">
                                             <label>Instructor: </label>
@@ -428,9 +433,20 @@
                                     <?php } 
                                     ?>
                                     <div class="select-sparetor">
-                                        <input class="payfor" type="checkbox" id="payforcheckbox" name="payforcheckbox" value="">
+                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup()">
                                         <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
                                         <p class="payfor-ptag">Share the booking details with them</p>
+										<div class="btn-ord-txt">
+											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
+										</div>
+										<script type="text/javascript">
+											function opengiftpopup(){
+											var checkBox = document.getElementById("payforcheckbox{{$item['priceid']}}");
+												if (checkBox.checked == true){
+												    $('#giftanotheralink').click();
+												}
+											}
+										</script>
                                     </div>
                                 </div>
     						</div>
@@ -970,6 +986,84 @@
         color: red !important;
     }
 </style>
+
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="leavegift">
+    <div class="modal-dialog modal-lg giftsmodals">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+				<div class="row contentPop"> 
+					<div class="col-lg-12 nopadding">
+					   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
+					   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
+					</div>
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="activity-title-img">
+								<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1667542553-Aerial-View.jpg" alt="Avatar" class="avatar">
+							</div>
+						</div>
+						<div class="col-lg-10">
+							<div class="activity-details">
+								<h3>Valor MMA Personal Training Sessions</h3>
+								<p>We will include all of the booking details in the email your guest will receive</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="gift-comments">
+								<label>Leave a comment for them</label>
+								<textarea class="form-control" rows="4"  name="Aboutcompany" id="" maxlength="150"></textarea>
+								<label>From:</label>
+								<input type="name" class="form-control myemail" name="name" autocomplete="off" placeholder="Darryl Phipps" size="30" maxlength="80" value="">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="gift-comments email">
+								<input type="email" class="form-control myemail" name="Emailb" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
+							</div>
+							<a href="#" class="addnewemail">+Add another email</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="booking-checkbox">
+								<form action="">
+								  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+								  <label for="vehicle1">Don’t Show The Price</label>
+								  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
+								</form>
+							</div>
+						</div>
+						<div class="col-lg-12 text-right">
+							<button class="post-btn-red" type="submit" id="" disabled="">Save</button>
+						</div>
+					</div>
+					
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+<script>
+	$(".show-more").click(function(event) {
+	var txt = $(".hide-part").is(':visible') ? 'Show More' : 'Show Less';
+	$(".hide-part").toggleClass("show-part");
+	$(this).html(txt);
+	event.preventDefault();
+});
+</script>
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
 
 <!-- <script src="{{ url('public/js/creditcard.js') }}"></script> -->
@@ -977,68 +1071,69 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
   
 <script type="text/javascript">
-$(function() {
-    var $form = $(".validation");
-    $('form.validation').bind('submit', function(e) {
-        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
-        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
-    
-        if(save_cardRadio == null) {
-            $('#save_card').val(0);
-        }else{
-             $('#save_card').val(1);
-        }
+	$(function() {
+	    var $form = $(".validation");
+	    $('form.validation').bind('submit', function(e) {
+	        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
+	        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+	    
+	        if(save_cardRadio == null) {
+	            $('#save_card').val(0);
+	        }else{
+	             $('#save_card').val(1);
+	        }
 
-        if(cardinfoRadio == null) {
-            var $form  = $(".validation"),
-                inputVal = ['input[type=email]', 'input[type=password]',
-                                 'input[type=text]', 'input[type=file]',
-                                 'textarea'].join(', '),
-                $inputs       = $form.find('.required').find(inputVal),
-                $errorStatus = $form.find('div.error'),
-                valid         = true;
-                $errorStatus.addClass('hide');
-         
-            $('.has-error').removeClass('has-error');
-            $inputs.each(function(i, el) {
-                var $input = $(el);
-                if ($input.val() === '') {
-                    $input.parent().addClass('has-error');
-                    $errorStatus.removeClass('hide');
-                    e.preventDefault();
-                }
-            });      
-            if (!$form.data('cc-on-file')) {
-                e.preventDefault();
-                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-                Stripe.createToken({
-                    number: $('.card-num').val(),
-                    cvc: $('.card-cvc').val(),
-                    exp_month: $('.card-expiry-month').val(),
-                    exp_year: $('.card-expiry-year').val()
-                }, stripeHandleResponse);
-            }
-        }
-    });
-  
-    function stripeHandleResponse(status, response) {
-        if (response.error) {
-            $('.error')
-                .removeClass('hide')
-                .find('.alert')
-                .text(response.error.message);
-        } else {
-            var token = response['id'];
-            $form.find('input[type=text]').empty();
-            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-            $form.get(0).submit();
-        }
-    }
-});
+	        if(cardinfoRadio == null) {
+	            var $form  = $(".validation"),
+	                inputVal = ['input[type=email]', 'input[type=password]',
+	                                 'input[type=text]', 'input[type=file]',
+	                                 'textarea'].join(', '),
+	                $inputs       = $form.find('.required').find(inputVal),
+	                $errorStatus = $form.find('div.error'),
+	                valid         = true;
+	                $errorStatus.addClass('hide');
+	         
+	            $('.has-error').removeClass('has-error');
+	            $inputs.each(function(i, el) {
+	                var $input = $(el);
+	                if ($input.val() === '') {
+	                    $input.parent().addClass('has-error');
+	                    $errorStatus.removeClass('hide');
+	                    e.preventDefault();
+	                }
+	            });      
+	            if (!$form.data('cc-on-file')) {
+	                e.preventDefault();
+	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+	                Stripe.createToken({
+	                    number: $('.card-num').val(),
+	                    cvc: $('.card-cvc').val(),
+	                    exp_month: $('.card-expiry-month').val(),
+	                    exp_year: $('.card-expiry-year').val()
+	                }, stripeHandleResponse);
+	            }
+	        }
+	    });
+	  
+	    function stripeHandleResponse(status, response) {
+	        if (response.error) {
+	            $('.error')
+	                .removeClass('hide')
+	                .find('.alert')
+	                .text(response.error.message);
+	        } else {
+	            var token = response['id'];
+	            $form.find('input[type=text]').empty();
+	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+	            $form.get(0).submit();
+	        }
+	    }
+	});
 </script>
 
 <script>
     $( document ).ready(function() {
+  
         $('#checkout-button').click(function(){
             var check = document.querySelector( 'input[name="terms_condition"]:checked');
             if(check == null) {
@@ -1057,7 +1152,8 @@ $(function() {
             @endif
         });
     });
-$(function () {
-  $('#tooltipex').tooltip()
-})
+
+	$(function () {
+	  $('#tooltipex').tooltip()
+	})
 </script>

@@ -457,12 +457,14 @@ class SchedulerController extends Controller
                $status = "Active";
           }
           
-          $program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $companyId])->get();
+          //$program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $companyId])->get();
+          $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id])->get();
 
           $modelchk = 0;
           $modeldata = '';
           //session()->forget('ordermodelary');
-          //$ordermodelary = array("646");
+          //$ordermodelary = array("637","638");
+          //$ordermodelary = array("650","651");
           $ordermodelary = session()->get('ordermodelary');
           if(!empty($ordermodelary)){
                $modelchk = 1;
@@ -537,9 +539,10 @@ class SchedulerController extends Controller
                          <div class="col-lg-8">
                               <div class="modal-booking-info">
                                    <h3>Booking Receipt</h3>';
-                    
+          $idarry = '';         
           foreach($array as $or){
                $order_detail = UserBookingDetail::where('id',$or)->first();
+               $idarry .= $or.',';
                $odt = $this->booking_repo->getorderdetailsfromodid($order_detail->booking_id,$or);
                $totaltax += $odt['tax_for_this'];
                $tot_dis += $odt['discount'];
@@ -611,7 +614,7 @@ class SchedulerController extends Controller
                               </div>
                               <div class="col-md-6 col-xs-6">
                                    <div class="booking-page-meta-info">
-                                   <span>'.@$odt['BusinessPriceDetails']['pay_session'].'</span>
+                                   <span>'.@$odt['BusinessPriceDetails']['pay_session'].' Session</span>
                                    </div>
                               </div>
 
@@ -862,8 +865,12 @@ class SchedulerController extends Controller
                          </div>';
           }
 
+          $idarry = rtrim($idarry,',');
+
          /* print_r($odt);exit;*/
-          $html .= '    <div class="row border-xx mg-tp">
+          $html .= '     <input type="hidden" name="booking_id" id="booking_id" value="'.$order_detail->booking_id.'"> 
+                         <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="'.$idarry.'"> 
+                         <div class="row border-xx mg-tp">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
                                         <label>PAYMENT METHOD</label>
@@ -875,6 +882,7 @@ class SchedulerController extends Controller
                                    </div>
                               </div>
                          </div>
+
                          <div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
@@ -900,6 +908,7 @@ class SchedulerController extends Controller
                                    </div>
                               </div>
                          </div>
+
                          <div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
@@ -942,6 +951,37 @@ class SchedulerController extends Controller
           </div>';
 
          return $html;
+     }
+
+     public function sendreceiptfromcheckout(Request $request){
+          //print_r($request->all());
+          $compare_chk=[];
+          //$request->orderdetalidary = '637';
+          $odetail = explode("," , $request->orderdetalidary);
+          foreach($odetail as $od){
+               $book_data = UserBookingDetail::getbyid($od);
+               $cid = $book_data->business_services->company_information->id;
+               $newary = array($cid=>array("oid"=>$od,"cid"=> $cid,"booking_id"=>$request->booking_id));
+               if(in_array( $cid ,array_keys($compare_chk))){
+                    foreach($compare_chk  as $chk){
+                         if($chk['cid'] == $cid ){
+                              $oid = $compare_chk[$cid]['oid'].','.$od;
+                              $compare_chk[$cid]['oid'] = $oid;
+                         }
+                    }
+               }else{
+                    $compare_chk  = $compare_chk + $newary;
+               }
+               
+          }
+          foreach($compare_chk as $detail){
+               $email_detail = array(
+                    'orderdetalidary' => $detail['oid'],
+                    'cid' => $detail['cid'],
+                    'email' => $request->email,
+                    'booking_id'=>$detail['booking_id']);
+               $status = MailService::sendEmailReceiptFromCheckoutRegister($email_detail);
+          }
      }
 
      public function cancelbookingmodel(Request $request){
@@ -1771,7 +1811,7 @@ class SchedulerController extends Controller
           }
           
         /*  print_r($request->all());exit;*/
-          return redirect('/scheduler-checkin/'.$request->pageid)->with('success', $successmsg);   ;
+          return redirect('/scheduler-checkin/'.$request->pageid)->with('success', $successmsg); 
      }
 
      public function getbookingcancelmodel(Request $request){
@@ -1882,7 +1922,7 @@ class SchedulerController extends Controller
                //print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
-               $program_list = BusinessServices::where(['is_active'=>1, 'cid'=> $request->companyId])->get();
+               $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
                $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
                $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
                $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();

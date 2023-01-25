@@ -220,6 +220,7 @@ class PageController extends Controller
             'content' => preg_replace('/(^[\"\']|[\"\']$)/', '', html_entity_decode(htmlentities(stripcslashes($pageContent->content)))),
         ]);
     }
+
     public function GetPrivacyPage()
     {
         $pageContent = $this->cms->getPageContent('privacy_policy');

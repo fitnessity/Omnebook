@@ -37,6 +37,8 @@ use Image;
 use Hash;
 use App\Api;
 use App\MailService;
+
+
 class ActivityController extends Controller {
 
 	protected $sports;
@@ -296,6 +298,7 @@ class ActivityController extends Controller {
 			$searchDataProfile=array();
 	        $searchDatauserProfile = '';
 	        $searchDatabusiness = '';
+	        $searchDataacivity = '';
 
 			if($request->label  != ''){
 				$select_label = $request->label;
@@ -325,6 +328,8 @@ class ActivityController extends Controller {
 	            });
 	            $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
 	            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
+	            $searchDataacivity = BusinessServices::where('program_name','LIKE', '%'.$select_label.'%')->first();
+
 			}
 
 			if($request->address != ''){
@@ -1183,6 +1188,8 @@ class ActivityController extends Controller {
 	            return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
 	        }else if($searchDatabusiness !=''){
 	            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
+	        }else if($searchDataacivity !=''){
+	            return Redirect::to('/activity-details/'.$searchDataacivity->id);
 	        }else{
 				return view('activity.index',[
 					'allactivities'=>$allactivities,

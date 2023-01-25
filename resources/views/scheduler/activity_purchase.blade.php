@@ -1185,9 +1185,6 @@ input:disabled{
 	$(document).ready(function () {
 		var modelchk = '{{$modelchk}}';
 		if(modelchk == 1){	
- 			/*var modeldata = '<?php htmlspecialchars_decode($modeldata)?>';
- 			alert(modeldata);
- 			$('#receiptbody').html(modeldata);	*/
  			$("#bookingreceipt").modal('show');
 		}
 
@@ -1289,6 +1286,52 @@ input:disabled{
 </script>
 
 <script type="text/javascript">
+
+	function valid(email)
+    {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test(email); //this will either return true or false based on validation
+    }
+    
+    function sendemail(){
+        $('.reviewerro').html('');
+        var email = $('#email').val();
+        var orderdetalidary = $('#orderdetalidary').val();
+        var booking_id = $('#booking_id').val();
+        if(email == ''){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Add Email Address..');
+        }else if(!valid(email)){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Enter Valid Email Address..');
+        }else{
+            $('.btn-modal-booking').attr('disabled',true);
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Sending...');
+            $.ajax({
+                url: "{{route('sendreceiptfromcheckout')}}",
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: 'get',
+                data:{
+                    orderdetalidary:orderdetalidary,
+                    email:email,
+                    booking_id:booking_id,
+                },
+                success: function (response) {
+                    $('.reviewerro').html('');
+                    $('.reviewerro').css('display','block');
+                    /*if(response == 'success'){*/
+                        $('.reviewerro').html('Email Successfully Sent..');
+/*                    }else{
+                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                    }*/
+                }
+            });
+        }
+    }
+
 	function saveparticipate(){
 		$('#qty').html('');
 		var aducnt = $('#adultcnt').val();

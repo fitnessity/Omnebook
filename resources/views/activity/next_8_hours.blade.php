@@ -482,7 +482,7 @@
 										</div>
 										<div class="col-md-2 col-xs-6 col-sm-2">
 											<div class="join-btn">
-												<a class="showall-btn btn-position" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+												<a class="showall-btn btn-position" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 											</div>
 										</div>
 									</div>

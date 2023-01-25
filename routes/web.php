@@ -975,6 +975,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('check_in_activity', 'SchedulerController@check_in_activity')->name('check_in_activity');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
     Route::post('updateorderdetails', 'SchedulerController@updateorderdetails')->name('updateorderdetails');
+    Route::get('sendreceiptfromcheckout', 'SchedulerController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout');
 });
 
 Route::group(['middleware' => ['auth']], function()

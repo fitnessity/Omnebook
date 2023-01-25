@@ -96,12 +96,35 @@ class CompanyInformation extends Model {
         return $this->hasMany(BusinessServices::class, 'cid');
     }
 
+    public function businessterms() {
+        return $this->hasOne(BusinessTerms::class, 'cid');
+    }
+
+
     public function business_terms() {
         return $this->hasMany(BusinessTerms::class, 'cid');
     }
 
-    public function businessterms() {
-        return $this->belongsTo(BusinessTerms::class, 'cid');
+   
+    public function company_address(){
+        $comp_address = '';
+        if($this->address != ''){
+            $comp_address = $this->address.', ';
+        }
+        if($this->city != ''){
+            $comp_address .= $this->city.', ';
+        }
+        if($this->state != ''){
+            $comp_address .= $this->state.', ';
+        }
+        if($this->country != ''){
+            $comp_address .= $this->country.', ';
+        }
+        if($this->zip_code != ''){
+            $comp_address .= $this->zip_code;
+        }
+
+        return $comp_address;
     }
 
 }
