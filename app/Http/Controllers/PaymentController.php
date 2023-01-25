@@ -242,7 +242,7 @@ class PaymentController extends Controller {
                 );
                 $status = UserBookingDetail::create($act);
 
-                $customer = Customer::where(['business_id' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
+                $customer = Customer::where(['business_id' => $activitylocation->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
 
                 if(!$customer){
                     $customer = Customer::create([
@@ -255,6 +255,7 @@ class PaymentController extends Controller {
                         'status' => 0,
                         'phone_number' => Auth::user()->phone_number,
                         'birthdate' => Auth::user()->birthdate,
+                        'user_id' => Auth::user()->id
                     ]);
 
                     $customer->create_stripe_customer_id();

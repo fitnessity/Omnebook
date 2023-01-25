@@ -38,8 +38,11 @@ class User extends Authenticatable
     ];
     public $timestamps = false;
     
-    protected $appends = ['about_me','network_count','about_business'];
+    protected $appends = ['about_me','network_count','about_business', 'full_name'];
     
+    public function getFullNameAttribute(){
+        return $this->firstname . ' ' . $this->lastname;
+    }
 
     public function getaddress(){
         $address = '';

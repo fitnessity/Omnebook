@@ -1071,75 +1071,81 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
   
 <script type="text/javascript">
-	$(function() {
-	    var $form = $(".validation");
-	    $('form.validation').bind('submit', function(e) {
-	        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
-	        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
-	    
-	        if(save_cardRadio == null) {
-	            $('#save_card').val(0);
-	        }else{
-	             $('#save_card').val(1);
-	        }
+$(function() {
+    var $form = $(".validation");
+    $('form.validation').bind('submit', function(e) {
+        $('#checkout-button').html('loading...').prop('disabled', true);
+        var check = document.querySelector( 'input[name="terms_condition"]:checked');
+        if(check == null) {
+            $('#error_check').show();
+            $('#checkout-button').html('Check Out').prop('disabled', false);
+            return false;
+        }
 
-	        if(cardinfoRadio == null) {
-	            var $form  = $(".validation"),
-	                inputVal = ['input[type=email]', 'input[type=password]',
-	                                 'input[type=text]', 'input[type=file]',
-	                                 'textarea'].join(', '),
-	                $inputs       = $form.find('.required').find(inputVal),
-	                $errorStatus = $form.find('div.error'),
-	                valid         = true;
-	                $errorStatus.addClass('hide');
-	         
-	            $('.has-error').removeClass('has-error');
-	            $inputs.each(function(i, el) {
-	                var $input = $(el);
-	                if ($input.val() === '') {
-	                    $input.parent().addClass('has-error');
-	                    $errorStatus.removeClass('hide');
-	                    e.preventDefault();
-	                }
-	            });      
-	            if (!$form.data('cc-on-file')) {
-	                e.preventDefault();
-	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-	                Stripe.createToken({
-	                    number: $('.card-num').val(),
-	                    cvc: $('.card-cvc').val(),
-	                    exp_month: $('.card-expiry-month').val(),
-	                    exp_year: $('.card-expiry-year').val()
-	                }, stripeHandleResponse);
-	            }
-	        }
-	    });
-	  
-	    function stripeHandleResponse(status, response) {
-	        if (response.error) {
-	            $('.error')
-	                .removeClass('hide')
-	                .find('.alert')
-	                .text(response.error.message);
-	        } else {
-	            var token = response['id'];
-	            $form.find('input[type=text]').empty();
-	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-	            $form.get(0).submit();
-	        }
-	    }
-	});
+        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
+        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+    
+        if(save_cardRadio == null) {
+            $('#save_card').val(0);
+        }else{
+             $('#save_card').val(1);
+        }
+
+        if(cardinfoRadio == null) {
+            var $form  = $(".validation"),
+                inputVal = ['input[type=email]', 'input[type=password]',
+                                 'input[type=text]', 'input[type=file]',
+                                 'textarea'].join(', '),
+                $inputs       = $form.find('.required').find(inputVal),
+                $errorStatus = $form.find('div.error'),
+                valid         = true;
+                $errorStatus.addClass('hide');
+         
+            $('.has-error').removeClass('has-error');
+            $inputs.each(function(i, el) {
+                var $input = $(el);
+                if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorStatus.removeClass('hide');
+                    e.preventDefault();
+                }
+            });      
+            if (!$form.data('cc-on-file')) {
+                e.preventDefault();
+                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                Stripe.createToken({
+                    number: $('.card-num').val(),
+                    cvc: $('.card-cvc').val(),
+                    exp_month: $('.card-expiry-month').val(),
+                    exp_year: $('.card-expiry-year').val()
+                }, stripeHandleResponse);
+            }
+        }
+    });
+  
+    function stripeHandleResponse(status, response) {
+        if (response.error) {
+            $('.error')
+                .removeClass('hide')
+                .find('.alert')
+                .text(response.error.message);
+        } else {
+            var token = response['id'];
+            $form.find('input[type=text]').empty();
+            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+            $form.get(0).submit();
+        }
+        $('#checkout-button').html('Check Out').prop('disabled', false);
+    }
+});
+
 </script>
 
 <script>
     $( document ).ready(function() {
   
         $('#checkout-button').click(function(){
-            var check = document.querySelector( 'input[name="terms_condition"]:checked');
-            if(check == null) {
-                $('#error_check').show();
-                return false;
-            }
+            
 
             @if(!Auth::user())
                 $.ajax({

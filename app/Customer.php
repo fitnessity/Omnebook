@@ -9,6 +9,7 @@ use App\BookingCheckinDetails;
 use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use DB;
 
 class Customer extends Authenticatable
 {
@@ -22,7 +23,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id'
     ];
 
     /**
@@ -44,7 +45,7 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter'];
 
 
     public function getProfilePicUrlAttribute()
@@ -115,6 +116,14 @@ class Customer extends Authenticatable
         return [];
     }
 
+    public function getFullNameAttribute(){
+        return $this->fname . ' ' . $this->lname;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->fname[0] . ' ' . $this->lname[0];
+    }
+
     public function full_address(){
         $location = '';
         $address = '';
@@ -161,14 +170,15 @@ class Customer extends Authenticatable
         $customer = $this;
         $company = $this->company_information;
         if($user){
+            $user_id = $user ? $user->id : "no_user_id";
             $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
                 $query->select('id')
                       ->from('business_services')
                       ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user){
+            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
                 $query->select('id')
                       ->from('user_booking_status')
-                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
             });
             return $result->count();
         }
@@ -180,14 +190,15 @@ class Customer extends Authenticatable
         $customer = $this;
         $company = $this->company_information;
         if($user){
+            $user_id = $user ? $user->id : "no_user_id";
             $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
                 $query->select('id')
                       ->from('business_services')
                       ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user){
+            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
                 $query->select('id')
                       ->from('user_booking_status')
-                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
             })->whereRaw('pay_session > 0');
             return $result->count();
         }
@@ -198,17 +209,19 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
+        
         $now = Carbon::now();
 
         if($user){
+            $user_id = $user ? $user->id : "no_user_id";
             $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
                 $query->select('id')
                       ->from('business_services')
                       ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user){
+            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
                 $query->select('id')
                       ->from('user_booking_status')
-                      ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user->id, $customer->id]);
+                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
             })->whereDate('expired_at', '<',  $now->addDays(14));
             return $result->count();
         }
@@ -232,7 +245,7 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -252,7 +265,7 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -261,19 +274,18 @@ class Customer extends Authenticatable
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
-        })->whereRaw('pay_session > 0 or pay_session is not null');
-
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
+        })->whereRaw('(pay_session > 0 and pay_session is not null)');
 
         return $booking_details;
     }
 
     public function complete_booking_details(){
-        
+
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -282,8 +294,8 @@ class Customer extends Authenticatable
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
-        })->whereRaw('pay_session <= 0 or pay_session is null');
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        })->whereRaw('(pay_session <= 0 or pay_session is null)');
 
 
         return $booking_details;
@@ -294,7 +306,7 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -303,7 +315,7 @@ class Customer extends Authenticatable
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
         });
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
@@ -318,7 +330,7 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -327,7 +339,7 @@ class Customer extends Authenticatable
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
         });
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
@@ -342,7 +354,7 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : null;
+        $user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
@@ -351,7 +363,7 @@ class Customer extends Authenticatable
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?)', [$user_id, $customer->id]);
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
         });
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
