@@ -19,6 +19,7 @@ use App\BusinessSubscriptionPlan;
 use App\Customer;
 use App\BookingActivityCancel;
 use App\BookingCheckinDetails;
+use App\BookingPostorder;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -202,6 +203,9 @@ class SchedulerController extends Controller
      
           $pricrdropdown = BusinessServices::find(@$schedule_data->serviceid)->price_details;
           $bookingdata = UserBookingDetail::where('sport',@$schedule_data->serviceid)->where('act_schedule_id',$sid)->where('bookedtime',date('Y-m-d'))->get();
+
+          $booking_postorders = BookingPostorder::where('business_activity_scheduler_id',$sid)->whereRaw('date(booked_at) = ?',date('Y-m-d'))->get();
+
           return view('scheduler.scheduler_checkin', [
                'business_details' => $business_details,
                'companyId' => $companyId,
@@ -211,6 +215,7 @@ class SchedulerController extends Controller
                'bookingdata' => $bookingdata,
                'pricrdropdown' => $pricrdropdown,
                'todaydate'=>$filter_date->format('l, F j , Y'),
+               'booking_postorders' => $booking_postorders,
           ]);
      }
 

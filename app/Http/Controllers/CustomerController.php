@@ -52,7 +52,7 @@ class CustomerController extends Controller {
     public function index(Request $request, $business_id){
 
         $user = Auth::user();
-        $company = $user->businesses->find($business_id);
+        $company = $user->businesses()->findOrFail($business_id);
 
         $customers = $company->customers()->orderBy('fname');
         if($request->fname){
@@ -87,7 +87,7 @@ class CustomerController extends Controller {
 
     public function show($business_id, $id){
         $user = Auth::user();
-        $company = $user->businesses->find($business_id);
+        $company = $user->businesses()->findOrFail($business_id);
 
         $terms = $company->business_terms->first();
 
@@ -227,7 +227,7 @@ class CustomerController extends Controller {
 
     public function activity_visits(Request $request, $business_id, $id){
         $user = Auth::user();
-        $company = $user->businesses->find($business_id);
+        $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($id);
         $visits = $customer->visits()->where('order_detail_id', $request->booking_detail_id)->get();
         

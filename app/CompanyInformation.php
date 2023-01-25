@@ -104,4 +104,8 @@ class CompanyInformation extends Model {
         return $this->belongsTo(BusinessTerms::class, 'cid');
     }
 
+    public function business_activity_schedulers() {
+        return $this->hasMany(BusinessActivityScheduler::class, 'cid');
+    }
+
 }
