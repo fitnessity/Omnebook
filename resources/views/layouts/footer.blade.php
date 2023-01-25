@@ -162,7 +162,6 @@
     <script>
         $(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
             e.preventDefault()
-            console.log();
             $.ajax({
                 url: $(this).data('url'),
                 success: function(html){
