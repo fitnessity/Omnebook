@@ -225,7 +225,14 @@ class CustomerController extends Controller {
         }
     }
 
-    
+    public function activity_visits(Request $request, $business_id, $id){
+        $user = Auth::user();
+        $company = $user->businesses->find($business_id);
+        $customer = $company->customers->find($id);
+        $visits = $customer->visits()->where('order_detail_id', $request->booking_detail_id)->get();
+        
+        return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
+    }
 
     public function savenotes(Request $request){
         Customer::where('id',$request->cus_id)->update(["notes"=>$request->notetext]);

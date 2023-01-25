@@ -519,7 +519,7 @@
 																		</div>
 																		<div class="row">
 																			<div class="col-md-6 col-xs-6">
-																				<a class="visiting-view" data-toggle="modal" data-target="#view_visit_modal" data-behavior="click_visit_modal"> View Visits </a>
+																				<a class="visiting-view" data-url="{{route('business_customer_activity_visits', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-behavior="ajax_html_modal"> View Visits </a>
 																			</div>
 																			<div class="col-md-6 col-xs-6">
 																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer"> Edit Booking </a>
@@ -565,7 +565,7 @@
 																					<label>BOOKING # </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> {{$booking_detail->booking->order_id}} {{$booking_detail->id}}</span>
+																					<span> {{$booking_detail->booking->order_id}}</span>
 																				</div>
 																			
 																				<div class="col-md-6 col-xs-6">
@@ -1028,7 +1028,6 @@
 		</div>
 	<!-- end modal -->
 	@include('customers._edit_booking_modal')
-	@include('customers._view_visit_modal')
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
@@ -1079,10 +1078,6 @@
 </script>
 
 <script type="text/javascript">
-	$(document).on('click', '[data-behavior~=click_visit_modal]', function(e){
-		e.preventDefault()
-		console.log('123');
-	});
 
     $(document).ready(function() {
     	$('.cards-block').click();

@@ -1,40 +1,54 @@
 <?php use App\Cms; ?>
 <style>
 .f-btn-news{
-	background: #f53b49;
-	border: none;
-	padding: 7px;
-	border-radius: 13px;
-	color: white;
-	width: 100%;
-	font-size: 15px;
-	font-weight: 500;
+  background: #f53b49;
+  border: none;
+  padding: 7px;
+  border-radius: 13px;
+  color: white;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 500;
 }
 .f-send-news{
-	background: #f53b49;
-	float: left;
-	color: white;
-	padding: 9px;
-	border: none;
-	border-radius: 5px;
-	margin-top: 5px;
-	width: 50%;
+  background: #f53b49;
+  float: left;
+  color: white;
+  padding: 9px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 5px;
+  width: 50%;
 }
 .sp-foot{
-	margin-top: 6px;
+  margin-top: 6px;
 }
 .social-footer{margin-top:180px;}
 
 @media screen and (max-width: 400px){
-	.social-footer{margin-top:0px;}
+  .social-footer{margin-top:0px;}
 }
 @media screen and (min-width: 401px) and (max-width: 767px){
-	.social-footer{margin-top:0px;}
+  .social-footer{margin-top:0px;}
 }
 @media screen and (min-width: 768px) and (max-width: 992px){
-	.social-footer{margin-top:0px;}
+  .social-footer{margin-top:0px;}
 }
 </style>
+<div class="modal fade compare-model" id="ajax_html_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: right;"> 
+                <div class="closebtn">
+                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body body-tbm"></div>
+        </div>
+    </div>
+</div>
 <footer id="footer">
      @if(session()->has('alert-success'))
                         <div class="alert alert-success">
@@ -143,9 +157,21 @@
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
-	<script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+  <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
+        $(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
+            e.preventDefault()
+            console.log();
+            $.ajax({
+                url: $(this).data('url'),
+                success: function(html){
+                    $('#ajax_html_modal .modal-body').html(html)
+                    $('#ajax_html_modal').modal('show')
+                }
+            })
+        });
+
         $(document).ready(function() {
             // hide #back-top first
             $("#back-top").hide();
