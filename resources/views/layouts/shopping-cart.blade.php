@@ -980,6 +980,14 @@
 $(function() {
     var $form = $(".validation");
     $('form.validation').bind('submit', function(e) {
+        $('#checkout-button').html('loading...').prop('disabled', true);
+        var check = document.querySelector( 'input[name="terms_condition"]:checked');
+        if(check == null) {
+            $('#error_check').show();
+            $('#checkout-button').html('Check Out').prop('disabled', false);
+            return false;
+        }
+
         var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
         var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
     
@@ -1033,6 +1041,7 @@ $(function() {
             $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
             $form.get(0).submit();
         }
+        $('#checkout-button').html('Check Out').prop('disabled', false);
     }
 });
 </script>
@@ -1040,11 +1049,7 @@ $(function() {
 <script>
     $( document ).ready(function() {
         $('#checkout-button').click(function(){
-            var check = document.querySelector( 'input[name="terms_condition"]:checked');
-            if(check == null) {
-                $('#error_check').show();
-                return false;
-            }
+            
 
             @if(!Auth::user())
                 $.ajax({
