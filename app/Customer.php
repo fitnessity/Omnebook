@@ -267,8 +267,7 @@ class Customer extends Authenticatable
             $query->select('id')
                   ->from('user_booking_status')
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id = ?))', [$user_id, $customer->id]);
-        })->whereRaw('(pay_session > 0 or pay_session is not null)');
-
+        })->whereRaw('(pay_session > 0 and pay_session is not null)');
 
         return $booking_details;
     }
