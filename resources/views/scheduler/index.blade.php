@@ -106,10 +106,10 @@
 
 									@php if($date1 < $date2){ @endphp
 										<div class="overlay-activity">
-										<label class="overlay-activity-label">Activity Completed</label>
+
 									@php } else if($cancel_chk == 1) { @endphp
 										<div class="overlay-activity">
-										<label class="overlay-activity-label red-fonts">Activity Cancelled</label>
+
 									@php } @endphp
 
 	
@@ -146,19 +146,32 @@
 													<label class="scheduler-titles"> Instructor: </label><span> {{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}</span>
 												</div>
 											</div>
-											<div class="col-md-2 col-xs-12 col-sm-12">
+
+											@if($date1 < $date2)
+												<div class="col-md-1 col-xs-12 col-sm-1">
+													<label class="overlay-activity-label">Activity Completed</label>
+												</div>
+											@elseif($cancel_chk == 1)
+												<div class="col-md-1 col-xs-12 col-sm-1">
+													<label class="overlay-activity-label">Activity Cancelled</label>
+												</div>
+											@endif
+											<div class="col-md-1 col-xs-12 col-sm-12">
+						
 												<form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('editBusinessService')}}">
 													@csrf
 													<div class="scheduled-btns scheduled-custom">
 														<input type="hidden" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
 									                    <input type="hidden" name="cid" value="{{ $bookscheduler->business_service->cid }}" style="width:50px" />
 									                    <input type="hidden" name="serviceid" value="{{ $bookscheduler->business_service->id }}" style="width:50px" />
-														<button type="submit" class="btn-edit edit-costume">Edit</button>
-														@if($date1 < $date2 )
-															<button type="button" class="btn-edit" disabled>Cancel</button>
-														@else
-															<a class="btn-edit edit-costume" onclick="getcancellationdata({{$bookscheduler->id}},'{{$bookscheduler->spots_reserved($filter_date)}}','{{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}');">Cancel</a>
-														@endif
+									                    <div class="scheduled-btns">
+															<button type="submit" class="btn-edit edit-costume btn-sp">Edit</button>
+															@if($date1 < $date2 )
+																<button type="button" class="btn-edit" disabled>Cancel</button>
+															@else
+																<a class="btn-edit edit-costume" onclick="getcancellationdata({{$bookscheduler->id}},'{{$bookscheduler->spots_reserved($filter_date)}}','{{StaffMembers::getinstructorname($bookscheduler->business_service->instructor_id)}}');">Cancel</a>
+															@endif
+														</div>
 														
 													</div>
 												</form>

@@ -936,6 +936,10 @@ Route::group(['middleware' => ['auth']], function(){
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
+
+        // BookingPostorders
+        Route::post('/booking_postorders','BookingPostorderController@create')->name('business_booking_postorders_create');
+        Route::delete('/booking_postorders/{booking_postorder_id}','BookingPostorderController@delete')->name('business_booking_postorders_delete');
     });
 });
 

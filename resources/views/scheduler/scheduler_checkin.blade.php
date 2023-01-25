@@ -39,12 +39,26 @@
                          </div>
 					</div>
 					<div class="col-md-3 col-sm-12 col-sm-6">
-                        <div class="manage-search manage-space">
-							<form method="get" action="/activities/">
-								<input type="text" name="bookingclient" id="bookingclient" placeholder="Search for client" autocomplete="off" value="">
-								<button id="serchbtn"><i class="fa fa-search"></i></button>
-							</form>
+						<div class="row">
+							<div class="col-md-10 col-sm-12 col-sm-6">
+		                        <div class="manage-search manage-space">
+									<div class="sub">
+										<input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">
+										<div id="serch_postorder_client_box" style="display:none;">
+					                        <ul class="customer-list">
+					                        </ul>
+					                    </div>
+
+										<button ><i class="fa fa-search"></i></button>
+									</div>
+									
+								</div>
+							</div>
+							<div class="col-md-2 col-sm-12 col-sm-6">
+		                        <a style="margin-top: 73px;" class="btn-nxt manage-cus-btn" href="#" data-business-activity-scheduler-id="{{$schedule_data->id}}"  data-behavior="add_client_to_booking_post_order">Add</a>
+							</div>
 						</div>
+
                     </div>
 				</div>
 				
@@ -90,6 +104,52 @@
 						</div>
 						
 						<div id="schedulelist">
+							@foreach($booking_postorders as $booking_postorder)
+
+								<div class="scheduler-info-box">
+									<div class="row">
+										<div class="col-md-2 col-xs-12 col-sm-4">
+											<div class="scheduler-border scheduler-label">
+												<a href="#" data-behavior="remove_post_order" data-id="{{$booking_postorder->id}}"><i class="fas fa-times"></i></a>
+											</div>
+										</div>
+										
+										<div class="col-md-1 col-xs-3 col-sm-4">	
+										<div class="scheduler-qty">
+											<span> {{$booking_postorder->customer->first_letter}}</span>
+										</div>
+									</div>
+										<div class="col-md-2 col-xs-9 col-sm-4">
+											<div class="scheduled-activity-info">
+												<span>{{$booking_postorder->customer->full_name}}</span>
+											</div>
+										</div>
+										<div class="col-md-2 col-xs-12 col-sm-4">
+											<div class="scheduled-activity-info">
+												<div class="price-mobileview">
+													N/A
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 col-xs-12 col-sm-4">
+											<div class="scheduled-location">
+												<span>N/A</span>
+											</div>
+										</div>
+										<div class="col-md-1 col-xs-12 col-sm-4">
+											<div class="scheduled-location">
+												<span>N/A</span>
+											</div>
+										</div>
+										<div class="col-md-2 col-xs-12 col-sm-12">
+											<div class="scheduled-btns">
+												<a href="{{route('activity_purchase',['book_id' => 0, 'cus_id' => $booking_postorder->customer_id])}}" class="btn-edit btn-sp">Purchase</a>
+												<a href="{{route('business_customer_show',['business_id' => $companyId, 'id'=> $booking_postorder->customer_id])}}" class="btn-edit" target="_blank">View Account</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							@endforeach
 							@if(!empty($bookingdata) && count($bookingdata) > 0)
 							@foreach($bookingdata as $bd)
 							@php 
@@ -213,6 +273,86 @@
 @include('layouts.footer')
 
 <script type="text/javascript">
+
+
+	$(document).on('click', '[data-behavior~=remove_post_order]', function(e){
+		e.preventDefault()
+
+		$.ajax({
+			url: "/business/{{$companyId}}/booking_postorders/" + $(this).data('id'),
+			method: "DELETE",
+			data: { 
+				_token: '{{csrf_token()}}', 
+			},
+			success: function(html){
+				location.reload();
+			}
+		})
+	})
+
+	$(document).on('click', '[data-behavior~=add_client_to_booking_post_order]', function(e){
+		e.preventDefault()
+		if(!$('#search_postorder_client').data('customer-id')){
+			$('#search_postorder_client').focus();
+			return
+		}
+		$.ajax({
+			url: "{{route('business_booking_postorders_create', ['business_id' => $companyId])}}",
+			method: "POST",
+			data: { 
+				business_activity_scheduler_id: $(this).data('business-activity-scheduler-id'),
+				customer_id: $('#search_postorder_client').data('customer-id'),  
+				_token: '{{csrf_token()}}', 
+			},
+			success: function(html){
+				location.reload();
+			}
+		})
+	})
+	$(document).on('keyup', '#search_postorder_client', function() {
+	  $.ajax({
+	      type: "GET",
+	      url: "{{route("business_customer_index", ['business_id' => $companyId])}}",
+	      data: { fname: $(this).val(),  _token: '{{csrf_token()}}', },
+	      success: function(data) {
+	        $("#serch_postorder_client_box .customer-list").html('');
+	        console.log(data);
+	        let customer_row = $('<div class="row rowclass-controller"></div>');
+	        $.each(data, function(index, customer){
+	          let content = customer_row.find('.rowclass-controller');
+	          let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+	          if(customer.profile_pic_url){
+	            profile_img = '<img src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50">';            
+	          }
+	          customer_row.append('<div class="col-md-2">' + profile_img + '</div>');
+	          customer_row.append('<div class="col-md-10 div-controller"><a data-customer-id="' + customer.id + '" data-name="'+customer.fname + ' ' +  customer.lname+'" class="click_to_input" style="color: black;" href="/business/' + {{$companyId}} +'/customers/'+ customer.id + '">' + 
+	              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
+	              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
+	              '<p class="pstyle liaddress">' + customer.phone_number + '</p></a></div>');
+	          
+	        })
+
+	        $("#serch_postorder_client_box .customer-list").append(customer_row);
+	        $("#serch_postorder_client_box").show();
+	      }
+	  });
+	});
+
+	$(document).on('click', '.click_to_input', function(e){
+		e.preventDefault()
+		console.log($(this).data('name'))
+		console.log($(this).data('customer-id'))
+
+		$('#search_postorder_client').val($(this).data('name'))
+		$('#search_postorder_client').data('customer-id', $(this).data('customer-id'))
+		$("#serch_postorder_client_box").hide();
+		$("#serch_postorder_client_box .customer-list").html('');
+		$("[data-behavior~=add_client_to_booking_post_order]").show();
+		
+	})
+
+
 	$(document).on('change', 'input[data-behavior="show_latecancel"]', function(){
 		if($(this).is(':checked')){
 			$.ajax({
@@ -392,22 +532,6 @@
 	  	//window.location.href = "viewcustomer/"+cid;
 	     window.open($url + "viewcustomer/"+cid, "_blank");
 	}
-
-	$("#serchclient").keyup(function() {
-      $.ajax({
-          type: "POST",
-          url: "/searchcustomersaction",
-          data: { query: $(this).val(),  _token: '{{csrf_token()}}', },
-          beforeSend: function() {
-              //$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-          },
-          success: function(data) {
-              $("#option-box1").show();
-              $("#option-box1").html(data);
-              $("#serchclient").css("background", "#FFF");
-          }
-      });
-    });
 
     $(".dobdate").keyup(function(){
       if ($(this).val().length == 2){

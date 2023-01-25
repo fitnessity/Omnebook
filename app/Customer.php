@@ -45,7 +45,7 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter'];
 
 
     public function getProfilePicUrlAttribute()
@@ -114,6 +114,14 @@ class Customer extends Authenticatable
             return $savedEvents['data'];
         }
         return [];
+    }
+
+    public function getFullNameAttribute(){
+        return $this->fname . ' ' . $this->lname;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->fname[0] . ' ' . $this->lname[0];
     }
 
     public function full_address(){
