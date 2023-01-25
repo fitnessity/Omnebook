@@ -1863,6 +1863,14 @@ class SchedulerController extends Controller
                BookingCheckinDetails::create($data); 
           }else{ BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->update(['checkin'=>$request->checkin, "checkin_date"=> date('Y-m-d')]); 
           }   
+
+          $booking_detail = UserBookingDetail::find($request->order_detail_id);
+          if($request->checkin == '1'){
+               $booking_detail->update(['pay_session' => $booking_detail->pay_session - 1]);
+          }else{
+               $booking_detail->update(['pay_session' => $booking_detail->pay_session + 1]);
+          }
+
      }
 
      public function editcartmodel(Request $request){
