@@ -24015,13 +24015,12 @@ span.Zebra_DatePicker_Icon_Wrapper {
   line-height: 1.5;
   width: 75%;
   margin-bottom: 2px;
+  margin-top: 10px;
 }
-.payfor-share{
-	width: 9%;
-}
+
 .payfor-ptag{
 	font-size: 11px;
-	margin-left: 24%;
+	margin-left: 13%;
 }
 .custom-fitnessity{
 	padding-right: 0px;
@@ -24029,4 +24028,17 @@ padding-left: 0px;
 }
 .calender-wrapper{
 	padding-left: 0px !important;
+}
+.info-align{
+	float: right;
+	text-align: right;
+}
+.participaingtxt{
+	font-size: 12px;
+	font-weight: 400;
+	width: 100%;
+}
+.select-sparetor{
+	border-top: 2px solid #c90000;
+	margin-top: 8px;
 }

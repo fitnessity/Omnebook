@@ -531,7 +531,7 @@ span.status::after {
 	color: #ffffff;
 }
 */
-.invite-share { float: right; }
+.invite-share { float: right; width: 100%; text-align: end;}
 .invite-share span{
 	font-size: 12px;
 }

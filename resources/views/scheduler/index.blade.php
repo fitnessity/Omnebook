@@ -152,7 +152,7 @@
 													<div class="scheduled-btns scheduled-custom">
 														<input type="hidden" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
 									                    <input type="hidden" name="cid" value="{{ $bookscheduler->business_service->cid }}" style="width:50px" />
-									                    <input type="hidden" name="serviceid" value="{{ $bookscheduler->business_service->serviceid }}" style="width:50px" />
+									                    <input type="hidden" name="serviceid" value="{{ $bookscheduler->business_service->id }}" style="width:50px" />
 														<button type="submit" class="btn-edit edit-costume">Edit</button>
 														@if($date1 < $date2 )
 															<button type="button" class="btn-edit" disabled>Cancel</button>

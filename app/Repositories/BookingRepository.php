@@ -452,6 +452,10 @@ class BookingRepository
         if(@$schedulerdata->end_activity_date != ''){
             $end_activity_date = date('d-m-Y', strtotime(@$schedulerdata->end_activity_date));
         }
+
+        if($end_activity_date == '—'){
+            $end_activity_date = date('d-m-Y', strtotime(@$booking_details->expired_at));
+        }
          
 
         if(@$booking_details->created_at != ''){
@@ -520,8 +524,8 @@ class BookingRepository
             "service_fee" =>  $service_fee,
             "categoty_name" =>   $categoty_name,
         );
-       $arayy =array_values(array_unique($one_array, SORT_REGULAR));
-        return $arayy;
+       /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
+        return $one_array;
     }
 
     public function saveBookingStatus($data,$cart=null,$n=null)
