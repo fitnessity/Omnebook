@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
+use App\UserFamilyDetail;
 
 class CartController extends Controller {
 
@@ -46,5 +47,25 @@ class CartController extends Controller {
     	]);
     }
 
-    
+    public function addfamilyfromcart(Request $request){
+    	$data = UserFamilyDetail::create([
+                'user_id' => Auth::user()->id,
+                'first_name' => $request['fname'],
+                'last_name' => $request['lname'],
+                'email' => $request['email'],
+                'mobile' => $request['mobile'],
+                'emergency_contact' => $request['emergency_contact'],
+                'relationship' => $request['relationship'],
+                'gender' => $request['gender'],
+                'birthday' => $request['birthdate'],
+                'emergency_contact_name' => $request['emergency_name'],
+    	]);
+
+    	return redirect('/carts');
+    	/*if($data){
+    		return "success";
+    	}else{
+    		return "fail";
+    	}*/
+    }
 }

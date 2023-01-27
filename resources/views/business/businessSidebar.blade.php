@@ -103,7 +103,7 @@ if(request()->business_id){
 						<a href="{{route('business.schedulers.index')}}"><div class="navlink1 @if(Route::current()->getName()=='business_schedulers_index') tab-active @endif" id="tab9">Manage Bookings</div></a>
 						<a href="{{route('manageService')}}"><div class="navlink1 @if(Route::current()->getName() == 'manageService') tab-active @endif" id="">Manage Service</div></a>
 						<a ><div class="navlink1" id="">Add/Manage Product</div></a>
-						<a ><div class="navlink1" id="">Add/Manage Staff</div></a>
+						<a><div class="navlink1" id="">Add/Manage Staff</div></a>
 					@endif
 				</li>
 				@if($companyId)
