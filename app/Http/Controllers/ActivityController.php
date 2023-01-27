@@ -100,15 +100,10 @@ class ActivityController extends Controller {
 
 		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'experience')->with(['company_information']);
 		$name = 'Experience';
-		
-
-
+	
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
 
-
-
-	
 		return view('activity.get_started',[
 			'activity_get_start_fast'=>$activity_get_start_fast,
 			'bookschedulers' => $bookschedulers,
@@ -116,7 +111,6 @@ class ActivityController extends Controller {
 			'allactivities'=>$activities,
 			'activities'=>$activities->get(),
 			'name'=>$name,
-
 		]);	
     } 
 
@@ -166,7 +160,7 @@ class ActivityController extends Controller {
     	$end_date = clone($start_date);
     	$end_date = $end_date->modify("23:59:59");
     	$business_services;
-    	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->get();
+    	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
 
     	return view('activity.next_8_hours',[
     		'bookschedulers' => $bookschedulers,
@@ -1761,8 +1755,11 @@ class ActivityController extends Controller {
         echo  $sercatefirst;exit;*/
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  ;
         $selectval = $priceid = $total_price_val = '' ;
-        $adult_cnt =$child_cnt =$infant_cnt =0;
-        $adult_price = $child_price = $infant_price =0;
+        $adult_cnt =$child_cnt =$infant_cnt = $child_discount =  $adult_discount = $infant_discount = 0;
+        $adult_price = $child_price = $infant_price = 0;
+        $child_dis = @$servicePrfirst['child_discount'];
+        $infant_dis = @$servicePrfirst['infant_discount'];
+        $adult_dis = @$servicePrfirst['adult_discount'];
         if(date('l',strtotime($actdate)) == 'Saturday' || date('l',strtotime($actdate)) == 'Sunday'){
             if(@$servicePrfirst['adult_weekend_price_diff'] != ''){
                 $adult_price = @$servicePrfirst['adult_weekend_price_diff'];
@@ -1820,6 +1817,24 @@ class ActivityController extends Controller {
             }
         }
 
+        if($child_dis != '' && $child_price != 0){
+        	$child_discount = ($child_price - ($child_price * $child_dis)/100); 
+        }else{
+			$child_discount = $child_price ; 
+        }
+
+        if($adult_dis != '' && $adult_price != 0){
+        	$adult_discount = ($adult_price - ($adult_price * $adult_dis)/100); 
+        }else{
+			$adult_discount = $adult_price ; 
+        }
+
+        if($infant_dis != '' && $infant_price != 0){
+        	$infant_discount = ($infant_price - ($infant_price * $infant_dis)/100); 
+        }else{
+			$infant_discount = $infant_price ; 
+        }
+
         $mbox =''; 
         if (!empty(@$servicePr)) {
             foreach ($servicePr as  $pr) {
@@ -1831,6 +1846,7 @@ class ActivityController extends Controller {
             }
         }
         $total_price_val =  $adult_price + $child_price+ $infant_price;
+        $total_price_display =  $child_discount + $adult_discount+ $infant_discount;
         $reccuringval = '';
         $changeactsession_para = "'".$serviceid."','".$serviceid."',this.value,'book','ajax'";
         $changeactpr_para = "'".$serviceid."',this.value,'".@$spot_avil."','book','".$serviceid."'";
@@ -2018,14 +2034,34 @@ class ActivityController extends Controller {
                                             }
                                             
                                             $actbox .= '<div class="personcategory" >
-                                                <span>Adults x '.$adult_cnt.' = $'.$adult_price.'</span>
-                                                <span>Kids x '.$child_cnt.' = $'.$child_price.'</span>
-                                                <span>Infants x '.$infant_cnt.' = $'.$infant_price.'</span>
-                                            </div>';
+                                                <span>Adults x '.$adult_cnt.' = ';
+                                                if($adult_price != $adult_discount){
+                                                	$actbox .= ' <strike style="color:red">
+                                                	<span style="color:black"> $'.$adult_price.'</span></strike>&nbsp; $'.$adult_discount.'</span>';
+                                                }else{
+                                                	$actbox .= ' $'.$adult_price.'</span>';
+                                                }
+
+                                                $actbox .= '<span>Kids x '.$child_cnt.' = '; 
+												if($child_price != $child_discount){
+                                                	$actbox .= ' <strike style="color:red">
+                                                	<span style="color:black"> $'.$child_price.'</span></strike>&nbsp; $'.$child_discount.'</span>';
+                                                }else{
+                                                	$actbox .= ' $'.$child_price.'</span>';
+                                                }
+
+                                                $actbox .= '<span>Infants x '.$infant_cnt.' = ';
+                                                if($infant_price != $infant_discount){ 
+                                                 	$actbox .= ' <strike style="color:red"><span style="color:black"> $'.$infant_price.'</span></strike>&nbsp; $'.$infant_discount.'</span>';
+                                                }else{
+                                                	$actbox .= ' $'.$infant_price.'</span>';
+                                                }
+
+                                             $actbox .= '</div>';
                                             if(@$total_price_val != ''){
                                                 $actbox .= '<div class="cartstotal mt-20">
                                                     <label>Total </label>
-                                                    <span id="totalprice">$'.@$total_price_val.' USD</span>
+                                                    <span id="totalprice">$'.@$total_price_display.' USD</span>
                                                 </div>';
                                             }
                                             $actbox .= '</div>
@@ -2227,6 +2263,7 @@ class ActivityController extends Controller {
         $actscheduledata = BusinessActivityScheduler::where('id',$request->actscheduleid)->first();
         $SpotsLeft = UserBookingDetail::where('act_schedule_id',$request->actscheduleid)->whereDate('bookedtime', '=', $dateformate)->get()->toArray();
         $totalquantity = 0;
+        
 		foreach($SpotsLeft as $data){
 			$item = json_decode($data['qty'],true);
 			if($item['adult'] != '')
@@ -2254,6 +2291,28 @@ class ActivityController extends Controller {
             $total_price_val_infant =  @$pricedata['infant_cus_weekly_price']; 
         }
         
+        $child_dis = @$pricedata['child_discount'];
+        $infant_dis = @$pricedata['infant_discount'];
+        $adult_dis = @$pricedata['adult_discount'];
+
+        if($child_dis != '' && $total_price_val_child != 0){
+        	$child_discount = ($total_price_val_child - ($total_price_val_child * $child_dis)/100); 
+        }else{
+			$child_discount = $total_price_val_child ; 
+        }
+
+        if($adult_dis != '' && $total_price_val_adult != 0){
+        	$adult_discount = ($total_price_val_adult - ($total_price_val_adult * $adult_dis)/100); 
+        }else{
+			$adult_discount = $total_price_val_adult ; 
+        }
+
+        if($infant_dis != '' && $total_price_val_infant != 0){
+        	$infant_discount = ($total_price_val_infant - ($total_price_val_infant * $infant_dis)/100); 
+        }else{
+			$infant_discount = $total_price_val_infant ; 
+        }
+
 
         $stactbox.='<div class="row"><div class="col-lg-12">
                         <h4 class="modal-title partcipate-model">Select The Number of Participants</h4>
@@ -2276,7 +2335,8 @@ class ActivityController extends Controller {
 							</div>
 						</div>
                     </div>
-                    <input type="hidden" name="adultprice" id="adultprice" value="'.$total_price_val_adult.'" >';
+                    <input type="hidden" name="adultprice" id="adultprice" value="'.$total_price_val_adult.'" >
+                    <input type="hidden" name="adultdis" id="adultdis" value="'.$adult_discount.'" >';
             }
             if ($total_price_val_child!= '' ) {
                 $stactbox.='
@@ -2297,7 +2357,7 @@ class ActivityController extends Controller {
 							</div>
 						</div>
                     </div>
-                    <input type="hidden" name="childprice" id="childprice" value="'.$total_price_val_child.'" >';
+                    <input type="hidden" name="childprice" id="childprice" value="'.$total_price_val_child.'" >  <input type="hidden" name="childdis" id="childdis" value="'.$child_discount.'" >';
             }
             if($total_price_val_infant != '' ) {
                 $stactbox.='
@@ -2319,7 +2379,8 @@ class ActivityController extends Controller {
 							</div>
 						</div>
                     </div>
-                    <input type="hidden" name="infantprice" id="infantprice" value="'.$total_price_val_infant.'" >';
+                    <input type="hidden" name="infantprice" id="infantprice" value="'.$total_price_val_infant.'" >
+                    <input type="hidden" name="infantdis" id="infantdis" value="'.$infant_discount.'" >';
             }
         $stactbox.='<input type="hidden" name="maxlengthval" id="maxlengthval" value="'.@$SpotsLeftdis.'"></div>';
 
@@ -2391,10 +2452,10 @@ class ActivityController extends Controller {
             <span>Infants x 0</span>
         </div>';
         
-        if(@$total_price_val_adult != ''){
+        if(@$total_price_val_adult != '' ){
             $bookdata .=' <div class="cartstotal mt-20">
                 <label>Total </label>
-                <span id="totalprice">$'.@$total_price_val_adult.' USD</span>
+                <span id="totalprice">$0 USD</span>
             </div>';
         }
 
@@ -2436,7 +2497,7 @@ class ActivityController extends Controller {
         }
 
         $adult_cnt =$child_cnt =$infant_cnt =0;
-        $adult_price = $child_price = $infant_price =0;
+        $adult_price = $child_price = $infant_price = $child_discount =  $adult_discount = $infant_discount = 0;
         $dayval = date('l',strtotime($request->sesdate));
         if (!empty($price)) { 
             $stactbox .= '<select id="selprice'.$actid.'" name="selprice'.$actid.'" class="price-select-control" onchange="changeactpr('.$fun_para.')">';
@@ -2490,6 +2551,7 @@ class ActivityController extends Controller {
                 }
             }
             $total_price_val = $adult_price + $child_price + $infant_price ;
+
             $stactbox .= '</select>';
             foreach ($price as  $pr) {
                 $mem_ary [] =  $pr['membership_type'];
@@ -2500,6 +2562,31 @@ class ActivityController extends Controller {
                     $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
                 }
             $mbox .='</select>';
+
+            $child_dis = @$pricedatafirst['child_discount'];
+        	$infant_dis = @$pricedatafirst['infant_discount'];
+        	$adult_dis = @$pricedatafirst['adult_discount'];
+
+            if($child_dis != '' && $child_price != 0){
+	        	$child_discount = ($child_price - ($child_price * $child_dis)/100); 
+	        }else{
+				$child_discount = $child_price; 
+	        }
+
+	        if($adult_dis != '' && $adult_price != 0){
+	        	$adult_discount = ($adult_price - ($adult_price * $adult_dis)/100); 
+	        }else{
+				$adult_discount = $adult_price; 
+	        }
+
+	        if($infant_dis != '' && $infant_price != 0){
+	        	$infant_discount = ($infant_price - ($infant_price * $infant_dis)/100); 
+	        }else{
+				$infant_discount = $infant_price; 
+	        }
+
+
+        	$total_price_display =  $child_discount + $adult_discount+ $infant_discount;
         }
 
 
@@ -2509,7 +2596,7 @@ class ActivityController extends Controller {
                                         
         $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil =$bcnt=1 ;$timedata12='';
         if(!empty($bus_schedule) && $chk_found =='Not'){ 
-        $i= 1;          
+        	$i= 1;          
             foreach($bus_schedule as $data){
             	if($i == 1){
 	            	$SpotsLeftdis = 0; 
@@ -2582,16 +2669,43 @@ class ActivityController extends Controller {
                 $bookdata .= '</span>
             </div>';
         }
-        $bookdata .= '<div class="personcategory">
+
+        $bookdata .= '<div class="personcategory" >
+         	<span>Adults x '.$adult_cnt.' = ';
+	        if($adult_price != $adult_discount){
+	        	$bookdata .= '<strike style="color:red">
+	        	<span style="color:black"> $'.$adult_price.'</span></strike>&nbsp; $'.$adult_discount.'</span>';
+	        }else{
+	        	$bookdata .= ' $'.$adult_price.'</span>';
+	        }
+
+	        $bookdata .= '<span>Kids x '.$child_cnt.' = '; 
+			if($child_price != $child_discount){
+	        	$bookdata .= '<strike style="color:red">
+	        	<span style="color:black"> $'.$child_price.'</span></strike>&nbsp; $'.$child_discount.'</span>';
+	        }else{
+	        	$bookdata .= ' $'.$child_price.'</span>';
+	        }
+
+	        $bookdata .= '<span>Infants x '.$infant_cnt.' = ';
+	        if($infant_price != $infant_discount){ 
+	         	$bookdata .= '<strike style="color:red"><span style="color:black"> $'.$infant_price.'</span></strike>&nbsp; $'.$infant_discount.'</span>';
+	        }else{
+	        	$bookdata .= ' $'.$infant_price.'</span>';
+	        }
+        
+     	$bookdata .= '</div>';
+
+       /* $bookdata .= '<div class="personcategory">
             <span>Adults x '.$adult_cnt.' </span>
             <span>Kids x '.$child_cnt.' </span>
             <span>Infants x '.$infant_cnt.' </span>
-        </div>';
+        </div>';*/
         
         if(@$total_price_val != ''){
-           $bookdata .= '<div class="cartstotal mt-20">
+            $bookdata .= '<div class="cartstotal mt-20">
                 <label>Total </label>
-                <span id="totalprice">$ '.@$total_price_val.' USD</span>
+                <span id="totalprice">$ '.@$total_price_display.' USD</span>
             </div>';
         }
 
