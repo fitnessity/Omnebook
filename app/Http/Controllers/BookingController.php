@@ -1269,7 +1269,7 @@ class BookingController extends Controller {
                                     <label class="manage-service-display">Name: </label><span> '.$count.'. '.Auth::user()->firstname.' '.Auth::user()->lastname.' </span>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y',strtotime($request->date)).'   </span>
+                                    <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y',strtotime($dt->bookedtime)).'   </span>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="manage-service-display">Whos Participating: </label><span> '. nl2br($participate).'</span>
