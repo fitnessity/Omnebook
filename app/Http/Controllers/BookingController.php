@@ -1258,7 +1258,12 @@ class BookingController extends Controller {
                 $participate =  $dt->decodeparticipate();
                 $price_title = $dt->business_price_details->price_title;
                 $catename = $dt->business_price_details->business_price_details_ages->category_title;
-                
+
+                if($dt->booking->user_type == 'user'){
+                    $name = $dt->booking->user->firstname.' '.$dt->booking->user->lastname;
+                }else{
+                    $name = $dt->booking->customer->fname.' '.$dt->booking->customer->lname;
+                }
                 $html .='<div class="modal-inner-txt modal-table-data'; 
                     if(count($data) == $count){ 
                         $html.= ' nthchildlast';
@@ -1266,7 +1271,7 @@ class BookingController extends Controller {
                     $html.= '">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <label class="manage-service-display">Name: </label><span> '.$count.'. '.Auth::user()->firstname.' '.Auth::user()->lastname.' </span>
+                                    <label class="manage-service-display">Name: </label><span> '.$count.'. <a href="#">'.$name.'</a> </span>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="manage-service-display">Date Booked: </label><span> '.date('m/d/Y',strtotime($dt->bookedtime)).'   </span>
