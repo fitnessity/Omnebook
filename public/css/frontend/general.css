@@ -24034,7 +24034,7 @@ padding-left: 0px;
 }
 .participaingtxt{
 	font-size: 12px;
-	font-weight: 400;
+	font-weight: 600;
 	width: 100%;
 }
 .select-sparetor{
@@ -24081,6 +24081,7 @@ padding-left: 0px;
 .show-more-cart a{
 	color: #000 !important;
 	text-decoration: none !important;
+	font-size: 14px;
 }
 .hide-part{
     display: none;
@@ -24183,9 +24184,38 @@ padding-left: 0px;
 .block-datetime{
 	margin-bottom: 15px;
 }
-.block-radio input{
-	
+.termsdetails.terms-txt{
+	font-size: 12px;
 }
-.block-radio label{
-	
+.new-participant input{
+	margin-bottom: 15px;
+}
+.new-participant select{
+	margin-bottom: 15px;
+}
+.add-btn-submit{
+	float: right;
+	margin-top: 22px;
+}
+.participant-cart{
+	width: 100%;
+	display: block;
+	margin-top: 4px;
+	color: #000;
+	font-size: 13px;
+}
+.participant-cart:hover{
+	color: #000;
+}
+.btn-nxt-part{
+	background: #ed1b24;
+	color: #fff;
+	padding: 6px 15px;
+	border: unset;
+	font-size: 16px;
+}
+.personal-task-sprator{
+	border: 1px solid #000;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }

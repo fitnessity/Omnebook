@@ -507,7 +507,7 @@ span.status::after {
 }
 .info-display label{
 	font-size: 12px;
-	font-weight: normal;
+	font-weight: 600;
 	margin-bottom: 0px;
 }
 .info-display span{
@@ -563,7 +563,7 @@ span.status::after {
 	color: #000000;
 }
 .select-participat{
-	padding: 9px 0px;
+	padding: 9px 7px;
 	background: #fff;
 	border: 1px solid #000;
 	border-radius: 6px;

@@ -360,7 +360,7 @@
 											</div>
 										</div>
 										</div>
-										<div class="show-more-cart"><a class="show-more">Show More</a></div>
+										<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
 										
 											<!--
                                         <div class="info-display">
@@ -424,7 +424,7 @@
     										{ 
                                                 $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
                                         		<p id='part<?php echo $i.$item["code"]; ?>'>
-                                                    participant#{{$i+1}}:  @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
+                                                    <b>Participant#{{$i+1}}: </b> @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
                                                 </p>
                                         <?php 
                                             } 
@@ -432,6 +432,7 @@
                                     </div>
                                     <?php } 
                                     ?>
+                                    <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a>
                                     <div class="select-sparetor">
                                         <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup()">
                                         <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
@@ -453,7 +454,7 @@
     						<div class="row">
                                 <div class="col-md-12 divmargin cart-terms-dis">
                                     @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
-                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails"> View the terms and conditions from this provider below </span>
+                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails terms-txt"> View the terms and conditions from this provider below </span>
                                         <div>
                                             @if($termcondfaqtext != '')
                                                 <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
@@ -669,7 +670,7 @@
     								<!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
     								<label>Taxes & Fees: </label>
                                     <label>Discount: </label>
-    								<label>Shpping:</label>
+    								<!-- <label>Shpping:</label> -->
     							</div>
     						</div>
     						<div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -679,7 +680,7 @@
     								<!-- <span> <?php /*echo "$ " .number_format($service_fee,2);*/ ?> </span> -->
     								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
     								<span> {{number_format($discount,2)}} </span>
-                                    <span> $0 </span>
+                                    <!-- <span> $0 </span> -->
     							</div>
     						</div>
     					</div>
@@ -825,7 +826,7 @@
                                     <!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
                                     <label>Taxes & Fees:</label>
                                     <label>Discount: </label>
-                                    <label>Shpping:</label>
+                                   <!--  <label>Shpping:</label> -->
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -835,7 +836,7 @@
                                    <!--  <span> $ 0.00 </span> -->
                                     <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>
-                                    <span> $0 </span>
+                                   <!--  <span> $0 </span> -->
                                 </div>
                             </div>
                         </div>
@@ -871,7 +872,7 @@
     <?php } ?>
     <?php /*?><a id="btnEmpty" href="/emptycart">Empty Cart</a><?php */?>
     <?php
-    /*?>$total_quantity = 0;
+    /* ?>$total_quantity = 0;
     $total_price = 0;
     if (isset($cart['cart_item'])) {
         ?>	
@@ -941,8 +942,7 @@
                 </tbody>
             </table>
         </form>
-        <?php
-    } else {
+        <?php } else {
         ?>
         <div class="no-records">Your Cart is Empty</div>
         <?php
@@ -1009,7 +1009,7 @@
 					<div class="row">
 						<div class="col-lg-2">
 							<div class="activity-title-img">
-								<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1667542553-Aerial-View.jpg" alt="Avatar" class="avatar">
+								<img src="{{ asset('/public/uploads/profile_pic/1667542553-Aerial-View.jpg')}}" alt="Avatar" class="avatar">
 							</div>
 						</div>
 						<div class="col-lg-10">
@@ -1056,13 +1056,136 @@
     </div>
 </div>
 <!-- end modal -->
+
+<!-- The Add New Participant Modal -->
+	<div class="modal fade compare-model" id="newparticipant">
+		<div class="modal-dialog eventcalender">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
+						<div class="col-lg-12">
+							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Family or Friends</h4>
+						</div>
+					</div>
+					<div id='termserror'></div>
+					<div class="row"> 
+						<form action="{{route('addfamilyfromcart')}}" method="POST">
+							@csrf
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>First Name</label>
+									<input type="text" name="fname" id="fname" class="form-control" required>
+									
+									<label>Last Name</label>
+									<input type="text" name="lname" id="lname" class="form-control" required>
+									
+									<label>Select Gender</label>
+									<select name="gender" id="gender" class="form-control" required>
+										<option value="" hidden="">Select Gender</option>
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+									</select>
+									
+									<label>Email</label>
+									<input type="text" name="email" id="email" class="form-control" required>
+									
+									<label>Select Relationship</label>
+									<select name="relationship" id="relationship" class="form-control" required>
+										<option value="" hidden="">Select Relationship</option>
+										<option>Brother</option><option>Sister</option>
+										<option>Father</option><option>Mother</option>
+										<option>Wife</option><option>Husband</option>
+										<option>Son</option><option>Daughter</option>
+										<option>Friend</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>Birthday</label>
+									<input required="required" type="text" name="birthdate" id="birthdate" class="form-control" maxlength= "10" value="" placeholder="Date Formate: dd/mm/yyyy">
+									
+									<label>Mobile Number</label>
+									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')" required>
+									
+									<label>Emergency Contact Name</label>
+									<input type="text" name="emergency_name" id="emergency_name" class="form-control">
+									
+									<label>Emergency Contact Number</label>
+									<input type="text" name="emergency_contact" id="emergency_contact" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('emergency_contact')">
+									
+									<button type="submit" class="btn-nxt-part add-btn-submit" id="submitfamily">Submit</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+<!-- end modal -->
+
+
 <script>
 	$(".show-more").click(function(event) {
-	var txt = $(".hide-part").is(':visible') ? 'Show More' : 'Show Less';
-	$(".hide-part").toggleClass("show-part");
-	$(this).html(txt);
-	event.preventDefault();
-});
+		var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
+		$(".hide-part").toggleClass("show-part");
+		$(this).html(txt);
+		event.preventDefault();
+	});
+
+	$("#birthdate").keyup(function(){
+        if ($(this).val().length == 2){
+            $(this).val($(this).val() + "/");
+        }else if ($(this).val().length == 5){
+            $(this).val($(this).val() + "/");
+        }
+    });
+    $('#submitfamily').click(function(e) {
+    	$("#termserror").html('').removeClass('alert-class alert-danger');
+    	let date = $('#birthdate').val();
+    	const  today = new Date().toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}); 
+    	if(!dateCheck("01/01/1960", today ,date)){
+			$("#termserror").html('Plese Enter Valid Date.').addClass('alert-class alert-danger');
+		   return false;
+    	}
+    });
+
+	function dateCheck(from,to,check) {
+
+	    var fDate,lDate,cDate;
+	    fDate = Date.parse(from);
+	    lDate = Date.parse(to);
+	    cDate = Date.parse(check);
+
+	    if((cDate <= lDate && cDate >= fDate)) {
+	        return true;
+	    }
+	    return false;
+	}
+
+
+	function changeformate(idname) {
+        /*$('#b_contact').val();*/
+        //alert(idname);
+        var con = $('#'+idname).val();
+        var curchr = con.length;
+        if (curchr == 3) {
+            $('#'+idname).val("(" + con + ")" + " ");
+        } else if (curchr == 9) {
+            $('#'+idname).val(con + "-");
+        }
+    }
+
 </script>
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
 
@@ -1071,82 +1194,78 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
   
 <script type="text/javascript">
-$(function() {
-    var $form = $(".validation");
-    $('form.validation').bind('submit', function(e) {
-        $('#checkout-button').html('loading...').prop('disabled', true);
-        var check = document.querySelector( 'input[name="terms_condition"]:checked');
-        if(check == null) {
-            $('#error_check').show();
-            $('#checkout-button').html('Check Out').prop('disabled', false);
-            return false;
-        }
+	$(function() {
+	    var $form = $(".validation");
+	    $('form.validation').bind('submit', function(e) {
+	        $('#checkout-button').html('loading...').prop('disabled', true);
+	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
+	        if(check == null) {
+	            $('#error_check').show();
+	            $('#checkout-button').html('Check Out').prop('disabled', false);
+	            return false;
+	        }
 
-        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
-        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
-    
-        if(save_cardRadio == null) {
-            $('#save_card').val(0);
-        }else{
-             $('#save_card').val(1);
-        }
+	        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
+	        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+	    
+	        if(save_cardRadio == null) {
+	            $('#save_card').val(0);
+	        }else{
+	             $('#save_card').val(1);
+	        }
 
-        if(cardinfoRadio == null) {
-            var $form  = $(".validation"),
-                inputVal = ['input[type=email]', 'input[type=password]',
-                                 'input[type=text]', 'input[type=file]',
-                                 'textarea'].join(', '),
-                $inputs       = $form.find('.required').find(inputVal),
-                $errorStatus = $form.find('div.error'),
-                valid         = true;
-                $errorStatus.addClass('hide');
-         
-            $('.has-error').removeClass('has-error');
-            $inputs.each(function(i, el) {
-                var $input = $(el);
-                if ($input.val() === '') {
-                    $input.parent().addClass('has-error');
-                    $errorStatus.removeClass('hide');
-                    e.preventDefault();
-                }
-            });      
-            if (!$form.data('cc-on-file')) {
-                e.preventDefault();
-                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-                Stripe.createToken({
-                    number: $('.card-num').val(),
-                    cvc: $('.card-cvc').val(),
-                    exp_month: $('.card-expiry-month').val(),
-                    exp_year: $('.card-expiry-year').val()
-                }, stripeHandleResponse);
-            }
-        }
-    });
-  
-    function stripeHandleResponse(status, response) {
-        if (response.error) {
-            $('.error')
-                .removeClass('hide')
-                .find('.alert')
-                .text(response.error.message);
-        } else {
-            var token = response['id'];
-            $form.find('input[type=text]').empty();
-            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-            $form.get(0).submit();
-        }
-        $('#checkout-button').html('Check Out').prop('disabled', false);
-    }
-});
-
+	        if(cardinfoRadio == null) {
+	            var $form  = $(".validation"),
+	                inputVal = ['input[type=email]', 'input[type=password]',
+	                                 'input[type=text]', 'input[type=file]',
+	                                 'textarea'].join(', '),
+	                $inputs       = $form.find('.required').find(inputVal),
+	                $errorStatus = $form.find('div.error'),
+	                valid         = true;
+	                $errorStatus.addClass('hide');
+	         
+	            $('.has-error').removeClass('has-error');
+	            $inputs.each(function(i, el) {
+	                var $input = $(el);
+	                if ($input.val() === '') {
+	                    $input.parent().addClass('has-error');
+	                    $errorStatus.removeClass('hide');
+	                    e.preventDefault();
+	                }
+	            });      
+	            if (!$form.data('cc-on-file')) {
+	                e.preventDefault();
+	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+	                Stripe.createToken({
+	                    number: $('.card-num').val(),
+	                    cvc: $('.card-cvc').val(),
+	                    exp_month: $('.card-expiry-month').val(),
+	                    exp_year: $('.card-expiry-year').val()
+	                }, stripeHandleResponse);
+	            }
+	        }
+	    });
+	  
+	    function stripeHandleResponse(status, response) {
+	        if (response.error) {
+	            $('.error')
+	                .removeClass('hide')
+	                .find('.alert')
+	                .text(response.error.message);
+	        } else {
+	            var token = response['id'];
+	            $form.find('input[type=text]').empty();
+	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+	            $form.get(0).submit();
+	        }
+	        $('#checkout-button').html('Check Out').prop('disabled', false);
+	    }
+	});
 </script>
 
 <script>
     $( document ).ready(function() {
-  
         $('#checkout-button').click(function(){
-            
-
             @if(!Auth::user())
                 $.ajax({
                    type:'GET',
