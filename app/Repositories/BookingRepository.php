@@ -1091,7 +1091,7 @@ class BookingRepository
     
     public function getbusinessbookingsdata($sid,$date){
         // disable date filter for temporary used;
-        return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
+        return UserBookingDetail::where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
        // return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
     }
 
