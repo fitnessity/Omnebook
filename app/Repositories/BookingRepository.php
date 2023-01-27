@@ -1090,7 +1090,9 @@ class BookingRepository
     }
     
     public function getbusinessbookingsdata($sid,$date){
-       return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
+        // disable date filter for temporary used;
+        return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid])->get();
+       // return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
     }
 
     public function getbookingbyUserid($userid){
