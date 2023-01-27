@@ -38,12 +38,12 @@
 						</div>
 						<div class="col-md-6 col-xs-12 col-sm-12">
 							<div class="priceactivity-scheduler">
-                <select name="frm_servicesport" class="form-control valid" data-behavior="on_change_submit">
-									<option value="all"> Show All Activities </option>
-									<option value="individual">Personal Trainer</option>
-									<option value="classes">Classes</option>
-									<option value="events">Events</option>
-									<option value="experience">Experience</option>
+                <select name="activity_type" class="form-control valid" data-behavior="on_change_submit">
+									<option value=""> Show All Activities </option>
+									<option value="individual" @if(request()->activity_type == 'individual') selected @endif>Personal Trainer</option>
+									<option value="classes" @if(request()->activity_type == 'classes') selected @endif>Classes</option>
+									<option value="events" @if(request()->activity_type == 'events') selected @endif>Events</option>
+									<option value="experience" @if(request()->activity_type == 'experience') selected @endif>Experience</option>
                 </select>
 							</div>
 						</div>
@@ -138,14 +138,16 @@
 	                        <label class="overlay-activity-label">Activity Completed</label>
 	                     	</div>
 			                  <div class="col-md-1 col-xs-12 col-sm-12">
-                         	<input name="_token" type="hidden" value="JLkwuOIVrxJovIsrY5fxBtCNDZxJuSeHLxuLmq0I">
-													<div class="scheduled-btns">
-                            <input type="hidden" class="btn btn-black" name="btnedit" id="btnedit" value="Edit">
-                            <input type="hidden" name="cid" value="68" style="width:50px">
-                            <input type="hidden" name="serviceid" value="20" style="width:50px">
-                            <button type="submit" class="btn-edit btn-sp">Edit</button>
-                            <button type="button" class="btn-edit" disabled="">Cancel</button>
-			                    </div>
+			                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
+			                  		@csrf
+														<div class="scheduled-btns">
+	                            <input type="hidden" name="btnedit" value="Edit">
+	                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
+	                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
+	                            <button type="submit" class="btn-edit btn-sp">Edit</button>
+	                            <button type="button" class="btn-edit" disabled="">Cancel</button>
+			                    	</div>
+			                  	</form>
 			                  </div>
 			                </div>
 		           			</div>
@@ -190,14 +192,16 @@
 	                    	</div>
 		                  </div>
 		                  <div class="col-md-2 col-xs-12 col-sm-12">
-                       	<input name="_token" type="hidden" value="JLkwuOIVrxJovIsrY5fxBtCNDZxJuSeHLxuLmq0I">
-												<div class="scheduled-btns">
-                          <input type="hidden" class="btn btn-black" name="btnedit" id="btnedit" value="Edit">
-                          <input type="hidden" name="cid" value="68" style="width:50px">
-                          <input type="hidden" name="serviceid" value="20" style="width:50px">
-                          <button type="submit" class="btn-edit btn-sp">Edit</button>
-                          <button type="button" class="btn-edit" disabled="">Cancel</button>
-		                    </div>
+		                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
+		                  		@csrf
+													<div class="scheduled-btns">
+                            <input type="hidden" name="btnedit" value="Edit">
+                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
+                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
+                            <button type="submit" class="btn-edit btn-sp">Edit</button>
+                            <button type="button" class="btn-edit" data-behavior="ajax_html_modal" data-url="{{route("business.schedulers.delete_modal", ['business_scheduler_id' => $business_scheduler->id, 'date' => $filter_date->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel</button>
+		                    	</div>
+		                  	</form>
 		                  </div>
 		                </div>
 	           			</div>
@@ -210,14 +214,15 @@
 				<div class="row">
 					<div class="col-md-6 col-xs-12 col-sm-6">
 						<div class="activities-details">
-							<label>Total Activities Today: </label> <span id="sccount"> {{count($bookschedulers)}} </span>
+							<label>Total Activities Today: </label> <span id="sccount"> {{count($business_schedulers)}} </span>
 							<label>Total Reservations Today:</label> <span id="rescount">{{$total_reservations}} </span>
+							{{$filter_date->addDay()->format('m/d/Y')}}
 						</div>
 					</div>
 					<div class="col-md-6 col-xs-12 col-sm-6">
 						<div class="pre-next-btns pre-nxt-btn-space">
-							<button class="btn-previous btn-sp" onclick="getscheduledata('previous');" style="background: darkgray;" disabled id="btn-pre"><i class="fas fa-caret-left preday-arrow" ></i>Previous Day</button>
-							<button class="btn-previous"  onclick="getscheduledata('next');"  id="btn-next">Next Day <i class="fas fa-caret-right nextday-arrow"></i></button>
+							<a class="btn-previous btn-sp" style="background: darkgray;" href="{{route('business.schedulers.index', array_merge(request()->query(), ['date' => $filter_date->subDay()->format('m/d/Y')]))}}"  disabled id="btn-pre"><i class="fas fa-caret-left preday-arrow" ></i>Previous Day</a>
+							<a class="btn-previous" id="btn-next" href="{{route('business.schedulers.index', array_merge(request()->query(), ['date' => $filter_date->addDay()->format('m/d/Y')]))}}">Next Day <i class="fas fa-caret-right nextday-arrow"></i></a>
 						</div>
 					</div>
 				</div>
@@ -268,55 +273,10 @@
 
 	})
 
-	function getcancellationdata(val,clientcnt,insname){
-		date = $('#managecalendarservice').val();
-		$.ajax({
-			url:'{{route("cancelbookingmodel")}}',
-			type:"POST",
-			data:{
-				date:date,
-				sid: val,
-				clientcnt: clientcnt,
-				insname: insname,
-				_token: '{{csrf_token()}}',
-			},
-			success:function(response){
-				$("#bookingcancelmodel").modal('show')
-				$('#cancellationdata').html(response);
-			}
-		});
-	}
+	$(document).on('click', '[data-behavior~=disable_scheduler]', function(e){
+		e.preventDefault()
 
-	function  getscheduledata(chk,val) {
-		date = $('#managecalendarservice').val();
-		$.ajax({
-			url:'{{route("business.schedulers.index")}}',
-			type:"GET",
-			data:{
-				date:date,
-				chk:chk,
-				dropval:val,
-			},
-			success:function(response){
-				var data = response.split('~');
-				var data1 = data[0].split('^^');
-				var data2 = data1[0].split('^');
-
-				var data3 = data[1].split('$!^');
-				$('#sccount').html(data2[1]);
-				$('#rescount').html(data1[1]);
-				$('#bindscheduledata').html(data2[0]);
-				$('#spandate').html(data3[0]);
-				if(data3[1] == 'notodaydate'){
-					$('#btn-pre').prop('disabled', false);
-					$('#btn-pre').css('background','#ed1b24');
-				}else{
-					$('#btn-pre').prop('disabled',true );
-					$('#btn-pre').css('background','darkgray');
-				}
-			}
-		});
-	}
+	})
 </script>
 
 @include('layouts.footer')
