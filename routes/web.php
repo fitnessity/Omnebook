@@ -18,7 +18,8 @@ use App\Http\Controllers\Customers_Auth\HomeController;
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
 
     // Scheduler
-    Route::resource('schedulers', 'SchedulerController')->only(['index']);
+    Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
+    Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -976,8 +977,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
-    Route::post('cancelbookingmodel', 'SchedulerController@cancelbookingmodel')->name('cancelbookingmodel');
-    Route::post('submitcancelbooking', 'SchedulerController@submitcancelbooking')->name('submitcancelbooking');
+    
     Route::any('activity_schedule/{odid?}', 'SchedulerController@activity_schedule')->name('activity_schedule');
     Route::any('all_activity_schedule', 'SchedulerController@all_activity_schedule')->name('all_activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
