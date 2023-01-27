@@ -113,7 +113,7 @@ if(!empty($cart["cart_item"])) {
 												{{date('l, jS \of F Y', strtotime( $item["sesdate"] ))}}
 											@else  {{date('l, jS \of F Y')}} @endif</span>
 								<span>{{$timecart}}</span>
-								<span>Price: {{$totalprice}}</span>
+								<span>Price: ${{$totalprice}}</span>
 								<span>Participants: @if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult - {{$item['adult']['quantity']}} @endif @endif 
                      @if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children - {{$item['child']['quantity']}} @endif @endif
 										@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant - {{$item['infant']['quantity'] }} @endif @endif </span>
