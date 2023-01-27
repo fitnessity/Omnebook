@@ -13,14 +13,34 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Customers_Auth\HomeController;
-//Route::get('/home', 'HomeController@index')->name('homemy');
-//Route::get('/home', 'HomeController@index')->name('homemy');
-//Route::get('/', 'HomeController@index');
 
-/*Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('cache:clear');
-    return "success";
-});*/
+
+Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
+
+    // Scheduler
+    Route::resource('schedulers', 'SchedulerController')->only(['index']);
+});
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::prefix('/business/{business_id}')->group(function () {
+        Route::get('/customers','CustomerController@index')->name('business_customer_index');
+        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+        Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
+        Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
+
+        // Services
+        Route::get('/services', 'UserProfileController@manageService')->name('manageService');
+
+        // BookingPostorders
+        Route::post('/booking_postorders','BookingPostorderController@create')->name('business_booking_postorders_create');
+        Route::delete('/booking_postorders/{booking_postorder_id}','BookingPostorderController@delete')->name('business_booking_postorders_delete');
+
+        // Booking Checkin Details
+        Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+    });
+});
+
+
 
 
 
@@ -135,6 +155,7 @@ View::composer(['*'],function($view){
     }	
 });
 
+
 Route::get('/check',function(){
    $show_step = 1;
    return view('home.registration',compact('show_step'));
@@ -161,11 +182,12 @@ Route::get('/userlogin', 'Frontend\LoginController@index')->name('userlogin');
 Route::post('auth/userlogin', 'Frontend\LoginController@postLogin')->name('auth/userlogin');
 Route::get('/userlogout', 'Frontend\LoginController@logout');
 
-Auth::routes();
+// Auth::routes();
 Route::any('logout', function (Request $request) {
     Auth::logout();
     return redirect('/');
 });
+
 
 Route::post('searchbussinessaction','HomeController@searchbussinessaction');
 Route::post('searchaction','HomeController@searchaction');
@@ -256,9 +278,9 @@ Route::group(array('prefix' => 'admin'), function(){
     //forgot password routes
     Route::get('/forgotpassword', 'Admin\AdminAuthController@GetForgotpassword');  
     Route::get('/dashboard', 'Admin\AdminUserController@index');
-    Route::get('/profile/editprofiledetail', 'Admin\AdminUserProfileController@viewProfile');
-    Route::post('/profile/editprofiledetail', 'Admin\AdminUserProfileController@editProfileDetail');
-    Route::post('/profile/editProfilePicture', 'Admin\AdminUserProfileController@editProfilePicture');
+    Route::get('/profile/editprofiledetail', 'Admin\AdminProfileController@viewProfile');
+    Route::post('/profile/editprofiledetail', 'Admin\AdminProfileController@editProfileDetail');
+    Route::post('/profile/editProfilePicture', 'Admin\AdminProfileController@editProfilePicture');
 
     //Home tracker
     Route::get('/hometracker', 'Admin\HomeTrackerController@index')->name('hometracker');
@@ -513,7 +535,7 @@ Route::get('login/google', 'LoginController@redirectToGoogle')->name('login.goog
 Route::get('login/google/callback', 'LoginController@handleGoogleCallback');
 
 // Password reset link request routes...
-Route::post('/password/email', 'Auth\PasswordController@postEmail');
+// Route::post('/password/email', 'Auth\PasswordController@postEmail');
 
 // Password reset routes...
 Route::get('/password/reset/{token}', 'Auth\PasswordController@getReset');
@@ -587,7 +609,6 @@ Route::get('/profile/delete-service', 'UserProfileController@deleteNewService');
 Route::post('/mybusinessusertag', 'UserProfileController@mybusinessusertag');
 Route::get('/manage/company', 'UserProfileController@manageCompany')->name('manageCompany');
 Route::post('/changecompanystatus', 'UserProfileController@changecompanystatus')->name('changecompanystatus');
-Route::get('/manage/service/{company_id}', 'UserProfileController@manageService')->name('manageService');
 Route::get('/pcompany/delete/{company_id}', 'UserProfileController@deleteCompany');
 Route::get('/pcompany/edit/{company_id}', 'UserProfileController@editCompany');
 Route::get('/pcompany/view/{company_id}', 'UserProfileController@viewPCompany');
@@ -930,18 +951,6 @@ Route::namespace('Customers_Auth')->group(function(){
     /*Route::group(['prefix'  =>  'customers','middleware' => ['auth:customers']], function () {
     });*/
 });
-Route::group(['middleware' => ['auth']], function(){
-    Route::prefix('/business/{business_id}')->group(function () {
-        Route::get('/customers','CustomerController@index')->name('business_customer_index');
-        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
-        Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
-        Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
-
-        // BookingPostorders
-        Route::post('/booking_postorders','BookingPostorderController@create')->name('business_booking_postorders_create');
-        Route::delete('/booking_postorders/{booking_postorder_id}','BookingPostorderController@delete')->name('business_booking_postorders_delete');
-    });
-});
 
 Route::group(['middleware' => ['auth']], function()
 {
@@ -964,8 +973,6 @@ Route::group(['middleware' => ['auth']], function()
 
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('manage-scheduler', 'SchedulerController@index')->name('activity-scheduler');
-    Route::get('scheduler-checkin/{sid?}', 'SchedulerController@scheduler_checkin')->name('scheduler_checkin');
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
@@ -989,3 +996,4 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
     Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
 });
+?>

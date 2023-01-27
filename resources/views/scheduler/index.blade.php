@@ -122,7 +122,7 @@
 												</div>
 											</div>
 											<div class="col-md-1 col-xs-12 col-sm-4">	
-												<a href="{{route('scheduler_checkin',['sid'=>$bookscheduler->id])}}" class="scheduler-qty">
+												<a href="{{route('booking_checkin_details_index',['business_activity_scheduler_id'=>$bookscheduler->id])}}" class="scheduler-qty">
 													<label class="scheduler-titles">QTY: </label> <span> {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}} </span>
 												</a>
 											</div>
@@ -265,7 +265,7 @@
 	function  getscheduledata(chk,val) {
 		date = $('#managecalendarservice').val();
 		$.ajax({
-			url:'{{route("activity-scheduler")}}',
+			url:'{{route("business.schedulers.index")}}',
 			type:"GET",
 			data:{
 				date:date,

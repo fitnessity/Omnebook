@@ -48,7 +48,8 @@ input,select {
                 $profilePicture = $loggedinUser->profile_pic;
               ?>
               <div class="col-md-12 text-center">
-                  <h2>Manage Company</h2>
+                  <h2>Manage Company <small><a href="/business-welcome" style="float: right" class="btn btn-red" name="btnedit" id="btnedit" value="Edit">Create Company</a></small></h2>
+
               </div>
               @if(isset($company) && !empty($company[0]))
               @foreach($company as $cp => $comp)

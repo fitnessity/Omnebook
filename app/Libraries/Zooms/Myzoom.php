@@ -1,7 +1,6 @@
 <?php
 namespace App\Libraries\Zooms;
 include(app_path() . '/Libraries/Zooms/vendor/autoload.php');
-include base_path().'/==buddy/wp-load.php';
 use \Firebase\JWT\JWT;
 Class Myzoom {
             public $zoom_api_key;

@@ -147,7 +147,6 @@
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
-    <script src="https://darsa.in/sly/examples/js/vendor/plugins.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>sly.min.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
@@ -171,6 +170,14 @@
                 }
             })
         });
+
+        $(function(){
+            $("[data-behavior~=datepicker]").datepicker( { 
+                minDate: 0,
+                changeMonth: true,
+                changeYear: true   
+            });
+        })
 
         $(document).ready(function() {
             // hide #back-top first

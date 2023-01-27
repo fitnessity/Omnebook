@@ -17,7 +17,7 @@
 		</div>
 
 		<div class="col-md-3">
-			<button  id="serchbtn" type="submit" class="btn-nxt search-btn-sp" data-behavior="search_customer">Search</button>
+			<button type="submit" class="btn-nxt search-btn-sp" data-behavior="search_customer">Search</button>
 		</div>
 	</div>
 </form>
