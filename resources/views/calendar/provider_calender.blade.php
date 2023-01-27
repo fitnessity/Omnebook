@@ -157,10 +157,9 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-            defaultView: "month", 
+            /*defaultView: "month", */
             eventRender: function (event, element, view) {
-
-             //alert('call');
+                //alert('call');
                 if (event.allDay === 'true') { event.allDay = true; } 
 				else { event.allDay = false; }
             },
@@ -207,9 +206,9 @@
                 alert('hii');
                 //alert('Clicked on: ' + date.format());
 
-                /*alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+                // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
-                alert('Current view: ' + view.name);
+                // alert('Current view: ' + view.name); 
 
             }*/
             

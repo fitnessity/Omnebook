@@ -419,12 +419,7 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} 
-																				<a data-id="{{$booking_detail->booking->id}}" data-behavior="send_receipt" href="#">
-																					<i class="far fa-file-alt"  ></i>	
-																				</a>
-																				
-																			</span>
+																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} <i class="far fa-file-alt"></i></span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -525,7 +520,7 @@
 																		</div>
 																		<div class="row">
 																			<div class="col-md-6 col-xs-6">
-																				<a class="visiting-view" data-url="{{route('business_customer_activity_visits', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-behavior="ajax_html_modal"> View Visits </a>
+																				<a class="visiting-view"> View Visits </a>
 																			</div>
 																			<div class="col-md-6 col-xs-6">
 																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer"> Edit Booking </a>
@@ -571,7 +566,7 @@
 																					<label>BOOKING # </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> {{$booking_detail->booking->order_id}}</span>
+																					<span> {{$booking_detail->booking->order_id}} </span>
 																				</div>
 																			
 																				<div class="col-md-6 col-xs-6">
@@ -585,7 +580,7 @@
 																					<label>PAYMENT TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> </span>
+																					<span>15 Sessions </span>
 																				</div>
 																				@if ($booking_detail->business_price_details)
 																					<div class="col-md-6 col-xs-6">
@@ -602,6 +597,7 @@
 																				<div class="col-md-6 col-xs-6">
 																					@if ($booking_detail->business_services)
 																					<span>{{$booking_detail->business_services->program_name}} </span>
+																					}
 																					@endif
 																				</div>
 																				
@@ -739,7 +735,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal-box-selection" data-toggle="modal" data-target="">
+					<div class="modal-box-selection" data-toggle="modal" data-target="#blocktime">
 						<div class="row"> 
 							<div class="col-md-3">
 								<div class="schedule-client">
@@ -779,15 +775,366 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-5">
-							<div class="side-border-right">
-								<div class="r">
-									<label class="red-fonts">Step 1: </label><label> Plan Your Session</label>				
+						<div class="col-md-4">
+							<div class="side-border-right-red">
+								<label class="red-fonts">Step 1: </label> <label> Plan Your Session</label>	
+								<div class="program-selection">
+									<label>Select Program</label>
+									<select name="" id="" class="form-control valid" autocomplete="off">
+                                        <option value="">Select Program</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+									</select>
+								</div>
+									
+								<div class="program-selection">
+									<label>Select Catagory </label>
+									<select name="" id="" class="form-control valid" autocomplete="off">
+                                        <option value="">Select Catagory</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+									</select>
+								</div>
+								
+								<div class="program-selection">
+									<label>Select Price Option </label>
+									<select name="" id="" class="form-control valid" autocomplete="off">
+                                        <option value="">Select Price</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+									</select>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="program-selection">
+											<label>Participants</label>
+											<input type="text" class="form-control valid" name="" id="" placeholder="1" title="" >
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="program-selection">
+											<label>Price</label>
+											<input type="text" class="form-control valid" name="" id="" placeholder="$" title="" >
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="program-selection">
+											<label>Date:</label>
+											<div class="date-activity-check">
+												<input type="text"  id="refunddate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="program-selection">
+											<label>Time</label>
+											<input type="text" class="form-control valid" name="" id="" placeholder="$" title="" >
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="program-selection">
+											<label>Duration:</label>
+											<div class="duration-min">
+												<input type="text" class="form-control valid" name="" id="" placeholder="$" title="" >
+												<select name="" id="" class="form-control valid" autocomplete="off">
+													<option value="">Min</option>
+													<option>Hr</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="program-selection">
+									<label>How Often Will this happen? </label>
+									<form action="/action_page.php">
+										<p>Please select your favorite Web language:</p>
+										<input type="radio" id="" name="fav_language" value="HTML">
+										<label class="onedaybboking" for="html">One Day Booking</label>
+										<input type="radio" id="css" name="fav_language" value="CSS">
+										<label class="onedaybboking" for="css">Repeat This Booking</label>
+									</form>
 								</div>
 							</div>
 						</div>
+						
+						<div class="col-md-4 nopadding side-border-right-red">
+							<label class="red-fonts">Step 2: </label> <label> Select Client</label>	
+							<div>
+								<label>Search for customer</label>
+								<div class="search-customer">
+									<form method="get" action="/activities/">
+										<input type="text" name="label" id="site_search" placeholder="Search by name, phone or email" autocomplete="off" value="">
+										<button id="serchbtn"><i class="fa fa-search"></i></button>
+									</form>
+								</div>
+								<div class="col-md-12 nopadding">
+									<button type="submit" class="btn-nxt mb-00 addclint-btn" id="">Add New Client </button>
+								</div>
+							</div>
+							
+							<div>
+								<label>Send notification to customer</label>
+								<input type="text" class="form-control valid" name="" id="" placeholder="Enter email" title="" >
+								<div class="col-md-12 nopadding">
+									<button type="submit" class="btn-nxt mb-00 addclint-btn" id="">Send Email</button>
+								</div>
+							</div>
+							
+							<div>
+								<label>Connect Calender for updates</label>
+								<div class="connect-calender">
+									<input type="text" class="form-control valid" name="" id="" title="" >
+									<input type="text" class="form-control valid" name="" id="" title="" >
+								</div>
+							</div>
+							
+						</div>
+						
+						<div class="col-md-4">
+							<label class="red-fonts">Step 3: </label> <label> Booking Summary & Pay</label>	
+							<div class="program-selection">
+								<label>Client Info:</label>
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Client Name</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>Darryl Phipps</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Age</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>40</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Email</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>darrylkphipps@gmail.com</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Phone number</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>718-708-3690</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Location</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>New York, USA</span>
+									</div>
+								</div>	
+								<div class="booking-border-sparetor"></div>
+								<label>Booking Details:</label>
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Program Name</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>Kickboxing with Valor</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Catagory Name</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>Adult Kickboxing</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Price Option</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>1 Drop in Session</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Particpants</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>1 Adult</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Date</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>11/30/2022</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Time</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>9:00 Am to 10:00 PM</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Duration</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>1 Hour</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Booking Recurrence</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>One Day Booking</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Price</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>$100</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Service Fee</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>$7</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Tax</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>$9</span>
+									</div>
+									
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<div class="sub-info-customer">
+											<label>Total</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span>$116</span>
+									</div>
+									
+								</div>	
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12 text-right">
+							<button type="submit" class="btn-nxt mb-00 pay-btn" id="">Cancel</button>
+							<button type="submit" class="btn-nxt mb-00 pay-btn" id="">Payment</button>
+						</div>
 					</div>
 				
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- end modal -->
+
+<!-- The Calendar Modal -->
+	<div class="modal fade compare-model" id="blocktime">
+		<div class="modal-dialog booking-time">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
+						<div class="col-lg-12">
+							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add a personal task or block off a date or time</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="select-date">
+								<label>Selected Date:</label>
+								<div class="block-datetime">
+									<input type="text"  id="blockdatetime" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+								</div>
+							</div>
+							<div class="program-selection">
+								<label>Personal Task:</label>
+								<select name="" id="" class="form-control valid" autocomplete="off">
+                                    <option value="">Select personal task</option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+								</select>
+							</div>
+							<div class="block-radio">
+								<input type="radio" id="html" name="fav_language" value="HTML">
+								<label for="html">Block off the full day</label><br>
+								<input type="radio" id="css" name="fav_language" value="CSS">
+								<label for="css">Block off a time</label>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="program-selection">
+										<label>From</label>
+										<select name="" id="" class="form-control valid" autocomplete="off">
+											<option value="">Select personal task</option>
+											<option>1</option>
+											<option>2</option>
+											<option>3</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -1136,7 +1483,1118 @@
 			</div>
 		</div>
 	<!-- end modal -->
-	@include('customers._edit_booking_modal')
+	
+	
+	<!-- The Modal Edit Booking -->
+		<div class="modal fade compare-model" id="bookingcustomer">
+			<div class="modal-dialog booking0customer">
+				<div class="modal-content">
+					<div class="modal-header" style="text-align: right;"> 
+						<div class="closebtn">
+							<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+					</div>
+
+					<!-- Modal body -->
+					<div class="modal-body body-tbm">
+						<div class="row"> 
+							<div class="col-lg-6 col-sm-6">
+							   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit info for membership {Program Name} </h4>
+							</div>
+							<div class="col-lg-6 col-sm-6">
+							   <h4 class="modal-title" style="text-align: end; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;"> | Membership Status: <span class="green-fonts"> Active </span> </h4>
+							</div>
+							<div class="col-lg-12">
+								<div class="client-info"></div>
+							</div>
+							
+							<div class="col-md-12 col-xs-12 mobile-custom">
+								<div class="view-customer">
+									<ul class="nav nav-tabs" id="CustTab" role="tablist">
+									  <li class="nav-item active">
+										<a class="nav-link active" id="edit-details-info-tab" data-toggle="tab" href="#edit-details" role="tab" aria-controls="customer-info" aria-selected="true" aria-expanded="true">Edit Details</a>
+									  </li>
+									  <li class="nav-item">
+										<a class="nav-link" id="void-refund" data-toggle="tab" href="#void" role="tab" aria-controls="visits" aria-selected="false" aria-expanded="false">Void or Refund </a>
+									  </li>
+									  <li class="nav-item">
+										<a class="nav-link" id="suspend-terminate-tab" data-toggle="tab" href="#suspend-terminate" role="tab" aria-controls="account-details" aria-selected="false" aria-expanded="false">Suspend or Terminate</a>
+									  </li>
+									</ul>
+								</div>
+								<div class="tab-custom tab-content" id="myTabContent">
+									<div class="tab-pane fade active" id="edit-details" role="tabpanel" aria-labelledby="edit-details-info-tab">
+										<div class="row">
+											<div class="col-md-5 col-xs-12 col-sm-12">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Current Booking Details</h4>
+													<p class="text-center">Review the membership details before any changes</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Total Remaining</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number">
+																<span>5/10</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Booking # </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>0000000000001 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Program Name: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis Lessons</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Catagory: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Private Lessons 30 Min ( 1 Person)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Price Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>30 Minute Private</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Number of Sessions:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>10 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Drop In</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Participant Quantity:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Adult x 1</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Who's Participating:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Darryl Phipps (23)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Activity Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Service Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Personal Training</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Duration:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>12 Months</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Purchase Date:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Activation Date: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Expiration: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<label>Tip Amount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Discount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Tax:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="tip-xp">
+																<label>Total Amount Paid </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number tip-xp">
+																<span>$95</span>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-2 nopadding">
+												<div class="title-middle-part">
+													<h4 class="edit-booking-title">Edit Section </h4>
+													<p class="text-center">Use this section to edit the membership details you need below</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-12 col-xs-12 col-sm-12">
+															<div class="bottom-border-sparetor sessions-no">
+																<label>Number of sessions</label>
+																<input class="form-control" type="text" id="num" name="num" placeholder="20" value="20">
+															</div>
+														</div>
+														<div class="col-md-12 col-xs-12 col-sm-12">
+															<div class="activation-date">
+																<label>Membership Activation Date</label>
+																<div class="date-activity-check">
+																	<input type="text"  id="membershipactivationdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+																</div>
+															</div>
+														</div>
+														<div class="col-md-12 col-xs-12 col-sm-12">
+															<div class="membership-duration">
+																<label>Membership Duration</label>
+															</div>
+															<div class="duration-date">
+																<input class="form-control" type="text" id="duration" name="duration" placeholder="14">
+																<h3>Month(s)</h3>
+																<select name="" id="" class="form-control">
+																	<option value="">Months + </option>
+																	<option value=""></option>
+																	<option value=""></option>
+																</select>
+															</div>
+															<button type="submit" class="btn-nxt btn-search-checkout mb-00 membership-save" id="">Save </button>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-5 col-sm-12 col-xs-12">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Updated Sections </h4>
+													<p class="text-center">Review the changes below. Changes are listed in red</p>
+												</div>
+												<div class="">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Total Remaining</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number">
+																<span class="red-fonts">15/20</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Booking # </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>0000000000001 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Program Name: </label>
+															</div>
+														</div> 
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis Lessons</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Catagory: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Private Lessons 30 Min ( 1 Person)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Price Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>30 Minute Private</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Number of Sessions:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>10 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Drop In</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Participant Quantity:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Adult x 1</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Who's Participating:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Darryl Phipps (23)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Activity Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Service Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Personal Training</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Duration:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>12 Months</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Purchase Date:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Activation Date: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Expiration: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span class="red-fonts">3/13/2024</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<label>Tip Amount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Discount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Tax:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="tip-xp">
+																<label>Total Amount Paid </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number tip-xp">
+																<span>$95</span>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="void" role="tabpanel" aria-labelledby="void-refund">
+										<div class="row">
+											<div class="col-md-5 col-sm-12 col-xs-12">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Current Booking Details</h4>
+													<p class="text-center">Review the membership details before any changes</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Total Remaining</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number">
+																<span>5/10</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Booking # </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>0000000000001 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Program Name: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis Lessons</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Catagory: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Private Lessons 30 Min ( 1 Person)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Price Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>30 Minute Private</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Number of Sessions:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>10 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Drop In</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Participant Quantity:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Adult x 1</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Who's Participating:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Darryl Phipps (23)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Duration:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>12 Months</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Purchase Date:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Activation Date: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Expiration: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<label>Tip Amount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Discount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Tax:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="tip-xp">
+																<label>Total Amount Paid </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number tip-xp">
+																<span>$95</span>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-7 col-sm-12 col-xs-12 nopadding">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Edit Section </h4>
+													<p class="text-center">Use this section to edit the membership details you need below</p>
+												</div>
+												<div class="radio-text">
+													<form action="">
+													<input type="radio" id="void" name="fav_language" value="HTML">
+													  <label for="void">Void This Sale (Made a booking mistake? Training or testing a sale? You can void this membership.)</label>
+													</form>
+												</div>
+												<div class="void-box">
+													<div class="void-transaction">
+														<p>Voiding this transaction will delete this record from your system, You will not be able to undo this once you agree to void.</p>
+														<button type="submit" class="btn-nxt mt-00" id="">Yes, Void This Sale</button>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-5 col-sm-5 col-xs-5">
+														<div class="red-sparetor"></div>
+													</div>
+													<div class="col-md-2 col-sm-2 col-xs-2 text-center">
+														<label> OR </label>
+													</div>
+													<div class="col-md-5 col-sm-5 col-xs-5">
+														<div class="red-sparetor"></div>
+													</div>
+												</div>
+												
+												<div class="radio-text">
+													<form action="">
+													<input type="radio" id="void" name="fav_language" value="HTML">
+													  <label for="void">Issue a Refund</label>
+													</form>
+												</div>
+												<div class="refund-details"> 
+													<label>Total Amount Paid: </label>
+													<span> $ 95  (Original payment method: xxxx 3456) </span>
+												</div>
+												<div class="refund-details"> 
+													<label>Refund Issue Date: </label>
+													<div class="date-activity-check refund-date">
+														<input type="text"  id="refunddate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+													</div>
+												</div>
+												<div class="refund-details refund-amount"> 
+													<label>Refund Amount:  </label>
+													<input class="form-control" type="text" id="num" name="num" placeholder="20" value="20">
+													<h4>(Refund amount can’t be greater than the total amount paid)</h4>
+												</div>
+												<div class="refund-details refund-method"> 
+													<label>Refund Method: </label>
+													<select name="" id="" class="form-control">
+														<option value="">Issue refund to payment method xxx 3456   </option>
+														<option value=""></option>
+														<option value=""></option>
+													</select>
+												</div>
+												<div class="refund-details text-center">
+													<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+													<button type="submit" class="btn-nxt mb-00 mt-00" id="">Issue The Refund</button>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="suspend-terminate" role="tabpanel" aria-labelledby="suspend-terminate-tab">
+										<div class="row">
+											<div class="col-md-5">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Current Booking Details</h4>
+													<p class="text-center">Review the membership details before any changes</p>
+												</div>
+												<div class="side-border-right">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6 ">
+															<label>Total Remaining</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number">
+																<span>5/10</span>
+															</div>
+														</div>
+														 
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Booking # </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>0000000000001 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Program Name: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis Lessons</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Catagory: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Private Lessons 30 Min ( 1 Person)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Price Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>30 Minute Private</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Number of Sessions:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>10 </span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Option:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Drop In</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Participant Quantity:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Adult x 1</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Who's Participating:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Darryl Phipps (23)</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Activity Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Tennis</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Service Type:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>Personal Training</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Duration:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>12 Months</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Purchase Date:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Activation Date: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Membership Expiration: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>1/13/2023</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<label>Tip Amount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer tip-xp">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Discount: </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<label>Tax:</label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="sub-info-customer">
+																<span>$0</span>
+															</div>
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="tip-xp">
+																<label>Total Amount Paid </label>
+															</div>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="remaining-number tip-xp">
+																<span>$95</span>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+											<div class="col-md-7 nopadding">
+												<div class="title-sp-customer">
+													<h4 class="edit-booking-title">Edit Section </h4>
+													<p class="text-center">Use this section to edit the membership details you need below</p>
+												</div>
+												<div class="radio-text">
+													<form action="">
+													<input type="radio" id="void" name="fav_language" value="HTML">
+													  <label for="void">Suspend/Freeze (Seeting a membership or contract suspension will freeze this membership for a duration of time.)</label>
+													</form>
+												</div>
+												<div class="refund-details refund-method"> 
+													<label>Reason for Suspension: </label>
+													<select name="" id="" class="form-control">
+														<option value=""> Select or input an option</option>
+														<option value=""></option>
+														<option value=""></option>
+													</select>
+												</div>
+												<div class="refund-details refund-method"> 
+													<label>Suspension Start Date: </label>
+													<div class="date-activity-check start-date">
+														<input type="text"  id="suspensionstartdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+													</div>
+													<label>Suspension End Date: </label>
+													<div class="date-activity-check start-date">
+														<input type="text"  id="suspensionenddate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+													</div>
+												</div>
+												<div class="refund-details refund-amount"> 
+													<label>Suspension Fee: </label>
+													<input class="form-control" type="text" id="num" name="num" placeholder="$">
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12">
+														<div class="refundcomment">
+															<label>Leave a comment:</label>
+															<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12">
+														<button type="submit" class="btn-nxt suspend" id="">Suspend/Freeze</button>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-5 col-xs-5 col-sm-5">
+														<div class="red-sparetor"></div>
+													</div>
+													<div class="col-md-2 col-xs-2 col-sm-2 text-center">
+														<label> OR </label>
+													</div>
+													<div class="col-md-5 col-xs-5 col-sm-5">
+														<div class="red-sparetor"></div>
+													</div>
+												</div>
+												
+												<div class="radio-text">
+													<form action="">
+													<input type="radio" id="void" name="fav_language" value="HTML">
+													  <label for="void">Terminate/Cancel (Terminate/Cancel this membership)	  </label>
+													</form>
+												</div>
+												<div class="refund-details refund-method"> 
+													<label>Reason for Termination:  </label>
+													<select name="" id="" class="form-control">
+														<option value=""> Select or input an option</option>
+														<option value=""></option>
+														<option value=""></option>
+													</select>
+												</div>
+												<div class="refund-details refund-method"> 
+													<label>Termination  Date:</label>
+													<div class="date-activity-check start-date">
+														<input type="text"  id="terminationdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+													</div>
+												</div>
+												<div class="refund-details refund-amount"> 
+													<label>Termination Fee: </label>
+													<input class="form-control" type="text" id="num" name="num" placeholder="$">
+												</div>
+												<div class="row">
+													<div class="col-md-5 col-xs-12">
+														<div class="refundcomment">
+															<label>Leave a comment:</label>
+															<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+														</div>
+													</div>
+													<div class="col-md-7 col-xs-12">
+														<div class="refundcomment refund-note">
+															<p>By clicking terminate, you will be removing all remaining contract & membership agreements, payment agreements & scheduled recurring payments. </p>
+															<button type="submit" class="btn-nxt" id="">Terminate</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- end modal -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
@@ -1183,21 +2641,18 @@
             changeYear: true   
         } );
     } );
+	$( function() {
+        $( "#blockdatetime" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } );
 	
 </script>
 
 <script type="text/javascript">
-	$(document).on('click', '[data-behavior~=send_receipt]', function(e){
-		e.preventDefault()
-		console.log('send receipt');
-		$.ajax({
-			url: "{{route('sendemailofreceipt')}}/?order_id=" + $(this).data('id'),
-			success: function(){
-				alert('receipt sent');
-			}
-		})
-	})
-
     $(document).ready(function() {
     	$('.cards-block').click();
     });
