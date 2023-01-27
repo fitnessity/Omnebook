@@ -37,8 +37,6 @@ input:disabled{
     $activity = $service;
 	$sid = $serviceid = $service->id;
 
-
-	
 	$businessSp = BusinessService::where('cid', $service['cid'])->first();
 	if(!empty($businessSp)) {
         $languages = $businessSp['languages'];
@@ -128,7 +126,7 @@ input:disabled{
     	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 	
-$chk_found = '';
+	$chk_found = '';
 	if( strpos(@$bus_service->special_days_off,date('m/d/Y')) !== false){
        	$chk_found = "Found";
     }else{
@@ -1535,12 +1533,23 @@ $(document).ready(function () {
 			var aduprice = $('#adultprice').val();
 			var childprice = $('#childprice').val();
 			var infantprice = $('#infantprice').val();
-			var totalprice = 0;
-			var totalpriceadult = 0;
-			var totalpricechild = 0;
-			var totalpriceinfant = 0; 
+
+			var adultdis = $('#adultdis').val();
+			var childdis = $('#childdis').val();
+			var infantdis = $('#infantdis').val();
+
+			var totalprice = 0; var totalpricedisplay = 0;
+			var totalpriceadult = 0; var totalpricechild = 0; var totalpriceinfant = 0; 
+			var totalpriceadultdisplay = 0; var totalpricechilddisplay  = 0;  var totalpriceinfantdisplay = 0; 
+			var adustrike = ''; var childstrike = ''; var infantstrike = '';
 			if(typeof(aduprice) != "undefined" && aduprice != null){
-				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+				totalpriceadult = parseInt(aducnt) * parseFloat(aduprice);
+				totalpriceadultdisplay = parseInt(aducnt) * parseFloat(adultdis);
+				if(totalpriceadult != totalpriceadultdisplay){
+					adustrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpriceadult +'</span></strike>&nbsp; $'+ totalpriceadultdisplay +'</span>';
+				}else{
+					adustrike ='$'+totalpriceadult;
+				}
 				if(aducnt != 0){
 					$('#cartaduprice').val(aduprice);
 				}else{
@@ -1549,7 +1558,14 @@ $(document).ready(function () {
 			}
 
 			if(typeof(childprice) != "undefined" && childprice != null){
-				totalpricechild = parseInt(chilcnt)*parseInt(childprice);
+				totalpricechild = parseInt(chilcnt)*parseFloat(childprice);
+				totalpricechilddisplay = parseInt(chilcnt) * parseFloat(childdis);
+				if(totalpricechild != totalpricechilddisplay){
+					childstrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpricechild +'</span></strike>&nbsp; $'+ totalpricechilddisplay +'</span>';
+				}else{
+					childstrike ='$'+totalpricechild;
+				}
+
 				if(chilcnt != 0){
 					$('#cartchildprice').val(childprice);
 				}else{
@@ -1557,7 +1573,14 @@ $(document).ready(function () {
 				}
 			}
 			if(typeof(infantprice) != "undefined" && infantprice != null){
-				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
+				totalpriceinfantdisplay = parseInt(infcnt) * parseFloat(infantdis);
+				if(totalpriceinfant != totalpriceinfantdisplay){
+					infantstrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpriceinfant +'</span></strike>&nbsp; $'+ totalpriceinfantdisplay +'</span>';
+				}else{
+					infantstrike ='$'+ totalpriceinfant;
+				}
+
 				if(infcnt != 0){
 					$('#cartinfantprice').val(infantprice);
 				}else{
@@ -1568,21 +1591,24 @@ $(document).ready(function () {
 			var adult = '';
 			var child = '';
 			var infant = '';
+
 			if(aducnt != 0){
-				adult = '<span>Adults x '+aducnt+' = $'+totalpriceadult+'</span>';
+				adult = '<span>Adults x '+aducnt+' = '+ adustrike +'</span>';
 			}
 
 			if(chilcnt != 0){
-				child = '<span>Kids x  '+chilcnt+' = $'+totalpricechild+'</span>';
+				child = '<span>Kids x  '+chilcnt+' = '+ childstrike +'</span>';
 			}
 
 			if(infcnt != 0){
-				infant = '<span>Infants x  '+infcnt+' = $'+totalpriceinfant+'</span>';
+				infant = '<span>Infants x  '+infcnt+' = '+ infantstrike +'</span>';
 			}
 			
-			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
+			totalpricedisplay = parseFloat(totalpriceadultdisplay)+parseFloat(totalpricechilddisplay)+parseFloat(totalpriceinfantdisplay);
+
 			$('.personcategory').html(adult+child+infant);
-			$('#totalprice').html('$'+totalprice+' USD');
+			$('#totalprice').html('$'+totalpricedisplay+' USD');
 			$('#adupricequantity').val(aducnt);
 			$('#childpricequantity').val(chilcnt);
 			$('#infantpricequantity').val(infcnt);

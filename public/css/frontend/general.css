@@ -22564,11 +22564,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-radius: 4px;
 }
 .overlay-activity-label{
-/*	position: absolute;*/
+	position: absolute;
     background: #fff;
     padding: 10px;
     z-index: 1000;
-/*    left: 70%;*/
+    left: 70%;
     border-radius: 7px;
     font-size: 13px;
     width: 150px;
@@ -24106,4 +24106,86 @@ padding-left: 0px;
 }
 .event-info p{
 	font-size: 19px;
+}
+.program-selection select{
+	margin-bottom: 15px;
+}
+.program-selection input{
+	margin-bottom: 15px;
+}
+.duration-min input{
+	width: 40%;
+	display: inline-block;
+}
+.duration-min select{
+	width: 55%;
+	display: inline-block;
+}
+.onedaybboking{
+	margin-right: 6px;
+	font-weight: normal;
+}
+.side-border-right-red{
+	border-right: 1px solid #df0003;
+	padding-right: 11px;
+}
+.search-customer{
+	float: left;
+	margin-top: 0px;
+	text-align: left;
+	width: 100%;
+}
+.search-customer form {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+}
+.search-customer form input {
+	background: white;
+	border: medium none;
+	font-size: 13px;
+	padding: 6px 40px;
+	width: 100%;
+	color: #2e2e2e;
+	border-radius: 5px;
+	border: 1px solid #000;
+}
+.search-customer button {
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+	color: #000;
+	font-size: 15px;
+	position: absolute;
+	left: 6px;
+	top: 47%;
+	transform: translateY(-50%);
+	padding: 9px;
+	border: none;
+}
+.addclint-btn{
+	margin-top: 15px;
+	float: right;
+}
+.pay-btn{
+	margin-top: 15px;
+}
+.connect-calender input{
+	width: 49%;
+	display: inline-block;
+}
+.booking-border-sparetor{
+	border-bottom: 1px solid #000;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.select-date{
+	display: block ruby;
+}
+.block-datetime{
+	margin-bottom: 15px;
+}
+.block-radio input{
+	
+}
+.block-radio label{
+	
 }
