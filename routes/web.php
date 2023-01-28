@@ -927,9 +927,6 @@ Route::post('save_business_reviews','BusinessController@save_business_reviews')-
 
 Route::post('save_business_service_reviews','LessonController@save_business_service_reviews')->name('save_business_service_reviews');
 
-//Route::get('createstaff','UserProfileController@createStaff')->name('createstaff');
-Route::get('createStaff','UserProfileController@createmanageStaff')->name('createStaff');
-Route::get('staff-scheduled-activities','UserProfileController@staff_scheduled_activities')->name('staff-scheduled-activities');
 Route::get('manageproduct','UserProfileController@manageproduct')->name('manageproduct');
 Route::get('addproduct','UserProfileController@addproduct')->name('addproduct');
 Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity'); 
@@ -997,4 +994,13 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
     Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
 });
+
+
+Route::group(['middleware' => ['auth']], function()
+{
+    Route::get('createStaff','StaffController@createmanageStaff')->name('createStaff');
+    Route::get('staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
+});
+
+
 ?>
