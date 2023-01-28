@@ -5804,9 +5804,9 @@ ul.pagination > li > a:hover {
     text-decoration: underline !important;
 }
 
-ul.pagination > li > a {
+/* ul.pagination > li > a {
     color: #f53b49 !important;
-}
+} */
 
 /********************** event **********************/
 
@@ -24061,7 +24061,6 @@ padding-left: 0px;
 	margin-top: 10px;
 }
 .gift-comments.email input{
-	margin-top: 37px;
 	margin-bottom: 7px;
 }
 .addnewemail{
@@ -24253,4 +24252,52 @@ padding-left: 0px;
 	border: 1px solid #000;
 	padding: 15px;
 	text-align: center;
+}
+.public-bio label{
+	width: 100%;
+}
+.staff-sprator{
+	border: 1px solid #000;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+.table-header{
+	text-align: center;
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+#scheduled-activities_paginate{
+	float: right !important;
+}
+.staff-main a:hover{
+	color: #000;
+}
+.add-staff-btn{
+	float: right;
+	margin-top: 17px;
+}
+.close.close-btn-design-staff{
+	opacity: 1.2;
+	color: #fff;
+	position: absolute;
+	top: 18px;
+	right: 20px;
+}
+.staff-hed-info p{
+	display: inline;
+}
+.staff-hed-info a{
+	margin-left: 18px;
+	text-decoration: underline;
+}
+.position-add{
+	float: right;
+	text-decoration: underline;
+}
+.staff-hed-info.text-side{
+	float: right;
+}
+.multiple-email{
+	margin-top: 37px;
 }

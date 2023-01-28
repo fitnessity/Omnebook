@@ -14,11 +14,11 @@ use Request as resAll;
 
 class StaffController extends Controller {
 
-	public function createmanageStaff(Request $request){
+	public function createmanageStaff(Request $request , $business_id){
 		return view('staff.createstaff');
 	}
 
-	public function staff_scheduled_activities(){
+	public function staff_scheduled_activities(Request $request , $business_id){
 		return view('staff.staff-scheduled-activities');
 	}
 

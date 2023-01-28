@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.userHeader')
 
-<div class="p-0 col-md-12 inner_top">
+<div class="p-0 col-md-12 inner_top nopadding">
     <div class="row">
         <div class="col-md-2" style="background: black;">
         	 @include('business.businessSidebar')
@@ -32,16 +32,16 @@
 			
 			<div class="row">
 				<div class="col-md-12">
-					<div class="staff-hed-info">
+					<div class="staff-hed-info text-side">
 						<label>Legend: </label>
 						<p class="con-week">C= Continuous Weekly | S= One Special Event</p>
-						 <a href="#" class="share-staff">Share </a> <p> Schedule with instructor</p>
+						 <a href="#" class="share-staff">Share</a> <p> Schedule with instructor</p>
 					</div>
 				</div>
 			</div>
 				
 			<div class="table-staff table-sp">
-				<table id="example" class="table table-striped table-bordered" style="width:100%">
+				<table id="scheduled-activities" class="table table-striped table-bordered" style="width:100%">
 					<thead>
 						<tr>
 							<th> Activity </th>
@@ -98,21 +98,23 @@
 					</tbody>
 				</table>
 			</div>
-			<a href="#" class="button-fitness add-another-session-edudetails">Manage Staff</a>
+			<!--<a href="#" class="button-fitness add-another-session-edudetails">Manage Staff</a>-->
 		</div>
 		
 	</div>
 
 </div>
-@include('layouts.footer')
+
 <script>
 	$(document).ready(function() {
-		$('#example').DataTable();
+		$('#scheduled-activities').DataTable();
 	} );	
 	
-	$('#example').dataTable( {
+	$('#scheduled-activities').dataTable( {
 		"searching": false
 	} );
 </script>
+@include('layouts.footer')
+
 
 @endsection

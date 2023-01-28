@@ -141,11 +141,11 @@
 				<div class="modal-body">
 					<div class="row contentPop">
 						<div class="col-lg-12">
-						   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Add New Staff</h4>
+						   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600; margin-bottom: 15px;">Add New Staff</h4>
 						</div>
 						<div class="col-lg-3">
 							<div class="photo-select">
-								<img src="https://development.fitnessity.co/public/uploads/profile_pic/thumb/1657726206-badminton-1428046__480.jpg" class="pro_card_img blah" id="showimg">
+								<img src="{{asset('/public/images/service-nofound.jpg')}}" class="pro_card_img blah" id="showimg">
 								<input type="file" id="files" class="hidden"/>
 								<label for="files">Upload Image</label>
 							</div>
@@ -180,7 +180,7 @@
 								</div>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<div class="form-group">
-										<label for="position">Position</label>
+										<label for="position">Position</label> <a class="position-add">Add Position</a>
 										<div class="special-offer">
 											<div class="multiples">
 												<select id="providerservices" name="service_type[]" class="myfilter" multiple="multiple">
@@ -188,18 +188,21 @@
 													<option value="classes">select poisition</option>
 												</select>
 											</div>
+											
 										</div>
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<div class="form-group">
 										<label class="position-gander">How Do You Identify?</label>
-										<input type="radio" id="male" name="fav_language" value="male">
-										<label class="inner-fonts-staff" for="male">Male</label>
-										<input type="radio" id="female" name="fav_language" value="Female">
-										<label class="inner-fonts-staff" for="female">Female</label>
-										<input type="radio" id="other" name="fav_language" value="Other">
-										<label class="inner-fonts-staff" for="other">Other</label>
+										<div>
+											<input type="radio" id="male" name="fav_language" value="male">
+											<label class="inner-fonts-staff" for="male">Male</label>
+											<input type="radio" id="female" name="fav_language" value="Female">
+											<label class="inner-fonts-staff" for="female">Female</label>
+											<input type="radio" id="other" name="fav_language" value="Other">
+											<label class="inner-fonts-staff" for="other">Other</label>
+										</div>
 									</div>
 								</div>
 								
@@ -229,7 +232,7 @@
 									</div>
 								</div>
 								<div class="form-group col-md-5 col-sm-6 col-xs-12">
-									<label for="email">Completion Date (mm/dd/yyyy) <!-- <span id="star">*</span> --></label>
+									<label for="email">Birthday <!-- <span id="star">*</span> --></label>
 									<div class="special-date">
 										<input  type="text" class="form-control completionyear" id="completionyear" name="frm_passingdate[]" placeholder="Completion Date" autocomplete="off" value="">
 										<span class="error" id="b_certificateyear"></span>
@@ -240,13 +243,15 @@
 	
 						
 						<div class="col-md-12">
-							<div class="text-border">
+							<div class="text-border public-bio">
 								<label class="position-gander">Public Bio</label>
 								<textarea id="w3review" name="w3review" rows="4" cols="80">Tell us something about your staff member. Customers will learn more about who they are training with.
 								</textarea> 
 							</div>
-							<!--<div class="table-hed">Scheduled Activities</div>
-								<table id="example" class="table table-striped table-bordered" style="width:100%">
+							<button class="button-fitness add-another-session-edudetails add-staff-btn">Add</button>
+							<!--<div class="staff-sprator"></div>
+							<div class="table-header">Scheduled Activities</div>
+								<table id="scheduled-activities" class="table table-striped table-bordered" style="width:100%">
 									<thead>
 										<tr>
 											<th> Activity </th>
@@ -272,8 +277,9 @@
 										</tr>
 									</tbody>
 								</table>
+								
 							</div>-->
-							<a class="button-fitness add-another-session-edudetails">Add Staff</a>
+							
 						</div>
 					</div>
 				</div>
@@ -302,6 +308,15 @@
 	$('#example').dataTable( {
 		"searching": false
 		"paging": false
+	} );
+</script>
+<script>
+	$(document).ready(function() {
+		$('#scheduled-activities').DataTable();
+	} );	
+	
+	$('#scheduled-activities').dataTable( {
+		"searching": false
 	} );
 </script>
 <script>
