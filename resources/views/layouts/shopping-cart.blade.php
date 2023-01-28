@@ -319,34 +319,7 @@
 												</div>
 											</div>
 										</div>
-                                        <!-- <div class="info-display">
-                                            <label>Activity Location:</label>
-                                            <span>{{@$act['activity_location']}}</label>
-                                        </div>
-                                        
-                                        <div class="info-display">
-                                            <label>Great For: </label>
-                                            <span>{{@$act['activity_for']}}</label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Age: </label>
-                                            <span>{{@$act['age_range']}}</label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Language: </label>
-                                            <span></label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Skill Level: </label>
-                                            <span>{{@$act['difficult_level']}}</label>
-                                        </div>
-                                        
-                                        <div class="info-display">
-                                            <label>Business Type: </label>
-                                            <span><?php
-    											/*if($act['service_type']=='individual'){ echo 'Personal Training'; }
-    											else { echo ucfirst(@$act['service_type']); }*/ ?></label>
-                                        </div> -->
+
 										<div class="row">
 											<div class="col-md-6">
 												<div class="info-display">
@@ -361,13 +334,6 @@
 										</div>
 										</div>
 										<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
-										
-											<!--
-                                        <div class="info-display">
-                                            <label>Instructor: </label>
-                                            <span>Darryl Phipps</label>
-                                        </div>
-                                        <a href="#">View Your Itinerary</a>-->
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
@@ -435,20 +401,12 @@
                                     ?>
                                    <!--  <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a> -->
                                     <div class="select-sparetor">
-                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup()">
-                                        <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
+                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}')">
+                                        <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
                                         <p class="payfor-ptag">Share the booking details with them</p>
 										<div class="btn-ord-txt">
-											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
+											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift_{{$item['priceid']}}" style="display:none;" id="giftanotheralink{{$item['priceid']}}"></a>
 										</div>
-										<script type="text/javascript">
-											function opengiftpopup(){
-											var checkBox = document.getElementById("payforcheckbox{{$item['priceid']}}");
-												if (checkBox.checked == true){
-												    $('#giftanotheralink').click();
-												}
-											}
-										</script>
                                     </div>
                                 </div>
     						</div>
@@ -476,17 +434,6 @@
                         </div>
                     </div>
                     <script>
-    					function familypart11(val,cnt)
-    					{
-    						/*alert(val+'---'+cnt);
-    						console.log($(this).find(':selected').data('id'));
-    							console.log($(this).children("option:selected").val());
-    						
-    						var counter = cnt+1;
-    						var txt= 'participant#'+counter+':';
-    						$('#part'+cnt).text(txt);*/
-    					}
-    					
     					$('.familypart').change(function() {
     						var value = $(this).children("option:selected").val();
     						if(value == 'addparticipate'){
@@ -652,6 +599,80 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- The Modal Add Business-->
+					<div class="modal fade compare-model" id="leavegift_{{$item['priceid']}}">
+					    <div class="modal-dialog modal-lg giftsmodals">
+					        <div class="modal-content">
+								<div class="modal-header" style="text-align: right;"> 
+								  	<div class="closebtn">
+										<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+								</div>
+
+					            <!-- Modal body -->
+					            
+				            	<div class="modal-body">
+				            		<form action="{{route('addactivitygift',['priceid',$item['priceid'] ])}}" method="post" id="giftform{{$item['priceid']}}">
+										@csrf
+										<input type="hidden" name="priceid" id="priceid{{$item['priceid']}}" value="{{$item['priceid']}}">
+										<input type="hidden" name="sc_date" id="sc_date{{$item['priceid']}}" value="{{date('m/d/Y',strtotime($item['sesdate']))}}">
+										<div class="row contentPop"> 
+											<div class="col-lg-12 nopadding">
+											   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
+											   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
+											</div>
+											<div class="row">
+												<div class="col-lg-2">
+													<div class="activity-title-img">
+														<img src="{{ $profilePic }}" alt="Avatar" class="avatar">
+													</div>
+												</div>
+												<div class="col-lg-10">
+													<div class="activity-details">
+														<h3>{{$item["name"]}}</h3>
+														<p>We will include all of the booking details in the email your guest will receive</p>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="gift-comments">
+														<label>Leave a comment for them</label>
+														<textarea class="form-control" rows="4"  name="comment" id="comment" maxlength="150"></textarea>
+														<label>From:</label>
+														<input type="name" class="form-control myemail" name="gift_from"  id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="">
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="gift-comments email multiple-email" id="emaildiv{{$item['priceid']}}">
+														<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
+													</div>
+													<a href="#" class="addnewemail" onclick="addemail('{{$item["priceid"]}}');">+Add another email</a>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="booking-checkbox">
+														  <input type="checkbox" id="price_show" name="price_show" value="1">
+														  <label for="price_show">Don’t Show The Price</label>
+														  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
+													</div>
+												</div>
+												<div class="col-lg-12 text-right">
+													<button class="post-btn-red" type="button" id="submit{{$item['priceid']}}" onclick="submitform('{{$item["priceid"]}}');">Save</button>
+												</div>
+											</div>
+										</div>
+					            	</form>
+				            	</div>					        
+				           	</div>
+				    	</div>
+					</div>
+					<!-- end modal -->
 
     			<?php } ?>
         			<div class="btn-ord-txt">
@@ -876,84 +897,6 @@
             </div>
         </div>
     <?php } ?>
-    <?php /*?><a id="btnEmpty" href="/emptycart">Empty Cart</a><?php */?>
-    <?php
-    /* ?>$total_quantity = 0;
-    $total_price = 0;
-    if (isset($cart['cart_item'])) {
-        ?>	
-        <form action="{{route('create-checkout-session')}}" method="POST">
-            @csrf
-            <table class="tbl-cart" cellpadding="10" cellspacing="1">
-                <tbody>
-                    <tr>
-                        <th style="text-align:left;">Name</th>
-                        <th style="text-align:left;">Type</th>
-                        <th style="text-align:right;" width="5%">Quantity</th>
-                        <th style="text-align:right;" width="10%">Unit Price</th>
-                        <th style="text-align:right;" width="10%">Price</th>
-                        <th style="text-align:center;" width="5%">Remove</th>
-                    </tr>	
-                    <?php
-                    foreach ($cart['cart_item'] as $item) {
-                        $item_price = $item["price"];
-						if ($item['image']!="") {
-							if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
-								$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
-							} else {
-								$profilePic = '/public/images/service-nofound.jpg';
-							}
-						}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-                        ?>
-                    <input type="hidden" name="itemid[]" value="<?= $item["code"] ?>" />
-                    <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
-                    <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
-                    <input type="hidden" name="itemqty[]" value="<?= $item["quantity"]; ?>" />
-                    <input type="hidden" name="itemprice[]" value="<?= $item_price * 100; ?>" />
-                   <?php /*?><input type="hidden" name="itemprice[]" value="<?= number_format(floatval($item_price), 2) * 100; ?>" /> <?php */?><?php /*?>
-                    <input type="hidden" name="itemtype[]" value="<?= $item["type"]; ?>" />
-                    
-                    <?php $itype='';
-						if($item["type"]=='individual'){ $itype='Personal Trainer'; }
-						else{ $itype=$item["type"]; }
-					?>
-                    
-                    <tr>
-                        <td><img src="<?= $profilePic ?>" class="cart-item-image" /><?= $item["name"]; ?></td>
-                        <td><?= $itype; ?></td>
-                        <td style="text-align:right;"><?= $item["quantity"]; ?></td>
-                        <td  style="text-align:right;"><?= "$ " . $item["price"]/$item["quantity"]; ?></td>
-                        <td  style="text-align:right;"><?= "$ " . number_format($item["price"], 2); ?></td>
-                        <td style="text-align:center;"><a href="/removetocart?code=<?= $item["code"]; ?>" class="btnRemoveAction"><i class="fa fa-trash" title="Remove Item"></i></a></td>
-                    </tr>
-                    <?php
-                    $total_quantity += (int) $item["quantity"];
-					$total_price += $item["price"];
-                    //$total_price += ((int) $item["quantity"] * (float) $item["price"]);
-                }
-                ?>
-                <tr>
-                    <td colspan="2" align="right">Total:</td>
-                    <td align="right"><?php echo $total_quantity; ?></td>
-                    <td align="right" colspan="2"><strong><?php echo "$ " . number_format($total_price, 2); ?></strong></td>
-                    <td></td>
-                </tr>
-                <tr><td colspan="6">&nbsp;</td></tr>
-                <tr>
-                    <td colspan="6" align="center">
-                        <a class="btn-style-one" style="float: left;" href="/instant-hire"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
-                        <button type="submit" class="btn-style-one" id="checkout-button" style="float:right;">Checkout</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <?php } else {
-        ?>
-        <div class="no-records">Your Cart is Empty</div>
-        <?php
-    }<?php */
-    ?>
 </div>
 <style>
     #shopping-cart {margin: 40px;}
@@ -993,75 +936,7 @@
     }
 </style>
 
-<!-- The Modal Add Business-->
-<div class="modal fade compare-model" id="leavegift">
-    <div class="modal-dialog modal-lg giftsmodals">
-        <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
-			  	<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-			</div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-				<div class="row contentPop"> 
-					<div class="col-lg-12 nopadding">
-					   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
-					   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
-					</div>
-					<div class="row">
-						<div class="col-lg-2">
-							<div class="activity-title-img">
-								<img src="{{ asset('/public/uploads/profile_pic/1667542553-Aerial-View.jpg')}}" alt="Avatar" class="avatar">
-							</div>
-						</div>
-						<div class="col-lg-10">
-							<div class="activity-details">
-								<h3>Valor MMA Personal Training Sessions</h3>
-								<p>We will include all of the booking details in the email your guest will receive</p>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="gift-comments">
-								<label>Leave a comment for them</label>
-								<textarea class="form-control" rows="4"  name="Aboutcompany" id="" maxlength="150"></textarea>
-								<label>From:</label>
-								<input type="name" class="form-control myemail" name="name" autocomplete="off" placeholder="Darryl Phipps" size="30" maxlength="80" value="">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="gift-comments email">
-								<input type="email" class="form-control myemail" name="Emailb" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
-							</div>
-							<a href="#" class="addnewemail">+Add another email</a>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="booking-checkbox">
-								<form action="">
-								  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-								  <label for="vehicle1">Don’t Show The Price</label>
-								  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
-								</form>
-							</div>
-						</div>
-						<div class="col-lg-12 text-right">
-							<button class="post-btn-red" type="submit" id="" disabled="">Save</button>
-						</div>
-					</div>
-					
-				 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end modal -->
 
 <!-- The Add New Participant Modal -->
 	<div class="modal fade compare-model" id="newparticipant">
@@ -1142,6 +1017,20 @@
 
 
 <script>
+	function opengiftpopup(pid){
+		/*alert('hii');*/
+		var checkBox = document.getElementById("payforcheckbox"+pid);
+		//alert(checkBox.checked );
+		if (checkBox.checked == true){
+		    $('#giftanotheralink'+pid).click();
+		}
+	}
+
+	function addemail(pid) {
+
+		$('#emaildiv'+pid).append('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
+	}
+ 
 	$(".show-more").click(function(event) {
 		var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
 		$(".hide-part").toggleClass("show-part");
@@ -1156,6 +1045,7 @@
             $(this).val($(this).val() + "/");
         }
     });
+
     $('#submitfamily').click(function(e) {
     	$("#termserror").html('').removeClass('alert-class alert-danger');
     	let date = $('#birthdate').val();
@@ -1179,10 +1069,7 @@
 	    return false;
 	}
 
-
 	function changeformate(idname) {
-        /*$('#b_contact').val();*/
-        //alert(idname);
         var con = $('#'+idname).val();
         var curchr = con.length;
         if (curchr == 3) {

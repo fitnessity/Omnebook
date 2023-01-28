@@ -38,6 +38,9 @@ Route::group(['middleware' => ['auth']], function(){
 
         // Booking Checkin Details
         Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+
+        Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
+        Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
     });
 });
 
@@ -758,6 +761,7 @@ Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@g
 /*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
 Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
+Route::post('/addactivitygift/{priceid?}', 'CartController@addactivitygift')->name('addactivitygift');
 
 
 
@@ -993,13 +997,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
     Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
-});
-
-
-Route::group(['middleware' => ['auth']], function()
-{
-    Route::get('createStaff','StaffController@createmanageStaff')->name('createStaff');
-    Route::get('staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
 });
 
 
