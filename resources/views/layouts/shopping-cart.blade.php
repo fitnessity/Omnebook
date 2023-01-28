@@ -410,6 +410,7 @@
                                                         data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
                                                         <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
+                                                <option value="addparticipate">+ Add New Participant</option>
                                             </select> 
                                         <?php } ?>
 
@@ -432,7 +433,7 @@
                                     </div>
                                     <?php } 
                                     ?>
-                                    <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a>
+                                   <!--  <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a> -->
                                     <div class="select-sparetor">
                                         <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup()">
                                         <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
@@ -487,38 +488,43 @@
     					}
     					
     					$('.familypart').change(function() {
-    						var name = $(this).find(':selected').data('name');
-    						var cnt = $(this).find(':selected').data('cnt');
-    						var act = $(this).find(':selected').data('act');
-                            var type = $(this).find(':selected').data('type');
-    						/*var age = $(this).find(':selected').data('age');*/
     						var value = $(this).children("option:selected").val();
-    						var counter = cnt+1;
-    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
-                            
-                            if(name == undefined){
-                                name = '{{$ajaxname}}';
-                            }
-                            
-                            
-                            var txt= 'participant#'+counter+': '+name;
-    						$('#part'+cnt+act).text(txt);
-                           
-                            var _token = $('meta[name="csrf-token"]'). attr('content');
-                            $.ajax({
-                                type: 'POST',
-                                url: '{{route("form_participate")}}',
-                                data: {
-                                    _token: _token,
-                                    act: act,
-                                    familyid: value,
-                                    counter: cnt,
-                                    type: type,
-                                },
-                                success: function (data) {
-                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
-                                }
-                            });
+    						if(value == 'addparticipate'){
+    							$('#newparticipant').modal('show');
+    						}else{
+	    						var name = $(this).find(':selected').data('name');
+	    						var cnt = $(this).find(':selected').data('cnt');
+	    						var act = $(this).find(':selected').data('act');
+	                            var type = $(this).find(':selected').data('type');
+	    						/*var age = $(this).find(':selected').data('age');*/
+	    						
+	    						var counter = cnt+1;
+	    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+	                            
+	                            if(name == undefined){
+	                                name = '{{$ajaxname}}';
+	                            }
+	                            
+	                            
+	                            var txt= 'participant#'+counter+': '+name;
+	    						$('#part'+cnt+act).text(txt);
+	                           
+	                            var _token = $('meta[name="csrf-token"]'). attr('content');
+	                            $.ajax({
+	                                type: 'POST',
+	                                url: '{{route("form_participate")}}',
+	                                data: {
+	                                    _token: _token,
+	                                    act: act,
+	                                    familyid: value,
+	                                    counter: cnt,
+	                                    type: type,
+	                                },
+	                                success: function (data) {
+	                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
+	                                }
+	                            });
+	                        }
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
@@ -1095,7 +1101,7 @@
 									</select>
 									
 									<label>Email</label>
-									<input type="text" name="email" id="email" class="form-control" required>
+									<input type="text" name="email" id="email" class="form-control" >
 									
 									<label>Select Relationship</label>
 									<select name="relationship" id="relationship" class="form-control" required>
@@ -1114,7 +1120,7 @@
 									<input required="required" type="text" name="birthdate" id="birthdate" class="form-control" maxlength= "10" value="" placeholder="Date Formate: dd/mm/yyyy">
 									
 									<label>Mobile Number</label>
-									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')" required>
+									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')">
 									
 									<label>Emergency Contact Name</label>
 									<input type="text" name="emergency_name" id="emergency_name" class="form-control">
