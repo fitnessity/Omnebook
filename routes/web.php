@@ -20,6 +20,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
+    // Scheduler Checkin Details
+    Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -37,7 +39,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::delete('/booking_postorders/{booking_postorder_id}','BookingPostorderController@delete')->name('business_booking_postorders_delete');
 
         // Booking Checkin Details
-        Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+    Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
     });
 });
 
@@ -983,8 +985,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
-    Route::post('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
-    Route::post('check_in_activity', 'SchedulerController@check_in_activity')->name('check_in_activity');
+    Route::get('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
     Route::post('updateorderdetails', 'SchedulerController@updateorderdetails')->name('updateorderdetails');
     Route::get('sendreceiptfromcheckout', 'SchedulerController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout');

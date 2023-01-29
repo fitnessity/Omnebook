@@ -107,7 +107,7 @@
     											</div>
     										</div>
                         <div class="col-md-1 col-xs-12 col-sm-4">    
-                        	<a href="{{route('booking_checkin_details_index',['business_activity_scheduler_id'=>$business_scheduler->id])}}" class="scheduler-qty">
+                        	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
                         		<label class="scheduler-titles">QTY: </label> 
                         		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
                         	</a>
@@ -164,7 +164,7 @@
 												</div>
 											</div>
 	                    <div class="col-md-1 col-xs-12 col-sm-4">    
-	                    	<a href="{{route('booking_checkin_details_index',['business_activity_scheduler_id'=>$business_scheduler->id])}}" class="scheduler-qty">
+	                    	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
 	                    		<label class="scheduler-titles">QTY: </label> 
 	                    		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
 	                    	</a>
