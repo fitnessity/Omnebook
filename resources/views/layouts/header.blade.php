@@ -548,16 +548,18 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
                                                     </li>
 													<li class="pc-link">
+                                                    	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
+                                                    </li>
+
+                                                    <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info" style="color: white;">Booking Info</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
                                                     </li> -->
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-comments"></i></span>
-                                                        <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
-                                                    </li>
+													
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Business Center </span></li>
 													<li class="pc-link">
@@ -569,6 +571,10 @@ $total_quantity = 0;
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
+													<li class="pc-link">
+                                                    	<span class="pc-micon"><i class="fas fa-comments"></i></span>
+                                                        <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
+                                                    </li>	
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-question-circle"></i></span>
                                                         <a href="{{route('help')}}" style="color: white;">Help Desk</a>

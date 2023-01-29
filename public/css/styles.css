@@ -591,13 +591,14 @@ a.tooltip-custom:hover {
 }
 
 .button-fitness {
-    padding: 6px 13px;
+    padding: 6px 20px;
     background: red;
     color: #fff;
     font-size: 14px;
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
+	border: none;
 }
 
 .button-fitness:hover {

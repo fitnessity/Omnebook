@@ -319,34 +319,7 @@
 												</div>
 											</div>
 										</div>
-                                        <!-- <div class="info-display">
-                                            <label>Activity Location:</label>
-                                            <span>{{@$act['activity_location']}}</label>
-                                        </div>
-                                        
-                                        <div class="info-display">
-                                            <label>Great For: </label>
-                                            <span>{{@$act['activity_for']}}</label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Age: </label>
-                                            <span>{{@$act['age_range']}}</label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Language: </label>
-                                            <span></label>
-                                        </div>
-                                        <div class="info-display">
-                                            <label>Skill Level: </label>
-                                            <span>{{@$act['difficult_level']}}</label>
-                                        </div>
-                                        
-                                        <div class="info-display">
-                                            <label>Business Type: </label>
-                                            <span><?php
-    											/*if($act['service_type']=='individual'){ echo 'Personal Training'; }
-    											else { echo ucfirst(@$act['service_type']); }*/ ?></label>
-                                        </div> -->
+
 										<div class="row">
 											<div class="col-md-6">
 												<div class="info-display">
@@ -360,14 +333,7 @@
 											</div>
 										</div>
 										</div>
-										<div class="show-more-cart"><a class="show-more">Show More</a></div>
-										
-											<!--
-                                        <div class="info-display">
-                                            <label>Instructor: </label>
-                                            <span>Darryl Phipps</label>
-                                        </div>
-                                        <a href="#">View Your Itinerary</a>-->
+										<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
@@ -410,6 +376,7 @@
                                                         data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
                                                         <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
                                                 <?php } ?>
+                                                <option value="addparticipate">+ Add New Participant</option>
                                             </select> 
                                         <?php } ?>
 
@@ -424,7 +391,7 @@
     										{ 
                                                 $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
                                         		<p id='part<?php echo $i.$item["code"]; ?>'>
-                                                    participant#{{$i+1}}:  @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
+                                                    <b>Participant#{{$i+1}}: </b> @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
                                                 </p>
                                         <?php 
                                             } 
@@ -432,28 +399,21 @@
                                     </div>
                                     <?php } 
                                     ?>
+                                   <!--  <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a> -->
                                     <div class="select-sparetor">
-                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup()">
-                                        <label class="payfor-label" for="payforcheckbox">Paying or gifting for someone?</label>
+                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}')">
+                                        <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
                                         <p class="payfor-ptag">Share the booking details with them</p>
 										<div class="btn-ord-txt">
-											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
+											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift_{{$item['priceid']}}" style="display:none;" id="giftanotheralink{{$item['priceid']}}"></a>
 										</div>
-										<script type="text/javascript">
-											function opengiftpopup(){
-											var checkBox = document.getElementById("payforcheckbox{{$item['priceid']}}");
-												if (checkBox.checked == true){
-												    $('#giftanotheralink').click();
-												}
-											}
-										</script>
                                     </div>
                                 </div>
     						</div>
     						<div class="row">
                                 <div class="col-md-12 divmargin cart-terms-dis">
                                     @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
-                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails"> View the terms and conditions from this provider below </span>
+                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails terms-txt"> View the terms and conditions from this provider below </span>
                                         <div>
                                             @if($termcondfaqtext != '')
                                                 <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
@@ -474,50 +434,44 @@
                         </div>
                     </div>
                     <script>
-    					function familypart11(val,cnt)
-    					{
-    						/*alert(val+'---'+cnt);
-    						console.log($(this).find(':selected').data('id'));
-    							console.log($(this).children("option:selected").val());
-    						
-    						var counter = cnt+1;
-    						var txt= 'participant#'+counter+':';
-    						$('#part'+cnt).text(txt);*/
-    					}
-    					
     					$('.familypart').change(function() {
-    						var name = $(this).find(':selected').data('name');
-    						var cnt = $(this).find(':selected').data('cnt');
-    						var act = $(this).find(':selected').data('act');
-                            var type = $(this).find(':selected').data('type');
-    						/*var age = $(this).find(':selected').data('age');*/
     						var value = $(this).children("option:selected").val();
-    						var counter = cnt+1;
-    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
-                            
-                            if(name == undefined){
-                                name = '{{$ajaxname}}';
-                            }
-                            
-                            
-                            var txt= 'participant#'+counter+': '+name;
-    						$('#part'+cnt+act).text(txt);
-                           
-                            var _token = $('meta[name="csrf-token"]'). attr('content');
-                            $.ajax({
-                                type: 'POST',
-                                url: '{{route("form_participate")}}',
-                                data: {
-                                    _token: _token,
-                                    act: act,
-                                    familyid: value,
-                                    counter: cnt,
-                                    type: type,
-                                },
-                                success: function (data) {
-                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
-                                }
-                            });
+    						if(value == 'addparticipate'){
+    							$('#newparticipant').modal('show');
+    						}else{
+	    						var name = $(this).find(':selected').data('name');
+	    						var cnt = $(this).find(':selected').data('cnt');
+	    						var act = $(this).find(':selected').data('act');
+	                            var type = $(this).find(':selected').data('type');
+	    						/*var age = $(this).find(':selected').data('age');*/
+	    						
+	    						var counter = cnt+1;
+	    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+	                            
+	                            if(name == undefined){
+	                                name = '{{$ajaxname}}';
+	                            }
+	                            
+	                            
+	                            var txt= 'participant#'+counter+': '+name;
+	    						$('#part'+cnt+act).text(txt);
+	                           
+	                            var _token = $('meta[name="csrf-token"]'). attr('content');
+	                            $.ajax({
+	                                type: 'POST',
+	                                url: '{{route("form_participate")}}',
+	                                data: {
+	                                    _token: _token,
+	                                    act: act,
+	                                    familyid: value,
+	                                    counter: cnt,
+	                                    type: type,
+	                                },
+	                                success: function (data) {
+	                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
+	                                }
+	                            });
+	                        }
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
@@ -646,6 +600,80 @@
                         </div>
                     </div>
 
+                    <!-- The Modal Add Business-->
+					<div class="modal fade compare-model" id="leavegift_{{$item['priceid']}}">
+					    <div class="modal-dialog modal-lg giftsmodals">
+					        <div class="modal-content">
+								<div class="modal-header" style="text-align: right;"> 
+								  	<div class="closebtn">
+										<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+								</div>
+
+					            <!-- Modal body -->
+					            
+				            	<div class="modal-body">
+				            		<form action="{{route('addactivitygift',['priceid',$item['priceid'] ])}}" method="post" id="giftform{{$item['priceid']}}">
+										@csrf
+										<input type="hidden" name="priceid" id="priceid{{$item['priceid']}}" value="{{$item['priceid']}}">
+										<input type="hidden" name="sc_date" id="sc_date{{$item['priceid']}}" value="{{date('m/d/Y',strtotime($item['sesdate']))}}">
+										<div class="row contentPop"> 
+											<div class="col-lg-12 nopadding">
+											   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
+											   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
+											</div>
+											<div class="row">
+												<div class="col-lg-2">
+													<div class="activity-title-img">
+														<img src="{{ $profilePic }}" alt="Avatar" class="avatar">
+													</div>
+												</div>
+												<div class="col-lg-10">
+													<div class="activity-details">
+														<h3>{{$item["name"]}}</h3>
+														<p>We will include all of the booking details in the email your guest will receive</p>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="gift-comments">
+														<label>Leave a comment for them</label>
+														<textarea class="form-control" rows="4"  name="comment" id="comment" maxlength="150"></textarea>
+														<label>From:</label>
+														<input type="name" class="form-control myemail" name="gift_from"  id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="">
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="gift-comments email multiple-email" id="emaildiv{{$item['priceid']}}">
+														<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
+													</div>
+													<a href="#" class="addnewemail" onclick="addemail('{{$item["priceid"]}}');">+Add another email</a>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="booking-checkbox">
+														  <input type="checkbox" id="price_show" name="price_show" value="1">
+														  <label for="price_show">Don’t Show The Price</label>
+														  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
+													</div>
+												</div>
+												<div class="col-lg-12 text-right">
+													<button class="post-btn-red" type="button" id="submit{{$item['priceid']}}" onclick="submitform('{{$item["priceid"]}}');">Save</button>
+												</div>
+											</div>
+										</div>
+					            	</form>
+				            	</div>					        
+				           	</div>
+				    	</div>
+					</div>
+					<!-- end modal -->
+
     			<?php } ?>
         			<div class="btn-ord-txt">
                     	<a href="/activities" class="post-btn-red">Book Another Activity</a>
@@ -669,7 +697,7 @@
     								<!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
     								<label>Taxes & Fees: </label>
                                     <label>Discount: </label>
-    								<label>Shpping:</label>
+    								<!-- <label>Shpping:</label> -->
     							</div>
     						</div>
     						<div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -679,7 +707,7 @@
     								<!-- <span> <?php /*echo "$ " .number_format($service_fee,2);*/ ?> </span> -->
     								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
     								<span> {{number_format($discount,2)}} </span>
-                                    <span> $0 </span>
+                                    <!-- <span> $0 </span> -->
     							</div>
     						</div>
     					</div>
@@ -825,7 +853,7 @@
                                     <!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
                                     <label>Taxes & Fees:</label>
                                     <label>Discount: </label>
-                                    <label>Shpping:</label>
+                                   <!--  <label>Shpping:</label> -->
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -835,7 +863,7 @@
                                    <!--  <span> $ 0.00 </span> -->
                                     <span> $ 0.00 </span>
                                     <span> $ 0.00 </span>
-                                    <span> $0 </span>
+                                   <!--  <span> $0 </span> -->
                                 </div>
                             </div>
                         </div>
@@ -869,85 +897,6 @@
             </div>
         </div>
     <?php } ?>
-    <?php /*?><a id="btnEmpty" href="/emptycart">Empty Cart</a><?php */?>
-    <?php
-    /*?>$total_quantity = 0;
-    $total_price = 0;
-    if (isset($cart['cart_item'])) {
-        ?>	
-        <form action="{{route('create-checkout-session')}}" method="POST">
-            @csrf
-            <table class="tbl-cart" cellpadding="10" cellspacing="1">
-                <tbody>
-                    <tr>
-                        <th style="text-align:left;">Name</th>
-                        <th style="text-align:left;">Type</th>
-                        <th style="text-align:right;" width="5%">Quantity</th>
-                        <th style="text-align:right;" width="10%">Unit Price</th>
-                        <th style="text-align:right;" width="10%">Price</th>
-                        <th style="text-align:center;" width="5%">Remove</th>
-                    </tr>	
-                    <?php
-                    foreach ($cart['cart_item'] as $item) {
-                        $item_price = $item["price"];
-						if ($item['image']!="") {
-							if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
-								$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
-							} else {
-								$profilePic = '/public/images/service-nofound.jpg';
-							}
-						}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-                        ?>
-                    <input type="hidden" name="itemid[]" value="<?= $item["code"] ?>" />
-                    <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
-                    <input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
-                    <input type="hidden" name="itemqty[]" value="<?= $item["quantity"]; ?>" />
-                    <input type="hidden" name="itemprice[]" value="<?= $item_price * 100; ?>" />
-                   <?php /*?><input type="hidden" name="itemprice[]" value="<?= number_format(floatval($item_price), 2) * 100; ?>" /> <?php */?><?php /*?>
-                    <input type="hidden" name="itemtype[]" value="<?= $item["type"]; ?>" />
-                    
-                    <?php $itype='';
-						if($item["type"]=='individual'){ $itype='Personal Trainer'; }
-						else{ $itype=$item["type"]; }
-					?>
-                    
-                    <tr>
-                        <td><img src="<?= $profilePic ?>" class="cart-item-image" /><?= $item["name"]; ?></td>
-                        <td><?= $itype; ?></td>
-                        <td style="text-align:right;"><?= $item["quantity"]; ?></td>
-                        <td  style="text-align:right;"><?= "$ " . $item["price"]/$item["quantity"]; ?></td>
-                        <td  style="text-align:right;"><?= "$ " . number_format($item["price"], 2); ?></td>
-                        <td style="text-align:center;"><a href="/removetocart?code=<?= $item["code"]; ?>" class="btnRemoveAction"><i class="fa fa-trash" title="Remove Item"></i></a></td>
-                    </tr>
-                    <?php
-                    $total_quantity += (int) $item["quantity"];
-					$total_price += $item["price"];
-                    //$total_price += ((int) $item["quantity"] * (float) $item["price"]);
-                }
-                ?>
-                <tr>
-                    <td colspan="2" align="right">Total:</td>
-                    <td align="right"><?php echo $total_quantity; ?></td>
-                    <td align="right" colspan="2"><strong><?php echo "$ " . number_format($total_price, 2); ?></strong></td>
-                    <td></td>
-                </tr>
-                <tr><td colspan="6">&nbsp;</td></tr>
-                <tr>
-                    <td colspan="6" align="center">
-                        <a class="btn-style-one" style="float: left;" href="/instant-hire"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
-                        <button type="submit" class="btn-style-one" id="checkout-button" style="float:right;">Checkout</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <?php
-    } else {
-        ?>
-        <div class="no-records">Your Cart is Empty</div>
-        <?php
-    }<?php */
-    ?>
 </div>
 <style>
     #shopping-cart {margin: 40px;}
@@ -987,82 +936,149 @@
     }
 </style>
 
-<!-- The Modal Add Business-->
-<div class="modal fade compare-model" id="leavegift">
-    <div class="modal-dialog modal-lg giftsmodals">
-        <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
-			  	<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-			</div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-				<div class="row contentPop"> 
-					<div class="col-lg-12 nopadding">
-					   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
-					   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
+
+<!-- The Add New Participant Modal -->
+	<div class="modal fade compare-model" id="newparticipant">
+		<div class="modal-dialog eventcalender">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
 					</div>
-					<div class="row">
-						<div class="col-lg-2">
-							<div class="activity-title-img">
-								<img src="http://dev.fitnessity.co/public/uploads/profile_pic/1667542553-Aerial-View.jpg" alt="Avatar" class="avatar">
-							</div>
-						</div>
-						<div class="col-lg-10">
-							<div class="activity-details">
-								<h3>Valor MMA Personal Training Sessions</h3>
-								<p>We will include all of the booking details in the email your guest will receive</p>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="gift-comments">
-								<label>Leave a comment for them</label>
-								<textarea class="form-control" rows="4"  name="Aboutcompany" id="" maxlength="150"></textarea>
-								<label>From:</label>
-								<input type="name" class="form-control myemail" name="name" autocomplete="off" placeholder="Darryl Phipps" size="30" maxlength="80" value="">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="gift-comments email">
-								<input type="email" class="form-control myemail" name="Emailb" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
-							</div>
-							<a href="#" class="addnewemail">+Add another email</a>
-						</div>
-					</div>
-					<div class="row">
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
 						<div class="col-lg-12">
-							<div class="booking-checkbox">
-								<form action="">
-								  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-								  <label for="vehicle1">Don’t Show The Price</label>
-								  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
-								</form>
-							</div>
-						</div>
-						<div class="col-lg-12 text-right">
-							<button class="post-btn-red" type="submit" id="" disabled="">Save</button>
+							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Family or Friends</h4>
 						</div>
 					</div>
-					
-				 </div>
-            </div>
-        </div>
-    </div>
-</div>
+					<div id='termserror'></div>
+					<div class="row"> 
+						<form action="{{route('addfamilyfromcart')}}" method="POST">
+							@csrf
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>First Name</label>
+									<input type="text" name="fname" id="fname" class="form-control" required>
+									
+									<label>Last Name</label>
+									<input type="text" name="lname" id="lname" class="form-control" required>
+									
+									<label>Select Gender</label>
+									<select name="gender" id="gender" class="form-control" required>
+										<option value="" hidden="">Select Gender</option>
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+									</select>
+									
+									<label>Email</label>
+									<input type="text" name="email" id="email" class="form-control" >
+									
+									<label>Select Relationship</label>
+									<select name="relationship" id="relationship" class="form-control" required>
+										<option value="" hidden="">Select Relationship</option>
+										<option>Brother</option><option>Sister</option>
+										<option>Father</option><option>Mother</option>
+										<option>Wife</option><option>Husband</option>
+										<option>Son</option><option>Daughter</option>
+										<option>Friend</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>Birthday</label>
+									<input required="required" type="text" name="birthdate" id="birthdate" class="form-control" maxlength= "10" value="" placeholder="Date Formate: dd/mm/yyyy">
+									
+									<label>Mobile Number</label>
+									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')">
+									
+									<label>Emergency Contact Name</label>
+									<input type="text" name="emergency_name" id="emergency_name" class="form-control">
+									
+									<label>Emergency Contact Number</label>
+									<input type="text" name="emergency_contact" id="emergency_contact" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('emergency_contact')">
+									
+									<button type="submit" class="btn-nxt-part add-btn-submit" id="submitfamily">Submit</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
 <!-- end modal -->
+
+
 <script>
+	function opengiftpopup(pid){
+		/*alert('hii');*/
+		var checkBox = document.getElementById("payforcheckbox"+pid);
+		//alert(checkBox.checked );
+		if (checkBox.checked == true){
+		    $('#giftanotheralink'+pid).click();
+		}
+	}
+
+	function addemail(pid) {
+
+		$('#emaildiv'+pid).append('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
+	}
+ 
 	$(".show-more").click(function(event) {
-	var txt = $(".hide-part").is(':visible') ? 'Show More' : 'Show Less';
-	$(".hide-part").toggleClass("show-part");
-	$(this).html(txt);
-	event.preventDefault();
-});
+		var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
+		$(".hide-part").toggleClass("show-part");
+		$(this).html(txt);
+		event.preventDefault();
+	});
+
+	$("#birthdate").keyup(function(){
+        if ($(this).val().length == 2){
+            $(this).val($(this).val() + "/");
+        }else if ($(this).val().length == 5){
+            $(this).val($(this).val() + "/");
+        }
+    });
+
+    $('#submitfamily').click(function(e) {
+    	$("#termserror").html('').removeClass('alert-class alert-danger');
+    	let date = $('#birthdate').val();
+    	const  today = new Date().toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}); 
+    	if(!dateCheck("01/01/1960", today ,date)){
+			$("#termserror").html('Plese Enter Valid Date.').addClass('alert-class alert-danger');
+		   return false;
+    	}
+    });
+
+	function dateCheck(from,to,check) {
+
+	    var fDate,lDate,cDate;
+	    fDate = Date.parse(from);
+	    lDate = Date.parse(to);
+	    cDate = Date.parse(check);
+
+	    if((cDate <= lDate && cDate >= fDate)) {
+	        return true;
+	    }
+	    return false;
+	}
+
+	function changeformate(idname) {
+        var con = $('#'+idname).val();
+        var curchr = con.length;
+        if (curchr == 3) {
+            $('#'+idname).val("(" + con + ")" + " ");
+        } else if (curchr == 9) {
+            $('#'+idname).val(con + "-");
+        }
+    }
+
 </script>
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
 
@@ -1071,82 +1087,78 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
   
 <script type="text/javascript">
-$(function() {
-    var $form = $(".validation");
-    $('form.validation').bind('submit', function(e) {
-        $('#checkout-button').html('loading...').prop('disabled', true);
-        var check = document.querySelector( 'input[name="terms_condition"]:checked');
-        if(check == null) {
-            $('#error_check').show();
-            $('#checkout-button').html('Check Out').prop('disabled', false);
-            return false;
-        }
+	$(function() {
+	    var $form = $(".validation");
+	    $('form.validation').bind('submit', function(e) {
+	        $('#checkout-button').html('loading...').prop('disabled', true);
+	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
+	        if(check == null) {
+	            $('#error_check').show();
+	            $('#checkout-button').html('Check Out').prop('disabled', false);
+	            return false;
+	        }
 
-        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
-        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
-    
-        if(save_cardRadio == null) {
-            $('#save_card').val(0);
-        }else{
-             $('#save_card').val(1);
-        }
+	        var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
+	        var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+	    
+	        if(save_cardRadio == null) {
+	            $('#save_card').val(0);
+	        }else{
+	             $('#save_card').val(1);
+	        }
 
-        if(cardinfoRadio == null) {
-            var $form  = $(".validation"),
-                inputVal = ['input[type=email]', 'input[type=password]',
-                                 'input[type=text]', 'input[type=file]',
-                                 'textarea'].join(', '),
-                $inputs       = $form.find('.required').find(inputVal),
-                $errorStatus = $form.find('div.error'),
-                valid         = true;
-                $errorStatus.addClass('hide');
-         
-            $('.has-error').removeClass('has-error');
-            $inputs.each(function(i, el) {
-                var $input = $(el);
-                if ($input.val() === '') {
-                    $input.parent().addClass('has-error');
-                    $errorStatus.removeClass('hide');
-                    e.preventDefault();
-                }
-            });      
-            if (!$form.data('cc-on-file')) {
-                e.preventDefault();
-                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-                Stripe.createToken({
-                    number: $('.card-num').val(),
-                    cvc: $('.card-cvc').val(),
-                    exp_month: $('.card-expiry-month').val(),
-                    exp_year: $('.card-expiry-year').val()
-                }, stripeHandleResponse);
-            }
-        }
-    });
-  
-    function stripeHandleResponse(status, response) {
-        if (response.error) {
-            $('.error')
-                .removeClass('hide')
-                .find('.alert')
-                .text(response.error.message);
-        } else {
-            var token = response['id'];
-            $form.find('input[type=text]').empty();
-            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-            $form.get(0).submit();
-        }
-        $('#checkout-button').html('Check Out').prop('disabled', false);
-    }
-});
-
+	        if(cardinfoRadio == null) {
+	            var $form  = $(".validation"),
+	                inputVal = ['input[type=email]', 'input[type=password]',
+	                                 'input[type=text]', 'input[type=file]',
+	                                 'textarea'].join(', '),
+	                $inputs       = $form.find('.required').find(inputVal),
+	                $errorStatus = $form.find('div.error'),
+	                valid         = true;
+	                $errorStatus.addClass('hide');
+	         
+	            $('.has-error').removeClass('has-error');
+	            $inputs.each(function(i, el) {
+	                var $input = $(el);
+	                if ($input.val() === '') {
+	                    $input.parent().addClass('has-error');
+	                    $errorStatus.removeClass('hide');
+	                    e.preventDefault();
+	                }
+	            });      
+	            if (!$form.data('cc-on-file')) {
+	                e.preventDefault();
+	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+	                Stripe.createToken({
+	                    number: $('.card-num').val(),
+	                    cvc: $('.card-cvc').val(),
+	                    exp_month: $('.card-expiry-month').val(),
+	                    exp_year: $('.card-expiry-year').val()
+	                }, stripeHandleResponse);
+	            }
+	        }
+	    });
+	  
+	    function stripeHandleResponse(status, response) {
+	        if (response.error) {
+	            $('.error')
+	                .removeClass('hide')
+	                .find('.alert')
+	                .text(response.error.message);
+	        } else {
+	            var token = response['id'];
+	            $form.find('input[type=text]').empty();
+	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+	            $form.get(0).submit();
+	        }
+	        $('#checkout-button').html('Check Out').prop('disabled', false);
+	    }
+	});
 </script>
 
 <script>
     $( document ).ready(function() {
-  
         $('#checkout-button').click(function(){
-            
-
             @if(!Auth::user())
                 $.ajax({
                    type:'GET',
