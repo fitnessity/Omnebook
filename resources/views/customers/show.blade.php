@@ -167,7 +167,7 @@
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
 												<label class="tab-titles">Quick Stats</label>
-												<a data-toggle="modal" data-target="#calenderevent">Edit</a>
+											<!--	<a data-toggle="modal" data-target="#calenderevent">Edit</a> -->
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
@@ -687,6 +687,8 @@
 		</div>
 	</div>
 </div>
+
+
 <!-- The Calendar Modal -->
 	<div class="modal fade compare-model" id="calenderevent">
 		<div class="modal-dialog eventcalender">
@@ -755,7 +757,7 @@
 		</div>
 	</div>
 <!-- end modal -->
-<!-- The Calendar Modal -->
+<!-- The Schedule A Client Modal -->
 	<div class="modal fade compare-model" id="bookclienttraining">
 		<div class="modal-dialog book-client-training">
 			<div class="modal-content">
@@ -1118,19 +1120,41 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="program-selection">
-										<label>From</label>
-										<select name="" id="" class="form-control valid" autocomplete="off">
-											<option value="">Select personal task</option>
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
+										<label>From: </label>
+										<select name="shift_start[]" id="shift_start" class="shift_start form-control" required="required">
+											<option value="">Select Time</option>
+											<option value="00:00">12:00 AM</option>
+											<option value="00:15">12:15 AM</option>
+											<option value="00:30">12:30 AM</option>
+											<option value="00:45">12:45 AM</option>
+											<option value="01:00">01:00 AM</option>
 										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
-									
+									<div class="program-selection">
+										<label>To: </label>
+										<select name="shift_start[]" id="shift_start" class="shift_start form-control" required="required">
+											<option value="">Select Time</option>
+											<option value="00:00">12:00 AM</option>
+											<option value="00:15">12:15 AM</option>
+											<option value="00:30">12:30 AM</option>
+											<option value="00:45">12:45 AM</option>
+											<option value="01:00">01:00 AM</option>
+										</select>
+									</div>
 								</div>
 							</div>
+							
+							
+						</div>
+						<div class="col-lg-6">
+							<div class="program-selection">
+								<label>Add Comment: </label>
+								<textarea name="notetext" rows="4" style="width: 100%;"> </textarea>
+							</div>
+							
+							<div class="personal-task-sprator"></div>
 							
 						</div>
 					</div>

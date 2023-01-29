@@ -5804,9 +5804,9 @@ ul.pagination > li > a:hover {
     text-decoration: underline !important;
 }
 
-ul.pagination > li > a {
+/* ul.pagination > li > a {
     color: #f53b49 !important;
-}
+} */
 
 /********************** event **********************/
 
@@ -22010,6 +22010,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-bottom: 15px;
     display: flex;
     margin-top: 10px;
+	width: 100%;
 }
 .btn-black{
     margin-right: 13px;
@@ -24033,7 +24034,7 @@ padding-left: 0px;
 }
 .participaingtxt{
 	font-size: 12px;
-	font-weight: 400;
+	font-weight: 600;
 	width: 100%;
 }
 .select-sparetor{
@@ -24059,7 +24060,6 @@ padding-left: 0px;
 	margin-top: 10px;
 }
 .gift-comments.email input{
-	margin-top: 37px;
 	margin-bottom: 7px;
 }
 .addnewemail{
@@ -24080,6 +24080,7 @@ padding-left: 0px;
 .show-more-cart a{
 	color: #000 !important;
 	text-decoration: none !important;
+	font-size: 14px;
 }
 .hide-part{
     display: none;
@@ -24182,9 +24183,120 @@ padding-left: 0px;
 .block-datetime{
 	margin-bottom: 15px;
 }
-.block-radio input{
-	
+.termsdetails.terms-txt{
+	font-size: 12px;
 }
-.block-radio label{
-	
+.new-participant input{
+	margin-bottom: 15px;
+}
+.new-participant select{
+	margin-bottom: 15px;
+}
+.add-btn-submit{
+	float: right;
+	margin-top: 22px;
+}
+.participant-cart{
+	width: 100%;
+	display: block;
+	margin-top: 4px;
+	color: #000;
+	font-size: 13px;
+}
+.participant-cart:hover{
+	color: #000;
+}
+.btn-nxt-part{
+	background: #ed1b24;
+	color: #fff;
+	padding: 6px 15px;
+	border: unset;
+	font-size: 16px;
+}
+.personal-task-sprator{
+	border: 1px solid #000;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.btn-grey{
+	background: #cacaca;
+	padding: 6px 15px;
+	border: none;
+	color: #000;
+	cursor: pointer;
+	font-size: 14px;
+	text-align: center;
+	width: 100%;
+}
+.staff-main.top-nav.search-staff{
+	width: 100%;
+	border: 1px solid #000;
+	padding: 4px;
+	border-radius: 4px;
+}
+.staff-main.top-nav.search-staff input{
+	width: 100%;
+}
+.fix-width{
+	width: 100%;
+}
+.table-icons-staff{
+	font-size: 18px;
+	color: #ec1c24;
+}
+.table-icons-staff a{
+	color: #ec1c24;
+}
+.photo-select{
+	border: 1px solid #000;
+	padding: 15px;
+	text-align: center;
+}
+.public-bio label{
+	width: 100%;
+}
+.staff-sprator{
+	border: 1px solid #000;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+.table-header{
+	text-align: center;
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+#scheduled-activities_paginate{
+	float: right !important;
+}
+.staff-main a:hover{
+	color: #000;
+}
+.add-staff-btn{
+	float: right;
+	margin-top: 17px;
+}
+.close.close-btn-design-staff{
+	opacity: 1.2;
+	color: #fff;
+	position: absolute;
+	top: 18px;
+	right: 20px;
+}
+.staff-hed-info p{
+	display: inline;
+}
+.staff-hed-info a{
+	margin-left: 18px;
+	text-decoration: underline;
+}
+.position-add{
+	float: right;
+	text-decoration: underline;
+}
+.staff-hed-info.text-side{
+	float: right;
+}
+.multiple-email{
+	margin-top: 37px;
 }

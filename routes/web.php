@@ -39,7 +39,10 @@ Route::group(['middleware' => ['auth']], function(){
         Route::delete('/booking_postorders/{booking_postorder_id}','BookingPostorderController@delete')->name('business_booking_postorders_delete');
 
         // Booking Checkin Details
-    Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+        Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+
+        Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
+        Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
     });
 });
 
@@ -759,6 +762,8 @@ Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 /*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
+Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
+Route::post('/addactivitygift/{priceid?}', 'CartController@addactivitygift')->name('addactivitygift');
 
 
 
@@ -928,9 +933,6 @@ Route::post('save_business_reviews','BusinessController@save_business_reviews')-
 
 Route::post('save_business_service_reviews','LessonController@save_business_service_reviews')->name('save_business_service_reviews');
 
-//Route::get('createstaff','UserProfileController@createStaff')->name('createstaff');
-Route::get('createStaff','UserProfileController@createmanageStaff')->name('createStaff');
-Route::get('staff-scheduled-activities','UserProfileController@staff_scheduled_activities')->name('staff-scheduled-activities');
 Route::get('manageproduct','UserProfileController@manageproduct')->name('manageproduct');
 Route::get('addproduct','UserProfileController@addproduct')->name('addproduct');
 Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity'); 
@@ -997,4 +999,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
     Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
 });
+
+
 ?>
