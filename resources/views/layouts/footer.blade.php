@@ -157,6 +157,7 @@
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>

@@ -38,16 +38,16 @@ class UserBookingDetail extends Model
      */
 
     public function getBookingCheckinDetails(){
-       $data = BookingCheckinDetails::where('order_detail_id',$this->id)->whereMonth('checkin_date', date('m'))->first();
+       $data = BookingCheckinDetails::where('booking_detail_id',$this->id)->whereMonth('checked_at', date('m'))->first();
        return @$data->checkin;
     }
 
     public function BookingCheckinDetails(){
-        return $this->hasMany(BookingCheckinDetails::class,'order_detail_id');
+        return $this->hasMany(BookingCheckinDetails::class,'booking_detail_id');
     }
 
     public function BookingActivityCancel(){
-        return $this->hasMany(BookingActivityCancel::class,'order_detail_id');
+        return $this->hasMany(BookingActivityCancel::class,'booking_detail_id');
     }
 
     public function UserBookingStatus()
@@ -71,7 +71,7 @@ class UserBookingDetail extends Model
 
     }
 
-    public function business_price_details(){
+    public function business_price_detail(){
 
         return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
 
@@ -189,7 +189,7 @@ class UserBookingDetail extends Model
 
     public function getremainingsession(){
         $pay_session = $this->pay_session;
-        $checkindetailscnt = BookingCheckinDetails::where(['order_detail_id'=> $this->id,'checkin'=>1])->count();
+        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
         $remaining = $pay_session - $checkindetailscnt;
         return $remaining;
     }

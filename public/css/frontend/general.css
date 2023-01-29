@@ -22564,17 +22564,16 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-radius: 4px;
 }
 .overlay-activity-label{
-	position: absolute;
     background: #fff;
     padding: 10px;
     z-index: 1000;
-    left: 70%;
     border-radius: 7px;
     font-size: 13px;
     width: 150px;
     text-align: center;
     top: 16px;
     opacity: 1;
+    display: inline-block;
 }
 .priceselect.sp-select p{
 	display: inline-block;

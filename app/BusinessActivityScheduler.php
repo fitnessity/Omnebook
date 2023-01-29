@@ -167,19 +167,7 @@ class BusinessActivityScheduler extends Model
     }
 
     public function spots_left($current_time){
-        $user_booking_details = UserBookingDetail::where('act_schedule_id', $this->id)->whereDate('bookedtime', '=', $current_time->format("Y-m-d"))->get();
-
-        $totalquantity = 0;
-        foreach($user_booking_details as $user_booking_detail){
-            $item = json_decode($user_booking_detail['qty'],true);
-            if($item['adult'] != '')
-                $totalquantity += $item['adult'];
-            if($item['child'] != '')
-                $totalquantity += $item['child'];
-            if($item['infant'] != '')
-                $totalquantity += $item['infant'];
-        }
-        return intval($this->spots_available) - $totalquantity;
+        return intval($this->spots_available) - BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $current_time->format("Y-m-d"))->count();
     }
 
     public function price_detail() {

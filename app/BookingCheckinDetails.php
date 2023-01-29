@@ -27,33 +27,24 @@ class BookingCheckinDetails extends Model
     public $timestamps = false;
     protected $table = 'booking_checkin_details';
 	protected $fillable = [
-        'booking_id', 'order_detail_id','checkin','checkin_date'
+        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged',
     ];
 
-     /**
-
-     * Get the user that owns the education.
-
-     */
-    public function UserBookingStatus(){
-        return $this->belongsTo(UserBookingStatus::class,'booking_id');
-    }
 
     public function UserBookingDetail(){
-        return $this->belongsTo(UserBookingDetail::class,'order_detail_id');
+        return $this->belongsTo(UserBookingDetail::class,'booking_detail_id');
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 
     public function order_detail(){
-        return $this->belongsTo(UserBookingDetail::class,'order_detail_id');
+        return $this->belongsTo(UserBookingDetail::class,'booking_detail_id');
     }
 
     public function status_term(){
-        switch($this->checkin){
-            case 0:
-                return 'Unchecked';
-            case 1:
-                return 'Checked In';
-        }
+        return $this->checked_at ? "Checked In" : "Unchecked";
     }
 
 }

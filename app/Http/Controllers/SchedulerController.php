@@ -1536,8 +1536,12 @@ class SchedulerController extends Controller
      }
 
      public function getbookingcancelmodel(Request $request){
-          $booking_data = UserBookingStatus::where('id',$request->oid)->first();
+
+          // 
           $bookingdetail_data = UserBookingDetail::where('id',$request->order_detail_id)->first();
+          $booking_data = $bookingdetail_data->booking;
+
+
           $cardInfo = [];
           if($booking_data->user_type == 'customer'){
                $cardInfo = $booking_data->customers->get_stripe_card_info();
@@ -1548,6 +1552,16 @@ class SchedulerController extends Controller
           $data = BookingActivityCancel::where(['booking_id'=> $request->oid,'order_detail_id'=> $request->order_detail_id])->first();
           $cancel_charge_amt = '';
           $html = '';
+
+
+          $html .='<div class="row"> <div class="col-lg-12"><h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px;margin-bottom: 10px;">What happens if a customer late cancels or no show? </h4></div></div>';
+          $html .='<div class="row">';
+          $html .= '<form method="post" action="'. route('booking_activity_cancel') .'">';
+          $html .= '<input type="hidden" name="_token"  value="'.csrf_token().'" />';
+
+          $html .= '<input type="hidden" name="booking_id" id="booking_id" value="' . $booking_data->id. '">';
+          $html .= '<input type="hidden" name="pageid" id="pageid" value="'.$request->business_activity_scheduler_id.'">';
+          $html .= '<input type="hidden" name="order_detail_id" id="order_detail_id" value="'.$bookingdetail_data->id.'">';
           $html .=' <input type="hidden" name="card_idval" id="card_idval" value="">
                     <input type="hidden" name="cancel_id" id="cancel_id" value="'.@$data->id.'">
                     <input type="radio" id="nothing" name="cancel_charge_action" value="nothing" ';
@@ -1607,32 +1621,12 @@ class SchedulerController extends Controller
                     <label for="javascript">Deduct from membership</label> 
                     <select class="form-control" name="membership" id="membership">
                       <option value="">Choose from membership options </option>
-                      <option value="'.$bookingdetail_data->business_price_details->membership_type.'" selected>'.$bookingdetail_data->business_price_details->membership_type.'</option>
+                      <option value="'.$bookingdetail_data->business_price_detail->membership_type.'" selected>'.$bookingdetail_data->business_price_detail->membership_type.'</option>
                     </select>';
+          $html .= '<button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</button>';
+          $html .= '</form>';
+          $html .= '</div>';
           return $html;
-     }
-
-     public function check_in_activity(Request $request){
-         
-          $bd = BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->whereMonth('checkin_date', date('m'))->first();
-          if($bd == ''){
-               $data = array(
-                    "booking_id"=> $request->oid,
-                    "order_detail_id"=> $request->order_detail_id,
-                    "checkin"=> $request->checkin,
-                    "checkin_date"=> date('Y-m-d')
-               ); 
-               BookingCheckinDetails::create($data); 
-          }else{ BookingCheckinDetails::where(['booking_id'=>$request->oid,'order_detail_id'=>$request->order_detail_id])->update(['checkin'=>$request->checkin, "checkin_date"=> date('Y-m-d')]); 
-          }   
-
-          $booking_detail = UserBookingDetail::find($request->order_detail_id);
-          if($request->checkin == '1'){
-               $booking_detail->update(['pay_session' => $booking_detail->pay_session - 1]);
-          }else{
-               $booking_detail->update(['pay_session' => $booking_detail->pay_session + 1]);
-          }
-
      }
 
      public function editcartmodel(Request $request){

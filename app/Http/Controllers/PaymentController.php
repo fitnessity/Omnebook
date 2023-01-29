@@ -40,6 +40,7 @@ use App\Payment;
 use App\UserFamilyDetail;
 use App\MailService;
 use App\Zip_code;
+use App\BookingCheckinDetails;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\UserFavourite;
 use App\BusinessServicesFavorite;
@@ -242,6 +243,8 @@ class PaymentController extends Controller {
                 );
                 $status = UserBookingDetail::create($act);
 
+
+
                 $customer = Customer::where(['business_id' => $activitylocation->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
 
                 if(!$customer){
@@ -260,6 +263,16 @@ class PaymentController extends Controller {
 
                     $customer->create_stripe_customer_id();
                 }
+
+                BookingCheckinDetails::create([
+                    'business_activity_scheduler_id' => $act_schedule_id,
+                    'customer_id' => $customer->id,
+                    'booking_detail_id' => $status->id,
+                    'checkin_date' => date('Y-m-d',strtotime($sesdate)),
+                    'use_session_amount' => 0,
+                    'before_use_session_amount' => 0,
+                    'after_use_session_amount' => 0
+                ]);
 
 
                 $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
