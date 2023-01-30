@@ -442,14 +442,16 @@
 																					<label>PAYMENT TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>15 Sessions </span>
+																					<span></span>
 																				</div>
 																			
 																				<div class="col-md-6 col-xs-6">
 																					<label>TOTAL REMAINING:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}}</span>
+																					<span>
+																						{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}
+																					</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -520,7 +522,7 @@
 																		</div>
 																		<div class="row">
 																			<div class="col-md-6 col-xs-6">
-																				<a class="visiting-view"> View Visits </a>
+																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('business_customer_activity_visits', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
 																			</div>
 																			<div class="col-md-6 col-xs-6">
 																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer"> Edit Booking </a>
@@ -529,8 +531,6 @@
 																	</div>
 																</div>
 															@endforeach
-
-
 														</div>
 													</div>
 												</div>
@@ -580,14 +580,18 @@
 																					<label>PAYMENT TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>15 Sessions </span>
+																					<span> </span>
 																				</div>
+
 																				@if ($booking_detail->business_price_detail)
 																					<div class="col-md-6 col-xs-6">
 																						<label>TOTAL REMAINING:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}}</span>
+																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->pay_session}}
+																							{{$booking_detail->id}}
+																						{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}
+
 																					</div>
 																				@endif
 																				
