@@ -367,7 +367,7 @@ class BookingRepository
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
         $business_services = $booking_details->business_services;
         $businessuser= $booking_details->business_services->company_information;
-        $BusinessPriceDetails = $booking_details->business_price_details;
+        $BusinessPriceDetails = $booking_details->business_price_detail;
         $categoty_name = $BusinessPriceDetails->business_price_details_ages->category_title;
         $schedulerdata = $booking_details->business_activity_scheduler;
 
@@ -1115,7 +1115,7 @@ class BookingRepository
             $price  =  $status->amount;
             $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','Desc')->first();
             $programname = $book_data->business_services->program_name;
-            $price_title = $book_data->business_price_details->price_title;
+            $price_title = $book_data->business_price_detail->price_title;
             $purchasefor =  $programname.' $'.$price;
         }
         return  $purchasefor.'~~'.$price_title;
