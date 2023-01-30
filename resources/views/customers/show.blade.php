@@ -173,7 +173,11 @@
 												<label>Status</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span class="green-fonts">Active</span>
+												@if($customerdata->status == 0)
+													InActive
+												@else
+													<span class="green-fonts">Active</span>
+												@endif
 											</div>
 										</div>
 										<div class="row">
