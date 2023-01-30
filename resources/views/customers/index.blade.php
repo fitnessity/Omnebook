@@ -98,7 +98,7 @@
 																	@if($customer->status == 0)
 																		InActive
 																	@else
-																		Active;
+																		Active
 																	@endif</span>
 															</div>
 														</div>
