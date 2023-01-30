@@ -169,40 +169,53 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        if($user){
-            $user_id = $user ? $user->id : "no_user_id";
-            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
-                $query->select('id')
-                      ->from('business_services')
-                      ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
-                $query->select('id')
-                      ->from('user_booking_status')
-                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-            });
-            return $result->count();
-        }
-        return 0;
+        $user_id = $user ? $user->id : "no_user_id";
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        });
+        return $result->count();
+    }
+
+    public function active_memberships_by_activity_id($activity_id){
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+
+        $user_id = $user ? $user->id : "no_user_id";
+
+        $result = UserBookingDetail::where('sport', $activity_id)->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        })->whereRaw('pay_session > 0');
+        return $result->count();
+        
     }
 
     public function active_memberships(){
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        if($user){
-            $user_id = $user ? $user->id : "no_user_id";
-            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
-                $query->select('id')
-                      ->from('business_services')
-                      ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
-                $query->select('id')
-                      ->from('user_booking_status')
-                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-            })->whereRaw('pay_session > 0');
-            return $result->count();
-        }
-        return 0;
+
+        $user_id = $user ? $user->id : "no_user_id";
+
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        })->whereRaw('pay_session > 0');
+        return $result->count();
+        
     }
 
     public function expired_soon(){
@@ -212,20 +225,20 @@ class Customer extends Authenticatable
         
         $now = Carbon::now();
 
-        if($user){
-            $user_id = $user ? $user->id : "no_user_id";
-            $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
-                $query->select('id')
-                      ->from('business_services')
-                      ->where('cid', $company->id);
-            })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
-                $query->select('id')
-                      ->from('user_booking_status')
-                      ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-            })->whereDate('expired_at', '<',  $now->addDays(14));
-            return $result->count();
-        }
-        return 0;
+
+        $user_id = $user ? $user->id : "no_user_id";
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        })->whereDate('expired_at', '<',  $now->addDays(14));
+        return $result->count();
+
+
     }
 
     function create_stripe_customer_id(){
