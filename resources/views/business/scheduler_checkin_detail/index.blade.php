@@ -144,7 +144,7 @@
                                                         <option value=""  @if(!$booking_checkin_detail->order_detail) selected @endif>Please select Membership</option>
                                                         @foreach($booking_checkin_detail->customer->active_booking_details()->get() as $customer_booking_detail)
 
-                                                         <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && $customer_booking_detail->business_price_detail->id == $booking_checkin_detail->order_detail->business_price_detail->id) selected @endif>
+                                                         <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
                                                             {{$customer_booking_detail->business_price_detail['price_title']}}
                                                         </option>
                                                         @endforeach

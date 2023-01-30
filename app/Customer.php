@@ -322,7 +322,7 @@ class Customer extends Authenticatable
         });
 
 
-        return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
+        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
     }
 
     public function visits_count(){
@@ -346,8 +346,8 @@ class Customer extends Authenticatable
         });
 
 
-       /* return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checkin', 1)->count();*/
-       return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checked_at',"!=",NULL)->count();
+       /* return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checkin', 1)->count();*/
+       return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checked_at',"!=",NULL)->count();
     }
 
     public function get_last_seen(){
@@ -371,7 +371,7 @@ class Customer extends Authenticatable
         });
 
 
-        $checkin = BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->first();
+        $checkin = BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->first();
         if($checkin){
             return $checkin->checkin_date;
         }
