@@ -167,7 +167,7 @@
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
 												<label class="tab-titles">Quick Stats</label>
-											<!--	<a data-toggle="modal" data-target="#calenderevent">Edit</a> -->
+												<a data-toggle="modal" data-target="#calenderevent">Edit</a>
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
@@ -372,7 +372,7 @@
 															<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
 															<td>{{date('h:i A', strtotime($visit->order_detail->business_activity_scheduler->shift_start))}}</td>
 															<td>{{$visit->order_detail->business_services->program_name}}</td>
-															<td>{{$visit->order_detail->business_price_details->price_title}}</td>
+															<td>{{$visit->order_detail->business_price_detail->price_title}}</td>
 															
 															<td>
 															{{$visit->status_term()}}
@@ -419,7 +419,7 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}} <i class="far fa-file-alt"></i></span>
+																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}} <i class="far fa-file-alt"></i></span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -449,7 +449,7 @@
 																					<label>TOTAL REMAINING:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}}</span>
+																					<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -582,12 +582,12 @@
 																				<div class="col-md-6 col-xs-6">
 																					<span>15 Sessions </span>
 																				</div>
-																				@if ($booking_detail->business_price_details)
+																				@if ($booking_detail->business_price_detail)
 																					<div class="col-md-6 col-xs-6">
 																						<label>TOTAL REMAINING:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_details->pay_session}}</span>
+																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}}</span>
 																					</div>
 																				@endif
 																				

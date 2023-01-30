@@ -39,7 +39,7 @@ class UserBookingDetail extends Model
 
     public function getBookingCheckinDetails(){
        $data = BookingCheckinDetails::where('booking_detail_id',$this->id)->whereMonth('checked_at', date('m'))->first();
-       return @$data->checkin;
+       return @$data->checked_at;
     }
 
     public function BookingCheckinDetails(){

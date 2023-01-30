@@ -346,7 +346,8 @@ class Customer extends Authenticatable
         });
 
 
-        return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checkin', 1)->count();
+       /* return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checkin', 1)->count();*/
+       return BookingCheckinDetails::whereIn('order_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checked_at',"!=",NULL)->count();
     }
 
     public function get_last_seen(){

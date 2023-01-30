@@ -57,7 +57,7 @@
 							</div>
 							@if($orderdata->business_services->service_type == $st ) 
 								@php 
-									$catelist = $orderdata->business_price_details->business_price_details_ages;
+									$catelist = $orderdata->business_price_detail->business_price_details_ages;
 									$sche_ary = [];
 									foreach($catelist->BusinessActivityScheduler as $sc){
 										if($sc->end_activity_date > $filter_date->format('Y-m-d')){
