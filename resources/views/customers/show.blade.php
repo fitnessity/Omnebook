@@ -1156,9 +1156,31 @@
 							
 							<div class="personal-task-sprator"></div>
 							
+							<label>Repeat: </label>
+							<div class="repeat">
+								<form action="">
+									<group>
+									<div class="input-container">
+									  <input type="radio" name="title"><label>Daily</label>      
+									</div>
+									<div class="input-container">
+									  <input type="radio" name="title" checked><label>Weekly</label>
+									</div>
+									<div class="input-container">
+									  <input type="radio" name="title"><label>Monthly</label>     
+									</div>
+									<div class="input-container">
+									  <input type="radio" name="title"><label>Yearly</label>  
+									</div>  
+									</group>
+								</form>
+							</div>
+
+						</div>
+						<div class="col-md-12">
+							<button type="submit" class="btn-nxt mb-00 addclint-btn" id="">Schedule</button>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		</div>
