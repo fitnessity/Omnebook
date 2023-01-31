@@ -24392,3 +24392,11 @@ padding-left: 0px;
 .hours-sp{
 	margin-left: 8px;
 }
+.product-sprator{
+	border-bottom: 1px solid #000;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+.product-sub-title label{
+	font-size: 18px;
+}

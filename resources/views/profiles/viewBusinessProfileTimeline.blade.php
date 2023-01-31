@@ -34,7 +34,8 @@
 	use App\PagePostSave;
 	use App\Http\Requests;
 	use App\PageLike;
-    use App\BusinessPostViews;;
+    use App\BusinessPostViews;
+    
 ?>
 <style>
 .removepost{ height: auto !important; }
@@ -46,6 +47,7 @@ $customerName = @$loggedinUser->firstname . ' ' . @$loggedinUser->lastname;
 $loggedinUserorignal = Auth::user();
 $profilePicture = @$loggedinUser->profile_pic;
 $coverPicture = @$loggedinUser->cover_photo;
+
 if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     ?>
     <script type="text/javascript">
@@ -303,62 +305,61 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         	<div class="tab-content">
 
     			<div class="tab-pane active" id="timeline" role="tabpanel">
-                    <div class="central-meta postbox">
-                    	<?php if(@$loggedinUser->id == $company->user_id) { ?>
-                        <form method="post" action="{{route('pagePost')}}" enctype="multipart/form-data" id="profilepostfrm">
-                            @csrf
-    						<span class="create-post">Create post </span>
-    						<div class="post-img figure">
-    							@if($company['logo'] != '' && File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
-                                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$company['logo']) }}" alt="fitnessity" class="img-fluid">
-                                @else
-                                    <?php
-                                    echo '<div class="company-img-text">';
-                                    $pf=substr($company->company_name, 0, 1);
-                                    echo '<p>'.$pf.'</p></div>';
-                                    ?>
-                                @endif
-    						</div>
-                            
-    						<div class="newpst-input">
-    							<textarea rows="4" id="post_text" name="post_text" placeholder="Share some what you are thinking?" data-emojiable="true" required></textarea>
-                                <span class="error" id="err_post_sign"></span>
-    						</div>
-                            <div class="postImage"></div>
-    						<div class="attachments">
-    							<ul>
-                                	<li><span class="add-loc"><i class="fa fa-location-dot"></i></span></li>
-    								<li>
-                                    	<label for="music_post"><i class="fa fa-music"></i> </label>
-    									<input id="music_post" name="music_post" type="file"/>
-    								</li>
-                                    <li>
-                                    	<label for="image_post"><i class="fa fa-image"></i></label>
-    									<input id="image_post" type="file" name="image_post[]" multiple />
-    									<span class="error" id="err_image_sign"></span>
-    								</li>
-                                    <li>
-                                    	<label for="video"><i class="fas fa-video"></i></label>
-    									<input id="video" name="video" type="file"/>
-    								</li>
-                                    <li class="checkwebcam">
-    									<label for="file-input" onclick="return showWebCam()" id="webCamButton"><i class="fa fa-camera"></i></label>
-                                    </li>
-                                    <li class="emojili"><div class="emojilidiv"> </div></li>
-    								<li class="preview-btn">
-                                    	<button class="post-btn-preview preview" type="button" data-ripple="">Preview</button>
-    								</li>
-    							</ul>
-                                <div id="results" class="selfieresult"></div>
-                                <input type="hidden" name="selfieimg" id="selfieimg" class="image-tag">
-                                <input id="page_id" name="page_id" type="hidden" value="{{ request()->id }}"/>
+                    <?php  if(@$loggedinUserorignal->id == $company->user_id) { ?>
+                        <div class="central-meta postbox">
+                            <form method="post" action="{{route('pagePost')}}" enctype="multipart/form-data" id="profilepostfrm">
+                                @csrf
+        						<span class="create-post">Create post </span>
+        						<div class="post-img figure">
+        							@if($company['logo'] != '' && File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
+                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.$company['logo']) }}" alt="fitnessity" class="img-fluid">
+                                    @else
+                                        <?php
+                                        echo '<div class="company-img-text">';
+                                        $pf=substr($company->company_name, 0, 1);
+                                        echo '<p>'.$pf.'</p></div>';
+                                        ?>
+                                    @endif
+        						</div>
                                 
-    							<button class="post-btn profilepostbtn" type="button" data-ripple="">Post1111</button>
-    						</div>
-                        </form>
-                        <?php } ?>
-    				</div>
-                    
+        						<div class="newpst-input">
+        							<textarea rows="4" id="post_text" name="post_text" placeholder="Share some what you are thinking?" data-emojiable="true" required></textarea>
+                                    <span class="error" id="err_post_sign"></span>
+        						</div>
+                                <div class="postImage"></div>
+        						<div class="attachments">
+        							<ul>
+                                    	<li><span class="add-loc"><i class="fa fa-location-dot"></i></span></li>
+        								<li>
+                                        	<label for="music_post"><i class="fa fa-music"></i> </label>
+        									<input id="music_post" name="music_post" type="file"/>
+        								</li>
+                                        <li>
+                                        	<label for="image_post"><i class="fa fa-image"></i></label>
+        									<input id="image_post" type="file" name="image_post[]" multiple />
+        									<span class="error" id="err_image_sign"></span>
+        								</li>
+                                        <li>
+                                        	<label for="video"><i class="fas fa-video"></i></label>
+        									<input id="video" name="video" type="file"/>
+        								</li>
+                                        <li class="checkwebcam">
+        									<label for="file-input" onclick="return showWebCam()" id="webCamButton"><i class="fa fa-camera"></i></label>
+                                        </li>
+                                        <li class="emojili"><div class="emojilidiv"> </div></li>
+        								<li class="preview-btn">
+                                        	<button class="post-btn-preview preview" type="button" data-ripple="">Preview</button>
+        								</li>
+        							</ul>
+                                    <div id="results" class="selfieresult"></div>
+                                    <input type="hidden" name="selfieimg" id="selfieimg" class="image-tag">
+                                    <input id="page_id" name="page_id" type="hidden" value="{{ request()->id }}"/>
+                                    
+        							<button class="post-btn profilepostbtn" type="button" data-ripple="">Post</button>
+        						</div>
+                            </form>
+        				</div>
+                    <?php } ?>
             		<div class="loadMore"> <?php $p=1; ?>
                         @foreach($page_posts as $page_post)
                         <?php 
@@ -796,7 +797,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																	<i class="em em-stuck_out_tongue"></i>
 																</div>
 															</div>
-                                                            <button id="{{$page_post->id}}" class="postcomment theme-red-bgcolor" type="button">Post</button>
+                                                            <button id="{{$page_post->id}}" type_comment="normal" class="postcomment theme-red-bgcolor" type="button">Post</button>
 														</form> 
 													</div>
 												</li>
@@ -879,16 +880,17 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                         <div class="friend-name">
                                             <?php
                                             $postsave = PagePostSave::where('user_id',Auth::user()->id)->where('post_id',$posts_post->id)->get();
-                                            ?>                                           
+                                            ?>      
+                                            @if(@$loggedinUserorignal->id == $posts_post['user_id'])                                     
                                             <div class="more">
                                                 <div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
                                                     <ul>
-                                                         @if(@$loggedinUser->id == $posts_post['user_id'])
+                                                         @if(@$loggedinUserorignal->id == $posts_post['user_id'])
                                                         <li><a id="{{$posts_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
                                                         <li><a href="{{route('delPost',$posts_post['id'])}}"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                         @endif
 
-                                                        @if((@$loggedinUser->id != $posts_post->user_id) && $postsave->count() == 0 )
+                                                        @if((@$loggedinUserorignal->id != $posts_post->user_id) && $postsave->count() == 0 )
                                                             <li><a href="{{route('savePost',['pid'=>$posts_post['id'],'uid'=>$posts_post['user_id']])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
                                                         @elseif ($postsave->count() > 0)
                                                             <li><a href="{{route('RemovesavePost',['pid'=>$posts_post->id,'uid'=>$posts_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
@@ -896,6 +898,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     </ul>
                                                 </div>
                                             </div>
+                                            @endif
                                             <ins><a href="#" title="">{{ucfirst($userData->firstname)}} {{ucfirst($userData->lastname)}} </a> Post Album</ins>
                                             <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($posts_post['created_at']))}}</span>
                                         </div><!-- friend-name -->
@@ -1226,7 +1229,15 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         ?>
                                                         <li class="commentappendremove">
                                                             <div class="comet-avatar">
-                                                                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="">
+                                                                @if(@$username->profile_pic  != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".@$username->profile_pic  )))
+                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$username->profile_pic ) }}" alt="fitnessity" >
+                                                                @else
+                                                                    <?php
+                                                                    echo '<div class="company-img-text">';
+                                                                    $pf=substr(@$username->firstname, 0, 1).substr(@$username->lastname, 0, 1);
+                                                                    echo '<p>'.$pf.'</p></div>';
+                                                                    ?>
+                                                                @endif
                                                             </div>
                                                             <div class="we-comment">
                                                                 <h5><a href="javascript:void(0);" title="">{{$username->firstname}} {{$username->lastname}}</a></h5>
@@ -1237,7 +1248,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                 ?>
                                                                     <span>{{$comment->created_at->diffForHumans()}}</span>
                                                                     <!--<a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>-->
-                                                                    <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
+                                                                    <a href="javascript:void(0);" class="commentlike" id="{{$comment->id}}" post-id="{{@$profile_post->id}}" ><i class="fa fa-heart <?php if($cmntUlike>0){ echo 'commentLiked'; } ?>" id="comlikei<?php echo $comment->id; ?>"></i><span id="comlikecounter<?php echo $comment->id; ?>"><?php echo $cmntlike; ?></span></a>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -1252,12 +1263,20 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @endif
                                                 <li class="post-comment">
                                                     <div class="comet-avatar">
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="pic">
+                                                        @if(@$loggedinUserorignal->profile_pic  != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUserorignal->profile_pic  )))
+                                                            <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUserorignal->profile_pic ) }}" alt="fitnessity" >
+                                                        @else
+                                                            <?php
+                                                            echo '<div class="company-img-text">';
+                                                            $pf=substr(@$loggedinUserorignal->firstname, 0, 1).substr(@$loggedinUserorignal->lastname, 0, 1);
+                                                            echo '<p>'.$pf.'</p></div>';
+                                                            ?>
+                                                        @endif
                                                     </div>
                                                     <div class="post-comt-box">
                                                         <form method="post" id="commentfrm">
-                                                            <textarea placeholder="Post your comment" name="comment" id="comment{{$posts_post['id']}}"></textarea>
-                                                            <span class="error" id="err_comment{{$posts_post['id']}}"></span>
+                                                            <textarea placeholder="Post your comment" name="comment" id="saved_comment{{$posts_post['id']}}"></textarea>
+                                                            <span class="error" id="saved_err_comment{{$posts_post['id']}}"></span>
                                                             <div class="add-smiles">
                                                                 
                                                                 <span class="em em-expressionless" title="add icon"></span>
@@ -1276,7 +1295,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                     <i class="em em-stuck_out_tongue"></i>
                                                                 </div>
                                                             </div>
-                                                            <button style="background-color: #ef3e46" id="{{$posts_post['id']}}" class="postcomment" type="button">Post</button>
+                                                            <button style="background-color: #ef3e46" type_comment="saved" id="{{$posts_post['id']}}" class="postcomment" type="button">Post</button>
                                                         </form> 
                                                     </div>
                                                 </li>
@@ -2332,12 +2351,20 @@ $( document ).ready(function() {
 
 	$(document).on('click', '.postcomment', function () {
         var postId =$(this).attr('id');
-        var comment = $('#comment'+postId).val();     
+        var type_comment =$(this).attr('type_comment');
+        if(type_comment == 'saved'){
+            var com_name = 'saved_comment';
+            var err_comment = 'saved_err_comment';
+        }else{
+            var com_name = 'comment';
+            var err_comment = 'err_comment';
+        }
+        var comment = $('#'+com_name+postId).val();     
         var ret_post = true;
-        $('#err_comment'+postId).html('');
+        $('#'+err_comment+postId).html('');
         if(comment == ''){
-            $('#err_comment'+postId).html('Please enter comment!');
-            $('#comment').focus();
+            $('#'+err_comment+postId).html('Please enter comment!');
+            $('#'+com_name).focus();
             return false;
         }
         if(ret_post == true){
@@ -2351,7 +2378,7 @@ $( document ).ready(function() {
                 },          
                 success: function (data) {
                     $('.commentappend'+postId).append(data.html);
-					$('#comment'+postId).val('');
+					$('#'+com_name+postId).val('');
                     $(".postinfoul"+postId).load(" .postinfoul"+postId+" >*");
                 }
             });
