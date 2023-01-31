@@ -2,6 +2,8 @@
 @section('content')
 @include('layouts.userHeader')
 
+<link rel="stylesheet" type="text/css" href="http://dev.fitnessity.co/public/css/slimselect.min.css" />
+
 <div class="p-0 col-md-12 inner_top nopadding">
     <div class="row">
         <div class="col-md-2" style="background: black;">
@@ -239,31 +241,136 @@
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<div class="form-group">
 										<label for="salepricet">On Sale Price</label>
-										<input type="text" class="form-control" name="Saleprice"	placeholder="$">
+										<input type="text" class="form-control" name="Saleprice" placeholder="$">
 									</div>
 								</div>
-								
-								<div class="staff-sprator"></div>
-								
-								<div class="col-md-5 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<label for="address">Address</label>
-										<input type="text" class="form-control" name="Address">
+								<div class="col-md-12 col-sm-6 col-xs-12">
+									<div class="product-sprator"></div>
+								</div>
+
+								<div class="col-md-12 col-sm-6 col-xs-12">
+									<div class="product-sub-title">
+										<label>Inventory Count</label>
 									</div>
 								</div>
+
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<div class="form-group">
-										<label for="city">City</label>
-										<input type="text" class="form-control" name="City"	>
+										<label>Quantity</label>
+										<input type="text" class="form-control" name="quantity" placeholder="0">
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<div class="form-group">
-										<label for="state">State</label>
-										<input type="text" class="form-control" name="State">
+										<label>Low Quantity Alert</label>
+										<input type="text" class="form-control" name="lquantity" placeholder="0">
 									</div>
 								</div>
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Vendor</label> <a class="position-add">Create New Vendor</a>
+										 <select multiple id="vendorselect" name="vendorselect">
+											<option value="Cardio Equipment">Cardio Equipment</option>
+											<option value="Strength Equipment">Strength Equipment</option>
+                                            <option value="Stretch Equipment">Stretch Equipment </option>
+                                         </select>
+											<script>
+                                                var p = new SlimSelect({
+                                                    select: '#vendorselect'
+                                                });
+                                            </script>
+									</div>
+								</div>
+
+								<div class="col-md-12 col-sm-6 col-xs-12">
+									<div class="product-sprator"></div>
+								</div>
 								
+								<div class="col-md-12 col-sm-6 col-xs-12">
+									<div class="product-sub-title">
+										<label>Product Details</label>
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Colors (Select all that apply) </label> <a class="position-add">Add new colors</a>
+										 <select multiple id="colorsselect" name="colorsselect">
+											<option value="Cardio Equipment">Cardio Equipment</option>
+											<option value="Strength Equipment">Strength Equipment</option>
+                                            <option value="Stretch Equipment">Stretch Equipment </option>
+                                         </select>
+											<script>
+                                                var p = new SlimSelect({
+                                                    select: '#colorsselect'
+                                                });
+                                            </script>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Brands </label> <a class="position-add">Add new brands</a>
+										 <select multiple id="brandssselect" name="brandsselect">
+											<option value="Cardio Equipment">Cardio Equipment</option>
+											<option value="Strength Equipment">Strength Equipment</option>
+                                            <option value="Stretch Equipment">Stretch Equipment </option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#brandssselect'
+                                           });
+                                        </script>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Sizes (Select all that apply)</label> <a class="position-add">Add New Size </a>
+										 <select multiple id="sizesselect" name="sizesselect">
+											<option value="Cardio Equipment">15</option>
+											<option value="Strength Equipment">20</option>
+                                            <option value="Stretch Equipment">30</option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#sizesselect'
+                                           });
+                                        </script>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Catagory (Select all that apply) </label> 
+										 <select multiple id="catagoryselect" name="catagoryselect">
+											<option value="Cardio Equipment">1</option>
+											<option value="Strength Equipment">2</option>
+                                            <option value="Stretch Equipment">3</option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#catagoryselect'
+                                           });
+                                        </script>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Great For (Select all that apply)</label> 
+										 <select multiple id="greatselect" name="greatselect">
+											<option value="Cardio Equipment">15</option>
+											<option value="Strength Equipment">20</option>
+                                            <option value="Stretch Equipment">30</option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#greatselect'
+                                           });
+                                        </script>
+									</div>
+								</div>
+
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<div class="form-group">
 										<label for="postcode">Post Code</label>
@@ -330,6 +437,7 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://dev.fitnessity.co/public/js/slimselect.min.js"></script>
 @include('layouts.footer')
 
 <script type="text/javascript">

@@ -1264,6 +1264,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <!--</div>--> <!-- comment by nnn -->
             </section>
 
+
+
+
 @include('layouts.footer')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -1278,6 +1281,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 <script src="{{ url('public/js/pixelarity-face.js') }}"></script>
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
+<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
 <!-- emoji -->
 <script src="{{ url('public/emoji/lib/js/config.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
@@ -1285,6 +1289,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/emoji/lib/js/emoji-picker.js') }}"></script>
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
+
+<script>
+$('.firstfancyimg').click(function(){
+  $.fancybox.close();
+});
+</script>
 <script type="text/javascript"> 
     
     function take_snapshot() {
@@ -2363,7 +2373,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
+
 
 @endsection
             
