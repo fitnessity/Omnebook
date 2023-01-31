@@ -39,7 +39,8 @@ class PageController extends Controller
     }
 
     public function GetPageAboutUs(Request $request) {
-        $pageContent = $this->cms->getPageContent('about_us');
+        //$pageContent = $this->cms->getPageContent('about_us');
+        $pageContent = $this->cms->getPageContent('about_us_page');
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');

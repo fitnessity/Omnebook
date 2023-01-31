@@ -370,63 +370,50 @@
                                         </script>
 									</div>
 								</div>
-
-								<div class="col-md-5 col-sm-6 col-xs-12">
+								
+								<div class="col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
-										<label for="postcode">Post Code</label>
-										<input type="text" class="form-control" name="Address">
+										<label>What activity is this for? (Select all that apply)</label> 
+										 <select multiple id="activityselect" name="activityselect">
+											<option value="Cardio Equipment">15</option>
+											<option value="Strength Equipment">20</option>
+                                            <option value="Stretch Equipment">30</option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#activityselect'
+                                           });
+                                        </script>
 									</div>
 								</div>
-								<div class="form-group col-md-5 col-sm-6 col-xs-12">
-									<label for="email">Birthday <!-- <span id="star">*</span> --></label>
-									<div class="special-date">
-										<input  type="text" class="form-control completionyear" id="completionyear" name="frm_passingdate[]" placeholder="Completion Date" autocomplete="off" value="">
-										<span class="error" id="b_certificateyear"></span>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group">
+										<label>Material (Select all that apply) </label> <a class="position-add">Add new material </a>
+										 <select multiple id="materialselect" name="materialselect">
+											<option value="Cardio Equipment">15</option>
+											<option value="Strength Equipment">20</option>
+                                            <option value="Stretch Equipment">30</option>
+                                         </select>
+										<script>
+                                            var p = new SlimSelect({
+                                             select: '#materialselect'
+                                           });
+                                        </script>
 									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="product-des form-group">
+										<label class="position-gander">Explain your policy and what steps to take for customers returning products.</label>
+										<textarea id="w3review" name="w3review" rows="4" cols="80">	</textarea> 
+									</div>
+									<button class="button-fitness add-another-session-edudetails add-staff-btn">Add</button>
 								</div>
 							</div>
 						</div>
 	
 						
-						<div class="col-md-12">
-							<div class="text-border public-bio">
-								<label class="position-gander">Public Bio</label>
-								<textarea id="w3review" name="w3review" rows="4" cols="80">Tell us something about your staff member. Customers will learn more about who they are training with.
-								</textarea> 
-							</div>
-							<button class="button-fitness add-another-session-edudetails add-staff-btn">Add</button>
-							<!--<div class="staff-sprator"></div>
-							<div class="table-header">Scheduled Activities</div>
-								<table id="scheduled-activities" class="table table-striped table-bordered" style="width:100%">
-									<thead>
-										<tr>
-											<th> Activity </th>
-											<th>Program</th>
-											<th> Location</th>
-											<th>Days of week</th>
-											<th>Position</th>
-											<th>Service Type</th>
-											<th>Duration</th>
-											<th>Time</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>c   Kickboxing</td>
-											<td>Kickboxing Level 1 for beginners </td>
-											<td>At Business </td>
-											<td>M,T,W,T,F </td>
-											<td>Instructor</td>
-											<td>Class</td>
-											<td>45m</td>
-											<td>6:15 pm to 7:00 pm </td>
-										</tr>
-									</tbody>
-								</table>
-								
-							</div>-->
-							
-						</div>
+						
 					</div>
 				</div>
 			</div>
