@@ -353,7 +353,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                 <input type="hidden" name="selfieimg" id="selfieimg" class="image-tag">
                                 <input id="page_id" name="page_id" type="hidden" value="{{ request()->id }}"/>
                                 
-    							<button class="post-btn profilepostbtn" type="button" data-ripple="">Post</button>
+    							<button class="post-btn profilepostbtn" type="button" data-ripple="">Post1111</button>
     						</div>
                         </form>
                         <?php } ?>
@@ -1129,12 +1129,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         </a>
                                                     </li> 
                                                     <li><a class="<?php echo $activethumblike; ?>" href="javascript:void(0);" title="Like Post"><i id="{{$posts_post['id']}}" is_like="1" class="thumbup thumblike fas fa-thumbs-up"></i></a></li>
-                                                    <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{$posts_post['id']}}"  postid="{{$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
+                                                    <li><a class="bg-red" href="javascript:void(0);" title="dislike Post"><i id="{{@$posts_post['id']}}"  postid="{{@$page_post['id']}}" is_like="0" class="thumpdown thumblike fas fa-thumbs-down"></i></i></a></li>
                                                 </ul>
                                             </figure>   
                                             <div class="we-video-info">
-                                                <ul class ="postinfouls{{$page_post['id']}}">
-                                                    @if(isset($page_post->video))
+                                                <ul class ="postinfouls{{@$page_post['id']}}">
+                                                    @if(@$page_post->video != '')
                                                         <?php 
                                                             $ppvcnts = BusinessPostViews::where('post_id' , $page_post->id)->count();
                                                         ?>
@@ -1552,7 +1552,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script>
 $(document).ready(function() {
 	$('.showphotosbusiness').on('click', function(e) {
-		close: true,
+		close: true
 	});
 });
 </script>
@@ -1900,7 +1900,7 @@ $(document).ready(function () {
 	}
 	$("#resetPassword").click(function () {
         var email1='';
-        if(Auth::user()){
+        if('<?php Auth::user() ?>'){
             email1 = '{{Auth::user()->email}}';
         }
 		formdata = new FormData();

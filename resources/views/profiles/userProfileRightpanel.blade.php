@@ -173,7 +173,7 @@
                 	<div class="get-text">{{$start->title}}</div>
                 @endif
                 <div class="get-btn-box">
-                	<a href="{{ Config::get('constants.SITE_URL') }}/registration" class="get-btn"> Get Started </a>
+                	<a href="{{ Config::get('constants.SITE_URL') }}/activities" class="get-btn"> Get Started </a>
                 </div>
 			</div>
 		@endif

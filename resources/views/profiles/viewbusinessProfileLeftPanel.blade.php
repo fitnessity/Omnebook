@@ -26,6 +26,8 @@
 	$totalbookings = $i;
 	/*$totalbookings = UserBookingStatus::where('user_id',$compinfo->user_id)->count();*/
 	$business_usre_name= '—';
+	$bus_repre_name= 'N/A';
+	$bus_repre_name = @$compinfo->first_name .' '.@$compinfo->last_name;
 	if(@$compinfo->business_user_tag != ''){
 		$business_usre_name = "@".$compinfo->business_user_tag;
 	}
@@ -132,27 +134,28 @@
 </div>    
 
 <div class="widget">
-	<h4 class="widget-title"></h4> 
+	<h4 class="widget-title">Stats</h4> 
 	<div class="your-page">
         <figure>
-        <?php if(isset($userData['profile_pic'])) {
-             if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData['profile_pic'] ))){ ?>
-                <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userData['profile_pic']) }}" alt="Fitnessity">
+        <?php if(@$compinfo->logo != '') {
+             if(File::exists(public_path("/uploads/profile_pic/thumb/".@$compinfo->logo))){ ?>
+                <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$compinfo->logo) }}" alt="Fitnessity">
             <?php }else{ 
-                $pf=substr($userData['firstname'], 0, 1).substr($userData['lastname'], 0, 1);
+                $pf=substr(@$compinfo->company_name, 0, 1);
                 echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
             } 
 		}
 		else{ 
-			if(isset($userData['firstname'])) {
-				$pf=substr($userData['firstname'], 0, 1).substr($userData['lastname'], 0, 1);
+			if(@$compinfo->company_name != '') {
+				$pf=substr(@$compinfo->company_name, 0, 1);
            		echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
 			}
 		}
 		?>
         </figure>
         <div class="page-meta">
-            <a href="#" title="" class="underline">{{$customerName}}</a>
+            <!-- <a href="#" title="" class="underline">{{$customerName}}</a> -->
+            <a href="#" title="" class="underline">{{$bus_repre_name}}</a>
             <?php /*?><span><i class="far fa-comment-alt"></i><a href="#" title="">Messages </a></span>
             <span><i class="far fa-bell"></i><a href="#" title="">Notifications </a></span><?php */?>
         </div>

@@ -20874,7 +20874,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border: 1px solid #dcdcdc;
 	border-radius: 4px;
 	box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 15%);
-	padding: 15px;
+	padding: 28px 15px 25px 15px;
 	margin-bottom: 20px;
 }
 .userblock-card{
@@ -20896,14 +20896,20 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .bookedcard .border-center{
 	border: 1px solid #000;
-	margin: 25px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 .bookedcard .cart-items span{
-	font-size: 18px;
-	font-weight: 500;
+	font-size: 20px;
+	font-weight: normal;
 }
-.bookedcard .cart-total{
-	margin-top: 15px;
+.bookedcard .cart-total span{
+	font-size: 19px;
+	font-weight: normal;
+}
+.bookedcard .cart-total label{
+	font-size: 19px;
+	font-weight: normal;
 }
 .cart-itme-img img{
 	width: 100%;
@@ -20913,6 +20919,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 19px;
 	font-weight: 500;
 	margin-bottom: 15px;
+	text-align: center;
 }
 .kick-adul h4{
 	font-size: 15px;
@@ -20924,7 +20931,6 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .cart-btns-continues{
 	display: flex;
-	float: right;
 }
 .cart-border{
 	border-bottom: 1px solid #000;
@@ -22566,10 +22572,10 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .overlay-activity-label{
     background: #fff;
-    padding: 10px;
+    padding: 10px 0px;
     z-index: 1000;
     border-radius: 7px;
-    font-size: 13px;
+    font-size: 11px;
     width: 150px;
     text-align: center;
     top: 16px;
@@ -22791,10 +22797,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
   z-index: 1;
 }
 .more-post-optns > i {
-	position: absolute;
+	/*position: absolute;*/
 	z-index: 2;
-	right: 0;
-	bottom: 2px;
 }
 
 .more-post-optns > ul {
@@ -24299,4 +24303,92 @@ padding-left: 0px;
 }
 .multiple-email{
 	margin-top: 37px;
+}
+
+
+.repeat input[type=radio] {
+  opacity: 0;
+  width: 100%;
+  height: 42px;
+  background-color: blue;
+  position: relative;
+  z-index: 1;
+}
+
+.repeat group {
+  width: 100%;
+  display: flex;
+}
+.repeat .input-container {
+  height: 42px;
+  width: 100%;
+  line-height: 42px;
+  text-align: center;
+  position: relative;
+}
+.input-container:first-child label {
+  border-radius: 5px 0 0 5px;
+}
+.input-container:last-child label {
+  border-radius: 0 5px 5px 0;
+  border-right: 2px solid #CCC;
+}
+
+.repeat label {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border: 2px solid #CCC;
+  border-right: inherit;
+  top: 0;
+  left: 0;
+  font-family: arial;
+  color: #737373;
+}
+
+.repeat input:checked + label {
+  background-color: #ed1b24;
+  top: 0;
+  left: 0;
+  border: 2px solid #ed1b24 !important;
+  z-index: 2;
+  color: white;
+}
+.bookedcard h3{
+	font-weight: bold;
+	font-size: 22px;
+	margin-bottom: 15px;
+}
+.cart-itme-img h4{
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 11px;
+	font-size: 15px;
+	font-weight: 500;
+}
+.img-title.com-info h4{
+	text-align: center;
+	font-size: 15px;
+	font-weight: 500;
+}
+.img-title.com-info p{
+	text-align: center;
+	font-size: 15px;
+}
+.form-control.rs-birthdate{
+	line-height: 14px !important;
+	width: 125px;
+	float: right;
+}
+.product-des textarea{
+	width: 100%;
+	border: 1px solid #000;
+	border-radius: 4px;
+}
+.activity-city.city-space{
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+.hours-sp{
+	margin-left: 8px;
 }
