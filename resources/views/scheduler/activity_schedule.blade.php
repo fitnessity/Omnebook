@@ -125,7 +125,26 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal" id="success-reservation" role="dialog">
+	    <div class="modal-dialog modal-lg booking-receipt">
+	        <div class="modal-content">
+	            <!-- Modal body -->
+	            <div class="modal-body" id="receiptbody">
+	            	<div class="row">
+	            		<div class="col-md-12 text-center">
+	                       <label class="pay-confirm green-fonts"> Your Reservation Is Confirmed.</label>
+	                    </div>
+	            	</div>
+	            </div>
+	        </div>
+	    </div>
+	</div> 
+
 </div>
+
+
+@include('layouts.footer')
 
 <script>
 	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {
@@ -134,10 +153,11 @@
 	});
 
 	function addtimedate(sid){
+		//jQuery.noConflict();
 		let text = "Are You Sure To Book This Date And Time?";
 		if (confirm(text) == true) {
 		   	$.ajax({
-		   		url: "{{route('updateorderdetails')}}",
+		   		url: "{{route('reserve_time_for_order')}}",
 				type: 'POST',
 				xhrFields: {
 					withCredentials: true
@@ -150,12 +170,13 @@
 					odid:'{{$odid}}',
 				},
 				success: function (response) { /*alert(response);*/
-					window.location.reload();
+					$('#success-reservation').modal('show');
+ 					$(".activity-schedule-tabs").load(location.href+" .activity-schedule-tabs>*","");
+					//swindow.location.reload();
 				}
 		   	});
 		}
 	}
 </script>
-@include('layouts.footer')
 
 @endsection

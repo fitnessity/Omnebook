@@ -133,13 +133,13 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
-                                                <label style="font-size:12px; font-weight: bold">DOB:&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="date" name="birthdate" style="line-height:14px; width:125px; float:right"  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
+                                                <label style="font-size:12px; font-weight: normal;">DOB:&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input type="date" name="birthdate" style=""  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
                                                 <br><br>
                                                 <input type="radio" name="dobstatus" value="0" @if($UserProfileDetail['dobstatus'] == 0) checked="" @endif>
-                                                <label>Show &nbsp;&nbsp;</label>
+                                                <label style="font-weight: normal;">Show &nbsp;&nbsp;</label>
                                                 <input type="radio" name="dobstatus" value="1" @if($UserProfileDetail['dobstatus'] == 1) checked="" @endif>
-                                                <label>Hide</label>
+                                                <label style="font-weight: normal;">Hide</label>
                                                 </label>
                                             </div>
                                         </div>

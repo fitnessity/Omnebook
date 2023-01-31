@@ -8,9 +8,11 @@ use App\BusinessActivityScheduler;
 use App\BusinessPriceDetails;
 use App\BusinessServiceReview;
 use App\BusinessServicesFavorite;
+use App\BusinessServices;
 
 $total_quantity=0;
  $item_price=0;
+
 
 if(!empty($cart["cart_item"])) {
     foreach($cart['cart_item'] as $item){
@@ -30,6 +32,10 @@ if(!empty($cart["cart_item"])) {
     }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
+    $act = BusinessServices::where('id', $cartdata["code"])->first();
+    $serprice = BusinessPriceDetails::where('id', $cartdata['priceid'])->orderBy('id', 'ASC')->first();
+    $daynum = '+'.@$serprice['pay_setnum'].' '.strtolower(@$serprice['pay_setduration']);
+	$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));
     $timecart = $tot_dura= '';
     if(@$bookschedulercart->shift_end !=''){
 			$timecart =  date('h:ia', strtotime( @$bookschedulercart->shift_end)).' - '.date('h:ia', strtotime( @$bookschedulercart->shift_end));
@@ -46,6 +52,8 @@ if(!empty($cart["cart_item"])) {
 			} 
 		}
 }
+
+print_r($cartdata);
 ?>
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 
@@ -60,8 +68,9 @@ if(!empty($cart["cart_item"])) {
 		</div>
 		<div class="row">
 			<div class="col-md-5">
-				<div class="bookedcard">
-					<h5>You Just Booked With </h5>
+				<div class="bookedcard text-center">
+					<h3>Your Cart Totals</h3>
+					<!-- <h5>You Just Booked With </h5>
 					<div class="row">
 						<div class="col-md-2 col-sm-2 col-xs-3">
 							<div class="userblock-card">
@@ -85,15 +94,15 @@ if(!empty($cart["cart_item"])) {
 								<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 							</div>
 						</div>
-					</div>
-					<div class="border-center"> </div>
+					</div> -->
 					<div class="cart-items">
 						<span>You have {{$total_quantity}} items In Your Cart</span>
 					</div>
 					<div class="cart-total">
-						<label>Cart Total: </label>
+						<label>Cart Total Amount: </label>
 						<span>${{$item_price}}</span>
 					</div>
+					<div class="border-center"> </div>
 				</div>
 				
 			</div>
@@ -102,33 +111,222 @@ if(!empty($cart["cart_item"])) {
 					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
 							<img src="{{$profilePicact}}">
+							<h4>You Just Booked With </h4>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 col-xs-9">
+								<div class="img-title com-info">
+									<h4>{{@$companyData->company_name}}</h4>
+									<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="kick-adul">
 							<h5>{{$cartdata['name']}}</h5>
-							<h4>Booking Details</h4>
 							<div class="cart-details">
-								<span>@if($cartdata['sesdate']!='' && $cartdata['sesdate']!='0')
-												{{date('l, jS \of F Y', strtotime( $item["sesdate"] ))}}
-											@else  {{date('l, jS \of F Y')}} @endif</span>
-								<span>{{$timecart}}</span>
-								<span>Price: ${{$totalprice}}</span>
-								<span>Participants: @if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult - {{$item['adult']['quantity']}} @endif @endif 
-                     @if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children - {{$item['child']['quantity']}} @endif @endif
-										@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant - {{$item['infant']['quantity'] }} @endif @endif </span>
-								<span>Service Type: {{@$sdata->select_service_type}} </span>
-								<span>Duration: {{$tot_dura}}</span>
-								<span>Activity Location:  {{@$sdata->activity_location}}</span>
-								<span>Service For: {{@$sdata->activity_for}}</span>
-								<span>Age:  {{@$sdata->age_range}}</span>
-								<span>Language: {{@$ser->languages}} </span>
-								<span>Skill Level: {{@$sdata->difficult_level}}</span>
-								<!-- <span>Instructor: Darryl Phipps</span> -->
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label>Date Scheduled:</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											<span>@if($cartdata["sesdate"]!='' && $cartdata["sesdate"]!='0') {{date('m/d/Y',strtotime($cartdata["sesdate"]))}} @endif</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6"> 
+										<div class="info-display">
+											<label>Time & Duration:</label>
+										</div>
+									</div> 
+									<div class="col-md-6"> 
+										<div class="info-display info-align"> 
+											<span>{{$timecart}} | {{$tot_dura}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label>Category:</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											<span>{{ @$serprice->business_price_details_ages->category_title}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label>Price Option: </label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											<span>{{@$serprice['price_title']}}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label>Date Booked: </label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											<span>{{date('m/d/Y')}}</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label>Number of Sessions: </label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											<span>{{@$serprice['pay_session']}} Sessions</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="hide-part"> 
+								
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Membership Option: </label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="info-display info-align">
+												<span>{{@$serprice['membership_type']}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Participant Quantity: </label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="info-display info-align">
+												<span>@if(!empty($cartdata['adult'])) @if($cartdata['adult']['quantity']  != 0) Adult x {{$cartdata['adult']['quantity']}} @endif @endif</span> 
+												<span>@if(!empty($cartdata['child']))  @if($cartdata['child']['quantity']  != 0) Children x {{$cartdata['child']['quantity']}} @endif @endif</span>
+												<span>@if(!empty($cartdata['infant'])) @if($cartdata['infant']['quantity'] != 0) Infant x {{$cartdata['infant']['quantity'] }} @endif @endif</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Activity Type:</label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="info-display info-align">
+												<span>{{@$act['sport_activity']}}</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Service Type:</label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span> <?php echo @$act['select_service_type']; ?></span>
+											</div>
+										</div>
+									</div>
+										
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Membership Duration: </label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span>{{@$serprice['pay_setnum']}} {{@$serprice['pay_setduration']}}</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Purchase Date: </label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span>{{date('m/d/Y')}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Membership Activation Date: </label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span>{{date('m/d/Y')}}</span>
+											</div>
+										</div>
+									</div>
+								
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Membership Expiration: </label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span>{{$expired_at}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="info-display">
+												<label>Provider Company: </label>
+											</div>
+										</div>
+										<div class="col-md-6">	
+											<div class="info-display info-align">
+												<span>{{$act->company_information->company_name}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
 							</div>
 						</div>
-					</div>
-					<div class="col-md-7 col-sm-12">
 						<div class="cart-btns-continues">
 							<div class="btn-cart-modal">
 								<a type="submit" href="{{route('activities_index')}}" class="btn btn-black mt-10" >Continue Shopping</a>
@@ -513,6 +711,12 @@ if(!empty($cart["cart_item"])) {
 
 <script type="text/javascript">
 	$(document).ready(function () {
+		$(".show-more").click(function(event) {
+			var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
+			$(".hide-part").toggleClass("show-part");
+			$(this).html(txt);
+			event.preventDefault();
+		});
 
 		$(".dobdate").keyup(function(){
             if ($(this).val().length == 2){

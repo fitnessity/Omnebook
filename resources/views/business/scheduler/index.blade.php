@@ -134,7 +134,7 @@
                             <span>—</span>
                         	</div>
 			                  </div>
-	                     	<div class="col-md-1 col-xs-12 col-sm-4">
+	                     	<div class="col-md-1 col-xs-12 col-sm-4 nopadding">
 	                        <label class="overlay-activity-label">Activity Completed</label>
 	                     	</div>
 			                  <div class="col-md-1 col-xs-12 col-sm-12">

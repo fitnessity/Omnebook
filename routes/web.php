@@ -22,6 +22,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
     // Scheduler Checkin Details
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
+    Route::resource('products', 'ProductController')->only(['index', 'update', 'destroy', 'store']);
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -43,6 +44,7 @@ Route::group(['middleware' => ['auth']], function(){
 
         Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
         Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
+        //Route::get('/products','ProductController@index')->name('products_index');
     });
 });
 
@@ -763,7 +765,8 @@ Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@g
 /*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
 Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
-Route::post('/addactivitygift/{priceid?}', 'CartController@addactivitygift')->name('addactivitygift');
+Route::post('/addactivitygift', 'CartController@addactivitygift')->name('addactivitygift');
+Route::post('/activity_gift_model', 'CartController@activity_gift_model')->name('activity_gift_model');
 
 
 
@@ -989,7 +992,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::get('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
-    Route::post('updateorderdetails', 'SchedulerController@updateorderdetails')->name('updateorderdetails');
+    Route::post('reserve_time_for_order', 'SchedulerController@reserve_time_for_order')->name('reserve_time_for_order');
     Route::get('sendreceiptfromcheckout', 'SchedulerController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout');
 });
 

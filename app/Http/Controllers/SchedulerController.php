@@ -49,7 +49,7 @@ class SchedulerController extends Controller
      }
 
 
-     public function scheduler_checkin($sid){
+     /*  public function scheduler_checkin($sid){
           $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
           $companyservice  =[];
           if(!empty($companyId)) {
@@ -76,7 +76,7 @@ class SchedulerController extends Controller
                'todaydate'=>$filter_date->format('l, F j , Y'),
                'booking_postorders' => $booking_postorders,
           ]);
-     }
+     }*/
 
      public function searchcustomerbooking(Request $request) {
           $filter_date = new DateTime();
@@ -1544,7 +1544,7 @@ class SchedulerController extends Controller
 
           $cardInfo = [];
           if($booking_data->user_type == 'customer'){
-               $cardInfo = $booking_data->customers->get_stripe_card_info();
+               $cardInfo = $booking_data->customer->get_stripe_card_info();
           }else{
                $cardInfo = $booking_data->user->get_stripe_card_info();
           }
@@ -2026,10 +2026,11 @@ class SchedulerController extends Controller
           return $html.'~~'.$result;
      }
 
-     public function updateorderdetails(Request $request){
+     public function reserve_time_for_order(Request $request){
           $data =  UserBookingDetail::where('id',$request->odid)->first();
           $array = json_decode($data['booking_detail'],true);
           $array['sessiondate'] = $request->date;
           UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
+          BookingCheckinDetails::create(["business_activity_scheduler_id"=>$request->timeid, "customer_id" => $data->booking->customer_id,'booking_detail_id'=> $request->odid ,"checkin_date"=>$request->date ,'use_session_amount' => 0,'before_use_session_amount' => 0,'after_use_session_amount' => 0]);
      }
 }
