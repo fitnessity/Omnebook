@@ -414,6 +414,7 @@ Route::group(array('prefix' => 'admin'), function(){
     //Feedbacks
     Route::get('/feedbacks', 'Admin\FeedbackController@index');
     Route::get('/feedbacks/view/{id}', 'Admin\FeedbackController@viewFeedback');
+    Route::get('/feedbacks/delete/{id}', 'Admin\FeedbackController@deleteFeedback');
 
     //Booking
     Route::get('/bookings', 'Admin\BookingController@index');
@@ -916,7 +917,7 @@ Route::post('NewService', 'UserProfileController@NewService')->name('NewService'
 
 Route::post('updatebusinesspostviewcount', 'BusinessController@updatebusinesspostviewcount');
 Route::get('businessprofile/{user_name}/{id}','BusinessController@viewbusinessprofileofOther')->name('show_businessprofile');
-Route::get('businessprofile/timeline/{user_name}/{id}','BusinessController@viewbprofiletimelineofOther')->name('businessprofile');
+Route::get('businessprofile/timeline/{user_name}/{id}','BusinessController@viewbprofiletimelineofOther')->name('businessprofiletimeline');
 Route::post('pagePost', 'BusinessController@pagePost')->name('pagePost');
 Route::post('pagePostcomment/{id}', 'BusinessController@pagePostcomment');
 Route::get('pageshowcomments/{id}', 'BusinessController@pageshowcomments');

@@ -38,7 +38,7 @@
     
 ?>
 <style>
-.removepost{ height: auto !important; }
+    .removepost{ height: auto !important; }
 </style>
 <?php
 $compinfo = CompanyInformation::where('id',request()->id)->first();
@@ -62,36 +62,30 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 }
 
 ?>
-<div class="banner banner-fs">
-    <a href="javascript:void(0);">
-        <?php         
-        if (!empty($viewgallery)) {
-            $totalwid = count($viewgallery);
-            $width = 100/$totalwid;
-            ?>
-            <div class="4img-slider">
-            	<div class="con-width">
-                <?php
-                	foreach (array_slice($viewgallery, 0, 4) as $pic) {
-                ?>
-                		<div class="one" style="width:{{$width}}%">
-							<img style="padding:0; margin:0;"  width="{{$width}}%" height="300" src="/public/uploads/page-cover-photo/thumb/<?= $pic['name'] ?>" /> <!--<i class="fa fa-trash" aria-hidden="true"></i>-->
-                            <i class="fa fa-pen editpic editpic-fs" id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
-						</div>
-                <?php } ?>
-                 </div>
-            </div>
-        <?php } else { ?> 
-            <a href="javascript:void(0);" data-toggle="modal" data-target="#uploadCoverPic">
-                @if(!empty($coverPicture))
-                <img src="{{ url('/public/uploads/cover-photo/'.$UserProfileDetail['cover_photo']) }}" alt="images" class="img-fluid">
-                @else
-                <img src="/public/images/newimage/banner.jpg" alt="images" class="img-fluid">
+
+<div class="banner banner-fs bannerstyle">
+    <?php   $totalcount = count($viewgallery);
+        $rem = 4 -$totalcount;
+    ?>
+    @if (!empty($viewgallery))
+        @foreach (array_slice($viewgallery, 0, 4) as $pic)
+            <div class="business-slider">
+                <img src="/public/uploads/page-cover-photo/thumb/<?= $pic['name'] ?>" alt="images" class="img-fluid">
+                @if(@$loggedinUserorignal->id == $pic['user_id'])
+                    <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
                 @endif
-            </a>
-        <?php } ?>
-    </a>
+            </div>
+        @endforeach
+    @endif
+    @for($i=0 ; $i<$rem ; $i++)
+    <div class="business-slider">
+        <img src="/public/images/newimage/uploadphoto.jpg" alt="images" class="img-fluid">
+        <i class="fa fa-pen editpic editpic-fs" id="0" imgname="10.jpg" data-toggle="modal" data-target="#uploadCoverPic"></i>
+    </div>
+    @endfor
 </div>
+
+
 @if (count($errors) > 0)
 	<div class="alert alert-danger">
 		<ul>
@@ -256,6 +250,205 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     </div>
 </section>
 
+<!-- Modal -->
+<div class="modal" id="uploadCoverPic" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body login-pad">
+                <div class="pop-title employe-title">
+                    <h3>Change Cover Photo</h3>
+                </div>
+                <button type="button" class="close modal-close" data-dismiss="modal">
+                    <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                </button>
+                <div class="signup">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <div class="cover-tagbox">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Your Cover Photo will be used to customize the header of your profile.</span>
+                            </div>
+                            <div class="file-upload">
+                                <form name="frm_cover" id="frm_cover" action="{{Route('savepagecoverphoto')}}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="image-upload-wrap piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: none;" @endif>
+                                         <input class="file-upload-input" name="coverphoto" id="coverphoto" type='file' onchange="readURL(this);" accept="image/*" />
+
+                                        <div class="drag-text">
+                                            <h3>Drop your image here</h3>
+                                            <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger('click')">Select Your File</button>
+                                        </div>
+                                        <img class="card-img-top" id="thumb-2" src="">
+                                    </div>
+                                    @if ($errors->has('coverphoto'))
+                                    <span class="help-block" style="color:red">
+                                        <strong>Upload your photo</strong>
+                                    </span>
+                                    @endif
+                                   <!--  <div class="file-upload-content piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: block;" @endif>
+                                         @php
+                                         if(@$UserProfileDetail['cover_photo']!="")
+                                         $path='public/uploads/cover-photo/'.$UserProfileDetail['cover_photo'];
+                                         else
+                                         $path="#"
+
+                                         @endphp
+                                         <img class="file-upload-image" src="/{{$path}}" alt="your image" height="100px" />
+                                    </div>-->
+                                    <div>
+                                    </div>
+                                    <div class="highlighted-txt-yellow">
+                                        For best result, upload an image that is 800px by 450px or larger.
+                                    </div>
+
+                                   <!--  <p>If you'd like to delete your current cover photo, use the delete Cover Photo button.</p> -->
+
+                                    <div class="image-title-wrap">
+                                        <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                                        <input type="hidden" name="page_id" value="{{request()->id}}">
+                                        <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
+                                        &nbsp;&nbsp;
+                                        <button type="button" style="background:#000" onclick="" class="remove-image">Delete My Cover Photo</button>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="uploadgalaryPic" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body login-pad">  
+                <div class="pop-title employe-title">
+                    <h3>Change Photo</h3>
+                </div>
+                <button type="button" class="close modal-close" data-dismiss="modal">
+                    <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                </button>
+                <div class="signup">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <div class="cover-tagbox">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Your Cover Photo will be used to customize the header of your profile.</span><br>
+                                <span>Required Dimensions for Your Cover Photo Is 800 X 450.</span>
+                            </div>
+                            <div class="file-upload">
+                                <form name="frm_cover" id="frm_cover" action="{{Route('savegallarypics')}}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="pageid" value="{{request()->id}}">
+                                    <div class="image-upload-wrap piccrop_block" id="file1">
+                                        <input class="file-upload-input" name="galaryphoto" id="galaryphoto" type='file' onchange="readURL(this);" accept="image/*" />
+
+                                        <div class="drag-text">
+                                            <h3>Drop your image here</h3>
+                                            <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger('click')">Select Your File</button>
+                                        </div>
+                                        <img class="card-img-top" id="thumb-2" src="">
+                                    </div>
+                                    @if ($errors->has('coverphoto'))
+                                    <span class="help-block" style="color:red">
+                                        <strong>Upload your photo</strong>
+                                    </span>
+                                    @endif
+                                    <div class="" id="file1">
+                                        <input type="hidden" name="imgId" id="imgId">
+                                        <input type="hidden" name="imgname" id="imgname">
+                                         <img class="file-upload-image srcappend" src="/{{$path}}" alt="your image" height="100px" />
+                                    </div>
+                                    <div>
+                                    </div>
+                                    &nbsp;
+                                    <div class="image-title-wrap">
+                                        <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                                        <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    &nbsp;
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="previewmodel" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body login-pad">  
+                <div class="pop-title employe-title"><h3>Preview Post</h3></div>
+                <button type="button" class="close modal-close" data-dismiss="modal">
+                    <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                </button>
+                <div>                  
+                    <div class="loadMore">
+                        <!-- foreach -->
+                        <div class="central-meta item">
+                                <div class="user-post">
+                                    <div class="friend-info">
+                                        <figure><img src="/public/images/newimage/nearly1.jpg" alt=""></figure>
+                                        <div class="friend-name">
+                                            <ins><a href="#" title="">{{ucfirst(@$loggedinUser->firstname)}} {{ucfirst(@$loggedinUser->lastname)}}</a> Post Album</ins>
+                                        </div>
+                                        <div class="post-meta">
+                                           <p class="postText"></p>
+                                            <figure>
+                                                <div class="img-bunch" id="add_image">
+                                                    <div class="row" >
+                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                            <figure>
+                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                </a>
+                                                            </figure>
+                                                            <figure>
+                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                </a>
+                                                            </figure>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                            <figure>
+                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                </a>
+                                                            </figure>
+                                                            <figure>
+                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                </a>
+                                                            </figure>
+                                                            <figure>
+                                                                <a href="#" title="" data-toggle="modal" data-target="#img-comt">
+                                                                </a>
+                                                                <div class="more-photos"><span>+12</span></div>
+                                                            </figure>
+                                                        </div>
+                                                    </div> <!-- row -->
+                                                </div><!-- img-bunch -->
+                                            </figure>  
+                                        </div>
+                                    </div><!-- friend-info -->
+                                </div>
+                            </div>
+                        <!-- end foreach -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="desc-sec">
     <div class="container-fluid">
         <div class="row">
@@ -379,14 +572,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 ?>
                                             @endif
 										</figure>
+                                        @if(@$loggedinUserorignal->id == $page_post['user_id'])
 										<div class="friend-name">
-											<?php /*?><div class="more">
+                                            <div class="more">
 												<div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
 													<ul>
-														@if(@$loggedinUser->id == $page_post['user_id'])
-                                                        	<li><a id="{{$page_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
-                                                            <li><a href="javascript:void(0);" class="delpagepost" postid="{{$page_post['id']}}" posttype="post" ><i class="fa fa-trash"></i>Delete Post</a></li>
-                                                        @endif
+														
+                                                    	<li><a id="{{$page_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+                                                        <li><a href="javascript:void(0);" class="delpagepost" postid="{{$page_post['id']}}" posttype="post" ><i class="fa fa-trash"></i>Delete Post</a></li>
                                                         
 														<!--<li class="bad-report"><i class="fa fa-flag"></i>Report Post</li>
 														<li><i class="fa fa-address-card"></i>Boost This Post</li>
@@ -395,10 +588,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <li><i class="fa fa-bell-slash"></i>Turn off Notifications</li>-->
 													</ul>
 												</div>
-											</div><?php */?>
+											</div>
 											<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
 											<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
 										</div>
+                                        @endif
 										<div class="post-meta">
                                         <?php if( !empty($page_post->post_text) ){ ?>
                                             <input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$page_post->post_text}}" disabled="">
@@ -449,74 +643,74 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 													</div>
 												<!-- more than 4 images -->
 												@elseif(isset($getimages[4]) && !empty($getimages[4]))
-                                                <?php
-                                                    $i=0;
-                                                    foreach($getimages as $img){
-                                                        if(!empty($img) && File::exists(public_path("/uploads/gallery/".$userid."/".$img))){ 
-                                                            if($i>4){
-                                                ?>
-                                                    <div class="img-bunch" style="display:none">
-                                                        <div class="row">                   
-                                                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                                                <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
-                                                                    </a>
-                                                                </figure>
+                                                    <?php
+                                                        $i=0;
+                                                        foreach($getimages as $img){
+                                                            if(!empty($img) && File::exists(public_path("/uploads/gallery/".$userid."/".$img))){ 
+                                                                if($i>4){
+                                                    ?>
+                                                        <div class="img-bunch" style="display:none">
+                                                            <div class="row">                   
+                                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                    <figure>
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
+                                                                        </a>
+                                                                    </figure>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                <?php    }
-                                                        }
-                                                    $i++;
-                                                    }                                              
-                                                ?>
-                                                    <div class="img-bunch">
-														<div class="row">
-															<div class="col-lg-6 col-md-6 col-sm-6">
-																@if(isset($getimages[0]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[1]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-															</div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-6">
-																@if(isset($getimages[2]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
-																		</a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[3]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
-                                                                        </a>
-																	</figure>
-																@endif
-                                                                @if(isset($getimages[4]))
-																	<figure>
-                                                                    	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$page_post->id}}">
-                                                                        	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
-																		</a>
-                                                                        <div class="more-photos">
-																			<span>+{{$countimg}}</span>
-																		</div>
-																	</figure>
-																@endif
-															</div>
-														</div>
-													</div>
+                                                    <?php    }
+                                                            }
+                                                        $i++;
+                                                        }                                              
+                                                    ?>
+                                                        <div class="img-bunch">
+    														<div class="row">
+    															<div class="col-lg-6 col-md-6 col-sm-6">
+    																@if(isset($getimages[0]))
+    																	<figure>
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                            	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+    																		</a>
+    																	</figure>
+    																@endif
+                                                                    @if(isset($getimages[1]))
+    																	<figure>
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                            	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+    																		</a>
+    																	</figure>
+    																@endif
+    															</div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6">
+    																@if(isset($getimages[2]))
+    																	<figure>
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                            	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
+    																		</a>
+    																	</figure>
+    																@endif
+                                                                    @if(isset($getimages[3]))
+    																	<figure>
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                            	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
+                                                                            </a>
+    																	</figure>
+    																@endif
+                                                                    @if(isset($getimages[4]))
+    																	<figure>
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                            	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
+    																		</a>
+                                                                            <div class="more-photos">
+    																			<span>+{{$countimg}}</span>
+    																		</div>
+    																	</figure>
+    																@endif
+    															</div>
+    														</div>
+    													</div>
                                                 
             										<!-- 4 images -->
                                                 @elseif(isset($getimages[3]) && !empty($getimages[3]))
@@ -825,7 +1019,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     { ?>
                                         <div class="col-sm-3 col-md-4 col-lg-4">
                                             <div class="photo-tab-imgs">
-                                                <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                <figure>
+                                                    <a href="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" data-fancybox="photogallery">
+                                                        <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                    </a>
+                                                </figure>
+                                                <!-- <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}"> -->
                                             </div>
                                         </div>
                                     <?php 
@@ -1558,6 +1757,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 <script src="{{ url('public/js/pixelarity-face.js') }}"></script>
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
+<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
 <!-- emoji -->
 <script src="{{ url('public/emoji/lib/js/config.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
@@ -1565,7 +1765,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/emoji/lib/js/emoji-picker.js') }}"></script>
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
-<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 <script>
@@ -1657,6 +1857,51 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+    $('.preview').click(function () {
+        //var imgsrc = $('.').attr('src');
+        //$('.postText').text($('#post_text').val());
+        $('.postText').html($('.newpst-input .emoji-wysiwyg-editor').html());
+        var img_array = [];
+        var video = $('#videourl').val();
+        var music = $('#musicurl').val();
+        var sources = $(".postimgarray").map(function() {
+            img_array.push(this.src);
+        }).get();  
+        var imgcount = img_array.length-5;
+        var totimgcount = img_array.length;
+        var html = '<div class="row" ><div class="col-lg-6 col-md-6 col-sm-6">';
+        /* video preview */                
+        if(String(video) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><video width="320" height="240" src='+video+' controls>Your browser does not support the video tag.</video></a></figure>';
+        }
+        /* music preview*/
+        if(String(music) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><audio src="'+music+'" controls></audio></a></figure>';
+        }
+        /* Image preview */
+        if(String(img_array[0]) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[0]+' alt="" width="100" height ="210"></a></figure>'
+        }
+        if(String(img_array[1]) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[1]+' alt="" width="100" height ="210"></a></figure>'
+        }
+        html += '</div>';
+        html += '<div class="col-lg-6 col-md-6 col-sm-6">';
+        if(String(img_array[2]) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[2]+' alt="" width="100" height ="140"></a></figure>'
+        }
+        if(String(img_array[3]) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[3]+' alt="" width="100" height ="140"></a></figure>'
+        }
+        if(String(img_array[4]) != 'undefined'){
+            html += '<figure><a href="#" title="" data-toggle="modal" data-target="#img-comt"><img src='+img_array[4]+' alt="" width="100" height ="140"></a><div class="more-photos"><span>+ '+imgcount+'</span></div></figure>'
+        }
+        html += '</div>';
+        html += '</div>';
+        $('#add_image').html(html);
+        $('#previewmodel').modal('show');
+    });
 });
 
 $(document).ready(function(){
@@ -1813,7 +2058,8 @@ $('.editpic').click(function () {
    var foldernm = '<?php echo @$loggedinUser->id;  ?>';
    $('#imgId').val(id);
    $('#imgname').val(imgname);
-   $(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
+   //$(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
+   $(".srcappend").attr("src","/public/uploads/page-cover-photo/thumb/"+imgname);
 });
 
 $("#coverphoto").change(function() {

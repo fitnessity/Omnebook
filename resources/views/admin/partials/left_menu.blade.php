@@ -116,11 +116,11 @@
           </a>
         </li> -->
 
-        <li class="{{ $request->segment(2) == 'businessusers' ? 'active' : '' }}">
+        <!-- <li class="{{ $request->segment(2) == 'businessusers' ? 'active' : '' }}">
           <a href="/admin/businessusers">
             <i class="fa fa-users"></i> <span>Manage BusinessUsers</span> 
           </a>
-        </li>
+        </li> -->
 
         <li class="{{ $request->segment(2) == 'plans' ? 'active' : '' }}">
           <a href="/admin/plans/membership-plan">

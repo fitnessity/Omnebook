@@ -131,7 +131,9 @@
 
                   <!-- <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td> -->
 
-                  <td><a href="\admin\feedbacks\view\{{$value->id}}" title="Click for more details" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                  <td>
+                    <a href="\admin\feedbacks\view\{{$value->id}}" title="Click for more details" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a href="\admin\feedbacks\delete\{{$value->id}}" title="Click for more details" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                   </tr>
 

@@ -99,7 +99,7 @@
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
                                                 <input type="hidden" name="old_profile_pic" value="{{ $UserProfileDetail['profile_pic'] }}" />
-
+												<label> First Name </label>
                                                 <input type="text" name="firstname" id="firstname" placeholder="First Name" class="form-control" value="{{ $UserProfileDetail['firstname']}}">
                                                 @if ($errors->has('firstname'))
                                                 <span class="help-block" style="color:red">
@@ -111,6 +111,7 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Last Name </label>
                                                 <input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control" value="{{$UserProfileDetail['lastname'] }}">
                                                 @if ($errors->has('lastname'))
                                                 <span class="help-block" style="color:red">
@@ -122,6 +123,7 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Gender </label>
                                                 <input type="text" name="gender" id="gender" placeholder="Gender" class="form-control" value="{{$UserProfileDetail['gender'] }}">
                                                 @if ($errors->has('gender'))
                                                 <span class="help-block" style="color:red">
@@ -133,24 +135,26 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
-                                                <label style="font-size:12px; font-weight: normal;">DOB:&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="date" name="birthdate" style=""  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
+                                                <label>DOB:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                <input type="date" name="birthdate"  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
                                                 <br><br>
-                                                <input type="radio" name="dobstatus" value="0" @if($UserProfileDetail['dobstatus'] == 0) checked="" @endif>
+                                                <input type="radio" class="radio-dots" name="dobstatus" value="0" @if($UserProfileDetail['dobstatus'] == 0) checked="" @endif>
                                                 <label style="font-weight: normal;">Show &nbsp;&nbsp;</label>
-                                                <input type="radio" name="dobstatus" value="1" @if($UserProfileDetail['dobstatus'] == 1) checked="" @endif>
+                                                <input type="radio" class="radio-dots" name="dobstatus" value="1" @if($UserProfileDetail['dobstatus'] == 1) checked="" @endif>
                                                 <label style="font-weight: normal;">Hide</label>
-                                                </label>
+                                                
                                             </div>
                                         </div>
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> User Name </label>
                                                 <input type="text" readonly="readonly" placeholder="@username" class="form-control" value="{{$UserProfileDetail['username'] }}">
                                             </div>
                                         </div>
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Phone Number </label>
                                                 <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$phone_number}}" maxlength="14"  onkeyup="changeformate()">
                                                 @if ($errors->has('phone_number'))
                                                 <span class="help-block" style="color:red">
@@ -162,6 +166,7 @@
 
                                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group editform">
+												<label> Address </label>
                                                 <input type="text" name="address" id="address" placeholder="Address" class="form-control" value="{{$UserProfileDetail['address'] }}">
                                                 @if ($errors->has('address'))
                                                 <span class="help-block" style="color:red">
@@ -177,6 +182,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> City </label>
                                                 <input type="text" name="city" id="city" placeholder="City" class="form-control" value="{{$UserProfileDetail['city'] }}">
                                                 @if ($errors->has('city'))
                                                 <span class="help-block" style="color:red">
@@ -188,6 +194,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> State </label>
                                                 <input type="text" name="state" id="state" placeholder="State" class="form-control" value="{{$UserProfileDetail['state'] }}">
                                                 @if ($errors->has('state'))
                                                 <span class="help-block" style="color:red">
@@ -199,6 +206,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Country </label>
                                                 <input type="text" name="country" id="country" placeholder="Country" class="form-control" value="{{$UserProfileDetail['country'] }}">
                                                 @if ($errors->has('country'))
                                                 <span class="help-block" style="color:red">
@@ -210,6 +218,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Zipcode </label>
                                                 <input type="text" name="zipcode" id="zipcode" placeholder="Zipcode" class="form-control" value="{{$UserProfileDetail['zipcode'] }}">
                                                 @if ($errors->has('zipcode'))
                                                 <span class="help-block" style="color:red">
@@ -221,9 +230,9 @@
 
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group editform">
+												<label> Quick Intro </label>
                                                 <textarea name="quick_intro" id="quick_intro" cols="30" minlength="50" maxlength="200" rows="2" placeholder="Quick Intro (max 100 Words)" class="form-control">{{$UserProfileDetail['quick_intro'] }}</textarea>
                                                 <span id="quick_intro_count"><span id="display_count">0</span> words. Words left : <span id="word_left">200</span></span>
-
                                             </div>
                                         </div>
 
@@ -232,17 +241,20 @@
                                     <input type="submit" name="btnprofile" id="btnprofile" value="Update" class="btn-style-one">
                                 </div>
 
-                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 user-top">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
 
                                     <div class="form-group editform">
+										<label> Email </label>
                                         <input type="text" readonly placeholder="Email" class="form-control" value="{{$UserProfileDetail['email'] }}">
                                     </div>
 
                                     <div class="form-group editform">
+										<label> Favorite Activities </label>
                                         <input type="text" name="favorit_activity" id="favorit_activity" placeholder="Favorite Activities (Can display up to 6 activites)" class="form-control" value="{{$UserProfileDetail['favorit_activity']}}">
                                     </div>
 
                                     <div class="form-group editform">
+										<label> About </label>
                                         <textarea name="business_info" id="business_info" cols="30" rows="7" maxlength="1000" placeholder=" About (a short description about your business - max 1000 words)" class="form-control">{{$UserProfileDetail['business_info']}}</textarea>
                                         <span id="business_info_count"><span id="display_count_business">0</span> words. Words left : <span id="word_left_business">1000</span></span>
                                     </div>
@@ -332,6 +344,7 @@
                                 <form name="frm_pwd" id="frm_pwd" action="{{Route('updatechangepassword')}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group editform">
+										<label> Current Password </label>
                                         <input type="password" name="currpassword" id="currpassword" placeholder="Current Password" class="form-control">
                                         @if ($errors->has('currpassword'))
                                         <span class="help-block" style="color:red">
@@ -341,6 +354,7 @@
                                     </div>
 
                                     <div class="form-group editform">
+										<label> New Password </label>
                                         <input type="password" name="newpassword" id="newpassword" placeholder="New Password" class="form-control">
                                         <img src="{{ url('public/img/icon-verified-autorize.png') }}" alt="" class="password-img">
                                         @if ($errors->has('newpassword'))
@@ -351,6 +365,7 @@
                                     </div>
 
                                     <div class="form-group editform">
+										<label> Retype Password </label>
                                         <input type="password" name="retypepassword" id="retypepassword" placeholder="Retype Password" class="form-control">
                                         <img src="{{ url('public/img/icon-verified-autorize.png') }}" alt="" class="password-img">
                                         @if ($errors->has('retypepassword'))

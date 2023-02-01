@@ -458,7 +458,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         <div class="modal-content">
             <div class="modal-body login-pad">  
                 <div class="pop-title employe-title">
-                    <h3>Change Photohh</h3>
+                    <h3>Change Photo</h3>
                 </div>
                 <button type="button" class="close modal-close" data-dismiss="modal">
                     <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
@@ -468,7 +468,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                             <div class="cover-tagbox">
                                 <i class="fas fa-info-circle"></i>
-                                <span>Your Cover Photo will be used to customize the header of your profile.</span>
+                                <span>Your Cover Photo will be used to customize the header of your profile.</span><br>
+                                <span>Required Dimensions for Your Cover Photo Is 800 X 450.</span>
                             </div>
                             <div class="file-upload">
                                 <form name="frm_cover" id="frm_cover" action="{{Route('savegallarypics')}}" method="post" enctype="multipart/form-data">
@@ -495,12 +496,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     </div>
                                     <div>
                                     </div>
-
+                                    &nbsp;
                                     <div class="image-title-wrap">
                                         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
                                         <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
                                         &nbsp;&nbsp;
                                     </div>
+                                    &nbsp;
                                 </form>
                             </div>
 
