@@ -169,7 +169,8 @@
                                         </div>
                                         <div class="col-md-1 col-xs-12 col-sm-4">
                                             <div class="scheduled-location">
-                                                @if($booking_checkin_detail->order_detail && $booking_checkin_detail->order_detail->expired_at)     {{$booking_checkin_detail->order_detail->expired_at}}
+                                                @if($booking_checkin_detail->order_detail)
+                                                    {{Carbon\Carbon::parse($booking_checkin_detail->order_detail->expired_at)->format('m/d/Y')}}
                                                 @else
                                                     N/A
                                                 @endif
@@ -351,7 +352,7 @@
                 checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null
             },
             success:function(response) {
-                location.reload()
+                //location.reload()
             },
         });
     });

@@ -401,11 +401,11 @@
                                     ?>
                                    <!--  <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a> -->
                                     <div class="select-sparetor">
-                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}')">
+                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}','{{$profilePic}}','{{$item["name"]}}','{{date("m/d/Y",strtotime($item["sesdate"]))}}')">
                                         <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
                                         <p class="payfor-ptag">Share the booking details with them</p>
 										<div class="btn-ord-txt">
-											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift_{{$item['priceid']}}" style="display:none;" id="giftanotheralink{{$item['priceid']}}"></a>
+											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
 										</div>
                                     </div>
                                 </div>
@@ -599,80 +599,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- The Modal Add Business-->
-					<div class="modal fade compare-model" id="leavegift_{{$item['priceid']}}">
-					    <div class="modal-dialog modal-lg giftsmodals">
-					        <div class="modal-content">
-								<div class="modal-header" style="text-align: right;"> 
-								  	<div class="closebtn">
-										<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">×</span>
-										</button>
-									</div>
-								</div>
-
-					            <!-- Modal body -->
-					            
-				            	<div class="modal-body">
-				            		<form action="{{route('addactivitygift',['priceid',$item['priceid'] ])}}" method="post" id="giftform{{$item['priceid']}}">
-										@csrf
-										<input type="hidden" name="priceid" id="priceid{{$item['priceid']}}" value="{{$item['priceid']}}">
-										<input type="hidden" name="sc_date" id="sc_date{{$item['priceid']}}" value="{{date('m/d/Y',strtotime($item['sesdate']))}}">
-										<div class="row contentPop"> 
-											<div class="col-lg-12 nopadding">
-											   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600;">Leave a gift for your friends and family</h4>
-											   <hr style="border: 8px solid #df0003; width: 80%; margin-left: -16px;">
-											</div>
-											<div class="row">
-												<div class="col-lg-2">
-													<div class="activity-title-img">
-														<img src="{{ $profilePic }}" alt="Avatar" class="avatar">
-													</div>
-												</div>
-												<div class="col-lg-10">
-													<div class="activity-details">
-														<h3>{{$item["name"]}}</h3>
-														<p>We will include all of the booking details in the email your guest will receive</p>
-													</div>
-												</div>
-											</div>
-
-											<div class="row">
-												<div class="col-lg-6">
-													<div class="gift-comments">
-														<label>Leave a comment for them</label>
-														<textarea class="form-control" rows="4"  name="comment" id="comment" maxlength="150"></textarea>
-														<label>From:</label>
-														<input type="name" class="form-control myemail" name="gift_from"  id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="">
-													</div>
-												</div>
-												<div class="col-lg-6">
-													<div class="gift-comments email multiple-email" id="emaildiv{{$item['priceid']}}">
-														<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">
-													</div>
-													<a href="#" class="addnewemail" onclick="addemail('{{$item["priceid"]}}');">+Add another email</a>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-lg-12">
-													<div class="booking-checkbox">
-														  <input type="checkbox" id="price_show" name="price_show" value="1">
-														  <label for="price_show">Don’t Show The Price</label>
-														  <p>If this is a gift, you can have the option not to show the price in the booking email.</p>
-													</div>
-												</div>
-												<div class="col-lg-12 text-right">
-													<button class="post-btn-red" type="button" id="submit{{$item['priceid']}}" onclick="submitform('{{$item["priceid"]}}');">Save</button>
-												</div>
-											</div>
-										</div>
-					            	</form>
-				            	</div>					        
-				           	</div>
-				    	</div>
-					</div>
-					<!-- end modal -->
 
     			<?php } ?>
         			<div class="btn-ord-txt">
@@ -936,7 +862,27 @@
     }
 </style>
 
+<!-- The Modal Add Business-->
+	<div class="modal fade compare-model" id="leavegift">
+	    <div class="modal-dialog modal-lg giftsmodals">
+	        <div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+				  	<div class="closebtn">
+						<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
 
+	            <!-- Modal body -->
+	            
+	        	<div class="modal-body" id="leavegiftbody">
+	        		
+	        	</div>					        
+	       	</div>
+		</div>
+	</div>
+	<!-- end modal -->
 
 <!-- The Add New Participant Modal -->
 	<div class="modal fade compare-model" id="newparticipant">
@@ -1017,18 +963,40 @@
 
 
 <script>
-	function opengiftpopup(pid){
+	function opengiftpopup(pid,img,name,date){
 		/*alert('hii');*/
 		var checkBox = document.getElementById("payforcheckbox"+pid);
 		//alert(checkBox.checked );
 		if (checkBox.checked == true){
-		    $('#giftanotheralink'+pid).click();
+			$.ajax({
+	           type:'post',
+	           url:'/activity_gift_model',
+	           data:{
+	           		_token : '<?php echo csrf_token() ?>' ,
+	           		name : name,
+	           		img : img,
+	           		pid : pid,
+	           		date : date,
+	           	},
+	            success:function(data) {
+	            	$('#leavegiftbody').html(data);
+	            }
+	        });
+		    $('#giftanotheralink').click();
 		}
+		
+
+		/*$('#emaildiv').html('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
+		$(".avatar").attr("src", img);
+		$('#act_name').html(name);
+		$('#priceid').val(pid);
+		$('#sc_date').val(date);*/
+		
 	}
 
 	function addemail(pid) {
-
-		$('#emaildiv'+pid).append('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
+		//alert('hii');
+		$('#emaildiv').append('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
 	}
  
 	$(".show-more").click(function(event) {

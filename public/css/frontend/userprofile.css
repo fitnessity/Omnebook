@@ -4348,19 +4348,19 @@
 
         .friend-name {
 
-          width: 84%;
+          width: 84% !important;
 
         }
 
         .post-meta .we-video-info > ul {
 
-          width: 100%;
+          width: 70%;
 
         }
 
         .we-video-info > .users-thumb-list {
 
-          width: 100%;
+          width: 30%;
 
           margin-top: 10px;
 
@@ -4463,10 +4463,8 @@
           font-size: 13px;
 
         }
-
-        
-
         /*calender end*/
+		.photo-tab-imgs img{width: 100%;}
 
     }
 
@@ -4612,19 +4610,19 @@
 
         .friend-name {
 
-          width: 86%;
+          width: 86% !important;
 
         }
 
         .post-meta .we-video-info > ul {
 
-          width: 100%;
+          width: 70%;
 
         }
 
         .we-video-info > .users-thumb-list {
 
-          width: 100%;
+          width: 30%;
 
           margin-top: 10px;
 
@@ -4717,6 +4715,8 @@
         }
 
         /*calender end*/
+		.more-post-optns > i{top: 4px;}
+		.photo-tab-imgs img{width: 100%;}
 
 }
 

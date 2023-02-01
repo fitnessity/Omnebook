@@ -672,6 +672,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                             <li class="nav-item">
 								<a class="nav-link" href="#reviews">Reviews</a>
 							</li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Schedule</a>
+                            </li>
 							
                             <?php /*if($loggedinUser->id == $company->user_id) { ?>
 							<li class="nav-item">
@@ -898,7 +901,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 									<?php } ?>
 									<div class="friend-info">
                                     	<figure>
-                                            @if(File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
+                                            @if($compinfo['logo'] != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
                                             <img src="{{ url('/public/uploads/profile_pic/thumb/'.$company['logo']) }}" alt="fitnessity" class="img-fluid">
                                             @else
                                                 <?php

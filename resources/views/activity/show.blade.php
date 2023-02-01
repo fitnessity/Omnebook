@@ -1262,7 +1262,7 @@ input:disabled{
 <nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
   <div class="container">
     <p class="navbar-text navbar-right" style="text-align:center;">
-    	<a href="#check_availability" class="showall-btn" href="http://lvh.me:8080/activities/get_started/events">Check Availablity</a>
+    	<a href="#check_availability" class="showall-btn" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
     </p>
   </div>
 </nav>

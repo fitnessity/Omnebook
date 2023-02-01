@@ -103,6 +103,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
    */
   public function update(Request $request, $business_id, $scheduler_id, $id)
   {
+    //print_r($request->all());exit;
     $company = $request->current_company;
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     $business_checkin_detail = BookingCheckinDetails::findOrFail($id);

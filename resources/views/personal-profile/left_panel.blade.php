@@ -42,6 +42,13 @@
                                     <span>Reviews</span>
                                 </a>
                             </li> <?php */?>
+                            
+                            <li class=" {{ (request()->is('personal-profile/booking-info*')) ? 'active' : '' }}">
+                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info">
+                                    <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">
+                                    <span>Booking Info</span>
+                                </a>
+                            </li>
 
                             <li class=" {{ (request()->is('personal-profile/favorite*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite">
@@ -62,15 +69,7 @@
                                     <img src="{{ url('public/img/menu-icon1.svg') }}" alt="">
                                     <span>Following</span>
                                 </a>
-                            </li>
-                            
-                            <li class=" {{ (request()->is('personal-profile/booking-info*')) ? 'active' : '' }}">
-                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info">
-                                    <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">
-                                    <span>Booking Info</span>
-                                </a>
-                            </li>
-
+                            </li> 
                         </ul>
 			</div>
 		</div>
