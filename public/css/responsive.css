@@ -1331,6 +1331,7 @@
 	.suspend { float: right; margin-top: 3px;}
 	.show-all .table-inner-data-sec .p-name{width: 75%;}
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
+	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2239,7 +2240,6 @@
 	/*.page-content-wrapper .content-page label{width: 16%;}*/
 	.w-38 { width: 72% !important;}
 	.show_block{margin-top: 15px;}
-	.rs-birthdate{float: none !important;}
 	.w-80 {  width: 100% !important;}
 	.dob input{width: 265px !important;}
 	.divmargin{margin-left: 0px !important;}
@@ -2250,7 +2250,6 @@
 	.ord-details .empty-cart{padding: 120px 0;}
 	.card-btns{width: 100%; margin-bottom: 10px;}
 	#mycamera .fa.fa-camera{left: 7px;top: 8px;position: absolute;}
-	.friend-name {  width: 80%;}
 	.emoji-picker-icon{right: 51%; top: 62%;}
 	.cards-block{width: 100% !important; margin-bottom: 15px;}
 	.favorite-block .favorite-content{width: 44% !important;}
@@ -2403,6 +2402,8 @@
 	.fsth-0 { margin-top: 30px;}
 	.show-all .table-inner-data-sec .p-name{width: 79%;}
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
+	.form-control.rs-birthdate{width: 295px;}
+	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
 }
 
 @media(max-width: 575px) {
@@ -2621,6 +2622,7 @@
 	.home-black-section label{font-size: 20px;}
 	.home-black-section i{display: none;}
 	#dropBox { min-width: 330px;}
+	.form-control.rs-birthdate {  width: 272px;}
 	
 }
 
@@ -2670,6 +2672,7 @@
 	.home-black-section label{font-size: 20px;}
 	.home-black-section i{display: none;}
 	#dropBox {  min-width: 300px;}
+	.form-control.rs-birthdate {  width: 240px;}
 }
 
 @media(max-width: 280px){

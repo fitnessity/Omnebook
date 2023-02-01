@@ -1688,7 +1688,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             	
 																	<div class="col-sm-3 col-md-4 col-lg-4">
 																		<div class="photo-tab-imgs">
-																			<img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                                            <figure>
+                                                                                <a href="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" data-fancybox="gallery_photo{{$i}}" class="firstfancyimg">
+                                                                                    <img height="170" width="170" lass="bixrwtb6" src="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" alt="fitnessity">
+                                                                                </a>
+                                                                            </figure>
+																			<!-- <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}"> -->
 																		</div>
                                                                 	</div>
                                                              	
@@ -3977,12 +3982,11 @@ $("#myDate").datepicker({
 	// an array of excluded dates
 	disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
 	// an array of pre-selected dates
-	daterange = [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")
+	daterange: [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")],
 	// appearance options
 	showButtonPanel:true,  
 	showWeek: true,
 	firstDay: 1
-});
 });
 </script>
 
@@ -3993,9 +3997,13 @@ $("#myDate").datepicker({
 	r.getDateRange()
 </script>
 <script>
-document.querySelector('.show-btn').addEventListener('click', function() {
-  document.querySelector('.sm-menu').classList.toggle('active');
-});
+   /* var btn = document.querySelector('.show-btn');
+    if(btn != ''){
+
+        btn.addEventListener('click', function() {
+            document.querySelector('.sm-menu').classList.toggle('active');
+        });
+    }*/
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
