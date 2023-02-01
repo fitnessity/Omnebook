@@ -169,8 +169,7 @@
                                         </div>
                                         <div class="col-md-1 col-xs-12 col-sm-4">
                                             <div class="scheduled-location">
-                                                @if($booking_checkin_detail->order_detail)
-                                                    {{$booking_checkin_detail->order_detail->expired_at->format('m/d/Y')}}
+                                                @if($booking_checkin_detail->order_detail && $booking_checkin_detail->order_detail->expired_at)     {{$booking_checkin_detail->order_detail->expired_at}}
                                                 @else
                                                     N/A
                                                 @endif
