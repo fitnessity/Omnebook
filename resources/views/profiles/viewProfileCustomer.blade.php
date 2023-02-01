@@ -69,6 +69,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     <?php
 }
 ?>
+<style>
+.removepost {
+  height: auto !important;
+}
+</style>
 
 <div class="banner banner-fs bannerstyle">
 

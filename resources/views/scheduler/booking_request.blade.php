@@ -3,13 +3,10 @@
 @include('layouts.userHeader')
 
 
-<div class="p-0 col-md-12 inner_top padding-0">
+<!-- <div class="p-0 col-md-12 inner_top padding-0"> -->
+<!-- <div class="p-0 col-md-12 padding-0">
     <div class="row">
-        <div class="col-md-2" style="background: black;">
-           @include('business.businessSidebar')
-        </div>
-
-        <div class="col-md-10 nopadding">   
+        <div class="col-md-10 ">   --> 
 			<div class="container-fluid no-padding">
 				<div class="row">
 					<div class="col-md-3">
@@ -392,9 +389,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
+	<!-- 	</div>
 	</div>
-</div>
+</div> -->
 
 
 

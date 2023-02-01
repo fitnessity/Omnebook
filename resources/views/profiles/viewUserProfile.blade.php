@@ -67,6 +67,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     <?php
 }
 ?>
+<style>
+.removepost {
+  height: auto !important;
+}
+.removepost{
+	padding: 0px !important;
+}
+
+
+</style>
 
 <div class="banner banner-fs bannerstyle">
 
@@ -1282,6 +1292,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/pixelarity-face.js') }}"></script>
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <!-- emoji -->
 <script src="{{ url('public/emoji/lib/js/config.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
@@ -1290,11 +1302,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 
-<script>
-$('.firstfancyimg').click(function(){
-  $.fancybox.close();
-});
-</script>
+
 <script type="text/javascript"> 
     
     function take_snapshot() {
@@ -1439,9 +1447,6 @@ $('.firstfancyimg').click(function(){
         $('a.share').shares();
     });
 
-    $('.firstfancyimg').click(function(){
-        $.fancybox.close();
-    });
 </script>
 <script>
     $(function() {

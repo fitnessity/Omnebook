@@ -470,13 +470,15 @@ class BookingController extends Controller {
     }
 
     public function sendemailofreceipt(Request $request){
+        //print_r($request->all());exit;
         $email_detail = array(
             'odetailid' => $request->odetailid,
             'oid' => $request->oid,
             'email' => $request->email);
-        $status = MailService::sendEmailReceipt($email_detail);
+        /*$status = MailService::sendEmailReceipt($email_detail);*/
 
-        SGMailService::sendBookingReceipt($request->order_id);
+        //$status  = SGMailService::sendBookingReceipt($request->order_id);
+        $status  = SGMailService::sendBookingReceipt($request->oid);
         return $status;
     }
 

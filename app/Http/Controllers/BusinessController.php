@@ -323,7 +323,7 @@ class BusinessController extends Controller
 
     public function savegallarypics(Request $request)
     {   
-       /* echo "string"; print_r($request->all());*/
+        //echo "string"; print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $pageid=$request->pageid;
         $id = $request->imgId;
@@ -778,7 +778,6 @@ class BusinessController extends Controller
 		
 		
 		$viewgallery = $this->viewPageGalleryList($page_id);
-		
 		$cart = []; $profile_posts=[]; $family=[];
         /*if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
@@ -896,7 +895,7 @@ class BusinessController extends Controller
        
         $postsavedtab = PagePostSave::where('user_id',$company['user_id'])->orderBy('id','desc')->get();
 		$cart = []; $profile_posts=[]; $family=[];
-		
+		$viewgallery = $this->viewPageGalleryList($page_id);
 		return view('profiles.viewBusinessProfileTimeline', [
             'cart' => $cart,
 			'company' => $company,
@@ -920,6 +919,7 @@ class BusinessController extends Controller
 			'page_posts' => $PagePost,
 			'family' =>$family,
 			'postsave' => $postsave,
+            'viewgallery' => $viewgallery,
         ]);
 	}
 	
@@ -941,13 +941,14 @@ class BusinessController extends Controller
     }
 	public function viewPageGalleryList($page_id) {
         $galleryPic = [];
-        $gallery = DB::select('select id, attachment_name, cover_photo from page_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
+        $gallery = DB::select('select id, attachment_name, cover_photo,user_id from page_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
         if (!empty($gallery) && $gallery[0]->id > 0) {
             foreach ($gallery as $pic) {
                 $filename = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'page-cover-photo' . DIRECTORY_SEPARATOR . $pic->attachment_name;
                 $obj['id'] = $pic->id;
                 $obj['cover'] = $pic->cover_photo;
                 $obj['name'] = $pic->attachment_name;
+                $obj['user_id'] = $pic->user_id;
                 $obj['size'] = @filesize($filename);
                 $galleryPic[] = $obj;
             }

@@ -18529,8 +18529,8 @@ input.search_input_banner {
 }
 
 input#zipcode {
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
+   /* border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px; */
     border-left: 2px solid #c7c7c7;
 }
 
@@ -23608,7 +23608,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .classes-time label{
 	font-weight: 400;
-	margin-top: 5px;
+	margin-top: 10px;
 	font-size: 13px;
 }
 .col-md-offset-3-custom{
@@ -24399,4 +24399,13 @@ padding-left: 0px;
 }
 .product-sub-title label{
 	font-size: 18px;
+}
+.postImage{
+	margin-bottom: 20px;
+}
+.postImage img{
+	margin-left: 5px;
+}
+.post-meta .removepost{
+	margin-bottom: 20px;
 }

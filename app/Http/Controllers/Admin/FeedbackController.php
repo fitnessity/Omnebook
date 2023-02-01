@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\FeedbackRepository;
 use App\User;
+use App\FitnessityFeedback;
 use Auth;
 use Redirect;
 use Response;
@@ -62,4 +63,20 @@ class FeedbackController extends Controller
             return Redirect::to('/admin/feedbacks')->with('status',$response);
         }        
     }
+
+    public function deleteFeedback($id)
+    { 
+        if(isset($id) && $id > 0){
+            $allFeedbacks = FitnessityFeedback::where('id',$id)->delete();
+            $response = array(
+                'success' =>  'Feedback Succesfully Deleted.',
+            );
+        } else {
+            $response = array(
+                    'danger' =>  'Finding Error While Deleting Feedback.',
+            );
+        } 
+        return Redirect::to('/admin/feedbacks')->with('status',$response);       
+    }
+
 }
