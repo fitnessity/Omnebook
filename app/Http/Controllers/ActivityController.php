@@ -55,9 +55,6 @@ class ActivityController extends Controller {
 
 		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'classes')->with(['company_information']);
 		$name = 'Personal Training';
-		
-
-
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
 
@@ -97,7 +94,6 @@ class ActivityController extends Controller {
 
     public function experiences(Request $request){
     	$activity_get_start_fast =  ActivtyGetStartedFast::find(3);
-
 		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'experience')->with(['company_information']);
 		$name = 'Experience';
 	
@@ -1641,7 +1637,7 @@ class ActivityController extends Controller {
                                                         }
                                                         $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
                                                             <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
-                                                            <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                                                            <a class="showall-btn" href="/activity-details/'.$act['id'].'">Book Now</a>
                                                         </div>';
                                                         if($price_all != ''){
                                                             $actbox .= '<div>
@@ -1698,7 +1694,7 @@ class ActivityController extends Controller {
                                                     }
                                                     $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
                                                         <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
-                                                        <a class="showall-btn" href="/activity-details/'.$act['id'].'">More Details</a>
+                                                        <a class="showall-btn" href="/activity-details/'.$act['id'].'">Book Now</a>
                                                     </div>';
                                                     if($price_all != ''){
                                                         $actbox .= '<div>
@@ -2452,12 +2448,12 @@ class ActivityController extends Controller {
             <span>Infants x 0</span>
         </div>';
         
-        if(@$total_price_val_adult != '' ){
+       /* if(@$total_price_val_adult != '' ){*/
             $bookdata .=' <div class="cartstotal mt-20">
                 <label>Total </label>
                 <span id="totalprice">$0 USD</span>
             </div>';
-        }
+        /*}*/
 
         echo $stactbox.'~~'.$bookdata;
     }

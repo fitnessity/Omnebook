@@ -462,7 +462,7 @@ class UserRepository
                 $total_users -> whereIn("role",['customer','business']);
                 break; 
         }
-        $total_users -> where("is_deleted",0);
+        $total_users -> where("is_deleted",'0');
         return $total_users->count();
     }
 
@@ -489,7 +489,8 @@ class UserRepository
                 
         }
 
-        $total_users -> where("is_deleted",0);
+        //$total_users -> where("is_deleted", 0);
+        $total_users -> where("is_deleted", '0');
         $total_users -> whereIn("role",['customer','business']);
         return $total_users->count();
     }

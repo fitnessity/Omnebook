@@ -187,6 +187,19 @@ input:disabled{
         }
     }
  	/*echo $timedata;exit();*/
+
+ 	$mbox =''; 
+ 	$mem_ary = []; 
+    if (!empty(@$servicePr)) {
+    	foreach ($servicePr as  $pr) {
+            $mem_ary [] =  $pr['membership_type'];
+        }
+        $mem_ary = array_unique($mem_ary);
+        foreach ($mem_ary as  $pr) {
+            $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
+        }
+    }
+
 	$selectval = $priceid = $total_price_val = '' ;
 	$adult_cnt =$child_cnt =$infant_cnt =0;
 	$adult_price = $child_price = $infant_price =0;
@@ -210,11 +223,13 @@ input:disabled{
         $i=1;
         if (!empty(@$servicePr)) {
             foreach ($servicePr as  $pr) {
-                if($i==1){
-            		$priceid =$pr['id'];
-            	}
-                $selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-                $i++;
+            	if(@$mem_ary[0] == $pr['membership_type']){
+	                if($i==1){
+	            		$priceid = $pr['id'];
+	            	}
+	                $selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
+	                $i++;
+	            }
             }
         }
     }else{
@@ -239,27 +254,18 @@ input:disabled{
 	        }
 			$i=1;
             foreach ($servicePr as  $pr) {
-            	if($i==1){
-            		$priceid =$pr['id'];
-            	}
-				$selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-				$i++;
+            	if(@$mem_ary[0] == $pr['membership_type']){
+	            	if($i==1){
+	            		$priceid =$pr['id'];
+	            	}
+					$selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
+					$i++;
+				}
 			}
 		}
     }
 
-	$mbox =''; 
-    if (!empty(@$servicePr)) {
-    	foreach ($servicePr as  $pr) {
-            $mem_ary [] =  $pr['membership_type'];
-        }
-        $mem_ary = array_unique($mem_ary);
-        foreach ($mem_ary as  $pr) {
-            $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
-        }
-    }
-
-
+	
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
 
     $pro_pic = $service->profile_pic;
@@ -1146,7 +1152,7 @@ input:disabled{
 						                                <?php }?>
 						                                    target="_blank">{{ $service['program_name'] }}</a></span>
 													<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-													<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">More Details</a>
+													<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">Book Now</a>
 												</div>
 												@if($price_all != '')
 													<div>
@@ -1262,7 +1268,7 @@ input:disabled{
 <nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
   <div class="container">
     <p class="navbar-text navbar-right" style="text-align:center;">
-    	<a href="#check_availability" class="showall-btn" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+    	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
     </p>
   </div>
 </nav>
@@ -1681,7 +1687,7 @@ $(document).ready(function () {
 			},
 			success: function (response) {
 				if(response != ''){
-					$('#updatefilterforcart').html(response);
+					//$('#updatefilterforcart').html(response);
 					$('#sesdate'+sid).val(actdate);
 				}else{
 					$('#updatefilterforcart').html('');
@@ -1882,104 +1888,107 @@ $(document).ready(function () {
 
 	function changeactpr(aid,val,part,div,maid)
 	{
+	    $('#book'+maid+aid).html('<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>');
+
 		/*var n = val.split('!^');
-	    var datan = '';
-	    var session = '';
-	    var id = '';
-	    var pr1 = 0;
-	    var price_title = '—';
-	    var memtype_hidden = '';
-	    var persontype = '';
-	    if(n[0] != ''){
-	    	datan1 = n[0].split('~~');
-	    	if(datan1[0] != ''){
-	    		session =  datan1[0]; 
-	    	}
-	    	if(datan1[1] != ''){
-				pr1 =  datan1[1]; 
-	    	}
-	    	if(datan1[2] != ''){
-	    		id=datan1[2];
-	    	}
-	    }
-	    if(n[1] != ''){
-	        datan = n[1].split('^^');
-	        if(datan[0] != ''){
-	            price_title = datan[0];
-	            $('#price_title_hidden'+maid+aid).val(datan[0]);
-	        }
-	        if(datan[1] != ''){
-	            memtype_hidden = datan[1];
-	            $('#memtype_hidden'+maid+aid).val(datan[1]);
-	        }
-	        if(datan[2] != ''){
-	          	persontype = datan[2];
-	            $('#persontype').val(datan[2]);
-	        }
-	  
-	    }
-		var pr; var qty;
-		var actfilparticipant=$('#actfilparticipant'+maid).val();
-		var category_title = $('#cate_title'+maid+aid).val();
-	    var time = $('#time_hidden'+maid+aid).val();
-	    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
+		    var datan = '';
+		    var session = '';
+		    var id = '';
+		    var pr1 = 0;
+		    var price_title = '—';
+		    var memtype_hidden = '';
+		    var persontype = '';
+		    if(n[0] != ''){
+		    	datan1 = n[0].split('~~');
+		    	if(datan1[0] != ''){
+		    		session =  datan1[0]; 
+		    	}
+		    	if(datan1[1] != ''){
+					pr1 =  datan1[1]; 
+		    	}
+		    	if(datan1[2] != ''){
+		    		id=datan1[2];
+		    	}
+		    }
+		    if(n[1] != ''){
+		        datan = n[1].split('^^');
+		        if(datan[0] != ''){
+		            price_title = datan[0];
+		            $('#price_title_hidden'+maid+aid).val(datan[0]);
+		        }
+		        if(datan[1] != ''){
+		            memtype_hidden = datan[1];
+		            $('#memtype_hidden'+maid+aid).val(datan[1]);
+		        }
+		        if(datan[2] != ''){
+		          	persontype = datan[2];
+		            $('#persontype').val(datan[2]);
+		        }
+		  
+		    }
+			var pr; var qty;
+			var actfilparticipant=$('#actfilparticipant'+maid).val();
+			var category_title = $('#cate_title'+maid+aid).val();
+		    var time = $('#time_hidden'+maid+aid).val();
+		    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
 
-		if(actfilparticipant!='')
-		{
-			pr=actfilparticipant*pr1; 
-			qty=actfilparticipant;
-		}
-		else{ 
-			qty=1; 
-			if( pr1!='' ){ pr=qty*pr1; } else { pr='100'; }
-		}
-		var infantcnt = 0;
-		var childcnt = 0;
-		var adultcnt = 0;
-		var bookdata ='';
-		if(category_title != ''){
-			bookdata += '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div>';
-		}
-		if(time != ''){
-			bookdata += '<div><label>Duration: </label><span>'+ time +'</span></div>';
-		}
-		if(price_title != ''){
-			bookdata += '<div><label>Price Title: </label><span>'+ price_title+'</span></div>';
-		}
-		if(session != ''){
-			bookdata += '<div><label>Price Option: </label><span>'+session+' Session</span></div>';
-		}
+			if(actfilparticipant!='')
+			{
+				pr=actfilparticipant*pr1; 
+				qty=actfilparticipant;
+			}
+			else{ 
+				qty=1; 
+				if( pr1!='' ){ pr=qty*pr1; } else { pr='100'; }
+			}
+			var infantcnt = 0;
+			var childcnt = 0;
+			var adultcnt = 0;
+			var bookdata ='';
+			if(category_title != ''){
+				bookdata += '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div>';
+			}
+			if(time != ''){
+				bookdata += '<div><label>Duration: </label><span>'+ time +'</span></div>';
+			}
+			if(price_title != ''){
+				bookdata += '<div><label>Price Title: </label><span>'+ price_title+'</span></div>';
+			}
+			if(session != ''){
+				bookdata += '<div><label>Price Option: </label><span>'+session+' Session</span></div>';
+			}
 
-		if(session != ''){
-			bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x 1</span><span>Kids x 0</span><span>Infants x 0</span></div>';
-		}
-		if(pr1 !=''){
-			bookdata += '<div><label>Total </label><span id="totalprice">$'+pr1+' USD</span></div>';
-		}
-		bookdata += '</div>';
+			if(session != ''){
+				bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x 1</span><span>Kids x 0</span><span>Infants x 0</span></div>';
+			}
+			if(pr1 !=''){
+				bookdata += '<div><label>Total </label><span id="totalprice">$'+pr1+' USD</span></div>';
+			}
+			bookdata += '</div>';
 
-		if(div=='book'){
-			$('#book'+maid+aid).html(bookdata);
-			$('#pricequantity'+maid+aid).val(qty);
-			$('#price'+maid+aid).val(pr);
-			$('#pricetotal'+maid+aid).val(pr);
-			$('#priceid'+aid).val(id);
-		}
+			if(div=='book'){
+				$('#book'+maid+aid).html(bookdata);
+				$('#pricequantity'+maid+aid).val(qty);
+				$('#price'+maid+aid).val(pr);
+				$('#pricetotal'+maid+aid).val(pr);
+				$('#priceid'+aid).val(id);
+			}
 
-		else if (div=='bookmore'){
-			console.log(aid);
-			$('#bookmore'+maid+aid).html(bookdata);
-			$('#pricebookmore'+maid+aid).val(pr);
-			$('#priceid'+aid).val(id);
-		}
+			else if (div=='bookmore'){
+				console.log(aid);
+				$('#bookmore'+maid+aid).html(bookdata);
+				$('#pricebookmore'+maid+aid).val(pr);
+				$('#priceid'+aid).val(id);
+			}
 
-		else if (div=='bookajax'){
-			$('#bookajax'+maid+aid).html(bookdata);
-			$('#pricebookajax'+maid+aid).val(pr);
-			$('#pricequantity'+maid+aid).val(qty);
-			$('#priceid'+aid).val(id);	
-		}
-		$("#actfiloffer_forcart option:selected").prop("selected", false);*/
+			else if (div=='bookajax'){
+				$('#bookajax'+maid+aid).html(bookdata);
+				$('#pricebookajax'+maid+aid).val(pr);
+				$('#pricequantity'+maid+aid).val(qty);
+				$('#priceid'+aid).val(id);	
+			}
+			$("#actfiloffer_forcart option:selected").prop("selected", false);
+		*/
 	}
 
 	function chngemember(sid) {
@@ -2003,6 +2012,8 @@ $(document).ready(function () {
 				$("#pricechng"+sid+sid).html(response);
 				var selval = $("#selprice"+sid).val();
 				$("#priceid"+sid).val(selval);
+				$('#cartadd').html('<div id="addcartdiv"></div>');
+				$('#book'+sid+sid).html('<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>');
 			}
 		});
 	}
@@ -2077,12 +2088,18 @@ $(document).ready(function () {
 					}
 					$("#pricechng"+main+aid).html(pricelistdata);
 					$("#memberoption").html(memberoption);
+					var datahtml = '<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>';
+
+					$('#cartadd').html('<div id="addcartdiv"></div>');
 					if(div =='book'){
-	                    $('#book'+main+aid).html(bookdata);
+	                    //$('#book'+main+aid).html(bookdata);
+	                    $('#book'+main+aid).html(datahtml);
 	                }else if (div =='bookmore'){
-	                    $('#bookmore'+main+aid).html(bookdata);
+	                    //$('#bookmore'+main+aid).html(bookdata);
+	                    $('#bookmore'+main+aid).html(datahtml);
 	                }else{
-	                    $('#bookajax'+main+aid).html(bookdata);
+	                    //$('#bookajax'+main+aid).html(bookdata);
+	                    $('#bookajax'+main+aid).html(datahtml);
 	                }
 	                if(cattitle != ''){
 	                    $('#cate_title'+main+aid).val(cattitle);
@@ -2093,7 +2110,7 @@ $(document).ready(function () {
 	            	}else{
 	            		$('#timeschedule').html(setime);
 	            		$('#time_hidden'+main+aid).val(timedata);
-						$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');
+						/*$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');*/
 	            	}
 	            	$('#actscheduleid'+aid).val(id);
 	            	$("#actfiloffer_forcart option:selected").prop("selected", false);
