@@ -89,7 +89,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     @if (!empty($viewgallery))
         @foreach (array_slice($viewgallery, 0, 4) as $pic)
             <div class="business-slider">
-                <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
+              <!--   <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" /> -->
+              <img src="{{Storage::url($pic['name'])}}" />
                <!--  <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i> -->
             </div>
         @endforeach

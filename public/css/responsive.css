@@ -2404,6 +2404,7 @@
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 	.form-control.rs-birthdate{width: 295px;}
 	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
+	.sticky-book-now{font-size: 20px;}
 }
 
 @media(max-width: 575px) {

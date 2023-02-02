@@ -87,7 +87,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         @foreach (array_slice($viewgallery, 0, 4) as $pic)
            <div class="business-slider">
                 <img src="{{Storage::url($pic['name'])}}" />
-                <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
+                <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{Storage::url($pic['name'])}}" data-toggle="modal" data-target="#uploadgalaryPic"></i>
             </div>
         @endforeach
     @endif
@@ -2789,7 +2789,7 @@ $(document).on('click', '.editpic', function(){
 	var foldernm = '<?php echo @$loggedinUser->id;  ?>';
 	$('#imgId').val(id);
 	$('#imgname').val(imgname);
-	$(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
+	$(".srcappend").attr("src",imgname);
 });
 
 $(document).on('click', '.reportPost', function(){
