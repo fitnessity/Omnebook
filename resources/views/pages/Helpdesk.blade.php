@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.header')
 <style>
 .help-desk input {
     color: black;
@@ -30,7 +30,7 @@
     width: 100%;
     min-height: 633px;
     color: #696969 !important;
-    padding-top: 5%;
+    padding-top: 10% !important;
     padding-bottom: 5%;
 }
 .help{
@@ -38,7 +38,7 @@
 }
 </style>
 @section('content')
-<div class="help-desk">
+<div class="help-desk" style="margin-top:15px;">
 <!-- <input type="text" name="" id="help" list="qa" class="help" placeholder="How do we help ?" /> -->
 <datalist id="qa"> </datalist>
 	<div class="container">

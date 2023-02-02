@@ -214,3 +214,12 @@
   margin-right: -15px !important;
   margin-left: -15px !important;
 }
+.fitness-fee-ad{
+	width: 47%;
+	border: 1px solid #000;
+	border-radius: 5px;
+	padding: 5px 4px;
+}
+.fitness-fee-sp{
+	margin-left: 7px;
+}

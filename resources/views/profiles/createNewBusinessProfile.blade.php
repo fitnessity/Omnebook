@@ -9,8 +9,9 @@
     use App\StaffMembers;
 
     $fitnessity_fee= 0;
-    $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-    $fitnessity_fee = $bspdata->fitnessity_fee;
+    //$bspdata = BusinessSubscriptionPlan::where('id',1)->first();
+    //$fitnessity_fee = $bspdata->fitnessity_fee;
+    $fitnessity_fee = Auth::user()->fitnessity_fee;
 
     function timeSlotOption($lbl, $val) {
         $start = "00:00"; //you can write here 00:00:00 but no t need to it

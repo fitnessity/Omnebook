@@ -80,7 +80,7 @@ class PaymentController extends Controller {
 
         $fitnessity_fee= 0;
         $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-        $fitnessity_fee = $bspdata->fitnessity_fee;
+        //$fitnessity_fee = $bspdata->fitnessity_fee;
         $service_fee = $bspdata->service_fee;
         $tax = $bspdata->site_tax;
 
@@ -148,7 +148,7 @@ class PaymentController extends Controller {
             {
                 $priceid=0; $sesdate= $encodeqty ='' ;
                 $aduqnt = $childqnt = $infantqnt =0; 
-                
+                $fitnessity_fee = 0;
                 if ($metadatapro[$i] == $cartnew[$i]['code'])
                 {   
                     $transfer_amt_to_bususer = 0;
@@ -160,6 +160,8 @@ class PaymentController extends Controller {
                     $priceid = $cartnew[$i]['priceid'];
                     $sesdate = $cartnew[$i]['sesdate'];
                     $pidval = $cartnew[$i]['code'];
+                    $activitylocation = BusinessServices::where('id',$pidval)->first();
+                    $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                     $act_schedule_id = $cartnew[$i]['actscheduleid'];
                     if(!empty($cartnew[$i]['adult'])){
                         $aduqnt = $cartnew[$i]['adult']['quantity'];
@@ -213,7 +215,7 @@ class PaymentController extends Controller {
                     $encodeparticipate = json_encode($participate);
                 }
 
-                $activitylocation = BusinessServices::where('id',$pidval)->first();
+                
                 $price_detail = BusinessPriceDetails::find($priceid);
                 $activity_scheduler = BusinessActivityScheduler::find($act_schedule_id);
                 $act = array(
@@ -622,7 +624,7 @@ class PaymentController extends Controller {
     }
 
     public function form_participate(Request $request){
-      /*  print_r($request->all());*/
+     /*   print_r($request->all());exit;*/
         $cart_item = [];
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');

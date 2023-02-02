@@ -328,8 +328,8 @@ class SchedulerController extends Controller
           $modeldata = '';
           //session()->forget('ordermodelary');
           //$ordermodelary = array("637","638");
-          //$ordermodelary = array("650","651");
-          $ordermodelary = session()->get('ordermodelary');
+          // $ordermodelary = array("650","651");
+          //$ordermodelary = session()->get('ordermodelary');
           if(!empty($ordermodelary)){
                $modelchk = 1;
                $modeldata = $this->getmultipleodermodel($ordermodelary);
@@ -1006,7 +1006,7 @@ class SchedulerController extends Controller
           $bookidarray = [];
           $fitnessity_fee= 0;
           $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-          $fitnessity_fee = $bspdata->fitnessity_fee;
+          //$fitnessity_fee = $bspdata->fitnessity_fee;
           $service_fee = $bspdata->service_fee;
           $tax = $bspdata->site_tax;
 
@@ -1206,7 +1206,7 @@ class SchedulerController extends Controller
                     for($i=0;$i<count($metadatapro);$i++){
                          $priceid=0; $sesdate= $encodeqty ='' ;
                          $aduqnt = $childqnt = $infantqnt =0; 
-                         $aduprice = $childprice = $infantprice = 0;
+                         $aduprice = $childprice = $infantprice = $fitnessity_fee = 0;
                          if ($metadatapro[$i] == $cartnew[$i]['code'])
                          {   
                               $taxval =$cartnew[$i]['tax'];
@@ -1239,6 +1239,7 @@ class SchedulerController extends Controller
                          }
 
                          $activitylocation = BusinessServices::where('id',$pidval)->first();
+                         $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                          $price_detail = BusinessPriceDetails::find($priceid);
                          $time = $act_schedule_id;
                          $contract_date = date('Y-m-d',strtotime($sesdate));
@@ -1378,9 +1379,10 @@ class SchedulerController extends Controller
 
                foreach($cartnew as $crt){
                     $aduprice = $childprice = $infantprice = 0;
-                    $aduqnt = $childqnt = $infantqnt = 0;
+                    $aduqnt = $childqnt = $infantqnt = $fitnessity_fee = 0;
                     $taxval = $crt['tax'];
                     $activitylocation = BusinessServices::where('id',$crt['code'])->first();
+                    $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                     $price_detail = BusinessPriceDetails::find($crt['priceid']);
                     $payment_number_c = array( 'adult'=>0 ,'child' => 0,
                         'infant'=> 0);

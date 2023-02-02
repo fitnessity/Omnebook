@@ -361,9 +361,9 @@
     										
     										for($i=0; $i<$totalquantity ; $i++)
     										{ ?>
-                                            <select class="select-participat familypart" name="participat[]" id="participats" onchange="familypart(this.value,'<?php echo $i; ?>')">
-                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">Choose or Add Participant</option>
-                                                <option value="{{Auth::user()->id}}" data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
+                                            <select class="select-participat familypart" name="participat[]" id="participats" >
+                                                <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
+                                                <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
                                                 <?php foreach($family as $fa){ 
 
                                                    /* $date_now = date_create();
@@ -373,8 +373,8 @@
                                                    /* echo $age;  */  											?>   
                                                 	<option value="<?php echo $fa['id']; ?>" 
                                                         data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
-                                                        data-cnt="<?php echo $i; ?>" data-act="<?php echo $item["code"]; ?>" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
-                                                        <?php echo $fa['first_name'].' '.$fa['last_name']; ?></option>
+                                                        data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
+                                                        {{$fa['first_name']}} {{$fa['last_name']}}</option>
                                                 <?php } ?>
                                                 <option value="addparticipate">+ Add New Participant</option>
                                             </select> 
@@ -384,13 +384,13 @@
                                     <?php 
                                         $participatearray = [];
                                     ?>
-                                    <div class="mtp-15 info-details participaingdiv{{$item['code']}}">
+                                    <div class="mtp-15 info-details participaingdiv{{$item['priceid']}}">
                                     	<?php
                                             $ajaxname = Auth::user()->firstname.' '.Auth::user()->lastname;
     										for($i=0; $i<$totalquantity; $i++)
     										{ 
                                                 $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
-                                        		<p id='part<?php echo $i.$item["code"]; ?>'>
+                                        		<p id='part<?php echo $i.$item["priceid"]; ?>'>
                                                     <b>Participant#{{$i+1}}: </b> @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
                                                 </p>
                                         <?php 
@@ -435,15 +435,16 @@
                     </div>
                     <script>
     					$('.familypart').change(function() {
+    						// /alert('hii');
     						var value = $(this).children("option:selected").val();
     						if(value == 'addparticipate'){
     							$('#newparticipant').modal('show');
     						}else{
 	    						var name = $(this).find(':selected').data('name');
 	    						var cnt = $(this).find(':selected').data('cnt');
-	    						var act = $(this).find(':selected').data('act');
+	    						var act = $(this).find(':selected').data('priceid');
 	                            var type = $(this).find(':selected').data('type');
-	    						/*var age = $(this).find(':selected').data('age');*/
+	    						// var age = $(this).find(':selected').data('age');
 	    						
 	    						var counter = cnt+1;
 	    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
@@ -471,7 +472,7 @@
 	                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
 	                                }
 	                            });
-	                        }
+	                       		}
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>

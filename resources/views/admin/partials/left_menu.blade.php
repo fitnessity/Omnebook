@@ -104,9 +104,10 @@
           </a>
         </li>
 
-        <li class="{{ ($request->segment(2) == 'customers' || $request->segment(2) == 'customer') ? 'active' : '' }}">
-          <a href="/admin/customers">
-            <i class="fa fa-users"></i> <span>Manage Customers</span>  
+        <li class="{{ ($request->segment(2) == 'users' || $request->segment(2) == 'users') ? 'active' : '' }}">
+          <a href="/admin/users">
+           <!--  <i class="fa fa-users"></i> <span>Manage Customers</span> --> 
+           <i class="fa fa-users"></i> <span>Manage Users</span>   
           </a>
         </li>
 
