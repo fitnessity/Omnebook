@@ -1768,6 +1768,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+
+<script>
+$('[data-fancybox]').fancybox({
+	protect: true
+});
+</script>
+
 <script>
 $(document).ready(function() {
 	$('.showphotosbusiness').on('click', function(e) {

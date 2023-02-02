@@ -115,11 +115,12 @@ class AdminUserController extends Controller
     public function viewCustomers()
     {   
         //$customers = $this->users->getCustomers();
-       //$customers = User::where('role','!=','admin')->get();   
+        //$customers = User::where('role','!=','admin')->get();   
 		$customers = User::where('is_deleted','=','0')->get();    
         return view('admin.customers.index', [
                 'allCustomers' => $customers,
-                'pageTitle' => "Manage Customers"
+                //'pageTitle' => "Manage Customers"
+                'pageTitle' => "Manage Users"
                 ]);
 
     }
@@ -166,7 +167,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Please select at least one customer.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
+        return Redirect::to('/admin/users')->with('status',$response);
     }
 
     public function getCustomerDetails($id)
@@ -177,7 +178,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  'Customer not found.',
             );
-            return Redirect::to('/admin/customers')->with('status',$response);
+            return Redirect::to('/admin/users')->with('status',$response);
         }    
         return view('admin.customers.edit', [
             'customerDetails' => $customer_details,
@@ -202,7 +203,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  $errMsg,
             );
-            return redirect('/admin/customers/edit/'.$request->id)->with('status', $response);
+            return redirect('/admin/users/edit/'.$request->id)->with('status', $response);
         }
 
         $loggedinUser = Auth::user();
@@ -257,7 +258,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' => 'Some error while updating profile picture.',
             );
-            return redirect('/admin/customers/edit/'.$request->id)->with('status', $response);
+            return redirect('/admin/users/edit/'.$request->id)->with('status', $response);
         }else {
 
             if(isset($request->about_me) && $userObj->role == "customer")
@@ -287,7 +288,7 @@ class AdminUserController extends Controller
             $response = array(
                     'success' => 'Profile updated succesfully!',
             );
-            return Redirect::to('/admin/customers/edit/'.$request->id)->with('status',$response);
+            return Redirect::to('/admin/users/edit/'.$request->id)->with('status',$response);
         }
     }
 
@@ -299,7 +300,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  'Customer not found.',
             );
-            return Redirect::to('/admin/customers')->with('status',$response);
+            return Redirect::to('/admin/users')->with('status',$response);
         }
         
         return view('admin.customers.view', [
@@ -332,7 +333,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Customer not found.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
+        return Redirect::to('/admin/users')->with('status',$response);
 
     }
 
@@ -361,8 +362,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Customer not found.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
-
+        return Redirect::to('/admin/users')->with('status',$response);
     }
 
     protected function customerValidator($data)
@@ -398,6 +398,11 @@ class AdminUserController extends Controller
             'profile_pic' => 'Please upload an only image',
             'about_me.required' => 'Provide about me'
         ]);
+    }
+
+    public function updatefitnessityfee(Request $request){
+        //echo $request->fitness_fee;exit;
+        User::where('id',$request->uid)->update(['fitnessity_fee'=>$request->fitness_fee]);
     }
 
 }

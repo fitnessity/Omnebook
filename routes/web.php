@@ -301,7 +301,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('/cms/edit/{id}', 'Admin\CmsController@postCmsModule');  
 
     //Manage Customers
-    Route::get('/customers', 'Admin\AdminUserController@viewCustomers');
+    /*Route::get('/customers', 'Admin\AdminUserController@viewCustomers');
     Route::post('/customers', 'Admin\AdminUserController@postCustomers');
     Route::get('/customers/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
     Route::get('/customers/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
@@ -309,6 +309,18 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('/customers/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
     Route::get('/customers/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
     Route::get('/customers/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
+    Route::post('/customer/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');*/
+
+    //Manage users
+    Route::get('/users', 'Admin\AdminUserController@viewCustomers');
+    Route::post('/users', 'Admin\AdminUserController@postCustomers');
+    Route::get('/users/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
+    Route::get('/users/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
+    Route::get('/users/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
+    Route::post('/users/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
+    Route::get('/users/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
+    Route::get('/users/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
+    Route::post('/user/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');
 
     //reportedfeeds
     Route::get('/reportedfeeds', 'Admin\ReportedFeedsController@index')->name('reportedfeed-list');
