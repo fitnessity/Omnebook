@@ -4722,11 +4722,12 @@ class LessonController extends Controller {
         }
         //print_r($cart_item['cart_item']);exit;
         if($request->chk == 'activity_purchase'){
-            if($request->type == 'customer'){
+            return redirect()->route('business.orders.index', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
+            /*if($request->type == 'customer'){
                 return redirect('activity_purchase/0/'.$request->pageid);
             }else{
                 return redirect('activity_purchase/'.$request->pageid);
-            }
+            }*/
         }else{
             if($msg == ''){
                 $msg = config('app.url').'/success-cart/'.$priceid;
@@ -4765,15 +4766,11 @@ class LessonController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');
         }
-        //echo "<pre>";print_r($cart_item);
         if(!empty($cart_item["cart_item"])) {
             foreach($cart_item["cart_item"] as $k => $v) {
-                //echo $v['code'].'----'.$_GET['code'].'....<br/>';
                 if($_GET["priceid"] == $v['priceid']) {
                     unset($cart_item["cart_item"][$k]);
                 }
-                //if(empty($cart_item["cart_item"]))
-                //unset($cart_item["cart_item"]);
             }
         }
         
@@ -4783,11 +4780,13 @@ class LessonController extends Controller {
             $request->session()->forget('cart_item');
         }
         if($request->chk == 'purchase'){
-            if($request->user_type == 'customer'){
+            //return redirect('orders?'.$request->pageid);
+            return redirect()->route('business.orders.index', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
+            /*if($request->user_type == 'customer'){
                 return redirect('activity_purchase/0/'.$request->pageid);
             }else{
                 return redirect('activity_purchase/'.$request->pageid);
-            }
+            }*/
         }else{
             return redirect('/carts'); 
         }

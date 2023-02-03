@@ -29,8 +29,8 @@
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('contact')">
 									<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
-									<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
-									<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+									<!-- <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off"> -->
+									<!-- <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off"> -->
 									<div class="row check-txt-center">
 										<div class="col-md-8">
 											<div class="terms-wrap wrap-sp">

@@ -459,7 +459,7 @@ input:disabled{
 													<i class="fas fa-pencil-alt"></i></a>
 												</div>
 												<div class="close-cross-icon-trash">
-													<a href="{{route('removetocart',['code'=>$item['code'],'pageid'=>$pageid,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
+													<a href="{{route('removetocart',['priceid'=>$item['priceid'],'pageid'=>$pageid,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
 													<i class="fas fa-trash-alt"></i></a>
 												</div>
 												<div class="ticket-summery-details">
@@ -590,7 +590,7 @@ input:disabled{
 									$service_fee= ($subtotal * $tax->service_fee)/100; 
 							 		$grand_total  = 0 ;
 							 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
-							 		$grand_total = number_format($grand_total,0, '.', '');
+							 		$grand_total = $grand_total;
 							 		$tax_ser_fees = ($service_fee + $taxes);
 							 		//echo $tax_ser_fees;
 								@endphp
@@ -845,12 +845,10 @@ input:disabled{
 													
 													<div class="col-md-12">
 														<div class="options-payment">
-															<form action="">
-																<input type="radio" id="html" name="fav_language" value="" checked>
-															 	<label for="html">Option 1 :</label> 
-																<span>Use billing information on  file.</span><br>
-																<span class="visa-info"></span><br>
-															</form>
+															<input type="radio" id="html" name="fav_language" value="" checked>
+														 	<label for="html">Option 1 :</label> 
+															<span>Use billing information on  file.</span><br>
+															<span class="visa-info"></span><br>
 														</div>
 													</div>
 													<div class="col-md-12 col-sm-12 col-xs-12">
@@ -965,7 +963,7 @@ input:disabled{
 
 									<div class="col-md-6 col-sm-6 col-xs-12 ">
 										<div class="btn-ord-txt">
-				                            <button class="post-btn-red" type="submit" id="checkout-button">Complete Payment</button>
+				                            <button class="post-btn-red" type="submit" id="checkout-button" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button>
 				                        </div>
 										<!-- <button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button> -->
 									</div>
@@ -1132,7 +1130,7 @@ input:disabled{
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
 	        var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
-	       
+	       //alert(cardinfoRadio);
 	        if(cardinfoRadio == 'newcard') {
 	            var $form  = $(".validation"),
 	                inputVal = ['input[type=email]', 'input[type=password]',
@@ -1920,9 +1918,10 @@ input:disabled{
     });
 
     function searchclick(cid){
-    	var url = '{{env("APP_URL")}}';
-    	//document.getElementById("myForm").submit();
-    	var url = url+'/activity_purchase/0/'+cid;
+    	//var url = '{{env("APP_URL")}}';
+    	var url = "{{route('business.orders.index',['cus_id' => 'cid' ])}}";
+    	url = url.replace('cid', cid);
+    	// var url = url+'/activity_purchase/0/'+cid;
 	 	window.location.href = url;
 	}
 
