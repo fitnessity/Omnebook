@@ -293,9 +293,7 @@
           type: "POST",
           url: "/searchcustomersaction",
           data: { query: $(this).val(),  _token: '{{csrf_token()}}', },
-          beforeSend: function() {
-              //$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-          },
+         
           success: function(data) {
               $("#option-box").show();
               $("#option-box").html(data);
@@ -306,50 +304,43 @@
 
 	function registerUser() {
     	
-       /* var valchk = getAge();*/
         var validForm = $('#frmregister').valid();
         var posturl = '/customers/registration';
         if (!jQuery("#b_trm1").is(":checked")) {
            $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
             return false;
         }
-       /* if(valchk == 1){
-            $('#register_submit').prop('disabled', true);*/
-            if (validForm) {
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
+        if (validForm) {
+            var formData = $("#frmregister").serialize();
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: formData,
+                beforeSend: function () {
+                    $('#register_submit').prop('disabled', true).css('background','#999999');
+                    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                },
+                complete: function () {
+                
+                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                },
+                success: function (response) {
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    showSystemMessages('#systemMessage', response.type, response.msg);
+                    if (response.type === 'success') {
+                    	// $("#frmregister")[0].reset();
+                    	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    	$("#divstep1").css("display","none");
+                    	$("#divstep3").css("display","block");
+                    	$("#cust_id").val(response.id);
+                    } else {
                         $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                    },
-                    success: function (response) {
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                        	// $("#frmregister")[0].reset();
-                        	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        	$("#divstep1").css("display","none");
-                        	$("#divstep3").css("display","block");
-                        	$("#cust_id").val(response.id);
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
                     }
-                });
-            }
-        
-        /*}else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }*/
+                }
+            });
+        }
     }
 
   	function changeformate_fami_pho(idname) {
@@ -391,18 +382,6 @@
                   required: true,
                   email: true
               },
-              /*dob: {
-                  required: true,
-              },*/
-              password: {
-                  required: true,
-                  minlength: 8
-              },
-              confirm_password: {
-                  required: true,
-                  minlength: 8,
-                  equalTo: "#password"
-              },
           },
           messages: {
               firstname: "Enter your Firstname",
@@ -413,24 +392,12 @@
                   minlength: "Please enter a valid email address",
                   remote: jQuery.validator.format("{0} is already in use")
               },
-             /* dob: {
-                  required: "Please provide your date of birth",
-              },*/
-              password: {
-                  required: "Provide a password",
-                  minlength: jQuery.validator.format("Enter at least {0} characters")
-              },
-              confirm_password: {
-                  required: "Repeat your password",
-                  minlength: jQuery.validator.format("Enter at least {0} characters"),
-                  equalTo: "Enter the same password as above"
-              },
           },
           submitHandler: registerUser
       });
   	});
 
-    $('#email').on('blur', function() {
+    /*$('#email').on('blur', function() {
       var posturl = '{{route("emailvalidation_customer")}}';
       var formData = $("#frmregister").serialize();
       $.ajax({
@@ -445,13 +412,11 @@
                 $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
             }
         });
-  });
+  });*/
 
     $(document).on('click', '#step3_next', function () {
         $("#err_gender").html("");
-        /*if ($('input[name="gender"]:checked').val() == '' || $('input[name="gender"]:checked').val() == 'undefined' || $('input[name="gender"]:checked').val() == undefined) {
-            $("#err_gender").html('Please select your gender');
-        } else {*/
+   
             if ($('input[name="gender"]:checked').val() == 'other' && $('#othergender').val() == '') {
                 $("#err_gender").html('Please enter other gender');
             } else {
@@ -484,7 +449,6 @@
                     }
                 });
             }
-        //}
     });
 
     $(document).on('click', '#step4_next', function () {
@@ -502,33 +466,7 @@
         $('#err_city_sign').html('');
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
-        
-        /*if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }*/
-
+    
         var posturl = '/customers/saveaddress';
         var formdata = new FormData();
         formdata.append('_token', '{{csrf_token()}}')
@@ -797,9 +735,6 @@
               $('#b_address').val(badd);
             }
             
-        
-           /* $('#lat').val(place.geometry.location.lat());
-            $('#lon').val(place.geometry.location.lng());*/
         });
     }
 </script>

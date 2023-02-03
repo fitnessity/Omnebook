@@ -33,25 +33,14 @@ class RegistrationController extends Controller
     }
 
     public function emailvalidation_customer(Request $request) {
-        $postArr = $request->all();
-
-        $rules = [
-            'email' => 'required|unique:customers',
-        ];
-
-        $validator = Validator::make($postArr, $rules);
-        if ($validator->fails()) {
-            $errMsg = array();
-            foreach ($validator->messages()->getMessages() as $field_name => $messages) {
-                $errMsg = $messages;
-            }
+        $chk = $this->customers->finduniqueemailperbusiness($request->business_id,$request->email);
+        if($chk == 'false'){
             $response = array(
                 'type' => 'danger',
-                'msg' => $errMsg,
+                'msg' => 'The email has already been taken.',
             );
             return Response::json($response);
         }
-
     }
 
 	public function postRegistrationCustomer(Request $request) {
@@ -59,15 +48,10 @@ class RegistrationController extends Controller
         $user = Auth::user();
         $company = $user->businesses->find($request->business_id);
 
-        //print_r($postArr);exit;
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|unique:customers',
             'contact' => 'required',
-            'password' => 'required',
-            'confirm_password' => 'required|same:password',
-            'username' => 'unique:customers'
         ];
 
         $validator = Validator::make($postArr, $rules);
@@ -82,16 +66,9 @@ class RegistrationController extends Controller
             );
             return Response::json($response);
         } else {
-            //check for unique email id
-            if (!$this->customers->validateCustomer($postArr['email'])) {
-                $response = array(
-                    'type' => 'danger',
-                    'msg' => 'Email already exists. Please select different Email',
-                );
-                return Response::json($response);
-            };
+
             //check for unique customer name
-            if (!$this->customers->validateCustomer($postArr['username'])) {
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'User name already exists. Please select different Name',
@@ -99,6 +76,15 @@ class RegistrationController extends Controller
                 return Response::json($response);
             };
 
+            //check for unique email id
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Email already exists. Please select different Email',
+                );
+                return Response::json($response);
+            };
+            
             if (count($postArr) > 0) {
 
                 \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
@@ -118,7 +104,7 @@ class RegistrationController extends Controller
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $customerObj->username = $postArr['username'];
-                $customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                /*$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));*/
                 $customerObj->email = $postArr['email'];
                 $customerObj->country = 'US';
                 $customerObj->status = 0;
@@ -149,13 +135,11 @@ class RegistrationController extends Controller
                 if ($customerObj) {    
                                   
                     MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
-                    //MailService::sendEmailSignupVerification($customerObj->id);
 
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',
                         'msg' => 'Customer Successfully Registered.',
-                        //'redirecturl' => $url,
                     );
 
                     return Response::json($response);
@@ -240,23 +224,6 @@ class RegistrationController extends Controller
         if ($customerObj) {                    
             MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
         }
-
-        /*  if ((CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->count()) == 0)
-                $family = new CustomerFamilyDetail();
-            else
-                $family = CustomerFamilyDetail::where('cus_id', $postArr['cust_id'])->first();
-
-            $family->cus_id = Input::get('cust_id');
-            $family->first_name = Input::get('first_name');
-            $family->last_name = Input::get('last_name');
-            $family->email = Input::get('email');
-            $family->mobile = Input::get('mobile');
-            $family->gender = Input::get('gender');
-            $family->relationship = Input::get('relationship');
-            $family->emergency_contact = Input::get('emergency_contact');
-            $family->birthday = date('Y-m-d',strtotime(Input::get('birthday')));
-            $family->save();
-        */
 
         $url = '/viewcustomer/'.$request->cust_id;
         $response = array(

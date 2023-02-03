@@ -241,9 +241,9 @@ class SchedulerController extends Controller
           return view('scheduler.booking_request');
      }
 
-     public function activity_purchase($book_id = null,$cus_id =null){
-          /*echo  $book_id;
-          echo  $cus_id;exit;*/         
+     /*public function activity_purchase($book_id = null,$cus_id =null){
+          // echo  $book_id;
+          // echo  $cus_id;exit;         
           $cart_item = [];
           if (session()->has('cart_item')) {
                $cart_item = session()->get('cart_item');
@@ -362,9 +362,9 @@ class SchedulerController extends Controller
                'modeldata' => $modeldata,
                'pageid' => $pageid,
           ]);
-     }
+     }*/
 
-     public function getmultipleodermodel($array)
+     /*public function getmultipleodermodel($array)
      {    
           $html = '';
           $totaltax = 0;
@@ -581,115 +581,115 @@ class SchedulerController extends Controller
                                    </div>
                               </div>';
 
-                         /*   <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>TOTAL REMAINNIG:</label>
-                                   </div>
-                               </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span></span>
-                                   </div>
-                               </div>
+                            // <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>TOTAL REMAINNIG:</label>
+                            //        </div>
+                            //    </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span></span>
+                            //        </div>
+                            //    </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>EXPIRATION DATE:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span>'. $odt['expdate'].'</span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>EXPIRATION DATE:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span>'. $odt['expdate'].'</span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                   <label>DATE BOOKED:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span>'. $odt['created_at'].'</span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //        <label>DATE BOOKED:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span>'. $odt['created_at'].'</span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>RESERVED DATE:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span></span>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <label>BOOKED BY:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <span>'. $odt['nameofbookedby'].'</span>
-                                   </div>
-                              </div>'
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>RESERVED DATE:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span></span>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <label>BOOKED BY:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <span>'. $odt['nameofbookedby'].'</span>
+                            //        </div>
+                            //   </div>'
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <label>CHECK IN DATE:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <span></span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <label>CHECK IN DATE:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <span></span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <label>CHECK IN TIME:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                        <span></span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <label>CHECK IN TIME:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //             <span></span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>ACTIVITY LOCATION:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span>'. $odt['activity_location'].'</span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>ACTIVITY LOCATION:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span>'. $odt['activity_location'].'</span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>ACTIVITY DURATION:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span>'. $odt['time'].'</span>
-                                   </div>
-                              </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>ACTIVITY DURATION:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span>'. $odt['time'].'</span>
+                            //        </div>
+                            //   </div>
 
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <label>GREAT FOR:</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="booking-page-meta-info">
-                                       <span>'. $odt['activity_for'].'</span>
-                                   </div>
-                              </div>
-                         */
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <label>GREAT FOR:</label>
+                            //        </div>
+                            //   </div>
+                            //   <div class="col-md-6 col-xs-6">
+                            //        <div class="booking-page-meta-info">
+                            //            <span>'. $odt['activity_for'].'</span>
+                            //        </div>
+                            //   </div>
+                         
 
                               $html .='<div class="col-md-6 col-xs-6">
                                    <div class="">
@@ -731,7 +731,7 @@ class SchedulerController extends Controller
 
           $idarry = rtrim($idarry,',');
 
-         /* print_r($odt);exit;*/
+          // print_r($odt);exit;
           $html .= '     <input type="hidden" name="booking_id" id="booking_id" value="'.$order_detail->booking_id.'"> 
                          <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="'.$idarry.'"> 
                          <div class="row border-xx mg-tp">
@@ -786,18 +786,18 @@ class SchedulerController extends Controller
                               </div>
                          </div>';
 
-                         /*<div class="row border-xx">
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="total-titles">
-                                        <label>FEES</label>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-xs-6">
-                                   <div class="total-titles">
-                                        <span>$'.$service_fee.'</span>
-                                   </div>
-                              </div>
-                         </div>*/
+                         // <div class="row border-xx">
+                         //      <div class="col-md-6 col-xs-6">
+                         //           <div class="total-titles">
+                         //                <label>FEES</label>
+                         //           </div>
+                         //      </div>
+                         //      <div class="col-md-6 col-xs-6">
+                         //           <div class="total-titles">
+                         //                <span>$'.$service_fee.'</span>
+                         //           </div>
+                         //      </div>
+                         // </div>
                          $html .='<div class="row border-xx">
                               <div class="col-md-6 col-xs-6">
                                    <div class="total-titles">
@@ -815,7 +815,7 @@ class SchedulerController extends Controller
           </div>';
 
          return $html;
-     }
+     }*/
 
      public function sendreceiptfromcheckout(Request $request){
           //print_r($request->all());
@@ -1465,11 +1465,12 @@ class SchedulerController extends Controller
           session()->put('cart_item', $cart);
           session()->put('ordermodelary', $bookidarray);
 
-          if($request->user_type == 'customer'){
+          /*if($request->user_type == 'customer'){
                return redirect('activity_purchase/0/'.$request->user_id);
           }else{
                return redirect('activity_purchase/'.$request->user_id);
-          }
+          }*/
+          return redirect()->route('business.orders.index', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
      }
 
      public function booking_activity_cancel(Request $request){

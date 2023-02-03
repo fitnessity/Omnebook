@@ -23,6 +23,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     // Scheduler Checkin Details
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
     Route::resource('products', 'ProductController')->only(['index', 'update', 'destroy', 'store']);
+    Route::resource('orders', 'OrderController')->only(['index','create', 'store']);
+    
+    //Route::any('activity_purchase/{book_id?}/{cus_id?}', 'OrderController@index')->name('activity_purchase');
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -49,12 +52,8 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 
-
-
-
 Route::get('/addcheckoutsession','HomeController@addcheckoutsession')->name('addcheckoutsession');
 Route::get('/senddummymail','HomeController@senddummymail')->name('senddummymail');
-
 
 Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
 Route::get('/set-unset-session-business-welcome/{check?}','HomeController@set_unset_session_business_welcome');
@@ -995,7 +994,7 @@ Route::group(['middleware' => ['auth']], function()
 Route::group(['middleware' => ['auth']], function()
 {
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
-    Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
+    //Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
     
     Route::any('activity_schedule/{odid?}', 'SchedulerController@activity_schedule')->name('activity_schedule');

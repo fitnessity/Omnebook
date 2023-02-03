@@ -1194,12 +1194,13 @@ class UserProfileController extends Controller {
         }
         
         if($request->btnmanageservice == 'Manage Service') {
-            return redirect('/manage/service/' . $request->cid);
+            return redirect('/business/'.$request->cid.'/services');
         }
     }
     
     
     public function editBusinessService(Request $request) {
+        //print_r($request->all());exit;
         $businessData = [
             'bstep' => 72,
             'cid' => $request->cid,
@@ -1217,13 +1218,13 @@ class UserProfileController extends Controller {
         }
         
         if($request->btnactive == 'Active') {
-            BusinessServices::where('cid', $request->cid)->where('serviceid', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 1]);
-            return redirect('/manage/service/' . $request->cid);
+            BusinessServices::where('cid', $request->cid)->where('id', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 1]);
+            return redirect('/business/'.$request->cid.'/services');
         }
         
         if($request->btnactive == 'Inactive') {
-            BusinessServices::where('cid', $request->cid)->where('serviceid', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 0]);
-            return redirect('/manage/service/' . $request->cid);
+             BusinessServices::where('cid', $request->cid)->where('id', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 0]);
+            return redirect('/business/'.$request->cid.'/services');
         }
     }
     public function createNewBusinessProfile(Request $request) {

@@ -653,7 +653,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="row">                   
                                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
@@ -670,14 +670,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     															<div class="col-lg-6 col-md-6 col-sm-6">
     																@if(isset($getimages[0]))
     																	<figure>
-                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                             	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
     																		</a>
     																	</figure>
     																@endif
                                                                     @if(isset($getimages[1]))
     																	<figure>
-                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                             	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
     																		</a>
     																	</figure>
@@ -686,21 +686,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                 <div class="col-lg-6 col-md-6 col-sm-6">
     																@if(isset($getimages[2]))
     																	<figure>
-                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                             	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
     																		</a>
     																	</figure>
     																@endif
                                                                     @if(isset($getimages[3]))
     																	<figure>
-                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                             	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
                                                                             </a>
     																	</figure>
     																@endif
                                                                     @if(isset($getimages[4]))
     																	<figure>
-                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                        	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                             	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
     																		</a>
                                                                             <div class="more-photos">
@@ -718,7 +718,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														<div class="row">                   
 															<div class="col-lg-12 col-md-12 col-sm-12">
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
 																	</a>
 																</figure>
@@ -727,21 +727,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">   
 															<div class="col-lg-4 col-md-4 col-sm-4"> 
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
 																	</a>
 																</figure>   
 															</div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" height="170">
 																	</a>
 																</figure>    
 															</div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4">  
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
 																	</a>
 																</figure>   
@@ -754,19 +754,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														<div class="row">
 															<div class="col-lg-6 col-md-6 col-sm-6">
 																<figure>
-																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
 																	</a>
 																</figure>
 															</div>
 															<div class="col-lg-6 col-md-6 col-sm-6">
 																<figure>
-																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
+																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
 																	</a>
 																</figure>
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
 																	</a>
 																</figure>
@@ -778,14 +778,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														<div class="row">
 															<div class="col-lg-6 col-md-6 col-sm-6">
 																<figure>
-                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+                                                                	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
 																	</a>
 																</figure>
 															</div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
 																<figure>
-																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$page_post->id}}">
+																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
 																	</a>
 																</figure>
@@ -798,7 +798,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														<div class="row">
 															<div class="col-lg-12 col-md-12 col-sm-12">
 																<figure>
-																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$page_post->id}}">
+																	<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$page_post->id}}">
                                                                     	<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
 																</figure>
@@ -1020,7 +1020,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                         <div class="col-sm-3 col-md-4 col-lg-4">
                                             <div class="photo-tab-imgs">
                                                 <figure>
-                                                    <a href="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" data-fancybox="photogallery">
+                                                    <a href="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" class="postfancyimg" data-fancybox="photogallery">
                                                         <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
                                                     </a>
                                                 </figure>
@@ -1157,7 +1157,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}"  class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1174,14 +1174,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[0]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[1]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
@@ -1190,21 +1190,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[2]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[3]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[4]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery1{{$posts_post['id']}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" class="postfancyimg" data-fancybox="gallery1{{$posts_post['id']}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
                                                                         </a>
                                                                         <div class="more-photos">
@@ -1222,7 +1222,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1231,21 +1231,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">   
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="" height="170">
                                                                     </a>
                                                                 </figure>    
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4">  
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
@@ -1258,19 +1258,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
@@ -1282,14 +1282,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1302,7 +1302,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$posts_post['id']}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="postfancyimg" data-fancybox="gallery{{$posts_post['id']}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1745,6 +1745,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 </section>
 
 @include('layouts.footer')
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -1758,6 +1759,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/pixelarity-face.js') }}"></script>
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
 <!-- emoji -->
 <script src="{{ url('public/emoji/lib/js/config.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
@@ -1766,13 +1768,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 
-
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 
 <script>
-$('[data-fancybox]').fancybox({
-	protect: true
-});
+
 </script>
 
 <script>
