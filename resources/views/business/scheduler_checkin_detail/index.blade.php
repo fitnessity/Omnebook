@@ -179,7 +179,7 @@
 
                                         <div class="col-md-2 col-xs-12 col-sm-12">
                                             <div class="scheduled-btns">
-                                                <a href="{{route('business.orders.index',['cus_id' => $booking_checkin_detail->customer_id])}}" class="btn-edit btn-sp">Purchase</a>
+                                                <a href="{{route('business.orders.create',['cus_id' => $booking_checkin_detail->customer_id])}}" class="btn-edit btn-sp">Purchase</a>
                                                 <a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $booking_checkin_detail->customer_id])}}" class="btn-edit" target="_blank">View Account</a>
                                             </div>
                                         </div>
