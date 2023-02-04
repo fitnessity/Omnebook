@@ -23,9 +23,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $business_id)
     {
-        //
+        return view('business.products.create');
     }
 
     /**

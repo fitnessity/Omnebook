@@ -22,8 +22,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
     // Scheduler Checkin Details
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
-    Route::resource('products', 'ProductController')->only(['index', 'update', 'destroy', 'store']);
-    Route::resource('orders', 'OrderController')->only(['index','create', 'store']);
+    Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
+    Route::resource('orders', 'OrderController')->only(['create', 'store']);
     
     //Route::any('activity_purchase/{book_id?}/{cus_id?}', 'OrderController@index')->name('activity_purchase');
 });

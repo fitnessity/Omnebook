@@ -84,10 +84,10 @@ class UserBookingStatus extends Model
             $pmt_type_json = json_decode($this->pmt_json,true);
             if($pmt_type_json['pmt_by_check'] != 0){
                 $pmt_type = 'Check No: '.$pmt_type_json['check_no'];
-            }else if($pmt_type_json['pmt_by_comp'] != 0){
-                $pmt_type = 'Comp';
-            }else{
+            }else if($pmt_type_json['pmt_by_cash'] != 0){
                 $pmt_type = 'Cash';
+            }else{
+                $pmt_type = 'Comp';
             }
         }else{
             $pmt_type =  'CC ending in ********'.$last4;

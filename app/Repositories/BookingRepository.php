@@ -514,6 +514,7 @@ class BookingRepository
             "tax_for_this" => @$tax_for_this,
             "price_opt" => @$price_opt ,
             "BusinessPriceDetails" => $BusinessPriceDetails,
+            "pay_session" => $booking_details['pay_session'],
             "to_rem" => @$to_rem ,
             "totprice_for_this" => $totprice_for_this,
             "nameofbookedby" => $nameofbookedby,
