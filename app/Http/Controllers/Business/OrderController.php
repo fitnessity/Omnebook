@@ -36,7 +36,16 @@ class OrderController extends BusinessBaseController
         $this->booking_repo = $booking_repo;
     }
 
-    public function index(Request $request ,$business_id)
+    public function index()
+    {
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request ,$business_id)
     {
          //print_r($request->all());exit;       
         $cart_item = [];
@@ -49,7 +58,7 @@ class OrderController extends BusinessBaseController
         $book_cnt = $activated =0;
         $book_data =  $address = $username = $age = $purchasefor = $price_title = $status=  $user_data = $tax = $user_type = '';
 
-        $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
+        $companyId = $request->current_company->id;
         
         $tax = BusinessSubscriptionPlan::where('id',1)->first();
         $userfamilydata = [];
@@ -85,7 +94,7 @@ class OrderController extends BusinessBaseController
            $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
            $user_type = 'customer';
-           $customerdata = $this->customers->findById($request->cus_id);
+           $customerdata = $request->current_company->customers->find($request->cus_id);
            $book_data = @$customerdata->getlastbooking();
            $username  =  @$customerdata->fname.' '. @$customerdata->lname;
            $age = Carbon::parse( @$customerdata->birthdate)->age; 
@@ -109,10 +118,11 @@ class OrderController extends BusinessBaseController
            $status = "Active";
         }
           
-        $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id])->get();
+        $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->get();
 
         $modelchk = 0;
         $modeldata = '';
+        //$ordermodelary = array('678');
         $ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
@@ -142,16 +152,6 @@ class OrderController extends BusinessBaseController
            'modeldata' => $modeldata,
            'pageid' => $pageid,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -328,7 +328,7 @@ class OrderController extends BusinessBaseController
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="booking-page-meta-info">
-                                <span>'.@$odt['BusinessPriceDetails']['pay_session'].' Session</span>
+                                <span>'.@$odt['pay_session'].' Session</span>
                             </div>
                         </div>
 

@@ -956,13 +956,16 @@ class SchedulerController extends Controller
                $aduid = "adultprice";
                $childtid = "childprice";
                $infantid = "infantprice";
+               $session_val = "session_val";
                if($request->type == 'ajax'){
                     $aduid = "adultpriceajax";
                     $childtid = "childpriceajax";
                     $infantid = "infantpriceajax";
+                    $session_val = "session_valajax";
                }
                
-               $html .='<input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
+               $html .='<input type="hidden" name="session_val" id="'.$session_val.'" value="'.@$membershiplist[0]['pay_session'].'" >
+                         <input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
                          <input type="hidden" name="childprice" id="'.$childtid.'" value="'.$total_price_val_child.'" >
                          <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >^^'.$membershiplist[0]['pay_setnum'].'!!'.$membershiplist[0]['pay_setduration']; 
           }else if($request->chk == 'participat'){
@@ -1002,7 +1005,7 @@ class SchedulerController extends Controller
      }
 
      public function checkout_register(Request $request){
-          //print_r($request->all()); 
+          print_r($request->all()); //exit;
           $bookidarray = [];
           $fitnessity_fee= 0;
           $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
@@ -1195,6 +1198,7 @@ class SchedulerController extends Controller
                               $cartnew[$cnt]['child']= $c['child'];
                               $cartnew[$cnt]['infant']= $c['infant'];
                               $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
+                              $cartnew[$cnt]['p_session']= $c['p_session'];
                               $cnt++;
                               unset($cart['cart_item'][$key]);
                          }
@@ -1214,6 +1218,7 @@ class SchedulerController extends Controller
                               $sesdate = $cartnew[$i]['sesdate'];
                               $pidval = $cartnew[$i]['code'];
                               $tip = $cartnew[$i]['tip'];
+                              $p_session = $cartnew[$i]['p_session'];
                               $discount = $cartnew[$i]['discount'];
                               $act_schedule_id = $cartnew[$i]['actscheduleid'];
                               if(!empty($cartnew[$i]['adult'])){
@@ -1266,7 +1271,7 @@ class SchedulerController extends Controller
                               'price' => $encodeprice,
                               'qty' =>$encodeqty ,
                               'priceid' => $priceid,
-                              'pay_session' => $price_detail->pay_session,
+                              'pay_session' => $p_session,
                               'expired_at' => $expired_at,
                               'contract_date' =>date('Y-m-d',strtotime($sesdate)),
                               'booking_detail' => json_encode(array(
@@ -1315,7 +1320,6 @@ class SchedulerController extends Controller
                     $pmt_by_comp = $grandtotal;
                     $grandtotal = 0;
                }
-               
                $date = new DateTime("now", new DateTimeZone('America/New_York') );
                $oid = $date->format('YmdHis');
                $digits = 3;
@@ -1372,6 +1376,7 @@ class SchedulerController extends Controller
                          $cartnew[$cnt]['child']= $c['child'];
                          $cartnew[$cnt]['infant']= $c['infant'];
                          $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
+                         $cartnew[$cnt]['p_session']= $c['p_session'];
                          $cnt++;
                          unset($cart['cart_item'][$key]);
                     }
@@ -1384,6 +1389,7 @@ class SchedulerController extends Controller
                     $activitylocation = BusinessServices::where('id',$crt['code'])->first();
                     $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                     $price_detail = BusinessPriceDetails::find($crt['priceid']);
+                    $p_session = $crt['p_session'];
                     $payment_number_c = array( 'adult'=>0 ,'child' => 0,
                         'infant'=> 0);
                     $encodepayment_number = json_encode($payment_number_c);
@@ -1434,7 +1440,7 @@ class SchedulerController extends Controller
                          'price' => $encodeprice,
                          'qty' =>$encodeqty ,
                          'priceid' => $crt['priceid'],
-                         'pay_session' => $price_detail->pay_session,
+                         'pay_session' => $p_session,
                          'contract_date' =>date('Y-m-d',strtotime($crt['sesdate'])),
                          'booking_detail' => json_encode(array(
                               'activitytype' => @$activitylocation->service_type,
@@ -1470,7 +1476,7 @@ class SchedulerController extends Controller
           }else{
                return redirect('activity_purchase/'.$request->user_id);
           }*/
-          return redirect()->route('business.orders.index', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
+          return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
      }
 
      public function booking_activity_cancel(Request $request){
@@ -1645,7 +1651,7 @@ class SchedulerController extends Controller
           $cart = [];
           if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                $cart = $cart_item["cart_item"][$request->priceid];
-               //print_r( $cart);
+               // /print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
                $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
@@ -1797,13 +1803,19 @@ class SchedulerController extends Controller
                                              <div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
                                              <div class="check-client-info-box">
                                                   <div class="row">
-                                                       <div class="col-md-4 col-sm-4 col-xs-12">
+                                                       <div class="col-md-2 col-sm-4 col-xs-12">
                                                             <div class="select0service pricedollar">
                                                                  <label>Price </label>
-																 <div class="set-price">
-																	<i class="fas fa-dollar-sign"></i>
-																 </div>
+													<div class="set-price">
+														<i class="fas fa-dollar-sign"></i>
+													</div>
                                                                  <input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="'.$cart["totalprice"].'" disabled>
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-md-2 col-sm-4 col-xs-12">
+                                                            <div class="select0service pricedollar">
+                                                                 <label>Session</label>
+                                                                 <input type="text" class="form-control valid" id="p_sessionajax" name="pay_session" placeholder="1"  value="'.$cart["p_session"].'" >
                                                             </div>
                                                        </div>
                                                        <div class="col-md-4 col-sm-4 col-xs-12">
@@ -2020,6 +2032,7 @@ class SchedulerController extends Controller
                                         </div>
                               </div>
                               <div id="pricedivajax">
+                                   <input type="hidden" name="session_val" id="session_valajax" value="'.@$cart["p_session"].'" >
                                    <input type="hidden" name="adultprice" id="adultpriceajax" value="'.$aduprice.'" >
                                    <input type="hidden" name="childprice" id="childpriceajax" value="'.$childprice.'" >
                                    <input type="hidden" name="infantprice" id="infantpriceajax" value="'.$infantprice.'" > 

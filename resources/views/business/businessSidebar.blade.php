@@ -126,7 +126,7 @@ if(request()->business_id){
 				</li>
 				<li>
 					<span><img src="/public/img/checkout-register.png" alt="Fitnessity"></span>
-					<a href="{{ route('business.orders.index', [ 'book_id'=>'0']) }}" class="@if(Route::current()->getName()=='business.activity_purchase') tab-active @endif"><div class="navlink1 service-price " id="tab1">CHECKOUT REGISTER</div></a>
+					<a href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}" class="@if(Route::current()->getName()=='business.orders.create') tab-active @endif"><div class="navlink1 service-price " id="tab1">CHECKOUT REGISTER</div></a>
 				</li>
 				<li>
 					<span><img src="/public/img/salesreports.png" alt="Fitnessity"></span>

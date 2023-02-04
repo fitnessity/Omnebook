@@ -177,13 +177,19 @@ input:disabled{
 									<div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
 									<div class="check-client-info-box">
 										<div class="row">
-											<div class="col-md-4 col-sm-4 col-xs-12">
+											<div class="col-md-2 col-sm-4 col-xs-12">
 												<div class="select0service pricedollar">
 													<label>Price </label>
 													<div class="set-price">
 														<i class="fas fa-dollar-sign"></i>
 													</div>
 													<input type="text" class="form-control valid" id="price" placeholder="$0.00" disabled>
+												</div>
+											</div>
+											<div class="col-md-2 col-sm-4 col-xs-12">
+												<div class="select0service pricedollar">
+													<label>Session</label>
+													<input type="text" class="form-control valid" id="p_session" name="p_session" placeholder="1">
 												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
@@ -283,7 +289,7 @@ input:disabled{
 										<input type="hidden" name="pid" id="pid" value="">
 										<input type="hidden" name="categoryid" id="categoryid" value="">
 										<input type="hidden" name="checkount_qty" id="checkount_qty" value="">
-
+										<input type="hidden" name="pay_session" id="pay_session" value="">
 										<input type="hidden" name="aduquantity" id="adupricequantity" value="" class="product-quantity"/>
 										<input type="hidden" name="childquantity" id="childpricequantity" value="" class="product-quantity"/>
 										<input type="hidden" name="infantquantity" id="infantpricequantity" value="" class="product-quantity"/>
@@ -329,6 +335,13 @@ input:disabled{
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
 													<span id="mp_name"></span>
+												</div>
+												
+												<div class="col-md-6 col-sm-6 col-xs-6"> 
+													<label>Number Of Session</label>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6"> 
+													<span id="session_span"></span>
 												</div>
 													
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
@@ -493,6 +506,13 @@ input:disabled{
 														</div>
 
 														<div class="col-md-6 col-sm-6 col-xs-6">
+															<label>Number Of Seesion:</label>
+														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<span>{{@$item['p_session']}}</span>
+														</div>
+
+														<div class="col-md-6 col-sm-6 col-xs-6">
 															<label>Participant Quantity:</label>
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
@@ -587,11 +607,15 @@ input:disabled{
 									</div>
 								</div>
 								@php  	
-									$service_fee= ($subtotal * $tax->service_fee)/100; 
-							 		$grand_total  = 0 ;
-							 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
-							 		$grand_total = $grand_total;
-							 		$tax_ser_fees = ($service_fee + $taxes);
+									if($subtotal != $discount){
+										$service_fee= ($subtotal * $tax->service_fee)/100; 
+								 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
+								 		$grand_total = $grand_total;
+								 		$tax_ser_fees = ($service_fee + $taxes);
+								 	}else{
+								 		$grand_total  = $subtotal  = $tax_ser_fees = 0 ;
+								 		
+								 	}
 							 		//echo $tax_ser_fees;
 								@endphp
 								<div class="row">
@@ -857,33 +881,6 @@ input:disabled{
 													</div>
 												</div>	
 
-												<div class="row" id="checkdiv"  style="display: none;">
-													<div class="col-md-1 col-sm-1 col-xs-2">
-														<div class="close-div">
-															<div class="close-cross"> 
-																<i class="fas fa-times"></i>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-3 col-sm-4 col-xs-6">
-														<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" >
-													</div>
-													<div class="col-md-8 col-sm-4 col-xs-2">
-														<label>Check</label>
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="row">
-															<div class="cash-tend">
-																<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
-															</div>
-														</div>
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="checkout-sapre-tor">
-														</div>
-													</div>
-												</div>	
-
 												<div id="ccnewdiv"  style="display: none;"> 
 													<div class="col-md-1 col-sm-1 col-xs-2">
 														<div class="close-div">
@@ -950,6 +947,34 @@ input:disabled{
 														</div>
 						        					</div>
 					                            </div>
+
+					                            <div class="row" id="checkdiv"  style="display: none;">
+													<div class="col-md-1 col-sm-1 col-xs-2">
+														<div class="close-div">
+															<div class="close-cross"> 
+																<i class="fas fa-times"></i>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-3 col-sm-4 col-xs-6">
+														<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" >
+													</div>
+													<div class="col-md-8 col-sm-4 col-xs-2">
+														<label>Check</label>
+													</div>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<div class="row">
+															<div class="cash-tend">
+																<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
+															</div>
+														</div>
+													</div>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<div class="checkout-sapre-tor">
+														</div>
+													</div>
+												</div>	
+
 											</div>
 										</div>
 									</div>
@@ -1356,6 +1381,7 @@ input:disabled{
 		var aduprice = $('#adultprice').val();
 		var childprice = $('#childprice').val();
 		var infantprice = $('#infantprice').val();
+		var pay_session = $('#session_val').val();
 	
 		if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
 			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
@@ -1387,6 +1413,9 @@ input:disabled{
 		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
 	
 		$('#price').val(totalprice);
+		$('#p_session').val(pay_session);
+		$('#session_span').html(pay_session);
+		$('#pay_session').val(pay_session);
 		$('#qty').html(adult+' '+child+' '+infant);
 		$('.participateclosebtn').click();
 		gettotal('','')
@@ -1794,19 +1823,23 @@ input:disabled{
 	    	$('#cc_amt').val(0);
 	    	$('#cc_new_card_amt').val(0);
 	    }else if(this.value == 'check'){
+	    	$('#check_amt').val(0);
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
 	    		$('#check_amt').val('{{$grand_total}}');
 	    	}
 	        $('#checkdiv').css('display','block');
 	    }else if(this.value == 'newcard'){
-	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden")) {
+	    	$('#cc_new_card_amt').val(0);
+	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#checkdiv').is(":hidden")) {
 	    		$('#cc_new_card_amt').val('{{$grand_total}}');
 	    	}
 	    	$('#ccnewdiv').css('display','block');
 	    }else if(this.value == 'cardonfile'){
-	    	if($('#cashdiv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
+	    	$('#cc_amt').val(0);
+	    	if($('#cashdiv').is(":hidden") && $('#ccnewdiv').is(":hidden") && $('#checkdiv').is(":hidden")) {
 	    		$('#cc_amt').val('{{$grand_total}}');
 	    	}
+
 	    	$('#card_id').val($(this).attr("card-id"));
 	    	$('.visa-info').html($(this).attr("extra-data"));
 	        $('#ccfilediv').css('display','block');
@@ -1815,10 +1848,13 @@ input:disabled{
 	});
 
 	document.getElementById("cash_amt").onkeyup = function() {myMethod()};
+	//document.getElementById("cc_new_card_amt").onkeyup = function() {myMethod()};
+	//document.getElementById("check_amt").onkeyup = function() {myMethod()};
 
 	document.getElementById("cash_amt_tender").onkeyup = function() {myMethod()};
 
 	function myMethod() {
+		var grand_total = '{{$grand_total}}';
 		var cash_amt_tender = parseFloat($('#cash_amt_tender').val());
 		var cash_amt = parseFloat($('#cash_amt').val());
 		var tot =0;
@@ -1832,6 +1868,9 @@ input:disabled{
 				if($('#ccnewdiv').is(':visible')){
 					$('#cc_new_card_amt').val(tot_btn);
 				}
+				if($('#checkdiv').is(':visible')){
+					$('#check_amt').val(tot_btn);
+				}
 				$('#cash_change').val('0');
 			}else{
 				tot_btn  = '0.00';
@@ -1840,6 +1879,9 @@ input:disabled{
 				}
 				if($('#ccnewdiv').is(':visible')){
 					$('#cc_new_card_amt').val(0);
+				}
+				if($('#checkdiv').is(':visible')){
+					$('#check_amt').val(0);
 				}
 				$('#cash_change').val(tot);
 			}
@@ -1858,6 +1900,13 @@ input:disabled{
 				}else{
 					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
 				}
+			}else if($('#checkdiv').is(':visible')){
+				var cash = cash_amt_tender + parseFloat($('#check_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				}
 			}else{
 				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
 			}
@@ -1868,20 +1917,33 @@ input:disabled{
 				if( cash === cash_amt){
 					$('#total_remaing').html('Total Amount Remaining $0.00');
 				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
 				}
 			}else if($('#ccnewdiv').is(':visible')){
 				var cash = parseFloat($('#cc_new_card_amt').val());
 				if( cash === cash_amt){
 					$('#total_remaing').html('Total Amount Remaining $0.00');
 				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
+				}
+			}else if($('#checkdiv').is(':visible')){
+				var cash = parseFloat($('#check_amt').val());
+				if( cash === cash_amt){
+					$('#total_remaing').html('Total Amount Remaining $0.00');
+				}else{
+					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
 				}
 			}else{
-				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+				$('#total_remaing').html('Total Amount Remaining $'+cash_amt);
 			}
 		}
 	}
+
+
+    $(document).on('keyup', '#p_session', function() {
+    	$('#pay_session').val($(this).val());
+    	$('#session_span').html($(this).val());
+    });
 
     $(document).on('keyup', '#serchclient', function() {
     	var _token = '{{csrf_token()}}';
@@ -1919,7 +1981,7 @@ input:disabled{
 
     function searchclick(cid){
     	//var url = '{{env("APP_URL")}}';
-    	var url = "{{route('business.orders.index',['cus_id' => 'cid' ])}}";
+    	var url = "{{route('business.orders.create',['cus_id' => 'cid' ])}}";
     	url = url.replace('cid', cid);
     	// var url = url+'/activity_purchase/0/'+cid;
 	 	window.location.href = url;

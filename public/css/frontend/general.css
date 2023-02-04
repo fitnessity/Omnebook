@@ -24409,3 +24409,7 @@ padding-left: 0px;
 .post-meta .removepost{
 	margin-bottom: 20px;
 }
+.photo-select.product-edit img{
+	width: 125px;
+	height: 125px;
+} 
