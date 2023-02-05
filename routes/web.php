@@ -25,7 +25,11 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     
-    //Route::any('activity_purchase/{book_id?}/{cus_id?}', 'OrderController@index')->name('activity_purchase');
+});
+
+Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
+
+    Route::resource('orders', 'OrderController')->only(['index']);
 });
 
 Route::group(['middleware' => ['auth']], function(){
