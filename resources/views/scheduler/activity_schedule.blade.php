@@ -61,7 +61,7 @@
 									$sche_ary = [];
 									foreach($catelist->BusinessActivityScheduler as $sc){
 										if($sc->end_activity_date > $filter_date->format('Y-m-d')){
-											if(strpos($sc->activity_days, date("l")) !== false){
+											if(strpos($sc->activity_days, $filter_date->format("l")) !== false){
 												$sche_ary [] = $sc;
 											}
 										}
