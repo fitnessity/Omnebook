@@ -690,7 +690,7 @@ input:disabled{
 								<div class="row">
 									<div class="col-md-6 col-sm-6 col-xs-6">
 										<div class="activityselect3 special-date">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" value="{{date('M-d-Y')}}">
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" >
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
@@ -1687,7 +1687,7 @@ $(document).ready(function () {
 			},
 			success: function (response) {
 				if(response != ''){
-					//$('#updatefilterforcart').html(response);
+					$('#updatefilterforcart').html(response);
 					$('#sesdate'+sid).val(actdate);
 				}else{
 					$('#updatefilterforcart').html('');
@@ -1764,7 +1764,6 @@ $(document).ready(function () {
 		
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
-
 ?>
 <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
