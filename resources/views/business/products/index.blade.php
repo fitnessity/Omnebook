@@ -3,6 +3,7 @@
 @include('layouts.userHeader')
 
 
+
 <div class="p-0 col-md-12 inner_top nopadding">
     <div class="row">
         <div class="col-md-2" style="background: black;">
@@ -160,14 +161,6 @@
 		"searching": false
 		"paging": false
 	} );
-	    $(document).ready(function () {
-        $('#example')
-                .dataTable({
-                    "responsive": true,
-                    "ajax": 'data.json'
-                });
-    });
-
 </script>
 <script>
 	$(document).ready(function() {
