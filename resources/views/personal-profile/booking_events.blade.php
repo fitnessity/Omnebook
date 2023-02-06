@@ -142,7 +142,7 @@ use App\UserFamilyDetail;
 
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span> 0 </span>
+                                                             <span> {{@$book_details['remaing_session']}}/{{@$book_details['pay_session']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>PROGRAM NAME:</span>
@@ -226,7 +226,7 @@ use App\UserFamilyDetail;
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
-                                                            <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                           <!--  <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                             <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
                                                         </div>
                                                         <!-- <div class="icon">
@@ -417,7 +417,7 @@ use App\UserFamilyDetail;
                                                        <!--  <a href="#">Check In</a> -->
                                                        <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                        <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
-                                                       <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                      <!--  <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                     </div>
                                                     <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
                                                         <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
@@ -609,7 +609,7 @@ use App\UserFamilyDetail;
                                                        <!--  <a href="#">Check In</a> -->
                                                        <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
                                                        <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
-                                                    <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                   <!--  <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                         </div>
                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
                                                             <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
@@ -803,7 +803,7 @@ use App\UserFamilyDetail;
                                                         <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                     </div>
                                                      <div class="threebtn_fboxes" id="anothertwobtn{{$i}}pa_{{$book_details['businessservices']['id']}}" style="display:none;">
-                                                            <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a>
+                                                           <!--  <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                             <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
                                                         </div>
                                                     <!-- <div class="icon">

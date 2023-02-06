@@ -53,6 +53,7 @@ use App\BusinessActivityScheduler;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
 use Carbon\Carbon;
+use Config;
 
 use Request as resAll;
 
@@ -1201,7 +1202,7 @@ class BookingController extends Controller {
     public function getbookingmodeldata(Request $request){
         $p_name = $this->businessservice->findById($request->sid)->program_name;
         $data = $this->bookings->getbusinessbookingsdata($request->sid,$request->date);
-        $html = '';
+        $html = '' ;$link ='#';
         $ajax = "'ajax'";
         $html.= '<div class="col-lg-12">
                     <div class="schedule-modal-title modal-mb">
@@ -1265,6 +1266,7 @@ class BookingController extends Controller {
                     $name = $dt->booking->user->firstname.' '.$dt->booking->user->lastname;
                 }else{
                     $name = $dt->booking->customer->fname.' '.$dt->booking->customer->lname;
+                    $link = Config::get('constants.SITE_URL')."/business/".$dt->booking->customer->business_id."/customers/".$dt->booking->customer->id;
                 }
 
                 $html .='<div class="modal-inner-txt modal-table-data'; 
@@ -1278,7 +1280,7 @@ class BookingController extends Controller {
                     $html.= '">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <label class="manage-service-display">Name: </label><span> '.$count.'. <a href="#">'.$name.'</a> </span>
+                                    <label class="manage-service-display">Name: </label><span> '.$count.'. <a href="'.$link.'">'.$name.'</a> </span>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="manage-service-display">Date Booked: </label><span> '.$dateval.'</span>
