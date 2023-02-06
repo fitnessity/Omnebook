@@ -193,5 +193,6 @@ class UserBookingDetail extends Model
         $remaining = $pay_session - $checkindetailscnt;
         return $remaining;
     }
+
 }
 

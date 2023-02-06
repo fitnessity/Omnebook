@@ -155,7 +155,9 @@ class BusinessServices extends Model
         return $this->hasMany(BusinessActivityScheduler::class, 'serviceid');
     }
 
-    
+    public function UserBookingDetails(){
+        return $this->hasMany(UserBookingDetails::class, 'sport');
+    }
 
     public function reviews_score()
     {
@@ -179,10 +181,47 @@ class BusinessServices extends Model
     }
 
     public function formal_service_types(){
-
 		if( $this->service_type =='individual' ) return 'Personal Training'; 
 		else if( $this->service_type =='classes' )	return 'Group Class'; 
 		else if( $this->service_type =='experience' ) return 'Experience'; 
         else if( $this->service_type =='events' ) return 'Events'; 
     }
+
+    public function get_expired_time(){
+        $sc_details = $this->schedulers;
+        $ex_date = 'N/A';
+        $dates = [];
+        if(!empty($sc_details) && count($sc_details)>0){
+            foreach( $sc_details as $sd){
+                $dates[] = $sd['end_activity_date'];
+            }
+            $ex_date = date('m/d/Y',strtotime(max($dates)));
+        }
+       
+        return $ex_date;
+    }
+    public function get_scheduled_categories($catdata){
+        $dataarray = [];
+        if(!empty($catdata)){
+            foreach($catdata as $data){
+                $businessschedule =  $data->BusinessActivityScheduler;
+                if(!empty($businessschedule)){
+                    foreach($businessschedule as $scdata){
+                        $dataarray[]= $scdata['category_id'];
+                    }
+                }
+            }
+            $dataarray =array_unique($dataarray);
+        }
+
+        return count($dataarray);
+    }
+
+
+    public function this_week_booking(){
+       $UserBookingDetailcount = UserBookingDetail::where('sport',$this->id)->where('bookedtime',">=", date('Y-m-d', strtotime("this week")))->count();
+        return  $UserBookingDetailcount;
+    }
+
+
 }

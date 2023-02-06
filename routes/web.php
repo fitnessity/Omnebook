@@ -24,7 +24,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
-    
+    Route::resource('services', 'ServiceController')->only(['index','create', 'update', 'destroy', 'store']);
+    Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -40,7 +41,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
 
         // Services
-        Route::get('/services', 'UserProfileController@manageService')->name('manageService');
+        //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
 
         // BookingPostorders
         Route::post('/booking_postorders','BookingPostorderController@create')->name('business_booking_postorders_create');
