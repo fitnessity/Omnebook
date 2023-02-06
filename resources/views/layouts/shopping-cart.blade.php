@@ -338,7 +338,41 @@
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="price-section">
-                                        <h4><?= "$ " . number_format($item["totalprice"], 2); ?></h4>
+                                        <h4>
+                                        	@if($item['adult'])
+                                        	  x{{$item['adult']['quantity']}} Child
+                                        	  @if($serprice['child_discount'])
+                                        	    @php
+                                        	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * $serprice['child_discount'])/100)
+                                        	    @endphp
+                                        	    ${{$child_discount_price}}<strike> ${{$item['adult']['price']}}</strike>/person
+                                        	  @endif
+                                        	  <br/>
+                                        	@endif
+
+                                        	@if($item['child'])
+                                        	  x{{$item['child']['quantity']}} Child
+                                        	  @if($serprice['child_discount'])
+                                        	    @php
+                                        	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * $serprice['child_discount'])/100)
+                                        	    @endphp
+                                        	    ${{$child_discount_price}}<strike> ${{$item['child']['price']}}</strike>/person
+                                        	  @endif
+                                        	  <br/>
+                                        	@endif
+
+                                        	@if($item['infant'])
+                                        	  x{{$item['infant']['quantity']}} Child
+                                        	  @if($serprice['child_discount'])
+                                        	    @php
+                                        	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * $serprice['child_discount'])/100)
+                                        	    @endphp
+                                        	    ${{$child_discount_price}}<strike> ${{$item['infant']['price']}}</strike>/person
+                                        	  @endif
+                                        	  <br/>
+                                        	@endif
+                                        	total: <?= "$ " . number_format($item["totalprice"] - $discount, 2); ?>
+                                        </h4>
                                     </div>
                                     <div class="invite-share">
                                     	<!--<span>Invite Others</span>
@@ -623,17 +657,24 @@
     								<label>Subtotal </label>
     								<!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
     								<label>Taxes & Fees: </label>
-                                    <label>Discount: </label>
+                                    {{-- <label>Discount: </label> --}}
     								<!-- <label>Shpping:</label> -->
     							</div>
     						</div>
     						<div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
     							<div class="inner-box-right"> 
     								<span> <?php echo count($cart['cart_item']); ?> </span>
-    								<span> <?php echo "$ " . number_format($item_price, 2); ?> </span>
+    								<span> 
+    									@if($discount)
+    										<?php echo "$ " . number_format($item_price - $discount, 2); ?> 
+    									@else
+    										<?php echo "$ " . number_format($item_price, 2); ?> 
+    									@endif
+    									
+    								</span>
     								<!-- <span> <?php /*echo "$ " .number_format($service_fee,2);*/ ?> </span> -->
     								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
-    								<span> {{number_format($discount,2)}} </span>
+    								{{-- <span> {{number_format($discount,2)}} </span> --}}
                                     <!-- <span> $0 </span> -->
     							</div>
     						</div>

@@ -10,16 +10,32 @@ use App\BusinessServiceReview;
 use App\BusinessServicesFavorite;
 use App\BusinessServices;
 
-$total_quantity=0;
- $item_price=0;
-
-
+$total_quantity = 0;
+$item_price = 0;
+$discount = 0;
+$totalquantity = 0;
 if(!empty($cart["cart_item"])) {
+	$cartdata = $cart['cart_item'][$priceid];
+    $serprice = BusinessPriceDetails::where('id', $cartdata['priceid'])->orderBy('id', 'ASC')->first();
+
     foreach($cart['cart_item'] as $item){
         $total_quantity = count($cart["cart_item"]);
         $item_price = $item_price + $item["totalprice"];
+
+        if(!empty($item['adult'])){
+            $totalquantity += $item['adult']['quantity'];
+            $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
+        }
+        if(!empty($item['child'])){
+            $totalquantity += $item['child']['quantity'];
+            $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
+        }
+        if(!empty($item['infant'])){
+            $totalquantity += $item['infant']['quantity'];
+            $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
+        }
     }
-    $cartdata = $cart['cart_item'][$priceid];
+
     $pid = $cart['cart_item'][$priceid]['code'];
     $totalprice = $cart['cart_item'][$priceid]['totalprice'];
     $profilePicact = url('/public/images/service-nofound.jpg');
@@ -33,7 +49,7 @@ if(!empty($cart["cart_item"])) {
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
     $act = BusinessServices::where('id', $cartdata["code"])->first();
-    $serprice = BusinessPriceDetails::where('id', $cartdata['priceid'])->orderBy('id', 'ASC')->first();
+    
     $daynum = '+'.@$serprice['pay_setnum'].' '.strtolower(@$serprice['pay_setduration']);
 	$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));
     $timecart = $tot_dura= '';
@@ -51,9 +67,8 @@ if(!empty($cart["cart_item"])) {
 				$tot_dura = $hr.$min.$sec; 
 			} 
 		}
-}
+	}
 
-print_r($cartdata);
 ?>
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 
@@ -100,7 +115,9 @@ print_r($cartdata);
 					</div>
 					<div class="cart-total">
 						<label>Cart Total Amount: </label>
-						<span>${{$item_price}}</span>
+						<span>
+							${{$item_price - $discount}}
+						</span>
 					</div>
 					<div class="border-center"> </div>
 				</div>
@@ -127,6 +144,49 @@ print_r($cartdata);
 						<div class="kick-adul">
 							<h5>{{$cartdata['name']}}</h5>
 							<div class="cart-details">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-display">
+											<label></label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-display info-align">
+											@if($cart['cart_item'][$priceid]['adult'])
+											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Child
+											  @if($serprice['child_discount'])
+											    @php
+											      $child_discount_price = ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['child_discount'])/100)
+											    @endphp
+											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
+											  @endif
+											  <br/>
+											@endif
+
+											@if($cart['cart_item'][$priceid]['child'])
+											  x{{$cart['cart_item'][$priceid]['child']['quantity']}} Child
+											  @if($serprice['child_discount'])
+											    @php
+											      $child_discount_price = ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
+											    @endphp
+											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['price']}}</strike>/person
+											  @endif
+											  <br/>
+											@endif
+
+											@if($cart['cart_item'][$priceid]['infant'])
+											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Child
+											  @if($serprice['child_discount'])
+											    @php
+											      $child_discount_price = ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['child_discount'])/100)
+											    @endphp
+											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
+											  @endif
+											  <br/>
+											@endif
+										</div>
+									</div>
+								</div>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="info-display">
