@@ -183,7 +183,7 @@ input:disabled{
 													<div class="set-price">
 														<i class="fas fa-dollar-sign"></i>
 													</div>
-													<input type="text" class="form-control valid" id="price" placeholder="$0.00" disabled>
+													<input type="text" class="form-control valid" id="price" placeholder="$0.00" class="manualprice">
 												</div>
 											</div>
 											<div class="col-md-2 col-sm-4 col-xs-12">
@@ -614,7 +614,6 @@ input:disabled{
 								 		$tax_ser_fees = ($service_fee + $taxes);
 								 	}else{
 								 		$grand_total  = $subtotal  = $tax_ser_fees = 0 ;
-								 		
 								 	}
 							 		//echo $tax_ser_fees;
 								@endphp
@@ -1347,7 +1346,7 @@ input:disabled{
                     $('.reviewerro').css('display','block');
                     /*if(response == 'success'){*/
                         $('.reviewerro').html('Email Successfully Sent..');
-/*                    }else{
+					/*  }else{
                         $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
                     }*/
                 }
@@ -1797,6 +1796,40 @@ input:disabled{
 	 	}
 	}
 
+	document.getElementById("price").onkeyup = function() {
+		var price = parseFloat($(this).val());
+		var chkadu = chkchild = chkinfant = 0;
+		var qty = uniqueprice = 0;
+		if($('#adupricequantity').val() != '' && $('#adupricequantity').val() != 0 && $('#adultprice').val() != ''){
+			qty += parseInt($('#adupricequantity').val());
+			chkadu = 1;
+		}if($('#childpricequantity').val() != '' && $('#childpricequantity').val() != 0 && $('#childprice').val() != ''){
+			qty += parseInt($('#childpricequantity').val());
+			chkchild = 1;
+		}if($('#infantpricequantity').val() != '' && $('#infantpricequantity').val() != 0 && $('#infantprice').val() != ''){
+			qty += parseInt($('#infantpricequantity').val());
+			chkinfant = 1;
+		}
+		if(qty != 0 && price != 0 && price != 'undefined'){
+			uniqueprice = parseFloat(price/parseFloat(qty));
+		}
+
+		if(chkadu == 1  && $('#adultprice').val() != ''){
+			$('#cartaduprice').val(uniqueprice);
+		}
+		if(chkchild == 1 && $('#childprice').val() != ''){
+			$('#cartchildprice').val(uniqueprice);
+		}
+		if(chkinfant == 1 && $('#infantprice').val() != ''){
+			$('#cartinfantprice').val(uniqueprice);
+		}
+		gettotal('','');
+	};
+
+
+	
+
+
 	$('.close-div').click(function() {
 		var name = $(this).parent('div').parent('div').attr('id');
 		$("#"+name).css('display','none');
@@ -1986,7 +2019,6 @@ input:disabled{
     	// var url = url+'/activity_purchase/0/'+cid;
 	 	window.location.href = url;
 	}
-
 </script>
 
 <script type="text/javascript">
@@ -2087,8 +2119,6 @@ input:disabled{
 			}
 		});
 	}
-
-	
 
 	/*$("#serchclient").keyup(function() {
       $.ajax({

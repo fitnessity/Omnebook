@@ -13,6 +13,7 @@ use App\User;
 use App\Customer;
 use App\BusinessActivityScheduler;
 use App\BusinessPriceDetails;
+use App\BookingCheckinDetails;
 use DB;
 use Auth;
 use config;
@@ -116,7 +117,8 @@ class BookingRepository
         $full_ary = [];
         foreach($BookingDetail as $book_details){
             $one_array = [];
-            $data = UserBookingStatus::where('id',$book_details['user_booking_detail']['booking_id'])->first();
+            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->whereNotNull('checked_at')->count();
+            $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
             $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
             $sc_date = str_replace('-', '/', $sc_date);  
@@ -170,9 +172,7 @@ class BookingRepository
                     if($item['infant'] != '')
                         $totalquantity += $item['infant'];
                 }
-                if( @$serviceactdata['spots_available'] != ''){
-                    $SpotsLeftdis = $serviceactdata['spots_available'] - $totalquantity;
-                }
+                
 
                 $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
                 $language = @$language_name->languages;
@@ -236,7 +236,7 @@ class BookingRepository
                 }
 
                 if(@$book_details['user_type'] == 'user'){
-                    $userdata = User::where('id',$data->user_id)->first();
+                    $userdata = User::where('id',$book_details['user_id'])->first();
                     $acc_url = config('app.url').'/userprofile/'.$userdata->username;
                     $taxval = $tot_amount_cart - $sub_totprice; 
                     $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
@@ -244,7 +244,7 @@ class BookingRepository
 
                     $name =  @$book_details['user']['firstname'].' '.@$book_details['user']['lastname'];
                 }else{  
-                    $userdata = Customer::where('id',$data->customer_id)->first();
+                    $userdata = Customer::where('id',$book_details['customer_id'])->first();
                     $acc_url = config('app.url').'/business/'.$userdata->business_id.'/customers/'.$userdata->id;
                     $extra_fees = json_decode(@$book_details['user_booking_detail']['extra_fees'],true); 
                     $tax = $extra_fees['tax'];
@@ -264,8 +264,8 @@ class BookingRepository
                     "confirm_id" => $book_details["order_id"],
                     "price_title" => @$BusinessPriceDetails['price_title'],
                     "pay_session" => @$BusinessPriceDetails['pay_session'],
-                    "SpotsLeftdis" => $SpotsLeftdis,
-                    "spots_available" => @$serviceactdata['spots_available'],
+                    "SpotsLeftdis" => $remaining,
+                    "spots_available" =>  $book_details['user_booking_detail']['pay_session'],
                     "sc_date" => @$sc_date,
                     "shift_start" => @$serviceactdata['shift_start'],
                     "shift_end" => @$serviceactdata['shift_end'],
@@ -294,6 +294,8 @@ class BookingRepository
     public function getdeepdetailofcurrentorder($BookingDetail){
         $full_ary = [];
         foreach($BookingDetail as $book_details){
+            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->whereNotNull('checked_at')->count();
+            $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
             $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
             if(@$book_details['businessservices']['service_type']=='individual')
             { 
@@ -339,7 +341,8 @@ class BookingRepository
                     "orderdetailid" => $book_details['user_booking_detail']['id'],
                     "confirm_id" => $book_details["order_id"],
                     "price_title" => @$BusinessPriceDetails['price_title'],
-                    "pay_session" => @$BusinessPriceDetails['pay_session'],
+                    "pay_session" => @$book_details['user_booking_detail']['pay_session'],
+                    "remaing_session" => $remaining,
                     "spots_available" => @$serviceactdata['spots_available'],
                     "sc_date" => @$sc_date,
                     "shift_start" => @$serviceactdata['shift_start'],
@@ -370,7 +373,7 @@ class BookingRepository
         $BusinessPriceDetails = $booking_details->business_price_detail;
         $categoty_name = $BusinessPriceDetails->business_price_details_ages->category_title;
         $schedulerdata = $booking_details->business_activity_scheduler;
-
+        $remaining = $booking_details->getremainingsession();
         if(@$businessuser->logo != "") {
             if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$businessuser->logo)) {
                $com_pic = url('/public/uploads/profile_pic/thumb/' . @$businessuser->logo);
@@ -442,7 +445,7 @@ class BookingRepository
         }
 
         if(@$schedulerdata->spots_available != ''){
-            $to_rem = $SpotsLeftdis.' / '.@$schedulerdata->spots_available;
+            $to_rem = $remaining.' / '.@$schedulerdata->spots_available;
         }
         
         if(@$business_services->program_name != ''){

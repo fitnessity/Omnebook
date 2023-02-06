@@ -1651,7 +1651,7 @@ class SchedulerController extends Controller
           $cart = [];
           if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                $cart = $cart_item["cart_item"][$request->priceid];
-               // /print_r( $cart);
+               //print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
                $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
@@ -1809,7 +1809,7 @@ class SchedulerController extends Controller
 													<div class="set-price">
 														<i class="fas fa-dollar-sign"></i>
 													</div>
-                                                                 <input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="'.$cart["totalprice"].'" disabled>
+                                                                 <input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="'.$cart["totalprice"].'">
                                                             </div>
                                                        </div>
                                                        <div class="col-md-2 col-sm-4 col-xs-12">
@@ -1972,8 +1972,36 @@ class SchedulerController extends Controller
                          $("#taxajax").click(function () {
                               get_total_ajax();
                          });
-                    </script>
-                    ';
+                         document.getElementById("priceajax").onkeyup = function() {
+                              var price = parseFloat($(this).val());
+                              $("#pricetotalajax").val(price);
+                              var chkadu = chkchild = chkinfant = 0;
+                              var qty = uniqueprice = 0;
+                              if($("#adupricequantityajax").val() != "" && $("#adupricequantityajax").val() != 0 && $("#adultpriceajax").val() != ""){
+                                   qty += parseInt($("#adupricequantityajax").val());
+                                   chkadu = 1;
+                              }if($("#childpricequantityajax").val() != "" && $("#childpricequantityajax").val() != 0 && $("#childpriceajax").val() != ""){
+                                   qty += parseInt($("#childpricequantityajax").val());
+                                   chkchild = 1;
+                              }if($("#infantpricequantityajax").val() != "" && $("#infantpricequantityajax").val() != 0 && $("#infantprice").val() != ""){
+                                   qty += parseInt($("#infantpricequantityajax").val());
+                                   chkinfant = 1;
+                              }
+                              if(qty != 0 && price != 0 && price != "undefined"){
+                                   uniqueprice = parseFloat(price/parseFloat(qty));
+                              }
+                              if(chkadu == 1  && $("#adultpriceajax").val() != ""){
+                                   $("#cartadupriceajax").val(uniqueprice);
+                              }
+                              if(chkchild == 1 && $("#childpriceajax").val() != ""){
+                                   $("#cartchildpriceajax").val(uniqueprice);
+                              }
+                              if(chkinfant == 1 && $("#infantpriceajax").val() != ""){
+                                   $("#cartinfantpriceajax").val(uniqueprice);
+                              }
+                              get_total_ajax();
+                         };
+                    </script>';
 
                $result .= '<div class="row">
                               <div class="col-lg-12">

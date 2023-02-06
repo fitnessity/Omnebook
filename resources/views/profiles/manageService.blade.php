@@ -27,6 +27,10 @@ input,select {
     use App\BusinessPriceDetails;
     use App\BusinessActivityScheduler;
     use App\UserBookingDetail;
+    $popupserid = '';
+    if(@$popupserviceid != ''){
+        $popupserid = $popupserviceid;
+    }
 ?>
 <div class="p-0 col-md-12 inner_top padding-0">
     <div class="row">
@@ -37,25 +41,11 @@ input,select {
         <div class="col-md-10 nopadding">   
             <div class="business-offer-main manageservice-page">
                 <section class="row">
-                    <?php
-                        $companyid = $companyname = "";
-                        if(isset($companyInfo)) {
-                            if(isset($companyInfo[0]) && !empty($companyInfo[0])) {
-                                $companyid = $companyInfo[0]->id;
-                                $companyname = $companyInfo[0]->company_name;
-                            }
-                        }
-
-                        $popupserid = '';
-                        if(@$popupserviceid != ''){
-                            $popupserid = $popupserviceid;
-                        }
-                    ?>
                     <div class="col-md-12 text-center">
                         <h2>Manage <?=$companyname?> Services</h2>
                     </div>
                     
-                    <form id="frmservice" name="frmservice" method="post" action="{{route('editBusinessProfile')}}">
+                    <form id="frmservice" name="frmservice" method="post" action="{{route('business.service_redirection')}}">
                         <div class="col-md-10"></div>
                         <div class="col-md-2">
                         @csrf
@@ -69,39 +59,16 @@ input,select {
                         @if($cservice->serviceid != 0)
                             <?php
                                 $businessschedulecount = 0;
-                                $dataarray = [];
-                                $cattotal=  BusinessPriceDetailsAges::where('serviceid',$cservice->id)->where('userid',Auth::user()->id)->where('cid',$cservice->cid)->count();
-                                $catdata=  BusinessPriceDetailsAges::where('serviceid',$cservice->id)->where('userid',Auth::user()->id)->where('cid',$cservice->cid)->get();
-                                foreach($catdata as $data){
-                                    $businessschedule = BusinessActivityScheduler::where('category_id', $data['id'])->get();
-                                    foreach($businessschedule as $scdata){
-                                        $dataarray[]= $scdata['category_id'];
-                                    }
-                                }
-                                $dataarray =array_unique($dataarray);
-                                $firstday = date('Y-m-d', strtotime("this week"));
-                                $UserBookingDetailcount = UserBookingDetail::where('sport',$cservice->id)->where('bookedtime',">=", $firstday)->count();
+                                $catdata =  $cservice->BusinessPriceDetailsAges;
+                                $sc_cat_cnt = $cservice->get_scheduled_categories($catdata);
+                                $UserBookingDetailcount = $cservice->this_week_booking();
                                 $profilePic = '';
-                                if ($cservice['profile_pic']!="") {
-                                    if(str_contains($cservice['profile_pic'], ',')){
-                                        $pic_image = explode(',', $cservice['profile_pic']);
-                                        if( $pic_image[0] == ''){
-                                           $p_image  = $pic_image[1];
-                                        }else{
-                                            $p_image  = $pic_image[0];
-                                        }
-                                    }else{
-                                        $p_image = $cservice['profile_pic'];
-                                    }
-
-                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-                                    }
+                                if ($cservice->first_profile_pic() !="" && file_exists( public_path() . '/uploads/profile_pic/' . $cservice->first_profile_pic()) ) {
+                                    $profilePic = url('/public/uploads/profile_pic/' . $cservice->first_profile_pic());
                                 }
-
                             ?>
                             <div class="col-md-12">
-                                <form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('editBusinessService')}}">
+                                <form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('business.service_redirection')}}">
                                     <div class="col-md-12">
                                         @csrf
                                         <input type="hidden" name="cid" value="{{ $cservice->cid }}" style="width:50px" />
@@ -124,7 +91,6 @@ input,select {
                                                                		?>
                                                     			@endif
                                                             </div>
-                                                            <?php /*?><div class="col-lg-7 col-md-7 col-sm-7"><?php */?>
                                                             <div class="col-xs-12 col-lg-3 col-md-3 col-sm-3">
                                                                 <p class="texttr">{{$cservice->program_name}} ({{$cservice->sport_activity}}) <b>{{ ($cservice->is_active==1) ? "Active" : "Inactive"}}</b></p>
                                                                 <p class="texttr"><b>{{ ($cservice->service_type=='individual') ? 'Personal Training' : $cservice->service_type }}</b></p>
@@ -133,7 +99,7 @@ input,select {
                                 								<div class="manage-txt">
                                 									<label>OVERVIEW</label>
                                 									<span>{{$UserBookingDetailcount}} Bookings This Week   </span>
-                                									<span>Expires on: 1/26/2023</span>
+                                									<span>Expires on: {{$cservice->get_expired_time()}}</span>
                                                                     @if($cservice->is_active==0)
                                 									   <p>Note: This activity is inactive and is No longer available for bookings. Click edit to update expiration</p>
                                                                     @endif
@@ -142,21 +108,17 @@ input,select {
                                 							<div class="col-xs-12 col-lg-3 col-md-3 col-sm-4">
                                 								<div class="manage-txt">
                                 									<label>SCHEDULE</label>
-                                									<span>{{ $cattotal}} CATEGORIES CREATED | <br> {{ count($dataarray)}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>
-                    												<!-- <a href="#" data-toggle="modal" data-target="#modalviewbookings"> | VIEW BOOKINGS</a> -->
+                                									<span>{{ count($cservice->BusinessPriceDetailsAges)}} CATEGORIES CREATED | <br> {{ $sc_cat_cnt}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>
                                                                     <a href="#" onclick="getbookingmodel({{$cservice->id}},'simple');"> | VIEW BOOKINGS</a>
                     												</span>
-                                									<!--<span>{{ $cattotal}} Catagories Scheduled | <br> <a href="{{route('businesspricedetails')}}"> + Edit Schedule</a>   </span>-->
                                 								</div>
                                 							</div>
                                                             <div class="col-xs-12 col-lg-1 col-md-1 col-sm-2">
                                                                 <input type="submit" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
                                                             </div>
-                                                            <?php /*?><div class="col-lg-1 col-md-1 col-sm-1">
-                                                                <input type="submit" class="btn btn-black" name="btnview" id="btnview" value="View" />
-                                                            </div><?php */?>
+                                                           <div class="col-lg-1 col-md-1 col-sm-1"></div>
                                                             <div class="col-xs-12 col-lg-2 col-md-2 col-sm-2">
-                                                                <input type="submit" class="btn btn-red" name="btnactive" id="btnactive" value="{{ ($cservice->is_active==0) ? "Active" : "Inactive"}} " />
+                                                                <input type="submit" class="btn btn-red" name="btnactive" id="btnactive" value="{{ ($cservice->is_active==0) ? 'Active' : 'Inactive'}} " />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -321,36 +283,6 @@ $(document).ready(function(){
     if(popupid != ''){
         $('#editschedule'+popupid+companyid).modal('show');
     }
-
-    @if(isset($firstCompany))
-    $('#display_user_profile_pic').attr('src',"{{url('/').'/public/uploads/profile_pic/thumb/'.$firstCompany->logo}}")
-    $('.username').html("{{'@'.$firstCompany->business_user_tag}}")
-    $('#intro-user').html("{{$firstCompany->about_company}}")
-    $('.coemail').attr('href',"{{'mailto:'.$firstCompany->email}}")
-    $('.cophone').attr('href',"{{'tel:'.$firstCompany->contact_number}}")
-    @endif
-
-    $(".deletec").click(function(){
-        $.ajax({
-          url:"{{url('/pcompany/delete/')}}"+"/"+$(this).attr('company_id'),
-          type:'GET',
-          dataType: 'json',
-          processData: false,
-          contentType: false,
-          headers: {'X-CSRF-TOKEN': $("#_token").val()},
-          beforeSend: function () {
-            $('.deletec').prop('disabled', true);
-            showSystemMessages('#systemMessage', 'info', 'Please wait while we delete a company with Fitnessity.');
-          },
-          complete: function () {
-            $('#deletec').prop('disabled', false);
-          },
-          success: function (response) {
-              showSystemMessages('#systemMessage', response.type, response.msg);
-              window.location.reload()
-            }
-        });
-    });
 });  
 </script>
 @endsection

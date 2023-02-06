@@ -1216,16 +1216,6 @@ class UserProfileController extends Controller {
         if($request->btnview == 'View') {
             return redirect('/pcompany/view/'.$request->cid);
         }
-        
-        if($request->btnactive == 'Active') {
-            BusinessServices::where('cid', $request->cid)->where('id', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 1]);
-            return redirect('/business/'.$request->cid.'/services');
-        }
-        
-        if($request->btnactive == 'Inactive') {
-             BusinessServices::where('cid', $request->cid)->where('id', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 0]);
-            return redirect('/business/'.$request->cid.'/services');
-        }
     }
     public function createNewBusinessProfile(Request $request) {
         if (!Gate::allows('profile_view_access')) {
@@ -4262,16 +4252,6 @@ class UserProfileController extends Controller {
     public function mybusinessusertag(Request $request) {
         $count = CompanyInformation::where('business_user_tag', $request->email)->count();
         return response()->json(['status' => 200, 'count' => $count]);
-    }
-    
-    public function manageService(Request $request, $cid ) {
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        $companyInfo = CompanyInformation::where('id', $cid)->orderBy('id', 'DESC')->get();
-        $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $cid)->orderBy('id', 'DESC')->get();
-        return view('profiles.manageService', compact('cart', 'companyInfo', 'companyservice'));
     }
 
     public function manageCompany(Request $request) {
