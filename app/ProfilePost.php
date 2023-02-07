@@ -22,5 +22,7 @@ class ProfilePost extends Model
         'post_text','images','user_id','video','music'        
     ];
 
-     
+    public function User(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

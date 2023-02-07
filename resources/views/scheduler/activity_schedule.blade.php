@@ -14,8 +14,8 @@
 			<div class="member-txt">
 				<p>If you already have a memerbship with multiple sessions. Reserve your spot here. If you don’t already have a membership, <a href="{{route('activities_index')}}">Book Here </a></p>
 			</div>
-			<div>
-				<button type="button" class="btn-nxt manage-search">SELECT AN OPTION </button>
+			<div class="schedule-header">
+				<h3  class="btn-nxt manage-search ">SELECT AN OPTION </h3>
 			</div>
 			<div class="activity-schedule-tabs">
 				<ul class="nav nav-tabs" role="tablist">
@@ -67,7 +67,7 @@
 										}
 									} 
 								@endphp
-								@if( $orderdata->act_schedule_id == '' )
+							
 							 	<div class="row">
 									<div class="col-md-6 col-sm-6 col-xs-12">
 										<div class="classes-info">
@@ -93,7 +93,7 @@
 													$duration = $scary->get_duration();
 													$SpotsLeftdis = 0;
 													$bs = new  \App\Repositories\BookingRepository;
-													$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
+													$bookedspot = $bs->getcheckincount($scary->id,$filter_date->format('Y-m-d')); 
 													$SpotsLeftdis = $scary->spots_available - $bookedspot;
 													$cancel_chk = 0;
 											        
@@ -107,6 +107,7 @@
 														</div>
 											@endforeach
 										@else
+									
 											<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
 										@endif
 										</div>
@@ -116,7 +117,6 @@
 										</div>
 									</div>
 								</div>
-								@endif
 							@endif
 						</div>
 					</div>

@@ -10,4 +10,8 @@ class PagePost extends Model
     protected $fillable = [
         'page_id','user_id','post_text','images','video','music'        
     ];
+
+    public function User(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

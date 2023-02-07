@@ -35,6 +35,10 @@ class BookingCheckinDetails extends Model
         return $this->belongsTo(UserBookingDetail::class,'booking_detail_id');
     }
 
+    public function scheduler(){
+        return $this->belongsTo(BusinessActivityScheduler::class,'business_activity_scheduler_id');
+    }
+
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id');
     }

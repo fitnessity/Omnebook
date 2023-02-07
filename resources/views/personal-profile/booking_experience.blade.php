@@ -151,7 +151,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>EXPIRATION DATE:</span>
-                                                            <span>—</span>
+                                                            <span>{{$book_details['expired_at']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>DATE BOOKED:</span>
@@ -159,7 +159,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>RESERVED DATE:</span>
-                                                            <span>—</span>
+                                                            <span>{{$book_details['reserve_date']}}</span>
                                                         </p>
                                                     
                                                         <p>
@@ -169,11 +169,11 @@ use App\UserFamilyDetail;
 
                                                         <p>
                                                             <span>CHECK IN DATE:</span>
-                                                            <span>None</span>
+                                                            <span>{{$book_details['reserve_date']}}</span>
                                                         </p> 
                                                         <p>
                                                             <span>CHECK IN TIME:</span>
-                                                            <span>None</span>
+                                                            <span>{{$book_details['check_in_time']}}</span>
                                                         </p>
 
                                                         <p>
@@ -192,7 +192,7 @@ use App\UserFamilyDetail;
 
                                                         <p>
                                                             <span>ACTIVITY DURATION:</span>
-                                                            <span>—</span>
+                                                            <span>{{$book_details['reserve_time']}}</span>
                                                         </p>
 
                                                         <p>
@@ -223,7 +223,7 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="{{route('activity_schedule',['odid' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
+                                                            <a href="{{route('personal.schedulers.index',['odid' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
@@ -415,8 +415,7 @@ use App\UserFamilyDetail;
                                                     </div>
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
-                                                           <!--  <a href="#">Check In</a> -->
-                                                           <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
+                                                           <!--  <a href="#">Check In</a>
                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                             <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                         </div>
@@ -607,8 +606,7 @@ use App\UserFamilyDetail;
                                                     </div>
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
-                                                           <!--  <a href="#">Check In</a> -->
-                                                           <!--  <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Schedule</a>
+                                                           <!--  <a href="#">Check In</a> 
                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                            <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                         </div>
