@@ -31,6 +31,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
 
     Route::resource('orders', 'OrderController')->only(['index']);
+    Route::resource('schedulers', 'SchedulerController')->only(['index','create', 'update', 'destroy', 'store']);
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -382,6 +383,10 @@ Route::group(array('prefix' => 'admin'), function(){
 
     // Post
     Route::get('/post', 'Frontend\PostController@index')->name('admin/post');
+    Route::get('/businesspost', 'Frontend\PostController@businessindex')->name('admin/businesspost');
+    Route::get('/profilepost', 'Frontend\PostController@index')->name('admin/profilepost');
+    Route::get('/viewprofilepost/', 'Frontend\PostController@viewProfilepost')->name('admin/viewprofilepost');
+    Route::get('/viewbusinesspost/', 'Frontend\PostController@viewBusinesspost')->name('admin/viewbusinesspost');
 
     //Trainer
     Route::get('/trainer', 'Frontend\TrainerController@index')->name('trainer');
@@ -999,13 +1004,9 @@ Route::group(['middleware' => ['auth']], function()
 Route::group(['middleware' => ['auth']], function()
 {
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
-    //Route::any('activity_purchase/{book_id?}/{cus_id?}', 'SchedulerController@activity_purchase')->name('activity_purchase');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
-    
-    Route::any('activity_schedule/{odid?}', 'SchedulerController@activity_schedule')->name('activity_schedule');
     Route::any('all_activity_schedule', 'SchedulerController@all_activity_schedule')->name('all_activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
-    Route::post('checkout_register', 'SchedulerController@checkout_register')->name('checkout_register');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::get('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');

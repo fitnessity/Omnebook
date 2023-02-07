@@ -10,7 +10,8 @@ use Carbon\Carbon;
 use DateTime;
 use Config;
 use DateInterval;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer};
+use DateTimeZone;
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 
 
@@ -162,7 +163,474 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //
+        $bookidarray = [];
+        $fitnessity_fee= 0;
+        $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
+        //$fitnessity_fee = $bspdata->fitnessity_fee;
+        $service_fee = $bspdata->service_fee;
+        $tax = $bspdata->site_tax;
+
+        if(($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != '') || ($request->cc_amt != 0 && $request->cc_amt != '' )){
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $customer='';
+            if($request->user_type == 'user'){
+                $loggedinUser = Auth::user();
+                $userdata = User::where('id',$loggedinUser->id)->first();
+                if(empty($userdata['stripe_customer_id'])) {
+                     $stripe_customer_id =  $userdata->create_stripe_customer_id();
+                }else{
+                     $stripe_customer_id = $userdata['stripe_customer_id'];
+                }
+            }else{
+                $userdata = Customer::where('id',$request->user_id)->first();
+                if(empty($userdata['stripe_customer_id'])) {
+                     $stripe_customer_id = $userdata->create_stripe_customer_id();
+                }else{
+                     $stripe_customer_id = $userdata['stripe_customer_id'];
+                }
+            }
+            $listItems = []; 
+            $proid = []; 
+            //$totalprice = $request->grand_total;
+            if(isset($request->itemname)) {
+                $itemcount = count($request->itemname);
+                $pr=''; $total=0;
+                for($i=0; $i < $itemcount; $i++) {
+                     $pr=$request->itemprice[$i] / $request->itemqty[$i];
+                     $total = $total + $pr;
+                     if(isset($request->itemname[$i])) {
+                          $product = \Stripe\Product::create([
+                              'name' => $request->itemname[$i],
+                              'description' => $request->itemname[$i],
+                          ]);
+
+                          $price = \Stripe\Price::create([
+                               'product' => $product->id,
+                               'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
+                               'currency' => 'usd',
+                          ]);
+
+                          $listItem['price'] = $price->id;
+                          $listItem['quantity'] = $request->itemqty[$i];
+                          $listItems[] = $listItem;
+                     }
+                     if(isset($request->itemid[$i])) {
+                          $proidary = $request->itemid[$i];
+                          $proid[] = $proidary;
+                     }
+
+                }
+            }
+            $prodata = json_encode($proid); 
+            $listItems = json_encode($listItems);
+
+            if($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != ''){
+
+                $cc_new_card_amt = $request->cc_new_card_amt;
+                $totalprice = $cc_new_card_amt;
+
+                if($request->has('save_card')){
+                     $carddetails = $stripe->tokens->create([
+                          'card' => [
+                              'number' => $request->cardNumber,
+                              'exp_month' =>  $request->month,
+                              'exp_year' =>  $request->year,
+                              'cvc' =>  $request->cvv,
+                              'name' =>  $request->owner,
+                          ],
+                     ]);
+
+                     $customer_source = $stripe->customers->createSource(
+                          $stripe_customer_id ,
+                          [ 'source' =>$carddetails->id]
+                     );
+                     $payment_method = $customer_source->id;
+                }else{
+                     $paymentMethods =  $stripe->paymentMethods->create([
+                          'type' => 'card',
+                          'card' => [
+                              'number' => $request->cardNumber,
+                              'exp_month' => $request->month,
+                              'exp_year' => $request->year,
+                              'cvc' => $request->cvv,
+                          ],
+                     ]);
+
+                     $payment_method = $paymentMethods->id;
+                }
+            }else{
+                $cc_amt = $request->cc_amt;
+                $totalprice = $cc_amt;
+                $carddetails = $stripe->customers->retrieveSource(
+                     $stripe_customer_id,
+                     $request->card_id,
+                     []
+                );
+
+                $payment_method = $carddetails->id;
+            }
+
+            $pmtintent = \Stripe\PaymentIntent::create([
+                'amount' =>  round($totalprice *100),
+                'currency' => 'usd',
+                'customer' => $stripe_customer_id,
+                'payment_method' =>  $payment_method ,
+                'off_session' => true,
+                'confirm' => true,
+                'metadata' => [
+                     "pro_id" => $prodata,
+                     "listItems" =>$listItems,
+                ],
+            ]);
+
+            $payid = $pmtintent->id;
+
+            $payment_intent = $stripe->paymentIntents->retrieve(
+                $payid,
+                []
+            );
+
+            $data = json_decode( json_encode( $payment_intent),true);
+            //$amount= ($data["amount"]/100);
+            $amount1=  $request->grand_total;
+            $date = new DateTime("now", new DateTimeZone('America/New_York') );
+            $oid = $date->format('YmdHis');
+            $digits = 3;
+            $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
+            $orderid= 'FS_'.$oid.$rand;
+            $lastid='';
+            $pmt_by_cash = 0;
+            if($amount1 != $data["amount"]/100 ){
+                $pmt_by_cash = $amount1 - $data["amount"]/100;
+            }
+            if($request->user_type == 'user'){
+                $user_id = $request->user_id;
+                $customerid = '';
+            }else{
+                $customerid = $request->user_id;
+                $user_id = Auth::user()->id;
+            }
+
+            if($data['status']=='succeeded')
+            {
+                $orderdata = array(
+                     'user_id' =>  $user_id ,
+                     'customer_id' =>  $customerid ,
+                     'user_type' => $request->user_type,
+                     'status' => 'confirmed',
+                     'currency_code' => $data["currency"],
+                     'stripe_id' => $data["id"],
+                     'stripe_status' => $data["status"],
+                     'amount' => $amount1,
+                     'order_id' => $orderid,
+                     'order_type' => 'checkout_register',
+                     'bookedtime' =>$date->format('Y-m-d'),
+                     'pmt_json' =>json_encode(array(
+                                  'pmt_by_card' => $data["amount"]/100,
+                                  'pmt_by_cash' =>   $pmt_by_cash ,
+                                  'pmt_by_check' => 0,
+                                  'pmt_by_comp' => 0,
+                          )),
+                  ); 
+                $status = UserBookingStatus::create($orderdata);
+                $lastid=$status->id;
+                $businessuser =[];
+                $cart = session()->get('cart_item');
+                $cartnew = [];
+                 
+                $cnt=0;
+                foreach($cart['cart_item'] as $key=>$c)
+                {    
+                     if($c['chk'] == 'activity_purchase') {
+                          $cartnew[$cnt]['name']= $c['name'];
+                          $cartnew[$cnt]['code']= $c['code'];
+                          $cartnew[$cnt]['priceid']= $c['priceid'];
+                          $cartnew[$cnt]['sesdate']= $c['sesdate'];
+                          $cartnew[$cnt]['tip']= $c['tip'];
+                          $cartnew[$cnt]['discount']= $c['discount'];
+                          $cartnew[$cnt]['tax']= $c['tax'];
+                          $cartnew[$cnt]['actscheduleid']= $c['actscheduleid']; 
+                          $cartnew[$cnt]['adult']= $c['adult'];
+                          $cartnew[$cnt]['child']= $c['child'];
+                          $cartnew[$cnt]['infant']= $c['infant'];
+                          $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
+                          $cartnew[$cnt]['p_session']= $c['p_session'];
+                          $cnt++;
+                          unset($cart['cart_item'][$key]);
+                     }
+                }   
+            
+                $metadatapro = json_decode($data['metadata']['pro_id']);
+                $metadatalistItems = json_decode($data['metadata']['listItems']);
+            
+                for($i=0;$i<count($metadatapro);$i++){
+                     $priceid=0; $sesdate= $encodeqty ='' ;
+                     $aduqnt = $childqnt = $infantqnt =0; 
+                     $aduprice = $childprice = $infantprice = $fitnessity_fee = 0;
+                     if ($metadatapro[$i] == $cartnew[$i]['code'])
+                     {   
+                          $taxval =$cartnew[$i]['tax'];
+                          $priceid = $cartnew[$i]['priceid'];
+                          $sesdate = $cartnew[$i]['sesdate'];
+                          $pidval = $cartnew[$i]['code'];
+                          $tip = $cartnew[$i]['tip'];
+                          $p_session = $cartnew[$i]['p_session'];
+                          $discount = $cartnew[$i]['discount'];
+                          $act_schedule_id = $cartnew[$i]['actscheduleid'];
+                          if(!empty($cartnew[$i]['adult'])){
+                              $aduqnt = $cartnew[$i]['adult']['quantity'];
+                              $aduprice = $cartnew[$i]['adult']['price'];
+                          }
+                          if(!empty($cartnew[$i]['child'])){
+                              $childqnt = $cartnew[$i]['child']['quantity'];
+                              $childprice= $cartnew[$i]['child']['price'];
+                          }
+                          if(!empty($cartnew[$i]['infant'])){
+                              $infantqnt = $cartnew[$i]['infant']['quantity'];
+                              $infantprice = $cartnew[$i]['infant']['price'];
+                          }    
+
+                          $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,'infant'=>$infantqnt); 
+                          $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,'infant'=>$infantprice);
+                          $encodeparticipate = json_encode($cartnew[$i]['participate']);
+                          $payment_number_c = array();
+                          $encodepayment_number = json_encode($payment_number_c);
+                          $encodeqty = json_encode($qty_c);
+                          $encodeprice = json_encode($price_c);
+                     }
+
+                     $activitylocation = BusinessServices::where('id',$pidval)->first();
+                     $fitnessity_fee = $activitylocation->user->fitnessity_fee;
+                     $price_detail = BusinessPriceDetails::find($priceid);
+                     $time = $act_schedule_id;
+                     $contract_date = date('Y-m-d',strtotime($sesdate));
+                     $explodetime = explode(' ',$time);
+                     $expired_at = '';
+                     if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+                          if($explodetime[1] == 'Months'){
+                               $daynum = '+'.$explodetime[0].' month';
+                               $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                          }else if($explodetime[1] == 'Days'){
+                               $daynum = '+'.$explodetime[0].' days';
+                               $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                          }else if($explodetime[1] == 'Weeks'){
+                               $daynum = '+'.$explodetime[0].' weeks';
+                               $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                          }else {
+                               $daynum = '+'.$explodetime[0].' years';
+                               $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                          }
+                     }
+                     $act = array(
+                          'booking_id' => $lastid,
+                          'sport' => $pidval,
+                          'price' => $encodeprice,
+                          'qty' =>$encodeqty ,
+                          'priceid' => $priceid,
+                          'pay_session' => $p_session,
+                          'expired_at' => $expired_at,
+                          'contract_date' =>date('Y-m-d',strtotime($sesdate)),
+                          'booking_detail' => json_encode(array(
+                                  'activitytype' => $activitylocation->service_type,
+                                  'numberofpersons' => 1,
+                                  'activitylocation' => $activitylocation->activity_location,
+                                  'whoistraining' => 'me',
+                                  'sessiondate' => '',
+                          )),
+                          'extra_fees' => json_encode(array(
+                              'service_fee' => $service_fee,
+                              'fitnessity_fee' => $fitnessity_fee,
+                              'tax' => $taxval,
+                              'tip' => $tip,
+                              'discount' => $discount,
+
+                          )),
+                          'expired_duration' =>$act_schedule_id,
+                          'payment_number' =>$encodepayment_number,
+                          'participate' => '['.$encodeparticipate.']',
+                          'transfer_provider_status' =>'unpaid',
+                     );
+                     $status = UserBookingDetail::create($act);
+                     $bookidarray [] = $status->id;
+                      //$status->transfer_to_provider();
+                }
+                //session()->forget('cart_item');
+            }
+        }else{
+            $retrun_cash = 0;
+            $cash_amt_tender = 0;
+            $pmt_by_check = 0;
+            $pmt_by_comp = 0;
+            $checknumber = '';
+            $grandtotal = $request->grand_total;
+            if($request->cardinfo == 'check'){
+                $pmt_by_check = $request->check_amt;
+                $checknumber  = $request->check_number;
+
+            }else if($request->cardinfo  == 'cash'){
+                if($request->cash_amt_tender > $request->cash_amt ){
+                     $retrun_cash = $request->cash_change;
+                }
+                $cash_amt_tender = $request->cash_amt_tender;
+            }else{
+                $pmt_by_comp = $grandtotal;
+                $grandtotal = 0;
+            }
+            $date = new DateTime("now", new DateTimeZone('America/New_York') );
+            $oid = $date->format('YmdHis');
+            $digits = 3;
+            $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
+            $orderid= 'FS_'.$oid.$rand;
+
+            if($request->user_type == 'user'){
+                $user_id = $request->user_id;
+                $customerid = '';
+            }else{
+                $customerid = $request->user_id;
+                $user_id = Auth::user()->id;
+            }
+
+            $orderdata = array(
+                'user_id' =>  $user_id ,
+                'customer_id' =>  $customerid ,
+                'user_type' => $request->user_type,
+                'status' => 'confirmed',
+                'currency_code' => 'usd',
+                'stripe_id' => '',
+                'stripe_status' => '',
+                'amount' => $grandtotal,
+                'order_id' => $orderid,
+                'order_type' => 'checkout_register',
+                'bookedtime' =>$date->format('Y-m-d'),
+                'retrun_cash' =>$retrun_cash,
+                'pmt_json' =>json_encode(array(
+                     'pmt_by_card' => 0,
+                     'pmt_by_cash' =>   $cash_amt_tender ,
+                     'pmt_by_check' => $pmt_by_check,
+                     'pmt_by_comp' => $pmt_by_comp,
+                     'check_no' => $checknumber,
+                )),
+            );
+            $status = UserBookingStatus::create($orderdata);
+            $lastid=$status->id; 
+
+            $businessuser =[];
+            $cart = session()->get('cart_item');
+            $cartnew = [];
+            $cnt=0;
+            foreach($cart['cart_item'] as $key=>$c)
+            {    
+                if($c['chk'] == 'activity_purchase') {
+                     $cartnew[$cnt]['name']= $c['name'];
+                     $cartnew[$cnt]['code']= $c['code'];
+                     $cartnew[$cnt]['priceid']= $c['priceid'];
+                     $cartnew[$cnt]['sesdate']= $c['sesdate'];
+                     $cartnew[$cnt]['tip']= $c['tip'];
+                     $cartnew[$cnt]['discount']= $c['discount'];
+                     $cartnew[$cnt]['tax']= $c['tax'];
+                     $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
+                     $cartnew[$cnt]['adult']= $c['adult'];
+                     $cartnew[$cnt]['child']= $c['child'];
+                     $cartnew[$cnt]['infant']= $c['infant'];
+                     $cartnew[$cnt]['participate']= $c['participate_from_checkout_regi'];
+                     $cartnew[$cnt]['p_session']= $c['p_session'];
+                     $cnt++;
+                     unset($cart['cart_item'][$key]);
+                }
+            } 
+
+            foreach($cartnew as $crt){
+                $aduprice = $childprice = $infantprice = 0;
+                $aduqnt = $childqnt = $infantqnt = $fitnessity_fee = 0;
+                $taxval = $crt['tax'];
+                $activitylocation = BusinessServices::where('id',$crt['code'])->first();
+                $fitnessity_fee = $activitylocation->user->fitnessity_fee;
+                $price_detail = BusinessPriceDetails::find($crt['priceid']);
+                $p_session = $crt['p_session'];
+                $payment_number_c = array( 'adult'=>0 ,'child' => 0,
+                    'infant'=> 0);
+                $encodepayment_number = json_encode($payment_number_c);
+                $encodeparticipate = json_encode($crt['participate']);
+
+                if(!empty($crt['adult'])){
+                    $aduqnt = $crt['adult']['quantity'];
+                    $aduprice = $crt['adult']['price'];
+                }
+                if(!empty($crt['child'])){
+                    $childqnt = $crt['child']['quantity'];
+                    $childprice= $crt['child']['price'];
+                }
+                if(!empty($crt['infant'])){
+                    $infantqnt = $crt['infant']['quantity'];
+                    $infantprice = $crt['infant']['price'];
+                }
+
+                $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,
+                    'infant'=>$infantqnt); 
+                $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
+                    'infant'=>$infantprice);
+                $encodeqty = json_encode($qty_c);
+                $encodeprice = json_encode($price_c);
+                $time = $crt['actscheduleid'];
+                $contract_date = date('Y-m-d',strtotime($crt['sesdate']));
+                $explodetime = explode(' ',$time);
+                $expired_at = '';
+                if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+                     if($explodetime[1] == 'Months'){
+                          $daynum = '+'.$explodetime[0].' month';
+                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                     }else if($explodetime[1] == 'Days'){
+                          $daynum = '+'.$explodetime[0].' days';
+                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                     }else if($explodetime[1] == 'Weeks'){
+                          $daynum = '+'.$explodetime[0].' weeks';
+                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                     }else {
+                          $daynum = '+'.$explodetime[0].' years';
+                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+                     }
+                }
+
+                $act = array(
+                    'booking_id' => $lastid,
+                    'sport' => $crt['code'],
+                    'price' => $encodeprice,
+                    'qty' =>$encodeqty ,
+                    'priceid' => $crt['priceid'],
+                    'pay_session' => $p_session,
+                    'expired_at' => $expired_at,
+                    'contract_date' =>date('Y-m-d',strtotime($crt['sesdate'])),
+                    'booking_detail' => json_encode(array(
+                        'activitytype' => @$activitylocation->service_type,
+                        'numberofpersons' => 1,
+                        'activitylocation' => @$activitylocation->activity_location,
+                        'whoistraining' => 'me',
+                        'sessiondate' => '',
+                    )),
+                    'extra_fees' => json_encode(array(
+                        'service_fee' => $service_fee,
+                        'fitnessity_fee' => $fitnessity_fee,
+                        'tax' => $taxval,
+                        'tip' => $crt['tip'],
+                        'discount' => $crt['discount'],
+                    )),
+                    'expired_duration' =>$crt['actscheduleid'],
+                    'participate' =>'['.$encodeparticipate.']',
+                    'transfer_provider_status' =>'unpaid',
+                    'payment_number'=>$encodepayment_number,
+                );
+           
+                $status = UserBookingDetail::create($act);
+                $bookidarray [] = $status->id;
+            }
+            //session()->forget('cart_item');
+        }
+         
+        session()->put('cart_item', $cart);
+        session()->put('ordermodelary', $bookidarray);
+        
+        return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
     }
 
     /**

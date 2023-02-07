@@ -55,9 +55,14 @@
             <i class="fa fa-sliders"></i> <span>Manage Slider</span>  
           </a>
         </li>
-        <li class="{{ $request->segment(2) == 'post' ? 'active' : '' }}">
-          <a href="{{route('admin/post')}}">
-            <i class="fa fa-sliders"></i> <span>Manage Post</span>  
+        <li class="{{ $request->segment(2) == 'business_post' ? 'active' : '' }}">
+          <a href="{{route('admin/businesspost')}}">
+            <i class="fa fa-sliders"></i> <span>Manage Business Post</span>  
+          </a>
+        </li>
+        <li class="{{ $request->segment(2) == 'profile_post' ? 'active' : '' }}">
+          <a href="{{route('admin/profilepost')}}">
+            <i class="fa fa-sliders"></i> <span>Manage profile Post</span>  
           </a>
         </li>
         <li class="{{ $request->segment(2) == 'inquiry' ? 'active' : '' }}">

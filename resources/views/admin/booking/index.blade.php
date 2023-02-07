@@ -19,7 +19,20 @@
             List
 
         </div>
-
+		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="booking-set">
+					<select id="" name="status" class="form-control filter-select">
+					  <option value="Open to All">today</option>
+					  <option value="Confirmation Pending">this week</option>
+					  <option value="Booked">this month</option>
+					  <option value="Rejected">3 months</option>
+					  <option value="Rejected">1 year</option>
+					</select>
+				</div>
+			</div>
+		</div>
 
 
         <div class="panel-body">

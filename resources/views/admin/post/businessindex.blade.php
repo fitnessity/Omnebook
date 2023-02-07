@@ -2,7 +2,7 @@
 @section('content')
     <div id="systemMessage"></div>
     <div class="panel panel-default">
-        <div class="panel-heading"> Profile Post List</div>
+        <div class="panel-heading"> Business Post List</div>
 
         <div class="panel-body">
           <div class="row">
@@ -22,7 +22,7 @@
                 <thead>
                     <tr>
                       <th>No</th>
-                      <th>Profile User Name</th>
+                      <th>User Name</th>
                       <th>Post Text</th>
                       <th>Posted Date</th>
                       <th>Action</th>
@@ -40,7 +40,7 @@
                                 <td>{{@$value->post_text}}</td>
                                 <td>{{date('m-d-Y H:i:s',strtotime(@$value->created_at))}}</td>
                                 <td>
-                                  <a href="\admin\viewprofilepost\" title="Click to view {{@$value->title}}" class="btn btn-xs btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                  <a href="\admin\viewbusinesspost\" title="Click to view {{@$value->title}}" class="btn btn-xs btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
                                   <!-- <a href="\admin\discover\delete\{{$value->id}}" title="Click to delete {{@$value->title}}" onclick="return confirm('Are you sure?')" class="btn btn-xs btn-primary"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
                                 </td>

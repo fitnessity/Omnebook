@@ -44,7 +44,8 @@ class BookingRepository
             $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
             foreach ($booking_details as $key => $book_value) {
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if(@$business_services != '' && $book_value['act_schedule_id'] == ''){
+                //if(@$business_services != '' && $book_value['act_schedule_id'] == ''){}
+                if(@$business_services != ''){
                     if($business_services->service_type == $type){
                         $BookingDetail_1 = $this->getBookingDetailnew($value->id);
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
@@ -87,7 +88,7 @@ class BookingRepository
             foreach ($booking_details as $key => $book_value) {
                // echo "jii<br>";
                 $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                if(@$business_services != '' && $book_value['act_schedule_id'] != ''){
+                if(@$business_services != '' ){
                     if(@$business_services->service_type == $type){
                         $BookingDetail_1 = $this->getBookingDetailnew($value->id);
                         $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
@@ -120,7 +121,11 @@ class BookingRepository
             $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->whereNotNull('checked_at')->count();
             $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
-            $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
+            if($scheduleddata['sessiondate'] == ''){
+                $sc_date = date("m-d-Y", strtotime($book_details['user_booking_detail']['expired_at']));
+            }else{
+                $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
+            }
             $sc_date = str_replace('-', '/', $sc_date);  
             $datechk = 0;
             if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d') && $chk == 'today'){
@@ -138,7 +143,6 @@ class BookingRepository
                 $dateforchk = date('Y-m-d',strtotime($sc_date));
             }
             if($datechk == 1){
-                
                 $serviceactdata = BusinessActivityScheduler::findById($book_details['user_booking_detail']['act_schedule_id']);
                 $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
 
@@ -282,7 +286,13 @@ class BookingRepository
                     "acc_url" =>  $acc_url,
                 );
 
-                $full_ary []= $one_array;
+                if($chk != 'past' && $book_details['order_type'] == 'simpleorder'){
+                    $full_ary []= $one_array;
+                }else if($chk == 'past' ){
+                    $full_ary []= $one_array;
+                }
+
+               
             }   
         }
         $arayy =array_values(array_unique($full_ary, SORT_REGULAR));
@@ -294,8 +304,9 @@ class BookingRepository
     public function getdeepdetailofcurrentorder($BookingDetail){
         $full_ary = [];
         foreach($BookingDetail as $book_details){
-            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->whereNotNull('checked_at')->count();
-            $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
+            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']]);
+            $reserve_date = $checkindetailscnt->select('checkin_date')->orderBy('checkin_date')->first();
+            $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt->whereNotNull('checked_at')->count();;
             $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
             if(@$book_details['businessservices']['service_type']=='individual')
             { 
@@ -334,12 +345,25 @@ class BookingRepository
                 $main_total = 0;
             }
 
+            $re_date = $re_time = $check_in_time ="—";
+            if($reserve_date != ''){
+                $start = date('h:ia', strtotime(@$reserve_date->scheduler->shift_start));
+                $end = date('h:ia', strtotime(@$reserve_date->scheduler->shift_end));
+                $re_date = date('m-d-Y',strtotime($reserve_date->checkin_date));
+                $check_in_time = date('m-d-Y',strtotime($reserve_date->checked_at));
+                $re_time = $start .' to '.$end;
+            }
+
             $one_array = array (
                     "pro_pic" => $pro_pic,
                     "orderid" => $book_details["id"],
                     "date_booked" => date('m-d-Y',strtotime($book_details['created_at'])),
                     "orderdetailid" => $book_details['user_booking_detail']['id'],
                     "confirm_id" => $book_details["order_id"],
+                    "expired_at" => date('m-d-Y',strtotime($book_details['user_booking_detail']["expired_at"])),
+                    "reserve_date" => $re_date,
+                    "reserve_time" => $re_time,
+                    "check_in_time" => $check_in_time,
                     "price_title" => @$BusinessPriceDetails['price_title'],
                     "pay_session" => @$book_details['user_booking_detail']['pay_session'],
                     "remaing_session" => $remaining,
@@ -1139,6 +1163,12 @@ class BookingRepository
                     $totalquantity += $item['infant'];
             }
         }
+        return $totalquantity;
+    }
+
+
+    public function getcheckincount($sid,$date){
+        $totalquantity = BookingCheckinDetails::where('business_activity_scheduler_id',$sid)->whereDate('checkin_date','=',date('Y-m-d',strtotime($date)))->count();
         return $totalquantity;
     }
 }

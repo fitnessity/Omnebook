@@ -424,7 +424,7 @@ input:disabled{
 							<div class="ticket-summery ticket-title">
 								<h4>Order Summary</h4>
 							</div>
-							<form action="{{route('checkout_register')}}" method="POST" class="validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
+							<form action="{{route('business.orders.store')}}" method="POST" class="validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
 								<div class="row">
 									<div class="col-md-12 col-xs-12">
 										<div class="check-client-info-box">
