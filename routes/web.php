@@ -24,7 +24,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
-    Route::resource('services', 'ServiceController')->only(['index','create', 'update', 'destroy', 'store']);
+    Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
 });
 
@@ -32,6 +32,9 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
 
     Route::resource('orders', 'OrderController')->only(['index']);
     Route::resource('schedulers', 'SchedulerController')->only(['index','create', 'update', 'destroy', 'store']);
+    Route::get('gym-studio-info/{tabval?}', 'OrderController@gym_studio_page')->name('gym_studio_page');
+    Route::get('experience-info/{tabval?}', 'OrderController@experience_page')->name('experience_page');
+    Route::get('events-info/{tabval?}', 'OrderController@events_page')->name('events_page');
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -893,10 +896,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
-    Route::get('/personal-profile/booking-info/{tabval?}', 'BookingController@bookinginfo')->name('bookinginfo');
-    Route::get('/personal-profile/gym-studio-info/{tabval?}', 'BookingController@gym_studio_page')->name('gym_studio_page');
-    Route::get('/personal-profile/experience-info/{tabval?}', 'BookingController@experience_page')->name('experience_page');
-    Route::get('/personal-profile/events-info/{tabval?}', 'BookingController@events_page')->name('events_page');
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');

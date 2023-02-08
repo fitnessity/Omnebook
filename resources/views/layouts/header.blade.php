@@ -554,7 +554,7 @@ $total_quantity = 0;
 
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
-															<a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info" style="color: white;">Booking Info</a>
+															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>

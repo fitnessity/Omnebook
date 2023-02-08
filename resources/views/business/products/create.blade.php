@@ -263,8 +263,15 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+      
+        var categ = new SlimSelect({
+            select: '#providerservices'
+        });
+    });
+</script>
+
 @include('layouts.footer')
-
-
 
 @endsection

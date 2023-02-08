@@ -35,7 +35,7 @@
 				<div class="col-md-2">
 					<div class="staff-main">
 						<!-- <a  class="btn-grey" href="#" data-toggle="modal" data-target="#product-modal" > Add Product</a> -->
-						<a  class="btn-grey" href="{{route('business.products.create')}}" > Add Product</a>
+						<a class="btn-grey" href="{{route('business.products.create')}}" > Add Product</a>
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div class="table-staff table-responsive">
-				<table id="example" class="table table-striped table-bordered" style="width:100%">
+				<table id="scheduled-activities" class="table table-striped table-bordered" style="width:100%">
 					<thead>
 						<tr>
 							<th>Item # </th>
@@ -154,30 +154,14 @@
 
 <script>
 	$(document).ready(function() {
-		$('#example').DataTable();
-	} );	
-	
-	$('#example').dataTable( {
-		"searching": false
-		"paging": false
-	} );
-</script>
-<script>
-	$(document).ready(function() {
 		$('#scheduled-activities').DataTable();
 	} );	
 	
 	$('#scheduled-activities').dataTable( {
 		"searching": false
+		"paging": false
 	} );
 </script>
-<script>
-    $(document).ready(function() {
-      
-        var categ = new SlimSelect({
-            select: '#providerservices'
-        });
-    });
-</script>
+
 
 @endsection

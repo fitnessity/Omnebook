@@ -4657,6 +4657,7 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]["categoryid"] = $categoryid;
                                 $cart_item["cart_item"][$k]["p_session"] = $p_session;
                                 $cart_item["cart_item"][$k]["chk"] = $chk ;
+                                $cart_item["cart_item"][$k]["participate_from_checkout_regi"] = $parti_from_chkout_regi ;
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
                                 $cart_item["cart_item"][$k]["priceid"] = $request->priceid;

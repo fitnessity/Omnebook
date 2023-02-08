@@ -2518,7 +2518,7 @@
 
             
 
-            <form name="creService" id="creService" action="{{route('addbusinessservices')}}" method="post" enctype="multipart/form-data">
+            <form name="creService" id="creService" action="{{route('business.services.store')}}" method="post" enctype="multipart/form-data">
 
                 <?php
 

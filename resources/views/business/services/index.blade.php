@@ -45,7 +45,7 @@ input,select {
                         <h2>Manage <?=$companyname?> Services</h2>
                     </div>
                     
-                    <form id="frmservice" name="frmservice" method="post" action="{{route('business.service_redirection')}}">
+                    <form id="frmservice" name="frmservice" method="GET" action="{{route('business.services.create')}}">
                         <div class="col-md-10"></div>
                         <div class="col-md-2">
                         @csrf
@@ -63,12 +63,12 @@ input,select {
                                 $sc_cat_cnt = $cservice->get_scheduled_categories($catdata);
                                 $UserBookingDetailcount = $cservice->this_week_booking();
                                 $profilePic = '';
-                                if ($cservice->first_profile_pic() !="" && file_exists( public_path() . '/uploads/profile_pic/' . $cservice->first_profile_pic()) ) {
+                                if ($cservice->first_profile_pic() !="") {
                                     $profilePic = url('/public/uploads/profile_pic/' . $cservice->first_profile_pic());
                                 }
                             ?>
                             <div class="col-md-12">
-                                <form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" method="post" action="{{route('business.service_redirection')}}">
+                                <form id="frmCompany<?=$cs?>" name="frmCompany<?=$cs?>" action="{{route('business.services.edit' ,['business_id' => $cservice->cid ,'service'=>0])}}">
                                     <div class="col-md-12">
                                         @csrf
                                         <input type="hidden" name="cid" value="{{ $cservice->cid }}" style="width:50px" />
