@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails};
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 
 
@@ -47,8 +47,7 @@ class OrderController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request ,$business_id)
-    {
-         //print_r($request->all());exit;       
+    {    
         $cart_item = [];
         if (session()->has('cart_item')) {
             $cart_item = session()->get('cart_item');
@@ -63,8 +62,9 @@ class OrderController extends BusinessBaseController
         
         $tax = BusinessSubscriptionPlan::where('id',1)->first();
         $userfamilydata = [];
-        $username = $address = ''; 
-        $pageid  =0;
+        $username = $address = $current_membership =''; 
+        $pageid  = $visits = 0;
+        $user_data = '';
         if($request->book_id != ''){
             $book_data = UserBookingDetail::getbyid($request->book_id);
             $user_type = @$book_data->booking->user_type ;
@@ -77,7 +77,10 @@ class OrderController extends BusinessBaseController
                 $cardInfo = $book_data->booking->user->get_stripe_card_info();
                 $address = $user_data->getaddress();
                 $pageid =  $book_data->booking->user->id;
-           }else if(@$book_data->booking->user_type == 'customer'){
+                $visits = @$user_data->visits_count();
+                $book_cnt = @$user_data->memberships();
+                $current_membership = @$user_data->get_current_membership();
+            }else if(@$book_data->booking->user_type == 'customer'){
                 $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
                 $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
                 $user_data = $book_data->booking->customer;
@@ -86,13 +89,15 @@ class OrderController extends BusinessBaseController
                 $cardInfo = $book_data->booking->customer->get_stripe_card_info();
                 $address = $user_data->full_address();
                 $pageid =  $book_data->booking->customer->id;
+                $visits = @$user_data->visits_count();
+                $book_cnt = @$user_data->memberships();
+                $current_membership = @$user_data->get_current_membership();
            } 
-
-           $book_cnt = $this->booking_repo->getbookingbyUserid(@$user_data->id);
-           $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
-           $last_book = explode("~~", $last_book_data);
-           $purchasefor  = @$last_book[0];
-           $price_title  = @$last_book[1];  
+            $last_membership = '';
+            $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
+            $last_book = explode("~~", $last_book_data);
+            $purchasefor  = @$last_book[0];
+            $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
            $user_type = 'customer';
            $customerdata = $request->current_company->customers->find($request->cus_id);
@@ -100,17 +105,20 @@ class OrderController extends BusinessBaseController
            $username  =  @$customerdata->fname.' '. @$customerdata->lname;
            $age = Carbon::parse( @$customerdata->birthdate)->age; 
            $user_data =  @$customerdata;
+           $visits = $customerdata->visits_count();
            $activated = @$customerdata->status;
            $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
            $cardInfo = @$customerdata->get_stripe_card_info();
            $address = @$customerdata->full_address();
            $book_id = @$customerdata->id;
-           $book_cnt = $this->booking_repo->getbookingbyUserid(@$user_data->id);
+           $book_cnt =@$customerdata->memberships();
+           $current_membership = @$customerdata->get_current_membership();
            $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
            $last_book = explode("~~", $last_book_data);
            $purchasefor  = @$last_book[0];
            $price_title  = @$last_book[1];
            $pageid = $request->cus_id;
+           $last_membership = '';
         }
 
         if($activated == 0){
@@ -123,15 +131,14 @@ class OrderController extends BusinessBaseController
 
         $modelchk = 0;
         $modeldata = '';
-        //$ordermodelary = array('678');
         $ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
             $modeldata = $this->getmultipleodermodel($ordermodelary);
             session()->forget('ordermodelary');
         }
-
-        return view('scheduler.activity_purchase', [
+        
+        return view('business.orders.create', [
            'companyId' => $companyId,
            'book_id' => $request->book_id,
            'book_data' => $book_data,
@@ -152,6 +159,9 @@ class OrderController extends BusinessBaseController
            'modelchk' => $modelchk,
            'modeldata' => $modeldata,
            'pageid' => $pageid,
+           'visits' => $visits,
+           'last_membership' => $last_membership,
+           'current_membership' => $current_membership,
         ]);
     }
 
@@ -677,8 +687,6 @@ class OrderController extends BusinessBaseController
     {
         //
     }
-
-
 
     public function getmultipleodermodel($array)
     {    

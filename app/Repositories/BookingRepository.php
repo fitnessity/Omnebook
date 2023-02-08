@@ -1138,13 +1138,16 @@ class BookingRepository
         $data = '';
         $purchasefor = '';
         $price_title = '';
-        $status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
+        //$status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
+        $status = UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$userid, $userid])->orderby('created_at','Desc')->first();
         if($status != ''){
             $price  =  $status->amount;
-            $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','Desc')->first();
-            $programname = $book_data->business_services->program_name;
-            $price_title = $book_data->business_price_detail->price_title;
-            $purchasefor =  $programname.' $'.$price;
+            $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','desc')->first();
+            if($book_data != ''){
+                $programname = $book_data->business_services->program_name;
+                $price_title = $book_data->business_price_detail->price_title;
+                $purchasefor =  $programname.' $'.$price;
+            }
         }
         return  $purchasefor.'~~'.$price_title;
     }

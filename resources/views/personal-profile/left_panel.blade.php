@@ -42,9 +42,8 @@
                                     <span>Reviews</span>
                                 </a>
                             </li> <?php */?>
-                            
-                            <li class=" {{ (request()->is('personal-profile/booking-info*')) ? 'active' : '' }}">
-                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info">
+                            <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
+                                <a href="{{ route('personal.orders.index')}}">
                                     <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">
                                     <span>Booking Info</span>
                                 </a>

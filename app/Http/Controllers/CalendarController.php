@@ -110,25 +110,17 @@ class CalendarController extends Controller
                 }
 
                 if($ser_data->service_type == 'individual'){
-                    $route = Config::get('constants.SITE_URL').'/personal-profile/booking-info/'.$tabval;
-                    //$route = "{{route('bookinginfo',['tabval' =>'$tabval])}}";
                     $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.$route.'" target="_blank">View booking details</a>'; 
+                            <a class="btn btn-danger" href="'.route("personal.orders.index", ['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
                 }else if($ser_data->service_type == 'classes'){
-                    $route = Config::get('constants.SITE_URL').'/personal-profile/gym-studio-info/'.$tabval;
-                    //$route = "{{route('gym_studio_page',['tabval' =>$tabval])}}";
                     $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.$route.'"  target="_blank">View booking details</a>'; 
+                            <a class="btn btn-danger" href="'.route("personal.booking_gym_studio",['tabval' => $tabval]).'"  target="_blank">View booking details</a>'; 
                 }else if($ser_data->service_type == 'experience'){
-                    $route = Config::get('constants.SITE_URL').'/personal-profile/experience-info/'.$tabval;
-                    //$route = "{{route('experience_page',['tabval' =>$tabval])}}"; 
                     $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.$route.'" target="_blank">View booking details</a>'; 
+                            <a class="btn btn-danger" href="'.route("personal.experience_page",['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
                 }else {
-                    $route = Config::get('constants.SITE_URL').'/personal-profile/events-info/'.$tabval;
-                    //$route = "{{route('events_page',['tabval' =>$tabval])}}"; 
                     $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.$route.'" target="_blank">View booking details</a>'; 
+                            <a class="btn btn-danger" href="'.route("personal.events_page",['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
                 }
             }
             

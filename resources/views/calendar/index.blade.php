@@ -81,7 +81,7 @@
             <div class="modal-body">
                 <div class="form-group book-info">
                     <!-- <label id="activity_name"></label>
-                    <a class="btn btn-danger" href="{{route('bookinginfo')}}">View booking details</a> -->
+                    <a class="btn btn-danger" href="">View booking details</a> -->
                 </div>
             </div>
         </div>

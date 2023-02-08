@@ -313,7 +313,7 @@
 										@endphp
 										<div class="activity-information activites-height">
 											<span><a  @if (Auth::check())  
-							                                    href="{{ route('businessprofile',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
+							                                    href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
 							                                @else 
 							                                    href="{{ route('userlogin') }}"  
 							                                @endif

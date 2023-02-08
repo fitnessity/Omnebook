@@ -39,11 +39,11 @@ use App\UserFamilyDetail;
                         <div class='row'>
                             <div class="col-lg-7 col-md-6 col-sm-12">
                                 <ul>
-                                    <li> <a href="{{route('bookinginfo')}}"> Personal Trainer </a> </li>
-                                    <li> <a href="{{route('gym_studio_page')}}" class="active">Classes </a> </li>
-                                    <li> <a href="{{route('events_page')}}" > Events </a> </li>
-                                    <li> <a href="{{route('experience_page')}}"> Experiences </a> </li>
-                                    <!-- <li> <a href="{{route('all_activity_schedule')}}"  > | Schedule</a> </li> -->
+                                    <li> <a href="{{route('personal.orders.index')}}"> Personal Trainer </a> </li>
+                                    <li> <a href="{{route('personal.gym_studio_page')}}" class="active">Classes </a> </li>
+                                    <li> <a href="{{route('personal.events_page')}}" > Events </a> </li>
+                                    <li> <a href="#"> Experiences </a> </li>
+                                   <!--  <li> <a href="{{route('all_activity_schedule')}}"  > | Schedule</a> </li> -->
                                   <!--   <li> <a href="#"> Products </a> </li> -->
                                 </ul>
                             </div>
@@ -58,10 +58,11 @@ use App\UserFamilyDetail;
                                         <a class="nav-item nav-link" id="nav-upcoming-tab" data-toggle="tab" href="#nav-upcoming" role="tab" aria-controls="nav-upcoming" aria-selected="false"  onclick="changecolor(this.id)">Upcoming</a>
                                         
                                         <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" href="#nav-past" role="tab" aria-controls="nav-past" aria-selected="false"  onclick="changecolor(this.id)">Past</a>
-                                       
+
                                         <!-- <a class="nav-item nav-link" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false"  onclick="changecolor(this.id)">Pending</a> -->
                                     </div>
                                 </nav>
+
                                 </div>
                             </div>
                         </div>
@@ -69,6 +70,7 @@ use App\UserFamilyDetail;
                     <div class="booking_info_section padding-1 white-bg border-radius1">
                         <div class="bookings-block">
                             <div class="tab-content" id="nav-tabContent">
+
 
                                 <div class="tab-pane " id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
@@ -141,7 +143,7 @@ use App\UserFamilyDetail;
 
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span> {{@$book_details['remaing_session']}}/{{@$book_details['pay_session']}}</span>
+                                                             <span> {{@$book_details['remaing_session']}}/{{@$book_details['pay_session']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>PROGRAM NAME:</span>
@@ -241,7 +243,7 @@ use App\UserFamilyDetail;
                                                                 $("#current_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
-                                                                 $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless_cu_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#current_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
@@ -258,6 +260,7 @@ use App\UserFamilyDetail;
                                     @endif
                                     </div>
                                 </div> 
+
                                 <div class="tab-pane" id="nav-today" role="tabpanel" aria-labelledby="nav-today-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
@@ -291,162 +294,162 @@ use App\UserFamilyDetail;
                                     </div>
                                 
                                     <div class="row"  id="searchbydate_today">
-                                    @php  $i = 1;
-                                        $br = new \App\Repositories\BookingRepository;
-                                        $BookingDetail = $br->getdeepdetailoforder($Booking_Detail,'today');
-                                    @endphp
-                                    @if(!empty($BookingDetail))
-                                    @foreach($BookingDetail as $book_details)
-                                        <div class="col-md-4 col-sm-6 ">
-                                            <div class="boxes_arts">
-                                                <div class="headboxes">
-                                                    <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
-                                                    <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                    <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
-                                                        <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
-                                                    </a>
-                                                    <div class="highlighted_box">Confirmed</div>
-                                                </div>
-                                                <div class="middleboxes middletoday" id="today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
-                                                    <p>
-                                                        <span>BOOKING CONFIRMATION #</span>
-                                                        <span>{{$book_details['confirm_id']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>PRICE OPTION:</span>
-                                                        <span>{{@$book_details['price_title']}} - {{@$book_details['pay_session']}} Sessions
+                                        @php  $i = 1;
+                                            $br = new \App\Repositories\BookingRepository;
+                                            $BookingDetail = $br->getdeepdetailoforder($Booking_Detail,'today');
+                                        @endphp
+                                        @if(!empty($BookingDetail))
+                                        @foreach($BookingDetail as $book_details)
+                                            <div class="col-md-4 col-sm-6 ">
+                                                <div class="boxes_arts">
+                                                    <div class="headboxes">
+                                                        <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
+                                                        <h4 class="fontsize">{{$book_details['program_name']}}</h4>
+                                                        <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                            <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
+                                                        </a>
+                                                        <div class="highlighted_box">Confirmed</div>
+                                                    </div>
+                                                    <div class="middleboxes middletoday" id="today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>">
+                                                        <p>
+                                                            <span>BOOKING CONFIRMATION #</span>
+                                                            <span>{{$book_details['confirm_id']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>PRICE OPTION:</span>
+                                                            <span>{{@$book_details['price_title']}} - {{@$book_details['pay_session']}} Sessions
+                                                            
+                                                            </span>
+                                                        </p>
+                                                        <p>
+                                                            <span>TOTAL REMAINING:</span>
+                                                            <span>{{@$book_details['c']}} / {{@$book_details['spots_available']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>DATE SCHEDULED:</span>
+                                                            <span>{{@$book_details['sc_date']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>RESERVED TIMED:</span>
+                                                            <span>@php if(@$book_details['shift_start']!=''){
+                                                                echo date('h:ia', strtotime( @$book_details['shift_start'] )); 
+                                                            }
+                                                            if(@$book_details['shift_end']!=''){
+                                                                echo ' to '.date('h:ia', strtotime( @$book_details['shift_end'] )); 
+                                                            }@endphp</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>TOTAL PRICE</span>
+                                                            <span>${{@$book_details['main_total']}} </span>
+                                                        </p>
                                                         
-                                                        </span>
-                                                    </p>
-                                                    <p>
-                                                        <span>TOTAL REMAINING:</span>
-                                                        <span>{{@$book_details['SpotsLeftdis']}} / {{@$book_details['spots_available']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>DATE SCHEDULED:</span>
-                                                        <span>{{@$book_details['sc_date']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>RESERVED TIMED:</span>
-                                                        <span>@php if(@$book_details['shift_start']!=''){
-                                                            echo date('h:ia', strtotime( @$book_details['shift_start'] )); 
-                                                        }
-                                                        if(@$book_details['shift_end']!=''){
-                                                            echo ' to '.date('h:ia', strtotime( @$book_details['shift_end'] )); 
-                                                        }@endphp</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>TOTAL PRICE</span>
-                                                        <span>${{@$book_details['main_total']}} </span>
-                                                    </p>
-                                                    
-                                                    <p>
-                                                        <span>BOOKED BY:</span>
-                                                        <span>{{@$book_details['name']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>ACTIVITY TYPE:</span>
-                                                        <span>{{$book_details['businessservices']['sport_activity']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>SERVICE TYPE:</span>
-                                                        <span>@if($book_details['businessservices']['select_service_type'] != '') {{$book_details['businessservices']['select_service_type']}} @else — @endif</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>PROGRAM NAME:</span>
-                                                        <span>{{$book_details['businessservices']['program_name']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>ACTIVITY LOCATION:</span>
-                                                        <span>{{$book_details['businessservices']['activity_location']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>GREAT FOR:</span>
-                                                        <span>{{$book_details['businessservices']['activity_for']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>LANGUAGE:</span>
-                                                        <span>{{@$book_details['language']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>PARTICIPANTS:</span>
-                                                        <span>
-                                                        <?php $a = json_decode($book_details['participate']);
-                                                            if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
-                                                            if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
-                                                            if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
-                                                        ?>
-                                                        </span>
-                                                    </p>
-                                                    <p>
-                                                        <span>SKILL LEVEL:</span>
-                                                        <span> {{$book_details['businessservices']['difficult_level']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>MEMBERSHIP TYPE:</span>
-                                                        <span>{{$book_details['membership_type']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>BUSINESS TYPE:</span>
-                                                        <span>{{@$book_details['b_type']}}</span>
-                                                    </p>
-                                                    <p>
-                                                        <span>WHO IS PARTICIPATING?</span>
-                                                        <span> <?php $a = json_decode($book_details['participate_name'],true); 
-                                                                if(!empty($a)){
-                                                                    foreach($a as $data){
-                                                                        if($data['from'] == 'family'){
-                                                                            $family = UserFamilyDetail::where('id',$data['id'])->first();
-                                                                            echo @$family->first_name.' '.@$family->last_name."<br>";
-                                                                        }else{ ?>
-                                                                             {{@$book_details['name']}}
-                                                                        <?php echo "<br>"; } 
-                                                                    } 
-                                                                }
-                                                            ?></span>
-                                                    </p>
-                                                    <p>
-                                                        <span>COMPANY:</span>
-                                                        <span>{{ $book_details['company_name'] }}</span>
-                                                    </p>
-                                                </div>
-                                                <div class="foterboxes">
-                                                    <div class="threebtn_fboxes">
-                                                       <!--  <a href="#">Check In</a> 
-                                                       <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
-                                                       <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
+                                                        <p>
+                                                            <span>BOOKED BY:</span>
+                                                            <span>{{@$book_details['name']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>ACTIVITY TYPE:</span>
+                                                            <span>{{$book_details['businessservices']['sport_activity']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>SERVICE TYPE:</span>
+                                                            <span>@if($book_details['businessservices']['select_service_type'] != '') {{$book_details['businessservices']['select_service_type']}} @else — @endif</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>PROGRAM NAME:</span>
+                                                            <span>{{$book_details['businessservices']['program_name']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>ACTIVITY LOCATION:</span>
+                                                            <span>{{$book_details['businessservices']['activity_location']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>GREAT FOR:</span>
+                                                            <span>{{$book_details['businessservices']['activity_for']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>LANGUAGE:</span>
+                                                            <span>{{@$book_details['language']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>PARTICIPANTS:</span>
+                                                            <span>
+                                                            <?php $a = json_decode($book_details['participate']);
+                                                                if( !empty($a->adult) ){ echo 'Adult: '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child: '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant: '.$a->infant; }
+                                                            ?>
+                                                            </span>
+                                                        </p>
+                                                        <p>
+                                                            <span>SKILL LEVEL:</span>
+                                                            <span> {{$book_details['businessservices']['difficult_level']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>MEMBERSHIP TYPE:</span>
+                                                            <span>{{$book_details['membership_type']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>BUSINESS TYPE:</span>
+                                                            <span>{{@$book_details['b_type']}}</span>
+                                                        </p>
+                                                        <p>
+                                                            <span>WHO IS PARTICIPATING?</span>
+                                                            <span> <?php $a = json_decode($book_details['participate_name'],true); 
+                                                                    if(!empty($a)){
+                                                                        foreach($a as $data){
+                                                                            if($data['from'] == 'family'){
+                                                                                $family = UserFamilyDetail::where('id',$data['id'])->first();
+                                                                                echo @$family->first_name.' '.@$family->last_name."<br>";
+                                                                            }else{ ?>
+                                                                                 {{@$book_details['name']}}
+                                                                            <?php echo "<br>"; } 
+                                                                        } 
+                                                                    }
+                                                                ?></span>
+                                                        </p>
+                                                        <p>
+                                                            <span>COMPANY:</span>
+                                                            <span>{{ $book_details['company_name'] }}</span>
+                                                        </p>
                                                     </div>
-                                                    <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
-                                                        <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
+                                                    <div class="foterboxes">
+                                                        <div class="threebtn_fboxes">
+                                                           <!--  <a href="#">Check In</a>
+                                                           <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
+                                                            <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
+                                                        </div>
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                            <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
+                                                        </div>
+                                                        <!-- <div class="icon">
+                                                            <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
+                                                            <span><img src="{{ url('public/img/message.png') }}" alt=""></span>
+                                                        </div> -->
+                                                        <div class="viewmore_links">
+                                                            <a id="viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
+                                                            <a id="viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
+                                                        </div>
+                                                        <script>
+                                                            $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
+                                                                $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
+                                                                $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                            });
+                                                            $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
+                                                                $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
+                                                                $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                                $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
+                                                            });
+                                                        </script>
                                                     </div>
-                                                    <!-- <div class="icon">
-                                                        <span><img src="{{ url('public/img/map.png') }}" alt=""></span>
-                                                        <span><img src="{{ url('public/img/message.png') }}" alt=""></span>
-                                                    </div> -->
-                                                    <div class="viewmore_links">
-                                                        <a id="viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-                                                        <a id="viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-                                                    </div>
-                                                    <script>
-                                                        $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
-                                                            $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
-                                                            $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
-                                                            $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
-                                                            $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
-                                                        });
-                                                        $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
-                                                            $("#today_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
-                                                            $("#viewless_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
-                                                            $("#viewmore_to_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
-                                                            $("#anothertwobtn<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
-                                                        });
-                                                    </script>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @php  $i++;@endphp
-                                    @endforeach
-                                    @endif
+                                            @php  $i++;@endphp
+                                        @endforeach
+                                        @endif
                                     </div>
                                 </div>
 
@@ -511,7 +514,7 @@ use App\UserFamilyDetail;
                                                         </p>
                                                         <p>
                                                             <span>TOTAL REMAINING:</span>
-                                                            <span>{{@$book_details['SpotsLeftdis']}} / {{@$book_details['spots_available']}}</span>
+                                                            <span>{{@$book_details['c']}} / {{@$book_details['spots_available']}}</span>
                                                         </p>
                                                         <p>
                                                             <span>DATE SCHEDULED:</span>
@@ -605,7 +608,7 @@ use App\UserFamilyDetail;
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> 
                                                            <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
-                                                        <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
+                                                           <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                         </div>
                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">
                                                             <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
@@ -648,7 +651,7 @@ use App\UserFamilyDetail;
                                             <div class="col-md-3 col-sm-12">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                             </div>
-                                           <!--  <div class="col-md-2 col-sm-6">
+                                            <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
                                                     <label for="">Show</label>
                                                     <select name="" id="" class="form-control w-38">
@@ -796,10 +799,10 @@ use App\UserFamilyDetail;
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Rebook</a>
-                                                             <!--  <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
+                                                           <a href="{{route('activities_show',['serviceid' => $book_details['businessservices']['id'] ])}}" target="_blank">Rebook</a>
+                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
-                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}pa_{{$book_details['businessservices']['id']}}" style="display:none;">
+                                                        <div class="threebtn_fboxes" id="anothertwobtn{{$i}}pa_{{$book_details['businessservices']['id']}}" style="display:none;">
                                                             <!-- <a href="{{$book_details['acc_url']}}" target="_blank">View Account</a> -->
                                                             <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details['company_name'])).'/'.$book_details['company_id']; ?>" target="_blank">View Provider</a>
                                                         </div>
@@ -816,7 +819,7 @@ use App\UserFamilyDetail;
                                                                 $("#past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").addClass("intro");
                                                                 $("#viewless_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").show();
                                                                 $("#viewmore_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").hide();
-                                                                 $("#anothertwobtn<?php echo $i.'pa_'.$book_details['businessservices']['id']; ?>").show();
+                                                                $("#anothertwobtn<?php echo $i.'pa_'.$book_details['businessservices']['id']; ?>").show();
                                                             });
                                                             $("#viewless_pa_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").click(function () {
                                                                 $("#past_<?php echo $i.'_'.$book_details['businessservices']['id']; ?>").removeClass("intro");
@@ -834,7 +837,7 @@ use App\UserFamilyDetail;
                                     </div>
                                 </div><!-- tab-pane -->
 
-                                <div class="tab-pane" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
+                                 <div class="tab-pane" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
                                             <div class="col-md-3 col-sm-12">
@@ -868,7 +871,7 @@ use App\UserFamilyDetail;
                                     <div class="row" id="searchbydate_pending">
                                     </div>
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>
@@ -899,7 +902,6 @@ use App\UserFamilyDetail;
         </div>
     </div>
 </div>  
-
 @include('layouts.footer')
 
 <script src="{{ url('public/js/jquery.1.11.1.min.js') }}"></script>
@@ -965,7 +967,7 @@ use App\UserFamilyDetail;
             $.ajax({
                 type: "post",
                 url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"gym-studio"},
+                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"experience"},
                 success: function(data){
                     $("#searchbydate_today").html(data);
                 }
@@ -978,7 +980,7 @@ use App\UserFamilyDetail;
             $.ajax({
                 type: "post",
                 url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"gym-studio"},
+                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"experience"},
                 success: function(data){
                     $("#searchbydate_past").html(data);
                 }
@@ -991,7 +993,7 @@ use App\UserFamilyDetail;
             $.ajax({
                 type: "post",
                 url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"gym-studio"},
+                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"experience"},
                 success: function(data){
                     $("#searchbydate_upcoming").html(data);
                 }
@@ -1053,7 +1055,7 @@ use App\UserFamilyDetail;
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
-            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"page":"gym-studio"},
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"page":"experience"},
             success: function(data){
                 if(type == 'today'){
                     $("#searchbydate_today").html(data);
@@ -1080,10 +1082,10 @@ use App\UserFamilyDetail;
         dateFormat: "mm/dd/yy"
     })
 
-
 </script>
 
 <script type="text/javascript">
+
      function  changecolor(id){
      /*   alert(id);*/
         if(id === 'nav-upcoming-tab'){
@@ -1119,12 +1121,12 @@ use App\UserFamilyDetail;
         }
     }
 
-    function valid(email)
+     function valid(email)
     {
         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test(email); //this will either return true or false based on validation
     }
-     function sendemail(odetailid,oid){
+    function sendemail(odetailid,oid){
         $('.reviewerro').html('');
         var email = $('#email').val();
         if(email == ''){
@@ -1161,5 +1163,6 @@ use App\UserFamilyDetail;
         }
     }
 </script>
+
 
 @endsection

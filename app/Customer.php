@@ -385,6 +385,33 @@ class Customer extends Authenticatable
             return $checkin->checkin_date;
         }
     }
+
+
+    public function get_current_membership(){
+        $user = $this->user;
+        $customer = $this;
+        $company = $this->company_information;
+        $user_id = $user ? $user->id : "no_user_id";
+
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $company->id);
+        })->whereIn('booking_id', function($query) use ($customer, $user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        });
+        $booking_detail_ids = $booking_details->get()->map(function($item){
+            return $item->id;
+        });
+
+
+        $checkin = BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->first();
+        if($checkin){
+           return $checkin->order_detail->business_services->program_name." ".$checkin->order_detail->business_price_detail->price_title;
+        }
+    }
     
 }
    

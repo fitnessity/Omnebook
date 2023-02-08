@@ -39,10 +39,10 @@ use App\UserFamilyDetail;
                         <div class='row'>
                             <div class="col-lg-7 col-md-6 col-sm-12">
                                 <ul>
-                                    <li> <a href="{{route('bookinginfo')}}"> Personal Trainer </a> </li>
-                                    <li> <a href="{{route('gym_studio_page')}}">Classes </a> </li>
-                                    <li> <a href="{{route('events_page')}}"  class="active"> Events </a> </li>
-                                    <li> <a href="{{route('experience_page')}}"> Experiences </a> </li>
+                                    <li> <a href="{{route('personal.orders.index')}}" class="active"> Personal Trainer </a> </li>
+                                    <li> <a href="{{route('personal.gym_studio_page')}}">Classes </a> </li>
+                                    <li> <a href="#" > Events </a> </li>
+                                    <li> <a href="{{route('personal.experience_page')}}"> Experiences </a> </li>
                                     <!-- <li> <a href="{{route('all_activity_schedule')}}"  > | Schedule</a> </li> -->
                                   <!--   <li> <a href="#"> Products </a> </li> -->
                                 </ul>

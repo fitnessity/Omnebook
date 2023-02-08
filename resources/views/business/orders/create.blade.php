@@ -3,38 +3,27 @@
 @include('layouts.userHeader')
 <style type="text/css">
 
-/*Prevent text selection*/
-span{
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
+	/*Prevent text selection*/
+	span{
+	    -webkit-user-select: none;
+	    -moz-user-select: none;
+	    -ms-user-select: none;
+	}
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input:disabled{
-    background-color:white;
-}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+	    -webkit-appearance: none;
+	    margin: 0;
+	}
+	input:disabled{
+	    background-color:white;
+	}
    
 </style>
 
 @php 
 	use Carbon\Carbon;
-	use App\UserBookingDetail;
-	use App\BusinessPriceDetailsAges;
-	use App\BusinessServices;
-	use App\BusinessService;
-	use App\BusinessPriceDetails;
-	use App\BusinessServiceReview;
-	use App\User;
-	use App\BusinessActivityScheduler;
-	use App\CompanyInformation;
-	use App\UserFamilyDetail;
-    use App\BusinessTerms;
-    use App\BusinessSubscriptionPlan;
+	use App\{BusinessPriceDetailsAges,BusinessServices,BusinessService,BusinessPriceDetails};
 @endphp
 
 <div class="p-0 col-md-12 inner_top padding-0">
@@ -87,19 +76,19 @@ input:disabled{
 												<label>Location: </label><span> {{$address}}</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
-												<label>Visits:  </label><span> 20</span>
+												<label>Visits: </label><span>  {{$visits}}</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
 												<label>Activities Bookings: </label><span>  {{$book_cnt}}</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
-												<label>Last Membership: </label><span> {{ $price_title}}</span>
+												<label>Last Membership: </label><span> {{ $last_membership}}</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
 												<label>Status: </label><span> {{$status}} </span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
-												<label>Current Membership: </label><span>None</span>
+												<label>Current Membership: </label><span>{{$current_membership}}</span>
 											</div>
 											<div class="col-md-6 col-sm-12 col-xs-12 nopadding">
 												<label>Last Purchase: </label><span> {{ $purchasefor}}</span>
@@ -451,8 +440,8 @@ input:disabled{
 												$participate = @$item["participate_from_checkout_regi"]['pc_name'];
 												$taxes += $taxval;
 												$act = BusinessServices::where('id', $item["code"])->first();
-												$serprice = BusinessPriceDetails::where('id', $item['priceid'])->first();
-												$serpricecate = BusinessPriceDetailsAges::where('id',$serprice->category_id)->first();
+												$serprice =$act->price_details->find($item['priceid']);
+												$serpricecate =$act->BusinessPriceDetailsAges->find(@$serprice->category_id);
 
 												$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
 												$iprice = number_format($total,0, '.', '');
@@ -466,8 +455,6 @@ input:disabled{
 							                   
 							                    <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 												<div class="close-cross-icon"> 
-													<?php /*?><a class="p-red-color" data-toggle="modal" data-target="#editcartitem{{$item['priceid']}}"><?php */?>
-													<!--  <a class="p-red-color editcartitemaks" data-toggle="modal" onclick="editcart({{$item['code']}},{{$serpricecate->id}});" >  -->
 													<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}"> 
 													<i class="fas fa-pencil-alt"></i></a>
 												</div>
@@ -488,7 +475,7 @@ input:disabled{
 															<label>Catagory: </label>
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
-															<span>{{$serpricecate->category_title}}</span>
+															<span>{{@$serpricecate->category_title}}</span>
 														</div>
 														
 														<div class="col-md-6 col-sm-6 col-xs-6">
