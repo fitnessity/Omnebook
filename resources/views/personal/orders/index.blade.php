@@ -30,11 +30,11 @@
                         <div class='row'>
                             <div class="col-lg-7 col-md-6 col-sm-12">
                                 <ul>
-                                    <li> <a href="#" class="active"> Personal Trainer </a> </li>
-                                    <li> <a href="{{route('personal.gym_studio_page')}}">Classes </a> </li>
-                                    <li> <a href="{{route('personal.events_page')}}" > Events </a> </li>
-                                    <li> <a href="{{route('personal.experience_page')}}"> Experiences </a> </li>
-                                    <!-- <li> <a href="{{route('all_activity_schedule')}}"  > | Schedule</a> </li> -->
+                                    <li> <a href="{{route('personal.orders.index',['serviceType'=>'individual'])}}" class="active"> Personal Trainer </a> </li>
+                                    <li> <a href="{{route('personal.orders.index',['serviceType'=>'classes'])}}">Classes </a> </li>
+                                    <li> <a href="{{route('personal.orders.index',['serviceType'=>'events'])}}" > Events </a> </li>
+                                    <li> <a href="{{route('personal.orders.index',['serviceType'=>'experience'])}}"> Experiences </a> </li>
+                                    
                                   <!--   <li> <a href="#"> Products </a> </li> -->
                                 </ul>
                             </div>
@@ -212,7 +212,7 @@
                                                     <div class="foterboxes">
                                                         <div class="threebtn_fboxes">
                                                            <!--  <a href="#">Check In</a> -->
-                                                            <a href="{{route('personal.schedulers.index',['odid' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
+                                                            <a href="{{route('personal.schedulers.index',['user_booking_detail_id' => $book_details['orderdetailid'] ])}}" target="_blank">Schedule</a>
                                                            <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                         </div>
                                                         <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details['businessservices']['id']}}" style="display:none;">

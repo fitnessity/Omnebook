@@ -31,10 +31,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
 
     Route::resource('orders', 'OrderController')->only(['index']);
-    Route::resource('schedulers', 'SchedulerController')->only(['index','create', 'update', 'destroy', 'store']);
-    Route::get('gym-studio-info/{tabval?}', 'OrderController@gym_studio_page')->name('gym_studio_page');
-    Route::get('experience-info/{tabval?}', 'OrderController@experience_page')->name('experience_page');
-    Route::get('events-info/{tabval?}', 'OrderController@events_page')->name('events_page');
+    Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
+    Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -1004,12 +1002,11 @@ Route::group(['middleware' => ['auth']], function()
 {
     Route::get('booking-request', 'SchedulerController@booking_request')->name('booking_request');
     Route::post('searchcustomerbooking', 'SchedulerController@searchcustomerbooking')->name('searchcustomerbooking');
-    Route::any('all_activity_schedule', 'SchedulerController@all_activity_schedule')->name('all_activity_schedule');
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::get('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
     Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
-    Route::post('reserve_time_for_order', 'SchedulerController@reserve_time_for_order')->name('reserve_time_for_order');
+  
     Route::get('sendreceiptfromcheckout', 'SchedulerController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout');
 });
 

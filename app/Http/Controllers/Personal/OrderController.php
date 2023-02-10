@@ -40,9 +40,13 @@ class OrderController extends PersonalBaseController
         }
         
         $BookingDetail = [];
-        $BookingDetail =  $this->booking_repo->getalldata('individual');
+        $serviceType = 'individual';
+        if($request->has('serviceType')){
+            $serviceType = $request->serviceType;
+        }
+        $BookingDetail =  $this->booking_repo->getalldata($serviceType);
         $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->getcurrenttabdata('individual');
+        $currentbookingstatus = $this->booking_repo->getcurrenttabdata($serviceType);
         $tabval = '';
         if($request->has('tabval')){
             $tabval = $request->tabval;
@@ -116,63 +120,4 @@ class OrderController extends PersonalBaseController
     {
         //
     }
-
-
-    public function gym_studio_page(Request $request ,$tabval  = null){
-        $user = User::where('id', Auth::user()->id)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-    
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-
-        $BookingDetail = [];
-        $BookingDetail =  $this->booking_repo->getalldata('classes');
-
-        $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->getcurrenttabdata('classes');
-       
-       /* print_r($BookingDetail);exit;*/
-        return view('personal.orders.booking_gym_studio', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
-    }
-
-    public function experience_page(Request $request ,$tabval  = null){
-        $user = User::where('id', Auth::user()->id)->first();
-       
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-
-        $BookingDetail = [];
-        $BookingDetail =  $this->booking_repo->getalldata('experience');
-
-        $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->getcurrenttabdata('experience');
-       
-        //print_r($currentbookingstatus);exit;
-        /*print_r($BookingDetail);exit;*/
-       return view('personal.orders.booking_experience', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart ,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
-    }
-
-    public function events_page(Request $request,$tabval  = null){
-        $user = User::where('id', Auth::user()->id)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-
-        $BookingDetail = [];
-        $BookingDetail =  $this->booking_repo->getalldata('events');
-    
-        $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->getcurrenttabdata('events');
-        /*print_r($BookingDetail);exit;*/
-       return view('personal.orders.booking_events', ['Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
-    }
-
 }
