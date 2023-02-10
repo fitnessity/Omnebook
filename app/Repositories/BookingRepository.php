@@ -1171,7 +1171,12 @@ class BookingRepository
 
 
     public function getcheckincount($sid,$date){
-        $totalquantity = BookingCheckinDetails::where('business_activity_scheduler_id',$sid)->whereDate('checkin_date','=',date('Y-m-d',strtotime($date)))->count();
-        return $totalquantity;
+        $count = BookingCheckinDetails::where('business_activity_scheduler_id',$sid)->whereDate('checkin_date','=',date('Y-m-d',strtotime($date)))->count();
+        return $count;
+    }
+
+    public function getCheckinDetail($sid,$date,$user_booking_detail_id,$customer_id){
+        $checkinData = BookingCheckinDetails::where(['business_activity_scheduler_id'=>$sid,'customer_id' =>$customer_id , 'booking_detail_id' =>$user_booking_detail_id])->whereDate('checkin_date','=',date('Y-m-d',strtotime($date)))->first();
+        return $checkinData;
     }
 }

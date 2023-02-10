@@ -23608,7 +23608,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .classes-time label{
 	font-weight: 400;
-	margin-top: 10px;
+	margin-top: 3px;
+	font-size: 13px;
+}
+.classes-time a{
+	margin-top: 4px;
 	font-size: 13px;
 }
 .col-md-offset-3-custom{

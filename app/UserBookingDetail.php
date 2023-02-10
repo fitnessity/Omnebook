@@ -51,24 +51,18 @@ class UserBookingDetail extends Model
     }
 
     public function UserBookingStatus()
-
     {
-
      	//return $this->belongsTo(UserBookingStatus::class, 'booking_id');
 		return $this->belongsToMany(UserBookingStatus::class, 'booking_id'); ///nnn 22-10-2022
     }
 
 
     public function booking(){
-
         return $this->belongsTo(UserBookingStatus::class, 'booking_id');
-
     }
 
     public function business_services(){
-
         return $this->belongsTo(BusinessServices::class, 'sport');
-
     }
 
     public function business_price_detail(){
@@ -189,7 +183,8 @@ class UserBookingDetail extends Model
 
     public function getremainingsession(){
         $pay_session = $this->pay_session;
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
+        //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
+        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->sum('use_session_amount');
         $remaining = $pay_session - $checkindetailscnt;
         return $remaining;
     }

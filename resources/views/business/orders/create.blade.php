@@ -1140,6 +1140,7 @@
 	$(function() {
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
+			$('#checkout-button').html('loading...').prop('disabled', true);
 	        var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
 	       //alert(cardinfoRadio);
 	        if(cardinfoRadio == 'newcard') {
@@ -1151,7 +1152,6 @@
 	                $errorStatus = $form.find('div.error'),
 	                valid         = true;
 	                $errorStatus.addClass('hide');
-	         
 	            $('.has-error').removeClass('has-error');
 	            $inputs.each(function(i, el) {
 	                var $input = $(el);
@@ -1186,6 +1186,7 @@
 	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
 	            $form.get(0).submit();
 	        }
+			$('#checkout-button').html('Complete Payment').prop('disabled', false);
 	    }
 	});
 </script>
@@ -1611,7 +1612,6 @@
 			$('#pc_user_tp').val(data1[0]);
 		}
 		
-		
 		$.ajax({
 			url: '{{route("getdropdowndata")}}',
 			type: 'get',
@@ -1646,7 +1646,7 @@
 					$('#actscheduleid').val(second[0]+ ' ' +second[1]);
 				}
 				
-				if(chk != 'participat' && chk != 'mpopt'){
+				if(chk != 'participat' && chk != 'mpopt' && chk != 'duration'){
 					$('#adultcnt').val(0);
 					$('#childcnt').val(0);
 					$('#infantcnt').val(0);
