@@ -117,12 +117,13 @@
                                     <div class="row">
                                         <div class="col-md-2 col-xs-12 col-sm-4">
                                             <div class="scheduler-border scheduler-label">
-                                                <a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"><i class="fas fa-times"></i></a>
+                                                <a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}" ><i class="fas fa-times"></i></a>
                                                 <div class="checkbox-check">
                                                     
                                                     <input type="checkbox" name="check_in" value="1"
                                                         data-behvaior="checkin"
                                                         data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"  
+                                                        data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"
                                                         @if($booking_checkin_detail->checked_at) checked @endif >
                                                     <label for="check_in"> Check In</label><br>
                                                     @if($booking_checkin_detail->order_detail)
@@ -349,7 +350,17 @@
     //     }
     // });
 
-    $(document).on('change', "[data-behvaior~=checkin]", function(){
+    $(document).on('change', "[data-behvaior~=checkin]", function(e){
+        checkbox = this
+        if(!$(this).data('booking-detail-id')){
+            this.checked = false;
+            alert('Need to choose price title first.');
+            e.preventDefault()
+            e.stopPropagation();
+            return false
+        }
+
+
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
             type: "PATCH",
@@ -360,6 +371,11 @@
             success:function(response) {
                 location.reload()
             },
+            error: function(){
+                checkbox.checked = false;
+                e.preventDefault()
+                e.stopPropagation();
+            }
         });
     });
 
