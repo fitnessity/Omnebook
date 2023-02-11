@@ -281,11 +281,11 @@
               let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
 
               if(customer.profile_pic_url){
-                profile_img = '<img src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50">';            
+                profile_img = '<img class="img-circle" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50px">';            
               }
               customer_row.append('<div class="col-md-3">' + profile_img + '</div>');
               customer_row.append('<div class="col-md-9 div-controller"><a data-customer-id="' + customer.id + '" data-name="'+customer.fname + ' ' +  customer.lname+'" class="click_to_input" style="color: black;" href="/business/' + {{request()->current_company->id}} +'/customers/'+ customer.id + '">' + 
-                  '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
+                  '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (' + customer.age+ '  Years Old)' : '') + '</label></p>' +
                   '<p class="pstyle liaddress">' + customer.email +'</p>' + 
                   '<p class="pstyle liaddress">' + customer.phone_number + '</p></a></div>');
 
