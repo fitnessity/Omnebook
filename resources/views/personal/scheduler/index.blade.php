@@ -8,9 +8,9 @@
 	<div class="row">
 		<div class="col-md-7 col-md-offset-3-custom">
 			<div class="valor-mix-title">
-				<h2>{{@$program_name}}</h2>
+				<h2>{{$programName}}</h2>
 				<!-- <p>Booking Schedule</p> -->
-				<p>{{@$company_name}}</p>
+				<p>{{$companyName}}</p>
 			</div>
 			<div class="member-txt">
 				<p>If you already have a membership with multiple sessions. Reserve your spot here. If you don’t already have a membership, <a href="{{route('activities_index')}}">Book Here </a></p>
@@ -26,7 +26,7 @@
 					</li>
 					@endforeach
 				</ul>
-				<div class="tab-content">
+				<div class="tab-content" style="min-height: 600px;">
 					@foreach($service_type_ary as $st)
 					<div class="tab-pane @if($serviceType== $st ) active @endif" id="tabs-{{$st}}" role="tabpanel">
 						<div class="row">
