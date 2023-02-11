@@ -24,7 +24,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->get();
 
 
-    $filter_date = Carbon::now();
+    $filter_date = $date;
 
 
 
