@@ -33,6 +33,12 @@ class BookingCheckinDetails extends Model
                 $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
             }
         });
+
+        self::updated(function($model){
+            if($model->no_show_action == 'charge_fee'){
+                $model->customer->charge($model->no_show_charged);
+            }
+        });
     }
 	/**
 

@@ -412,6 +412,11 @@ class Customer extends Authenticatable
            return $checkin->order_detail->business_services->program_name." ".$checkin->order_detail->business_price_detail->price_title;
         }
     }
+
+    public function charge($amount){
+        // charge on default card
+        // add charge history(id amount strip_transaction_id credit_card_number status charge_class charge_id created_at updated_at)
+    }
     
 }
    

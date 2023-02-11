@@ -109,13 +109,34 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     if($request->checked_at){
       $business_checkin_detail = $business_checkin_detail->whereNotNull('booking_detail_id');
       $overwrite['use_session_amount'] = 1;
+      $overwrite['no_show_action'] = Null;
+      $overwrite['no_show_charged'] = Null;
     }else{
       $overwrite['use_session_amount'] = 0;
     }
     $business_checkin_detail = $business_checkin_detail->findOrFail($id);
 
 
-    $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount']), $overwrite));
+    if($request->no_show_action){
+      $overwrite['no_show_charged'] = Null;
+      $overwrite['use_session_amount'] = 0;
+      $overwrite['booking_detail_id'] = $business_checkin_detail->booking_detail_id;
+      $overwrite['checked_at'] = Null;
+      
+      switch ($request->no_show_action) {
+          case 'nothing':
+            break;
+          case 'charge_fee':
+            $overwrite['no_show_charged'] = $request->no_show_charged;
+            break;
+          case 'deduct':
+            $overwrite['use_session_amount'] = 1;
+            $overwrite['booking_detail_id'] = $request->booking_detail_id;
+            break;
+      }
+
+    }
+    $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
   }
 
   /**
@@ -130,5 +151,13 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     $business_checkin_detail = BookingCheckinDetails::findOrFail($id);
     $business_checkin_detail->delete();
+  }
+
+  public function latecancel_modal(Request $request, $business_id, $scheduler_id, $id){
+    $company = $request->current_company;
+    $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
+    $booking_checkin_detail = BookingCheckinDetails::where('business_activity_scheduler_id', $business_activity_scheduler->id)->findOrFail($id);
+
+    return view('business.scheduler_checkin_detail.latecancel_edit', compact('booking_checkin_detail'));
   }
 }
