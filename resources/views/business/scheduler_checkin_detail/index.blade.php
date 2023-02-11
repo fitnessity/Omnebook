@@ -124,9 +124,16 @@
                                         </div>
                                         
                                         <div class="col-md-1 col-xs-3 col-sm-4">    
-                                            <div class="scheduler-qty">
-                                                <span> {{$booking_checkin_detail->customer->first_letter}}</span>
-                                            </div>
+                                            @if($booking_checkin_detail->customer->profile_pic)
+                                                <img class='img-circle' src="{{Storage::Url($booking_checkin_detail->customer->profile_pic)}}" width=60 height=60 alt="">
+                                            @else
+                                                <div class="scheduler-qty">
+                                                    <span> 
+                                                        {{$booking_checkin_detail->customer->first_letter}}
+                                                    </span>
+                                                </div>
+                                            @endif
+                                            
                                         </div>
                                         <div class="col-md-2 col-xs-9 col-sm-4">
                                             <div class="scheduled-activity-info">
