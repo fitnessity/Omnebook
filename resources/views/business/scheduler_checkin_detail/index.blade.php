@@ -23,8 +23,14 @@
                 <div class="row">
                     <div class="col-md-4 col-xs-12 col-sm-5">
                          <div class="scheduler-info">
-                            <label>Program Name: </label><span>{{$business_activity_scheduler->business_service->program_name}} </span>
+                            <label>Program Name: </label>
+                            <span>{{$business_activity_scheduler->business_service->program_name}} <br/></span>
                          </div>
+                         <div class="scheduler-info">
+                            <label>Category: </label>
+                            <span>{{$business_activity_scheduler->businessPriceDetailsAges->category_title}}</span>
+                         </div>
+                         
                          <div class="scheduler-info">
                             <label>Date: </label><span>{{$filter_date->format('l, F j , Y')}} </span>
                          </div>
