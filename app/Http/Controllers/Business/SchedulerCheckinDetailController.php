@@ -137,6 +137,11 @@ class SchedulerCheckinDetailController extends BusinessBaseController
 
     }
     $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+
+    return redirect()->route('business.schedulers.checkin_details.index',[
+      'scheduler'=>$business_checkin_detail->business_activity_scheduler_id, 
+      'date' =>$business_checkin_detail->checkin_date
+    ]);
   }
 
   /**

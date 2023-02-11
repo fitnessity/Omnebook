@@ -374,12 +374,19 @@
 													@foreach($visits as $visit)
 														<tr>
 															<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
-															<td>{{date('h:i A', strtotime($visit->order_detail->business_activity_scheduler->shift_start))}}</td>
+															<td>
+																{{date('h:i A', strtotime($visit->checked_at))}}
+															</td>
 															<td>{{$visit->order_detail->business_services->program_name}}</td>
 															<td>{{$visit->order_detail->business_price_detail->price_title}}</td>
 															
 															<td>
-															{{$visit->status_term()}}
+																@if($visit->status_term())
+																	{{$visit->status_term()}}
+																@else
+																	<a target="_blank" href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$visit->business_activity_scheduler_id, 'date' =>$visit->checkin_date])}}">Unprocess</a>
+																@endif
+																
 															</td>
 															<td>{{StaffMembers::getinstructorname($visit->order_detail->business_services->instructor_id)}}</td>
 														</tr>
