@@ -77,7 +77,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row mobile-scheduler">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="scheduler-table-title">
                                     <label>  </label>
                                 </div>
@@ -97,7 +97,7 @@
                                     <label> Price Title  </label>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="scheduler-table-title">
                                     <label>  Remaining   </label>
                                 </div>
@@ -107,6 +107,8 @@
                                     <label> Expiration</label>
                                 </div>
                             </div>
+                            <div class="col-md-1">
+                            </div>
                         </div>
                         
                         <div id="schedulelist">
@@ -115,30 +117,17 @@
 
                                 <div class="scheduler-info-box">
                                     <div class="row">
-                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                        <div class="col-md-1 col-xs-12 col-sm-4">
                                             <div class="scheduler-border scheduler-label">
                                                 <a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}" ><i class="fas fa-times"></i></a>
-                                                <div class="checkbox-check">
-                                                    
-                                                    <input type="checkbox" name="check_in" value="1"
-                                                        data-behvaior="checkin"
-                                                        data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"  
-                                                        data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"
-                                                        @if($booking_checkin_detail->checked_at) checked @endif >
-                                                    <label for="check_in"> Check In</label><br>
-                                                    @if($booking_checkin_detail->order_detail)
-                                                        <input type="checkbox" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('getbookingcancelmodel', ['order_detail_id' => $booking_checkin_detail->order_detail->id, 'business_activity_scheduler_id' => $business_activity_scheduler->id])}}" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}">
-                                                    @endif
-                                                    <label for="late_cancel"> Late Cancel</label><br>
-                                                </div>
                                             </div>
                                         </div>
                                         
                                         <div class="col-md-1 col-xs-3 col-sm-4">    
-                                        <div class="scheduler-qty">
-                                            <span> {{$booking_checkin_detail->customer->first_letter}}</span>
+                                            <div class="scheduler-qty">
+                                                <span> {{$booking_checkin_detail->customer->first_letter}}</span>
+                                            </div>
                                         </div>
-                                    </div>
                                         <div class="col-md-2 col-xs-9 col-sm-4">
                                             <div class="scheduled-activity-info">
                                                 <span>{{$booking_checkin_detail->customer->full_name}}</span>
@@ -164,7 +153,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 col-xs-12 col-sm-4">
+                                        <div class="col-md-1 col-xs-12 col-sm-4">
                                             <div class="scheduled-location">
                                                 @if($booking_checkin_detail->order_detail)
                                                     {{$booking_checkin_detail->order_detail->getremainingsession()}}/{{$booking_checkin_detail
@@ -182,6 +171,26 @@
                                                     N/A
                                                 @endif
                                             </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-12 col-sm-4">
+
+                                                <div class="checkbox-check">
+                                                    <label style="font-weight: inherit;">
+                                                    @if($booking_checkin_detail->order_detail)
+                                                        <input type="checkbox" name="check_in" value="1"
+                                                            data-behvaior="checkin"
+                                                            data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"  
+                                                            data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"
+                                                            @if($booking_checkin_detail->checked_at) checked @endif >
+                                                        
+                                                    @endif
+                                                     Check In</label><br>
+                                                    <label style="font-weight: inherit;">
+                                                    @if($booking_checkin_detail->order_detail)
+                                                        <input type="checkbox" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('getbookingcancelmodel', ['order_detail_id' => $booking_checkin_detail->order_detail->id, 'business_activity_scheduler_id' => $business_activity_scheduler->id])}}" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}">
+                                                    @endif
+                                                    Late Cancel</label>
+                                                </div>
                                         </div>
 
                                         <div class="col-md-2 col-xs-12 col-sm-12">
@@ -366,10 +375,10 @@
             type: "PATCH",
             data:{
                 _token: '{{csrf_token()}}', 
-                checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null
+                checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null,
             },
             success:function(response) {
-                location.reload()
+                // location.reload()
             },
             error: function(){
                 checkbox.checked = false;

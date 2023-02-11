@@ -272,8 +272,6 @@ class PaymentController extends Controller {
                     'booking_detail_id' => $status->id,
                     'checkin_date' => date('Y-m-d',strtotime($sesdate)),
                     'use_session_amount' => 0,
-                    'before_use_session_amount' => 0,
-                    'after_use_session_amount' => 0
                 ]);
 
 

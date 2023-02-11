@@ -14,6 +14,26 @@ class BookingCheckinDetails extends Model
 
 { 
 	
+    public static function boot(){
+        parent::boot();
+
+        self::creating(function($model){
+            if($model->booking_detail_id){
+                $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
+                $model->before_use_session_amount = $userBookingDetail->getremainingsession();
+                $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+            }
+        });
+
+        self::updating(function($model){
+            // ... code here
+            if($model->booking_detail_id){
+                $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
+                $model->before_use_session_amount = $userBookingDetail->getremainingsession();
+                $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+            }
+        });
+    }
 	/**
 
      * The attributes that are mass assignable.
