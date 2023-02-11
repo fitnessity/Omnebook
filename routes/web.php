@@ -20,8 +20,11 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
+
     // Scheduler Checkin Details
+    Route::get('schedulers/{scheduler_id}/checkin_details/{id}/latecancel_modal', 'SchedulerCheckinDetailController@latecancel_modal')->name('scheduler_checkin_details.latecencel_modal');
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
+
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
