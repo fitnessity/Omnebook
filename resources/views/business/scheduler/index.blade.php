@@ -119,7 +119,11 @@
 	    										<div class="col-md-3 col-xs-12 col-sm-4">
 	    											<div class="scheduled-activity-info">
 	    												<label class="scheduler-titles"> Scheduled Activity: </label> 
-	    												<span>{{$business_scheduler->business_service->program_name}}</span>
+	    												<span>
+	    													{{$business_scheduler->business_service->program_name}}<br/>
+	    													{{$business_scheduler->businessPriceDetailsAges->category_title}}
+	    												</span>
+
 	    											</div>
 	    										</div>
 	                        <div class="col-md-2 col-xs-12 col-sm-4">

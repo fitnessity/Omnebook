@@ -59,7 +59,7 @@ input,select {
                         @if($cservice->serviceid != 0)
                             <?php
                                 $businessschedulecount = 0;
-                                $catdata =  $cservice->BusinessPriceDetailsAges;
+                                $catdata =  $cservice->businessPriceDetailsAges;
                                 $sc_cat_cnt = $cservice->get_scheduled_categories($catdata);
                                 $UserBookingDetailcount = $cservice->this_week_booking();
                                 $profilePic = '';
@@ -108,7 +108,7 @@ input,select {
                                 							<div class="col-xs-12 col-lg-3 col-md-3 col-sm-4">
                                 								<div class="manage-txt">
                                 									<label>SCHEDULE</label>
-                                									<span>{{ count($cservice->BusinessPriceDetailsAges)}} CATEGORIES CREATED | <br> {{ $sc_cat_cnt}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>
+                                									<span>{{ count($cservice->businessPriceDetailsAges)}} CATEGORIES CREATED | <br> {{ $sc_cat_cnt}} CATEGORIES SCHEDULED | <br> <a href="#" data-toggle="modal" data-target="#editschedule{{$cservice->id}}{{$cservice->cid}}"> + EDIT SCHEDULE</a>
                                                                     <a href="#" onclick="getbookingmodel({{$cservice->id}},'simple');"> | VIEW BOOKINGS</a>
                     												</span>
                                 								</div>

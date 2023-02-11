@@ -441,7 +441,7 @@
 												$taxes += $taxval;
 												$act = BusinessServices::where('id', $item["code"])->first();
 												$serprice =$act->price_details->find($item['priceid']);
-												$serpricecate =$act->BusinessPriceDetailsAges->find(@$serprice->category_id);
+												$serpricecate =$act->businessPriceDetailsAges->find(@$serprice->category_id);
 
 												$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
 												$iprice = number_format($total,0, '.', '');

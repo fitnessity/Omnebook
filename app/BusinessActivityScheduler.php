@@ -46,7 +46,7 @@ class BusinessActivityScheduler extends Model
         'end_activity_date'
     ];
 
-    public function BusinessPriceDetailsAges(){
+    public function businessPriceDetailsAges(){
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
     }
 
