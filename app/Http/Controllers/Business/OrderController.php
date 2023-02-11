@@ -319,7 +319,7 @@ class OrderController extends BusinessBaseController
                 $customerid = '';
             }else{
                 $customerid = $request->user_id;
-                $user_id = Auth::user()->id;
+                $user_id = Null;
             }
 
             if($data['status']=='succeeded')
@@ -343,6 +343,7 @@ class OrderController extends BusinessBaseController
                                   'pmt_by_comp' => 0,
                           )),
                   ); 
+
                 $status = UserBookingStatus::create($orderdata);
                 $lastid=$status->id;
                 $businessuser =[];
@@ -498,7 +499,7 @@ class OrderController extends BusinessBaseController
                 $customerid = '';
             }else{
                 $customerid = $request->user_id;
-                $user_id = Auth::user()->id;
+                $user_id = Null;
             }
 
             $orderdata = array(
