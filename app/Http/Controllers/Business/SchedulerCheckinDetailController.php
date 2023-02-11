@@ -68,9 +68,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
       BookingCheckinDetails::create(array_merge(
         $request->only(['customer_id', 'business_activity_scheduler_id', 'checkin_date']), 
         ['business_activity_scheduler_id' => $business_activity_scheduler->id,
-         'use_session_amount' => 0,
-         'before_use_session_amount' => 0,
-         'after_use_session_amount' => 0]));
+         'use_session_amount' => 0]));
   }
 
   /**
@@ -107,12 +105,17 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $company = $request->current_company;
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
+    $overwrite = [];
     if($request->checked_at){
       $business_checkin_detail = $business_checkin_detail->whereNotNull('booking_detail_id');
+      $overwrite['use_session_amount'] = 1;
+    }else{
+      $overwrite['use_session_amount'] = 0;
     }
-
     $business_checkin_detail = $business_checkin_detail->findOrFail($id);
-    $business_checkin_detail->update($request->only(['checked_at', 'booking_detail_id']));
+
+
+    $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount']), $overwrite));
   }
 
   /**

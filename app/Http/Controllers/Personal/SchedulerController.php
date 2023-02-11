@@ -75,7 +75,12 @@ class SchedulerController extends Controller
         $array = json_decode($data['booking_detail'],true);
         $array['sessiondate'] = $request->date;
         UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
-        BookingCheckinDetails::create(["business_activity_scheduler_id"=>$request->timeid, "customer_id" => $data->booking->customer_id,'booking_detail_id'=> $request->odid ,"checkin_date"=>$request->date ,'use_session_amount' => 0,'before_use_session_amount' => 0,'after_use_session_amount' => 0]);
+        BookingCheckinDetails::create([
+            "business_activity_scheduler_id"=>$request->timeid, 
+            "customer_id" => $data->booking->customer_id,
+            'booking_detail_id'=> $request->odid ,
+            "checkin_date"=>$request->date ,
+            'use_session_amount' => 0]);
     }
 
     /**
