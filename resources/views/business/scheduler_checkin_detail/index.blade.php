@@ -378,7 +378,7 @@
                 checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null,
             },
             success:function(response) {
-                // location.reload()
+                location.reload()
             },
             error: function(){
                 checkbox.checked = false;
