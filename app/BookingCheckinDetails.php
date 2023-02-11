@@ -74,7 +74,13 @@ class BookingCheckinDetails extends Model
     }
 
     public function status_term(){
-        return $this->checked_at ? "Checked In" : "Unchecked";
+        if($this->checked_at){
+            return 'Checked In';
+        }
+
+        if($this->no_show_action){
+            return 'No Show';
+        }
     }
 
 }
