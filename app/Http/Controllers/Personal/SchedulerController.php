@@ -17,13 +17,14 @@ class SchedulerController extends Controller
      */
     public function index(Request $request)
     {   
-        $programName = $companyName = $serviceType='classes';
+        $serviceType='classes';
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
+        $programName = $orderData->business_services->program_name;
+        $companyName = $orderData->business_services->company_information->company_name;
         if($orderData->booking->user_id != Auth::user()->id){
             $orderData = [];
         }else{
-            $programName = $orderData->business_services->program_name;
-            $companyName= $orderData->business_services->company_information->company_name;
+            
             $serviceType= $orderData->business_services->service_type;
         }
         
