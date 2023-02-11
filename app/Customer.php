@@ -14,6 +14,25 @@ use DB;
 class Customer extends Authenticatable
 {
 
+    public static function boot(){
+        parent::boot();
+
+        self::creating(function($model){
+            $fitnessity_user = User::where('email', $model->email)->first();
+            if($fitnessity_user){
+                $model->user_id = $fitnessity_user->id;
+            }
+        });
+
+        self::updating(function($model){
+            
+            $fitnessity_user = User::where('email', $model->email)->first();
+            if($fitnessity_user){
+                $model->user_id = $fitnessity_user->id;
+            }
+        });
+    }
+
 	use  Notifiable;
 
 	protected $table = 'customers';
