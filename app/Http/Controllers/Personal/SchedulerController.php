@@ -162,7 +162,7 @@ class SchedulerController extends Controller
             $d = clone($filter_date);
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
-        return view('personal.scheduler.allActivitySchedule',[
+        return view('personal.scheduler.all_activity_schedule',[
             'days' => $days,
             'filter_date' => $filter_date,
             'orderdata' => $orderdata,

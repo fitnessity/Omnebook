@@ -173,7 +173,7 @@
 												<label>Status</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												@if($customerdata->status == 0)
+												@if($customerdata->is_active() == 0)
 													InActive
 												@else
 													<span class="green-fonts">Active</span>
@@ -406,7 +406,7 @@
 										
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Products Booked  </a>
+										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Purchase History </a>
 									</li>
 								</ul>
 							</div>
@@ -505,7 +505,7 @@
 																					<label>BOOKED BY:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}}</span>
+																					<span>{{$booking_detail->booking->customer->firstname}} {{$booking_detail->booking->customer->lastname}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -536,7 +536,7 @@
 																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('business_customer_activity_visits', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
 																			</div>
 																			<div class="col-md-6 col-xs-6">
-																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer"> Edit Booking </a>
+																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a>
 																			</div>
 																		</div>
 																	</div>
@@ -692,6 +692,53 @@
 									</div>
 								</div>
 								<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+									<div class="table-staff table-responsive">
+										<table id="purchase-history" class="table table-striped table-bordered" style="width:100%">
+											<thead>
+												<tr>
+													<th>Sale Date </th>
+													<th>Item Description </th>
+													<th> Item Type</th>
+													<th>Pay Method</th>
+													<th>Price</th>
+													<th>Qnty</th>
+													<th>Refund/Void</th>
+													<th>Receipt</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>2/12/2023</td>
+													<td> VMA Belt Class , 6 month contract membership (recurring)</td>
+													<td>Membership</td>
+													<td>Visa  ****4576</td>
+													<td>$150  (R)</td>
+													<td>1</td>
+													<td>Refund | Void</td>
+													<td>
+														<div class="table-icons-staff">
+															<i class="fas fa-receipt"></i>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>2/12/2023</td>
+													<td>Mini Ninjas (3 to 4 yrs old), Kids Drop In (01 Pack)  </td>
+													<td>Membership</td>
+													<td>Visa  ****4576</td>
+													<td>$1,895.00</td>
+													<td>1</td>
+													<td>Refund | Void</td>
+													<td>
+														<div class="table-icons-staff">
+															<i class="fas fa-receipt"></i>
+														</div>
+													</td>
+												</tr>
+												
+											</tbody>
+										</table>
+									</div>
 									
 								</div>
 							</div>
@@ -1048,9 +1095,9 @@
 		</div>
 	<!-- end modal -->
 	
-	
+	@foreach ($active_booking_details as $booking_detail)
 	<!-- The Modal Edit Booking -->
-		<div class="modal fade compare-model" id="bookingcustomer">
+		<div class="modal fade compare-model" id="bookingcustomer_{{$booking_detail->id}}">
 			<div class="modal-dialog booking0customer">
 				<div class="modal-content">
 					<div class="modal-header" style="text-align: right;"> 
@@ -1065,7 +1112,7 @@
 					<div class="modal-body body-tbm">
 						<div class="row"> 
 							<div class="col-lg-6 col-sm-6">
-							   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit info for membership {Program Name} </h4>
+							   <h4 class="modal-title" style="text-align: left; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit info for membership {{$booking_detail->business_services->program_name}}</h4>
 							</div>
 							<div class="col-lg-6 col-sm-6">
 							   <h4 class="modal-title" style="text-align: end; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;"> | Membership Status: <span class="green-fonts"> Active </span> </h4>
@@ -1103,7 +1150,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="remaining-number">
-																<span>5/10</span>
+																<span>{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span>
 															</div>
 														</div>
 														
@@ -1114,7 +1161,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>0000000000001 </span>
+																<span>{{$booking_detail->booking->order_id}} </span>
 															</div>
 														</div>
 														
@@ -1125,7 +1172,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Tennis Lessons</span>
+																<span> {{$booking_detail->business_services->program_name}}</span>
 															</div>
 														</div>
 														
@@ -1147,7 +1194,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>30 Minute Private</span>
+																<span>{{$booking_detail->business_price_detail->price_title}}</span>
 															</div>
 														</div>
 														
@@ -1158,7 +1205,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>10 </span>
+																<span>{{$booking_detail->business_price_detail->pay_session}}</span>
 															</div>
 														</div>
 														
@@ -1169,7 +1216,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Drop In</span>
+																<span>{{$booking_detail->business_price_detail->membership_type}}</span>
 															</div>
 														</div>
 														
@@ -1180,7 +1227,13 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Adult x 1</span>
+																<span>
+                                                                	<?php $a = json_decode($booking_detail->qty);
+                                                                if( !empty($a->adult) ){ echo 'Adult x '.$a->adult; }
+                                                                if( !empty($a->child) ){ echo '<br> Child x '.$a->child; }
+                                                                if( !empty($a->infant) ){ echo '<br>Infant x '.$a->infant; }
+                                                            ?>
+                                                                </span>
 															</div>
 														</div>
 														
@@ -1191,7 +1244,17 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Darryl Phipps (23)</span>
+																<span>
+                                                                <?php $p = json_decode($booking_detail->participate);
+																
+																foreach($p[0] as $key=>$value)
+																{
+																	if($key=='pc_name')
+																		echo $value;
+																}
+																if( !empty($p->pc_name) ){ echo $p->pc_name; }
+																?>
+                                                                (23)</span>
 															</div>
 														</div>
 														
@@ -1202,7 +1265,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Tennis</span>
+																<span>{{$booking_detail->business_services->sport_activity}}</span>
 															</div>
 														</div>
 														
@@ -1213,7 +1276,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6">
 															<div class="sub-info-customer">
-																<span>Personal Training</span>
+																<span>{{$booking_detail->business_services->service_type}}</span>
 															</div>
 														</div>
 														
@@ -2159,6 +2222,7 @@
 			</div>
 		</div>
 	<!-- end modal -->
+	@endforeach
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')

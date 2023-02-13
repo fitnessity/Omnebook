@@ -48,8 +48,56 @@
                     <div class="page-title-box">
                         <h4 class="page-title">Add Family or Friends</h4>
                     </div>
+					
+					<div class="payment_info_section padding-2 white-bg border-radius1">
+						<div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>( + )</h2>
+								<p class="add-fm-fr">Add Family Member or Friend</p>
+                             </div>
+                         </div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12">
+                            <div class="text-right btn-txt-pro">
+								<button type="submit" class="btn-nxt-profile">PREV </button>
+								<button type="submit" class="btn-nxt-profile">NEXT </button>
+                            </div>
+						</div>
+					</div>
 
-                    <div class="add_family_section padding-1 white-bg border-radius1">
+                   <?php /*?><div class="add_family_section padding-1 white-bg border-radius1">
 
                         <form name="frm_family" id="frm_family" action="{{Route('addFamilyMember')}}" method="post"  autocomplete="off" >
                             @csrf
@@ -95,6 +143,7 @@
                                         }else{
                                             $emergency_contact = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $emergency_contact_num);
                                         }@endphp
+									
                                     <div class="row" id="familydiv{{$fam_cnt}}">	
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
@@ -154,7 +203,7 @@
 
                                             <div class="form-group dob">
                                                 <label>mm/dd/yyyy</label>
-                                                <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control" value="{{$family->birthday}}" required="required">
+                                                <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control" value="{{$family->birthday}}" required="required" data-behavior="datepicker">
 												<script type="text/javascript">
 													$('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
 														format: 'm-d-Y',
@@ -254,7 +303,7 @@
 
                                             <div class="form-group dob">
                                                 <label>mm/dd/yyyy</label>
-                                                <input type="text"  name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class=" form-control" required="required">
+                                                <input type="text"  name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class=" form-control" required="required" data-behavior="datepicker">
                                                 <script type="text/javascript" >
                                                 $('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
                                                     format: 'm-d-Y',
@@ -291,12 +340,6 @@
                                     </div> 
                                     @endif
 
-
-
-
-
-
-
                                 </div>
 
                             </div>
@@ -311,9 +354,9 @@
                                 <input type="submit" name="btn_family" id="btn_family" value="Submit" class="submit-btn">
                             </div>
 
-                        </form>
+                        </form> 
 
-                    </div>
+                    </div><?php */?>
 
 
                 </div>
@@ -373,7 +416,7 @@
             var mobileid = "\'mobile" + cnt + "\'";
             var emerconid = "\'emergency_contact" + cnt + "\'";
             var str = '<div class="addfmaily_content mt-3">' +
-                    '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control" value=""></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+mobileid+')"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input  type="text" name="emergency_name[' + cnt + ']" id="emergency_name[' + cnt + ']" placeholder="Emergency Contact Name" class="form-control" onkeypress="return event.charCode >= 65 && event.charCode <= 120"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+emerconid+')"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
+                    '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control" data-behavior="datepicker" value=""></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+mobileid+')"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input  type="text" name="emergency_name[' + cnt + ']" id="emergency_name[' + cnt + ']" placeholder="Emergency Contact Name" class="form-control" onkeypress="return event.charCode >= 65 && event.charCode <= 120"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+emerconid+')"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
             cnt = parseInt(cnt) + parseInt(1);
             $('#family_count').val(cnt);
             $(".addfmaily_block").append(str);

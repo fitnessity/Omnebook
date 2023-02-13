@@ -280,7 +280,9 @@
 .padding-1 {
     padding: 20px;
 }
-
+.padding-2 {
+    padding: 40px 20px 25px;
+}
 /** Edit Profile Page **/
 
 .profile-block {
@@ -1673,4 +1675,132 @@ a {
 	width: 7% !important;
 	display: inline-block !important;
 	margin-top: 10px !important;
+}
+.add-family-frnd{
+	display: inline-block;
+	width: 23%;
+	vertical-align: top;
+	margin-left: 14px;
+	margin-bottom: 15px;
+}
+.add-family-frnd .cards-content {
+  padding: 17px 20px;
+  border-radius: 15px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 10px 15px 0px #cfd7e2;
+  min-height: 154px;
+}
+.add-family-frnd .cards-content p {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+.add-family-frnd .cards-content h2{
+	font-weight: 500;
+	text-align: center;
+	font-size: 20px;
+	margin-top: 25px;
+}
+.add-family-frnd .cards-content .familyfrnd-info{
+	position: relative;
+}
+.add-family-frnd .cards-content .familyfrnd-info .edit-family {
+	position: absolute;
+	top: 40px;
+	left: 50px;
+	text-decoration: underline;
+	color: #fff;
+}
+.add-family-frnd .cards-content .familyfrnd-info .delete-family {
+	position: absolute;
+	top: 40px;
+	right: 50px;
+	text-decoration: underline;
+	color: #fff;
+}
+.add-fm-fr{
+	font-weight: 600;
+	font-size: 15px;
+}
+.add-family-frnd .cards-content .familyfrnd-info a:hover{
+	color: #ea1515;
+}
+.booking-history h3{
+	text-align: center;
+	font-size: 25px;
+}
+.booking-history p{
+	text-align: center;
+	font-size: 15px;
+}
+.booking-history.selecting-pro{
+	margin-bottom: 40px;
+}
+.booking-info-history{
+	display: inline-block;
+	width: 100%;
+	vertical-align: top;
+	margin-bottom: 15px;
+}
+.booking-info-history .cards-content {
+  padding: 17px 20px;
+  border-radius: 15px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 10px 15px 0px #cfd7e2;
+  min-height: 230px;
+}
+.booking-info-history .cards-content h2 {
+  font-weight: 500;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 10px;
+}
+.booking-info-history .cards-content p {
+	color: #fff;
+	font-size: 12px;
+	margin-top: 3px;
+	text-align: center;
+	padding: 0 42px;
+}
+.booking-activity{
+	display: grid;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.booking-activity span{
+	font-size: 13px;
+}
+.booking-activity-view{
+	position: relative;
+}
+.booking-activity-view{
+	position: relative;
+}
+.booking-activity-view .view-booking{
+	position: absolute;
+	left: 50px;
+	text-decoration: underline;
+	color: #fff;
+	top: 11px;
+	right: 50px;
+	text-align: center;
+}
+.booking-activity-view a:hover{
+	color: #ea1515;
+}
+.btn-nxt-profile{
+	background: #ed1b24;
+	color: #fff;
+	padding: 6px 15px;
+	border: unset;
+	font-size: 16px;
+}
+.btn-txt-pro{
+	margin-top: 20px;
+}
+.purchases-bt{
+	margin-bottom: 45px;
 }

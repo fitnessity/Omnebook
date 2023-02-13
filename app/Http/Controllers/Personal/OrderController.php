@@ -51,7 +51,7 @@ class OrderController extends PersonalBaseController
         if($request->has('tabval')){
             $tabval = $request->tabval;
         }
-        
+
         return view('personal.orders.index', [ 'Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabvalue'=>$tabval,'currentbooking_status'=>$currentbookingstatus]);
     }
 

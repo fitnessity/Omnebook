@@ -32,7 +32,7 @@
                     <input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
-                    <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
+                    <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
                     <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
@@ -433,7 +433,7 @@
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
         
-        if(address_sign == ''){
+        /*if(address_sign == ''){
             $('#err_address_sign').html('Please enter address');
             $('#address_sign').focus();
             return false;
@@ -457,7 +457,7 @@
             $('#err_zipcode_sign').html('Please enter zipcode');
             $('#zipcode_sign').focus();
             return false;
-        }
+        }*/
 
         var posturl = '/auth/saveaddress';
         var formdata = new FormData();
@@ -545,7 +545,7 @@
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
         
-        if(address_sign == ''){
+        /*if(address_sign == ''){
             $('#err_address_sign').html('Please enter address');
             $('#address_sign').focus();
             return false;
@@ -569,7 +569,7 @@
             $('#err_zipcode_sign').html('Please enter zipcode');
             $('#zipcode_sign').focus();
             return false;
-        }
+        }*/
 
         var posturl = '/auth/saveaddress';
         var formdata = new FormData();
@@ -683,21 +683,21 @@
             $('#relationship').focus();
             return false;
         }
-        if(mphone == ''){
+        /*if(mphone == ''){
             $('#err_mphone').html('Please enter mobile number');
             $('#mphone').focus();
             return false;
-        }
+        }*/
         if(gender == ''){
             $('#err_gender').html('Please select gender');
             $('#gender').focus();
             return false;
         }
-        if(emailid == ''){
+        /*if(emailid == ''){
             $('#err_emailid').html('Please enter emailid');
             $('#emailid').focus();
             return false;
-        }
+        }*/
         
         var posturl = '/submit-family-form1';
         var formdata = new FormData();
