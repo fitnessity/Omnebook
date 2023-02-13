@@ -22,6 +22,9 @@ class BookingCheckinDetails extends Model
                 $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
                 $model->before_use_session_amount = $userBookingDetail->getremainingsession();
                 $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+            }else{
+                $model->before_use_session_amount = 0;
+                $model->after_use_session_amount = 0;
             }
         });
 
@@ -31,6 +34,9 @@ class BookingCheckinDetails extends Model
                 $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
                 $model->before_use_session_amount = $userBookingDetail->getremainingsession();
                 $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+            }else{
+                $model->before_use_session_amount = 0;
+                $model->after_use_session_amount = 0;
             }
         });
 
