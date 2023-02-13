@@ -95,7 +95,7 @@
 																<label>Status: </label>
 																
 																<span class="green-fonts">
-																	@if($customer->status == 0)
+																	@if($customer->is_active() == 0)
 																		InActive
 																	@else
 																		Active

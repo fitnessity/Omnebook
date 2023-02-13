@@ -436,6 +436,15 @@ class Customer extends Authenticatable
         // charge on default card
         // add charge history(id amount strip_transaction_id credit_card_number status charge_class charge_id created_at updated_at)
     }
+
+    public function is_active(){
+        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->whereDate("checkin_date",">=", Carbon::now()->subMonths(3))->orderby('checkin_date','desc')->first();
+        if( $checkindetail != ''){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 }
    

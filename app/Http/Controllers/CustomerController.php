@@ -94,8 +94,10 @@ class CustomerController extends Controller {
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
         $active_booking_details = $customerdata->active_booking_details()->get();
+       
         $complete_booking_details = $customerdata->complete_booking_details()->get();
-
+        // print_r($active_booking_details);
+        // exit;
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');

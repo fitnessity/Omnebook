@@ -84,7 +84,7 @@ class OrderController extends BusinessBaseController
                 $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
                 $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
                 $user_data = $book_data->booking->customer;
-                $activated = $book_data->booking->customer->status;
+                $activated = $book_data->booking->customer->is_active();
                 $userfamilydata = Customer::where('parent_cus_id',$book_data->booking->customer->id)->get();
                 $cardInfo = $book_data->booking->customer->get_stripe_card_info();
                 $address = $user_data->full_address();
@@ -106,7 +106,7 @@ class OrderController extends BusinessBaseController
            $age = Carbon::parse( @$customerdata->birthdate)->age; 
            $user_data =  @$customerdata;
            $visits = $customerdata->visits_count();
-           $activated = @$customerdata->status;
+           $activated = @$customerdata->is_active();
            $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
            $cardInfo = @$customerdata->get_stripe_card_info();
            $address = @$customerdata->full_address();
