@@ -146,10 +146,11 @@
                                                     <select class="form-control valid price-info" data-behavior="change_price_title" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}">
                                                         <option value=""  @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
                                                         @foreach($booking_checkin_detail->customer->active_booking_details()->get() as $customer_booking_detail)
-
-                                                         <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
-                                                            {{$customer_booking_detail->business_price_detail['price_title']}}
-                                                        </option>
+                                                            @if($customer_booking_detail->business_price_detail)
+                                                            <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
+                                                                {{$customer_booking_detail->business_price_detail->price_title}}
+                                                            </option>
+                                                            @endif
                                                         @endforeach
                                                         
 
