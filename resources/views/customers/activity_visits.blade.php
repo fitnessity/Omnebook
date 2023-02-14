@@ -24,7 +24,7 @@
                               <td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
                               <td>{{date('h:i A', strtotime($visit->order_detail->business_activity_scheduler->shift_start))}}</td>
                               <td>{{$visit->order_detail->business_services->program_name}}</td>
-                              <td>{{$visit->order_detail->business_price_details->price_title}}</td>
+                              <td>{{$visit->order_detail->business_price_detail->price_title}}</td>
                               
                               <td>
                               {{$visit->status_term()}}

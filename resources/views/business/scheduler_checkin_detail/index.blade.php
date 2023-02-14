@@ -195,7 +195,7 @@
                                                      Check In</label><br>
                                                     <label style="font-weight: inherit;">
                                                     @if($booking_checkin_detail->order_detail)
-                                                        <input type="checkbox" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => $booking_checkin_detail->id, 'scheduler_id' => $business_activity_scheduler->id])}}" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}"
+                                                        <input type="checkbox" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => $booking_checkin_detail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}"
                                                         @if($booking_checkin_detail->no_show_action) checked @endif 
                                                         >
                                                     @endif

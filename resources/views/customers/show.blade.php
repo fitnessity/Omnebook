@@ -430,7 +430,7 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->business_price_detail->pay_session}} <i class="far fa-file-alt"></i></span>
+																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->pay_session}} <i class="far fa-file-alt"></i></span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -533,10 +533,11 @@
 																		</div>
 																		<div class="row">
 																			<div class="col-md-6 col-xs-6">
-																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('business_customer_activity_visits', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
+																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
 																			</div>
 																			<div class="col-md-6 col-xs-6">
-																				<a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a>
+																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Edit Booking </a>
+																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
 																		</div>
 																	</div>
@@ -1095,8 +1096,8 @@
 		</div>
 	<!-- end modal -->
 	
-	@foreach ($active_booking_details as $booking_detail)
-	<!-- The Modal Edit Booking -->
+	<!-- @foreach ($active_booking_details as $booking_detail)
+	//The Modal Edit Booking 
 		<div class="modal fade compare-model" id="bookingcustomer_{{$booking_detail->id}}">
 			<div class="modal-dialog booking0customer">
 				<div class="modal-content">
@@ -1108,7 +1109,7 @@
 						</div>
 					</div>
 
-					<!-- Modal body -->
+					// Modal body 
 					<div class="modal-body body-tbm">
 						<div class="row"> 
 							<div class="col-lg-6 col-sm-6">
@@ -2221,22 +2222,15 @@
 				</div>
 			</div>
 		</div>
-	<!-- end modal -->
-	@endforeach
+	// end modal 
+	@endforeach -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
 
 <!-- Latest compiled and minified JavaScript -->
 <script>
-    $( function() {
-        $( "#membershipactivationdate" ).datepicker( { 
-        	autoclose: true,
-            minDate: 0,
-            changeMonth: true,
-            changeYear: true   
-        } );
-    } );
+    
 	$( function() {
         $( "#refunddate" ).datepicker( { 
         	autoclose: true,
@@ -2281,6 +2275,12 @@
     if(query_error == 1) {
         $("#card-error").html("Requested card number is already exists.");
     }
+
+
+	function changedate(){
+		$('#span_membership_activation').html($('#membershipactivationdate').val());
+		$('#span_membership_activation').addClass('red-fonts');
+	}
 
     $("#confirm-purchase").on('click', function(){
     	var cardNumber = $('#cardNumber').val()
