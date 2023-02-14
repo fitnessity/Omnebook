@@ -49,7 +49,56 @@
                         <h4 class="page-title">Add Family or Friends</h4>
                     </div>
 					
-                   <div class="add_family_section padding-1 white-bg border-radius1">
+					<div class="payment_info_section padding-2 white-bg border-radius1">
+						<div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>Eric Phipps </h2>
+								<p>(Son 35 yrs old)</p>
+								<div class="familyfrnd-info">
+									<a class="edit-family" href="#"> Edit </a>
+									<a class="delete-family" href="#"> Delete </a>
+								</div>
+                             </div>
+                         </div>
+						 <div class="add-family-frnd" style="cursor: pointer">
+                            <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+								<h2>( + )</h2>
+								<p class="add-fm-fr">Add Family Member or Friend</p>
+                             </div>
+                         </div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12">
+                            <div class="text-right btn-txt-pro">
+								<button type="submit" class="btn-nxt-profile">PREV </button>
+								<button type="submit" class="btn-nxt-profile">NEXT </button>
+                            </div>
+						</div>
+					</div>
+
+                   <?php /*?><div class="add_family_section padding-1 white-bg border-radius1">
+
                         <form name="frm_family" id="frm_family" action="{{Route('addFamilyMember')}}" method="post"  autocomplete="off" >
                             @csrf
                             <div class="addfmaily_block">
@@ -304,8 +353,11 @@
                                 <input type="hidden" name="family_count" id="family_count" value="{{$fam_cnt}}" />
                                 <input type="submit" name="btn_family" id="btn_family" value="Submit" class="submit-btn">
                             </div>
+
                         </form> 
-                    </div>
+
+                    </div><?php */?>
+
 
                 </div>
 

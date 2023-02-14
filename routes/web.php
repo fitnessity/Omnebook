@@ -29,6 +29,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
+     Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -38,13 +39,19 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
 });
 
+Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
+    Route::get('/orders','DesignController@orders')->name('orders');
+    Route::get('/add_family','DesignController@add_family')->name('add_family');
+});
+
 Route::group(['middleware' => ['auth']], function(){
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
-        Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
-
+        //Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
+        Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
+        Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
         // Services
         //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
 

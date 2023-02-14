@@ -4,8 +4,8 @@
    </div>
 </div>
 <div class="row">
-
-   <form method="post" action="{{route('business.schedulers.checkin_details.update', ['scheduler'=>$booking_checkin_detail->business_activity_scheduler_id, 'checkin_detail' => $booking_checkin_detail->id])}}">
+  <div class="col-md-12">
+    <form method="post" action="{{route('business.schedulers.checkin_details.update', ['scheduler'=>$booking_checkin_detail->business_activity_scheduler_id, 'checkin_detail' => $booking_checkin_detail->id])}}">
      @csrf
      @method('PUT')
 
@@ -45,4 +45,5 @@
       </select>
       <button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</button>
    </form>
+  </div>
 </div>

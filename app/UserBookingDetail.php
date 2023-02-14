@@ -189,5 +189,57 @@ class UserBookingDetail extends Model
         return $remaining;
     }
 
+    public function getextrafees($feeName){
+        $fees = 0;
+        $extra_fees =  json_decode($this->extra_fees);
+        if(!empty($extra_fees)){
+            foreach(['service_fee', 'fitnessity_fee', 'tax' ,'tip' ,'discount'] as $key){
+                if($key == $feeName && $extra_fees->$key != null){
+                   $fees = $extra_fees->$key;
+                }
+            }
+        }
+        return $fees;
+    }
+
+    public function getperoderprice(){
+        $fees = 0;
+        $extra_fees =  json_decode($this->extra_fees);
+        if(!empty($extra_fees)){
+            foreach(['service_fee', 'tax' ,'tip' ,'discount'] as $key){
+                if($extra_fees->$key != null && $extra_fees->$key != 0){
+                    if($key == 'service_fee'){
+                        $fees += ($this->total() * $extra_fees->$key) /100;
+                    }else if($key == 'discount'){
+                        $fees -= $extra_fees->$key;
+                    }else{
+                        $fees += $extra_fees->$key;
+                    }
+                }
+            }
+        }
+        return $this->total() + $fees;
+    }
+
+    public static function getexpiretime($time,$contract_date){
+        $expired_at = '';
+        $explodetime = explode(' ',$time);
+        if(!empty($explodetime) && array_key_exists(1, $explodetime)){
+            if($explodetime[1] == 'Months'){
+                $daynum = '+'.$explodetime[0].' month';
+                $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+            }else if($explodetime[1] == 'Days'){
+                $daynum = '+'.$explodetime[0].' days';
+                $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+            }else if($explodetime[1] == 'Weeks'){
+                $daynum = '+'.$explodetime[0].' weeks';
+                $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+            }else {
+                $daynum = '+'.$explodetime[0].' years';
+                $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
+            }
+        }
+        return $expired_at;
+    }
 }
 

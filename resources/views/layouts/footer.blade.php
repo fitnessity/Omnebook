@@ -169,11 +169,17 @@
 		});
 		
 		$(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
+            var width = $(this).data('modal-width');
+            if(width == undefined){
+                width = '600px';
+            }            
             e.preventDefault()
             $.ajax({
                 url: $(this).data('url'),
                 success: function(html){
                     $('#ajax_html_modal .modal-body').html(html)
+                    $('#ajax_html_modal .modal-dialog').css({width:width});
+
                     $('#ajax_html_modal').modal('show')
                 }
             })

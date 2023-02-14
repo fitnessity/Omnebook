@@ -30,6 +30,7 @@ use App\User;
 use App\Customer;
 use App\CustomerFamilyDetail;
 use App\BusinessTerms;
+use App\UserBookingDetail;
 
 use Request as resAll;
 
@@ -227,13 +228,28 @@ class CustomerController extends Controller {
         }
     }
 
-    public function activity_visits(Request $request, $business_id, $id){
+   /* public function activity_visits(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($id);
-        $visits = $customer->visits()->where('order_detail_id', $request->booking_detail_id)->get();
+        $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
         
         return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
+    }*/
+
+    public function visit_modal(Request $request, $business_id, $id){
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customer = $company->customers->find($id);
+        $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
+        
+        return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
+    } 
+
+    public function visit_membership_modal(Request $request, $business_id ,$id){
+        $user = Auth::user();
+        $booking_detail = UserBookingDetail::where('id',$request->booking_detail_id)->first();
+        return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id]);
     }
 
     public function savenotes(Request $request){
