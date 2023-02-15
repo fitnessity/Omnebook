@@ -247,14 +247,14 @@ class SchedulerController extends Controller
           $html = '';
           if($request->chk == 'program'){
                $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$request->sid)->get();
-               $output = '<option value="">Selct Category</option>';
+               $output = '<option value="">Select Category</option>';
                foreach($catelist as $cl){
                     $output .= '<option value="'.$cl->id.'">'.$cl->category_title.'</option>';
                }
           }else if($request->chk == 'category'){
                $catedata = BusinessPriceDetailsAges::where('id',$request->sid)->first();
                $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
-               $output = '<option value="">Selct Price Title</option>';
+               $output = '<option value="">Select Price Title</option>';
                foreach($pricelist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
@@ -270,7 +270,7 @@ class SchedulerController extends Controller
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
           }else if($request->chk == 'priceopt'){
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
-               $output = '<option value="">Selct Membership Type</option>';
+               $output = '<option value="">Select Membership Type</option>';
                foreach($membershiplist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
                }
