@@ -44,23 +44,16 @@
                         $Sold_out = '';
                         $serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->first();
                         $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
-                      /*  print_r($item);exit();*/
                         if(!empty($item['adult'])){
                             $totalquantity += $item['adult']['quantity'];
-                            /*echo $serprice['adult_discount'];
-                            echo $item['adult']['price'];*/
                             $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
                         }
                         if(!empty($item['child'])){
                             $totalquantity += $item['child']['quantity'];
-                           /* echo $serprice['child_discount'];
-                            echo $item['child']['price'];*/
                             $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
                         }
                         if(!empty($item['infant'])){
                             $totalquantity += $item['infant']['quantity'];
-                            /*echo $serprice['infant_discount'];
-                            echo $item['infant']['price'];*/
                             $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
                         }
 
@@ -73,7 +66,6 @@
     						}
     					}else{ $profilePic = url('/public/images/service-nofound.jpg'); }
     					
-    					/*$bookscheduler = BusinessActivityScheduler::where('serviceid', $item["code"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();*/
                         $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
 
                         $tot_cart_qty = ($db_totalquantity + $totalquantity);
@@ -82,22 +74,19 @@
                             $Sold_out = "Sold Out";
                         }
     					$act = BusinessServices::where('id', $item["code"])->first();
-    					//DB::enableQueryLog();
                         $BusinessTerms = BusinessTerms::where('cid',$act["cid"])->first();
                         $termcondfaqtext = @$BusinessTerms->termcondfaqtext;
                         $contracttermstext = @$BusinessTerms->contracttermstext;
                         $liabilitytext = @$BusinessTerms->liabilitytext;
                         $covidtext = @$BusinessTerms->covidtext;
                         $refundpolicytext = @$BusinessTerms->refundpolicytext;
-    					//dd(\DB::getQueryLog());
     					
     					$service_fee= ($item["totalprice"] * $fees->service_fee)/100;
     					$tax= ($item["totalprice"] * $fees->site_tax)/100;
     					$total_amount = $item["totalprice"] + $service_fee + $tax;
     					$iprice = number_format($total_amount,0, '.', '');
     					$daynum = '+'.@$serprice['pay_setnum'].' '.strtolower(@$serprice['pay_setduration']);
-    					$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));
-    					//echo $total_amount.'---'.$iprice.'---'.$item["price"];		
+    					$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));	
     			?>
             		<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
                     <input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
@@ -119,10 +108,6 @@
                                 <div class="col-lg-7">
                                     <div class="ord-info">
                                         <h4><?= $item["name"]; ?></h4>
-                                        <!--<div class="info-display">
-                                            <label>Payment Type:</label>
-                                            <span>Day Tour</label>
-                                        </div>	-->
 										<div class="row">
 											<div class="col-md-6">
 												<div class="info-display">
@@ -150,16 +135,6 @@
     									} 
     									?>
                                         
-                                        <?php
-                                        /*if(@$bookscheduler[0]['set_duration']!=''){
-    										$tm=explode(' ',$bookscheduler[0]['set_duration']);
-    										$hr=''; $min=''; $sec='';
-    										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-    										if($tm[2]!=0){ $min=$tm[2].'min. '; }
-    										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-    										if($hr!='' || $min!='' || $sec!='')
-    										{ echo '<div class="info-display"><label>Duration:</label><span>'.$hr.$min.$sec.'</span></label></div>'; } 
-    									} */?>
 										<div class="row">
 											<div class="col-md-6">
 												<div class="info-display">
@@ -431,9 +406,7 @@
                                             } 
                                         ?>
                                     </div>
-                                    <?php } 
-                                    ?>
-                                   <!--  <a class="participant-cart" data-toggle="modal" data-target="#newparticipant">+ Add New Participant</a> -->
+                                    <?php } ?>
                                     <div class="select-sparetor">
                                         <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}','{{$profilePic}}','{{$item["name"]}}','{{date("m/d/Y",strtotime($item["sesdate"]))}}')">
                                         <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
@@ -469,7 +442,6 @@
                     </div>
                     <script>
     					$('.familypart').change(function() {
-    						// /alert('hii');
     						var value = $(this).children("option:selected").val();
     						if(value == 'addparticipate'){
     							$('#newparticipant').modal('show');
@@ -510,6 +482,7 @@
     					});
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
+
                     <div class="modal fade compare-model" id="termsModal_{{$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
@@ -655,10 +628,7 @@
     							<div class="inner-box-left"> 
     								<label>Bookings</label>
     								<label>Subtotal </label>
-    								<!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
     								<label>Taxes & Fees: </label>
-                                    {{-- <label>Discount: </label> --}}
-    								<!-- <label>Shpping:</label> -->
     							</div>
     						</div>
     						<div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -672,10 +642,7 @@
     									@endif
     									
     								</span>
-    								<!-- <span> <?php /*echo "$ " .number_format($service_fee,2);*/ ?> </span> -->
     								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
-    								{{-- <span> {{number_format($discount,2)}} </span> --}}
-                                    <!-- <span> $0 </span> -->
     							</div>
     						</div>
     					</div>
@@ -788,6 +755,13 @@
         						</div>
                             </div>
     					</div>
+    					@if (session('stripeErrorMsg'))
+    					<div class='form-row row'>
+                            <div class='col-md-12 error form-group'>
+                                <div class='alert-danger alert'> {{ session('stripeErrorMsg') }}</div>
+                            </div>
+                        </div>
+                        @endif
                         <div class="btn-ord-txt">
                             <button class="post-btn-red" type="submit" id="checkout-button" @if($soldout_chk == 1) disabled @endif>Check Out</button>
                         </div>
@@ -818,20 +792,14 @@
                                 <div class="inner-box-left"> 
                                     <label>Bookings</label>
                                     <label>Subtotal </label>
-                                    <!-- <label>Service Fee <i class="fas fa-info-circle info-tooltip" id="tooltipex" data-placement="top" title="The fee helps support the Fitnessity Platform and covers a broad range of operating cost including insurance, background checks, and customer support."></i></label> -->
                                     <label>Taxes & Fees:</label>
-                                    <label>Discount: </label>
-                                   <!--  <label>Shpping:</label> -->
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
                                 <div class="inner-box-right"> 
                                     <span> 0 </span>
                                     <span> $ 0.00 </span>
-                                   <!--  <span> $ 0.00 </span> -->
                                     <span> $ 0.00 </span>
-                                    <span> $ 0.00 </span>
-                                   <!--  <span> $0 </span> -->
                                 </div>
                             </div>
                         </div>
