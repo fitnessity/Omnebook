@@ -295,7 +295,7 @@
 										</select>
 									</div>
 									<input type="hidden" id="expire_duration" value="{{$booking_detail->expired_duration}}">
-									<button type="button" class="btn-nxt btn-search-checkout mb-00 membership-save" id="" data-behavior="update_order_detail" data-booking-detail-id = "{{$booking_detail->id}}">Save </button>
+									<button type="button" class="btn-nxt btn-search-checkout mb-00 membership-save" id="" data-behavior="update_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Save </button>
 								</div>
 							</div>
 						</div>
@@ -757,7 +757,7 @@
 						<div class="void-box">
 							<div class="void-transaction">
 								<p>Voiding this transaction will delete this record from your system, You will not be able to undo this once you agree to void.</p>
-								<button type="button" class="btn-nxt mt-00" id=""  data-behavior="destroy_order_detail" data-booking-id="{{$booking_detail->booking_id}}">Yes, Void This Sale</button>
+								<button type="button" class="btn-nxt mt-00" id=""  data-behavior="destroy_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Yes, Void This Sale</button>
 							</div>
 						</div>
 						<div class="row">
@@ -780,7 +780,7 @@
 						</div>
 						<div class="refund-details"> 
 							<label>Total Amount Paid: </label>
-							<span> ${{$booking_detail->booking->amount}} (Original payment method: xxxx 3456) </span>
+							<span> ${{$booking_detail->booking->amount}} (Original payment method: {{$booking_detail->booking->getstripecard()}}) </span>
 						</div>
 						<div class="refund-details"> 
 							<label>Refund Issue Date: </label>
@@ -790,20 +790,16 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Refund Amount:  </label>
-							<input class="form-control" type="text" id="num" name="num" placeholder="20" value="">
+							<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="">
 							<h4>(Refund amount can’t be greater than the total amount paid)</h4>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Refund Method: </label>
-							<select name="" id="" class="form-control">
-								<option value="">Issue refund to payment method xxx 3456   </option>
-								<option value=""></option>
-								<option value=""></option>
-							</select>
+							<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500"></textarea>
 						</div>
 						<div class="refund-details text-center">
-							<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
-							<button type="submit" class="btn-nxt mb-00 mt-00" id="">Issue The Refund</button>
+							<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+							<button type="button" class="btn-nxt mb-00 mt-00" id="" data-behavior="refund_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
 						</div>
 						
 					</div>
@@ -1076,7 +1072,7 @@
 								</div>
 							</div>
 							<div class="col-md-6 col-xs-12">
-								<button type="button" class="btn-nxt suspend" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}">Suspend/Freeze</button>
+								<button type="button" class="btn-nxt suspend" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}"  data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Suspend/Freeze</button>
 							</div>
 						</div>
 						<div class="row">
@@ -1121,7 +1117,7 @@
 							<div class="col-md-7 col-xs-12">
 								<div class="refundcomment refund-note">
 									<p>By clicking terminate, you will be removing all remaining contract & membership agreements, payment agreements & scheduled recurring payments. </p>
-									<button type="submit" class="btn-nxt" id="" data-behavior="terminate_order_detail" data-booking-detail-id = "{{$booking_detail->id}}">Terminate</button>
+									<button type="submit" class="btn-nxt" id="" data-behavior="terminate_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Terminate</button>
 								</div>
 							</div>
 						</div>
@@ -1210,6 +1206,27 @@
                 expire_duration: $('#expire_duration').val(),
                 membershipactivationdate: $('#membershipactivationdate').val(),
                 session: $('#editSession').val(),
+                customer_id:  $(this).data('customer-id'),
+                booking_id:  $(this).data('booking-id'),
+            },
+            success:function(response) {
+                location.reload()
+            },
+        });
+    });
+	$(document).on('click', "[data-behavior~=refund_order_detail]", function(){
+        $.ajax({
+            url: "/business/{{$business_id}}/refund/",
+            type: "POST",
+            data:{
+                _token: '{{csrf_token()}}', 
+                booking_detail_id: $(this).data('booking-detail-id'),
+                refund_reason: $('#refund_reason').val(),
+                refunddate: $('#refunddate').val(),
+                refund_amount: $('#refund_amount').val(),
+                refund_method: $('#refund_method').val(),
+                customer_id:  $(this).data('customer-id'),
+                booking_id:  $(this).data('booking-id'),
             },
             success:function(response) {
                 location.reload()
@@ -1229,6 +1246,8 @@
                 suspensionenddate: $('#suspensionenddate').val(),
                 suspension_fee: $('#suspension_fee').val(),
                 suspension_comment: $('#suspension_comment').val(),
+                customer_id:  $(this).data('customer-id'),
+                booking_id:  $(this).data('booking-id'),
             },
             success:function(response) {
                 location.reload()
@@ -1247,6 +1266,8 @@
                 terminated_at: $('#terminationdate').val(),
                 terminate_fee: $('#terminate_fee').val(),
                 terminate_comment: $('#terminate_comment').val(),
+                customer_id:  $(this).data('customer-id'),
+                booking_id:  $(this).data('booking-id'),
             },
             success:function(response) {
                 location.reload()
@@ -1261,9 +1282,11 @@
             method: "DELETE",
             data:{
                 _token: '{{csrf_token()}}', 
+                customer_id:  $(this).data('customer-id'),
+                booking_detail_id:  $(this).data('booking-detail-id'),
             },
             success:function(response) {
-                //location.reload()
+                location.reload()
             },
         });
     });

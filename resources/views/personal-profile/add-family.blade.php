@@ -155,12 +155,6 @@
                                             <div class="form-group dob">
                                                 <label>mm/dd/yyyy</label>
                                                 <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control" value="{{$family->birthday}}" required="required" data-behavior="datepicker">
-												<script type="text/javascript">
-													$('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
-														format: 'm-d-Y',
-														default_position: 'below'
-													});
-												</script>
                                             </div>
                                             
                                         </div>
@@ -168,7 +162,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile{{$fam_cnt}}')">
+                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone" >
                                             </div>
 
 
@@ -176,14 +170,14 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_name[{{$fam_cnt}}]" id="emergency_name[{{$fam_cnt}}]" placeholder="Emergency Contact Name" class="form-control"  value="{{$family->emergency_contact_name}}" onkeypress="return event.charCode >= 65 && event.charCode <= 120">
+                                                <input type="text" name="emergency_name[{{$fam_cnt}}]" id="emergency_name[{{$fam_cnt}}]" placeholder="Emergency Contact Name" class="form-control"  value="{{$family->emergency_contact_name}}" onkeypress="return event.charCode >= 65 && event.charCode <= 120" >
                                             </div>
 
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('emergency_contact{{$fam_cnt}}')">
+                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                                 <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" >
                                             </div>
 
@@ -255,12 +249,6 @@
                                             <div class="form-group dob">
                                                 <label>mm/dd/yyyy</label>
                                                 <input type="text"  name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class=" form-control" required="required" data-behavior="datepicker">
-                                                <script type="text/javascript" >
-                                                $('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
-                                                    format: 'm-d-Y',
-                                                    default_position: 'below'
-                                                });
-                                            </script>
                                             </div>
                                             
                                         </div>
@@ -268,7 +256,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('mobile{{$fam_cnt}}')">
+                                                <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-behavior="text-phone">
                                             </div>
 
 
@@ -283,7 +271,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('emergency_contact[{{$fam_cnt}}]')" >										
+                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-behavior="text-phone">										
                                                 <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" />
                                             </div>
 
@@ -306,94 +294,37 @@
                             </div>
                         </form> 
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
-
 </div>
-<script type="text/javascript">
-</script>
 @include('layouts.footer')
-
-<!--<script src="{{ url('public/js/jquery-3.3.1.slim.min.js') }}"></script>-->
-
-<script src="{{ url('public/js/bootstrap.min.js') }}"></script>
 
 <script src="{{ url('public/js/metisMenu.min.js') }}"></script>
 
 <script src="{{ url('public/js/jquery.slimscroll.js') }}"></script>
 
 <script src="{{ url('public/js/moment.min.js') }}"></script>
-
-<!-- <script src="{{ url('public/js/fullcalendar.min.js') }}"></script>
-
-<script src="{{ url('public/js/jquery.fullcalendar.js') }}"></script>
- -->
 <script src="{{ url('public/js/custom.js') }}"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css" type="text/css">
-<script src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
-
-    
-
 <script>
-  
-    $(document).ready(function () {   
-        $(".birthdatezebra").Zebra_DatePicker({ format: "m-d-Y" });
-        $(".birthdatezebra").Zebra_DatePicker({
-            format: "m-d-Y",
-            onSelect: function() {
-                $(this).change();
-                /*alert($(this).val());*/
-            }
-        });
-    });    
-
-         
-
-        $(".addmore_addfamily").click(function () {
-            var cnt = $('#family_count').val();
-            if(cnt == 0){
-                cnt = parseInt(cnt) + parseInt(1);
-            }
-            var mobileid = "\'mobile" + cnt + "\'";
-            var emerconid = "\'emergency_contact" + cnt + "\'";
-            var str = '<div class="addfmaily_content mt-3">' +
-                    '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control" data-behavior="datepicker" value=""></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+mobileid+')"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input  type="text" name="emergency_name[' + cnt + ']" id="emergency_name[' + cnt + ']" placeholder="Emergency Contact Name" class="form-control" onkeypress="return event.charCode >= 65 && event.charCode <= 120"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+emerconid+')"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
+    $(".addmore_addfamily").click(function () {
+        var cnt = $('#family_count').val();
+        if(cnt == 0){
             cnt = parseInt(cnt) + parseInt(1);
-            $('#family_count').val(cnt);
-            $(".addfmaily_block").append(str);
-           /* $( ".birthdate" ).datepicker();*/
-
-            $('.birthdatezebra_'+cnt).Zebra_DatePicker({
-                format: 'm/d/Y',
-                default_position: 'below'
-            });
-            $(".birthdatezebra").Zebra_DatePicker({ format: "m/d/Y" });
-            $(".birthdatezebra").Zebra_DatePicker({
-                format: "m-d-Y",
-                onSelect: function() {
-                    $(this).change();
-                    /*alert($(this).val());*/
-                }
-            });
-        });
-    //});
-
+        }
+        var mobileid = "\'mobile" + cnt + "\'";
+        var emerconid = "\'emergency_contact" + cnt + "\'";
+        var str = '<div class="addfmaily_content mt-3">' +
+                '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control" data-behavior="datepicker" value=""></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input  type="text" name="emergency_name[' + cnt + ']" id="emergency_name[' + cnt + ']" placeholder="Emergency Contact Name" class="form-control" onkeypress="return event.charCode >= 65 && event.charCode <= 120"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
+        cnt = parseInt(cnt) + parseInt(1);
+        $('#family_count').val(cnt);
+        $(".addfmaily_block").append(str);
+    });
+  
 
     $(document).on("click", '.delete-icon', function (event) {
         var rm = $(this).attr("data-del");
-        //alert(rm);
-        /*var fld='removed_family'+rm;
-         document.getElementById(fld).value='delete';
-         var did="#familydiv"+rm;
-         $(did).hide();*/
-
         var _token = $("input[name='_token']").val();
         $.ajax({
             type: 'POST',
@@ -405,21 +336,9 @@
             success: function (data) {
                 alert("Delete Family Member");
                 window.location.reload();
-                //$(".edit_profile_section").load(location.href + " .edit_profile_section");
             }
         });
     });
-
-    function changeformate(idname) {
-        /*$('#b_contact').val();*/
-        var con = $('#'+idname+'').val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $('#'+idname+'').val("(" + con + ")" + " ");
-        } else if (curchr == 9) {
-            $('#'+idname+'').val(con + "-");
-        }
-    }
 
 </script>
 
