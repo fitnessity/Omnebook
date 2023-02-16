@@ -37,4 +37,17 @@ class UserBookingDetailController extends Controller
     {
         UserBookingStatus::where('id',$id)->update(["status" => 'void']);
     }
+
+
+    public function refund(Request $request, $business_id){
+        //
+    } 
+
+    public function suspend(Request $request, $business_id){
+        UserBookingDetail::where('id',$request->booking_detail_id)->update(["status" => 'suspend' ,'suspend_reason' => $request->suspension_reason,'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,'suspend_fee' => $request->suspension_fee,'suspend_comment' =>$request->suspension_comment]);
+    } 
+
+    public function terminate(Request $request, $business_id){
+        UserBookingDetail::where('id',$request->booking_detail_id)->update(["status" => 'cancel' ,'terminate_reason' => $request->terminate_reason,'terminated_at' => date('Y-m-d',strtotime($request->terminatestartdate)),'terminate_fee' => $request->terminate_fee,'terminate_comment' =>$request->terminate_comment]);
+    }
 }

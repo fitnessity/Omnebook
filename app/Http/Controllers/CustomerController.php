@@ -253,11 +253,10 @@ class CustomerController extends Controller {
     }
 
     public function savenotes(Request $request){
-
         $cust = Customer::findOrFail($request->cus_id);
         Customer::where('id',$cust->id)->update(["notes"=>$request->notetext]);
         
-        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
+        return redirect()->route('business_customer_show',['business_id' => $request->business_id, 'id'=>$request->customer_id]);
     }
 
     public function addcustomerfamily ($id){
