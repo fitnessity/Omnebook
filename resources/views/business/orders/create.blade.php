@@ -965,6 +965,17 @@
 										</div>
 									</div>
 
+									@if (session('stripeErrorMsg'))
+										<div class="col-md-12">
+											<div class='form-row row'>
+		                                        <div class='col-md-12  error form-group'>
+												    <div class="alert-danger alert">
+												        {{ session('stripeErrorMsg') }}
+												    </div>
+												</div>
+											</div>
+										</div>
+									@endif
 									<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
 									<input type="hidden" name="cash_change" id="cash_change" value="">
 									<input type="hidden" name="card_id" id="card_id" value="">

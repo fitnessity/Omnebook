@@ -790,7 +790,7 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Refund Amount:  </label>
-							<input class="form-control" type="text" id="num" name="num" placeholder="20" value="20">
+							<input class="form-control" type="text" id="num" name="num" placeholder="20" value="">
 							<h4>(Refund amount can’t be greater than the total amount paid)</h4>
 						</div>
 						<div class="refund-details refund-method"> 
@@ -1052,11 +1052,7 @@
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Reason for Suspension: </label>
-							<select name="" id="" class="form-control">
-								<option value=""> Select or input an option</option>
-								<option value=""></option>
-								<option value=""></option>
-							</select>
+							<textarea class="form-control" rows="2" name="suspension_reason" id="suspension_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Suspension Start Date: </label>
@@ -1070,17 +1066,17 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Suspension Fee: </label>
-							<input class="form-control" type="text" id="num" name="num" placeholder="$">
+							<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$">
 						</div>
 						<div class="row">
 							<div class="col-md-6 col-xs-12">
 								<div class="refundcomment">
 									<label>Leave a comment:</label>
-									<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+									<textarea class="form-control" rows="2" name="suspension_comment" id="suspension_comment" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
 								</div>
 							</div>
 							<div class="col-md-6 col-xs-12">
-								<button type="submit" class="btn-nxt suspend" id="">Suspend/Freeze</button>
+								<button type="button" class="btn-nxt suspend" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}">Suspend/Freeze</button>
 							</div>
 						</div>
 						<div class="row">
@@ -1103,11 +1099,7 @@
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Reason for Termination:  </label>
-							<select name="" id="" class="form-control">
-								<option value=""> Select or input an option</option>
-								<option value=""></option>
-								<option value=""></option>
-							</select>
+							<textarea class="form-control" rows="2" name="terminate_reason" id="terminate_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Termination  Date:</label>
@@ -1117,19 +1109,19 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Termination Fee: </label>
-							<input class="form-control" type="text" id="num" name="num" placeholder="$">
+							<input class="form-control" type="text" id="terminate_fee" name="terminate_fee" placeholder="$">
 						</div>
 						<div class="row">
 							<div class="col-md-5 col-xs-12">
 								<div class="refundcomment">
 									<label>Leave a comment:</label>
-									<textarea class="form-control" rows="2" name="frm_programdesc" id="" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+									<textarea class="form-control" rows="2" name="terminate_comment" id="terminate_comment" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
 								</div>
 							</div>
 							<div class="col-md-7 col-xs-12">
 								<div class="refundcomment refund-note">
 									<p>By clicking terminate, you will be removing all remaining contract & membership agreements, payment agreements & scheduled recurring payments. </p>
-									<button type="submit" class="btn-nxt" id="">Terminate</button>
+									<button type="submit" class="btn-nxt" id="" data-behavior="terminate_order_detail" data-booking-detail-id = "{{$booking_detail->id}}">Terminate</button>
 								</div>
 							</div>
 						</div>
@@ -1175,6 +1167,39 @@
         } );
     } );
 
+    $( function() {
+        $( "#refunddate" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } );
+	 $( function() {
+        $( "#suspensionstartdate" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } );
+	$( function() {
+        $( "#suspensionenddate" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } );
+	$( function() {
+        $( "#terminationdate" ).datepicker( { 
+        	autoclose: true,
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true   
+        } );
+    } ); 
+
     $(document).on('click', "[data-behavior~=update_order_detail]", function(){
         $.ajax({
             url: "/business/{{$business_id}}/orders/" + $(this).data('booking-detail-id'),
@@ -1185,6 +1210,43 @@
                 expire_duration: $('#expire_duration').val(),
                 membershipactivationdate: $('#membershipactivationdate').val(),
                 session: $('#editSession').val(),
+            },
+            success:function(response) {
+                location.reload()
+            },
+        });
+    });
+
+    $(document).on('click', "[data-behavior~=suspend_order_detail]", function(){
+        $.ajax({
+            url: "/business/{{$business_id}}/suspend/",
+            type: "POST",
+            data:{
+                _token: '{{csrf_token()}}', 
+                booking_detail_id: $(this).data('booking-detail-id'),
+                suspension_reason: $('#suspension_reason').val(),
+                suspensionstartdate: $('#suspensionstartdate').val(),
+                suspensionenddate: $('#suspensionenddate').val(),
+                suspension_fee: $('#suspension_fee').val(),
+                suspension_comment: $('#suspension_comment').val(),
+            },
+            success:function(response) {
+                location.reload()
+            },
+        });
+    });
+
+    $(document).on('click', "[data-behavior~=terminate_order_detail]", function(){
+        $.ajax({
+            url: "/business/{{$business_id}}/terminate/",
+            type: "POST",
+            data:{
+                _token: '{{csrf_token()}}', 
+                booking_detail_id: $(this).data('booking-detail-id'),
+                terminate_reason: $('#terminate_reason').val(),
+                terminated_at: $('#terminationdate').val(),
+                terminate_fee: $('#terminate_fee').val(),
+                terminate_comment: $('#terminate_comment').val(),
             },
             success:function(response) {
                 location.reload()

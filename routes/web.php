@@ -30,6 +30,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
      Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
+     Route::get('refund', 'UserBookingDetailController@refund')->name('refund');
+     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
+     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -43,6 +46,11 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/orders','DesignController@orders')->name('orders');
     Route::get('/add_family','DesignController@add_family')->name('add_family');
 });
+
+Route::group(['middleware' => ['auth','customer_scope']], function(){
+    Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
+});
+
 
 Route::group(['middleware' => ['auth']], function(){
     Route::prefix('/business/{business_id}')->group(function () {
@@ -995,7 +1003,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
-    Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
     Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
