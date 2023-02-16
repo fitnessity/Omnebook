@@ -269,22 +269,23 @@ class SchedulerController extends Controller
 
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
           }else if($request->chk == 'priceopt'){
-               $membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
-               $output = '<option value="">Select Membership Type</option>';
+               //$membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
+               $membershiplist = BusinessPriceDetails::where('id',$request->sid)->first();
+               /*$output = '<option value="">Select Membership Type</option>';
                foreach($membershiplist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
-               }
+               }*/
 
                //print_r( $membershiplist);exit;
-
+               $output = $membershiplist->membership_type;
                if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
-                    $total_price_val_adult =  @$membershiplist[0]['adult_weekend_price_diff'];
-                    $total_price_val_child =  @$membershiplist[0]['child_weekend_price_diff'];
-                    $total_price_val_infant =  @$membershiplist[0]['infant_weekend_price_diff'];
+                    $total_price_val_adult =  @$membershiplist['adult_weekend_price_diff'];
+                    $total_price_val_child =  @$membershiplist['child_weekend_price_diff'];
+                    $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
                }else{
-                    $total_price_val_adult =  @$membershiplist[0]['adult_cus_weekly_price'];
-                    $total_price_val_child =  @$membershiplist[0]['child_cus_weekly_price'];
-                    $total_price_val_infant =  @$membershiplist[0]['infant_cus_weekly_price']; 
+                    $total_price_val_adult =  @$membershiplist['adult_cus_weekly_price'];
+                    $total_price_val_child =  @$membershiplist['child_cus_weekly_price'];
+                    $total_price_val_infant =  @$membershiplist['infant_cus_weekly_price']; 
                }
                $aduid = "adultprice";
                $childtid = "childprice";
@@ -297,10 +298,10 @@ class SchedulerController extends Controller
                     $session_val = "session_valajax";
                }
                
-               $html .='<input type="hidden" name="session_val" id="'.$session_val.'" value="'.@$membershiplist[0]['pay_session'].'" >
+               $html .='<input type="hidden" name="session_val" id="'.$session_val.'" value="'.@$membershiplist['pay_session'].'" >
                          <input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
                          <input type="hidden" name="childprice" id="'.$childtid.'" value="'.$total_price_val_child.'" >
-                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >^^'.$membershiplist[0]['pay_setnum'].'!!'.$membershiplist[0]['pay_setduration']; 
+                         <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >^^'.$membershiplist['pay_setnum'].'!!'.$membershiplist['pay_setduration']; 
           }else if($request->chk == 'participat'){
                $data = explode('~~',$request->sid);
                $data1 = explode('^^',$data[1]);

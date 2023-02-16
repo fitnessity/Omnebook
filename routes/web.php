@@ -29,10 +29,12 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
-     Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
-     Route::get('refund', 'UserBookingDetailController@refund')->name('refund');
-     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
-     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
+    Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
+    Route::post('refund', 'UserBookingDetailController@refund')->name('refund');
+    Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
+    Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
+    Route::resource('customers', 'CustomerController')->only(['index', 'update', 'destroy', 'store']);
+    Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -59,7 +61,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         //Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
-        Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
+        /*Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');*/
         // Services
         //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
 

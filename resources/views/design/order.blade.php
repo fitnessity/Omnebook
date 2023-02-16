@@ -18,7 +18,6 @@
 <div class="page-wrapper inner_top" id="wrapper">
     <div class="page-container">
         <!-- Left Sidebar Start -->
-        @include('personal-profile.left_panel')
         <!-- Left Sidebar End -->
         <div class="page-content-wrapper">
             <div class="content-page">
@@ -103,26 +102,6 @@
 </div>
  
 @include('layouts.footer')
-
-
-
-<script src="{{ url('public/js/jquery.1.11.1.min.js') }}"></script>
-
-<script src="{{ url('public/js/bootstrap.min.js') }}"></script>
-
-<script src="{{ url('public/js/metisMenu.min.js') }}"></script>
-
-<script src="{{ url('public/js/jquery.slimscroll.js') }}"></script>
-
-<script src="{{ url('public/js/moment.min.js') }}"></script>
-
-<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
-
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
-
-<script src="{{ url('public/js/custom.js') }}"></script>
-<!-- <script src="{{ url('public/js/compare/jquery-1.9.1.min.js') }}"></script> -->
-
 
 
 @endsection
