@@ -152,12 +152,12 @@
 													<button type="button" data-toggle="modal" data-target="#addpartcipate" class="btn-nxt search-add-client"> Select </button>
 												</div>
 											</div>
-											<div class="col-md-4 col-sm-4 col-xs-12">
+											<!-- <div class="col-md-4 col-sm-4 col-xs-12">
 												<label> Membership Option</label>
 												<select name="membership_opt_list" id="membership_opt_list" class="form-control" onchange="loaddropdown('mpopt',this,this.value);">
 													<option value="">Select</option>
 												</select>
-											</div>
+											</div> -->
 										</div>
 									</div>
 								</div>
@@ -1607,9 +1607,9 @@
 			$('#pt_name').html(selectedText);
 			$('#membership_opt_list').html('');
 		}
-		if(chk == 'mpopt'){
+		/*if(chk == 'mpopt'){
 			$('#mp_name').html(selectedText);
-		}
+		}*/
 
 		if(chk == 'duration'){
 			$('#duration').html($('#duration_int').val() +' '+ selectedText);
@@ -1647,7 +1647,8 @@
 				}
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
-					$('#membership_opt_list').html(data1[0]);
+					//$('#membership_opt_list').html(data1[0]);
+					$('#mp_name').html(data1[0]);
 					var part = data1[1].split('^^');
 					$('#pricediv').html(part[0]);
 					var second = part[1].split('!!');

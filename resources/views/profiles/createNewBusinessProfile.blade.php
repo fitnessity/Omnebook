@@ -6430,7 +6430,7 @@
 
                                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                                                                            <button type="button" class="btn button-fitness"  id="submitFormchild">Save</button>
+                                                                            <button type="submit" class="btn button-fitness"  id="submitFormchild">Save</button>
 
                                                                         </div>
 
@@ -6681,7 +6681,7 @@
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                                                                        <button type="button" class="btn button-fitness"  id="submitFormchild">Save</button>
+                                                                        <button type="submit" class="btn button-fitness"  id="submitFormchild">Save</button>
 
                                                                     </div>
                                                                 </div>

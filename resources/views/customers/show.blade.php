@@ -532,12 +532,16 @@
 																			</div>
 																		</div>
 																		<div class="row">
-																			<div class="col-md-6 col-xs-6">
+																			<div class="col-md-4 col-xs-6">
 																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
 																			</div>
-																			<div class="col-md-6 col-xs-6">
-																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Edit Booking </a>
+																			<div class="col-md-4 col-xs-6 text-center">
+																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="1050px"> Edit Booking </a>
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
+																			</div>
+																			<div class="col-md-4 col-xs-6">
+																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_autopaymodel', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
+																				<!-- <a class="auto-pay" data-toggle="modal" data-target="#auto-pay"> Auto Pay Details </a> -->
 																			</div>
 																		</div>
 																	</div>
@@ -1100,7 +1104,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
 
-<!-- Latest compiled and minified JavaScript -->
 
 <script type="text/javascript">
     $(document).ready(function() {

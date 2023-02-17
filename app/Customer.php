@@ -96,7 +96,7 @@ class Customer extends Authenticatable
 
     public function BookingStatus()
     {
-        return $this->hasMany(UserBookingStatus::class,'user_id');
+        return $this->hasMany(UserBookingStatus::class,'customer_id');
     }
 
 
@@ -455,6 +455,10 @@ class Customer extends Authenticatable
         }else{
             return false;
         }
+    }
+
+    public function refund(){
+        //refund to customer
     }
     
 }
