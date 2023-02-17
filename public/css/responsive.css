@@ -1619,6 +1619,7 @@
 	.modal-dialog.eventcalender{width: 40%;}
 	.modal-dialog.book-client-training{width: 90%;}
 	.modal-dialog.booking-time{width: 55%;}
+	.modal-dialog.pay-details{width: 77%;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1709,6 +1710,7 @@
 	.modal-dialog.book-client-training{width: 70%;}
 	.modal-dialog.booking-time{width: 70%;}
 	.booking-activity-view .view-booking {top: 36px !important;}
+	.modal-dialog.pay-details{width: 70%;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
