@@ -500,13 +500,22 @@
 																				<div class="col-md-6 col-xs-6">
 																					<span> {{date('h:i A', strtotime($booking_detail->business_services->shift_start))}}</span>
 																				</div>
-																				
-																				<div class="col-md-6 col-xs-6">
-																					<label>BOOKED BY:</label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span>{$booking_detail->booking->customer->firstname} {$booking_detail->booking->customer->lastname}</span>
-																				</div>
+																				@if ($booking_detail->booking->user)
+																					<div class="col-md-6 col-xs-6">
+																						<label>BOOKED BY:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online)</span>
+																					</div>
+																				@endif
+																				@if ($booking_detail->booking->customer)
+																					<div class="col-md-6 col-xs-6">
+																						<label>BOOKED BY:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->booking->customer->firstname}} {{$booking_detail->booking->customer->lastname}}</span>
+																					</div>
+																				@endif
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>CHECK IN DATE: </label>
@@ -655,7 +664,15 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{$booking_detail->booking->user->firstname} {$booking_detail->booking->user->lastname}</span>
+																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (online)</span>
+																					</div>
+																				@endif
+																				@if ($booking_detail->booking->customer)
+																					<div class="col-md-6 col-xs-6">
+																						<label>BOOKED BY:</label>
+																					</div>
+																					<div class="col-md-6 col-xs-6">
+																						<span>{{$booking_detail->booking->customer->firstname}} {{$booking_detail->booking->customer->lastname}}</span>
 																					</div>
 																				@endif
 																				
