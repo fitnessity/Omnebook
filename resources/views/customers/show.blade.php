@@ -513,7 +513,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->customer->firstname}} {{$booking_detail->booking->customer->lastname}}</span>
+																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}}</span>
 																					</div>
 																				@endif
 																				
@@ -672,7 +672,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->customer->firstname}} {{$booking_detail->booking->customer->lastname}}</span>
+																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}}</span>
 																					</div>
 																				@endif
 																				
