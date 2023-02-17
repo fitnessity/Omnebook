@@ -30,6 +30,13 @@
 					@foreach($service_type_ary as $st)
 					<div class="tab-pane @if($serviceType== $st ) active @endif" id="tabs-{{$st}}" role="tabpanel">
 						<div class="row">
+							<div class="col-md-12 text-right">
+								<div class="calendar-icon">
+									<input type="text" name="date" class="date" readonly placeholder="DD/MM/YYYY" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
 							@foreach ($days as $date)
 								@php
 									$hint_class = ($filter_date->format('Y-m-d') == $date->format('Y-m-d')) ? 'pairets' : 'pairets-inviable';
@@ -168,6 +175,20 @@
 
 
 @include('layouts.footer')
+<script>
+$(function() {
+ $( ".date" ).datepicker({
+ dateFormat : 'dd/mm/yy',
+ showOn: "both",
+ buttonImage: "/public/img/calendar-icon.png",
+ buttonImageOnly: true,
+ buttonText: "Select date",
+ changeMonth: true,
+ changeYear: true,
+ yearRange: "-100:+0"
+ }); 
+});
+</script>
 
 <script>
 	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {

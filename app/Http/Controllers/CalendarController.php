@@ -108,20 +108,100 @@ class CalendarController extends Controller
                 }else{
                     $tabval = "upcoming";
                 }
-
+                $html .='<div class="calendar-body">';
                 if($ser_data->service_type == 'individual'){
-                    $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.route("personal.orders.index", ['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
+                    $html .='<h3>'.$ser_data->program_name.'</h3>
+                            <p>with Valor Mixed Martial Arts</p>
+                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
+                           <div class="calendar-time">
+                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
+                            </div>
+                            <div class="calendar-time">
+                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                        <a class="btn btn-danger" href="'.route("personal.orders.index", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
+                                    </div>
+                                </div>
+                            </div>';
+                            
                 }else if($ser_data->service_type == 'classes'){
-                    $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.route("personal.booking_gym_studio",['tabval' => $tabval]).'"  target="_blank">View booking details</a>'; 
+                    $html .='<h3>'.$ser_data->program_name.'</h3>
+                            <p>with Valor Mixed Martial Arts</p>
+                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
+                            <div class="calendar-time">
+                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
+                            </div>
+                            <div class="calendar-time">
+                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                        <a class="btn btn-danger" href="'.route("personal.booking_gym_studio", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
+                                    </div>
+                                </div>
+                            </div>';
+
                 }else if($ser_data->service_type == 'experience'){
-                    $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.route("personal.experience_page",['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
+                    $html .='<h3>'.$ser_data->program_name.'</h3>
+                            <p>with Valor Mixed Martial Arts</p>
+                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
+                            <div class="calendar-time">
+                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
+                            </div>
+                            <div class="calendar-time">
+                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                        <a class="btn btn-danger" href="'.route("personal.experience_page", ['tabval' => $tabval]).'" target="_blank">View Booking</a>
+                                    </div> 
+                                </div>
+                            </div>';
                 }else {
-                    $html .='<p id="activity_name">'.$ser_data->program_name.'</p>
-                            <a class="btn btn-danger" href="'.route("personal.events_page",['tabval' => $tabval]).'" target="_blank">View booking details</a>'; 
+                    $html .='<h3>'.$ser_data->program_name.'</h3>
+                            <p>with Valor Mixed Martial Arts</p>
+                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
+                            <div class="calendar-time">
+                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
+                            </div>
+                            <div class="calendar-time">
+                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="calendar-btns">
+                                        <a class="btn btn-danger" href="'.route("personal.events_page", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
+                                    </div>
+                                </div>
+                            </div>'; 
                 }
+                $html .='</div>';
             }
             
         }   
