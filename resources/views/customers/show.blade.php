@@ -505,7 +505,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online)</span>
+																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online Market place)</span>
 																					</div>
 																				@endif
 																				@if ($booking_detail->booking->customer)
@@ -513,7 +513,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}}</span>
+																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}} (In person)</span>
 																					</div>
 																				@endif
 																				
@@ -664,7 +664,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (online)</span>
+																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online Market place)</span>
 																					</div>
 																				@endif
 																				@if ($booking_detail->booking->customer)
@@ -672,7 +672,7 @@
 																						<label>BOOKED BY:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}}</span>
+																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}} (In person)</span>
 																					</div>
 																				@endif
 																				
