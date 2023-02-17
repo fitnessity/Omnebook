@@ -162,7 +162,7 @@
   <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
-		$(document).ready(function () { 
+		$(document).on('focus', '[data-behavior~=text-phone]', function(e){
 			$('[data-behavior~=text-phone]').usPhoneFormat({
             	format: '(xxx) xxx-xxxx',
 			});
@@ -185,13 +185,14 @@
             })
         });
 
-        $(function(){
+        $(document).on('focus', '[data-behavior~=datepicker]', function(e){
             $("[data-behavior~=datepicker]").datepicker( { 
-                minDate: 0,
+               /* minDate: 0,*/
                 changeMonth: true,
-                changeYear: true   
+                changeYear: true ,
+                yearRange: '1960:2060',
             });
-        })
+        });
 
         $(document).ready(function() {
             // hide #back-top first

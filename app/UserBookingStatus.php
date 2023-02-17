@@ -96,4 +96,26 @@ class UserBookingStatus extends Model
         return $pmt_type;
     }
 
+    public function getstripecard(){
+        $stripe = new \Stripe\StripeClient(
+            config('constants.STRIPE_KEY')
+        );
+
+        $last4 = '';
+        $card_id = '—';
+        $stripe_id = $this->stripe_id;
+        if($stripe_id != ''){
+            $payment_intent = $stripe->paymentIntents->retrieve(
+                $stripe_id,
+                []
+            );
+            $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
+        }
+
+        if($last4 != ''){
+            $card_id =  'XXXX'.$last4;
+        }
+
+        return $card_id;
+    }
 }
