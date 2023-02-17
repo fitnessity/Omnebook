@@ -278,15 +278,22 @@ class SchedulerController extends Controller
 
                //print_r( $membershiplist);exit;
                $output = $membershiplist->membership_type;
-               if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
+               $total_price_val_adult =  @$membershiplist['adult_cus_weekly_price'];
+               $total_price_val_child =  @$membershiplist['child_cus_weekly_price'];
+               $total_price_val_infant =  @$membershiplist['infant_cus_weekly_price']; 
+
+               if($total_price_val_adult == 0 &&  $total_price_val_adult == '' ){
                     $total_price_val_adult =  @$membershiplist['adult_weekend_price_diff'];
-                    $total_price_val_child =  @$membershiplist['child_weekend_price_diff'];
-                    $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
-               }else{
-                    $total_price_val_adult =  @$membershiplist['adult_cus_weekly_price'];
-                    $total_price_val_child =  @$membershiplist['child_cus_weekly_price'];
-                    $total_price_val_infant =  @$membershiplist['infant_cus_weekly_price']; 
                }
+
+               if($total_price_val_child == 0 &&  $total_price_val_child == '' ){
+                    $total_price_val_child =  @$membershiplist['child_weekend_price_diff'];
+               }
+
+               if($total_price_val_infant == 0 &&  $total_price_val_infant == '' ){
+                    $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
+               }
+
                $aduid = "adultprice";
                $childtid = "childprice";
                $infantid = "infantprice";

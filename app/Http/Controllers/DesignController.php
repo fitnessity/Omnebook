@@ -14,6 +14,11 @@ class DesignController extends Controller {
 	
         return view('design.order');
 	}
+	
+	public function add_family_for_customer(Request $request){
+	
+        return view('design.add_family_for_customer');
+	}
 
 
     public function add_family(Request $request){

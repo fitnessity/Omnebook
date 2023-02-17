@@ -22207,6 +22207,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .inner-accordion-titles{
 	border-bottom: 2px solid #ec1a23;
 	margin-bottom: 10px;
+	margin-top: 5px;
 }
 .customer-profile-info span{
 	float: right;
@@ -23855,7 +23856,6 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .visiting-view{
 	color: #333;
 	font-size: 15px;
-	float: right;
 	margin-bottom: 6px;
 }
 .visiting-view:hover{
@@ -23869,6 +23869,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .edit-booking-customer:hover{
 	color: #ea1515;
 }
+
 .edit-booking-title{
 	font-size: 16px;
 	font-weight: 600;
@@ -24421,4 +24422,37 @@ padding-left: 0px;
 	width: 25%;
 	text-align: center;
 }
-
+.auto-pay{
+	color: #333;
+	font-size: 15px;
+	margin-bottom: 6px;
+	float: right;
+}
+.auto-pay:hover{
+	color: #ea1515;
+}
+.auto-amount{
+	display: inline-flex;
+}
+.auto-amount label{
+	margin-right: 6px;
+}
+.auto-details-location span{
+	margin-right: 10px;
+}
+.auto-pay-btns{
+	background: none;
+	border: none;
+	text-decoration: underline;
+	margin-bottom: 15px;
+}
+.add-family-shared .form-group{
+	width: 20%; 
+	display: inline-block;
+}
+.add-family-shared label{
+	font-weight: normal;
+}
+.connect-account{
+	font-size: 17px;
+}

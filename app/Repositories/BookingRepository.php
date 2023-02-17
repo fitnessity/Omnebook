@@ -556,6 +556,46 @@ class BookingRepository
         return $one_array;
     }
 
+
+    public function getreceipemailtbody($oid,$orderdetailid){
+        $booking_status = UserBookingStatus::where('id',$oid)->first();
+        $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
+        $business_services = $booking_details->business_services;
+        $businessuser= $booking_details->business_services->company_information;
+        $BusinessPriceDetails = $booking_details->business_price_detail;
+        $qty = $booking_details->getparticipate();
+      
+        $participate = $booking_details->decodeparticipate();
+        $total = $booking_details->getperoderprice();
+        $price = $booking_details->total();
+        $discount = $booking_details->getextrafees('discount');
+        $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
+        $one_array =[];
+        $one_array = array (
+            "provider_Name" => $businessuser->company_name,  
+            "booking_ID" => $booking_status->order_id,  
+            "program_Name" => $business_services->program_name,   
+            "category" => $BusinessPriceDetails->business_price_details_ages->category_title,   
+            "price_Option" => $BusinessPriceDetails->price_title,  
+            "sessions" => $booking_details->pay_session,  
+            "membership" => $BusinessPriceDetails->membership_type,  
+            "quantity" => $qty ,  
+            "participate" => $participate,  
+            "activity_Type" => $business_services->sport_activity,  
+            "service_Type" => $business_services->service_type,  
+            "membership_Duration" => $booking_details->expired_duration,  
+            "purchase_Date" => date('m-d-Y',strtotime($booking_details->created_at)),  
+            "membership_Activation_Date" =>  date('m-d-Y',strtotime($booking_details->contract_date)),  
+            "membership_Expiration" => date('m-d-Y',strtotime($expiretime)),  
+            "price" => $price,  
+            "discount" => $discount,  
+            "total" => $total
+        );
+
+        //return json_encode($one_array); 
+        return $one_array; 
+    }
+
     public function saveBookingStatus($data,$cart=null,$n=null)
     {
         Log::info("save booking run");
