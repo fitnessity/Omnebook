@@ -4,54 +4,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Libraries\Stripes\StripePay;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
-use App\Repositories\PlanRepository;
-use App\Repositories\ProfessionalRepository;
-use App\Repositories\BookingRepository;
-use App\Repositories\SportsRepository;
+use App\Repositories\{UserRepository,PlanRepository,ProfessionalRepository,BookingRepository,SportsRepository};
 use Illuminate\Support\Facades\Log;
 use Auth;
 use Session;
 use File;
 use Config;
-use App\Jobpostquestions;
 use Redirect;
-use App\Miscellaneous;
-use App\Quote;
 use View;
 use DB;
 use Response;
 use Validator;
-use App\UserBookingStatus;
-use App\User;
-use App\Evidents;
-use App\UserProfessionalDetail;
-use App\UserService;
-use App\CompanyInformation;
-use App\BusinessServices;
-use App\BusinessService;
-use App\BusinessPriceDetails;
-use App\UserBookingDetail;
-use App\BusinessCompanyDetail;
-use App\Fit_Cart;
-use App\Sports;
-use App\Customer;
-use App\Payment;
-use App\UserFamilyDetail;
-use App\MailService;
-use App\Zip_code;
-use App\BookingCheckinDetails;
+use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges};
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\UserFavourite;
-use App\BusinessServicesFavorite;
-use App\BusinessServiceReview;
-use App\BusinessActivityScheduler;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
 use DateTimeZone;
-use App\BusinessPriceDetailsAges;
-use App\BusinessSubscriptionPlan;
 
 class PaymentController extends Controller {
 	protected $sports;
@@ -93,14 +62,32 @@ class PaymentController extends Controller {
                 'bookedtime' =>$date->format('Y-m-d'),
             );
             $status = UserBookingStatus::create($orderdata);
+
+            $transactiondata = array( 
+                'user_type' => 'user',
+                'user_id' => $loggedinUser->id,
+                'item_type' =>'UserBookingStatus',
+                'item_id' =>'normal_order'.$status->id,
+                'channel' =>'',
+                'kind' => 'comp',
+                'transaction_id' => '',
+                'amount' => $request->grand_total,
+                'qty' =>'1',
+                'status' =>'processing',
+                'refund_amount' =>0,
+                'payload' =>'',
+            );
+
+            $transactionstatus = Transaction::create($transactiondata);
+
             $lastid=$status->id; 
 
             $businessuser =[];
-           $cart = session()->get('cart_item');
-           $cartnew = [];
-           $cnt=0;
-           foreach($cart['cart_item'] as $key=>$c)
-           {    
+            $cart = session()->get('cart_item');
+            $cartnew = [];
+            $cnt=0;
+            foreach($cart['cart_item'] as $key=>$c)
+            {    
                 if($c['chk'] != 'activity_purchase') {
                     $cartnew[$cnt]['name']= $c['name'];
                     $cartnew[$cnt]['code']= $c['code'];
@@ -424,6 +411,22 @@ class PaymentController extends Controller {
                 'bookedtime' =>$date->format('Y-m-d'),
             ); 
             $status = UserBookingStatus::create($orderdata);
+
+            $transactiondata = array( 
+                'user_type' => 'user',
+                'user_id' => Auth::user()->id,
+                'item_type' =>'UserBookingStatus',
+                'item_id' =>'normal_order'.$status->id,
+                'channel' =>'stripe',
+                'kind' => 'card',
+                'transaction_id' => $data["id"],
+                'amount' => $amount,
+                'qty' =>'1',
+                'status' =>'processing',
+                'refund_amount' =>0,
+                'payload' =>json_encode( $payment_intent,true),
+            );
+            $transactionstatus = Transaction::create($transactiondata);
 
             $lastid=$status->id;
             $businessuser =[];

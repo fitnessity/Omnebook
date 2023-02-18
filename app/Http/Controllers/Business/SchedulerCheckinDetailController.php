@@ -24,20 +24,16 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->get();
 
-
     $filter_date = $date;
-
-
-
 
     $pricrdropdown = BusinessServices::find($business_activity_scheduler->serviceid)->price_details;
     $bookingdata = UserBookingDetail::where('sport',$business_activity_scheduler->serviceid)->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
     
 
     return view('business.scheduler_checkin_detail.index', [
-      'booking_checkin_details' => $booking_checkin_details,
-      'business_activity_scheduler' =>$business_activity_scheduler,
-      'filter_date' => $filter_date,
+        'booking_checkin_details' => $booking_checkin_details,
+        'business_activity_scheduler' =>$business_activity_scheduler,
+        'filter_date' => $filter_date,
         'bookingdata' => $bookingdata,
         'pricrdropdown' => $pricrdropdown,
     ]);
@@ -64,7 +60,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
       $company = $request->current_company;
       $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     
-
       BookingCheckinDetails::create(array_merge(
         $request->only(['customer_id', 'business_activity_scheduler_id', 'checkin_date']), 
         ['business_activity_scheduler_id' => $business_activity_scheduler->id,

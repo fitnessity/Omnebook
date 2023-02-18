@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user};
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 
 
@@ -179,11 +179,19 @@ class OrderController extends BusinessBaseController
         //$fitnessity_fee = $bspdata->fitnessity_fee;
         $service_fee = $bspdata->service_fee;
         $tax = $bspdata->site_tax;
+        if($request->user_type == 'user'){
+            $user_id = $request->user_id;
+            $customerid = '';
+        }else{
+            $customerid = $request->user_id;
+            $user_id = Null;
+        }
 
         if(($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != '') || ($request->cc_amt != 0 && $request->cc_amt != '' )){
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
             $customer='';
+
             if($request->user_type == 'user'){
                 $loggedinUser = Auth::user();
                 $userdata = User::where('id',$loggedinUser->id)->first();
@@ -334,13 +342,6 @@ class OrderController extends BusinessBaseController
                 if($amount1 != $data["amount"]/100 ){
                     $pmt_by_cash = $amount1 - $data["amount"]/100;
                 }
-                if($request->user_type == 'user'){
-                    $user_id = $request->user_id;
-                    $customerid = '';
-                }else{
-                    $customerid = $request->user_id;
-                    $user_id = Null;
-                }
 
                 if($data['status']=='succeeded')
                 {
@@ -362,9 +363,26 @@ class OrderController extends BusinessBaseController
                                       'pmt_by_check' => 0,
                                       'pmt_by_comp' => 0,
                               )),
-                      ); 
+                    ); 
 
                     $status = UserBookingStatus::create($orderdata);
+
+                    $transactiondata = array( 
+                        'user_type' => $request->user_type,
+                        'user_id' => $request->user_id,
+                        'item_type' =>'UserBookingStatus',
+                        'item_id' =>'checkout_register '.$status->id,
+                        'channel' =>'stripe',
+                        'kind' => 'card',
+                        'transaction_id' => $data["id"],
+                        'amount' => $amount1,
+                        'qty' =>'1',
+                        'status' =>'processing',
+                        'refund_amount' =>0,
+                        'payload' =>json_encode( $payment_intent,true),
+                    );
+                    $transactionstatus = Transaction::create($transactiondata);
+
                     $lastid=$status->id;
                     $businessuser =[];
                     $cart = session()->get('cart_item');
@@ -505,15 +523,17 @@ class OrderController extends BusinessBaseController
             $checknumber = '';
             $grandtotal = $request->grand_total;
             if($request->cardinfo == 'check'){
+                $pay_type = 'check';
                 $pmt_by_check = $request->check_amt;
                 $checknumber  = $request->check_number;
-
             }else if($request->cardinfo  == 'cash'){
+                $pay_type = 'cash';
                 if($request->cash_amt_tender > $request->cash_amt ){
                      $retrun_cash = $request->cash_change;
                 }
                 $cash_amt_tender = $request->cash_amt_tender;
             }else{
+                $pay_type = 'comp';
                 $pmt_by_comp = $grandtotal;
                 $grandtotal = 0;
             }
@@ -522,14 +542,6 @@ class OrderController extends BusinessBaseController
             $digits = 3;
             $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
             $orderid= 'FS_'.$oid.$rand;
-
-            if($request->user_type == 'user'){
-                $user_id = $request->user_id;
-                $customerid = '';
-            }else{
-                $customerid = $request->user_id;
-                $user_id = Null;
-            }
 
             $orderdata = array(
                 'user_id' =>  $user_id ,
@@ -553,6 +565,23 @@ class OrderController extends BusinessBaseController
                 )),
             );
             $status = UserBookingStatus::create($orderdata);
+
+            $transactiondata = array( 
+                'user_type' => $request->user_type,
+                'user_id' => $request->user_id,
+                'item_type' =>'UserBookingStatus',
+                'item_id' =>'checkout_register '.$status->id,
+                'channel' =>'',
+                'kind' => $pay_type,
+                'transaction_id' => '',
+                'amount' => $grandtotal,
+                'qty' =>'1',
+                'status' =>'processing',
+                'refund_amount' =>0,
+                'payload' => '',
+            );
+            $transactionstatus = Transaction::create($transactiondata);
+
             $lastid=$status->id; 
 
             $businessuser =[];

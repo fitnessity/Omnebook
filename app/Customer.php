@@ -99,6 +99,11 @@ class Customer extends Authenticatable
         return $this->hasMany(UserBookingStatus::class,'customer_id');
     }
 
+    public function Transaction()
+    {
+        return $this->hasMany(Transaction::class,'user_id');
+    }
+
 
     public static function getcustomerofthiscompany($companyId){
         return Customer::where('business_id', $companyId)->orderBy('fname', 'ASC')->get();

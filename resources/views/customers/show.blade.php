@@ -713,6 +713,22 @@
 												</tr>
 											</thead>
 											<tbody>
+												@foreach ($purchase_history as $history)
+													<tr>
+														<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+														<td></td>
+														<td>{{$history->item_type}}</td>
+														<td>{{$history->getPmtMethod()}}</td>
+														<td>{{$history->amount}}  (R)</td>
+														<td>{{$history->qty}}</td>
+														<td>Refund | Void</td>
+														<td>
+															<div class="table-icons-staff">
+																<i class="fas fa-receipt"></i>
+															</div>
+														</td>
+													</tr>
+												@endforeach
 												<tr>
 													<td>2/12/2023</td>
 													<td> VMA Belt Class , 6 month contract membership (recurring)</td>
