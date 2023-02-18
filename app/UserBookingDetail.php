@@ -89,6 +89,7 @@ class UserBookingDetail extends Model
         $total = 0.0;
         $price = json_decode($this->price);
         $qty = json_decode($this->qty);
+
         foreach(['adult', 'child', 'infant'] as $key){
             $total += ($price->$key * $qty->$key);
         }
