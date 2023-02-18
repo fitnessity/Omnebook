@@ -174,7 +174,7 @@
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-6">
 									<div class="sub-info-customer">
-										<span>{{$booking_detail->expired_duration}}</span>
+										<span>{{$booking_detail->getDuration()}}</span>
 									</div>
 								</div>
 								
@@ -276,25 +276,17 @@
 									<div class="activation-date">
 										<label>Membership Activation Date</label>
 										<div class="date-activity-check">
-											<input type="text"  id="membershipactivationdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" onchange="changedate();">
+											<input type="text" id="activation_select" name="contract_date" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" class="form-control activity-scheduler-date w-80" value="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" data-behavior="datepicker">
 										</div>
 									</div>
 								</div>
 								<div class="col-md-12 col-xs-12 col-sm-12">
 									<div class="membership-duration">
-										<label>Membership Duration</label>
+										<label>Membership Expiration</label>
 									</div>
-									<div class="duration-date">
-										<input class="form-control" type="text" id="editduration" name="editduration" placeholder="14" value="{{explode(' ' , $booking_detail->expired_duration)[0]}}">
-										<h3>{{explode(" " , $booking_detail->expired_duration)[1]}}</h3>
-										<select name="duration_select" id="duration_select" class="form-control nopadding">
-											<option value="Years" @if(explode(" " , $booking_detail->expired_duration)[1] == 'Years') selected @endif >Years</option>
-											<option value="Months" @if(explode(" " , $booking_detail->expired_duration)[1] == 'Months') selected @endif >Months</option>
-											<option value="Weeks" @if(explode(" " , $booking_detail->expired_duration)[1] == 'Weeks') selected @endif >Weeks</option>
-											<option value="Days" @if(explode(" " , $booking_detail->expired_duration)[1] == 'Days') selected @endif >Days</option>
-										</select>
-									</div>
-									<input type="hidden" id="expire_duration" value="{{$booking_detail->expired_duration}}">
+									<input type="text" id="expiration_select" name="expired_at" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}" data-behavior="datepicker">
+									
+
 									<button type="button" class="btn-nxt btn-search-checkout mb-00 membership-save" id="" data-behavior="update_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Save </button>
 								</div>
 							</div>
@@ -479,7 +471,7 @@
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-6">
 									<div class="sub-info-customer">
-										<span  id="span_membership_activation">{{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
+										<span  id="span_membership_expiration">{{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
 									</div>
 								</div>
 								
@@ -1128,16 +1120,21 @@
 	</div>
 </div>
 <script type="text/javascript">
-	$("#editduration").keyup(function () { 
-		$('#span_membership_duration').html($(this).val() +' '+ $('#duration_select').val());
-		$('#expire_duration').val($(this).val() +' '+ $('#duration_select').val());
-		$('#span_membership_duration').addClass('red-fonts');
-	});
 
-	$("#duration_select").change(function () { 
-		$('#span_membership_duration').html($('#editduration').val()  +' '+  $(this).val());
-		$('#span_membership_duration').addClass('red-fonts');
-		$('#expire_duration').val($('#editduration').val()  +' '+  $(this).val());
+	$("#expiration_select").change(function () { 
+		if($(this).data('orginal-date') == $(this).val()){
+			$('#span_membership_expiration').removeClass('red-fonts').html($(this).data('orginal-date'));	
+		}else{
+			$('#span_membership_expiration').addClass('red-fonts').html($(this).val());	
+		}
+	});
+	$("#activation_select").change(function () { 
+		console.log($(this).val())
+		if($(this).data('orginal-date') == $(this).val()){
+			$('#span_membership_activation').removeClass('red-fonts').html($(this).data('orginal-date'));	
+		}else{
+			$('#span_membership_activation').addClass('red-fonts').html($(this).val());	
+		}
 	});
 
 	$("#editSession").keyup(function () {
@@ -1202,15 +1199,15 @@
             type: "PATCH",
             data:{
                 _token: '{{csrf_token()}}', 
-                booking_detail_id: $(this).data('booking-detail-id'),
-                expire_duration: $('#expire_duration').val(),
-                membershipactivationdate: $('#membershipactivationdate').val(),
-                session: $('#editSession').val(),
-                customer_id:  $(this).data('customer-id'),
                 booking_id:  $(this).data('booking-id'),
+                booking_detail_id: $(this).data('booking-detail-id'),
+                customer_id:  $(this).data('customer-id'),
+                pay_session: $('#editSession').val(),
+                contract_date: $('#activation_select').val(),
+                expired_at: $('#expiration_select').val()
             },
             success:function(response) {
-                location.reload()
+                // location.reload()
             },
         });
     });

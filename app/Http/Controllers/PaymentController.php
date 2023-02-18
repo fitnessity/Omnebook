@@ -144,6 +144,7 @@ class PaymentController extends Controller {
                      'qty' => $encodeqty  ,
                      'priceid' => $crt['priceid'],
                      'bookedtime' =>date('Y-m-d',strtotime($crt['sesdate'])),
+                     'contract_date' =>date('Y-m-d',strtotime($crt['sesdate'])),
                      'booking_detail' => json_encode(array(
                           'activitytype' => @$activitylocation->service_type,
                           'numberofpersons' => 1,
@@ -541,6 +542,7 @@ class PaymentController extends Controller {
                     'pay_session' => $price_detail->pay_session,
                     'expired_at' => $activity_scheduler->end_activity_date,
                     'bookedtime' =>date('Y-m-d',strtotime($sesdate)),
+                    'contract_date' =>date('Y-m-d',strtotime($sesdate)),
                     'booking_detail' => json_encode(array(
                             'activitytype' => $activitylocation->service_type,
                             'numberofpersons' => 1,

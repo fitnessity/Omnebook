@@ -89,7 +89,7 @@ class CustomerController extends Controller
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->id);
-        $booking_status = $customer->BookingStatus()->findOrFail($request->booking_id);
+        $booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
         $booking_detail = $booking_status->UserBookingDetail()->findOrFail($request->booking_detail_id);
         return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }

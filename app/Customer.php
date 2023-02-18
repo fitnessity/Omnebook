@@ -94,9 +94,9 @@ class Customer extends Authenticatable
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function BookingStatus()
+    public function bookingStatus()
     {
-        return $this->hasMany(UserBookingStatus::class,'customer_id');
+        return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$this->user_id, $this->id]);
     }
 
     public function Transaction()
