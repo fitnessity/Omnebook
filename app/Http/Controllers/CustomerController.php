@@ -95,6 +95,7 @@ class CustomerController extends Controller {
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
         $active_booking_details = $customerdata->active_booking_details()->get();
+        $purchase_history = $customerdata->Transaction()->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
         // print_r($active_booking_details);
@@ -109,6 +110,7 @@ class CustomerController extends Controller {
             'strpecarderror'=>$strpecarderror,
             'terms'=> $terms,
             'visits' => $visits,
+            'purchase_history' => $purchase_history,
             'active_booking_details' => $active_booking_details,
             'complete_booking_details' => $complete_booking_details
         ]);
