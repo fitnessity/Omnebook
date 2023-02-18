@@ -233,5 +233,26 @@ class UserBookingDetail extends Model
         }
         return $expired_at;
     }
+
+    public function getDuration(){
+        $date1 = Carbon::parse($this->contract_date);
+        $date2 = Carbon::parse($this->expired_at);
+
+        $totalDuration = $date2->diff($this->contract_date);
+        $string = "";
+
+        if($totalDuration->format('%Y') > 0){
+            $string .= $totalDuration->format(" %Y year");
+        }
+
+        if($totalDuration->format('%m') > 0){
+            $string .= $totalDuration->format(" %m month");
+        }
+
+        if($totalDuration->format('%d') > 0){
+            $string .= $totalDuration->format(" %d day");
+        }
+        return trim($string);
+    }
 }
 

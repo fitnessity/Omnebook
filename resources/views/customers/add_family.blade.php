@@ -115,21 +115,6 @@
 	                                <div class="form-group dob">
 	                                    <label>mm/dd/yyyy</label>
 	                                    <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control birthdate_{{$fam_cnt}} dobcustomerfamily" value="{{date('m/d/Y',strtotime('$family->birthdate'))}}" required="required" maxlength="10" data-behavior="datepicker">
-										<script type="text/javascript">
-											/*$('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
-												format: 'm-d-Y',
-												default_position: 'below'
-											});*/
-											 $( document ).ready(function() {
-												$(".birthdate_{{$fam_cnt}}").keyup(function(){
-											      	if ($(this).val().length == 2){
-											          	$(this).val($(this).val() + "/");
-											      	}else if ($(this).val().length == 5){
-											          	$(this).val($(this).val() + "/");
-											      	}
-											  	});
-		                                    });
-										</script>
 	                                </div>
 	                            </div>
 

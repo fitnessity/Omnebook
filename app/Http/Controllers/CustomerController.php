@@ -257,16 +257,6 @@ class CustomerController extends Controller {
         return view('customers._auto_pay_schedule_and_history', ['visits' => $visits, 'customer' => $customer]);
     } 
 
-   /* public function visit_membership_modal(Request $request, $business_id ,$id){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customer = $company->customers->find($id);
-        $booking_status = $customer->BookingStatus()->findOrFail($request->booking_id);
-        $booking_detail = $booking_status->UserBookingDetail()->findOrFail($request->booking_detail_id);
-        //$booking_detail = UserBookingDetail::where('id',$request->booking_detail_id)->first();
-        return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$id]);
-    }*/
-
     public function savenotes(Request $request){
         $cust = Customer::findOrFail($request->cus_id);
         Customer::where('id',$cust->id)->update(["notes"=>$request->notetext]);
