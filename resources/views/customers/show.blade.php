@@ -430,7 +430,7 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->pay_session}}/{{$booking_detail->pay_session}} <i class="far fa-file-alt"></i></span>
+																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}} <i class="far fa-file-alt"></i></span>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -488,13 +488,6 @@
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
-																					<label>RESERVED DATE: 	</label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span> 04/10/2021</span>
-																				</div>
-																				
-																				<div class="col-md-6 col-xs-6">
 																					<label>BOOKING TIME: </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
@@ -516,13 +509,6 @@
 																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}} (In person)</span>
 																					</div>
 																				@endif
-																				
-																				<div class="col-md-6 col-xs-6">
-																					<label>CHECK IN DATE: </label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span> {{date('m/d/Y', strtotime($booking_detail->getBookingCheckinDetails()))}}</span>
-																				</div>
 																				
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -613,9 +599,7 @@
 																						<label>TOTAL REMAINING:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->pay_session}}/{{$booking_detail->pay_session}}
-																							{{$booking_detail->id}}
-																						{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}
+																						<span>{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span>
 
 																					</div>
 																				@endif
@@ -645,12 +629,6 @@
 																					<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
 																				</div>
 																				
-																				<div class="col-md-6 col-xs-6">
-																					<label>RESERVED DATE: 	</label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span> 04/10/2021</span>
-																				</div>
 																				@if ($booking_detail->business_services)
 																					<div class="col-md-6 col-xs-6">
 																						<label>BOOKING TIME: </label>
@@ -675,13 +653,6 @@
 																						<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}} (In person)</span>
 																					</div>
 																				@endif
-																				
-																				<div class="col-md-6 col-xs-6">
-																					<label>CHECK IN DATE: </label>
-																				</div>
-																				<div class="col-md-6 col-xs-6">
-																					<span> {{date('m/d/Y', strtotime($booking_detail->getBookingCheckinDetails()))}}</span>
-																				</div>
 																				
 																				@if ($booking_detail->business_services)
 																					<div class="col-md-6 col-xs-6">
