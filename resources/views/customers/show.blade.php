@@ -167,7 +167,6 @@
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
 												<label class="tab-titles">Quick Stats</label>
-												<a data-toggle="modal" data-target="#calenderevent">Edit</a>
 											</div>
 											<div class="col-md-6 col-xs-6">
 												<label>Status</label>
