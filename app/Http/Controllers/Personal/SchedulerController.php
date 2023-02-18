@@ -81,7 +81,7 @@ class SchedulerController extends Controller
             "customer_id" => $data->booking->customer_id,
             'booking_detail_id'=> $request->odid ,
             "checkin_date"=>$request->date ,
-            'use_session_amount' => 0]);
+            'use_session_amount' => 1]);
     }
 
     /**
