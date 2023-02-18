@@ -284,12 +284,23 @@ class Customer extends Authenticatable
                   ->from('business_services')
                   ->where('cid', $company->id);
         })->whereIn('booking_id', function($query) use ($customer, $user_id){
+
             $query->select('id')
                   ->from('user_booking_status')
-                  ->whereRaw('(user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?)', [$user_id, $customer->id]);
-        });
+                  ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+                  // ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
+        })->get();
+        
 
-        return $booking_details->sum('provider_amount');
+        $sum = 0;
+        foreach($booking_details as $item){
+            $sum += $item->total();
+        }
+
+
+
+
+        return $sum;
     }
 
     public function active_booking_details(){
