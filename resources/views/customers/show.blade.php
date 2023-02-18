@@ -545,7 +545,7 @@
 																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
 																			</div>
 																			<div class="col-md-4 col-xs-6 text-center">
-																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="1050px"> Edit Booking </a>
+																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="90%"> Edit Booking </a>
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
 																			<div class="col-md-4 col-xs-6">
@@ -723,7 +723,7 @@
 													<th> Item Type</th>
 													<th>Pay Method</th>
 													<th>Price</th>
-													<th>Qnty</th>
+													<th>Qty</th>
 													<th>Refund/Void</th>
 													<th>Receipt</th>
 												</tr>
