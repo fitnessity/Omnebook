@@ -191,35 +191,26 @@ class UserBookingDetail extends Model
     }
 
     public function getextrafees($feeName){
-        $fees = 0;
-        $extra_fees =  json_decode($this->extra_fees);
-        if(!empty($extra_fees)){
-            foreach(['service_fee', 'fitnessity_fee', 'tax' ,'tip' ,'discount'] as $key){
-                if($key == $feeName && $extra_fees->$key != null){
-                   $fees = $extra_fees->$key;
-                }
-            }
-        }
-        return $fees;
+        $extra_fees =  json_decode($this->extra_fees, true);
+
+        return $extra_fees[$feeName] ?? 0;
     }
 
     public function getperoderprice(){
         $fees = 0;
-        $extra_fees =  json_decode($this->extra_fees);
-        if(!empty($extra_fees)){
-            foreach(['service_fee', 'tax' ,'tip' ,'discount'] as $key){
-                if($extra_fees->$key != null && $extra_fees->$key != 0){
-                    if($key == 'service_fee'){
-                        $fees += ($this->total() * $extra_fees->$key) /100;
-                    }else if($key == 'discount'){
-                        $fees -= $extra_fees->$key;
-                    }else{
-                        $fees += $extra_fees->$key;
-                    }
-                }
+        $extra_fees =  json_decode($this->extra_fees, true);
+
+        foreach($extra_fees as $key => $value){
+            if($key == 'service_fee'){
+                $fees += ($this->total() * $value) /100;
+            }else if($key == 'discount'){
+                $fees -= $value;
+            }else{
+                $fees += $value;
             }
         }
-        return $this->total() + $fees;
+
+        return $fees;
     }
 
     public static function getexpiretime($time,$contract_date){
