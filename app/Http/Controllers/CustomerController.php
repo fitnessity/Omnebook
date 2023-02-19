@@ -86,7 +86,9 @@ class CustomerController extends Controller {
         }
     }
 
-    public function show($business_id, $id){
+    public function show(Request $request, $business_id, $id){
+
+
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
 
@@ -98,15 +100,14 @@ class CustomerController extends Controller {
         $purchase_history = $customerdata->Transaction()->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
-        // print_r($active_booking_details);
-        // exit;
+
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
         }
         return view('customers.show', [
             'customerdata'=>$customerdata,
-            'cardInfo'=>$customerdata->get_stripe_card_info(),
+            'cardInfo'=>$customerdata->get_stripe_payment_methods(),
             'strpecarderror'=>$strpecarderror,
             'terms'=> $terms,
             'visits' => $visits,
@@ -486,8 +487,9 @@ class CustomerController extends Controller {
             $cust = Customer::find($request->cus_id);
             $cust->update($data);
         }
+        $cust = Customer::find($request->cus_id);
         
-        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$cust->id]);
+        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
     }
 
     public function paymentdeletecustomer(Request $request) {
