@@ -690,33 +690,33 @@
 	                                       </span>
 	                                     </label>
 									</div>
-									@if(!empty($cardInfo)) 
-									 	@foreach($cardInfo as $card) 
-	                                    	@php $brandname = ucfirst($card['brand']); @endphp
-											<div class="col-md-4 col-sm-4 col-xs-6">
-												<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-		                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="{{$brandname }}: XXXX{{$card['last4']}}  Exp. {{$card['exp_month']}}/{{$card['exp_year']}}" card-id="{{$card['id']}}">
-		                                            <span class="plan-details checkout-card">
-		                                                <div class="row">
-		                                                    <div class="col-md-12 col-xs-12">
-		                                                        <div class="payment-method-img">
-		                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
-		                                                        </div>
-		                                                    </div>
-		                                                    <div class="col-md-12 col-xs-12">
-																<div class="cart-name checkout-cart">
-		                                                           <span>CC (On File)</span>
-		                                                         </div>
-		                                                         <div class="cart-num checkout-cart">
-		                                                            <span>{{$brandname}} XX{{$card['last4']}}</span>
-		                                                         </div>
-		                                                    </div>
-		                                                </div>
-		                                           </span>
-		                                       </label>
-											</div>
-										@endforeach
-									@endif
+
+								 	@foreach($cardInfo as $card) 
+                                    	@php $brandname = ucfirst($card['brand']); @endphp
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+	                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="{{$card['card']['brand'] }}: XXXX {{$card['card']['last4']}}  Exp. {{$card['card']['exp_month']}}/{{$card['card']['exp_year']}}" card-id="{{$card['id']}}">
+	                                            <span class="plan-details checkout-card">
+	                                                <div class="row">
+	                                                    <div class="col-md-12 col-xs-12">
+	                                                        <div class="payment-method-img">
+	                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-md-12 col-xs-12">
+															<div class="cart-name checkout-cart">
+	                                                           <span>CC (On File)</span>
+	                                                         </div>
+	                                                         <div class="cart-num checkout-cart">
+	                                                            <span>{{$card['card']['brand']}} XX {{$card['card']['last4']}}</span>
+	                                                         </div>
+	                                                    </div>
+	                                                </div>
+	                                           </span>
+	                                       </label>
+										</div>
+									@endforeach
+
 									
 									<div class="col-md-4 col-sm-4 col-xs-6">
 										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
@@ -1981,7 +1981,7 @@
     	var _token = '{{csrf_token()}}';
 	  	$.ajax({
 	      	type: "GET",
-	      	url: "{{route('business_customer_index', ['business_id' => $companyId])}}",
+	      	url: "{{route('business_customer_index')}}",
 	      	data: { fname: $(this).val(),  _token: _token, },
 	      	success: function(data) {
 	        	$("#option-box1 .customer-list").html('');
@@ -2108,7 +2108,7 @@
 		}
 		
 		$.ajax({
-			url:'{{route("business_customer_index", ["business_id" => $companyId])}}',
+			url:'{{route("business_customer_index")}}',
 			type:"GET",
 			data:{
 				inpuval:inpuval
