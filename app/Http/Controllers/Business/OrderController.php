@@ -56,7 +56,7 @@ class OrderController extends BusinessBaseController
         //print_r($cart_item);exit;
         $cardInfo = $userfamilydata= [];
         $book_cnt = $activated =0;
-        $book_data =  $address = $username = $age = $purchasefor = $price_title = $status=  $user_data = $tax = $user_type = '';
+        $book_data =  $address = $username = $age = $purchasefor = $price_title = $status=  $user_data = $tax = $user_type = $last_membership = '';
 
         $companyId = $request->current_company->id;
         
@@ -65,39 +65,41 @@ class OrderController extends BusinessBaseController
         $username = $address = $current_membership =''; 
         $pageid  = $visits = 0;
         $user_data = '';
-        if($request->book_id != ''){
-            $book_data = UserBookingDetail::getbyid($request->book_id);
-            $user_type = @$book_data->booking->user_type ;
-            if(@$book_data->booking->user_type == 'user'){
-                $username = $book_data->booking->user->firstname.' '.$book_data->booking->user->lastname;
-                $age = Carbon::parse($book_data->booking->user->birthdate)->age; 
-                $user_data = $book_data->booking->user;
-                $activated = $book_data->booking->user->activated;
-                $userfamilydata = $book_data->booking->user->user_family_details;
-                $cardInfo = $book_data->booking->user->get_stripe_card_info();
-                $address = $user_data->getaddress();
-                $pageid =  $book_data->booking->user->id;
-                $visits = @$user_data->visits_count();
-                $book_cnt = @$user_data->memberships();
-                $current_membership = @$user_data->get_current_membership();
-            }else if(@$book_data->booking->user_type == 'customer'){
-                $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
-                $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
-                $user_data = $book_data->booking->customer;
-                $activated = $book_data->booking->customer->is_active();
-                $userfamilydata = Customer::where('parent_cus_id',$book_data->booking->customer->id)->get();
-                $cardInfo = $book_data->booking->customer->get_stripe_card_info();
-                $address = $user_data->full_address();
-                $pageid =  $book_data->booking->customer->id;
-                $visits = @$user_data->visits_count();
-                $book_cnt = @$user_data->memberships();
-                $current_membership = @$user_data->get_current_membership();
-           } 
-            $last_membership = '';
-            $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
-            $last_book = explode("~~", $last_book_data);
-            $purchasefor  = @$last_book[0];
-            $price_title  = @$last_book[1];  
+        if($request->book_id){
+            var_dump('no this cases');
+            exit();
+           //  $book_data = UserBookingDetail::getbyid($request->book_id);
+           //  $user_type = @$book_data->booking->user_type ;
+           //  if(@$book_data->booking->user_type == 'user'){
+           //      $username = $book_data->booking->user->firstname.' '.$book_data->booking->user->lastname;
+           //      $age = Carbon::parse($book_data->booking->user->birthdate)->age; 
+           //      $user_data = $book_data->booking->user;
+           //      $activated = $book_data->booking->user->activated;
+           //      $userfamilydata = $book_data->booking->user->user_family_details;
+           //      $cardInfo = $book_data->booking->user->get_stripe_card_info();
+           //      $address = $user_data->getaddress();
+           //      $pageid =  $book_data->booking->user->id;
+           //      $visits = @$user_data->visits_count();
+           //      $book_cnt = @$user_data->memberships();
+           //      $current_membership = @$user_data->get_current_membership();
+           //  }else if(@$book_data->booking->user_type == 'customer'){
+           //      $username  = $book_data->booking->customer->fname.' '.$book_data->booking->customer->lname;
+           //      $age = Carbon::parse($book_data->booking->customer->birthdate)->age; 
+           //      $user_data = $book_data->booking->customer;
+           //      $activated = $book_data->booking->customer->is_active();
+           //      $userfamilydata = Customer::where('parent_cus_id',$book_data->booking->customer->id)->get();
+           //      $cardInfo = $book_data->booking->customer->get_stripe_card_info();
+           //      $address = $user_data->full_address();
+           //      $pageid =  $book_data->booking->customer->id;
+           //      $visits = @$user_data->visits_count();
+           //      $book_cnt = @$user_data->memberships();
+           //      $current_membership = @$user_data->get_current_membership();
+           // } 
+           //  $last_membership = '';
+           //  $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
+           //  $last_book = explode("~~", $last_book_data);
+           //  $purchasefor  = @$last_book[0];
+           //  $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
            $user_type = 'customer';
            $customerdata = $request->current_company->customers->find($request->cus_id);
@@ -108,7 +110,7 @@ class OrderController extends BusinessBaseController
            $visits = $customerdata->visits_count();
            $activated = @$customerdata->is_active();
            $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
-           $cardInfo = @$customerdata->get_stripe_card_info();
+           $cardInfo = @$customerdata->get_stripe_payment_methods();
            $address = @$customerdata->full_address();
            $book_id = @$customerdata->id;
            $book_cnt =@$customerdata->memberships();
@@ -118,7 +120,7 @@ class OrderController extends BusinessBaseController
            $purchasefor  = @$last_book[0];
            $price_title  = @$last_book[1];
            $pageid = $request->cus_id;
-           $last_membership = '';
+           
         }
 
         if($activated == 0){
@@ -180,6 +182,8 @@ class OrderController extends BusinessBaseController
         $service_fee = $bspdata->service_fee;
         $tax = $bspdata->site_tax;
         if($request->user_type == 'user'){
+            var_dump('no cases');
+            exit();
             $user_id = $request->user_id;
             $customerid = '';
         }else{
@@ -193,20 +197,18 @@ class OrderController extends BusinessBaseController
             $customer='';
 
             if($request->user_type == 'user'){
-                $loggedinUser = Auth::user();
-                $userdata = User::where('id',$loggedinUser->id)->first();
-                if(empty($userdata['stripe_customer_id'])) {
-                     $stripe_customer_id =  $userdata->create_stripe_customer_id();
-                }else{
-                     $stripe_customer_id = $userdata['stripe_customer_id'];
-                }
+                var_dump('no cases');
+                exit();
+                // $loggedinUser = Auth::user();
+                // $userdata = User::where('id',$loggedinUser->id)->first();
+                // if(empty($userdata['stripe_customer_id'])) {
+                //      $stripe_customer_id =  $userdata->create_stripe_customer_id();
+                // }else{
+                //      $stripe_customer_id = $userdata['stripe_customer_id'];
+                // }
             }else{
                 $userdata = Customer::where('id',$request->user_id)->first();
-                if(empty($userdata['stripe_customer_id'])) {
-                     $stripe_customer_id = $userdata->create_stripe_customer_id();
-                }else{
-                     $stripe_customer_id = $userdata['stripe_customer_id'];
-                }
+                $stripe_customer_id = $userdata['stripe_customer_id'];
             }
             $listItems = []; 
             $proid = []; 
@@ -243,8 +245,10 @@ class OrderController extends BusinessBaseController
             $prodata = json_encode($proid); 
             $listItems = json_encode($listItems);
 
-            if($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != ''){
 
+            if($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != ''){
+                var_dump('123');
+                exit();
                 $cc_new_card_amt = $request->cc_new_card_amt;
                 $totalprice = $cc_new_card_amt;
 
@@ -298,15 +302,8 @@ class OrderController extends BusinessBaseController
                     }
                 }
             }else{
-                $cc_amt = $request->cc_amt;
-                $totalprice = $cc_amt;
-                $carddetails = $stripe->customers->retrieveSource(
-                     $stripe_customer_id,
-                     $request->card_id,
-                     []
-                );
-
-                $payment_method = $carddetails->id;
+                $totalprice = $cc_amt = $request->cc_amt;;
+                $payment_method = $request->card_id;
             }
             try {
                 $pmtintent = \Stripe\PaymentIntent::create([
