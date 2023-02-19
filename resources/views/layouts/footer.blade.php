@@ -144,6 +144,7 @@
     <p id="back-top" title="Back To Top">
         <a href="#top" class="cd-top"><span class="fa fa-arrow-up"></span></a>
     </p>
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
@@ -158,7 +159,7 @@
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
     <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-input-mask-phone-number.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>

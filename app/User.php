@@ -40,6 +40,22 @@ class User extends Authenticatable
     
     protected $appends = ['about_me','network_count','about_business', 'full_name'];
     
+    public static function boot(){
+        parent::boot();
+
+        self::created(function($model){
+            if(!$model->stripe_customer_id){
+                $model->create_stripe_customer_id();
+            }
+        });
+
+        self::updated(function($model){
+            if(!$model->stripe_customer_id){
+                $model->create_stripe_customer_id();
+            }
+        });
+    }
+    
     public function getFullNameAttribute(){
         return $this->firstname . ' ' . $this->lastname;
     }
