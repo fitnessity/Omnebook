@@ -55,11 +55,6 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
-Route::group(['middleware' => ['auth','customer_scope']], function(){
-    Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
-});
-
-
 Route::group(['middleware' => ['auth']], function(){
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
