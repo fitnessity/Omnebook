@@ -162,7 +162,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone" >
+                                                <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" class="form-control" value="{{$mobile}}" data-behavior="text-phone" >
                                             </div>
 
 
@@ -170,14 +170,14 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_name[{{$fam_cnt}}]" id="emergency_name[{{$fam_cnt}}]" placeholder="Emergency Contact Name" class="form-control"  value="{{$family->emergency_contact_name}}" onkeypress="return event.charCode >= 65 && event.charCode <= 120" >
+                                                <input type="text" name="emergency_name[{{$fam_cnt}}]" id="emergency_name[{{$fam_cnt}}]" placeholder="Emergency Contact Name" class="form-control"  value="{{$family->emergency_contact_name}}" >
                                             </div>
 
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{$emergency_contact}}" data-behavior="text-phone">
                                                 <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" >
                                             </div>
 
@@ -256,7 +256,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-behavior="text-phone">
+                                                <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required"  data-behavior="text-phone">
                                             </div>
 
 
@@ -271,7 +271,7 @@
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
 
                                             <div class="form-group">
-                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-behavior="text-phone">										
+                                                <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required"  data-behavior="text-phone">										
                                                 <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" />
                                             </div>
 

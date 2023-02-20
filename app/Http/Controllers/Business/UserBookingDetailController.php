@@ -40,12 +40,6 @@ class UserBookingDetailController extends Controller
             $overwrite['contract_date'] = date('Y-m-d',strtotime($request->contract_date));
         }
 
-        var_dump(array_merge($request->only([
-            'pay_session', 
-            'contract_date', 
-            'expired_at'
-        ]), $overwrite));
-
 
         $booking_detail->update(array_merge($request->only([
             'pay_session', 
