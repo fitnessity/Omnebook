@@ -50,10 +50,6 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
 });
 
-Route::group(['middleware' => ['auth','customer_scope']], function(){
-    Route::post('savenotes','CustomerController@savenotes')->name('savenotes');
-});
-
 
 Route::group(['middleware' => ['auth']], function(){
     Route::prefix('/business/{business_id}')->group(function () {

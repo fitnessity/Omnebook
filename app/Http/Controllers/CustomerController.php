@@ -265,13 +265,6 @@ class CustomerController extends Controller {
         return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$id]);
     }*/
 
-    public function savenotes(Request $request){
-        $cust = Customer::findOrFail($request->cus_id);
-        Customer::where('id',$cust->id)->update(["notes"=>$request->notetext]);
-        
-        return redirect()->route('business_customer_show',['business_id' => $request->business_id, 'id'=>$request->customer_id]);
-    }
-
     public function addcustomerfamily ($id){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];

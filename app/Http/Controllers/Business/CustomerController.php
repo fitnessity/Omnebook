@@ -68,9 +68,20 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $business_id, $id)
     {
-        //
+        //notes
+        $company = $request->current_company;
+
+        $customer = $company->customers()->findOrFail($id);
+
+            
+
+        $customer->update(array_merge(
+            $request->only(['notes']), []));
+
+        return redirect()->route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]);
+
     }
 
     /**
