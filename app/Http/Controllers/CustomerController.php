@@ -21,16 +21,9 @@ use Mail;
 use Config;
 use Carbon\Carbon;
 
-use App\Repositories\CustomerRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
 
-use App\BusinessCompanyDetail;
-use App\BusinessServices;
-use App\User;
-use App\Customer;
-use App\CustomerFamilyDetail;
-use App\BusinessTerms;
-use App\UserBookingDetail;
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,UserBookingStatus};
 
 use Request as resAll;
 
@@ -45,9 +38,10 @@ class CustomerController extends Controller {
     protected $company;
     public $error = '';
 
- 	public function __construct(CustomerRepository $customers,UserRepository $users) {
+ 	public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
         $this->middleware('auth');
         $this->customers = $customers;
+        $this->bookings = $bookings;
     }
 
     public function index(Request $request, $business_id){
@@ -503,6 +497,28 @@ class CustomerController extends Controller {
             );
             echo $stripval;
         }
+    }
+
+    public function sendReceiptToCustomer(Request $request){
+        if($request->odetailid == ''){
+            $bookingStatus = UserBookingStatus::where('id',$request->oid)->first();
+            $bookingDetail = $bookingStatus->UserBookingDetail;
+                foreach($bookingDetail as $bd){
+                    $getreceipemailtbody = $this->bookings->getreceipemailtbody($request->oid, $bd['id']);
+                    $email_detail = array(
+                        'getreceipemailtbody' => $getreceipemailtbody,
+                        'email' => $getreceipemailtbody['email']);
+                    $status  = SGMailService::sendBookingReceipt($email_detail);
+                }
+        }else{
+            $getreceipemailtbody = $this->bookings->getreceipemailtbody($request->oid, $request->odetailid);
+            $email_detail = array(
+                'getreceipemailtbody' => $getreceipemailtbody,
+                'email' => $getreceipemailtbody['email']);
+            $status  = SGMailService::sendBookingReceipt($email_detail);
+        }
+
+        return $status;
     }
 
 }

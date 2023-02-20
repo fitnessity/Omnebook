@@ -548,6 +548,7 @@ class ServiceController extends BusinessBaseController
                             $adultrecurring_first_pmt = $request->input('first_pmt_adult_'.$i.$y);
                             $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
                             $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
+                            $recurring_customer_chage_by_adult = $request->input('recurring_customer_chage_by_adult_'.$i.$y);
                         }else{
                             /*$recurring_every = NULL;
                             $recurring_duration = NULL;*/
@@ -562,6 +563,7 @@ class ServiceController extends BusinessBaseController
                             $adultrecurring_first_pmt = NULL;
                             $adultrecurring_recurring_pmt = NULL;
                             $adultrecurring_total_contract_revenue = NULL;
+                            $recurring_customer_chage_by_adult = NULL;
                         }
 
                         if($request->input('is_recurring_child_'.$i.$y) == 1){
@@ -578,6 +580,7 @@ class ServiceController extends BusinessBaseController
                             $childrecurring_first_pmt = $request->input('first_pmt_child_'.$i.$y);
                             $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
                             $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
+                            $recurring_customer_chage_by_child = $request->input('recurring_customer_chage_by_child_'.$i.$y);
                         }else{
                             /*$childrecurring_every = NULL;
                             $childrecurring_duration = NULL;*/
@@ -592,6 +595,7 @@ class ServiceController extends BusinessBaseController
                             $childrecurring_first_pmt = NULL;
                             $childrecurring_recurring_pmt = NULL;
                             $childrecurring_total_contract_revenue = NULL;
+                            $recurring_customer_chage_by_child = NULL;
                         }
 
                         if($request->input('is_recurring_infant_'.$i.$y) == 1){
@@ -608,6 +612,7 @@ class ServiceController extends BusinessBaseController
                             $infantrecurring_first_pmt = $request->input('first_pmt_infant_'.$i.$y);
                             $infantrecurring_recurring_pmt = $request->input('recurring_pmt_infant_'.$i.$y);
                             $infantrecurring_total_contract_revenue = $request->input('total_contract_revenue_infant_'.$i.$y);
+                            $recurring_customer_chage_by_infant = $request->input('recurring_customer_chage_by_infant_'.$i.$y);
                         }else{
                             /*$infantrecurring_every = NULL;
                             $infantrecurring_duration = NULL;*/
@@ -622,6 +627,7 @@ class ServiceController extends BusinessBaseController
                             $infantrecurring_first_pmt = NULL;
                             $infantrecurring_recurring_pmt = NULL;
                             $infantrecurring_total_contract_revenue = NULL;
+                            $recurring_customer_chage_by_infant = NULL;
                         }
                         
                         if($db_status == 'update'){
@@ -710,6 +716,7 @@ class ServiceController extends BusinessBaseController
                             "recurring_first_pmt_adult" => $adultrecurring_first_pmt,
                             "recurring_recurring_pmt_adult" => $adultrecurring_recurring_pmt,
                             "recurring_total_contract_revenue_adult" => $adultrecurring_total_contract_revenue,
+                            "recurring_customer_chage_by_adult" => $recurring_customer_chage_by_adult,
 
                             "is_recurring_child"=> $request->input('is_recurring_child_'.$i.$y),
                             "recurring_price_child"=>$childrecurring_price,
@@ -723,6 +730,7 @@ class ServiceController extends BusinessBaseController
                             "recurring_first_pmt_child" => $childrecurring_first_pmt,
                             "recurring_recurring_pmt_child" => $childrecurring_recurring_pmt,
                             "recurring_total_contract_revenue_child" => $childrecurring_total_contract_revenue,
+                            "recurring_customer_chage_by_child" => $recurring_customer_chage_by_child,
 
                             "is_recurring_infant"=> $request->input('is_recurring_infant_'.$i.$y),
                             "recurring_price_infant"=>$infantrecurring_price,
@@ -736,6 +744,7 @@ class ServiceController extends BusinessBaseController
                             "recurring_first_pmt_infant" => $infantrecurring_first_pmt,
                             "recurring_recurring_pmt_infant" => $infantrecurring_recurring_pmt,
                             "recurring_total_contract_revenue_infant" => $infantrecurring_total_contract_revenue,
+                            "recurring_customer_chage_by_infant" => $recurring_customer_chage_by_infant,
                             /*"recurring_every"=>$infantrecurring_every,
                             "recurring_duration"=> $infantrecurring_duration,*/
                             "fitnessity_fee"=> isset($request->fitnessity_fee) ? $request->fitnessity_fee : '',

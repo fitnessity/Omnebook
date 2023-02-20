@@ -570,6 +570,14 @@ class BookingRepository
         $price = $booking_details->total();
         $discount = $booking_details->getextrafees('discount');
         $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
+        if($booking_status->user_type == 'user'){
+            $email = $booking_status->user->email; 
+        }
+
+        if($booking_status->user_type == 'customer'){
+            $email = $booking_status->customer->email;
+        }
+
         $one_array =[];
         $one_array = array (
             "provider_Name" => $businessuser->company_name,  
@@ -589,7 +597,8 @@ class BookingRepository
             "membership_Expiration" => date('m-d-Y',strtotime($expiretime)),  
             "price" => $price,  
             "discount" => $discount,  
-            "total" => $total
+            "total" => $total,
+            "email" => $email,
         );
 
         //return json_encode($one_array); 

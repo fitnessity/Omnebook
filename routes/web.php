@@ -35,6 +35,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::resource('customers', 'CustomerController')->only(['index', 'update', 'destroy', 'store']);
     Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
+
+    Route::resource('staff', 'StaffController')->only(['index','create','edit','store','update', 'destroy']);
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -1011,8 +1013,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
     Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
     Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
-
     Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
+    Route::get('/send-receipt-to-customer', 'CustomerController@sendReceiptToCustomer')->name('sendReceiptToCustomer');
     
 });
 
