@@ -159,6 +159,7 @@
 						  </li>
 						</ul>
 					</div>
+					<div  id="errordiv" class="activity-msg"></div>
 					<div class="tab-custom tab-content" id="myTabContent">
 						<div class="tab-pane fade active" id="customer-info" role="tabpanel" aria-labelledby="customer-info-tab">
 							<div class="row">
@@ -430,7 +431,7 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}} <i class="far fa-file-alt"></i></span>
+																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -703,52 +704,22 @@
 												@foreach ($purchase_history as $history)
 													<tr>
 														<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-														<td></td>
-														<td>{{$history->item_type}}</td>
+														<td>{!!$history->item_description()!!}</td>
+														<td>{{$history->item_type_terms()}}</td>
 														<td>{{$history->getPmtMethod()}}</td>
-														<td>{{$history->amount}}  (R)</td>
+														<td>${{$history->amount}}</td>
 														<td>{{$history->qty}}</td>
 														<td>Refund | Void</td>
 														<td>
-															<div class="table-icons-staff">
+															<div class="table-icons-staff mailRecipt" class="mailRecipt" data-booking-detail-id="" data-booking-id ="{{$history->item_id}}" data-item-type="{{$history->item_type_terms()}}">
 																<i class="fas fa-receipt"></i>
 															</div>
 														</td>
 													</tr>
 												@endforeach
-												<tr>
-													<td>2/12/2023</td>
-													<td> VMA Belt Class , 6 month contract membership (recurring)</td>
-													<td>Membership</td>
-													<td>Visa  ****4576</td>
-													<td>$150  (R)</td>
-													<td>1</td>
-													<td>Refund | Void</td>
-													<td>
-														<div class="table-icons-staff">
-															<i class="fas fa-receipt"></i>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>2/12/2023</td>
-													<td>Mini Ninjas (3 to 4 yrs old), Kids Drop In (01 Pack)  </td>
-													<td>Membership</td>
-													<td>Visa  ****4576</td>
-													<td>$1,895.00</td>
-													<td>1</td>
-													<td>Refund | Void</td>
-													<td>
-														<div class="table-icons-staff">
-															<i class="fas fa-receipt"></i>
-														</div>
-													</td>
-												</tr>
-												
 											</tbody>
 										</table>
 									</div>
-									
 								</div>
 							</div>
 						</div>
@@ -758,8 +729,6 @@
 		</div>
 	</div>
 </div>
-
-
 
 	<!-- The Modal Add personal info-->
 		<div class="modal fade compare-model" id="editbooking">
@@ -1328,7 +1297,66 @@
 	$(document).ready(function() {
 		$('#visitstable').DataTable();
 		responsive: true
-	} );	
+	} );
+
+	$(".mailRecipt").click(function(){
+		var item_type = $(this).data('item-type');
+		if(item_type == 'no' || item_type == 'Membership'){
+			var confirm_value = confirm("Do you want to mail the receipt to this Customer? ");
+			if(confirm_value == true){
+				$.ajax({
+					url: "{{route('sendReceiptToCustomer')}}",
+		            xhrFields: {
+		                withCredentials: true
+		            },
+		            type: 'get',
+		            data:{
+		                odetailid: $(this).data('booking-detail-id'),
+		                oid: $(this).data('booking-id'),
+		           	},
+		            success: function (response) {
+		            	$('#errordiv').html('');
+		            	$('#errordiv').removeClass('green-fonts');
+		            	$('#errordiv').removeClass('reviewerro');
+	                    $('#errordiv').css('display','block');
+		                if(response == 'success'){
+		                	$('#errordiv').addClass('green-fonts');
+		                    $('#errordiv').html('Email Successfully Sent..');
+		                }else{
+		                	$('#errordiv').addClass('reviewerro');
+		                    $('#errordiv').html("Can't Mail on this Address. Plese Check your Email..");
+		                }
+		            }
+	            });
+			}
+		}
+	});
+
+
+	$(document).on('click', '[data-behavior~=mail_receipt]', function(e){
+		alert('hii');
+		/*confirm("Do you want to mail the receipt to this Customer? ");
+		if(confirm){
+			$.ajax({
+				url: "{{route('sendReceiptToCustomer')}}",
+	            xhrFields: {
+	                withCredentials: true
+	            },
+	            type: 'get',
+	            data:{
+	                odetailid: $(this).data('booking-detail-id'),
+	                oid: $(this).data('booking-id'),
+	           	},
+	            success: function (response) {
+	                if(response == 'success'){
+	                    $('.reviewerro').html('Email Successfully Sent..');
+	                }else{
+	                    $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+	                }
+	            }
+            });
+		}*/
+	});
 	
 	$("#birthdate").keyup(function(){
       if ($(this).val().length == 2){
@@ -1345,7 +1373,5 @@
 		"paging":   false,
 	} );
 </script>
-
-
 
 @endsection

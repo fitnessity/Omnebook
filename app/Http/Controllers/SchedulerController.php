@@ -3,34 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\BusinessCompanyDetail;
-use App\CompanyInformation;
-use App\BusinessServices;
-use App\UserBookingStatus;
-use App\BusinessActivityScheduler;
-use App\BusinessPriceDetailsAges;
-use App\BusinessPriceDetails;
-use App\StaffMembers;
-use App\UserBookingDetail;
-use App\ActivityCancel;
-use App\UserFamilyDetail;
-use App\BusinessSubscriptionPlan;
-use App\Customer;
-use App\BookingActivityCancel;
-use App\BookingCheckinDetails;
-use App\BookingPostorder;
+use App\{User,BusinessCompanyDetail,CompanyInformation,BusinessServices,UserBookingStatus,BusinessActivityScheduler,BusinessPriceDetailsAges,BusinessPriceDetails,StaffMembers,UserBookingDetail,ActivityCancel,UserFamilyDetail,BusinessSubscriptionPlan,Customer,BookingActivityCancel,BookingCheckinDetails,BookingPostorder,SGMailService,MailService};
 use Auth;
 use DB;
 use Carbon\Carbon;
 use DateTime;
 use Config;
 use DateInterval;
-use App\MailService;
-use App\Repositories\BusinessServiceRepository;
-use App\Repositories\BookingRepository;
-use App\Repositories\CustomerRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use DateTimeZone;
 
 class SchedulerController extends Controller
@@ -230,15 +210,13 @@ class SchedulerController extends Controller
                }else{
                     $compare_chk  = $compare_chk + $newary;
                }
-               
           }
           foreach($compare_chk as $detail){
+               $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $detail['oid']);
                $email_detail = array(
-                    'orderdetalidary' => $detail['oid'],
-                    'cid' => $detail['cid'],
-                    'email' => $request->email,
-                    'booking_id'=>$detail['booking_id']);
-               $status = MailService::sendEmailReceiptFromCheckoutRegister($email_detail);
+                'getreceipemailtbody' => $getreceipemailtbody,
+                'email' => $request->email);
+                $status  = SGMailService::sendBookingReceipt($email_detail);
           }
      }
 

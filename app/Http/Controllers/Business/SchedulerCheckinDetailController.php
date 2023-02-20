@@ -63,7 +63,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
       BookingCheckinDetails::create(array_merge(
         $request->only(['customer_id', 'business_activity_scheduler_id', 'checkin_date']), 
         ['business_activity_scheduler_id' => $business_activity_scheduler->id,
-         'use_session_amount' => 0]));
+         'use_session_amount' => 0, 'source_type' => 'in_person',]));
   }
 
   /**
