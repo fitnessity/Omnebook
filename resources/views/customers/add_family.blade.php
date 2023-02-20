@@ -140,13 +140,13 @@
 	                        <div class="row" id="familydiv{{$fam_cnt}}" >
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="text" name="fname[{{$fam_cnt}}]" id="fname[{{$fam_cnt}}]" placeholder="First Name" class="form-control" required="required" onkeypress='return event.charCode >= 65 && event.charCode <= 120'>
+	                                    <input type="text" name="fname[{{$fam_cnt}}]" id="fname[{{$fam_cnt}}]" placeholder="First Name" class="form-control" required="required" >
 	                                </div>
 	                            </div>
 
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="text" name="lname[{{$fam_cnt}}]" id="lname[{{$fam_cnt}}]" placeholder="Last Name" class="form-control" required="required" onkeypress='return event.charCode >= 65 && event.charCode <= 120'>
+	                                    <input type="text" name="lname[{{$fam_cnt}}]" id="lname[{{$fam_cnt}}]" placeholder="Last Name" class="form-control" required="required" >
 	                                </div>
 	                            </div>
 
@@ -187,34 +187,18 @@
 	                                <div class="form-group dob">
 	                                    <label>mm/dd/yyyy</label>
 	                                    <input type="text"  name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class=" form-control birthdate_{{$fam_cnt}}" required="required" maxlength="10" data-behavior="datepicker">
-	                                    <script type="text/javascript" >
-		                                    /*$('.birthdatezebra_'+{{$fam_cnt}}).Zebra_DatePicker({
-		                                        format: 'm-d-Y',
-		                                        default_position: 'below'
-		                                    });*/
-		                                    $( document ).ready(function() {
-												$(".birthdate_{{$fam_cnt}}").keyup(function(){
-											      	if ($(this).val().length == 2){
-											          	$(this).val($(this).val() + "/");
-											      	}else if ($(this).val().length == 5){
-											          	$(this).val($(this).val() + "/");
-											      	}
-											  	});
-		                                    });
-		                                    
-		                                </script>
 	                                </div>
 	                            </div>
 
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="number" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('mobile{{$fam_cnt}}')">
+	                                    <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" data-behavior="text-phone">
 	                                </div>
 	                            </div>
 	                            
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  onkeyup="changeformate('emergency_contact[{{$fam_cnt}}]')" >										
+	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" data-behavior="text-phone" >										
 	                                    <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" />
 	                                </div>
 	                            </div>
@@ -244,16 +228,7 @@
 
 <script>
   
-    $(document).ready(function () {   
-        $(".birthdatezebra").Zebra_DatePicker({ format: "m-d-Y" });
-        $(".birthdatezebra").Zebra_DatePicker({
-            format: "m-d-Y",
-            onSelect: function() {
-                $(this).change();
-                /*alert($(this).val());*/
-            }
-        });
-    });    
+
 
          
 
@@ -280,31 +255,7 @@
 			   alert('yahoooo0');
 			});*/
 
-	        $( document ).ready(function() {
-	        	/*alert('doc')*/;
-	        	/*$('body').on("keyup",'.birthdate_'+cnt, function(){
-	        		alert('birthdate_');
-			        //console.log('keyed');
-			    });*/
 
-				$('.birthdate_'+cnt).keyup(function(){
-					alert('birthdate_');
-			      	if ($(this).val().length == 2){
-			          	$(this).val($(this).val() + "/");
-			      	}else if ($(this).val().length == 5){
-			          	$(this).val($(this).val() + "/");
-			      	}
-			  	});
-			});
-
-            $(".birthdatezebra").Zebra_DatePicker({ format: "m/d/Y" });
-            $(".birthdatezebra").Zebra_DatePicker({
-                format: "m-d-Y",
-                onSelect: function() {
-                    $(this).change();
-                    /*alert($(this).val());*/
-                }
-            });
         });
     //});
 

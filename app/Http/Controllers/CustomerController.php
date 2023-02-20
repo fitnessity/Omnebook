@@ -258,13 +258,6 @@ class CustomerController extends Controller {
         return view('customers._auto_pay_schedule_and_history', ['visits' => $visits, 'customer' => $customer]);
     } 
 
-    public function savenotes(Request $request){
-        $cust = Customer::findOrFail($request->cus_id);
-        Customer::where('id',$cust->id)->update(["notes"=>$request->notetext]);
-        
-        return redirect()->route('business_customer_show',['business_id' => $request->business_id, 'id'=>$request->customer_id]);
-    }
-
     public function addcustomerfamily ($id){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];
@@ -287,6 +280,7 @@ class CustomerController extends Controller {
 
     public function addFamilyMemberCustomer(Request $request) {
         //print_r($request->all());exit;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $prev = $request['previous_family_count'];       
         $request['family_count'] . "---" . '----' . $prev;
         $request['family_count'] - $prev;

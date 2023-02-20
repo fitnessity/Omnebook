@@ -243,10 +243,9 @@
 									</div>
 									
 									<div class="manage-cust-box">
-										<form action="{{route('savenotes')}}" method="POST">
+										<form action="{{route('business.customers.update', ['customer' => $customerdata->id])}}" method="POST">
 											@csrf
-											<input type="hidden" name="customer_id" value="{{$customerdata->id}}">
-											<input type="hidden" name="business_id" value="{{$customerdata->business_id}}">
+											@method('PUT')
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
 													<label class="tab-titles">Notes</label>
@@ -254,10 +253,15 @@
 											</div>
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
-													<textarea name="notetext" rows="4" style="width: 100%;">{{$customerdata->notes}} </textarea>
+													<textarea name="notes" rows="4" style="width: 100%;">{{$customerdata->notes}} </textarea>
 												</div>
 											</div>
-											<button type="submit" class="btn-nxt">Submit</button>
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<button type="submit" class="btn-nxt" >Submit</button>
+												</div>
+											</div>
+											
 										</form>
 									</div>
 								
