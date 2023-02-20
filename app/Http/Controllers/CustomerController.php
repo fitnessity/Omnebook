@@ -294,6 +294,7 @@ class CustomerController extends Controller {
 
     public function addFamilyMemberCustomer(Request $request) {
         //print_r($request->all());exit;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $prev = $request['previous_family_count'];       
         $request['family_count'] . "---" . '----' . $prev;
         $request['family_count'] - $prev;
