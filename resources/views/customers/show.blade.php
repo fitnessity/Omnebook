@@ -221,48 +221,32 @@
 											</div>
 										</div>
 									</div>
-									<?php
-									$name = '';
-									$last4 = '';
-                                    foreach($cardInfo as $card) {
-                                    	$name=$card['name'];
-                                    	$last4='CC ending in ****'.$card['last4'];
-                                    }
-                                    ?>
+
 									<div class="manage-cust-box">
 										<div class="row">
 											<div class="col-md-12 col-xs-12">
 												<div class="customer-info">
 													<label class="tab-titles">Billing Information</label>
-													<a data-toggle="modal" data-target="#editbillinginfo">Edit</a>
+													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">Add</a>
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-md-12 col-xs-12">
-												<label>Card of File:</label>
+										@foreach($cardInfo as $card)
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<span>
+														{{$card['card']['brand']}} **** **** **** {{$card['card']['last4']}}
+														<a style="float:right" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->id])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> Remove</a>
+													</span>
+												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-3 col-xs-4">
-												<label>Name on card: </label>
-											</div>
-											<div class="col-md-8 col-xs-6">
-												<span>{{$name}}</span>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-12 col-xs-12">
-												<span>{{$last4}}</span>
-											</div>
-										</div>
+										@endforeach
 									</div>
 									
 									<div class="manage-cust-box">
-										<form action="{{route('savenotes')}}" method="POST">
+										<form action="{{route('business.customers.update', ['customer' => $customerdata->id])}}" method="POST">
 											@csrf
-											<input type="hidden" name="customer_id" value="{{$customerdata->id}}">
-											<input type="hidden" name="business_id" value="{{$customerdata->business_id}}">
+											@method('PUT')
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
 													<label class="tab-titles">Notes</label>
@@ -270,10 +254,15 @@
 											</div>
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
-													<textarea name="notetext" rows="4" style="width: 100%;">{{$customerdata->notes}} </textarea>
+													<textarea name="notes" rows="4" style="width: 100%;">{{$customerdata->notes}} </textarea>
 												</div>
 											</div>
-											<button type="submit" class="btn-nxt">Submit</button>
+											<div class="row">
+												<div class="col-md-12 col-xs-12">
+													<button type="submit" class="btn-nxt" >Submit</button>
+												</div>
+											</div>
+											
 										</form>
 									</div>
 								
@@ -430,8 +419,7 @@
 																<div class="row">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
-																			<label> {{$booking_detail->business_services->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
+																			<label> {{$booking_detail->business_services->program_name}}</label>															<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -775,13 +763,13 @@
 								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Phone Number </label>
-										<input class="form-control" type="text" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{$customerdata->phone_number}}">
+										<input class="form-control" type="text" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{$customerdata->phone_number}}" data-behavior="text-phone">
 									</div>
 								</div>
 								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Birthdate </label>
-										<input class="form-control" type="text" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+										<input class="form-control" type="text" data-behavior="datepicker" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" >
 									</div>
 								</div>
 								<div class="col-md-6 col-xs-12">
@@ -848,161 +836,6 @@
 								</div>
 							</div>
 						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!-- end modal -->
-
-	<!-- The Modal Add billing info-->
-		<div class="modal fade compare-model" id="editbillinginfo">
-			<div class="modal-dialog editbooking">
-				<div class="modal-content">
-					<div class="modal-header" style="text-align: right;"> 
-						<div class="closebtn">
-							<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-					</div>
-
-					<!-- Modal body -->
-					<div class="modal-body body-tbm">
-						<div class="row"> 
-							<div class="col-lg-12">
-							   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Edit Billing Information </h4>
-							</div>
-						</div>
-						<div class="row">
-							<form method="post" id="frmpayment" action="{{Route('update_customer')}}">
-								<div id="numbercarderror" class="red-fonts" style="text-align: center;margin-bottom: 15px"></div>
-								<div class="page-wrapper" id="wrapper">
-								    <div class="page-container">
-								        <div class="page-content-wrapper">
-								            <div class="content-page">
-								                <div class="container-fluid">
-								                    <div class="page-title-box">
-								                        <h4 class="page-title">Payment Information</h4>
-								                    </div>
-								                    <div class="payment_info_section padding-1 white-bg border-radius1">
-								                        <div class="payment-info-block">
-								                            <div class="savecard-block">
-								                                <?php
-								                                if(!empty($cardInfo)) {
-								                                ?>
-								                                    <div class="sacecard-title">Your Saved Cards</div>
-								                                    <?php
-								                                    foreach($cardInfo as $card) {
-								                                        $brandname = strtolower($card['brand']);
-								                                    ?>
-								                                    <div class="cards-block block-resize" style="cursor: pointer" data-name="<?=$card['name']?>" data-cvv="" data-cnumber="<?=$card['last4']?>" data-month="<?=$card['exp_month']?>" data-year="<?=$card['exp_year']?>" data-type="{{$brandname}}" data-ptype="update">
-								                                    <div class="cards-content block-resize" style="color:#ffffff; background-image: url({{ url('public/img/visa-card-bg.jpg')}} );">
-								                                        <img src="{{ url('/public/images/creditcard/'.$brandname.'.jpg') }}" alt="">
-								                                        <span style="float:right"><?=$card['name']?></span>
-								                                        <p><?=ucfirst($brandname)?></p>
-								                                        <span>
-								                                            <span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span> 
-								                                        </span>
-								                                        <span style="float:right" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i></span>
-								                                    </div>
-								                                    </div>
-								                                    <?php }
-								                                } ?>
-								                            </div>
-								                            <div class="row" >
-																<div class="col-md-12" >
-																	<form  class="billing-block col-lg-7">
-																		@csrf
-																		<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
-																		<input type="hidden" id="chk" name="chk" value="update_billing">
-																		<input type="hidden" name="payment_type" id="payment_type" value="insert" />
-																		<input type="hidden" name="_token" value="{{csrf_token()}}" />
-																		<input type="hidden" name="card_type" id="card_type" value="visa" />
-																		<div style="color:red" id="card-error"></div>
-																		<div class="sacecard-title">Billing Address</div>
-
-																		<div class="row">
-
-																			<div class="col-xl-9 col-lg-9 col-md-9 col-sm-8 col-xs-12 col-12 form-group">
-																				<label for="owner">Name On Card</label>
-																				<input required type="text" name="owner" id="owner" placeholder="" class="form-control">
-																			</div>
-
-																			<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-xs-12 col-12 form-group">
-																				<label for="cvv">CVV</label>
-																				<input required type="text" name="cvv" id="cvv" placeholder="" class="form-control">
-																			</div>
-
-																			<div id="card-number-field" class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-12 col-12 form-group">
-																				<label for="cardNumber">Card Number</label>
-																				<input required type="text" name="cardNumber" id="cardNumber" placeholder="" class="form-control">
-																			</div>
-																			
-																			<div id="expiration-date" class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 form-group">
-																				<input type="hidden" name="card_monthhidden" id="card_monthhidden" value="">
-																				<input type="hidden" name="card_yearhidden" id="card_yearhidden" value="">
-																				<select required id="card_month" name="card_month">
-																					<option value="">Mon</option>
-																					<option value="01">Jan</option>
-																					<option value="02">Feb</option>
-																					<option value="03">Mar</option>
-																					<option value="04">Apr</option>
-																					<option value="05">May</option>
-																					<option value="06">Jun</option>
-																					<option value="07">Jul</option>
-																					<option value="08">Aug</option>
-																					<option value="09">Sep</option>
-																					<option value="10">Oct</option>
-																					<option value="11">Nov</option>
-																					<option value="12">Dec</option>
-																				</select>
-																				<select required id="card_year" name="card_year">
-																					<option value="">Year</option>
-																					<option value="2021">2021</option>
-																					<option value="2022">2022</option>
-																					<option value="2023">2023</option>
-																					<option value="2024">2024</option>
-																					<option value="2025">2025</option>
-																					<option value="2026">2026</option>
-																					<option value="2027">2027</option>
-																					<option value="2028">2028</option>
-																					<option value="2029">2029</option>
-																					<option value="2030">2030</option>
-																					<option value="2031">2031</option>
-																					<option value="2032">2032</option>
-																					<option value="2033">2033</option>
-																					<option value="2034">2034</option>
-																					<option value="2035">2035</option>
-																					<option value="2036">2036</option>
-																					<option value="2037">2037</option>
-																					<option value="2038">2038</option>
-																					<option value="2039">2039</option>
-																					<option value="2040">2040</option>
-																				</select>
-																			</div>
-																		</div>
-																		<div class="row">
-																			<div id="pay-now" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 form-group">
-																				<input type="button" id="confirm-purchase" value="Confirm" class="btn-style-one">
-																			</div>
-																			<div id="credit_cards" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 form-group">
-																				<img src="/public/images/creditcard/visa.jpg" id="visa">
-																				<img src="/public/images/creditcard/mastercard.jpg" id="mastercard">
-																				<img src="/public/images/creditcard/amex.jpg" id="amex">
-																			</div>
-																		</div>
-																	</form>
-																</div>
-								                            </div>
-								                        </div>
-								                    </div>
-								                </div>
-								            </div>
-								        </div>
-								    </div>
-								</div>
-							</form>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -1120,29 +953,23 @@
   
     });
 
-    $(".delCard").on("click", function(){
-        $("#owner").val("");
-        $("#cvv").val("");
-        $("#cardNumber").val("");
-        $("#card-error").html("");
-        $("#card_month option:selected").text("Mon");
-        $("#card_year option:selected").text("Year");
-        $("#card_month").val("");
-        $("#card_year").val("");
+    $(document).on("click", "[data-behavior~=delete_card]", function(e){
+    	e.preventDefault()
+
         if (confirm('You are sure to delete card?')) {
-            var _token = $("input[name='_token']").val();
+
             var cardid = $(this).data("cardid");
             $.ajax({
-                type: 'POST',
-                url: '{{route("paymentdeletecustomer")}}',
+                type: 'DELETE',
+                url: $(this).data('url'),
                 data: {
-                    _token: _token,
-                    cardid: cardid,
-                    cus_id:'{{$customerdata->id}}',
+                    _token: '{{csrf_token()}}',
+
                 },
                 success: function(data) {
+
                    /* alert("Card removed successfully.");*/
-                    window.location.reload();
+                    location.reload();
                 }
             });
         } else {
@@ -1358,13 +1185,6 @@
 		}*/
 	});
 	
-	$("#birthdate").keyup(function(){
-      if ($(this).val().length == 2){
-          $(this).val($(this).val() + "/");
-      }else if ($(this).val().length == 5){
-          $(this).val($(this).val() + "/");
-      }
-  	});
 
 	$('#visitstable').dataTable( {
 		"searching": false,

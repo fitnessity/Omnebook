@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 
+use App\Customer;
+use App\StripePaymentMethod;
+
 class CustomerController extends Controller
 {
     /**
@@ -68,9 +71,20 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $business_id, $id)
     {
-        //
+        //notes
+        $company = $request->current_company;
+
+        $customer = $company->customers()->findOrFail($id);
+
+            
+
+        $customer->update(array_merge(
+            $request->only(['notes']), []));
+
+        return redirect()->route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]);
+
     }
 
     /**
@@ -92,5 +106,48 @@ class CustomerController extends Controller
         $booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
         $booking_detail = $booking_status->UserBookingDetail()->findOrFail($request->booking_detail_id);
         return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
+    }
+
+    public function card_editing_form(Request $request, $business_id){
+        $company = $request->current_company;
+
+        $customer = $company->customers()->findOrFail($request->customer_id);
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+        $intent = $stripe->setupIntents->create(
+          [
+            'customer' => $customer->stripe_customer_id,
+            'payment_method_types' => ['card'],
+          ]
+        );
+
+        return view('business.customers.card_editing_form', compact('intent'));
+    }
+
+
+    public function refresh_payment_methods(Request $request){
+        
+        $customer = Customer::findOrFail($request->customer_id);
+
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
+
+
+        foreach($payment_methods as $payment_method){
+            
+            $stripePaymentMethod = StripePaymentMethod::firstOrNew([
+                'payment_id' => $payment_method['id'],
+                'user_type' => 'Customer',
+                'user_id' => $customer->id,
+            ]);
+
+            $stripePaymentMethod->pay_type = $payment_method['type'];
+            $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+            $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+            $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+            $stripePaymentMethod->save();
+
+        }
+        return redirect($request->return_url);
     }
 }

@@ -80,7 +80,9 @@ class CustomerController extends Controller {
         }
     }
 
-    public function show($business_id, $id){
+    public function show(Request $request, $business_id, $id){
+
+
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
 
@@ -92,15 +94,14 @@ class CustomerController extends Controller {
         $purchase_history = $customerdata->Transaction()->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
-        // print_r($active_booking_details);
-        // exit;
+
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
         }
         return view('customers.show', [
             'customerdata'=>$customerdata,
-            'cardInfo'=>$customerdata->get_stripe_card_info(),
+            'cardInfo'=>$customerdata->get_stripe_payment_methods(),
             'strpecarderror'=>$strpecarderror,
             'terms'=> $terms,
             'visits' => $visits,
@@ -251,13 +252,6 @@ class CustomerController extends Controller {
         return view('customers._auto_pay_schedule_and_history', ['visits' => $visits, 'customer' => $customer]);
     } 
 
-    public function savenotes(Request $request){
-        $cust = Customer::findOrFail($request->cus_id);
-        Customer::where('id',$cust->id)->update(["notes"=>$request->notetext]);
-        
-        return redirect()->route('business_customer_show',['business_id' => $request->business_id, 'id'=>$request->customer_id]);
-    }
-
     public function addcustomerfamily ($id){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];
@@ -280,6 +274,7 @@ class CustomerController extends Controller {
 
     public function addFamilyMemberCustomer(Request $request) {
         //print_r($request->all());exit;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $prev = $request['previous_family_count'];       
         $request['family_count'] . "---" . '----' . $prev;
         $request['family_count'] - $prev;
@@ -480,8 +475,9 @@ class CustomerController extends Controller {
             $cust = Customer::find($request->cus_id);
             $cust->update($data);
         }
+        $cust = Customer::find($request->cus_id);
         
-        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$cust->id]);
+        return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
     }
 
     public function paymentdeletecustomer(Request $request) {

@@ -1129,7 +1129,6 @@
 		}
 	});
 	$("#activation_select").change(function () { 
-		console.log($(this).val())
 		if($(this).data('orginal-date') == $(this).val()){
 			$('#span_membership_activation').removeClass('red-fonts').html($(this).data('orginal-date'));	
 		}else{
@@ -1207,7 +1206,7 @@
                 expired_at: $('#expiration_select').val()
             },
             success:function(response) {
-                // location.reload()
+                location.reload()
             },
         });
     });

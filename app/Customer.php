@@ -24,6 +24,20 @@ class Customer extends Authenticatable
             }
         });
 
+        self::created(function($model){
+            if(!$model->stripe_customer_id){
+                $model->create_stripe_customer_id();
+            }
+        });
+
+        self::updated(function($model){
+            if(!$model->stripe_customer_id){
+                $model->create_stripe_customer_id();
+            }
+        });
+
+        
+
         self::updating(function($model){
             
             $fitnessity_user = User::where('email', $model->email)->first();
@@ -126,6 +140,7 @@ class Customer extends Authenticatable
         }
     }
 
+
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
@@ -134,10 +149,20 @@ class Customer extends Authenticatable
                 $this->stripe_customer_id,
                 ['object' => 'card' ,'limit' => 30]
             );
+
             $savedEvents  = json_decode( json_encode( $savedEvents),true);
             return $savedEvents['data'];
         }
         return [];
+    }
+
+
+    public function get_stripe_payment_methods(){
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+        $paymentMethods = $stripe->paymentMethods->all(['customer' => $this->stripe_customer_id, 'type' => 'card']);
+        return $paymentMethods;
+
     }
 
     public function getFullNameAttribute(){
