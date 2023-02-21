@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Business;
 use App\BusinessStaff;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\{CompanyInformation};
 
 class StaffController extends Controller
 {
@@ -15,7 +16,9 @@ class StaffController extends Controller
      */
     public function index(Request $request, $business_id )
     {
-        return view('business.staff.index');
+        $companyInfo = CompanyInformation::where('id', $business_id)->orderBy('id', 'DESC')->first();
+        $companyStaff = @$companyInfo->business_staff->sortByDesc('created_at');
+        return view('business.staff.index', compact('companyStaff'));
     }
 
     /**
@@ -25,7 +28,7 @@ class StaffController extends Controller
      */
     public function create()
     {
-        //
+        return view('business.staff._add_staff_model');
     }
 
     /**
@@ -34,9 +37,11 @@ class StaffController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $business_id)
     {
-        //
+        $company = $request->current_company;
+        BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email]);
+        return redirect()->route('business.staff.index');
     }
 
     /**

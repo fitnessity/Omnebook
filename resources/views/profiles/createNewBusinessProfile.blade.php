@@ -6750,8 +6750,8 @@
 
                                             <a class="" onclick=" return add_another_price_ages({{$i}});"> +Add Another Session </a>
 
-                                           <!-- <a class="" onclick=" return add_another_price_duplicate_session({{$i}});"> +Duplicate This Session Only </a>
-                                            <a class="" onclick=" return add_another_price_duplicate_category({{$i}});"> +Duplicate Entire Category </a>  -->
+                                           <!-- <a class="" onclick=" return add_another_price_duplicate_session({{$i}});"> +Duplicate This Session Only </a> -->
+                                            <a class="" onclick=" return add_another_price_duplicate_category({{$i}});"> +Duplicate Entire Category </a> 
 
                                         </div>  
 
@@ -9923,26 +9923,26 @@ $('body').delegate('.subtab3','click',function(){
     }
 
     function add_another_price_duplicate_category(i){
-        alert('hii');
         var fitnessity_fee = '{{$fitnessity_fee}}';
-
         var cnt=$('#recurring_count').val();
-        alert(cnt);
         var cnt_old=cnt;
-
         cnt++;
-        alert(i)
-        alert(cnt)
         $('#recurring_count').val(cnt);
-        $('#pricediv'+cnt_old).clone().attr('id', 'pricediv' + cnt).insertAfter('#pricediv'+cnt_old+':last');
-        $("#ext_int_div_1").clone(false).find("*[id]").andSelf().each(function() { $(this).attr("id", $(this).attr("id") + clone.id); });
+        var data = '<div id="pricediv'+cnt+'">';
+        if(cnt_old == 0){
+            var data = '<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div>';
+        }
         
-        $('#pricediv' + cnt).prepend('<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div>'); 
-        $('#price_id_db'+cnt+i).val('');
-        $('#agesdiv'+cnt+i).find("input[name='cat_id_db']").val('');
-
+        data += $('#pricediv'+cnt_old).html();
+        data += '</div>';
+        var divelement = data.replaceAll(cnt_old+"0",cnt+"0");
+        var old_i = i;
+        i++;
+        divelement = data.replaceAll("add_another_price_ages("+old_i+")","add_another_price_ages("+i+")");
+        
+        $('.service_price_block').append(divelement);
+        //$('#pricediv'+cnt_old).clone().attr('id', 'pricediv' + cnt).insertAfter('#pricediv'+cnt_old+':last');
     }
-
 
     function add_another_price_ages(i){
 
@@ -9981,26 +9981,6 @@ $('body').delegate('.subtab3','click',function(){
         $("#agesmaindiv"+i).append(ages_data);
     }
 
-    function add_another_price_duplicate_category(i){
-        alert('hii');
-        var fitnessity_fee = '{{$fitnessity_fee}}';
-
-        var cnt=$('#recurring_count').val();
-        /*alert(cnt);*/
-        var cnt_old=cnt;
-
-        cnt++;
-        alert(i)
-        alert(cnt)
-        $('#recurring_count').val(cnt);
-        $('#pricediv'+cnt_old).clone().attr('id', 'pricediv' + cnt).insertAfter('#pricediv'+cnt_old+':last');
-        $("#ext_int_div_1").clone(false).find("*[id]").andSelf().each(function() { $(this).attr("id", $(this).attr("id") + clone.id); });
-        
-        $('#pricediv' + cnt).prepend('<div class="row"><hr style="border: 1px solid #d4cfcf;width: 100%;"><div class="col-md-11"></div><div class="col-md-1"><i class="remove-category-price fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove emp option"></i></div></div>'); 
-        $('#price_id_db'+cnt+i).val('');
-        $('#agesdiv'+cnt+i).find("input[name='cat_id_db']").val('');
-
-    }
 
     function getpricetitle(i,j){
 
