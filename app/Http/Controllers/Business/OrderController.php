@@ -101,6 +101,7 @@ class OrderController extends BusinessBaseController
            //  $purchasefor  = @$last_book[0];
            //  $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
+
            $user_type = 'customer';
            $customerdata = $request->current_company->customers->find($request->cus_id);
            $book_data = @$customerdata->getlastbooking();
@@ -120,9 +121,7 @@ class OrderController extends BusinessBaseController
            $purchasefor  = @$last_book[0];
            $price_title  = @$last_book[1];
            $pageid = $request->cus_id;
-           
         }
-
         if($activated == 0){
            $status = "InActive";
         }else{

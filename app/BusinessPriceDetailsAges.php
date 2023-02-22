@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class BusinessPriceDetailsAges extends Model
 {
 
@@ -12,6 +14,7 @@ class BusinessPriceDetailsAges extends Model
      *
      * @var string
      */
+    use SoftDeletes;
     protected $table = 'business_price_details_ages';
 
     public $timestamps = false;
@@ -26,6 +29,8 @@ class BusinessPriceDetailsAges extends Model
         'userid',
         'cid',
         'serviceid',
+        'dues_tax',
+        'sales_tax',
     ];
     
     public function BusinessActivityScheduler()

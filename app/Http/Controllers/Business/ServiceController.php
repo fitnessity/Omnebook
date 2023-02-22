@@ -53,7 +53,7 @@ class ServiceController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-      /* print_r($request->all());exit;*/
+        //print_r($request->all());exit;
 
         $serid_pay=$request->serviceid;
         $businessData = [
@@ -636,7 +636,7 @@ class ServiceController extends BusinessBaseController
                             $cat_new_id = $create->id;
                         }
 
-                         $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  NULL; 
+                        $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  NULL; 
                         if($request->input('sectiondisplay'.$i.$y) == 'freeprice'){
                             $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0;
                         }else{
@@ -773,9 +773,9 @@ class ServiceController extends BusinessBaseController
                         ];
                        /* print_r($businessPayment);*/
                         if($request->input('price_id_db_'.$i.$y) != ''){
-                            $create = BusinessPriceDetails::where('id',$request->input('price_id_db_'.$i.$y))->update($businessPayment);
+                            BusinessPriceDetails::where('id',$request->input('price_id_db_'.$i.$y))->update($businessPayment);
                         }else{
-                            $create = BusinessPriceDetails::create($businessPayment);
+                            BusinessPriceDetails::create($businessPayment);
                         }
                     }
                 }

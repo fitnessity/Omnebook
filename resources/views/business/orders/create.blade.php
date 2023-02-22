@@ -50,7 +50,7 @@
 								<div class="col-md-5 col-sm-12 col-xs-12 nopadding">
 									<div class="manage-search serchcustomer">
 										<div class="sub">
-											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{Request::get('fname')}}">
+											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{$username}}" data-id="{{$pageid}}">
 											<div id="option-box1" style="display:none;">
 						                        <ul class="customer-list">
 						                        </ul>
@@ -2118,22 +2118,6 @@
 			}
 		});
 	}
-
-	/*$("#serchclient").keyup(function() {
-      $.ajax({
-          type: "POST",
-          url: "/searchcustomersaction",
-          data: { query: $(this).val(),  _token: '{{csrf_token()}}', },
-          beforeSend: function() {
-              //$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-          },
-          success: function(data) {
-              $("#option-box1").show();
-              $("#option-box1").html(data);
-              $("#serchclient").css("background", "#FFF");
-          }
-      });
-    });*/
 
     $(".dobdate").keyup(function(){
       if ($(this).val().length == 2){
