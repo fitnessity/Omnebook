@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BusinessPriceDetails extends Model
 {
@@ -12,6 +13,7 @@ class BusinessPriceDetails extends Model
      *
      * @var string
      */
+    use SoftDeletes;
     protected $table = 'business_price_details';
 
     public $timestamps = false;
