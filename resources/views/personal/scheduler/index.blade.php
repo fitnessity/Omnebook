@@ -3,6 +3,22 @@
 @section('content')
 @include('layouts.userHeader')
 
+<style>
+.schedulers-arrows{
+	position: relative;
+}
+.schedulers-arrows .owl-nav .owl-prev{
+	position: absolute;
+	top: 32px;
+	left: -25px;
+}
+.schedulers-arrows .owl-nav .owl-next{
+	position: absolute;
+	top: 31px;
+	right: -25px;
+}
+</style>
+
 @php use App\ActivityCancel; $service_type_ary = array("classes","individual","events","experience");@endphp
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
@@ -36,6 +52,45 @@
 								</div>
 							</div>
 						</div>
+					<!--	<div class="row">
+							<div class="owl-carousel owl-theme schedulers-arrows">
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Tue 21</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Wed 22</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Thu 23</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Fri 24</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Sat 25</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Sun 26</a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="pairets">
+										<a href="#" class="calendar-btn">Mon 15</a>
+									</div>
+								</div>
+							</div>
+						</div>-->
 						<div class="row">
 							@foreach ($days as $date)
 								@php
@@ -175,6 +230,26 @@
 
 
 @include('layouts.footer')
+<script>
+$('.owl-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:true,
+	navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+    responsive:{
+        0:{
+            items:1
+        },
+        600:{
+            items:3
+        },
+        1000:{
+            items:5
+        }
+    }
+	
+});
+</script>
 <script>
 $(function() {
  $( ".date" ).datepicker({

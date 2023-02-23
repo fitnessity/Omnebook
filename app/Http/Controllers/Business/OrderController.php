@@ -103,6 +103,7 @@ class OrderController extends BusinessBaseController
            //  $purchasefor  = @$last_book[0];
            //  $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
+
            $user_type = 'customer';
            $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
            $book_data = @$customerdata->getlastbooking();
@@ -121,15 +122,12 @@ class OrderController extends BusinessBaseController
            $purchasefor  = @$last_book[0];
            $price_title  = @$last_book[1];
            $pageid = $request->cus_id;
-
            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
            $intent = $stripe->setupIntents->create([
              'payment_method_types' => ['card'],
              'customer' => $customerdata->stripe_customer_id,
            ]);
-           
         }
-
         if($activated == 0){
            $status = "InActive";
         }else{

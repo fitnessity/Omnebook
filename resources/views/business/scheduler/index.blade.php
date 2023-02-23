@@ -121,7 +121,7 @@
 	    												<label class="scheduler-titles"> Scheduled Activity: </label> 
 	    												<span>
 	    													{{$business_scheduler->business_service->program_name}}<br/>
-	    													{{$business_scheduler->businessPriceDetailsAges->category_title}}
+	    													{{@$business_scheduler->businessPriceDetailsAges->category_title}}
 	    												</span>
 
 	    											</div>

@@ -11,7 +11,7 @@ class BusinessStaff extends Model
 {
     //
 
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'business_staff';
     protected $fillable = [
        'id','business_id','first_name','last_name','phone','email','position'
