@@ -136,10 +136,11 @@ class PaymentController extends Controller {
                 $encodepayment_number = json_encode($payment_number_c);
                 $encodeparticipate = json_encode($participate);
                 $activitylocation = BusinessServices::where('id',$crt['code'])->first();
-                
+                $business_id = $activitylocation->cid;
                 $act = array(
                      'booking_id' => $lastid,
                      'sport' => $crt['code'],
+                     'business_id' => $business_id ,
                      'price' => 0,
                      'qty' => $encodeqty  ,
                      'priceid' => $crt['priceid'],
@@ -381,7 +382,6 @@ class PaymentController extends Controller {
 
         $fitnessity_fee= 0;
         $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-        //$fitnessity_fee = $bspdata->fitnessity_fee;
         $service_fee = $bspdata->service_fee;
         $tax = $bspdata->site_tax;
 
@@ -449,7 +449,6 @@ class PaymentController extends Controller {
                     $cartnew[$cnt]['actscheduleid']= $c['actscheduleid'];
                     $cartnew[$cnt]['participate']= $c['participate'];
                     $cnt++;
-
                     unset($cart['cart_item'][$key]);
                 }
             }   
@@ -477,6 +476,7 @@ class PaymentController extends Controller {
                     $sesdate = $cartnew[$i]['sesdate'];
                     $pidval = $cartnew[$i]['code'];
                     $activitylocation = BusinessServices::where('id',$pidval)->first();
+                    $business_id = $activitylocation->cid;
                     $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                     $act_schedule_id = $cartnew[$i]['actscheduleid'];
                     if(!empty($cartnew[$i]['adult'])){
@@ -537,6 +537,7 @@ class PaymentController extends Controller {
                 $act = array(
                     'booking_id' => $lastid,
                     'sport' => $pidval,
+                    'business_id' => $business_id ,
                     'price' => $encodeprice,
                     'qty' =>$encodeqty ,
                     'priceid' => $priceid,
@@ -596,28 +597,7 @@ class PaymentController extends Controller {
                     'getreceipemailtbody' => $getreceipemailtbody,
                     'email' => Auth::user()->email);
                 SGMailService::sendBookingReceipt($email_detail);
-
-
-                /*$BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
-                $businessuser['businessuser'] = CompanyInformation::where('id', $activitylocation->cid)->first();
-                $businessuser = json_decode(json_encode($businessuser), true); 
-                $BusinessServices['businessservices'] = BusinessServices::where('id',$activitylocation->id)->first();
-                $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
-                foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                    if($details['sport'] == $pidval){
-                        if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $lastid){
-                            $BookingDetail_1['user_booking_detail'] = $details;
-                        }
-                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                    }
-                }*/
-
                 $statusdetail->transfer_to_provider();
-
-                
-
-               // MailService::sendEmailBookingConfirmnew($BookingDetail);
             }
 
             session()->put('cart_item', $cart);

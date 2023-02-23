@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
+use Carbon\Carbon;
 
 class CompanyInformation extends Model {
 
@@ -11,8 +14,9 @@ class CompanyInformation extends Model {
      *
      * @var string
      */
+     use SoftDeletes;
     protected $table = 'company_informations';
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -80,6 +84,10 @@ class CompanyInformation extends Model {
         return $this->belongsTo(BusinessService::class, 'id');
     }
 
+    public function UserBookingDetails(){
+        return $this->hasMany(UserBookingDetail::class, 'business_id');
+    }
+
 	public function service() {
         return $this->hasMany(BusinessServices::class, 'cid');
     }
@@ -104,12 +112,10 @@ class CompanyInformation extends Model {
         return $this->hasOne(BusinessTerms::class, 'cid');
     }
 
-
     public function business_terms() {
         return $this->hasMany(BusinessTerms::class, 'cid');
     }
 
-   
     public function company_address(){
         $comp_address = '';
         if($this->address != ''){
@@ -135,4 +141,72 @@ class CompanyInformation extends Model {
         return $this->hasMany(BusinessActivityScheduler::class, 'cid');
     }
 
+    public function visits_count(){
+        $company = $this;
+        $user_id = Auth::user()->id;
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($user_id) {
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->where('user_id',$user_id );
+        });
+        $booking_detail_ids = $booking_details->get()->map(function($item){
+            return $item->id;
+        });
+
+        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checked_at',"!=",NULL)->count();
+    }
+
+    public function active_memberships_count(){
+        $company = $this;
+        $user_id = Auth::user()->id;
+
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->where('user_id',$user_id );
+        })->whereRaw('pay_session > 0');
+        return $result->count(); 
+    }
+
+    public function completed_memberships_count(){
+        $company = $this;
+        $user_id = Auth::user()->id;
+
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->where('user_id',$user_id );
+        })->whereRaw('pay_session = 0');
+        return $result->count(); 
+    }
+
+    public function expired_soon(){
+        $company = $this;
+        $user_id = Auth::user()->id;
+        
+        $now = Carbon::now();
+
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($user_id){
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->where('user_id',$user_id );
+        })->whereDate('expired_at', '<',  $now->addDays(14));
+        return $result->count();
+    }
 }
