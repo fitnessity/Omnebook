@@ -401,8 +401,7 @@ class AdminUserController extends Controller
     }
 
     public function updatefitnessityfee(Request $request){
-        //echo $request->fitness_fee;exit;
-        User::where('id',$request->uid)->update(['fitnessity_fee'=>$request->fitness_fee]);
+        User::where('id',$request->uid)->update(['fitnessity_fee'=>$request->fitness_fee, 'recurring_fee'=>$request->recurring_fee]);
     }
 
 }
