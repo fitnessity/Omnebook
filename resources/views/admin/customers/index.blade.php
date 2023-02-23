@@ -32,7 +32,7 @@
                 <th>Gender</th>
                 <th>Status</th>
                 <th></th>
-                <th>Fitnessity Fee</th>
+                <th>Introduction Fee<br/>Recurring Fee</th>
                 <th>Action</th>
                 <th style="display: none;">Activated</th>
               </tr>
@@ -66,7 +66,8 @@
                       <a href="{{route('admin_user_login_as', ['id' => $value->id])}}">Login</a>
                     </td>
                     <td>
-                      <input class="fitness-fee-ad" type="text" name="fitness_fee" id="fitness_fee{{$value->id}}" value="{{$value->fitnessity_fee}}"> %
+                      <input class="fitness-fee-ad" type="text" name="fitness_fee" id="fitness_fee{{$value->id}}" value="{{$value->fitnessity_fee}}"> %<br/>
+                      <input class="fitness-fee-ad" type="text" name="recurring_fee" id="recurring_fee{{$value->id}}" value="{{$value->recurring_fee}}"> %
                       <button type="button" class="btn btn-primary fitness-fee-sp" data-id="{{$value->id}}">Update</button>
                     </td>
                     <td>
@@ -151,17 +152,18 @@ $(document).ready(function (){
     var fitness_fee = $('#fitness_fee'+uid).val();
 
     $.ajax({
-            url: "user/update_fee/",
-            type: "POST",
-            data:{
-                _token: '{{csrf_token()}}', 
-                fitness_fee: $('#fitness_fee'+uid ).val() ? $('#fitness_fee'+uid).val() : '15',
-                uid: uid
-            },
-            success:function(response) {
-                location.reload()
-            },
-        });
+        url: "user/update_fee/",
+        method: "POST",
+        data:{
+            _token: '{{csrf_token()}}', 
+            fitness_fee: $('#fitness_fee'+uid ).val() ? $('#fitness_fee'+uid).val() : '15',
+            recurring_fee: $('#recurring_fee'+uid ).val() ? $('#recurring_fee'+uid).val() : '1',
+            uid: uid
+        },
+        success:function(response) {
+            location.reload()
+        },
+    });
   });
   
 });
