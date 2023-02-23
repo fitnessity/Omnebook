@@ -231,12 +231,13 @@
 												</div>
 											</div>
 										</div>
-										@foreach($cardInfo as $card)
+
+										@foreach($customerdata->stripePaymentMethods()->get() as $card)
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
 													<span>
-														{{$card['card']['brand']}} **** **** **** {{$card['card']['last4']}}
-														<a style="float:right" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->id])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> Remove</a>
+														{{$card->brand}} **** **** **** {{$card->last4}}
+														<a style="float:right" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> Remove</a>
 													</span>
 												</div>
 											</div>

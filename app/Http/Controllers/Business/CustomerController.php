@@ -142,12 +142,14 @@ class CustomerController extends Controller
             ]);
 
             $stripePaymentMethod->pay_type = $payment_method['type'];
+            $stripePaymentMethod->brand = $payment_method['card']['brand'];
             $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
             $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
             $stripePaymentMethod->last4 = $payment_method['card']['last4'];
             $stripePaymentMethod->save();
 
         }
-        return redirect($request->return_url);
+        if($request->return_url)
+            return redirect($request->return_url);
     }
 }

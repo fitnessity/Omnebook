@@ -13,7 +13,7 @@ use DateInterval;
 use DateTimeZone;
 use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
-
+use App\Services\CheckoutRegisterCartService;
 
 class OrderController extends BusinessBaseController
 {
@@ -65,6 +65,8 @@ class OrderController extends BusinessBaseController
         $username = $address = $current_membership =''; 
         $pageid  = $visits = 0;
         $user_data = '';
+        $intent = null;
+        $customer = null;
         if($request->book_id){
             var_dump('no this cases');
             exit();
@@ -103,7 +105,7 @@ class OrderController extends BusinessBaseController
         }else if($request->cus_id != ''){
 
            $user_type = 'customer';
-           $customerdata = $request->current_company->customers->find($request->cus_id);
+           $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
            $book_data = @$customerdata->getlastbooking();
            $username  =  @$customerdata->fname.' '. @$customerdata->lname;
            $age = Carbon::parse( @$customerdata->birthdate)->age; 
@@ -111,7 +113,6 @@ class OrderController extends BusinessBaseController
            $visits = $customerdata->visits_count();
            $activated = @$customerdata->is_active();
            $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
-           $cardInfo = @$customerdata->get_stripe_payment_methods();
            $address = @$customerdata->full_address();
            $book_id = @$customerdata->id;
            $book_cnt =@$customerdata->memberships();
@@ -121,6 +122,11 @@ class OrderController extends BusinessBaseController
            $purchasefor  = @$last_book[0];
            $price_title  = @$last_book[1];
            $pageid = $request->cus_id;
+           $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+           $intent = $stripe->setupIntents->create([
+             'payment_method_types' => ['card'],
+             'customer' => $customerdata->stripe_customer_id,
+           ]);
         }
         if($activated == 0){
            $status = "InActive";
@@ -138,6 +144,8 @@ class OrderController extends BusinessBaseController
             $modeldata = $this->getmultipleodermodel($ordermodelary);
             session()->forget('ordermodelary');
         }
+
+
         
         return view('business.orders.create', [
            'companyId' => $companyId,
@@ -155,7 +163,6 @@ class OrderController extends BusinessBaseController
            'userfamily'=> $userfamilydata,
            'user_data'=> $user_data,
            'tax'=>  $tax, 
-           'cardInfo' => $cardInfo,
            'user_type' => $user_type,
            'modelchk' => $modelchk,
            'modeldata' => $modeldata,
@@ -163,6 +170,8 @@ class OrderController extends BusinessBaseController
            'visits' => $visits,
            'last_membership' => $last_membership,
            'current_membership' => $current_membership,
+           'intent' => $intent, 
+           'customer' => $customer,
         ]);
     }
 
@@ -174,170 +183,116 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        $bookidarray = [];
-        $fitnessity_fee= 0;
-        $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-        //$fitnessity_fee = $bspdata->fitnessity_fee;
-        $service_fee = $bspdata->service_fee;
-        $tax = $bspdata->site_tax;
-        if($request->user_type == 'user'){
-            var_dump('no cases');
-            exit();
-            $user_id = $request->user_id;
-            $customerid = '';
+
+
+        $company = $request->current_company;
+        $customer = $company->customers()->findOrFail($request->user_id);
+
+        $user = Auth::User();
+        $fitnessity_recurring_fee = $user->recurring_fee / 100;
+        $isCash = ($request->cash_amt > 0);
+        $isCheck = ($request->check_amt > 0);
+        $isCardOnFile = ($request->cc_amt > 0);
+        $isNewCard = ($request->cc_new_card_amt > 0);
+        $isComp = ($request->cardinfo == 'comp');
+        $transactions = [];
+
+        $checkoutRegisterCartService = new CheckoutRegisterCartService();
+
+
+
+        if($isComp){
+            $transactions[] = [
+                'channel' =>'comp',
+                'kind' => 'comp',
+                'transaction_id' => "COS_" . Carbon::now()->format('YmdHmsv'),
+                'amount' => $checkoutRegisterCartService->total($user),
+                'qty' =>'1',
+                'status' =>'complete',
+                'refund_amount' => 0,
+            ];
         }else{
-            $customerid = $request->user_id;
-            $user_id = Null;
-        }
+            if($isCardOnFile){
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+                $onFileTotal = $request->cc_amt;
+                $onFilePaymentMethodId = $request->card_id;
 
-        if(($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != '') || ($request->cc_amt != 0 && $request->cc_amt != '' )){
-            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-            $customer='';
+                try {
+                    $onFilePaymentIntent = $stripe->paymentIntents->create([
+                        'amount' =>  round($onFileTotal *100),
+                        'currency' => 'usd',
+                        'customer' => $customer->stripe_customer_id,
+                        'payment_method' => $onFilePaymentMethodId ,
+                        'off_session' => true,
+                        'confirm' => true,
+                        'metadata' => [],
+                    ]);
 
-            if($request->user_type == 'user'){
-                var_dump('no cases');
-                exit();
-                // $loggedinUser = Auth::user();
-                // $userdata = User::where('id',$loggedinUser->id)->first();
-                // if(empty($userdata['stripe_customer_id'])) {
-                //      $stripe_customer_id =  $userdata->create_stripe_customer_id();
-                // }else{
-                //      $stripe_customer_id = $userdata['stripe_customer_id'];
-                // }
-            }else{
-                $userdata = Customer::where('id',$request->user_id)->first();
-                $stripe_customer_id = $userdata['stripe_customer_id'];
-            }
-            $listItems = []; 
-            $proid = []; 
-            //$totalprice = $request->grand_total;
-            if(isset($request->itemname)) {
-                $itemcount = count($request->itemname);
-                $pr=''; $total=0;
-                for($i=0; $i < $itemcount; $i++) {
-                     $pr=$request->itemprice[$i] / $request->itemqty[$i];
-                     $total = $total + $pr;
-                     if(isset($request->itemname[$i])) {
-                          $product = \Stripe\Product::create([
-                              'name' => $request->itemname[$i],
-                              'description' => $request->itemname[$i],
-                          ]);
-
-                          $price = \Stripe\Price::create([
-                               'product' => $product->id,
-                               'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
-                               'currency' => 'usd',
-                          ]);
-
-                          $listItem['price'] = $price->id;
-                          $listItem['quantity'] = $request->itemqty[$i];
-                          $listItems[] = $listItem;
-                     }
-                     if(isset($request->itemid[$i])) {
-                          $proidary = $request->itemid[$i];
-                          $proid[] = $proidary;
-                     }
-
-                }
-            }
-            $prodata = json_encode($proid); 
-            $listItems = json_encode($listItems);
-
-
-            if($request->cc_new_card_amt != 0 && $request->cc_new_card_amt != ''){
-                var_dump('123');
-                exit();
-                $cc_new_card_amt = $request->cc_new_card_amt;
-                $totalprice = $cc_new_card_amt;
-
-                if($request->has('save_card')){
-                    try {
-                        $carddetails = $stripe->tokens->create([
-                            'card' => [
-                                'number' => $request->cardNumber,
-                                'exp_month' =>  $request->month,
-                                'exp_year' =>  $request->year,
-                                'cvc' =>  $request->cvv,
-                                'name' =>  $request->owner,
-                            ],
-                        ]);
-
-                        $customer_source = $stripe->customers->createSource(
-                            $stripe_customer_id ,
-                            [ 'source' =>$carddetails->id]
-                        );
-                        $payment_method = $customer_source->id;
-                    }catch(\Stripe\Exception\CardException $e) {
-                        $errormsg = $e->getError()->message;
-                        $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
-                        return redirect($url)->with('stripeErrorMsg', $errormsg);
-                    }catch (Exception $e) {
-                        $errormsg = "There Is An Error While Proccessing Your Payment...Please Check Your Details Again.. ";
-                        $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
-                        return redirect($url)->with('stripeErrorMsg', $errormsg);
+                    if($onFilePaymentIntent['status']=='succeeded'){
+                        $transactions[] = [
+                            'channel' =>'stripe',
+                            'kind' => 'card',
+                            'transaction_id' => $onFilePaymentIntent["id"],
+                            'amount' => $onFileTotal,
+                            'qty' =>'1',
+                            'status' =>'complete',
+                            'refund_amount' => 0,
+                            'payload' =>json_encode($onFilePaymentIntent,true),
+                        ];
                     }
-                }else{
-                    try {
-                        $paymentMethods =  $stripe->paymentMethods->create([
-                            'type' => 'card',
-                            'card' => [
-                                'number' => $request->cardNumber,
-                                'exp_month' => $request->month,
-                                'exp_year' => $request->year,
-                                'cvc' => $request->cvv,
-                            ],
-                        ]);
-
-                        $payment_method = $paymentMethods->id;
-                    }catch(\Stripe\Exception\CardException $e) {
-                        $errormsg = $e->getError()->message;
-                        $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
-                        return redirect($url)->with('stripeErrorMsg', $errormsg);
-                    }catch (Exception $e) {
-                        $errormsg = "There Is An Error While Proccessing Your Payment...Please Check Your Details Again.. ";
-                        $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
-                        return redirect($url)->with('stripeErrorMsg', $errormsg);
-                    }
+                }catch(\Stripe\Exception\CardException $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
                 }
-            }else{
-                $totalprice = $cc_amt = $request->cc_amt;;
-                $payment_method = $request->card_id;
             }
-            try {
-                $pmtintent = \Stripe\PaymentIntent::create([
-                    'amount' =>  round($totalprice *100),
-                    'currency' => 'usd',
-                    'customer' => $stripe_customer_id,
-                    'payment_method' =>  $payment_method ,
-                    'off_session' => true,
-                    'confirm' => true,
-                    'metadata' => [
-                         "pro_id" => $prodata,
-                         "listItems" =>$listItems,
-                    ],
-                ]);
 
-                $payid = $pmtintent->id;
+            if($isNewCard){
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+                $newCardTotal = $request->cc_new_card_amt;
+                $newCardPaymentMethodId = $request->new_card_payment_method_id;
 
-                $payment_intent = $stripe->paymentIntents->retrieve(
-                    $payid,
-                    []
-                );
+                try {
+                    $newCardPaymentIntent = $stripe->paymentIntents->create([
+                        'amount' =>  round($newCardTotal *100),
+                        'currency' => 'usd',
+                        'customer' => $customer->stripe_customer_id,
+                        'payment_method' => $newCardPaymentMethodId,
+                        'off_session' => true,
+                        'confirm' => true,
+                        'metadata' => [],
+                    ]);
 
-                $data = json_decode( json_encode( $payment_intent),true);
-                //$amount= ($data["amount"]/100);
-                $amount1=  $request->grand_total;
-                $date = new DateTime("now", new DateTimeZone('America/New_York') );
-                $oid = $date->format('YmdHis');
-                $digits = 3;
-                $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
-                $orderid= 'FS_'.$oid.$rand;
-                $lastid='';
-                $pmt_by_cash = 0;
-                if($amount1 != $data["amount"]/100 ){
-                    $pmt_by_cash = $amount1 - $data["amount"]/100;
+                    if(!$request->has('save_card')){
+                        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
+
+                        $stripePaymentMethod->delete();
+                    }
+
+                    if($newCardPaymentIntent['status']=='succeeded'){
+                        $transactions[] = [
+                            'channel' =>'stripe',
+                            'kind' => 'card',
+                            'transaction_id' => $newCardPaymentIntent["id"],
+                            'amount' => $newCardTotal,
+                            'qty' =>'1',
+                            'status' =>'complete',
+                            'refund_amount' => 0,
+                            'payload' =>json_encode($newCardPaymentIntent,true),
+                        ];
+                    }
+                }catch(\Stripe\Exception\CardException $e) {
+                    $errormsg = $e->getError()->message;
+                    $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
+                    return redirect($url)->with('stripeErrorMsg', $errormsg);
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                    $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
+                    return redirect($url)->with('stripeErrorMsg', $errormsg);
                 }
+            }
 
                 if($data['status']=='succeeded')
                 {
@@ -512,62 +467,56 @@ class OrderController extends BusinessBaseController
                 $errormsg = $e->getError()->message;
                 $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
                 return redirect($url)->with('stripeErrorMsg', $errormsg);
-            }
-        }else{
-            $retrun_cash = 0;
-            $cash_amt_tender = 0;
-            $pmt_by_check = 0;
-            $pmt_by_comp = 0;
-            $checknumber = '';
-            $grandtotal = $request->grand_total;
-            if($request->cardinfo == 'check'){
-                $pay_type = 'check';
-                $pmt_by_check = $request->check_amt;
-                $checknumber  = $request->check_number;
-            }else if($request->cardinfo  == 'cash'){
-                $pay_type = 'cash';
-                if($request->cash_amt_tender > $request->cash_amt ){
-                     $retrun_cash = $request->cash_change;
-                }
-                $cash_amt_tender = $request->cash_amt_tender;
-            }else{
-                $pay_type = 'comp';
-                $pmt_by_comp = $grandtotal;
-                $grandtotal = 0;
-            }
-            $date = new DateTime("now", new DateTimeZone('America/New_York') );
-            $oid = $date->format('YmdHis');
-            $digits = 3;
-            $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);   //24 06 2022 50 9 59
-            $orderid= 'FS_'.$oid.$rand;
 
-            $orderdata = array(
-                'user_id' =>  $user_id ,
-                'customer_id' =>  $customerid ,
-                'user_type' => $request->user_type,
-                'status' => 'active',
-                'currency_code' => 'usd',
-                'stripe_id' => '',
-                'stripe_status' => '',
-                'amount' => $grandtotal,
-                'order_id' => $orderid,
-                'order_type' => 'checkout_register',
-                'bookedtime' =>$date->format('Y-m-d'),
-                'retrun_cash' =>$retrun_cash,
-                'pmt_json' =>json_encode(array(
-                     'pmt_by_card' => 0,
-                     'pmt_by_cash' =>   $cash_amt_tender ,
-                     'pmt_by_check' => $pmt_by_check,
-                     'pmt_by_comp' => $pmt_by_comp,
-                     'check_no' => $checknumber,
-                )),
-            );
-            $status = UserBookingStatus::create($orderdata);
+            }
+			
+			if($isCash){
 
-            $transactiondata = array( 
-                'user_type' => $request->user_type,
-                'user_id' => $request->user_id,
+                $transactions[] = [
+                    'channel' =>'cash',
+                    'kind' => 'cash',
+                    'transaction_id' => "CS_" . Carbon::now()->format('YmdHmsv'),
+                    'amount' => $request->cash_amt,
+                    'qty' =>'1',
+                    'status' =>'complete',
+                    'refund_amount' => 0,
+                ];
+			}
+
+            if($isCheck){
+
+                $transactions[] = [
+                    'channel' =>'check',
+                    'kind' => 'check',
+                    'transaction_id' => "CK_" . Carbon::now()->format('YmdHmsv'),
+                    'amount' => $request->cash_amt,
+                    'qty' =>'1',
+                    'status' =>'complete',
+                    'refund_amount' => 0,
+                ];
+            }
+        }
+
+
+
+        $userBookingStatus = UserBookingStatus::create([
+            'customer_id' =>  $customer->id ,
+            'user_type' => 'customer',
+            'status' => 'active',
+            'currency_code' => 'usd',
+            'amount' => $request->cash_amt + $request->cc_new_card_amt + $request->check_amt + $request->cc_amt,
+            'order_type' => 'checkout_register',
+            'bookedtime' => Carbon::now()->format('Y-m-d'),
+            
+        ]);
+
+        foreach($transactions as $transaction){
+            
+            Transaction::create(array_merge($transaction, [ 
+                'user_type' => 'Customer',
+                'user_id' => $customer->id,
                 'item_type' =>'UserBookingStatus',
+<<<<<<< HEAD
                 'item_id' => $status->id,
                 'channel' =>'',
                 'kind' => $pay_type,
@@ -633,33 +582,14 @@ class OrderController extends BusinessBaseController
                     $infantqnt = $crt['infant']['quantity'];
                     $infantprice = $crt['infant']['price'];
                 }
+=======
+                'item_id' => $userBookingStatus->id,
+            ]));
+>>>>>>> 019cc3a332d4a14a992fa868b15ee3bb0d93127f
 
-                $qty_c= array( 'adult'=>$aduqnt ,'child' =>$childqnt,
-                    'infant'=>$infantqnt); 
-                $price_c = array( 'adult'=>$aduprice ,'child' =>$childprice,
-                    'infant'=>$infantprice);
-                $encodeqty = json_encode($qty_c);
-                $encodeprice = json_encode($price_c);
-                $time = $crt['actscheduleid'];
-                $contract_date = date('Y-m-d',strtotime($crt['sesdate']));
-                $explodetime = explode(' ',$time);
-                $expired_at = '';
-                if(!empty($explodetime) && array_key_exists(1, $explodetime)){
-                     if($explodetime[1] == 'Months'){
-                          $daynum = '+'.$explodetime[0].' month';
-                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
-                     }else if($explodetime[1] == 'Days'){
-                          $daynum = '+'.$explodetime[0].' days';
-                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
-                     }else if($explodetime[1] == 'Weeks'){
-                          $daynum = '+'.$explodetime[0].' weeks';
-                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
-                     }else {
-                          $daynum = '+'.$explodetime[0].' years';
-                          $expired_at  = date('Y-m-d', strtotime($contract_date. $daynum ));
-                     }
-                }
+        }
 
+<<<<<<< HEAD
                 $act = array(
                     'booking_id' => $lastid,
                     'sport' => $crt['code'],
@@ -694,10 +624,40 @@ class OrderController extends BusinessBaseController
                 $bookidarray [] = $status->id;
             }
             //session()->forget('cart_item');
+=======
+        foreach($checkoutRegisterCartService->items() as $item){
+
+            $now = new DateTime();
+            $contact_date = $now->format('Y-m-d');
+            $now->modify('+'. $item['actscheduleid']);
+            $expired_at = $now;
+            
+
+        
+
+            UserBookingDetail::create([                 
+                'booking_id' => $userBookingStatus->id,
+                'sport' => $item['code'],
+                'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
+                'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
+                'priceid' => $item['priceid'],
+                'pay_session' => $item['p_session'],
+                'expired_at' => $expired_at,
+                'contract_date' => Carbon::now()->format('Y-m-d'),
+                'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
+                'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
+                'tax' => $item['tax'],
+                'tip' => $item['tip'],
+                'discount' => $item['discount'],
+                'expired_duration' => $item['actscheduleid'],
+                'participate' => '['.json_encode($item['participate_from_checkout_regi']).']',
+                'transfer_provider_status' =>'unpaid',
+                'payment_number' => '{}',
+            ]);
+>>>>>>> 019cc3a332d4a14a992fa868b15ee3bb0d93127f
         }
-         
-        session()->put('cart_item', $cart);
-        session()->put('ordermodelary', $bookidarray);
+
+        session()->forget('cart_item');
         
         return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
     }

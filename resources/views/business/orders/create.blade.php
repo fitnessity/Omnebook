@@ -595,7 +595,7 @@
 								</div>
 								@php  	
 									if($subtotal != $discount){
-										$service_fee= ($subtotal * $tax->service_fee)/100; 
+										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 								 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
 								 		$grand_total = $grand_total;
 								 		$tax_ser_fees = ($service_fee + $taxes);
@@ -636,12 +636,12 @@
 													<span>${{$tax_ser_fees}}</span>
 												</div>
 												
-												<!-- <div class="col-md-6 col-sm-6 col-xs-6">
+												{{-- <div class="col-md-6 col-sm-6 col-xs-6">
 													<label>Service Fee: {{$tax->service_fee}}% </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6">
 													<span> ${{$service_fee}}</span>
-												</div> -->
+												</div> --}}
 												<div class="col-md-12 col-sm-12 col-xs-12">
 													<div class="checkout-sapre-tor">
 													</div>
@@ -659,336 +659,313 @@
 								</div>
 							
 								@csrf
-								
-								<input type="hidden" name="user_id" value="{{@$user_data->id}}">
-								<input type="hidden" name="user_type" value="{{@$user_type}}">
-								<div class="row">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<div class="payment-method">
-											<label>Select Payment Method</label>
+								@if($user_data)
+									<input type="hidden" name="user_id" value="{{@$user_data->id}}">
+									<input type="hidden" name="user_type" value="{{@$user_type}}">
+									<div class="row">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="payment-method">
+												<label>Select Payment Method</label>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-4 col-sm-4 col-xs-6">
-										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-										<input name="cardinfo" class="payment-radio" type="radio" value="cash" >
-											<span class="plan-details checkout-card">
-	                                            <div class="row">
-	                                               <div class="col-md-12 col-xs-12">
-	                                                  <div class="payment-method-img">
-	                                                      <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100">
-	                                                  </div>
-	                                               </div>
-	                                               <div class="col-md-12 col-xs-12">
-														<div class="cart-name checkout-cart">
-	                                                        <span>Cash</span>
-	                                                    </div>
-	                                                    <div class="cart-num checkout-cart">
-	                                                       <span></span>
-	                                                    </div>
-	                                               </div>
-	                                            </div>
-	                                       </span>
-	                                     </label>
-									</div>
-
-								 	@foreach($cardInfo as $card) 
-                                    	@php $brandname = ucfirst($card['brand']); @endphp
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-	                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" extra-data="{{$card['card']['brand'] }}: XXXX {{$card['card']['last4']}}  Exp. {{$card['card']['exp_month']}}/{{$card['card']['exp_year']}}" card-id="{{$card['id']}}">
+											<input name="cardinfo" class="payment-radio" type="radio" value="cash" >
+												<span class="plan-details checkout-card">
+		                                            <div class="row">
+		                                               <div class="col-md-12 col-xs-12">
+		                                                  <div class="payment-method-img">
+		                                                      <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100">
+		                                                  </div>
+		                                               </div>
+		                                               <div class="col-md-12 col-xs-12">
+															<div class="cart-name checkout-cart">
+		                                                        <span>Cash</span>
+		                                                    </div>
+		                                                    <div class="cart-num checkout-cart">
+		                                                       <span></span>
+		                                                    </div>
+		                                               </div>
+		                                            </div>
+		                                       </span>
+		                                     </label>
+										</div>
+										@if($customer)
+										 	@foreach($customer->stripePaymentMethods()->get() as $card) 
+		                                    	@php $brandname = ucfirst($card['brand']); @endphp
+												<div class="col-md-4 col-sm-4 col-xs-6">
+													<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+			                                        <input name="cardinfo" class="payment-radio" type="radio" value="cardonfile" data-card-last4="{{$card->last4}}" data-card-id="{{$card->payment_id}}">
+			                                            <span class="plan-details checkout-card">
+			                                                <div class="row">
+			                                                    <div class="col-md-12 col-xs-12">
+			                                                        <div class="payment-method-img">
+			                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
+			                                                        </div>
+			                                                    </div>
+			                                                    <div class="col-md-12 col-xs-12">
+																	<div class="cart-name checkout-cart">
+			                                                           <span>CC (On File)</span>
+			                                                         </div>
+			                                                         <div class="cart-num checkout-cart">
+			                                                            <span>{{$card->brand}} XXXX {{$card->last4}}</span>
+			                                                         </div>
+			                                                    </div>
+			                                                </div>
+			                                           </span>
+			                                       </label>
+												</div>
+											@endforeach
+										@endif
+
+										
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+		                                    <input name="cardinfo" class="payment-radio" type="radio" value="newcard">
+		                                        <span class="plan-details checkout-card">
+		                                            <div class="row">
+		                                                <div class="col-md-12 col-xs-12">
+		                                                    <div class="payment-method-img">
+		                                                        <img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100">
+		                                                    </div>
+		                                                </div>
+		                                                <div class="col-md-12 col-xs-12">
+															<div class="cart-name checkout-cart">
+		                                                        <span>CC (Input Cart)</span>
+		                                                    </div>
+		                                                    <div class="cart-num checkout-cart">
+		                                                        <span></span>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                        </span>
+		                                   </label>
+										</div>
+
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+	                                        <input name="cardinfo" class="payment-radio" type="radio" value="check">
 	                                            <span class="plan-details checkout-card">
 	                                                <div class="row">
 	                                                    <div class="col-md-12 col-xs-12">
 	                                                        <div class="payment-method-img">
-	                                                            <img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
+	                                                            <img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100">
 	                                                        </div>
 	                                                    </div>
 	                                                    <div class="col-md-12 col-xs-12">
 															<div class="cart-name checkout-cart">
-	                                                           <span>CC (On File)</span>
-	                                                         </div>
-	                                                         <div class="cart-num checkout-cart">
-	                                                            <span>{{$card['card']['brand']}} XX {{$card['card']['last4']}}</span>
+	                                                           <span>Check</span>
 	                                                         </div>
 	                                                    </div>
 	                                                </div>
 	                                           </span>
 	                                       </label>
 										</div>
-									@endforeach
-
-									
-									<div class="col-md-4 col-sm-4 col-xs-6">
-										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-	                                    <input name="cardinfo" class="payment-radio" type="radio" value="newcard">
-	                                        <span class="plan-details checkout-card">
-	                                            <div class="row">
-	                                                <div class="col-md-12 col-xs-12">
-	                                                    <div class="payment-method-img">
-	                                                        <img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100">
+										
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
+	                                        <input name="cardinfo" class="payment-radio" type="radio"  value="comp">
+	                                            <span class="plan-details checkout-card">
+	                                                <div class="row">
+	                                                    <div class="col-md-12 col-xs-12">
+	                                                        <div class="payment-method-img">
+	                                                            <img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100">
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-md-12 col-xs-12">
+															<div class="cart-name checkout-cart">
+	                                                           <span>Comp</span>
+	                                                         </div>
 	                                                    </div>
 	                                                </div>
-	                                                <div class="col-md-12 col-xs-12">
-														<div class="cart-name checkout-cart">
-	                                                        <span>CC (Input Cart)</span>
-	                                                    </div>
-	                                                    <div class="cart-num checkout-cart">
-	                                                        <span></span>
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-	                                        </span>
-	                                   </label>
-									</div>
+	                                           </span>
+	                                       </label>
+										</div>
 
-									<div class="col-md-4 col-sm-4 col-xs-6">
-										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-                                        <input name="cardinfo" class="payment-radio" type="radio" value="check">
-                                            <span class="plan-details checkout-card">
-                                                <div class="row">
-                                                    <div class="col-md-12 col-xs-12">
-                                                        <div class="payment-method-img">
-                                                            <img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12 col-xs-12">
-														<div class="cart-name checkout-cart">
-                                                           <span>Check</span>
-                                                         </div>
-                                                    </div>
-                                                </div>
-                                           </span>
-                                       </label>
-									</div>
-									
-									<div class="col-md-4 col-sm-4 col-xs-6">
-										<label class="pay-card" style="color:#000; background: #e9e9e9; margin-bottom: 15px;">
-                                        <input name="cardinfo" class="payment-radio" type="radio"  value="comp">
-                                            <span class="plan-details checkout-card">
-                                                <div class="row">
-                                                    <div class="col-md-12 col-xs-12">
-                                                        <div class="payment-method-img">
-                                                            <img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12 col-xs-12">
-														<div class="cart-name checkout-cart">
-                                                           <span>Comp</span>
-                                                         </div>
-                                                    </div>
-                                                </div>
-                                           </span>
-                                       </label>
-									</div>
-
-									<div class="col-md-12 col-xs-12">
-										<div class="check-client-info mathod-display">
-											<div class="payment-selection">
-												<h3>Payment Method Selected</h3>
-											</div>
-											<div id="addpmtmethods">
-												<div class="row" id="cashdiv" style="display: none;">
-													<div class="col-md-1 col-xs-1 col-sm-1">
-														<div class="close-div">
-															<div class="close-cross"> 
-																<i class="fas fa-times"></i>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-3 col-xs-6 col-sm-3">
-														<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="{{$grand_total}}">
-													</div>
-													<div class="col-md-8 col-xs-4 col-sm-3">
-														<label>Cash</label>
-													</div>
-													
-													<div class="col-md-12 col-xs-12">
-														<div class="changecalce">
-															<label>Change Calculator</label>
-														</div>
-													</div>
-													<div class="col-md-5 col-sm-4 col-xs-12">
-														<div class="cash-tend">
-															<span>Cash tendered</span>
-														</div>
-													</div>
-													<div class="col-md-3 col-sm-4 col-xs-6 nopadding">
-														<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00" >
-													</div>
-													<div class="col-md-2 col-sm-4 col-xs-6 nopadding">
-														<div class="cash-tend-option">
-															<span>(Optional)</span>
-														</div>
-													</div>
-													<div class="col-md-5 col-sm-5 col-xs-12">
-														<div class="cash-tend">
-															<span>Cash Change:</span>
-														</div>
-													</div>
-
-													<div class="col-md-2 col-sm-4 nopadding">
-														<div class="cash-tend-option">
-															<label id="cash_amt_change">$0.00</label>
-														</div>
-													</div>
-
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="checkout-sapre-tor">
-														</div>
-													</div>
+										<div class="col-md-12 col-xs-12">
+											<div class="check-client-info mathod-display">
+												<div class="payment-selection">
+													<h3>Payment Method Selected</h3>
 												</div>
-											
-												<div class="row" id="ccfilediv"  style="display: none;">
-													<div class="col-md-1">
-														<div class="close-div">
-															<div class="close-cross"> 
-																<i class="fas fa-times"></i>
+												<div id="addpmtmethods">
+													<div class="row" id="cashdiv" style="display: none;">
+														<div class="col-md-1 col-xs-1 col-sm-1">
+															<div class="close-div">
+																<div class="close-cross"> 
+																	<i class="fas fa-times"></i>
+																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-3">
-														<input type="text" class="form-control valid" id="cc_amt" name="cc_amt" placeholder="0.00" >
-													</div>
-													<div class="col-md-8">
-														<label>CC(Key/Stored)</label>
-													</div>
-													
-													<div class="col-md-12">
-														<div class="options-payment">
-															<input type="radio" id="html" name="fav_language" value="" checked>
-														 	<label for="html">Option 1 :</label> 
-															<span>Use billing information on  file.</span><br>
-															<span class="visa-info"></span><br>
+														<div class="col-md-3 col-xs-6 col-sm-3">
+															<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="0" data-behavior="calculateRemaining">
 														</div>
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="checkout-sapre-tor">
+														<div class="col-md-8 col-xs-4 col-sm-3">
+															<label>Cash</label>
 														</div>
-													</div>
-												</div>	
+														
+														<div class="col-md-12 col-xs-12">
+															<div class="changecalce">
+																<label>Change Calculator</label>
+															</div>
+														</div>
+														<div class="col-md-5 col-sm-4 col-xs-12">
+															<div class="cash-tend">
+																<span>Cash tendered</span>
+															</div>
+														</div>
+														<div class="col-md-3 col-sm-4 col-xs-6 nopadding">
+															<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00"  value="0" data-behavior="calculateChange">
+														</div>
+														<div class="col-md-2 col-sm-4 col-xs-6 nopadding">
+															<div class="cash-tend-option">
+																<span>(Optional)</span>
+															</div>
+														</div>
+														<div class="col-md-5 col-sm-5 col-xs-12">
+															<div class="cash-tend">
+																<span>Cash Change:</span>
+															</div>
+														</div>
 
-												<div id="ccnewdiv"  style="display: none;"> 
-													<div class="col-md-1 col-sm-1 col-xs-2">
-														<div class="close-div">
-															<div class="close-cross"> 
-																<i class="fas fa-times"></i>
+														<div class="col-md-2 col-sm-4 nopadding">
+															<div class="cash-tend-option">
+																<label id="cash_amt_change">$0.00</label>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-3 col-sm-4 col-xs-10">
-														<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" >
-													</div>
-													<div class="col-md-8 col-sm-4 col-xs-12">
-														<label>CC(Input Card)</label>
-													</div>
-													<div class="col-md-12 col-xs-12">
-						        						<div class="row" >
-						        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  required">
-						        								<div id="card-number-field" class="card-space">
-						        									<label for="cardNumber">Card Number</label>
-						        									<input  type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control card-num" > 
-						        								</div>
-						        							</div>
-						        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 required" >
-						        								<div id="" class="card-space">
-						        									<label for="owner">Name On Card</label>
-						                                            <input type="text" name="owner" id="owner" placeholder="ENTER YOUR NAME HERE" class="form-control">
-						        								</div>
-						        							</div>
-						        						</div>
-						        						<div class="row">
-						        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
-						        								<div id="expiration-date" class="card-space">
-						        									<label for="owner">Exp Month</label>
-						                                            <input type="text" name="month" id="month" placeholder="MM" class="form-control card-expiry-month">
-						        								</div>
-						        							</div>
-						                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
-						                                        <div id="expiration-date" class="card-space">
-						                                            <label for="owner">Exp Year</label>
-						                                            <input  type="text" name="year" id="year" placeholder="YYYY" class="form-control card-expiry-year">
-						                                        </div>
-						                                    </div>
-						        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 cvc required">
-						        								<div id="" class="card-space">
-						        									<label for="cvv">CVV</label>
-						                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
-						        								</div>
-						        							</div>
-						                                    <div class="col-md-12 col-xs-12">
-						                                        <div class="save-pmt-checkbox">
-						                                            <input type="checkbox" id="save_card" name="save_card" value="1">
-						                                            <label>Save for future payments</label>
-						                                        </div>
-						                                    </div>
-						                                    <div class='form-row row'>
-						                                        <div class='col-md-12 hide error form-group'>
-						                                            <div class='alert-danger alert'>Fix the errors before you begin.</div>
-						                                        </div>
-						                                    </div>
-						        						</div> 
-						        						<div class="col-md-12 col-sm-12 col-xs-12">
+
+														<div class="col-md-12 col-sm-12 col-xs-12">
 															<div class="checkout-sapre-tor">
 															</div>
 														</div>
-						        					</div>
-					                            </div>
-
-					                            <div class="row" id="checkdiv"  style="display: none;">
-													<div class="col-md-1 col-sm-1 col-xs-2">
-														<div class="close-div">
-															<div class="close-cross"> 
-																<i class="fas fa-times"></i>
+													</div>
+												
+													<div class="row" id="ccfilediv"  style="display: none;">
+														<div class="col-md-1">
+															<div class="close-div">
+																<div class="close-cross"> 
+																	<i class="fas fa-times"></i>
+																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-3 col-sm-4 col-xs-6">
-														<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" >
-													</div>
-													<div class="col-md-8 col-sm-4 col-xs-2">
-														<label>Check</label>
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="row">
-															<div class="cash-tend">
-																<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
+														<div class="col-md-3">
+															<input type="text" class="form-control valid" id="cc_amt" name="cc_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+														</div>
+														<div class="col-md-8">
+															<label>CC(Key/Stored)</label>
+														</div>
+														
+														<div class="col-md-12">
+															<div class="options-payment">
+																<input type="radio" id="html" name="fav_language" value="" checked>
+																<span id="use_billing_info">Use billing information on file.</span><br>
+																<span class="visa-info"></span><br>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-														<div class="checkout-sapre-tor">
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="checkout-sapre-tor">
+															</div>
 														</div>
+													</div>	
+
+													<div id="ccnewdiv"  style="display: none;"> 
+														<div class="col-md-1 col-sm-1 col-xs-2">
+															<div class="close-div">
+																<div class="close-cross"> 
+																	<i class="fas fa-times"></i>
+																</div>
+															</div>
+														</div>
+														<div class="col-md-3 col-sm-4 col-xs-10">
+															<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+														</div>
+														<div class="col-md-8 col-sm-4 col-xs-12">
+															<label>CC(Input Card)</label>
+														</div>
+														<div class="col-md-12 col-xs-12">
+															<div class="row" >
+																<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+																	<div id="payment-element" style="margin-top: 8px;">
+							                                    		
+							                                    	</div>
+																</div>
+															</div>
+							        						<div class="row">
+							                                    <div class="col-md-12 col-xs-12">
+							                                    	
+							                                        <div class="save-pmt-checkbox">
+							                                            <input type="checkbox" id="save_card" name="save_card" value="1" checked>
+							                                            <input type="hidden" id="new_card_payment_method_id" name="new_card_payment_method_id" value="">
+							                                            
+							                                            <label>Save for future payments</label>
+							                                        </div>
+							                                    </div>
+							                                    
+							        						</div> 
+							        						
+							        					</div>
+						                            </div>
+
+						                            <div class="row" id="checkdiv"  style="display: none;">
+														<div class="col-md-1 col-sm-1 col-xs-2">
+															<div class="close-div">
+																<div class="close-cross"> 
+																	<i class="fas fa-times"></i>
+																</div>
+															</div>
+														</div>
+														<div class="col-md-3 col-sm-4 col-xs-6">
+															<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+														</div>
+														<div class="col-md-8 col-sm-4 col-xs-2">
+															<label>Check</label>
+														</div>
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="row">
+																<div class="cash-tend">
+																	<input type="text" class="form-control valid" id="check_number" name="check_number" placeholder="check#" >
+																</div>
+															</div>
+														</div>
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="checkout-sapre-tor">
+															</div>
+														</div>
+													</div>	
+													<div class='form-row row'>
+													    <div class='col-md-12 hide error form-group'>
+													        <div class='alert-danger alert'>Fix the errors before you begin.</div>
+													    </div>
 													</div>
-												</div>	
 
-											</div>
-										</div>
-									</div>
-
-									@if (session('stripeErrorMsg'))
-										<div class="col-md-12">
-											<div class='form-row row'>
-		                                        <div class='col-md-12  error form-group'>
-												    <div class="alert-danger alert">
-												        {{ session('stripeErrorMsg') }}
-												    </div>
 												</div>
 											</div>
 										</div>
-									@endif
-									<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
-									<input type="hidden" name="cash_change" id="cash_change" value="">
-									<input type="hidden" name="card_id" id="card_id" value="">
-									<div class="col-md-6 col-sm-6 col-xs-12 ">
-										<button type="button" class="btn-bck activity-purchase mb-00" id="total_remaing">Total Amount Remaining ${{$grand_total}}</button>
-									</div>
 
-									<div class="col-md-6 col-sm-6 col-xs-12 ">
-										<div class="btn-ord-txt">
-				                            <button class="post-btn-red" type="submit" id="checkout-button" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button>
-				                        </div>
-										<!-- <button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button> -->
-									</div>
+										@if (session('stripeErrorMsg'))
+											<div class="col-md-12">
+												<div class='form-row row'>
+			                                        <div class='col-md-12  error form-group'>
+													    <div class="alert-danger alert">
+													        {{ session('stripeErrorMsg') }}
+													    </div>
+													</div>
+												</div>
+											</div>
+										@endif
+										<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
+										<input type="hidden" name="cash_change" id="cash_change" value="">
+										<input type="hidden" name="card_id" id="card_id" value="">
+										<div class="col-md-6 col-sm-6 col-xs-12 ">
+											<button type="button" class="btn-bck activity-purchase mb-00" id="total_remaing">Total Amount Remaining ${{$grand_total}}</button>
+										</div>
+
+										<div class="col-md-6 col-sm-6 col-xs-12 ">
+											<div class="btn-ord-txt" style="float: right;">
+					                            <button class="post-btn-red" type="submit" id="checkout-button" @if($checkout_btun_chk == 0) disabled  @endif style="margin-top: 0px;">Complete Payment</button>
+					                        </div>
+											<!-- <button type="submit" class="btn-nxt activity-purchase mb-00" @if($checkout_btun_chk == 0) disabled  @endif>Complete Payment</button> -->
+										</div>
+									@endif
 								</div>
 							</form>				
 						</div>
@@ -1143,18 +1120,50 @@
 
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
 
-<!-- <script src="{{ url('public/js/creditcard.js') }}"></script> -->
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
   
 <script type="text/javascript">
 	$(function() {
+
+		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
+
+		const client_secret = '{{$intent ? $intent->client_secret : null}}';
+
+		const options = {
+		  clientSecret: client_secret,
+		  // Fully customizable with appearance API.
+		  appearance: {/*...*/},
+		};
+
+		const elements = stripe.elements(options);
+		const paymentElement = elements.create('payment');
+
+		paymentElement.mount('#payment-element');
+
+
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
+	    	e.preventDefault()
+	    	var $form = $(this);
+	    	$('.error').addClass('hide').find('.alert').text('');
 			$('#checkout-button').html('loading...').prop('disabled', true);
-	        var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
-	       //alert(cardinfoRadio);
-	        if(cardinfoRadio == 'newcard') {
+			let cash_amt = $('#cash_amt').val();
+			let cc_amt = $('#cc_amt').val();
+			let cc_new_card_amt = $('#cc_new_card_amt').val();
+			let check_amt = $('#check_amt').val();
+
+			
+			var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
+
+			if(cash_amt <= 0 && cc_amt <=0 && cc_new_card_amt <=0 && check_amt <=0 && cardinfoRadio!= 'comp'){
+				$('.error').removeClass('hide').find('.alert').text('Choose payment method first');
+				$('#checkout-button').html('Complete Payment').prop('disabled', false);
+				return false;
+			}
+
+
+
+	        if(cc_new_card_amt > 0) {
 	            var $form  = $(".validation"),
 	                inputVal = ['input[type=email]', 'input[type=password]',
 	                                 'input[type=text]', 'input[type=file]',
@@ -1171,34 +1180,51 @@
 	                    $errorStatus.removeClass('hide');
 	                    e.preventDefault();
 	                }
-	            });      
-	            if (!$form.data('cc-on-file')) {
-	                e.preventDefault();
-	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-	                Stripe.createToken({
-	                    number: $('.card-num').val(),
-	                    cvc: $('.card-cvc').val(),
-	                    exp_month: $('.card-expiry-month').val(),
-	                    exp_year: $('.card-expiry-year').val()
-	                }, stripeHandleResponse);
-	            }
+	            });
+
+
+	        	stripe.confirmSetup({
+        	      elements,
+        	      redirect: 'if_required',
+        	      confirmParams: {
+        	      }
+        	    }).then(function(result){
+
+        	    	
+        	    	
+        	    	if (result.error) {
+        	    		$('.error').removeClass('hide').find('.alert').text(result.error.message);
+        	    		$('#checkout-button').html('Complete Payment').prop('disabled', false);
+        	    		return false;
+        	    	}else{
+        	    		$.ajax({
+        	    			url: '{{route('business.customers.refresh_payment_methods', ['customer_id' => request()->cus_id])}}',
+        	    			success: function(data){
+        	    				console.log(data)
+        	    				console.log('success')
+        	    			}
+        	    		})
+
+        	    		$('#new_card_payment_method_id').val(result.setupIntent.payment_method)
+	        	    	$form.off('submit');
+
+		                $form.submit();
+        	    	}
+
+        	    	
+        	    	
+        	    	
+        	    });      
+
+
+
+	        }else{
+    	    	$form.off('submit');
+
+                $form.submit();
 	        }
+	        
 	    });
-	  
-	    function stripeHandleResponse(status, response) {
-	        if (response.error) {
-	            $('.error')
-	                .removeClass('hide')
-	                .find('.alert')
-	                .text(response.error.message);
-	        } else {
-	            var token = response['id'];
-	            $form.find('input[type=text]').empty();
-	            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-	            $form.get(0).submit();
-	        }
-			$('#checkout-button').html('Complete Payment').prop('disabled', false);
-	    }
 	});
 </script>
 
@@ -1314,44 +1340,6 @@
         return emailReg.test(email); //this will either return true or false based on validation
     }
     
-    function sendemail(){
-        $('.reviewerro').html('');
-        var email = $('#email').val();
-        var orderdetalidary = $('#orderdetalidary').val();
-        var booking_id = $('#booking_id').val();
-        if(email == ''){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Add Email Address..');
-        }else if(!valid(email)){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Enter Valid Email Address..');
-        }else{
-            $('.btn-modal-booking').attr('disabled',true);
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Sending...');
-            $.ajax({
-                url: "{{route('sendreceiptfromcheckout')}}",
-                xhrFields: {
-                    withCredentials: true
-                },
-                type: 'get',
-                data:{
-                    orderdetalidary:orderdetalidary,
-                    email:email,
-                    booking_id:booking_id,
-                },
-                success: function (response) {
-                    $('.reviewerro').html('');
-                    $('.reviewerro').css('display','block');
-                    /*if(response == 'success'){*/
-                        $('.reviewerro').html('Email Successfully Sent..');
-					/*  }else{
-                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                    }*/
-                }
-            });
-        }
-    }
 
 	function saveparticipate(){
 		$('#qty').html('');
@@ -1834,141 +1822,169 @@
 		$("#"+name).css('display','none');
 		if(name == 'cashdiv'){
 			$('#cash_amt_tender').val(0);
-			//$('#cash_amt').val('');
+			$('#cash_amt').val(0);
 			$('#cash_amt_change').html('$0.00');
 		}else if(name == 'ccfilediv'){
 			$('#cc_amt').val(0);
 			$('#card_id').val('');
-		}else if(name == 'newcard'){
+		}else if(name == 'ccnewdiv'){
 			$('#cc_new_card_amt').val(0);
 		}else if(name == 'checkdiv'){
 			$('#check_amt').val(0);
 		}
 		
-		myMethod();
+		calculateTotalRemaining();
 	});
-
+	
+	
 	$('input[type=radio][name=cardinfo]').change(function() {
+
 	    if (this.value == 'cash') {
-	    	$('#cashdiv').css('display','block');
-	    	$('#check_amt').val(0);
-	    	$('#cc_amt').val(0);
-	    	$('#cc_new_card_amt').val(0);
+	    	if($('#check_amt').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
+	    		$('#cash_amt').val('{{$grand_total}}');
+	    	}
+
+	    	$('#cashdiv').show();
 	    }else if(this.value == 'check'){
-	    	$('#check_amt').val(0);
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#ccnewdiv').is(":hidden")) {
 	    		$('#check_amt').val('{{$grand_total}}');
 	    	}
-	        $('#checkdiv').css('display','block');
+
+	    	$('#checkdiv').show();
 	    }else if(this.value == 'newcard'){
-	    	$('#cc_new_card_amt').val(0);
 	    	if($('#cashdiv').is(":hidden") && $('#ccfilediv').is(":hidden") && $('#checkdiv').is(":hidden")) {
 	    		$('#cc_new_card_amt').val('{{$grand_total}}');
 	    	}
-	    	$('#ccnewdiv').css('display','block');
+	    	
+	    	$('#ccnewdiv').show();
 	    }else if(this.value == 'cardonfile'){
-	    	$('#cc_amt').val(0);
 	    	if($('#cashdiv').is(":hidden") && $('#ccnewdiv').is(":hidden") && $('#checkdiv').is(":hidden")) {
 	    		$('#cc_amt').val('{{$grand_total}}');
 	    	}
 
-	    	$('#card_id').val($(this).attr("card-id"));
-	    	$('.visa-info').html($(this).attr("extra-data"));
-	        $('#ccfilediv').css('display','block');
+
+	    	$('#use_billing_info').html('Use xxxx xxxx xxxx' + $(this).data('card-last4') + ' on file.')
+	    	$('#card_id').val($(this).data('card-id'))
+	    	$('#ccfilediv').show();
 	    }
-	    myMethod();
+
+	    if (this.value == 'comp') {
+	    	$('#cash_amt').val(0);
+	    	$('#check_amt').val(0);
+	    	$('#cc_amt').val(0);
+	    	$('#cc_new_card_amt').val(0);
+	    	$('#cashdiv').hide();
+	    	$('#checkdiv').hide();
+	    	$('#ccfilediv').hide();
+	    	$('#ccnewdiv').hide();
+	    }
+	    calculateTotalRemaining();
 	});
 
-	document.getElementById("cash_amt").onkeyup = function() {myMethod()};
-	//document.getElementById("cc_new_card_amt").onkeyup = function() {myMethod()};
-	//document.getElementById("check_amt").onkeyup = function() {myMethod()};
+	$(document).on("keyup", '[data-behavior=calculateRemaining]', calculateTotalRemaining)
+	$(document).on("keyup", '[data-behavior=calculateChange]', function(e){
+		let cash_amt = $('#cash_amt').val();
+		let cash_amt_tender = $('#cash_amt_tender').val()
+		$('#cash_change').val(cash_amt - cash_amt_tender);
+	})
+	// document.getElementById("cash_amt").onkeyup = function() {calculateTotalRemaining()};
+	//document.getElementById("cc_new_card_amt").onkeyup = function() {calculateTotalRemaining()};
+	//document.getElementById("check_amt").onkeyup = function() {calculateTotalRemaining()};
 
-	document.getElementById("cash_amt_tender").onkeyup = function() {myMethod()};
+	// document.getElementById("cash_amt_tender").onkeyup = function() {calculateTotalRemaining()};
 
-	function myMethod() {
-		var grand_total = '{{$grand_total}}';
-		var cash_amt_tender = parseFloat($('#cash_amt_tender').val());
-		var cash_amt = parseFloat($('#cash_amt').val());
-		var tot =0;
-		if($('#cash_amt_tender').val()!= ''  && $('#cash_amt').val()!= ''){
-			tot  = Math.abs(Number(cash_amt-cash_amt_tender));
-			if(cash_amt_tender < cash_amt){
-				tot_btn  = tot;
-				if($('#ccfilediv').is(':visible')){
-					$('#cc_amt').val(tot_btn);
-				}
-				if($('#ccnewdiv').is(':visible')){
-					$('#cc_new_card_amt').val(tot_btn);
-				}
-				if($('#checkdiv').is(':visible')){
-					$('#check_amt').val(tot_btn);
-				}
-				$('#cash_change').val('0');
-			}else{
-				tot_btn  = '0.00';
-				if($('#ccfilediv').is(':visible')){
-					$('#cc_amt').val(0);
-				}
-				if($('#ccnewdiv').is(':visible')){
-					$('#cc_new_card_amt').val(0);
-				}
-				if($('#checkdiv').is(':visible')){
-					$('#check_amt').val(0);
-				}
-				$('#cash_change').val(tot);
-			}
+	function calculateTotalRemaining() {
+		let total = $('#grand_total').val();
 
-			if($('#ccfilediv').is(':visible')){
-				var cash = cash_amt_tender + parseFloat($('#cc_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
-				}
-			}else if($('#ccnewdiv').is(':visible')){
-				var cash = cash_amt_tender + parseFloat($('#cc_new_card_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
-				}
-			}else if($('#checkdiv').is(':visible')){
-				var cash = cash_amt_tender + parseFloat($('#check_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
-				}
-			}else{
-				$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
-			}
-			$('#cash_amt_change').html('$'+ tot);
-		}else{
-			if($('#ccfilediv').is(':visible')){
-				var cash = parseFloat($('#cc_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
-				}
-			}else if($('#ccnewdiv').is(':visible')){
-				var cash = parseFloat($('#cc_new_card_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
-				}
-			}else if($('#checkdiv').is(':visible')){
-				var cash = parseFloat($('#check_amt').val());
-				if( cash === cash_amt){
-					$('#total_remaing').html('Total Amount Remaining $0.00');
-				}else{
-					$('#total_remaing').html('Total Amount Remaining $'+grand_total);
-				}
-			}else{
-				$('#total_remaing').html('Total Amount Remaining $'+cash_amt);
-			}
-		}
+		let cash_amt = $('#cash_amt').val();
+		let cc_amt = $('#cc_amt').val();
+		let cc_new_card_amt = $('#cc_new_card_amt').val();
+		let check_amt = $('#check_amt').val();
+
+		$('#total_remaing').html('Total Amount Remaining $' + parseFloat(total - cash_amt - cc_amt - cc_new_card_amt - check_amt).toFixed(2));
+		// var grand_total = '{{$grand_total}}';
+		// var cash_amt_tender = parseFloat($('#cash_amt_tender').val());
+		// var cash_amt = parseFloat($('#cash_amt').val());
+		// var tot =0;
+		// if($('#cash_amt_tender').val()!= ''  && $('#cash_amt').val()!= ''){
+		// 	tot  = Math.abs(Number(cash_amt-cash_amt_tender));
+		// 	if(cash_amt_tender < cash_amt){
+		// 		tot_btn  = tot;
+		// 		if($('#ccfilediv').is(':visible')){
+		// 			$('#cc_amt').val(tot_btn);
+		// 		}
+		// 		if($('#ccnewdiv').is(':visible')){
+		// 			$('#cc_new_card_amt').val(tot_btn);
+		// 		}
+		// 		if($('#checkdiv').is(':visible')){
+		// 			$('#check_amt').val(tot_btn);
+		// 		}
+		// 		$('#cash_change').val('0');
+		// 	}else{
+		// 		tot_btn  = '0.00';
+		// 		if($('#ccfilediv').is(':visible')){
+		// 			$('#cc_amt').val(0);
+		// 		}
+		// 		if($('#ccnewdiv').is(':visible')){
+		// 			$('#cc_new_card_amt').val(0);
+		// 		}
+		// 		if($('#checkdiv').is(':visible')){
+		// 			$('#check_amt').val(0);
+		// 		}
+		// 		$('#cash_change').val(tot);
+		// 	}
+
+		// 	if($('#ccfilediv').is(':visible')){
+		// 		var cash = cash_amt_tender + parseFloat($('#cc_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+		// 		}
+		// 	}else if($('#ccnewdiv').is(':visible')){
+		// 		var cash = cash_amt_tender + parseFloat($('#cc_new_card_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+		// 		}
+		// 	}else if($('#checkdiv').is(':visible')){
+		// 		var cash = cash_amt_tender + parseFloat($('#check_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+		// 		}
+		// 	}else{
+		// 		$('#total_remaing').html('Total Amount Remaining $'+tot_btn);
+		// 	}
+		// 	$('#cash_amt_change').html('$'+ tot);
+		// }else{
+		// 	if($('#ccfilediv').is(':visible')){
+		// 		var cash = parseFloat($('#cc_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+grand_total);
+		// 		}
+		// 	}else if($('#ccnewdiv').is(':visible')){
+		// 		var cash = parseFloat($('#cc_new_card_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+grand_total);
+		// 		}
+		// 	}else if($('#checkdiv').is(':visible')){
+		// 		var cash = parseFloat($('#check_amt').val());
+		// 		if( cash === cash_amt){
+		// 			$('#total_remaing').html('Total Amount Remaining $0.00');
+		// 		}else{
+		// 			$('#total_remaing').html('Total Amount Remaining $'+grand_total);
+		// 		}
+		// 	}else{
+		// 		$('#total_remaing').html('Total Amount Remaining $'+cash_amt);
+		// 	}
+		// }
 	}
 
 
@@ -2021,103 +2037,9 @@
 </script>
 
 <script type="text/javascript">
-	$("#business_name").keyup(function() {
-      $.ajax({
-          type: "POST",
-          url: "/searchcustomersaction",
-          data: { query: $(this).val(),  _token: '{{csrf_token()}}', },
-          beforeSend: function() {
-              //$("#label").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-          },
-          success: function(data) {
-              $("#option-box").show();
-              $("#option-box").html(data);
-              $("#business_name").css("background", "#FFF");
-          }
-      });
-  	});
 
-	function registerUser() {
-    	
-       /* var valchk = getAge();*/
-        var validForm = $('#frmregister').valid();
-        var posturl = '/customers/registration';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-       /* if(valchk == 1){
-            $('#register_submit').prop('disabled', true);*/
-            if (validForm) {
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                    },
-                    success: function (response) {
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                        	// $("#frmregister")[0].reset();
-                        	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        	$("#divstep1").css("display","none");
-                        	$("#divstep3").css("display","block");
-                        	$("#cust_id").val(response.id);
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
-                    }
-                });
-            }
-        
-        /*}else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }*/
-    }
+	
 
-  	function changeformate_fami_pho(idname) {
-      /*alert($('#contact').val());*/
-      var con = $('#'+idname).val();
-      var curchr = con.length;
-      if (curchr == 3) {
-          $('#'+idname).val("(" + con + ")" + "-");
-      } else if (curchr == 9) {
-          $('#'+idname).val(con + "-");
-      }
-    }
-
-    function getcustomerlist(){
-		$('#option-box1').hide();
-		var inpuval = $('#serchclient').val();
-		if(inpuval == ''){
-			$('#chk').val('empty');
-			$('#id').val('{{$companyId}}');
-		}else{
-			$('#chk').val('notempty');
-			$('#id').val(inpuval);
-		}
-		
-		$.ajax({
-			url:'{{route("business_customer_index")}}',
-			type:"GET",
-			data:{
-				inpuval:inpuval
-			},
-			success:function(response){
-				$('#customerlist').html(response);
-			}
-		});
-	}
 
     $(".dobdate").keyup(function(){
       if ($(this).val().length == 2){
@@ -2135,314 +2057,8 @@
         }
     });
 
-	$("#frmregister").submit(function (e) {
-      e.preventDefault();
-      $('#frmregister').validate({
-          rules: {
-              firstname: "required",
-              lastname: "required",
-              username: "required",
-              email: {
-                  required: true,
-                  email: true
-              },
-              /*dob: {
-                  required: true,
-              },*/
-              password: {
-                  required: true,
-                  minlength: 8
-              },
-              confirm_password: {
-                  required: true,
-                  minlength: 8,
-                  equalTo: "#password"
-              },
-          },
-          messages: {
-              firstname: "Enter your Firstname",
-              lastname: "Enter your Lastname",
-              username: "Enter your Username",
-              email: {
-                  required: "Please enter a valid email address",
-                  minlength: "Please enter a valid email address",
-                  remote: jQuery.validator.format("{0} is already in use")
-              },
-             /* dob: {
-                  required: "Please provide your date of birth",
-              },*/
-              password: {
-                  required: "Provide a password",
-                  minlength: jQuery.validator.format("Enter at least {0} characters")
-              },
-              confirm_password: {
-                  required: "Repeat your password",
-                  minlength: jQuery.validator.format("Enter at least {0} characters"),
-                  equalTo: "Enter the same password as above"
-              },
-          },
-          submitHandler: registerUser
-      });
-  	});
+	
 
-    $('#email').on('blur', function() {
-      var posturl = '{{route("emailvalidation_customer")}}';
-      var formData = $("#frmregister").serialize();
-      $.ajax({
-            url: posturl,
-            type: 'get',
-            dataType: 'json',
-            data: formData,  
-             beforeSend: function () {
-                $("#systemMessage").html('');
-            },             
-            success: function (response) {                    
-                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
-            }
-        });
-  });
-
-    $(document).on('click', '#step3_next', function () {
-        $("#err_gender").html("");
-        /*if ($('input[name="gender"]:checked').val() == '' || $('input[name="gender"]:checked').val() == 'undefined' || $('input[name="gender"]:checked').val() == undefined) {
-            $("#err_gender").html('Please select your gender');
-        } else {*/
-            if ($('input[name="gender"]:checked').val() == 'other' && $('#othergender').val() == '') {
-                $("#err_gender").html('Please enter other gender');
-            } else {
-                var posturl = '/customers/savegender';
-                var formdata = new FormData();
-                formdata.append('_token', '{{csrf_token()}}')
-                formdata.append('cust_id', $('#cust_id').val())
-                var g = $('input[name="gender"]:checked').val() == 'other' ? $('#othergender').val() : $('input[name="gender"]:checked').val();
-                formdata.append('gender', g);
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formdata,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $("#_token").val()
-                    },                
-                    beforeSend: function () {
-                        $('.step3_next').prop('disabled', true).css('background','#999999');
-                        $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-                    },
-                    complete: function () {
-                        $('.step3_next').prop('disabled', false).css('background','#ed1b24');
-                    },
-                    success: function (response) {
-                       $("#divstep3").css("display","none");
-                       $("#divstep4").css("display","block");
-                    }
-                });
-            }
-        //}
-    });
-
-    $(document).on('click', '#step4_next', function () {
-      
-        var address_sign = $('#b_address').val();
-        var country_sign = $('#b_country').val();
-        var city_sign = $('#b_city').val();
-        var state_sign = $('#b_state').val();
-        var zipcode_sign = $('#b_zipcode').val();
-        var lon = $('#lon').val();
-        var lat = $('#lat').val();
-        
-        $('#err_address_sign').html('');
-        $('#err_country_sign').html('');
-        $('#err_city_sign').html('');
-        $('#err_state_sign').html('');
-        $('#err_zipcode_sign').html('');
-        
-        /*if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }*/
-
-        var posturl = '/customers/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('cust_id', $('#cust_id').val())
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                $("#divstep4").css("display","none");
-                $("#divstep5").css("display","block");
-            }
-        });
-       
-    });
-
-    $(document).on('click', '#step44_next', function () {
-      	var posturl = '/customers/savephoto';
-       	var getData = new FormData($("#myformprofile")[0]);
-      	getData.append('_token', '{{csrf_token()}}')       
-      	getData.append('cust_id', $('#cust_id').val())       
-      	$.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: getData,
-            cache: true,
-            processData: false,
-            contentType: false,
-           
-            success: function (response) {
-                $("#divstep5").css("display","none");
-                $("#divstep6").css("display","block");
-            }
-        });
-  	});
-
-  	$(document).on('click', '#step5_next', function () {
-      
-        var fname = $('#fname').val();
-        var lname = $('#lname').val();
-        var birthday_date = $('#birthday_date').val();
-        var relationship = $('#relationship').val();
-        var mphone = $('#mphone').val();
-        var gender = $('#gender').val();
-        var emailid = $('#emailid').val();
-        
-        $('#err_fname').html('');
-        $('#err_lname').html('');
-        $('#err_birthday_date').html('');
-        $('#err_relationship').html('');
-        $('#err_mphone').html('');
-        $('#err_gender').html('');
-        $('#err_emailid').html('');
-        
-        if(fname == ''){
-            $('#err_fname').html('Please enter first name');
-            $('#fname').focus();
-            return false;
-        }
-        if(lname == ''){
-            $('#err_lname').html('Please enter last name');
-            $('#lname').focus();
-            return false;
-        }
-        if(birthday_date == ''){
-            $('#err_birthday_date').html('Please enter birth date');
-            $('#birthday_date').focus();
-            return false;
-        }
-        if(relationship == ''){
-            $('#err_relationship').html('Please select relationship');
-            $('#relationship').focus();
-            return false;
-        }
-        if(mphone == ''){
-            $('#err_mphone').html('Please enter mobile number');
-            $('#mphone').focus();
-            return false;
-        }
-        if(gender == ''){
-            $('#err_gender').html('Please select gender');
-            $('#gender').focus();
-            return false;
-        }
-        if(emailid == ''){
-            $('#err_emailid').html('Please enter emailid');
-            $('#emailid').focus();
-            return false;
-        }
-        
-        var posturl = '/submitfamilyCustomer';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('business_id', '{{$companyId}}')
-        formdata.append('first_name', $('.first_name').val())
-        formdata.append('last_name', $('.last_name').val())
-        formdata.append('email', $('.email').val())
-        formdata.append('relationship', $('.relationship').val())
-        formdata.append('mobile_number', $('.mobile_number').val())
-        formdata.append('emergency_phone', $('.emergency_phone').val())
-        formdata.append('birthday', $('#birthday_date').val())
-        formdata.append('gender', $('.gender').val())
-        formdata.append('cust_id', $('#cust_id').val())
-
-        setTimeout(function () {
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $("#_token").val()
-                },
-                beforeSend: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                  
-                    $("#systemMessage").html('Please wait while we submitting the data.')
-                },
-                complete: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                },
-                success: function (response) {
-                    $("#systemMessage").html(response.msg);
-                    if (response.type === 'success') {
-                        window.location.href = response.redirecturl;
-                    } else {
-                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }, 1000)
-    });
-
-    $(document).on('click', '#skip5_next', function () {
-    	window.location.href = '/viewcustomer/'+$('#cust_id').val();
-    });
 
     function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -2459,105 +2075,7 @@
     }
 </script>
 
-<script type="text/javascript">
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13
-        });
 
-        var input = document.getElementById('b_address');
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-        var infowindow = new google.maps.InfoWindow();
-        var marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29)
-        });
-
-        autocomplete.addListener('place_changed', function() {
-            infowindow.close();
-            marker.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Autocomplete's returned place contains no geometry");
-                return;
-            }
-
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-
-            marker.setIcon(({
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(35, 35)
-            }));
-
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-            var address = '';
-            var badd = '';
-            var sublocality_level_1 = '';
-            if (place.address_components) {
-                address = [
-                  (place.address_components[0] && place.address_components[0].short_name || ''),
-                  (place.address_components[1] && place.address_components[1].short_name || ''),
-                  (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker);
-            // Location details
-            for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
-                  $('#b_zipcode').val(place.address_components[i].long_name);
-                }
-                if(place.address_components[i].types[0] == 'country'){
-                  $('#b_country').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'locality'){
-                    $('#b_city').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                    sublocality_level_1 = place.address_components[i].long_name;
-                }
-
-                if(place.address_components[i].types[0] == 'street_number'){
-                   badd = place.address_components[i].long_name ;
-                }
-
-                if(place.address_components[i].types[0] == 'route'){
-                   badd += ' '+place.address_components[i].long_name ;
-                } 
-
-                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                  $('#b_state').val(place.address_components[i].long_name);
-                }
-            }
-
-            if(badd == ''){
-              $('#b_address').val(sublocality_level_1);
-            }else{
-              $('#b_address').val(badd);
-            }
-            
-        
-           /* $('#lat').val(place.geometry.location.lat());
-            $('#lon').val(place.geometry.location.lng());*/
-        });
-    }
-</script>
 
 <script>
     $( function() {
@@ -2569,9 +2087,6 @@
         } );
     } );
 </script>
-
-
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
 
 <script type="text/javascript">
 	$(document).mouseup(function (e) {
@@ -2591,8 +2106,6 @@
 </script>
 
 @include('layouts.footer')
-
-<?php /*?><script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><?php */?>
 
 
 @endsection
