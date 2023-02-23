@@ -243,8 +243,7 @@ class Customer extends Authenticatable
                   ->from('user_booking_status')
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
         })->whereRaw('pay_session > 0');
-        return $result->count();
-        
+        return $result->count(); 
     }
 
     public function active_memberships(){
@@ -286,8 +285,6 @@ class Customer extends Authenticatable
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
         })->whereDate('expired_at', '<',  $now->addDays(14));
         return $result->count();
-
-
     }
 
     function create_stripe_customer_id(){

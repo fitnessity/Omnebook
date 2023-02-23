@@ -16,7 +16,7 @@ class BusinessPriceDetails extends Model
     use SoftDeletes;
     protected $table = 'business_price_details';
 
-    public $timestamps = false;
+    public $timestamps = true;
     
     /**
      * The attributes that are mass assignable.

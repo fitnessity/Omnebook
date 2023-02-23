@@ -446,6 +446,7 @@ class OrderController extends BusinessBaseController
                          }
 
                          $activitylocation = BusinessServices::where('id',$pidval)->first();
+                         $business_id = $activitylocation->cid;
                          $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                          $price_detail = BusinessPriceDetails::find($priceid);
                          $time = $act_schedule_id;
@@ -470,6 +471,7 @@ class OrderController extends BusinessBaseController
                          $act = array(
                               'booking_id' => $lastid,
                               'sport' => $pidval,
+                              'business_id' => $business_id ,
                               'price' => $encodeprice,
                               'qty' =>$encodeqty ,
                               'priceid' => $priceid,
@@ -610,6 +612,7 @@ class OrderController extends BusinessBaseController
                 $aduqnt = $childqnt = $infantqnt = $fitnessity_fee = 0;
                 $taxval = $crt['tax'];
                 $activitylocation = BusinessServices::where('id',$crt['code'])->first();
+                $business_id = $activitylocation->cid;
                 $fitnessity_fee = $activitylocation->user->fitnessity_fee;
                 $price_detail = BusinessPriceDetails::find($crt['priceid']);
                 $p_session = $crt['p_session'];
@@ -660,6 +663,7 @@ class OrderController extends BusinessBaseController
                 $act = array(
                     'booking_id' => $lastid,
                     'sport' => $crt['code'],
+                    'business_id' => $business_id ,
                     'price' => $encodeprice,
                     'qty' =>$encodeqty ,
                     'priceid' => $crt['priceid'],

@@ -36,7 +36,7 @@ class BookingRepository
         return UserBookingDetail::where('booking_id',$bid)->get();
     }
 
-    public function getcurrenttabdata($type){
+    public function getcurrenttabdata($type,$cid){
         $BookingDetail = [];
         $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id,'order_type'=>'checkout_register','user_type'=>'customer'])->orderBy('created_at','desc')->get();
         foreach ($bookingstatus as $key => $value) {
@@ -71,34 +71,64 @@ class BookingRepository
         return $BookingDetail;
     }
 
-    public function getalldata($type){
+    public function getalldata($type,$cid){
         $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id'=>Auth::user()->id])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            if($value['user_type'] == 'user' ){
-                $customer = User::where('id',$value['user_id'])->first();
+        $user = Auth::user();
+        $company = $user->company()->findOrFail($cid);
+        $bookingDetails = $company->UserBookingDetails;
+        foreach ($bookingDetails as $key => $bookValue) {
+            $bookingstatus =  $bookValue->booking;
+            if($bookingstatus->user_type == 'user' ){
+                $customer = $bookingstatus->user();
                 $customers['user'] = $customer;
             }else{
-                $customer = Customer::where('id',$value['customer_id'])->first();
+                $bookingstatus = $bookingstatus->customer();
+                $customers['customer'] = $customer;
+            }
+            $business_services = $bookValue->business_services;
+            if(@$business_services != '' ){
+                if(@$business_services->service_type == $type){
+                    $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
+                    $businessuser['businessuser'] = $business_services->company_information;
+                    $BusinessServices['businessservices'] = $business_services;
+                    $customers = json_decode(json_encode($customers), true);
+                    $businessuser = json_decode(json_encode($businessuser), true);
+                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                    foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                        if($details['sport'] == $bookValue->sport){
+                            if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $bookValue->booking_id){
+                                $BookingDetail_1['user_booking_detail'] = $details;
+                            }
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
+                        }
+                    }    
+                }
+            }
+        }
+        /*$bookingstatus = $user->BookingStatus;
+
+        foreach ($bookingstatus as $key => $value) {
+            if($value['user_type'] == 'user' ){
+                $customer = $value->user();
+                $customers['user'] = $customer;
+            }else{
+                $customer = $value->customer();
                 $customers['customer'] = $customer;
             }
                
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
-           // print_r( $booking_details);
-            foreach ($booking_details as $key => $book_value) {
-               // echo "jii<br>";
-                $business_services = BusinessServices::where('id',$book_value->sport)->first();
+            $bookingDetails =$value->UserBookingDetail; 
+            foreach ($bookingDetails as $key => $bookValue) {
+                $business_services = $bookValue->business_services;
                 if(@$business_services != '' ){
                     if(@$business_services->service_type == $type){
                         $BookingDetail_1 = $this->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-
+                        $businessuser['businessuser'] = $business_services->company_information;
+                        $BusinessServices['businessservices'] = $business_services;
                         $customers = json_decode(json_encode($customers), true);
                         $businessuser = json_decode(json_encode($businessuser), true);
                         $BusinessServices = json_decode(json_encode($BusinessServices), true);
                         foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
+                            if($details['sport'] == $bookValue->sport){
                                 if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
                                     $BookingDetail_1['user_booking_detail'] = $details;
                                 }
@@ -108,7 +138,7 @@ class BookingRepository
                     }
                 }
             }
-        }
+        }*/
 
         //print_r($BookingDetail);exit;
         return $BookingDetail;
@@ -278,7 +308,7 @@ class BookingRepository
                     "language" => $language,
                     "participate" => $book_details['user_booking_detail']['qty'],
                     "participate_name" => $book_details['user_booking_detail']['participate'],
-                    "membership_type" => $BusinessPriceDetails['membership_type'],
+                    "membership_type" => @$BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,
@@ -375,7 +405,7 @@ class BookingRepository
                     "name" => $name,
                     "participate" => $book_details['user_booking_detail']['qty'],
                     "participate_name" => $book_details['user_booking_detail']['participate'],
-                    "membership_type" => $BusinessPriceDetails['membership_type'],
+                    "membership_type" => @$BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
                     "company_name" =>  $book_details['businessuser']['company_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,

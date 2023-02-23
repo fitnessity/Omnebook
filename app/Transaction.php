@@ -14,6 +14,8 @@ class Transaction extends Model
      */
     // public $timestamps = false;
     protected $table = 'transaction';
+    
+    public $timestamps = true;
 	
 	protected $fillable = [
         'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount',

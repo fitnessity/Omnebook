@@ -95,121 +95,127 @@
 										$schedule_end = strtotime($filter_date->format('Y/m/d').' '.$business_scheduler['shift_end']);
 								 	@endphp
 								 	@if ($schedule_end < time())
-										<div class="overlay-activity">
-			                <div class="scheduler-info-box">
-				                <div class="row">
-	    	                	<div class="col-md-1 col-xs-12 col-sm-4">
+									<div class="overlay-activity">
+						                <div class="scheduler-info-box">
+							                <div class="row">
+					    	                	<div class="col-md-1 col-xs-12 col-sm-4">
 	    											<div class="timeline">
 	    												<label class="scheduler-titles">Time: </label> 
 	    												<span>{{date('h:i A', strtotime($business_scheduler['shift_start']))}}</span>
 	    												<span>{{date('h:i A', strtotime($business_scheduler['shift_end']))}}</span>
 	    											</div>
 	    										</div>
-	                        <div class="col-md-1 col-xs-12 col-sm-4">    
-	                        	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
-	                        		<label class="scheduler-titles">QTY: </label> 
-	                        		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
-	                        	</a>
-	                        </div>
-	    	                  <div class="col-md-1 col-xs-12 col-sm-4 nopadding">
-	    	                  	<div class="scheduled-activity-info">
-	    	                  		<label class="scheduler-titles"> Duration: </label> <span>{{$business_scheduler->get_duration()}} </span>
-	    	                  	</div>
-	    	                  </div>
+						                        <div class="col-md-1 col-xs-12 col-sm-4">    
+						                        	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
+						                        		<label class="scheduler-titles">QTY: </label> 
+						                        		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
+						                        	</a>
+						                        </div>
+					    	                  	<div class="col-md-1 col-xs-12 col-sm-4 nopadding">
+						    	                  	<div class="scheduled-activity-info">
+						    	                  		<label class="scheduler-titles"> Duration: </label> <span>{{$business_scheduler->get_duration()}} </span>
+						    	                  	</div>
+					    	                  	</div>
 	    										<div class="col-md-3 col-xs-12 col-sm-4">
 	    											<div class="scheduled-activity-info">
 	    												<label class="scheduler-titles"> Scheduled Activity: </label> 
 	    												<span>
 	    													{{$business_scheduler->business_service->program_name}}<br/>
-	    													{{@$business_scheduler->businessPriceDetailsAges->category_title}}
+	    													@if($business_scheduler->businessPriceDetailsAges()->exists())
+	    													{{$business_scheduler->businessPriceDetailsAges->category_title}}
+	    													@endif
 	    												</span>
 
 	    											</div>
 	    										</div>
-	                        <div class="col-md-2 col-xs-12 col-sm-4">
-	                         	<div class="scheduled-location">
-	                         		<label class="scheduler-titles"> Location: </label> <span> {{$business_scheduler->business_service->activity_location}}</span>
-	                         	</div>
-	                        </div>
-				                  <div class="col-md-2 col-xs-12 col-sm-4">
-	                          <div class="scheduled-location">
-	                            <label class="scheduler-titles"> Instructor: </label>
-	                            <span>—</span>
-	                        	</div>
-				                  </div>
-		                     	<div class="col-md-1 col-xs-12 col-sm-4 nopadding">
-		                        <label class="overlay-activity-label">Activity Completed</label>
-		                     	</div>
-				                  <div class="col-md-1 col-xs-12 col-sm-12">
-				                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
-				                  		@csrf
-															<div class="scheduled-btns">
-		                            <input type="hidden" name="btnedit" value="Edit">
-		                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
-		                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
-		                            <button type="submit" class="btn-edit btn-sp">Edit</button>
-		                            <button type="button" class="btn-edit" disabled="">Cancel</button>
-				                    	</div>
-				                  	</form>
-				                  </div>
-				                </div>
-			           			</div>
-			         			</div>
-			         		@else
-
-		                <div class="scheduler-info-box">
-			                <div class="row">
-			                	<div class="col-md-1 col-xs-12 col-sm-4">
-													<div class="timeline">
-														<label class="scheduler-titles">Time: </label> 
-														<span>{{date('h:i A', strtotime($business_scheduler['shift_start']))}}</span>
-														<span>{{date('h:i A', strtotime($business_scheduler['shift_end']))}}</span>
-													</div>
+						                        <div class="col-md-2 col-xs-12 col-sm-4">
+						                         	<div class="scheduled-location">
+						                         		<label class="scheduler-titles"> Location: </label> <span> {{$business_scheduler->business_service->activity_location}}</span>
+						                         	</div>
+						                        </div>
+				                  				<div class="col-md-2 col-xs-12 col-sm-4">
+						                          	<div class="scheduled-location">
+							                            <label class="scheduler-titles"> Instructor: </label>
+							                            <span>—</span>
+						                        	</div>
+									            </div>
+		                     					<div class="col-md-1 col-xs-12 col-sm-4 nopadding">
+		                        					<label class="overlay-activity-label">Activity Completed</label>
+		                     					</div>
+								                <div class="col-md-1 col-xs-12 col-sm-12">
+								                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
+								                  		@csrf
+																			<div class="scheduled-btns">
+						                            <input type="hidden" name="btnedit" value="Edit">
+						                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
+						                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
+						                            <button type="submit" class="btn-edit btn-sp">Edit</button>
+						                            <button type="button" class="btn-edit" disabled="">Cancel</button>
+								                    	</div>
+								                  	</form>
+								                </div>
+				                			</div>
+			           					</div>
+			         				</div>
+			         				@else
+		                			<div class="scheduler-info-box">
+			                			<div class="row">
+			                				<div class="col-md-1 col-xs-12 col-sm-4">
+												<div class="timeline">
+													<label class="scheduler-titles">Time: </label> 
+													<span>{{date('h:i A', strtotime($business_scheduler['shift_start']))}}</span>
+													<span>{{date('h:i A', strtotime($business_scheduler['shift_end']))}}</span>
 												</div>
-		                    <div class="col-md-1 col-xs-12 col-sm-4">    
-		                    	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
-		                    		<label class="scheduler-titles">QTY: </label> 
-		                    		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
-		                    	</a>
-		                    </div>
-			                  <div class="col-md-1 col-xs-12 col-sm-4 nopadding">
-			                  	<div class="scheduled-activity-info">
-			                  		<label class="scheduler-titles"> Duration: </label> <span>{{$business_scheduler->get_duration()}} </span>
-			                  	</div>
-			                  </div>
-												<div class="col-md-3 col-xs-12 col-sm-4">
-													<div class="scheduled-activity-info">
-														<label class="scheduler-titles"> Scheduled Activity: </label> 
-														<span>{{$business_scheduler->business_service->program_name}}</span>
-													</div>
+											</div>
+						                    <div class="col-md-1 col-xs-12 col-sm-4">    
+						                    	<a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$business_scheduler->id, 'date' =>$filter_date->format('m/d/Y')])}}" class="scheduler-qty">
+						                    		<label class="scheduler-titles">QTY: </label> 
+						                    		<span> {{$business_scheduler->spots_left($filter_date)}}/{{$business_scheduler->spots_available}} </span>
+						                    	</a>
+						                    </div>
+							                <div class="col-md-1 col-xs-12 col-sm-4 nopadding">
+							                  	<div class="scheduled-activity-info">
+							                  		<label class="scheduler-titles"> Duration: </label> <span>{{$business_scheduler->get_duration()}} </span>
+							                  	</div>
+							                </div>
+											<div class="col-md-3 col-xs-12 col-sm-4">
+												<div class="scheduled-activity-info">
+													<label class="scheduler-titles"> Scheduled Activity: </label> 
+													<span>{{$business_scheduler->business_service->program_name}}
+															<br/>
+															@if($business_scheduler->businessPriceDetailsAges()->exists())
+	    														{{$business_scheduler->businessPriceDetailsAges->category_title}}
+	    													@endif
+	    											</span>
 												</div>
-		                    <div class="col-md-2 col-xs-12 col-sm-4">
-		                     	<div class="scheduled-location">
-		                     		<label class="scheduler-titles"> Location: </label> <span> {{$business_scheduler->business_service->activity_location}}</span>
-		                     	</div>
-		                    </div>
-			                  <div class="col-md-2 col-xs-12 col-sm-4">
-		                      <div class="scheduled-location">
-		                        <label class="scheduler-titles"> Instructor: </label>
-		                        <span>—</span>
-		                    	</div>
-			                  </div>
-			                  <div class="col-md-2 col-xs-12 col-sm-12">
-			                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
-			                  		@csrf
-														<div class="scheduled-btns">
-	                            <input type="hidden" name="btnedit" value="Edit">
-	                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
-	                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
-	                            <button type="submit" class="btn-edit btn-sp">Edit</button>
-	                            <button type="button" class="btn-edit" data-behavior="ajax_html_modal" data-url="{{route("business.schedulers.delete_modal", ['business_scheduler_id' => $business_scheduler->id, 'date' => $filter_date->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel</button>
-			                    	</div>
-			                  	</form>
-			                  </div>
-			                </div>
-		           			</div>
-			         		@endif
-		         		@endforeach
+											</div>
+						                    <div class="col-md-2 col-xs-12 col-sm-4">
+						                     	<div class="scheduled-location">
+						                     		<label class="scheduler-titles"> Location: </label> <span> {{$business_scheduler->business_service->activity_location}}</span>
+						                     	</div>
+						                    </div>
+			                  				<div class="col-md-2 col-xs-12 col-sm-4">
+						                      	<div class="scheduled-location">
+							                        <label class="scheduler-titles"> Instructor: </label>
+							                        <span>—</span>
+							                    </div>
+								            </div>
+		                  					<div class="col-md-2 col-xs-12 col-sm-12">
+							                  	<form name="frmservice" method="post" action="{{route('editBusinessService')}}">
+							                  		@csrf
+																		<div class="scheduled-btns">
+					                            <input type="hidden" name="btnedit" value="Edit">
+					                            <input type="hidden" name="cid" value="{{request()->current_company->id}}">
+					                            <input type="hidden" name="serviceid" value="{{$business_scheduler->business_service->id}}">
+					                            <button type="submit" class="btn-edit btn-sp">Edit</button>
+					                            <button type="button" class="btn-edit" data-behavior="ajax_html_modal" data-url="{{route("business.schedulers.delete_modal", ['business_scheduler_id' => $business_scheduler->id, 'date' => $filter_date->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel</button>
+							                    	</div>
+							                  	</form>
+		                  					</div>
+		                				</div>
+		           					</div>
+			         				@endif
+		         				@endforeach
 							</div>
 						</div>
 					</div>
