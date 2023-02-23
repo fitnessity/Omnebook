@@ -5,6 +5,8 @@ namespace App;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class UserBookingStatus extends Model
 {
     /**
@@ -13,8 +15,8 @@ class UserBookingStatus extends Model
      * @var array
      */
     // public $timestamps = false;
+     use SoftDeletes;
     protected $table = 'user_booking_status';
-	
 	protected $fillable = [
         'booking_type', 'user_id', 'customer_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
 		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
@@ -46,7 +48,7 @@ class UserBookingStatus extends Model
 
     public function UserBookingDetail()
     {
-        return $this->hasMany(UserBookingDetail::class, 'booking_id');
+        return $this->hasMany(UserBookingDetail::class, 'booking_id')->orderBy('created_at', 'desc');
     }
 
     public function Jobpostquestions()

@@ -7,6 +7,7 @@ namespace App;
 use App\User;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Carbon\Carbon;
 
@@ -23,11 +24,11 @@ class UserBookingDetail extends Model
      * @var array
 
      */
-
-    public $timestamps = false;
+    use SoftDeletes;
     protected $table = 'user_booking_details';
+    public $timestamps = false;
 	protected $fillable = [
-        'booking_id', 'sport', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment'
+        'booking_id', 'sport','business_id','booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment'
     ];
 
 
@@ -63,6 +64,9 @@ class UserBookingDetail extends Model
 
     public function business_services(){
         return $this->belongsTo(BusinessServices::class, 'sport');
+    }
+    public function company_information(){
+        return $this->belongsTo(CompanyInformation::class, 'business_id');
     }
 
     public function business_price_detail(){

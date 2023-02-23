@@ -229,7 +229,7 @@ class User extends Authenticatable
 
     public function BookingStatus()
     {
-         return $this->hasMany(UserBookingStatus::class);
+         return $this->hasMany(UserBookingStatus::class)->orderBy('created_at', 'desc');
     }
 
     public function orders(){

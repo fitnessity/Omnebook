@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class StripePaymentMethod extends Model
 {
+    
+    public $timestamps = true;
     //
     protected $fillable = [
         'user_type',
