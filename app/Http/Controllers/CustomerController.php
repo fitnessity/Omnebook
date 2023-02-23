@@ -101,7 +101,6 @@ class CustomerController extends Controller {
         }
         return view('customers.show', [
             'customerdata'=>$customerdata,
-            'cardInfo'=>$customerdata->get_stripe_payment_methods(),
             'strpecarderror'=>$strpecarderror,
             'terms'=> $terms,
             'visits' => $visits,
