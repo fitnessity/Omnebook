@@ -4,6 +4,7 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class UserBookingStatus extends Model
 {
@@ -19,6 +20,22 @@ class UserBookingStatus extends Model
         'booking_type', 'user_id', 'customer_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
 		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
     ];
+
+
+    
+
+    public static function boot(){
+        parent::boot();
+
+        self::creating(function($model){
+            $date = Carbon::now();
+            $digits = 3;
+            $rand = rand(pow(10, $digits-1), pow(10, $digits)-1); 
+
+            $model->order_id = 'FS_'.$date->format('YmdHis').$rand;
+        });
+
+    }
 
     /**
      * Get the user that owns the task.

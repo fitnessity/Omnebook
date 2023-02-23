@@ -10,6 +10,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
+use App\StripePaymentMethod;
 
 class Customer extends Authenticatable
 {
@@ -81,6 +82,9 @@ class Customer extends Authenticatable
     protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter'];
 
 
+    public function stripePaymentMethods(){
+        return StripePaymentMethod::where('user_type', 'Customer')->where('user_id', $this->id);
+    }
     public function getProfilePicUrlAttribute()
     {
         if($this->profile_pic){
