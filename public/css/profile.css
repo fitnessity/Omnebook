@@ -1781,15 +1781,20 @@ a {
 }
 .booking-activity-view .view-booking{
 	position: absolute;
-	left: 50px;
+	left: 5px;
 	text-decoration: underline;
 	color: #fff;
 	top: 11px;
-	right: 50px;
-	text-align: center;
 }
 .booking-activity-view a:hover{
 	color: #ea1515;
+}
+.booking-activity-view .view-schedule{
+	position: absolute;
+	right: 5px;
+	text-decoration: underline;
+	color: #fff;
+	top: 11px;
 }
 .btn-nxt-profile{
 	background: #ed1b24;

@@ -1711,6 +1711,7 @@
 	.modal-dialog.booking-time{width: 70%;}
 	.booking-activity-view .view-booking {top: 36px !important;}
 	.modal-dialog.pay-details{width: 70%;}
+	.booking-activity-view .view-schedule { top: 36px !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){

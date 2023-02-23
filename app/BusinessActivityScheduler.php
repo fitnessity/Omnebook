@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DateTime;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class BusinessActivityScheduler extends Model
 {
 
@@ -14,6 +16,7 @@ class BusinessActivityScheduler extends Model
      *
      * @var string
      */
+     use SoftDeletes;
     protected $table = 'business_activity_scheduler';
 
     public $timestamps = false;
