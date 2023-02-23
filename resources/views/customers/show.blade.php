@@ -230,12 +230,13 @@
 												</div>
 											</div>
 										</div>
-										@foreach($cardInfo as $card)
+
+										@foreach($customerdata->stripePaymentMethods()->get() as $card)
 											<div class="row">
 												<div class="col-md-12 col-xs-12">
 													<span>
-														{{$card['card']['brand']}} **** **** **** {{$card['card']['last4']}}
-														<a style="float:right" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->id])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> Remove</a>
+														{{$card->brand}} **** **** **** {{$card->last4}}
+														<a style="float:right" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> Remove</a>
 													</span>
 												</div>
 											</div>
@@ -705,34 +706,6 @@
 														</td>
 													</tr>
 												@endforeach
-												<tr>
-													<td>2/12/2023</td>
-													<td> VMA Belt Class , 6 month contract membership (recurring)</td>
-													<td>Membership</td>
-													<td>Visa  ****4576</td>
-													<td>$150  (R)</td>
-													<td>1</td>
-													<td>Refund | Void</td>
-													<td>
-														<div class="table-icons-staff">
-															<i class="fas fa-receipt"></i>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>2/12/2023</td>
-													<td>Mini Ninjas (3 to 4 yrs old), Kids Drop In (01 Pack)  </td>
-													<td>Membership</td>
-													<td>Visa  ****4576</td>
-													<td>$1,895.00</td>
-													<td>1</td>
-													<td>Refund | Void</td>
-													<td>
-														<div class="table-icons-staff">
-															<i class="fas fa-receipt"></i>
-														</div>
-													</td>
-												</tr>
 												
 											</tbody>
 										</table>
