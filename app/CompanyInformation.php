@@ -64,6 +64,10 @@ class CompanyInformation extends Model {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function business_staff() {
+        return $this->hasMany(BusinessStaff::class, 'business_id');
+    }
+
     public function certification() {
         return $this->hasMany(UserCertification::class, 'company_id');
     }

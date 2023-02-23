@@ -50,7 +50,7 @@
 								<div class="col-md-5 col-sm-12 col-xs-12 nopadding">
 									<div class="manage-search serchcustomer">
 										<div class="sub">
-											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{Request::get('fname')}}">
+											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{$username}}" data-id="{{$pageid}}">
 											<div id="option-box1" style="display:none;">
 						                        <ul class="customer-list">
 						                        </ul>
@@ -2039,8 +2039,6 @@
 <script type="text/javascript">
 
 	
-
-
 
 
     $(".dobdate").keyup(function(){
