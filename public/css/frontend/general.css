@@ -20260,11 +20260,11 @@ input#zipcode {
 	text-align: center;
 }
 .fees label{
-	margin-top: 22px;
 	position: relative;
 }
 .fees p{
-	font-size: 17px;
+	font-size: 14px;
+	margin-bottom: 0px;
 }
 .equal{
 	text-align: center;
@@ -20294,7 +20294,7 @@ input#zipcode {
 	margin-left: 5px;
 }
 .fit-fees{
-	width: 10%;
+	width: 11%;
 	margin-left: 5px;
 }
 .single-equal{
@@ -22199,6 +22199,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 49%;
 	display: inline-block;
 	text-align: end;
+	margin-right: 13px;
 }
 .inner-accordion-titles span i{
 	font-size: 20px;
@@ -22208,6 +22209,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-bottom: 2px solid #ec1a23;
 	margin-bottom: 10px;
 	margin-top: 5px;
+	display: flex;
 }
 .customer-profile-info span{
 	float: right;
@@ -24482,4 +24484,10 @@ padding-left: 0px;
 }
 .calendar-icon input{
 	display: none;
+}
+.activity-msg{
+	margin-top: 15px;
+	font-size: 16px;
+	font-weight: 500;
+	margin-left: 9px;
 }

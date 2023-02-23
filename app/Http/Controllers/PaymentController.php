@@ -15,7 +15,7 @@ use View;
 use DB;
 use Response;
 use Validator;
-use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges};
+use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges,SGMailService};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -67,7 +67,7 @@ class PaymentController extends Controller {
                 'user_type' => 'user',
                 'user_id' => $loggedinUser->id,
                 'item_type' =>'UserBookingStatus',
-                'item_id' =>'normal_order'.$status->id,
+                'item_id' => $status->id,
                 'channel' =>'',
                 'kind' => 'comp',
                 'transaction_id' => '',
@@ -223,9 +223,10 @@ class PaymentController extends Controller {
             $listItems = []; 
             $proid = []; 
             $totalprice = 0;
-            for($i=0;$i<count($request->itemprice);$i++){
+            /*for($i=0;$i<count($request->itemprice);$i++){
                 $totalprice += $request->itemprice[$i];
-            }
+            }*/
+            $totalprice = ($request->grand_total) *100;
      
             if(isset($request->itemname)) {
                 $itemcount = count($request->itemname);
@@ -274,7 +275,7 @@ class PaymentController extends Controller {
 
                 try {
                     $pmtintent = \Stripe\PaymentIntent::create([
-                        'amount' =>  round($totalprice),
+                        'amount' =>  $totalprice,
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
                         'payment_method' => $carddetails->id,
@@ -417,7 +418,7 @@ class PaymentController extends Controller {
                 'user_type' => 'user',
                 'user_id' => Auth::user()->id,
                 'item_type' =>'UserBookingStatus',
-                'item_id' =>'normal_order'.$status->id,
+                'item_id' => $status->id,
                 'channel' =>'stripe',
                 'kind' => 'card',
                 'transaction_id' => $data["id"],
@@ -552,14 +553,15 @@ class PaymentController extends Controller {
                     )),
                     'extra_fees' => json_encode(array(
                         'service_fee' => $service_fee,
-                        'fitnessity_fee' => $tax,
+                        'fitnessity_fee' => $fitnessity_fee,
+                        'tax' => $tax,
                     )),
                     'act_schedule_id' =>$act_schedule_id,
                     'payment_number' =>$encodepayment_number,
                     'participate' =>$encodeparticipate,
                     'transfer_provider_status' =>'unpaid',
                 );
-                $status = UserBookingDetail::create($act);
+                $statusdetail = UserBookingDetail::create($act);
 
                 $customer = Customer::where(['business_id' => $activitylocation->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
 
@@ -583,13 +585,20 @@ class PaymentController extends Controller {
                 BookingCheckinDetails::create([
                     'business_activity_scheduler_id' => $act_schedule_id,
                     'customer_id' => $customer->id,
-                    'booking_detail_id' => $status->id,
+                    'booking_detail_id' => $statusdetail->id,
                     'checkin_date' => date('Y-m-d',strtotime($sesdate)),
                     'use_session_amount' => 0,
+                    'source_type' => 'marketplace',
                 ]);
 
+                $getreceipemailtbody = $this->bookings->getreceipemailtbody($status->id, $statusdetail->id);
+                $email_detail = array(
+                    'getreceipemailtbody' => $getreceipemailtbody,
+                    'email' => Auth::user()->email);
+                SGMailService::sendBookingReceipt($email_detail);
 
-                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
+
+                /*$BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
                 $businessuser['businessuser'] = CompanyInformation::where('id', $activitylocation->cid)->first();
                 $businessuser = json_decode(json_encode($businessuser), true); 
                 $BusinessServices['businessservices'] = BusinessServices::where('id',$activitylocation->id)->first();
@@ -602,13 +611,13 @@ class PaymentController extends Controller {
                         }
                         $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
                     }
-                }
+                }*/
 
-                $status->transfer_to_provider();
+                $statusdetail->transfer_to_provider();
 
                 
 
-                MailService::sendEmailBookingConfirmnew($BookingDetail);
+               // MailService::sendEmailBookingConfirmnew($BookingDetail);
             }
 
             session()->put('cart_item', $cart);
