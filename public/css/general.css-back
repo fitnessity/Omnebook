@@ -4112,7 +4112,6 @@ width: 100%;
 .profile-menu-right .link {float:left; background:#232323; color:#fff; font-size:25px; padding:18px 17px; border-radius:0; border:none }
 .favorites { float: left; width: 100%; padding: 15px 0; }
 .pagecontent { text-transform: uppercase !important; }
-<<<<<<< HEAD
 button.common-btn {
     color: #fff;
     font-family: 'OswaldLight';
