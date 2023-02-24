@@ -194,6 +194,33 @@ class UserBookingDetail extends Model
         return $remaining;
     }
 
+    public function getReserveData($feildName)
+    {
+        $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->select('checkin_date')->orderBy('checkin_date','desc')->first();
+        
+        $reserve_date = $reserve_time = $check_in_time ="—";
+        if($reserve_data != ''){
+            $start = date('h:ia', strtotime(@$reserve_data->scheduler->shift_start));
+            $end = date('h:ia', strtotime(@$reserve_data->scheduler->shift_end));
+            if($reserve_data->checkin_date != '')
+                $reserve_date = date('m-d-Y',strtotime($reserve_data->checkin_date));
+            if($reserve_data->checked_at != '')
+                $check_in_time = date('m-d-Y',strtotime($reserve_data->checked_at));
+
+            $reserve_time = $start .' to '.$end;
+        }
+        if($feildName == 'reserve_date'){
+            return $reserve_date;
+        }
+        if($feildName == 'check_in_time'){
+            return $check_in_time;
+        }
+        if($feildName == 'reserve_time'){
+            return $reserve_time;
+        }
+        
+    }
+
     public function getextrafees($feeName){
         $extra_fees =  json_decode($this->extra_fees, true);
 
@@ -205,15 +232,16 @@ class UserBookingDetail extends Model
         $extra_fees =  json_decode($this->extra_fees, true);
 
         foreach($extra_fees as $key => $value){
-            if($key == 'service_fee'){
+            if($key == 'service_fee' ){
                 $fees += ($this->total() * $value) /100;
             }else if($key == 'discount'){
                 $fees -= $value;
+            }else if($key == 'fitnessity_fee'){
+                $fees += 0;
             }else{
                 $fees += $value;
             }
         }
-
         return $fees;
     }
 

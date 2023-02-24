@@ -163,7 +163,8 @@ class CompanyInformation extends Model {
     public function active_memberships_count(){
         $company = $this;
         $user_id = Auth::user()->id;
-
+        $now = Carbon::now();
+        //\DB::enableQueryLog();
         $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
                   ->from('business_services')
@@ -172,12 +173,15 @@ class CompanyInformation extends Model {
             $query->select('id')
                   ->from('user_booking_status')
                   ->where('user_id',$user_id );
-        })->whereRaw('pay_session > 0');
-        return $result->count(); 
+        })->whereDate('expired_at', '>=',  $now)->where('pay_session', ">" ,0);
+        $result->count();
+        //dd(\DB::getQueryLog());
+       return $result->count(); 
     }
 
     public function completed_memberships_count(){
         $company = $this;
+        $now = Carbon::now();
         $user_id = Auth::user()->id;
 
         $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
@@ -188,7 +192,7 @@ class CompanyInformation extends Model {
             $query->select('id')
                   ->from('user_booking_status')
                   ->where('user_id',$user_id );
-        })->whereRaw('pay_session = 0');
+        })->whereDate('expired_at', '<',  $now)->where('pay_session', ">" ,0);
         return $result->count(); 
     }
 
@@ -197,7 +201,6 @@ class CompanyInformation extends Model {
         $user_id = Auth::user()->id;
         
         $now = Carbon::now();
-
         $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
                   ->from('business_services')
@@ -207,6 +210,22 @@ class CompanyInformation extends Model {
                   ->from('user_booking_status')
                   ->where('user_id',$user_id );
         })->whereDate('expired_at', '<',  $now->addDays(14));
-        return $result->count();
+       return $result->count();
+    }
+
+    public function company_booking(){
+        $company = $this;
+        $user_id = Auth::user()->id;
+        $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($user_id) {
+            $query->select('id')
+                  ->from('user_booking_status')
+                  ->where('user_type','customer')
+                  ->where('user_id',$user_id);
+        });
+        return $booking_details->orderBy('created_at','desc')->get();
     }
 }

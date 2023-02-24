@@ -83,7 +83,7 @@ class UserBookingStatus extends Model
         return $this->hasMany(Jobpostbidding::class, 'jobid');
     }
 
-    public function getstripedata(){
+    public function getPaymentDetail(){
         $stripe = new \Stripe\StripeClient(
             config('constants.STRIPE_KEY')
         );
