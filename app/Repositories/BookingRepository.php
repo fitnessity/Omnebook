@@ -19,6 +19,7 @@ use Auth;
 use config;
 use App\MailService;
 use App\Fit_Cart;
+use DateTime;
 use Illuminate\Support\Facades\Log;
 
 class BookingRepository
@@ -37,38 +38,25 @@ class BookingRepository
     }
 
     public function getcurrenttabdata($type,$cid){
-        $BookingDetail = [];
-        $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id,'order_type'=>'checkout_register','user_type'=>'customer'])->orderBy('created_at','desc')->get();
-        foreach ($bookingstatus as $key => $value) {
-            $customer = Customer::where('id',$value['customer_id'])->first();
-            $booking_details = UserBookingDetail::where('booking_id',$value->id)->orderBy('created_at','desc')->get(); 
-            foreach ($booking_details as $key => $book_value) {
-                $business_services = BusinessServices::where('id',$book_value->sport)->first();
-                //if(@$business_services != '' && $book_value['act_schedule_id'] == ''){}
-                if(@$business_services != ''){
-                    if($business_services->service_type == $type){
-                        $BookingDetail_1 = $this->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = CompanyInformation::where('id', $business_services->cid)->first();
-                        $BusinessServices['businessservices'] = BusinessServices::where('id',$book_value->sport)->first();
-                        $customers['customer'] = $customer;
-                        $customers = json_decode(json_encode($customers), true);
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $book_value->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
-                            }
-                        }    
+        $bookingDetails = [];
+        $user = Auth::user();
+        $company = $user->company()->findOrFail($cid);
+        $company_booking = $company->company_booking();
+        $current_date = new DateTime();
+        foreach($company_booking as $bd){
+            if(new DateTime($bd->expired_at) > $current_date && $bd->expired_at != ''){
+                if($type == 'null'){
+                    $bookingDetails [] = $bd; 
+                }else{
+                    if($bd->business_services->service_type == $type){
+                        $bookingDetails [] = $bd; 
                     }
                 }
             }
         }
-
-        //print_r($BookingDetail);exit;
-        return $BookingDetail;
+        return $bookingDetails;
+        
+        //print_r($bookingDetails);exit;
     }
 
     public function getalldata($type,$cid){
@@ -79,77 +67,46 @@ class BookingRepository
         foreach ($bookingDetails as $key => $bookValue) {
             $bookingstatus =  $bookValue->booking;
             if($bookingstatus->user_type == 'user' ){
-                $customer = $bookingstatus->user();
+                $customer = $bookValue->booking->user;
                 $customers['user'] = $customer;
             }else{
-                $bookingstatus = $bookingstatus->customer();
+                $customer = $bookValue->booking->customer;
                 $customers['customer'] = $customer;
             }
             $business_services = $bookValue->business_services;
             if(@$business_services != '' ){
-                if(@$business_services->service_type == $type){
-                    $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
-                    $businessuser['businessuser'] = $business_services->company_information;
-                    $BusinessServices['businessservices'] = $business_services;
-                    $customers = json_decode(json_encode($customers), true);
-                    $businessuser = json_decode(json_encode($businessuser), true);
-                    $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                    foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                        if($details['sport'] == $bookValue->sport){
-                            if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $bookValue->booking_id){
-                                $BookingDetail_1['user_booking_detail'] = $details;
-                            }
+                
+                $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
+                $businessuser['businessuser'] = $business_services->company_information;
+                $BusinessServices['businessservices'] = $business_services;
+                $customers = json_decode(json_encode($customers), true);
+                $businessuser = json_decode(json_encode($businessuser), true);
+                $BusinessServices = json_decode(json_encode($BusinessServices), true);
+                foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
+                    if($details['sport'] == $bookValue->sport){
+                        if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $bookValue->booking_id){
+                            $BookingDetail_1['user_booking_detail'] = $details;
+                        }
+                        if(@$business_services->service_type == $type){
+                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
+                        }else if($type == 'null'){
                             $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
                         }
                     }    
                 }
             }
         }
-        /*$bookingstatus = $user->BookingStatus;
 
-        foreach ($bookingstatus as $key => $value) {
-            if($value['user_type'] == 'user' ){
-                $customer = $value->user();
-                $customers['user'] = $customer;
-            }else{
-                $customer = $value->customer();
-                $customers['customer'] = $customer;
-            }
-               
-            $bookingDetails =$value->UserBookingDetail; 
-            foreach ($bookingDetails as $key => $bookValue) {
-                $business_services = $bookValue->business_services;
-                if(@$business_services != '' ){
-                    if(@$business_services->service_type == $type){
-                        $BookingDetail_1 = $this->getBookingDetailnew($value->id);
-                        $businessuser['businessuser'] = $business_services->company_information;
-                        $BusinessServices['businessservices'] = $business_services;
-                        $customers = json_decode(json_encode($customers), true);
-                        $businessuser = json_decode(json_encode($businessuser), true);
-                        $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                        foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                            if($details['sport'] == $bookValue->sport){
-                                if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $value->id){
-                                    $BookingDetail_1['user_booking_detail'] = $details;
-                                }
-                                $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
-                            }
-                        }    
-                    }
-                }
-            }
-        }*/
-
-        //print_r($BookingDetail);exit;
         return $BookingDetail;
     }
 
     public function getdeepdetailoforder($BookingDetail,$chk){
+        
         $full_ary = [];
         foreach($BookingDetail as $book_details){
             $one_array = [];
-            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->whereNotNull('checked_at')->count();
-            $remaining =  $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
+            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->sum('use_session_amount');
+            $remaining = $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
             $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
             if($scheduleddata['sessiondate'] == ''){
                 $sc_date = date("m-d-Y", strtotime($book_details['user_booking_detail']['expired_at']));
@@ -547,7 +504,7 @@ class BookingRepository
             $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
         }
 
-        $pmt_type = $booking_status->getstripedata();
+        $pmt_type = $booking_status->getPaymentDetail();
         $last4 = $pmt_type;
 
         $one_array = array (

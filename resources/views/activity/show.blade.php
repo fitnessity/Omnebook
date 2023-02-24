@@ -417,21 +417,21 @@ input:disabled{
 				
 				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
 				@if($houserules != '')
-					<p class="mb-20">{{$houserules}}</p>
+					<p class="mb-20"><?php echo nl2br($houserules);?></p>
 				@else
 					<p class="mb-20">No Details Found</p>
 				@endif
 				
 				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
 				@if($cancelation != '')
-					<p class="mb-20">{{$cancelation}}</p>
+					<p class="mb-20"><?php echo nl2br($cancelation);?></p>
 				@else
 					<p class="mb-20">No Details Found</p>
 				@endif
 				
 				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
 				@if($cleaning != '')
-					<p class="mb-20">{{$cleaning}}</p>
+					<p class="mb-20"><?php echo nl2br($cleaning);?></p>
 				@else
 					<p class="mb-20">No Details Found</p>
 				@endif
