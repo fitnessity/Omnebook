@@ -69,7 +69,7 @@ class BookingController extends Controller {
 
     public function getreceiptmodel(Request $request) {
         $odt = $this->bookings->getorderdetailsfromodid($request->orderid,$request->orderdetailid);
-        $html = '';
+        /*$html = '';
         $html .= '<div class="row"> 
                     <div class="col-lg-4 bg-sidebar">
                        <div class="your-booking-page side-part">
@@ -390,8 +390,8 @@ class BookingController extends Controller {
                             </div>
                         </div>
                     </div>
-                </div>';
-        return $html;
+                </div>';*/
+        return view('personal.orders._receipt_model',compact('odt'));
     }
 
     public function sendemailofreceipt(Request $request){

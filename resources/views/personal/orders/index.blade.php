@@ -147,7 +147,8 @@
                                                     <div class="headboxes">
                                                         <img src="{{$pic}}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details->business_services->program_name}}</h4>
-                                                        <a class="openreceiptmodel" orderid = '{{$book_details->booking_id}}' orderdetailid="{{$book_details->id}}">
+                                                        <a class="openreceiptmodel"  data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid' => $book_details->booking_id ,
+                                                            'orderdetailid' => $book_details->id ])}}" data-modal-width="1150px">
                                                             <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
@@ -319,7 +320,7 @@
                                                 <div class="headboxes">
                                                     <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
                                                     <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                    <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                    <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel')}}" data-modal-width="1150px">
                                                         <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                     </a>
                                                     <div class="highlighted_box">Confirmed</div>
@@ -510,7 +511,7 @@
                                                 <div class="headboxes">
                                                     <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
                                                     <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                    <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                    <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel')}}" data-modal-width="1150px">
                                                         <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                     </a>
                                                     <div class="highlighted_box">Confirmed</div>
@@ -980,43 +981,6 @@
                 }
             });
         });
-
-
-        /*$("input[id=search_today]").change(function(){
-            var text = $(this).val();
-            alert(text);
-            var type = 'today';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date},
-                success: function(data){
-                    $("#searchbydate_upcoming").html(data);
-                }
-            });
-        });*/
-
-
-        $(document).on('click', '.openreceiptmodel', function(e){
-            var orderdetailid = $(this).attr("orderdetailid");
-            var orderid =$(this).attr('orderid');
-            jQuery.noConflict();
-            $.ajax({
-                url: "{{route('getreceiptmodel')}}",
-                xhrFields: {
-                        withCredentials: true
-                    },
-                type: 'get',
-                data:{
-                    orderdetailid:orderdetailid,
-                    orderid:orderid,
-                },
-                success: function (response) {
-                    $("#bookingreceipt").modal('show');
-                    $('#receiptbody').html(response);
-                }
-            });
-        });
     });
 
     function getsearchdata(type){
@@ -1126,48 +1090,6 @@
         }
     }
 
-    function valid(email)
-    {
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        return emailReg.test(email); //this will either return true or false based on validation
-    }
-
-    function sendemail(odetailid,oid){
-        $('.reviewerro').html('');
-        var email = $('#email').val();
-        if(email == ''){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Add Email Address..');
-        }else if(!valid(email)){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Enter Valid Email Address..');
-        }else{
-            $('.btn-modal-booking').attr('disabled',true);
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Sending...');
-            $.ajax({
-                url: "{{route('sendemailofreceipt')}}",
-                xhrFields: {
-                    withCredentials: true
-                },
-                type: 'get',
-                data:{
-                    odetailid:odetailid,
-                    oid:oid,
-                    email:email,
-                },
-                success: function (response) {
-                    $('.reviewerro').html('');
-                    $('.reviewerro').css('display','block');
-                    if(response == 'success'){
-                        $('.reviewerro').html('Email Successfully Sent..');
-                    }else{
-                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                    }
-                }
-            });
-        }
-    }
 </script>
 
 @endsection

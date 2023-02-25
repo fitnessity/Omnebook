@@ -38,10 +38,29 @@ class StaffController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $business_id)
-    {
+    {   
+        $image = '';
+        if ($request->hasFile('insimg')) 
+        {   
+            $file = $request->file('insimg');
+            $name = date('His').$file->getClientOriginalName();
+            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'instructureimg'.DIRECTORY_SEPARATOR,$name);
+            if( !empty($name) ){
+                $image = $name;
+            }
+        }
+
         $company = $request->current_company;
-        BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email]);
-        return redirect()->route('business.staff.index');
+        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio]);
+        if($request->has('fromservice')){
+            if($create){
+                return "success";
+            }else{
+                return "fail";
+            }
+        }else{
+            return redirect()->route('business.staff.index');
+        }
     }
 
     /**

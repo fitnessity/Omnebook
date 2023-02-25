@@ -377,6 +377,7 @@ class BookingRepository
     }
 
     public function getorderdetailsfromodid($oid,$orderdetailid){
+
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
         $business_services = $booking_details->business_services;
@@ -538,6 +539,8 @@ class BookingRepository
             "tip" =>  $tip,
             "service_fee" =>  $service_fee,
             "categoty_name" =>   $categoty_name,
+            "booking_id" =>   $oid,
+            "order_id" => $orderdetailid,
         );
        /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
         return $one_array;
@@ -553,8 +556,8 @@ class BookingRepository
         $qty = $booking_details->getparticipate();
       
         $participate = $booking_details->decodeparticipate();
-        $total = $booking_details->getperoderprice();
         $price = $booking_details->total();
+        $total = ($price + $booking_details->getperoderprice());
         $discount = $booking_details->getextrafees('discount');
         $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
         if($booking_status->user_type == 'user'){
