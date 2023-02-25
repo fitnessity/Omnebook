@@ -74,10 +74,10 @@
                                     <ul>
                                         <li> <a href="{{route('personal.orders.index',['serviceType'=> null])}}" @if(!request()->serviceType) class="active" @endif> All </a> </li>
 
-                                        <li> <a href="{{route('personal.orders.index',['serviceType'=>'individual'])}}" @if(request()->serviceType == 'individual') class="active" @endif> Personal Trainer </a> </li>
-                                        <li> <a href="{{route('personal.orders.index',['serviceType'=>'classes'])}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
-                                        <li> <a href="{{route('personal.orders.index',['serviceType'=>'events'])}}"  @if(request()->serviceType == 'events') class="active" @endif> Events </a> </li>
-                                        <li> <a href="{{route('personal.orders.index',['serviceType'=>'experience'])}}"  @if(request()->serviceType == 'experience') class="active" @endif> Experiences </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'individual']))}}" @if(request()->serviceType == 'individual') class="active" @endif> Personal Trainer </a> </li>
+                                        <li> <a href="{{route('personal.orders.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'events']))}}"  @if(request()->serviceType == 'events') class="active" @endif> Events </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}"  @if(request()->serviceType == 'experience') class="active" @endif> Experiences </a> </li>
                                         
                                       <!--   <li> <a href="#"> Products </a> </li> -->
                                     </ul>

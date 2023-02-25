@@ -84,35 +84,35 @@ class UserBookingStatus extends Model
     }
 
     public function getPaymentDetail(){
-        $stripe = new \Stripe\StripeClient(
-            config('constants.STRIPE_KEY')
-        );
+        // $stripe = new \Stripe\StripeClient(
+        //     config('constants.STRIPE_KEY')
+        // );
 
-        $last4 = '';
-        $pmt_type = '';
-        $stripe_id = $this->stripe_id;
-        if($stripe_id != ''){
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $stripe_id,
-                []
-            );
-            $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
-        }
+        // $last4 = '';
+        // $pmt_type = '';
+        // $stripe_id = $this->stripe_id;
+        // if($stripe_id != ''){
+        //     $payment_intent = $stripe->paymentIntents->retrieve(
+        //         $stripe_id,
+        //         []
+        //     );
+        //     $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
+        // }
 
-        if($last4 == ''){
-            $pmt_type_json = json_decode($this->pmt_json,true);
-            if($pmt_type_json['pmt_by_check'] != 0){
-                $pmt_type = 'Check No: '.$pmt_type_json['check_no'];
-            }else if($pmt_type_json['pmt_by_cash'] != 0){
-                $pmt_type = 'Cash';
-            }else{
-                $pmt_type = 'Comp';
-            }
-        }else{
-            $pmt_type =  'CC ending in ********'.$last4;
-        }
+        // if($last4 == ''){
+        //     $pmt_type_json = json_decode($this->pmt_json,true);
+        //     if($pmt_type_json['pmt_by_check'] != 0){
+        //         $pmt_type = 'Check No: '.$pmt_type_json['check_no'];
+        //     }else if($pmt_type_json['pmt_by_cash'] != 0){
+        //         $pmt_type = 'Cash';
+        //     }else{
+        //         $pmt_type = 'Comp';
+        //     }
+        // }else{
+        //     $pmt_type =  'CC ending in ********'.$last4;
+        // }
 
-        return $pmt_type;
+        return 'CC ending in ********';
     }
 
     public function getstripecard(){
@@ -137,5 +137,25 @@ class UserBookingStatus extends Model
         // }
 
         // return $card_id;
+    }
+
+    public function getBookedFirstName(){
+        if($this->user_type == 'user'){
+            return $this->user->firstname;
+        }
+
+        if($this->user_type == 'customer'){
+            return $this->customer->fname;
+        }
+    }
+
+    public function getBookedLastName(){
+        if($this->user_type == 'user'){
+            return $this->user->lastname;
+        }
+
+        if($this->user_type == 'customer'){
+            return $this->customer->lname;
+        }
     }
 }
