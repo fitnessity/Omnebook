@@ -6,7 +6,7 @@
     use App\BusinessSubscriptionPlan;
     use App\BusinessPriceDetailsAges;
     use App\BusinessPriceDetails;
-    use App\StaffMembers;
+    use App\BusinessStaff;
 
     $fitnessity_fee= 0;
     //$bspdata = BusinessSubscriptionPlan::where('id',1)->first();
@@ -3633,7 +3633,7 @@
                                         <div class="text-right"><span id="house_rules_left">2000</span> Characters Left</div>
                                     </div> 
 
-                                    <?php $staffdata = StaffMembers::where('user_id',Auth::user()->id)->get(); ?>
+                                    <?php $staffdata = BusinessStaff::where('business_id',Auth::user()->cid)->get(); ?>
                                     <div class="selectinstructor">  
                                         <h3>Choose Instructor</h3> <a href="" data-toggle="modal" data-target="#addins" class="modelbox-edit-link">Add Instructor</a>
                                         <p>Which staff member(s) will lead this program?</p>
@@ -3642,7 +3642,7 @@
                                                 <option value="">Select Your Instructor </option>
                                                 @if(!empty($staffdata))
                                                     @foreach($staffdata as $data)
-                                                        <option value="{{$data->id}}" @if($instructor_id == $data->id) selected @endif> {{$data->name}} </option>
+                                                        <option value="{{$data->id}}" @if($instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -8091,9 +8091,13 @@
                                 <div class="rev-post-box">
                                     <form method="post" enctype="multipart/form-data" name="addinsform" id="addinsform" >
                                     @csrf
-                                        <input type="text" name="insname" id="insname" placeholder="Instructor Name" class="inputs" /> 
-                                        <input type="text" name="insemail" id="insemail" placeholder="Instructor Email" class="inputs" />
-                                        <textarea placeholder="Description" name="insdescription" id="insdescription"></textarea>
+                                        <input type="hidden" name="fromservice" value="fromservice">
+                                        <input type="hidden" name="position" value="Instructure">
+                                        <input type="hidden" name="phone" value="(000) 000-000">
+                                        <input type="text" name="first_name" id="insfirstname" class="inputs" placeholder="Instructor First Name"/>
+                                        <input type="text" name="last_name" id="inslastname" placeholder="Instructor Last Name" class="inputs" /> 
+                                        <input type="text" name="email" id="insemail" placeholder="Instructor Email" class="inputs" />
+                                        <textarea placeholder="Public Bio" name="bio" id="bio"></textarea>
                                         <input type="file" name="insimg" id="insimg" class="inputs" />
                                         <div class="error" id="addinserro"> </div>
                                         <input type="button" onclick="submit_staffmember()" value="Submit" class="btn rev-submit-btn mt-10" id="submit_member">
@@ -12269,14 +12273,14 @@ $("#frm_servicetitle_two1").on("change", function() {
             $('#addinserro').html('Email-id is invalid');
             return false;
         }
-        var insdescription=$('#insdescription').val();
+        var bio=$('#bio').val();
         var _token = $("input[name='_token']").val();
 
-        if(insname !='' && insdescription !='')
+        if(insname !='' && bio !='')
         { 
             var formData = new FormData($("#addinsform")[0]);
             $.ajax({
-                url: "{{route('add_instructor')}}",
+                url: "{{route('business.staff.store')}}",
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 cache: false,

@@ -32,7 +32,7 @@ input:disabled{
 	use App\CompanyInformation;
 	use App\BusinessReview;
 	use Carbon\Carbon;
-    use App\StaffMembers;
+    use App\BusinessStaff;
 
     $activity = $service;
 	$sid = $serviceid = $service->id;
@@ -68,7 +68,7 @@ input:disabled{
 		$address .= $comp_data->zip_code;
 	}
 
-	$staffdata = StaffMembers::where(['id'=>$service->instructor_id])->first(); 
+	$staffdata = BusinessStaff::where(['id'=>$service->instructor_id])->first(); 
 
 	$companyname = $comp_data->company_name;
 	$companyid = $comp_data->id;
@@ -381,7 +381,7 @@ input:disabled{
 							</div>
 							<div class="mb-10">
 								<label>Instructor:</label>
-								<span>@if(@$staffdata->name != '') {{@$staffdata->name }} @else — @endif </span>
+								<span>@if(@$staffdata->first_name != '') {{@$staffdata->first_name }} {{@$staffdata->last_name }}  @else — @endif </span>
 							</div>
 						</div>
 					</div>
@@ -489,9 +489,9 @@ input:disabled{
 				
 				@if(@$staffdata != '') 
 				<?php 
-					if (@$staffdata->image != "") {
-				    	if (File::exists(public_path("/uploads/instructureimg/" . @$staffdata->image))){
-				    		$profilePicact = url('/public/uploads/instructureimg/' . @$staffdata->image);
+					if (@$staffdata->profile_pic != "") {
+				    	if (File::exists(public_path("/uploads/instructureimg/" . @$staffdata->profile_pic))){
+				    		$profilePicact = url('/public/uploads/instructureimg/' . @$staffdata->profile_pic);
 				    	}else{
 				    		$profilePicact = url('/public/images/service-nofound.jpg');
 				    	}
@@ -507,10 +507,10 @@ input:disabled{
 						<div class="col-md-9 col-sm-9 col-xs-12">
 							<div class="instructor-inner-details">
 								<label>Instructor:</label>
-								<span>{{@$staffdata->name}}</span>
+								<span>{{@$staffdata->first_name}} {{@$staffdata->last_name}}</span>
 							</div>
 							<div>
-								<p>{{@$staffdata->description}}</p>
+								<p>{{@$staffdata->bio}}</p>
 							</div>
 						</div>
 					</div>
