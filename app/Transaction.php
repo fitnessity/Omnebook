@@ -55,7 +55,7 @@ class Transaction extends Model
     public function item_description(){
         $item_description = '';
         if($this->item_type == 'UserBookingStatus'){
-            $bookingData = $this->UserBookingStatus->UserBookingDetail;
+            $bookingData = $this->userBookingStatus->UserBookingDetail;
             if(!empty($bookingData)){
                 foreach($bookingData as $bd){
                     $activityName = $bd->business_services->program_name;

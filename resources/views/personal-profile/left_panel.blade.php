@@ -6,7 +6,7 @@
 		<div class="slimscroll-menu" id="remove-scroll">
 			<div id="sidebar-menu">
 				<ul class="metismenu" id="side-menu">
-                            <li class="menu-title"><?php echo $UserProfileDetail['firstname'];?>'s Account</li>
+                            <li class="menu-title">{{Auth::User()->firstname}}'s Account</li>
 
                             <li class=" {{ (request()->is('personal-profile/user-profile*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/user-profile">
