@@ -41,11 +41,16 @@ class BookingRepository
         $bookingDetails = [];
         $user = Auth::user();
         $company = $user->company()->findOrFail($cid);
-        $company_booking = $company->company_booking();
+
+        $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
+
+        $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
+
+
         $current_date = new DateTime();
         foreach($company_booking as $bd){
             if(new DateTime($bd->expired_at) > $current_date && $bd->expired_at != ''){
-                if($type == 'null'){
+                if($type == null){
                     $bookingDetails [] = $bd; 
                 }else{
                     if($bd->business_services->service_type == $type){
@@ -59,12 +64,19 @@ class BookingRepository
         //print_r($bookingDetails);exit;
     }
 
-    public function getalldata($type,$cid){
-        $BookingDetail = [];
+    public function getCurrentUserBookingDetails($serviceType, $business_id){
         $user = Auth::user();
-        $company = $user->company()->findOrFail($cid);
-        $bookingDetails = $company->UserBookingDetails;
-        foreach ($bookingDetails as $key => $bookValue) {
+        $company = CompanyInformation::findOrFail($business_id);
+
+        $BookingDetail = [];
+
+        
+        
+        $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
+
+        $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
+
+        foreach ($userBookingDetails as $key => $bookValue) {
             $bookingstatus =  $bookValue->booking;
             if($bookingstatus->user_type == 'user' ){
                 $customer = $bookValue->booking->user;
@@ -77,6 +89,7 @@ class BookingRepository
             if(@$business_services != '' ){
                 
                 $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
+
                 $businessuser['businessuser'] = $business_services->company_information;
                 $BusinessServices['businessservices'] = $business_services;
                 $customers = json_decode(json_encode($customers), true);
@@ -87,9 +100,9 @@ class BookingRepository
                         if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $bookValue->booking_id){
                             $BookingDetail_1['user_booking_detail'] = $details;
                         }
-                        if(@$business_services->service_type == $type){
+                        if(@$business_services->service_type == $serviceType){
                             $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
-                        }else if($type == 'null'){
+                        }else if($serviceType == null){
                             $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
                         }
                     }    

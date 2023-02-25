@@ -32,41 +32,38 @@ class OrderController extends PersonalBaseController
     public function index(Request $request)
     {
         $user = Auth::user();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
 
-        $bookingStatus = $user->bookingStatus;
-        foreach($bookingStatus as $bs){
-            foreach($bs->UserBookingDetail as $bd)
-            $company_information []= $bd->company_information;
-        }
-        $business = array_unique($company_information, SORT_REGULAR);
 
         if($request->business_id){
-            $BookingDetail = [];
-            $serviceType = 'null';
-            if($request->has('serviceType')){
-                $serviceType = $request->serviceType;
-            }
-            $BookingDetail =  $this->booking_repo->getalldata($serviceType,$request->business_id);
+            $bookingDetail = [];
+
+
+            $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $request->business_id);
+
+
             $currentbookingstatus =[];
-            $currentbookingstatus = $this->booking_repo->getcurrenttabdata($serviceType,$request->business_id);
+            $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$request->business_id);
 
-            $tabValue = '';
-            if($request->has('tabval')){
-                $tabValue = $request->tabval;
+
+            return view('personal.orders.index', [
+                'bookingDetail' => $bookingDetail ,
+                'currentbookingstatus'=>$currentbookingstatus, 
+                'business'=>[]]);
+        }else{
+            $bookingStatus = $user->bookingStatus;
+            foreach($bookingStatus as $bs){
+                foreach($bs->UserBookingDetail as $bd)
+                $company_information []= $bd->company_information;
             }
+            $business = array_unique($company_information, SORT_REGULAR);
 
-            return view('personal.orders.index', [ 'Booking_Detail' => $BookingDetail ,'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'tabValue'=>$tabValue,'currentbookingstatus'=>$currentbookingstatus, 'business'=>[] ,'companyId'=> $request->business_id,'serviceType'=>$serviceType]);
         }
         
 
-        //print_r($business);exit;
-        return view('personal.orders.index',[ 'UserProfileDetail' => $UserProfileDetail, 'cart' => $cart,'business'=>$business,'Booking_Detail' => [], 'companyId'=> '' ,'tabValue'=>'']);
+
+        return view('personal.orders.index',[ 
+            'business'=>$business, 
+            'bookingDetail' => []]);
     }
 
     /**
