@@ -518,6 +518,7 @@ class BookingRepository
         }
 
         $pmt_type = $booking_status->getPaymentDetail();
+        var_dump($pmt_type);
         $last4 = $pmt_type;
 
         $one_array = array (

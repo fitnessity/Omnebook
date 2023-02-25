@@ -72,7 +72,7 @@
                             <div class='row'>
                                 <div class="col-lg-7 col-md-6 col-sm-12">
                                     <ul>
-                                        <li> <a href="{{route('personal.orders.index',['serviceType'=> null])}}" @if(!request()->serviceType) class="active" @endif> All </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=> null]))}}" @if(!request()->serviceType) class="active" @endif> All </a> </li>
 
                                         <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'individual']))}}" @if(request()->serviceType == 'individual') class="active" @endif> Personal Trainer </a> </li>
                                         <li> <a href="{{route('personal.orders.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
