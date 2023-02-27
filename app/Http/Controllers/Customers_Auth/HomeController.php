@@ -10,7 +10,6 @@ use Redirect;
 use Response;
 use App\Api;
 use Str;
-use App\MailService;
 use DB;
 
 use App\Repositories\CustomerRepository;

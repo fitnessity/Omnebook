@@ -1467,7 +1467,7 @@ class UserProfileController extends Controller {
 
 
         $companyId = $serviceId = 0;
-        if(isset($request->cid)) {
+        if(isset($request->cid) && $request->cid != 0) {
             $companyId = $request->cid;
         } elseif(isset(Auth::user()->cid) && !empty(Auth::user()->cid)) {
             $companyId = Auth::user()->cid;
@@ -4766,38 +4766,37 @@ class UserProfileController extends Controller {
     }
 
     public function submitFamilyForm1(Request $request) {
-
-
-
         $family = new UserFamilyDetail();
-
-
-
         $family->user_id = Auth::user()->id;
-
         $family->first_name = $request->first_name;
-
         $family->last_name = $request->last_name;
-
         $family->email = $request->email;
-
         $family->mobile = $request->mobile_number;
-
         $family->gender = $request->gender;
-
         $family->relationship = $request->relationship;
-
         $family->emergency_contact = $request->emergency_phone;
-
         //$dateee = \DateTime::createFromFormat("m-d-Y" , $request->birthday);
 
         $family->birthday = $request->birthday;
-
         $family->save();
 
         Auth::loginUsingId(Input::get('user_id'), true);
 
-        $url = '/profile/viewProfile';
+        $url = '/';
+        $claim = 'not set';
+        $claim_cid = '';
+        $claim_cname = '';
+        if(session()->has('claim_business_page')) {
+            $claim = 'set';
+            $claim_cid = session()->get('claim_cid');
+            $data = CompanyInformation::where('id',$claim_cid)->first();
+            if($data != ''){
+                $claim_cname = $data->company_name;
+            }
+        }
+        if($claim  == 'set'){
+            $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
+        }
 
         $response = array(
             'type' => 'success',
@@ -4813,6 +4812,20 @@ class UserProfileController extends Controller {
         Auth::loginUsingId(Auth::user()->id, true);
 
         $url = '/';
+        $claim = 'not set';
+        $claim_cid = '';
+        $claim_cname = '';
+        if(session()->has('claim_business_page')) {
+            $claim = 'set';
+            $claim_cid = session()->get('claim_cid');
+            $data = CompanyInformation::where('id',$claim_cid)->first();
+            if($data != ''){
+                $claim_cname = $data->company_name;
+            }
+        }
+        if($claim  == 'set'){
+            $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
+        }
 
         $response = array(
             'type' => 'success',
@@ -9157,8 +9170,7 @@ class UserProfileController extends Controller {
                 
                 CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => Auth::user()->id]);
                 BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => Auth::user()->id]);
-                User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $request->cid]);
-
+                $user = User::where('id', Auth::user()->id)->update(['bstep' => 1, 'cid' => $request->cid]);
                 $detail_data_com=  [];
                 $detail_data_user =  [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
@@ -9166,6 +9178,7 @@ class UserProfileController extends Controller {
                 MailService::sendEmailafterclaimed($allDetail);
 
                 $msg = 'Match';
+
 
             }else{
                 $msg = 'Not Match';

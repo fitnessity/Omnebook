@@ -8,7 +8,6 @@ use App\Exports\ExportCustomer;
 use App\Imports\CustomerImport;
 use Maatwebsite\Excel\HeadingRowImport;
 use Session;
-use App\MailService;
 use Redirect;
 use DB;
 use Input;
@@ -23,7 +22,7 @@ use Carbon\Carbon;
 
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
 
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,UserBookingStatus};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus};
 
 use Request as resAll;
 
@@ -179,8 +178,7 @@ class CustomerController extends Controller {
     }
 
     public function sendemailtocutomer(Request $request){
-       $status =  MailService::sendEmailVerifiedAcknowledgementcustomer($request->cid,$request->bid);
-        //print_r($request->all());exit;
+        $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid);
        return  $status;
     }
 

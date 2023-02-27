@@ -1338,7 +1338,7 @@ $('.firstfancyimg').click(function(){
   $.fancybox.close();
 });
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
 <script>
 $(document).ready(function () {
     var locations = @json($locations);

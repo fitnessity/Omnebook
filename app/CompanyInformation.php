@@ -199,8 +199,10 @@ class CompanyInformation extends Model {
     public function expired_soon(){
         $company = $this;
         $user_id = Auth::user()->id;
-        
+
         $now = Carbon::now();
+        $from = (Carbon::now()->subDays(7))->format('Y-m-d');
+        $to = (Carbon::now()->addDays(7))->format('Y-m-d');
         $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
             $query->select('id')
                   ->from('business_services')
@@ -209,8 +211,8 @@ class CompanyInformation extends Model {
             $query->select('id')
                   ->from('user_booking_status')
                   ->where('user_id',$user_id );
-        })->whereDate('expired_at', '<',  $now->addDays(14));
-       return $result->count();
+        })->whereDate('expired_at', '>',  $now)->whereBetween('expired_at',  [$from, $to]);
+        return $result->count(); 
     }
 
     public function company_booking(){

@@ -41,6 +41,7 @@ use App\BusinessService;
 use App\BusinessCompanyDetail;
 use App\BusinessActivityScheduler;
 use App\HomeTracker;
+use App\SGMailService;
 use View;
 use DateTime;
 
@@ -401,7 +402,8 @@ class HomeController extends Controller {
 
                 if ($user->save()) {
 
-                    MailService::sendEmailVerifiedAcknowledgement($user->id);
+                    // MailService::sendEmailVerifiedAcknowledgement($user->id);
+                    SGMailService::sendWelcomeMail($user->email);
                     Auth::login($user);
                     Auth::loginUsingId($user->id, true);
                     $request->session()->flash('alert-success', 'Your email has been successfully verified!');

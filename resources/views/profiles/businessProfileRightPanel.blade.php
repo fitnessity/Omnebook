@@ -194,7 +194,7 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 	</div><!-- profile-description -->
 </div><!-- right-box -->
 <script src="/public/js/compare/jquery-1.9.1.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
 <script>
 $(document).ready(function () {
 	

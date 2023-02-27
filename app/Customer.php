@@ -276,7 +276,8 @@ class Customer extends Authenticatable
         $company = $this->company_information;
         
         $now = Carbon::now();
-
+        $from = (Carbon::now()->subDays(7))->format('Y-m-d');
+        $to = (Carbon::now()->addDays(7))->format('Y-m-d');
 
         $user_id = $user ? $user->id : "no_user_id";
         $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
@@ -287,7 +288,9 @@ class Customer extends Authenticatable
             $query->select('id')
                   ->from('user_booking_status')
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-        })->whereDate('expired_at', '<',  $now->addDays(14));
+        })->whereDate('expired_at', '>',  $now)->whereBetween('expired_at',  [$from, $to]);
+
+        //->whereDate('expired_at', '<',  $now->addDays(14));
         return $result->count();
     }
 
