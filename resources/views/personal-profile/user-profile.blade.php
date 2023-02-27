@@ -708,9 +708,7 @@ $(document).ready(function() {
             }else{
               $('#address').val(badd);
             }
-            var fulladdress = exclude(",",place.formatted_address);
-            alert(fulladdress);
-
+            
             $('#lat').val(place.geometry.location.lat());
             $('#lon').val(place.geometry.location.lng());
             
@@ -720,5 +718,5 @@ $(document).ready(function() {
 </script>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
 @endsection

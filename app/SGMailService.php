@@ -7,29 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class SGMailService{
 
 	public static function sendBookingReceipt($email_detail){
-		//echo "hii";
-
 		$email = new Mail();
 		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		/*$booking = UserBookingStatus::findOrFail($booking_id);
-		if($booking->user_type == 'user'){
-			$user = User::find($booking->user_id);
-			$receiver = $user->email;
-			$full_name = $user->full_name;
-			
-		}
-
-		if($booking->user_type == 'customer'){
-			$customer = Customer::find($booking->customer_id);
-			$receiver = $customer->email;
-			$full_name = $customer->full_name;
-		}
-
-		$email->addTo(
-		    $receiver,
-		    $full_name,
-		);*/
-
+		
 		$email->addTo(
 		    $email_detail['email'],
 		);
@@ -61,12 +41,74 @@ class SGMailService{
 		  	$email_detail['getreceipemailtbody'],
 		  
 		);*/
-		//$email->setTemplateId("d-9ad5e9cbc94b4ccb8bab4ccecf915b51");
 		$email->setTemplateId("d-22008cb39c6a409791acb17f3064abd3");
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
 		try {
 		    $sendgrid->send($email);
 		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
+
+
+	public static function sendWelcomeMail($email_name){
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $email_name,
+		);
+		$email->setTemplateId("d-d42244ec709c4d91b23393393b2e05ef");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		     $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
+
+
+	public static function sendWelcomeMailToCustomer($id,$business_id){
+		$customer = Customer::findOrFail($id);
+		$businessdata = CompanyInformation::findOrFail($business_id);
+
+		$businessimg = $businessdata->logo;
+		if( $businessimg == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = env('APP_URL').'/uploads/profile_pic/thumb/'.$businessimg;
+        }
+
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $customer->email,
+		);
+
+		$substitutions = [
+			"providerName" => $businessdata->company_name,  
+			"CustomerName" => @$customer->fname.' '.@$customer->lname,  
+			"CompanyName" => $businessdata->company_name,  
+		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
+		    "address" => $businessdata->company_address(),   
+		    "PhoneNumber" => $businessdata->business_phone,   
+		    "Email" => $businessdata->business_email,  
+		    "website" => $businessdata->business_website,
+		    "ImageUrl" => $ImageUrl,
+		    "url" => $businessdata->users->username
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+		$email->setTemplateId("d-70af5c145eca4a4f878ec680469036b7");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		     $response = "success"; 
 		} catch (Exception $e) {
 			$response = 'fail';
 		}

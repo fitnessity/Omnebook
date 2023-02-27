@@ -133,9 +133,7 @@ class RegistrationController extends Controller
                 $customerObj->save();
 
                 if ($customerObj) {    
-                                  
-                    MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
-
+                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']); 
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',
@@ -221,8 +219,8 @@ class RegistrationController extends Controller
 
         $customerObj->save();
 
-        if ($customerObj) {                    
-            MailService::sendEmailVerifiedAcknowledgementcustomer($customerObj->id,$postArr['business_id']);
+        if ($customerObj) {      
+            SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
         }
 
         $url = '/viewcustomer/'.$request->cust_id;

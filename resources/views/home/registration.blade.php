@@ -300,11 +300,11 @@
                                     <span class="error" id="err_relationship"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input maxlength="14" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('mphone')">
+                                    <input maxlength="14" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                     <span class="error" id="err_mphone"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input maxlength="14" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('emergency_phone')">
+                                    <input maxlength="14" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                     <span class="error" id="err_emergency_phone" ></span>
                                 </div>
                                 <div class="form-group">
@@ -907,27 +907,6 @@
         }
     }
 
-    function changeformate() {
-        /*alert($('#contact').val());*/
-        var con = $('#contact').val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $("#contact").val("(" + con + ")" + "-");
-        } else if (curchr == 9) {
-            $("#contact").val(con + "-");
-        }
-    }
-
-    function changeformate_fami_pho(idname) {
-        /*alert($('#contact').val());*/
-        var con = $('#'+idname).val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $('#'+idname).val("(" + con + ")" + "-");
-        } else if (curchr == 9) {
-            $('#'+idname).val(con + "-");
-        }
-    }
 </script>
 
 
@@ -1032,7 +1011,7 @@
             }
         }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
 
 </body>
 </html>
