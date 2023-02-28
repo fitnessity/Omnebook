@@ -23,7 +23,6 @@ class OrderController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
 
-
     protected $business_service_repo;
     protected $customers;
     protected $users;
@@ -198,8 +197,6 @@ class OrderController extends BusinessBaseController
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
 
-
-
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -320,8 +317,6 @@ class OrderController extends BusinessBaseController
             }
         }
 
-
-
         $userBookingStatus = UserBookingStatus::create([
             'customer_id' =>  $customer->id ,
             'user_type' => 'customer',
@@ -345,15 +340,11 @@ class OrderController extends BusinessBaseController
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
-
             $now = new DateTime();
             $contact_date = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
             $expired_at = $now;
             
-
-        
-
             UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],

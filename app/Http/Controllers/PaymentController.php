@@ -15,7 +15,7 @@ use View;
 use DB;
 use Response;
 use Validator;
-use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges,SGMailService};
+use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges,SGMailService,Recurring};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -102,7 +102,7 @@ class PaymentController extends Controller {
                     unset($cart['cart_item'][$key]);
                 }
            } 
-
+           $qty_c = $price_c= [];
            foreach($cartnew as $crt){
                 $encodeqty ='' ; $aduqnt = $childqnt = $infantqnt = 0;
                   $aduprice = $childprice = $infantprice = 0;
@@ -163,21 +163,14 @@ class PaymentController extends Controller {
                      'transfer_provider_status' =>'unpaid',
                      'payment_number'=>$encodepayment_number,
                 );
-                $status = UserBookingDetail::create($act);
-                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
-                $businessuser['businessuser'] = CompanyInformation::where('id', $activitylocation->cid)->first();
-                $businessuser = json_decode(json_encode($businessuser), true); 
-                $BusinessServices['businessservices'] = BusinessServices::where('id',$activitylocation->id)->first();
-                $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                $BookingDetail_1 = $this->bookings->getBookingDetailnew($lastid);
-                foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                    if($details['sport'] == $crt['code']){
-                        if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $lastid){
-                            $BookingDetail_1['user_booking_detail'] = $details;
-                        }
-                        $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices);
-                    }
-                }
+
+                $statusdetail = UserBookingDetail::create($act);
+
+                $getreceipemailtbody = $this->bookings->getreceipemailtbody($status->id, $statusdetail->id);
+                $email_detail = array(
+                    'getreceipemailtbody' => $getreceipemailtbody,
+                    'email' => Auth::user()->email);
+                SGMailService::sendBookingReceipt($email_detail);
            }
 
            session()->forget('stripepayid');
@@ -472,9 +465,11 @@ class PaymentController extends Controller {
                     $tot_fee_adu =0;
                     $tot_fee_child =0;
                     $tot_fee_infant =0;
+                    $discount =0;
                     $priceid = $cartnew[$i]['priceid'];
                     $sesdate = $cartnew[$i]['sesdate'];
                     $pidval = $cartnew[$i]['code'];
+                    $price_detail = BusinessPriceDetails::find($priceid);
                     $activitylocation = BusinessServices::where('id',$pidval)->first();
                     $business_id = $activitylocation->cid;
                     $fitnessity_fee = $activitylocation->user->fitnessity_fee;
@@ -483,12 +478,14 @@ class PaymentController extends Controller {
                         $aduqnt = $cartnew[$i]['adult']['quantity'];
                         $aduprice = $cartnew[$i]['adult']['price'];
                         $tot_fee_adu =  ($aduprice * $fitnessity_fee) / 100;
+                        $discount +=  ($aduprice * $price_detail->adult_discount) / 100;
                         $per_act_trns_amt_to_admin +=   $tot_fee_adu * $aduqnt ;
                         $tot_pri +=   $aduqnt * $aduprice ;
                     }
                     if(!empty($cartnew[$i]['child'])){
                         $childqnt = $cartnew[$i]['child']['quantity'];
                         $childprice= $cartnew[$i]['child']['price'];
+                        $discount +=  ($childprice * $price_detail->child_discount) / 100;
                         $tot_fee_child =  ($childprice * $fitnessity_fee) / 100;
                         $per_act_trns_amt_to_admin  += $tot_fee_child * $childqnt ;
                         $tot_pri +=   $childqnt * $childprice ;
@@ -497,6 +494,7 @@ class PaymentController extends Controller {
                         $infantqnt = $cartnew[$i]['infant']['quantity'];
                         $infantprice = $cartnew[$i]['infant']['price'];
                         $tot_fee_infant =   ($infantprice * $fitnessity_fee) / 100;
+                        $discount +=  ($infantprice * $price_detail->infant_discount) / 100;
                         $per_act_trns_amt_to_admin  += $tot_fee_infant * $infantqnt ;
                         $tot_pri +=   $infantqnt * $infantprice ;
                     }
@@ -532,7 +530,7 @@ class PaymentController extends Controller {
                 }
 
                 
-                $price_detail = BusinessPriceDetails::find($priceid);
+                
                 $activity_scheduler = BusinessActivityScheduler::find($act_schedule_id);
                 $act = array(
                     'booking_id' => $lastid,
@@ -561,8 +559,125 @@ class PaymentController extends Controller {
                     'payment_number' =>$encodepayment_number,
                     'participate' =>$encodeparticipate,
                     'transfer_provider_status' =>'unpaid',
+                    'subtotal'=>$tot_pri,
+                    'tax' =>$tax,
+                    'tip' =>0,
+                    'discount' =>$discount,
+                    'fitnessity_fee' =>Auth::user()->fitnessity_fee,
                 );
                 $statusdetail = UserBookingDetail::create($act);
+
+                foreach($qty_c as $key=> $qty){
+                    $date = new Carbon;
+                    $stripe_id = $stripe_charged_amount = $payment_method= '';
+
+                    if($key == 'adult'){
+                        if($qty != '' && $qty != 0){
+                            $amount = $price_detail->recurring_first_pmt_adult;
+                            $re_i = $price_detail->recurring_nuberofautopays_adult;
+
+                            if($re_i != '' && $amount != ''){
+                                for ($num = $re_i; $num >0 ; $num--) { 
+                                    if($num==1){
+                                        $stripe_id =  $status->stripe_id;
+                                        $stripe_charged_amount = $status->amount;
+                                        $payment_method = 'card';
+                                        $payment_date = $date->format('Y-m-d');
+                                    }else{
+                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
+                                    } 
+
+                                    $recurring = array(
+                                        "booking_detail_id" => $statusdetail->id,
+                                        "user_id" => Auth::user()->id,
+                                        "user_type" => 'user',
+                                        "business_id" => $business_id ,
+                                        "payment_date" => $payment_date,
+                                        "amount" => $amount,
+                                        'charged_amount'=> $stripe_charged_amount,
+                                        'payment_method'=> $payment_method,
+                                        'stripe_payment_id'=> $stripe_id,
+                                        "tax" => $tax,
+                                        "status" => "scheduled",
+                                    );
+                                    Recurring::create($recurring);
+                                }
+                            } 
+                        }
+                    }
+
+                    if($key == 'child'){
+                        if($qty != '' && $qty != 0){
+                            $amount = $price_detail->recurring_first_pmt_child;
+                            $re_i = $price_detail->recurring_nuberofautopays_child;
+
+                            if($re_i != '' && $amount != ''){
+                                for ($num = $re_i; $num >0 ; $num--) { 
+                                    if($num==1){
+                                        $stripe_id =  $status->stripe_id;
+                                        $stripe_charged_amount = $status->amount;
+                                        $payment_method = 'card';
+                                        $payment_date = $date->format('Y-m-d');
+                                    }else{
+                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
+                                    } 
+
+                                    $recurring = array(
+                                        "booking_detail_id" => $statusdetail->id,
+                                        "user_id" => Auth::user()->id,
+                                        "user_type" => 'user',
+                                        "business_id" => $business_id ,
+                                        "payment_date" => $payment_date,
+                                        "amount" => $amount,
+                                        'charged_amount'=> $stripe_charged_amount,
+                                        'payment_method'=> $payment_method,
+                                        'stripe_payment_id'=> $stripe_id,
+                                        "tax" => $tax,
+                                        "status" => "scheduled",
+                                    );
+                                    Recurring::create($recurring);
+                                }
+                            } 
+                        }
+                    }
+
+                    if($key == 'infant'){
+                        if($qty != '' && $qty != 0){
+                            $amount = $price_detail->recurring_first_pmt_infant;
+                            $re_i = $price_detail->recurring_nuberofautopays_infant;
+
+                            if($re_i != '' && $amount != ''){
+                                for ($num = $re_i; $num >0 ; $num--) { 
+                                    if($num==1){
+                                        $stripe_id =  $status->stripe_id;
+                                        $stripe_charged_amount = $status->amount;
+                                        $payment_method = 'card';
+                                        $payment_date = $date->format('Y-m-d');
+                                    }else{
+                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
+                                    } 
+
+                                    $recurring = array(
+                                        "booking_detail_id" => $statusdetail->id,
+                                        "user_id" => Auth::user()->id,
+                                        "user_type" => 'user',
+                                        "business_id" => $business_id ,
+                                        "payment_date" => $payment_date,
+                                        "amount" => $amount,
+                                        'charged_amount'=> $stripe_charged_amount,
+                                        'payment_method'=> $payment_method,
+                                        'stripe_payment_id'=> $stripe_id,
+                                        "tax" => $tax,
+                                        "status" => "scheduled",
+                                    );
+                                    Recurring::create($recurring);
+                                }
+                            } 
+                        }
+                    }
+
+                }
+                
 
                 $customer = Customer::where(['business_id' => $activitylocation->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
 
