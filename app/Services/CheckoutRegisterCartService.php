@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-
+use App\BusinessPriceDetails;
 class CheckoutRegisterCartService
 {
     /**
@@ -37,7 +37,15 @@ class CheckoutRegisterCartService
     }
 
     public function items(){
-        return $this->_cart['cart_item'];
+        $cart['cart_item'] = [];
+        foreach($this->_cart['cart_item'] as $key=>$c)
+        {   
+            if($c['chk'] == 'activity_purchase') {
+                $cart['cart_item'][] = $c;
+            }
+        }
+
+        return $cart['cart_item'];
     }
 
     public function getQtyPriceByItem($item){
@@ -90,7 +98,10 @@ class CheckoutRegisterCartService
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
         $service_fee = $this->getRecurringFeeByItem($item, $user);
 
-
         return $pretaxSubTotal + $service_fee + $item["tax"];
+    }
+
+    public function getPriceDetail($priceid){
+        return BusinessPriceDetails::find($priceid);
     }
 }

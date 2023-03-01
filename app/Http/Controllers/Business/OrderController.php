@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction};
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use App\Services\CheckoutRegisterCartService;
 
@@ -317,6 +317,8 @@ class OrderController extends BusinessBaseController
             }
         }
 
+
+
         $userBookingStatus = UserBookingStatus::create([
             'customer_id' =>  $customer->id ,
             'user_type' => 'customer',
@@ -325,12 +327,11 @@ class OrderController extends BusinessBaseController
             'amount' => $request->cash_amt + $request->cc_new_card_amt + $request->check_amt + $request->cc_amt,
             'order_type' => 'checkout_register',
             'bookedtime' => Carbon::now()->format('Y-m-d'),
-            
         ]);
 
         foreach($transactions as $transaction){
             
-            Transaction::create(array_merge($transaction, [ 
+            $tran_data = Transaction::create(array_merge($transaction, [ 
                 'user_type' => 'Customer',
                 'user_id' => $customer->id,
                 'item_type' =>'UserBookingStatus',
@@ -345,9 +346,10 @@ class OrderController extends BusinessBaseController
             $now->modify('+'. $item['actscheduleid']);
             $expired_at = $now;
             
-            UserBookingDetail::create([                 
+            $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
+                'business_id'=> Auth::user()->cid,
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
@@ -364,6 +366,69 @@ class OrderController extends BusinessBaseController
                 'transfer_provider_status' =>'unpaid',
                 'payment_number' => '{}',
             ]);
+
+            $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
+            $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
+
+            foreach($qty_c as $key=> $qty){
+                $re_i = 0;
+                $date = new Carbon;
+                $stripe_id = $stripe_charged_amount = $payment_method= '';
+
+                if($key == 'adult'){
+                    if($qty != '' && $qty != 0){
+                        $amount = $price_detail->recurring_first_pmt_adult;
+                        $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                    }
+                }
+
+                if($key == 'child'){
+                    if($qty != '' && $qty != 0){
+                        $amount = $price_detail->recurring_first_pmt_child;
+                        $re_i = $price_detail->recurring_nuberofautopays_child; 
+                    }
+                }
+
+                if($key == 'infant'){
+                    if($qty != '' && $qty != 0){
+                        $amount = $price_detail->recurring_first_pmt_infant;
+                        $re_i = $price_detail->recurring_nuberofautopays_infant;
+                    }
+                }
+
+                if($qty != '' && $qty != 0){
+                    if($re_i != '' && $re_i != 0 && $amount != ''){
+                        for ($num = $re_i; $num >0 ; $num--) { 
+                            if($num==1){
+                                $stripe_id =  $tran_data['transaction_id'];
+                                $stripe_charged_amount = $tran_data['amount'];
+                                $payment_method = $tran_data['kind'];
+                                $payment_date = $date->format('Y-m-d');
+                                $status = 'Completed';
+                            }else{
+                                $month = $num - 1;
+                                $payment_date = (Carbon::now()->addMonth($month))->format('Y-m-d');
+                                $status = 'Scheduled';
+                            } 
+
+                            $recurring = array(
+                                "booking_detail_id" => $booking_detail->id,
+                                "user_id" => $customer->id,
+                                "user_type" => 'customer',
+                                "business_id" => $booking_detail->business_id ,
+                                "payment_date" => $payment_date,
+                                "amount" => $amount,
+                                'charged_amount'=> $stripe_charged_amount,
+                                'payment_method'=> $payment_method,
+                                'stripe_payment_id'=> $stripe_id,
+                                "tax" => $item['tax'],
+                                "status" => $status,
+                            );
+                            Recurring::create($recurring);
+                        }
+                    }
+                }
+            }
         }
 
         session()->forget('cart_item');

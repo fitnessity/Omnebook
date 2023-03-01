@@ -570,39 +570,11 @@ class PaymentController extends Controller {
                 foreach($qty_c as $key=> $qty){
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
-
+                    $re_i = 0;
                     if($key == 'adult'){
                         if($qty != '' && $qty != 0){
                             $amount = $price_detail->recurring_first_pmt_adult;
-                            $re_i = $price_detail->recurring_nuberofautopays_adult;
-
-                            if($re_i != '' && $amount != ''){
-                                for ($num = $re_i; $num >0 ; $num--) { 
-                                    if($num==1){
-                                        $stripe_id =  $status->stripe_id;
-                                        $stripe_charged_amount = $status->amount;
-                                        $payment_method = 'card';
-                                        $payment_date = $date->format('Y-m-d');
-                                    }else{
-                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
-                                    } 
-
-                                    $recurring = array(
-                                        "booking_detail_id" => $statusdetail->id,
-                                        "user_id" => Auth::user()->id,
-                                        "user_type" => 'user',
-                                        "business_id" => $business_id ,
-                                        "payment_date" => $payment_date,
-                                        "amount" => $amount,
-                                        'charged_amount'=> $stripe_charged_amount,
-                                        'payment_method'=> $payment_method,
-                                        'stripe_payment_id'=> $stripe_id,
-                                        "tax" => $tax,
-                                        "status" => "scheduled",
-                                    );
-                                    Recurring::create($recurring);
-                                }
-                            } 
+                            $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         }
                     }
 
@@ -610,34 +582,6 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $price_detail->recurring_first_pmt_child;
                             $re_i = $price_detail->recurring_nuberofautopays_child;
-
-                            if($re_i != '' && $amount != ''){
-                                for ($num = $re_i; $num >0 ; $num--) { 
-                                    if($num==1){
-                                        $stripe_id =  $status->stripe_id;
-                                        $stripe_charged_amount = $status->amount;
-                                        $payment_method = 'card';
-                                        $payment_date = $date->format('Y-m-d');
-                                    }else{
-                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
-                                    } 
-
-                                    $recurring = array(
-                                        "booking_detail_id" => $statusdetail->id,
-                                        "user_id" => Auth::user()->id,
-                                        "user_type" => 'user',
-                                        "business_id" => $business_id ,
-                                        "payment_date" => $payment_date,
-                                        "amount" => $amount,
-                                        'charged_amount'=> $stripe_charged_amount,
-                                        'payment_method'=> $payment_method,
-                                        'stripe_payment_id'=> $stripe_id,
-                                        "tax" => $tax,
-                                        "status" => "scheduled",
-                                    );
-                                    Recurring::create($recurring);
-                                }
-                            } 
                         }
                     }
 
@@ -645,34 +589,39 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $price_detail->recurring_first_pmt_infant;
                             $re_i = $price_detail->recurring_nuberofautopays_infant;
+                        }
+                    }
 
-                            if($re_i != '' && $amount != ''){
-                                for ($num = $re_i; $num >0 ; $num--) { 
-                                    if($num==1){
-                                        $stripe_id =  $status->stripe_id;
-                                        $stripe_charged_amount = $status->amount;
-                                        $payment_method = 'card';
-                                        $payment_date = $date->format('Y-m-d');
-                                    }else{
-                                        $payment_date = (Carbon::now()->addMonth($num))->format('Y-m-d');
-                                    } 
+                    if($qty != '' && $qty != 0){
+                        if($re_i != '' && $re_i != 0 && $amount != ''){
+                            for ($num = $re_i; $num >0 ; $num--) { 
+                                if($num==1){
+                                    $stripe_id =  $status->stripe_id;
+                                    $stripe_charged_amount = $status->amount;
+                                    $payment_method = $transactionstatus['kind'];
+                                    $payment_date = $date->format('Y-m-d');
+                                    $status = 'Completed';
+                                }else{
+                                    $month = $num - 1;
+                                    $payment_date = (Carbon::now()->addMonth($month))->format('Y-m-d');
+                                    $status = 'Scheduled';
+                                } 
 
-                                    $recurring = array(
-                                        "booking_detail_id" => $statusdetail->id,
-                                        "user_id" => Auth::user()->id,
-                                        "user_type" => 'user',
-                                        "business_id" => $business_id ,
-                                        "payment_date" => $payment_date,
-                                        "amount" => $amount,
-                                        'charged_amount'=> $stripe_charged_amount,
-                                        'payment_method'=> $payment_method,
-                                        'stripe_payment_id'=> $stripe_id,
-                                        "tax" => $tax,
-                                        "status" => "scheduled",
-                                    );
-                                    Recurring::create($recurring);
-                                }
-                            } 
+                                $recurring = array(
+                                    "booking_detail_id" => $statusdetail->id,
+                                    "user_id" => Auth::user()->id,
+                                    "user_type" => 'user',
+                                    "business_id" => $business_id ,
+                                    "payment_date" => $payment_date,
+                                    "amount" => $amount,
+                                    'charged_amount'=> $stripe_charged_amount,
+                                    'payment_method'=> $payment_method,
+                                    'stripe_payment_id'=> $stripe_id,
+                                    "tax" => $tax,
+                                    "status" => $status,
+                                );
+                                Recurring::create($recurring);
+                            }
                         }
                     }
 

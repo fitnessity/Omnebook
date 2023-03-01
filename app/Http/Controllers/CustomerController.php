@@ -240,15 +240,6 @@ class CustomerController extends Controller {
         return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
     } 
 
-    public function visit_autopaymodel(Request $request, $business_id, $id){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customer = $company->customers->find($id);
-        $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
-        
-        return view('customers._auto_pay_schedule_and_history', ['visits' => $visits, 'customer' => $customer]);
-    } 
-
     public function addcustomerfamily ($id){
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         $companyservice  =[];

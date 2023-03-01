@@ -26,6 +26,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
+    Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');

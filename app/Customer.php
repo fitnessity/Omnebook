@@ -122,7 +122,6 @@ class Customer extends Authenticatable
         return $this->hasMany(Transaction::class,'user_id');
     }
 
-
     public static function getcustomerofthiscompany($companyId){
         return Customer::where('business_id', $companyId)->orderBy('fname', 'ASC')->get();
     }
@@ -375,7 +374,6 @@ class Customer extends Authenticatable
     }
 
     public function visits(){
-        
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
@@ -450,7 +448,6 @@ class Customer extends Authenticatable
         }
     }
 
-
     public function get_current_membership(){
         $user = $this->user;
         $customer = $this;
@@ -493,6 +490,10 @@ class Customer extends Authenticatable
 
     public function refund(){
         //refund to customer
+    }
+
+    public function recurring($booking_detail_id){
+        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer']);
     }
     
 }

@@ -525,7 +525,7 @@
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
 																			<div class="col-md-4 col-xs-6">
-																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_autopaymodel', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
+																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
 																				<!-- <a class="auto-pay" data-toggle="modal" data-target="#auto-pay"> Auto Pay Details </a> -->
 																			</div>
 																		</div>
