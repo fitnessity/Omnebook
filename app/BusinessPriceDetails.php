@@ -97,7 +97,8 @@ class BusinessPriceDetails extends Model
         'recurring_client_be_charge_on_infant',
         'recurring_first_pmt_infant',
         'recurring_recurring_pmt_infant',
-        'recurring_total_contract_revenue_infant'
+        'recurring_total_contract_revenue_infant',
+        'dispaly_section'
     ];
     
 

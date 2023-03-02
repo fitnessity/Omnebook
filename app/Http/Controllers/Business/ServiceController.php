@@ -694,6 +694,7 @@ class ServiceController extends BusinessBaseController
 
                         $businessPayment = [
                             "category_id" => $cat_new_id,
+                            "dispaly_section" => $request->input('sectiondisplay'.$i.$y),
                             "business_service_id"=>$bid,
                             "cid" => $request->cid,
                             "userid" => $request->userid,
