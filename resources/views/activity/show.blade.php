@@ -702,7 +702,10 @@ input:disabled{
 								</div>
 							</div>
 						</div>
-						@php $date = date('l').', '.date('F d,  Y'); @endphp 
+						@php 
+							$date = date('l').', '.date('F d,  Y'); 
+							$totalquantity = 0;
+						@endphp 
 						<?php /*?><button id="submitcartbtn">submitcart</button><?php */?>
 						<div id="updatefilterforcart">
 							<div class="col-md-12 col-sm-12 col-xs-12">
