@@ -38,7 +38,7 @@
 					<th>Charged Amount </th>
 					<th>Payment Method </th>
 					<th> Status </th>
-					<th>Check All  | Uncheck All </th>
+					<th><input type="checkbox" class="checkAll"> Check All  | Uncheck All </th>
 					<th></th>
 				</tr>
 			</thead>
@@ -58,39 +58,15 @@
 						</td>
 						<td>${{$list['tax']}}</td>
 						<td>@if($list['charged_amount'] != '') ${{$list['charged_amount']}} @else $0 @endif</td>
-						<!-- <td> {{$list->getStripeCard()}} </td>  -->
-						<td> Visa ****4376 </td> 
+						<td> {{$list->getStripeCard()}} </td> 
 						<td>{{$list['status']}}</td>
-						<td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></td>
+						<td><input type="checkbox" id="chkbox" name="chkbox[]" class="custom_chkbox"></td>
 						<td>
 							<button type="submit" class="btn-nxt cancel-modal">Save</button>
 						</td>
 					</tr>
 					@php $i++; @endphp
 				@endforeach
-				<!-- <tr>
-					<td>
-						<div class="special-date">
-							<input  type="text" class="form-control" id="auto-pay-date" name="frm_passingdate[]" placeholder="" autocomplete="off" value="" data-behavior="datepicker">
-							<span class="error" id="b_certificateyear"></span>
-						</div>
-					</td>
-					<td> 
-						<div class="auto-amount">
-							<label>$</label>
-							<input type="text" class="form-control valid" name="frm_programname"  placeholder="150" >
-						</div>
-					</td>
-					<td>$8.95</td>
-					<td>$158.95 </td>
-					<td> Visa ***4376 </td>
-					<td>Scheduled </td>
-					<td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></td>
-					<td>
-						<button type="submit" class="btn-nxt cancel-modal">Save</button>
-					</td>
-				</tr> -->
-				
 			</tbody>
 		</table>
 	</div>
@@ -99,3 +75,17 @@
 		<button type="submit" class="auto-pay-btns">Pay Checked Items</button>							
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(".checkAll").on("click", function(){
+		if($(".checkAll").is(':checked')) {
+	        $(".custom_chkbox").each(function(){
+	            $(this).prop("checked",true);
+	        });
+	    }else{
+	    	$(".custom_chkbox").each(function(){
+	            $(this).prop("checked",false);
+	        });
+	    }
+    });
+</script>
