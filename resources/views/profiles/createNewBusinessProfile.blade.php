@@ -5472,20 +5472,20 @@
                                                         <div class="row">
                                                             <div class="col-md-12">
 
-                                                                <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice">
+                                                                <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" @if($price['dispaly_section'] == 'freeprice' ) checked @endif>
                                                                 <label class="recurring-pmt">Free</label>
                                                                 
-                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});"  checked value="weekdayprice">
+                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" @if($price['dispaly_section'] == 'weekdayprice' ) checked @endif>
                                                                 <label class="recurring-pmt">Everyday Price</label>
                                                                 
-                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice">
+                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice" @if($price['dispaly_section'] == 'weekendprice' ) checked @endif>
                                                                 <label class="recurring-pmt">Weekend Price</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="displaysectiondiv{{$i}}{{$j}}">
+                                            <div id="displaysectiondiv{{$i}}{{$j}}" @if($price['dispaly_section'] == 'freeprice' ) style="display: none;"  @endif >
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="setprice sp-select">
@@ -5502,57 +5502,35 @@
                                                 </div>
                             
                                                 <div class="row">
-
                                                     <div class="age-cat">
-
                                                         <div class="cat-age sp-select">
-
                                                             <label>Adults</label>
-
                                                             <p>Ages 12 & Older</p>
-
                                                         </div>
-
                                                     </div>
 
                                                     <div class="weekly-customer">
-
                                                         <div class="cus-week-price sp-select">
-
                                                             <label>Weekday Price</label>
-
                                                             <p> (Monday - Sunday)</p>
-
                                                             <input type="text" name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" placeholder="$" onkeyup="adultchangeestprice({{$i}},{{$j}});" value="{{$price['adult_cus_weekly_price']}}">
-
                                                         </div>
-
                                                     </div>
 
-                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" style="display: none;">
-
+                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif  >
                                                         <div class="cus-week-price sp-select">
-
                                                             <label>Weekend Price </label>
-
                                                             <p> (Saturday & Sunday)</p>
 
                                                             <input type="text" name="adult_weekend_price_diff_{{$i}}{{$j}}" id="adult_weekend_price_diff{{$i}}{{$j}}" placeholder="$"  value="{{$price['adult_weekend_price_diff']}}" onkeyup="weekendadultchangeestprice({{$i}},{{$j}});">
-
                                                         </div>
-
                                                     </div>
 
                                                     <div class="re-discount">
-
                                                         <div class="discount sp-select">
-
                                                             <label>Any Discount? </label>
-
                                                             <p> (Recommended 10% to 15%)</p>
-
                                                             <input type="text" name="adult_discount_{{$i}}{{$j}}" id="adult_discount{{$i}}{{$j}}" onkeyup="adultdischangeestprice({{$i}},{{$j}});" value="{{$price['adult_discount']}}" >
-
                                                         </div>
                                                     </div>
 
@@ -5584,7 +5562,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" style="display: none;">
+                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
                                                         <div class="cus-week-price earn sp-select">
                                                             <label>Weekend Estimated Earnings </label>
                                                             <input type="text" name="weekend_adult_estearn_{{$i}}{{$j}}" id="weekend_adult_estearn{{$i}}{{$j}}" placeholder="$" value="{{$price['weekend_adult_estearn']}}">
@@ -5634,7 +5612,7 @@
 
                                                     </div>
 
-                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" style="display: none;">
+                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
                                                         <div class="cus-week-price sp-select">
 
                                                             <label>Weekend Price</label>
@@ -5729,7 +5707,7 @@
 
                                                     </div>
 
-                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" style="display: none;">
+                                                    <div class="weekend-price Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
                                                         <div class="cus-week-price sp-select">
                                                             <label>Weekend Price</label>
                                                             <p> (Saturday & Sunday)</p>

@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('stripe:cron')->everyMinute();
+        //$schedule->command('stripe:cron')->everyMinute();
 
         $schedule->call(function () {
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
@@ -37,8 +37,8 @@ class Kernel extends ConsoleKernel
         })->everyTenMinutes();
 
         $schedule->call(function () {
-            $recurringDetails = Recurring::whereRaw("stripe_payment_id = '' or status !='Completed'")->whereDate('payment_date' ,'=', date("Y-m-d"));
-            foreach($recurringDetails->get() as $recurringDetail){
+            $recurringDetails = Recurring::whereDate('payment_date' ,'=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','Scheduled')->get();
+            foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
         })->everyMinute();
