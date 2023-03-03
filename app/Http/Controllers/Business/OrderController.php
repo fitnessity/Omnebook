@@ -143,8 +143,6 @@ class OrderController extends BusinessBaseController
             $modeldata = $this->getmultipleodermodel($ordermodelary);
             session()->forget('ordermodelary');
         }
-
-
         
         return view('business.orders.create', [
            'companyId' => $companyId,

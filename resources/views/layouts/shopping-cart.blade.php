@@ -616,7 +616,7 @@
             <?php
     			$service_fee= ($item_price * $fees->service_fee)/100;
     			$tax= ($item_price * $fees->site_tax)/100;
-    			$total_amount = $item_price + $service_fee + $tax - $discount;
+    			$total_amount = number_format(($item_price + $service_fee + $tax - $discount),2);
     		?>
     		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
     		<div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
