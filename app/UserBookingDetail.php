@@ -102,8 +102,6 @@ class UserBookingDetail extends Model
 
     public function platform_total(){
         $fitnessity_fee = BusinessSubscriptionPlan::where('id',1)->first()->fitnessity_fee;
-
-
         return round(($this->total() * $fitnessity_fee)/100, 2);
     }
 

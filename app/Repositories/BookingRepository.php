@@ -251,10 +251,10 @@ class BookingRepository
                     $userdata = Customer::where('id',$book_details['customer_id'])->first();
                     $acc_url = config('app.url').'/business/'.$userdata->business_id.'/customers/'.$userdata->id;
                     $extra_fees = json_decode(@$book_details['user_booking_detail']['extra_fees'],true); 
-                    $tax = $extra_fees['tax'];
-                    $tip = $extra_fees['tip'];
-                    $discount = $extra_fees['discount'];
-                    $service_fee = $extra_fees['service_fee'];
+                    $tax = @$extra_fees['tax'];
+                    $tip = @$extra_fees['tip'];
+                    $discount = @$extra_fees['discount'];
+                    $service_fee = @$extra_fees['service_fee'];
                     $service_fee = ($totprice_for_this * $service_fee )/100;
                     $main_total = $tip + $tax + $totprice_for_this - $discount + $service_fee;
                     $name =  @$book_details['customer']['fname'].' '.@$book_details['customer']['lname'];
@@ -328,10 +328,10 @@ class BookingRepository
             $extra_fees = json_decode(@$book_details['user_booking_detail']['extra_fees'],true);
             $tax = $tip = $discount = $service_fee= 0;
             if(!empty($extra_fees)){
-                $tax = $extra_fees['tax'];
-                $tip = $extra_fees['tip'];
-                $discount = $extra_fees['discount'];
-                $service_fee = $extra_fees['service_fee'];
+                $tax = @$extra_fees['tax'];
+                $tip = @$extra_fees['tip'];
+                $discount = @$extra_fees['discount'];
+                $service_fee = @$extra_fees['service_fee'];
             }
             $bookingdetail = UserBookingDetail::where('id',@$book_details['user_booking_detail']['id'])->first();
             $totprice_for_this = @$bookingdetail->total();
@@ -447,10 +447,10 @@ class BookingRepository
             $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
         }else{  
             $extra_fees = json_decode(@$booking_details->extra_fees,true); 
-            $tax_for_this = $extra_fees['tax'];
-            $tip = $extra_fees['tip'];
-            $discount = $extra_fees['discount'];
-            $service_fee = $extra_fees['service_fee'];
+            $tax_for_this = @$extra_fees['tax'];
+            $tip = @$extra_fees['tip'];
+            $discount = @$extra_fees['discount'];
+            $service_fee = @$extra_fees['service_fee'];
             $service_fee = ($totprice_for_this * $service_fee )/100;
             $main_total = $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee;
             $nameofbookedby = $booking_status->customer->fname.' '.$booking_status->customer->lname;

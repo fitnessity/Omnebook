@@ -182,7 +182,7 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-
+        $bookidarray = [];
         $company = $request->current_company;
         $customer = $company->customers()->findOrFail($request->user_id);
 
@@ -317,8 +317,6 @@ class OrderController extends BusinessBaseController
             }
         }
 
-
-
         $userBookingStatus = UserBookingStatus::create([
             'customer_id' =>  $customer->id ,
             'user_type' => 'customer',
@@ -366,10 +364,21 @@ class OrderController extends BusinessBaseController
                 'transfer_provider_status' =>'unpaid',
                 'payment_number' => '{}',
             ]);
+            $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
 
+            $tax_person = 0;
+            if($qty_c['adult'] != 0){
+                $tax_person++;
+            }if($qty_c['child']!= 0){
+                $tax_person++;
+            }if($qty_c['infant'] != 0){
+                $tax_person++;
+            }
+
+            $per_person_tax = $item['tax'] / $tax_person; 
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;
                 $date = new Carbon;
@@ -421,7 +430,7 @@ class OrderController extends BusinessBaseController
                                 'charged_amount'=> $stripe_charged_amount,
                                 'payment_method'=> $payment_method,
                                 'stripe_payment_id'=> $stripe_id,
-                                "tax" => $item['tax'],
+                                "tax" => $per_person_tax,
                                 "status" => $status,
                             );
                             Recurring::create($recurring);
@@ -432,6 +441,7 @@ class OrderController extends BusinessBaseController
         }
 
         session()->forget('cart_item');
+        session()->put('ordermodelary', $bookidarray);
         
         return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
 

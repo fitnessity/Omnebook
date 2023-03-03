@@ -187,24 +187,6 @@ class PaymentController extends Controller {
                 [
                     'name' => $userdata['firstname'].' '.$userdata['lastname'],
                     'email'=> $userdata['email'],
-                    /*'address' =>[
-                            "city": $userdata['city'],
-                            "country": $userdata['country'],
-                            "line1": $userdata['address'],
-                            "line2": $userdata['country'],
-                            "postal_code": $userdata['zipcode'],
-                            "state": $userdata['state'],
-                        ],
-                    'shipping' =>[
-                        'address' =>[
-                            "city": $userdata['city'],
-                            "country": $userdata['country'],
-                            "line1": $userdata['address'],
-                            "line2": $userdata['country'],
-                            "postal_code": $userdata['zipcode'],
-                            "state": $userdata['state'],
-                        ],
-                      ]*/
                 ]);
                 $stripe_customer_id = $customer->id;
                 if(!empty($customer)){
@@ -230,25 +212,18 @@ class PaymentController extends Controller {
                     $total = $total + $pr;
                     if(isset($request->itemname[$i])) {
                         $product = \Stripe\Product::create([
-                            // 'id' => $request->itemid[$i],
                             'name' => $request->itemname[$i],
                             'description' => $request->itemname[$i],
-                         // 'description' => $request->itemtype[$i],
                         ]);
 
-                        // echo $request->itempriceid[$i];
                         $price = \Stripe\Price::create([
                           'product' => $product->id,
                           'unit_amount' => $request->itemprice[$i] / $request->itemqty[$i],
                           'currency' => 'usd',
                         ]);   
-                        //print_r($price);
                         $listItem['price'] = $price->id;
                         $listItem['quantity'] = $request->itemqty[$i];
                         $listItems[] = $listItem;
-                        
-                        //echo $request->itemid[$i];
-                        //print_r($product);
                     }
                     if(isset($request->itemid[$i])) {
                         $proidary = $request->itemid[$i];
@@ -454,7 +429,7 @@ class PaymentController extends Controller {
             $fit_acc_amt = 0;
             for($i=0;$i<count($metadatapro);$i++)
             {
-                $priceid=0; $sesdate= $encodeqty ='' ;
+                $tax_person = $priceid=0; $sesdate= $encodeqty ='' ;
                 $aduqnt = $childqnt = $infantqnt =0; 
                 $fitnessity_fee = 0;
                 if ($metadatapro[$i] == $cartnew[$i]['code'])
@@ -529,8 +504,6 @@ class PaymentController extends Controller {
                     $encodeparticipate = json_encode($participate);
                 }
 
-                
-                
                 $activity_scheduler = BusinessActivityScheduler::find($act_schedule_id);
                 $act = array(
                     'booking_id' => $lastid,
@@ -566,15 +539,21 @@ class PaymentController extends Controller {
                     'fitnessity_fee' =>Auth::user()->fitnessity_fee,
                 );
                 $statusdetail = UserBookingDetail::create($act);
-
+                if($aduqnt != 0){
+                    $tax_person++;
+                }if($childqnt != 0){
+                    $tax_person++;
+                }if($infantqnt != 0){
+                    $tax_person++;
+                }
                 foreach($qty_c as $key=> $qty){
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
-                    $re_i = 0;
+                    $re_i = $tax_person = 0; 
                     if($key == 'adult'){
                         if($qty != '' && $qty != 0){
                             $amount = $price_detail->recurring_first_pmt_adult;
-                            $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                            $re_i = $price_detail->recurring_nuberofautopays_adult;
                         }
                     }
 
@@ -592,6 +571,7 @@ class PaymentController extends Controller {
                         }
                     }
 
+                    $per_person_tax = $tax / $tax_person; 
                     if($qty != '' && $qty != 0){
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
