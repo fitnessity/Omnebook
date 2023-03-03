@@ -113,8 +113,8 @@ class BusinessServices extends Model
         'know_before_you_go',
     ];
     
-    public function StaffMembers(){
-        return $this->belongsTo(StaffMembers::class, 'instructor_id');
+    public function BusinessStaff(){
+        return $this->belongsTo(BusinessStaff::class, 'instructor_id');
     }
 
     public function businesscompanydetail() {

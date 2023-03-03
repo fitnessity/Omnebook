@@ -21,6 +21,7 @@ class SchedulerController extends Controller
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
         $programName = $orderData->business_services->program_name;
         $companyName = $orderData->business_services->company_information->company_name;
+        $businessId = $orderData->business_id;
         if($orderData->booking->user_id != Auth::user()->id){
             $orderData = [];
         }else{
@@ -28,7 +29,6 @@ class SchedulerController extends Controller
             $serviceType= $orderData->business_services->service_type;
         }
         
-       
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -38,7 +38,7 @@ class SchedulerController extends Controller
 
         $days = [];
         $days[] = new DateTime(date('Y-m-d'));
-        for($i = 0; $i<=4; $i++){
+        for($i = 0; $i<=100; $i++){
             $d = clone($filter_date);
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
@@ -50,6 +50,7 @@ class SchedulerController extends Controller
             'companyName' => $companyName,
             'programName' => $programName,
             'serviceType' => $serviceType,
+            'businessId' => $businessId,
             'user_booking_detail_id' => $request->user_booking_detail_id,
         ]);
     }
@@ -72,18 +73,24 @@ class SchedulerController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  UserBookingDetail::where('id',$request->odid)->first();
-        $array = json_decode($data['booking_detail'],true);
-        $array['sessiondate'] = $request->date;
-        UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
-        BookingCheckinDetails::create([
-            "business_activity_scheduler_id"=>$request->timeid, 
-            "customer_id" => $data->booking->customer_id,
-            'booking_detail_id'=> $request->odid ,
-            "checkin_date"=>$request->date ,
-            "use_session_amount" => 1,
-            "source_type" => 'online_scheduler'
-        ]);
+        $company = Auth::user()->company()->find($request->businessId);
+        if($company  != ''){
+            $data = $company->UserBookingDetails()->findOrFail($request->odid);
+            $array = json_decode($data['booking_detail'],true);
+            $array['sessiondate'] = $request->date;
+            UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
+            BookingCheckinDetails::create([
+                "business_activity_scheduler_id"=>$request->timeid, 
+                "customer_id" => $data->booking->customer_id,
+                'booking_detail_id'=> $request->odid ,
+                "checkin_date"=>$request->date ,
+                "use_session_amount" => 1,
+                "source_type" => 'online_scheduler'
+            ]);
+            return "success";
+        }else{
+            return "fail";
+        }
     }
 
     /**
@@ -136,39 +143,4 @@ class SchedulerController extends Controller
         $checkinDetail->delete();
     }
 
-    public function allActivitySchedule(Request $request){
-        $order = UserBookingStatus::where(['user_id'=>Auth::user()->id,'order_type'=>'checkout_register'])->get();
-        $servicetype = 'classes';
-        if($request->stype){
-            $servicetype = $request->stype;
-        }
-        $orderdata = [];
-        foreach($order as $odt){
-            $orderdetaildata = UserBookingDetail::where('booking_id',$odt->id)->get();
-            foreach($orderdetaildata as $odetail){
-                if($odetail->business_services->service_type ==   $servicetype ){
-                    $orderdata []= $odetail;
-                }
-            }
-        }
-
-        $filter_date = new DateTime();
-        $shift = 1;
-        if($request->date && (new DateTime($request->date)) > $filter_date){
-            $filter_date = new DateTime($request->date); 
-            $shift = 0;
-        }
-        $days = [];
-        $days[] = new DateTime(date('Y-m-d'));
-        for($i = 0; $i<=4; $i++){
-            $d = clone($filter_date);
-            $days[] = $d->modify('+'.($i+$shift).' day');
-        }
-        return view('personal.scheduler.all_activity_schedule',[
-            'days' => $days,
-            'filter_date' => $filter_date,
-            'orderdata' => $orderdata,
-            'servicetype' => $servicetype,
-        ]);
-    }
 }

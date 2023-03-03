@@ -38,7 +38,8 @@ class PaymentController extends Controller {
     }
 
     public function createCheckoutSession(Request $request) {
-      /* $cart = session()->get('cart_item');
+        /* print_r($request->all());exit();
+        $cart = session()->get('cart_item');
         print_r($cart);exit();*/
         $loggedinUser = Auth::user();
         $customer='';
@@ -539,17 +540,19 @@ class PaymentController extends Controller {
                     'fitnessity_fee' =>Auth::user()->fitnessity_fee,
                 );
                 $statusdetail = UserBookingDetail::create($act);
-                if($aduqnt != 0){
+
+                if($qty_c['adult'] != 0){
                     $tax_person++;
-                }if($childqnt != 0){
+                }if($qty_c['child']  != 0){
                     $tax_person++;
-                }if($infantqnt != 0){
+                }if($qty_c['infant']  != 0){
                     $tax_person++;
                 }
+
                 foreach($qty_c as $key=> $qty){
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
-                    $re_i = $tax_person = 0; 
+                    $re_i = 0;
                     if($key == 'adult'){
                         if($qty != '' && $qty != 0){
                             $amount = $price_detail->recurring_first_pmt_adult;
@@ -576,8 +579,8 @@ class PaymentController extends Controller {
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
                                 if($num==1){
-                                    $stripe_id =  $status->stripe_id;
-                                    $stripe_charged_amount = $status->amount;
+                                    $stripe_id =  $transactionstatus['transaction_id'];
+                                    $stripe_charged_amount = $transactionstatus['amount'];
                                     $payment_method = $transactionstatus['kind'];
                                     $payment_date = $date->format('Y-m-d');
                                     $status = 'Completed';
@@ -604,10 +607,8 @@ class PaymentController extends Controller {
                             }
                         }
                     }
-
                 }
-                
-
+            
                 $customer = Customer::where(['business_id' => $activitylocation->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
 
                 if(!$customer){
@@ -636,7 +637,7 @@ class PaymentController extends Controller {
                     'source_type' => 'marketplace',
                 ]);
 
-                $getreceipemailtbody = $this->bookings->getreceipemailtbody($status->id, $statusdetail->id);
+                $getreceipemailtbody = $this->bookings->getreceipemailtbody($statusdetail->booking_id, $statusdetail->id);
                 $email_detail = array(
                     'getreceipemailtbody' => $getreceipemailtbody,
                     'email' => Auth::user()->email);

@@ -30,6 +30,10 @@ class Transaction extends Model
         return $this->belongsTo(UserBookingStatus::class,'item_id');
     }
 
+    public function Recurring(){
+        return $this->belongsTo(Recurring::class,'item_id');
+    }
+
     public function getPmtMethod(){
         $pmt_by = $this->kind;
         if($pmt_by == 'card'){
@@ -46,6 +50,8 @@ class Transaction extends Model
     public function item_type_terms(){
         if($this->item_type == 'UserBookingStatus'){
             return 'Membership';
+        }if($this->item_type == 'Recurring'){
+            return 'Auto Pay';
         }else{
             return 'Product';
         }
@@ -53,7 +59,7 @@ class Transaction extends Model
 
 
     public function item_description(){
-        $item_description = '';
+        $itemDescription = '';
         if($this->item_type == 'UserBookingStatus'){
             $bookingData = $this->userBookingStatus->UserBookingDetail;
             if(!empty($bookingData)){
@@ -61,11 +67,19 @@ class Transaction extends Model
                     $activityName = $bd->business_services->program_name;
                     $categoryName = $bd->business_price_detail->business_price_details_ages->category_title;
                     $priceOption = $bd->business_price_detail->price_title;
-                    $item_description .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                    $itemDescription .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
                 }
             }
             //echo $booking_data;exit();
+        }else if ($this->item_type == 'Recurring') {
+            $bookingData = $this->Recurring->UserBookingDetail;
+            if($bookingData != ''){
+                $activityName = $bookingData->business_services->program_name;
+                $categoryName = $bookingData->business_price_detail->business_price_details_ages->category_title;
+                $priceOption = $bookingData->business_price_detail->price_title;
+                $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
+            }
         }
-        return $item_description;
+        return $itemDescription;
     }
 }

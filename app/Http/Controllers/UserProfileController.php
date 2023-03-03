@@ -86,7 +86,6 @@ use App\Notification;
 use App\BusinessServicesFavorite;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
-use App\StaffMembers;
 use App\ProfilePostViews;
 use App\BusinessPostViews;
 use Carbon\Carbon;
@@ -9352,36 +9351,6 @@ class UserProfileController extends Controller {
             }
         }
         return 'success';
-    }
-
-
-    public function add_instructor(Request $request){
-        $images = '';
-        if ($request->hasFile('insimg')) 
-        {   
-            $file = $request->file('insimg');
-            $name = date('His').$file->getClientOriginalName();
-            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'instructureimg'.DIRECTORY_SEPARATOR,$name);
-            if( !empty($name) ){
-                $images = $name;
-            }
-        }
-        $staff_mem = [
-            'name' => $request->insname,
-            'image' => $images,
-            'description' => $request->insdescription,
-            'user_id' => Auth::user()->id,
-            'email'=>$request->insemail,
-        ]; 
-        
-        $create = StaffMembers::create($staff_mem);
-        if($create){
-            $status = "success";
-        }else{
-            $status = "fail";
-        }
-
-        return $status;
     }
 
     public function delimageactivity(Request $request){

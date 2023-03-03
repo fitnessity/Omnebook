@@ -15,38 +15,12 @@ use Input;
 use Image;
 use File;
 use DB;
+use DateTime;
 use Config;
-use App\MailService;
-use App\User;
-use App\UserService;
-use App\UserProfessionalDetail;
-use App\PagePost;
-use App\PagePostComments;
-use App\PagePostCommentsLike;
-use App\PagePostLikes;
-use App\PagePostSave;
-use App\CompanyInformation;
-use App\Miscellaneous;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
-use App\PageAttachment;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessService;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessSubscriptionPlan;
-use App\BusinessActivityScheduler;
-use App\PageLike;
-use App\Notification;
-use App\Sports;
-use App\BusinessReview;
-use App\BusinessPostViews;
-use App\UserFollow;
+
+use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous};
 
 class BusinessController extends Controller
 {
@@ -1369,5 +1343,47 @@ class BusinessController extends Controller
 
         echo $var;
         exit;
+    }
+
+
+    public function activities(Request $request, $business_id){
+        $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
+        $servicetype = 'classes';
+        if($request->stype){
+            $servicetype = $request->stype;
+        }
+        $orderdata = [];
+        foreach($order as $odt){
+            $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
+            foreach($orderdetaildata as $odetail){
+                if($odetail->business_services->service_type ==   $servicetype ){
+                    $orderdata []= $odetail;
+                }
+            }
+        }
+
+        $filter_date = new DateTime();
+        $shift = 1;
+        if($request->date && (new DateTime($request->date)) > $filter_date){
+            $filter_date = new DateTime($request->date); 
+            $shift = 0;
+        }
+        $days = [];
+        $days[] = new DateTime(date('Y-m-d'));
+        for($i = 0; $i<=100; $i++){
+            $d = clone($filter_date);
+            $days[] = $d->modify('+'.($i+$shift).' day');
+        }
+
+        $companyData = CompanyInformation::findOrFail($business_id);
+        $companyName = $companyData->company_name;
+        return view('personal.scheduler.all_activity_schedule',[
+            'days' => $days,
+            'filter_date' => $filter_date,
+            'orderdata' => $orderdata,
+            'serviceType' => $servicetype,
+            'companyName' => $companyName,
+            'businessId' => $business_id,
+        ]);
     }
 }

@@ -16142,6 +16142,7 @@ div#CreateCompanyModal #preview img.header_img {
     text-align: left;
     padding: 5px 10px;
     border-bottom: 1px solid #eee;
+    list-style: none !important; 
 }
 #suggesstion-box-search-activity #country-list {
 	top: 62px; color: #000;
@@ -24490,4 +24491,7 @@ padding-left: 0px;
 	font-size: 16px;
 	font-weight: 500;
 	margin-left: 9px;
+}
+.valor-mix-title label{
+	font-size: 14px !important;
 }
