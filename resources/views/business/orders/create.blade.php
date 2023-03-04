@@ -113,7 +113,11 @@
 														<option value="{{@$user_data->id}}~~{{$pc_user_tp}}">{{$username}}(me)</option>
 														@if(!empty($userfamily))
 														@foreach($userfamily as $ufd)
-															<option value="{{$ufd->id}}~~family^^{{$username}}">@if($pc_user_tp == 'customer'){{$ufd->fname}} {{$ufd->lname}} @else {{$ufd->first_name}} {{$ufd->last_name}} @endif</option>
+															<option value="{{$ufd->id}}~~family^^{{$username}}"
+																@if($ufd->id == request()->participate_id)
+																	selected
+																@endif
+																>@if($pc_user_tp == 'customer'){{$ufd->fname}} {{$ufd->lname}} @else {{$ufd->first_name}} {{$ufd->last_name}} @endif</option>
 														@endforeach
 														@endif
 													</select>
