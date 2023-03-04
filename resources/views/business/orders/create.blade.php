@@ -601,7 +601,7 @@
 									if($subtotal != $discount){
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 								 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
-								 		$grand_total = $grand_total;
+								 		$grand_total = number_format($grand_total,2);
 								 		$tax_ser_fees = ($service_fee + $taxes);
 								 	}else{
 								 		$grand_total  = $subtotal  = $tax_ser_fees = 0 ;
@@ -1123,27 +1123,89 @@
 <script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
 
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
+ 
 
+<script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
+<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/>
 
-  
+<script>
+  	
+  	/*$(document).on('keyup', '#serchclient', function() {
+    	var _token = '{{csrf_token()}}';
+	  	$.ajax({
+	      	type: "GET",
+	      	url: "{{route('business_customer_index')}}",
+	      	data: { fname: $(this).val(),  _token: _token, },
+	      	success: function(data) {
+	        	$("#option-box1 .customer-list").html('');
+	        	console.log(data);
+	        	$.each(data, function(index, customer){
+	        		let customer_row = $('<li class="searchclick" onClick="searchclick(' + customer.id + ')"><input type="hidden" name="_token" value="'+_token+'"><div class="row rowclass-controller"></div>');
+		          	let content = customer_row.find('.rowclass-controller');
+		          	let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+		          	if(customer.profile_pic_url){
+		            	profile_img = '<img class="searchbox-img" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="">';            
+		          	}
+		          	customer_row.append('<div class="col-md-3 nopadding text-center">' + profile_img + '</div>');
+		          	customer_row.append('<div class="col-md-9 div-controller">' + 
+		              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
+		              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
+		              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div></li>');
+		          	$("#option-box1 .customer-list").append(customer_row);
+		        })
+	        	$("#option-box1").show();
+	      	}
+	  	});
+	});*/
+
+	$(document).ready(function () {
+		var business_id = '{{$companyId}}';
+		var url = "{{ url('/business/business_id/customers') }}";
+		url = url.replace('business_id', business_id);
+
+    	$( "#serchclient" ).autocomplete({
+      		source: url,
+      		focus: function( event, ui ) {
+      			 return false;
+        	},
+        	select: function( event, ui ) {
+	            window.location.href = '/business/'+business_id+'/orders/create?cus_id='+ui.item.id;
+	        }
+    	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+    		let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+          	if(item.profile_pic_url){
+            	profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+          	}
+
+	        var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+		              '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (52  Years Old)' : '') + '</label></p>' +
+		              '<p class="pstyle liaddress">' + item.email +'</p>' + 
+		              '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
+	       
+	        return $( "<li></li>" )
+	                .data( "item.autocomplete", item )
+	                .append(inner_html)
+	                .appendTo( ul );
+	    };
+  	});
+
+</script>
+
 <script type="text/javascript">
 	$(function() {
-
 		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
-
 		const client_secret = '{{$intent ? $intent->client_secret : null}}';
-
 		const options = {
 		  clientSecret: client_secret,
 		  // Fully customizable with appearance API.
 		  appearance: {/*...*/},
 		};
-
 		const elements = stripe.elements(options);
 		const paymentElement = elements.create('payment');
 
 		paymentElement.mount('#payment-element');
-
 
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
@@ -1156,7 +1218,6 @@
 			let cc_new_card_amt = $('#cc_new_card_amt').val();
 			let check_amt = $('#check_amt').val();
 
-			
 			var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
 
 			if(cash_amt <= 0 && cc_amt <=0 && cc_new_card_amt <=0 && check_amt <=0 && cardinfoRadio!= 'comp'){
@@ -1164,8 +1225,6 @@
 				$('#checkout-button').html('Complete Payment').prop('disabled', false);
 				return false;
 			}
-
-
 
 	        if(cc_new_card_amt > 0) {
 	            var $form  = $(".validation"),
@@ -1186,16 +1245,12 @@
 	                }
 	            });
 
-
 	        	stripe.confirmSetup({
         	      elements,
         	      redirect: 'if_required',
         	      confirmParams: {
         	      }
         	    }).then(function(result){
-
-        	    	
-        	    	
         	    	if (result.error) {
         	    		$('.error').removeClass('hide').find('.alert').text(result.error.message);
         	    		$('#checkout-button').html('Complete Payment').prop('disabled', false);
@@ -1208,26 +1263,16 @@
         	    				console.log('success')
         	    			}
         	    		})
-
         	    		$('#new_card_payment_method_id').val(result.setupIntent.payment_method)
 	        	    	$form.off('submit');
 
 		                $form.submit();
         	    	}
-
-        	    	
-        	    	
-        	    	
-        	    });      
-
-
-
+        	    }); 
 	        }else{
     	    	$form.off('submit');
-
                 $form.submit();
 	        }
-	        
 	    });
 	});
 </script>
@@ -1997,36 +2042,6 @@
     	$('#session_span').html($(this).val());
     });
 
-    $(document).on('keyup', '#serchclient', function() {
-    	var _token = '{{csrf_token()}}';
-	  	$.ajax({
-	      	type: "GET",
-	      	url: "{{route('business_customer_index')}}",
-	      	data: { fname: $(this).val(),  _token: _token, },
-	      	success: function(data) {
-	        	$("#option-box1 .customer-list").html('');
-	        	console.log(data);
-	        	$.each(data, function(index, customer){
-
-	        		let customer_row = $('<li class="searchclick" onClick="searchclick(' + customer.id + ')"><input type="hidden" name="_token" value="'+_token+'"><div class="row rowclass-controller"></div>');
-		          	let content = customer_row.find('.rowclass-controller');
-		          	let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
-
-		          	if(customer.profile_pic_url){
-		            	profile_img = '<img class="searchbox-img" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="">';            
-		          	}
-		          	customer_row.append('<div class="col-md-3 nopadding text-center">' + profile_img + '</div>');
-		          	customer_row.append('<div class="col-md-9 div-controller">' + 
-		              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
-		              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
-		              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div></li>');
-		          	$("#option-box1 .customer-list").append(customer_row);
-		        })
-	        	$("#option-box1").show();
-	      	}
-	  	});
-	});
-
 	$("#tax").click(function () {
         gettotal('','');
     });
@@ -2041,10 +2056,6 @@
 </script>
 
 <script type="text/javascript">
-
-	
-
-
     $(".dobdate").keyup(function(){
       if ($(this).val().length == 2){
           $(this).val($(this).val() + "/");
@@ -2061,9 +2072,6 @@
         }
     });
 
-	
-
-
     function getAge() {
         var dateString = document.getElementById("dob").value;
         var today = new Date();
@@ -2078,8 +2086,6 @@
         return agechk;
     }
 </script>
-
-
 
 <script>
     $( function() {

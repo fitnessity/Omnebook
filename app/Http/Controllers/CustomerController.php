@@ -44,21 +44,25 @@ class CustomerController extends Controller {
     }
 
     public function index(Request $request, $business_id){
-
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
 
         $customers = $company->customers()->orderBy('fname');
-        if($request->fname){
+        /*if($request->fname){
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
+        }*/
+
+        if($request->term){
+            $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
         }
 
         $customer_count = $customers->count();
         $customers = $customers->get();
-
+        $url = '';
         $grouped_customers= array();
 		foreach ($customers as $customer) {
-		  $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
+		    $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
+            $url = url('/business/'.$business_id.'/orders/create?cus_id='.$customer->id);
 		}
 
 
