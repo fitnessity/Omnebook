@@ -48,162 +48,134 @@
 						<div class="row">
 							<div class="col-md-12 text-right">
 								<div class="calendar-icon">
-									<input type="text" name="date" class="date" readonly placeholder="DD/MM/YYYY" />
+									<input type="text" name="date" class="date datepicker"  readonly placeholder="DD/MM/YYYY" />
 								</div>
 							</div>
 						</div>
-					<!--	<div class="row">
-							<div class="owl-carousel owl-theme schedulers-arrows">
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Tue 21</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Wed 22</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Thu 23</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Fri 24</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Sat 25</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Sun 26</a>
-									</div>
-								</div>
-								<div class="item">
-									<div class="pairets">
-										<a href="#" class="calendar-btn">Mon 15</a>
-									</div>
-								</div>
-							</div>
-						</div>-->
+						
 						<div class="row">
+							<div class="owl-carousel owl-theme schedulers-arrows">
 							@foreach ($days as $date)
 								@php
 									$hint_class = ($filter_date->format('Y-m-d') == $date->format('Y-m-d')) ? 'pairets' : 'pairets-inviable';
 								@endphp
-							
-								<div class="col-md-2 col-sm-2 col-xs-6">
+								<div class="item">
 									<div class="{{$hint_class}}">
 										<a href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d')])}}" class="calendar-btn">{{$date->format("D d")}}</a>
 									</div>
 								</div>
 							@endforeach
+							</div>
 						</div>
+
 						<div class="tab-data">
 							<div class="row">
-								<div class="col-md-3 col-sm-4 col-xs-12">
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="checkout-sapre-tor">
 									</div>
 								</div>
-								<div class="col-md-6 col-sm-4 col-xs-12 valor-mix-title">
-									<label>Classes on {{$filter_date->format("l, F j")}}</label>
+								<div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title nopadding">
+									<label>Activities on {{$filter_date->format("l, F j")}}</label>
 								</div>
-								<div class="col-md-3 col-sm-4 col-xs-12">
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="checkout-sapre-tor">
 									</div>
 								</div>
 							</div>
-							@if($serviceType== $st && !empty($orderData)) 
-								@php 
-									$catelist = $orderData->business_price_detail->business_price_details_ages;
-									$sche_ary = [];
-									foreach($catelist->BusinessActivityScheduler as $sc){
-										if($sc->end_activity_date > $filter_date->format('Y-m-d')){
-											if(strpos($sc->activity_days, $filter_date->format("l")) !== false){
-												$sche_ary [] = $sc;
-											}
+							<div class="activity-tabs">
+								@if($serviceType== $st && !empty($orderData)) 
+									@php 
+										$catelist = '';
+										if($orderData->business_price_detail != ''){
+											$catelist = $orderData->business_price_detail->business_price_details_ages;
 										}
-									} 
-								@endphp
-							
-							 	<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-12">
-										<div class="classes-info">
-											<div class="row">
-												<div class="col-md-12 col-xs-12">
-													<h2>{{$orderData->business_services->sport_activity}}<label class="cancel-activity" style="display:none;">Activity Cancelled</label></h2>
-													<label>Program Name: </label> <span> {{$orderData->business_services->program_name}}</span>
-												</div>
-												<div class="col-md-12 col-xs-12">
-													<label>Category Name: </label> <span>{{$catelist->category_title}}</span>
-												</div>
-												<div class="col-md-12 col-xs-12">
-													<label>Instructor: </label> <span>@if($orderData->business_services->StaffMembers != '') {{$orderData->business_services->StaffMembers->name}} @endif</span>
-												</div>
-												<div class="col-md-12 col-xs-12">
-													<label>Remaining Session: </label> 
-													<span>
-														{{$orderData->getremainingsession()}}
-													</span>
+
+										$sche_ary = [];
+										if($catelist != ''){
+											foreach($catelist->BusinessActivityScheduler as $sc){
+												if($sc->end_activity_date > $filter_date->format('Y-m-d')){
+													if(strpos($sc->activity_days, $filter_date->format("l")) !== false){
+														$sche_ary [] = $sc;
+													}
+												}
+											} 
+										} 
+									@endphp
+								
+								 	<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-12">
+											<div class="classes-info">
+												<div class="row">
+													<div class="col-md-12 col-xs-12">
+														<h2>{{$orderData->business_services->sport_activity}}<label class="cancel-activity" style="display:none;">Activity Cancelled</label></h2>
+														<label>Program Name: </label> <span> {{$orderData->business_services->program_name}}</span>
+													</div>
+													<div class="col-md-12 col-xs-12">
+														<label>Category Name: </label> <span>{{@$catelist->category_title}}</span>
+													</div>
+													<div class="col-md-12 col-xs-12">
+														<label>Instructor: </label> <span>@if($orderData->business_services->StaffMembers != '') {{$orderData->business_services->StaffMembers->name}} @endif</span>
+													</div>
+													<div class="col-md-12 col-xs-12">
+														<label>Remaining Session: </label> 
+														<span>
+															{{$orderData->getremainingsession()}}
+														</span>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-6 col-sm-6 col-xs-12 nopadding">
-										<div class="row">
-										@if(!empty($sche_ary))
-											@foreach($sche_ary as $scary)
-												@php 
-													$duration = $scary->get_duration();
+										<div class="col-md-6 col-sm-6 col-xs-12 nopadding">
+											<div class="row">
+											@if(!empty($sche_ary))
+												@foreach($sche_ary as $scary)
+													@php 
+														$duration = $scary->get_duration();
 
-													$SpotsLeftdis = 0;
-													$bs = new  \App\Repositories\BookingRepository;
-													$bookedspot = $bs->getcheckincount($scary->id,$filter_date->format('Y-m-d')); 
-													$SpotsLeftdis = $scary->spots_available - $bookedspot;
-											
-											        $checkindetail = $bs->getCheckinDetail($scary->id,$filter_date->format('Y-m-d'),$orderData->id,$orderData->booking->customer_id);
+														$SpotsLeftdis = 0;
+														$bs = new  \App\Repositories\BookingRepository;
+														$bookedspot = $bs->getcheckincount($scary->id,$filter_date->format('Y-m-d')); 
+														$SpotsLeftdis = $scary->spots_available - $bookedspot;
+												
+												        $checkindetail = $bs->getCheckinDetail($scary->id,$filter_date->format('Y-m-d'),$orderData->id,$orderData->booking->customer_id);
 
-											        $cancel_chk = 0;
-											        $canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
+												        $cancel_chk = 0;
+												        $canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
 
-											        $date = $filter_date->format('Y-m-d');
-													$time = $scary->shift_start;
-													$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-													$current  = date('Y-m-d H:i:s');
-													$difference = round((strtotime($st_time) - strtotime($current))/3600, 1)
-												@endphp
-														<div class="col-md-4 col-xs-12">
-															<div class="classes-time">
-																<button class="post-btn activity-scheduler @if($canceldata != '' || $checkindetail != '') gry-cancel @endif"  onclick="addtimedate({{$scary->id}} , {{$orderData->id}});" 
-																@if($canceldata != '' || $checkindetail != '') disabled @endif>{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
-																@if($checkindetail != '' && $difference >= 24)
-																	<a onclick="ReScheduleOrder({{$checkindetail->id}});">Reschedule</a>
-																@endif
-																<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
+												        $date = $filter_date->format('Y-m-d');
+														$time = $scary->shift_start;
+														$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
+														$current  = date('Y-m-d H:i:s');
+														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1)
+													@endphp
+															<div class="col-md-4 col-xs-12">
+																<div class="classes-time">
+																	<button class="post-btn activity-scheduler @if($canceldata != '' || $checkindetail != '') gry-cancel @endif"  onclick="addtimedate({{$scary->id}} , {{$orderData->id}});" 
+																	@if($canceldata != '' || $checkindetail != '') disabled @endif>{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
+																	@if($checkindetail != '' && $difference >= 24)
+																		<a onclick="ReScheduleOrder({{$checkindetail->id}});">Reschedule</a>
+																	@endif
+																	<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
+																</div>
 															</div>
-														</div>
-											@endforeach
-										@else
-											<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
-										@endif
+												@endforeach
+											@else
+												<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
+											@endif
+											</div>
+										</div>
+										<div class="col-md-12 col-xs-12">
+											<div class="checkout-sapre-tor">
+											</div>
 										</div>
 									</div>
-									<div class="col-md-12 col-xs-12">
-										<div class="checkout-sapre-tor">
-										</div>
-									</div>
-								</div>
-							@endif
+								@endif
+							</div>
 						</div>
 					</div>
 					@endforeach
 					<div class="valor-mix-title"> 
-						<a href="{{route('personal.allActivitySchedule')}}">Want to see full scheduler?</a>
+						<a href="{{route('businessActivities',['business_id'=>$businessId])}}">Want to see full scheduler?</a>
 						<h2></h2>
 					</div>
 				</div>
@@ -218,7 +190,7 @@
 	            <div class="modal-body" id="receiptbody">
 	            	<div class="row">
 	            		<div class="col-md-12 text-center">
-	                       <label class="pay-confirm green-fonts"> Your Reservation Is Confirmed.</label>
+	                       <label class="pay-confirm "></label>
 	                    </div>
 	            	</div>
 	            </div>
@@ -231,38 +203,45 @@
 
 @include('layouts.footer')
 <script>
-$('.owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:true,
-	navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-    responsive:{
-        0:{
-            items:1
-        },
-        600:{
-            items:3
-        },
-        1000:{
-            items:5
-        }
-    }
-	
-});
+	$('.owl-carousel').owlCarousel({
+	    loop:true,
+	    margin:10,
+	    nav:true,
+		navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	    responsive:{
+	        0:{
+	            items:1
+	        },
+	        600:{
+	            items:3
+	        },
+	        1000:{
+	            items:5
+	        }
+	    }
+	});
 </script>
+
 <script>
-$(function() {
- $( ".date" ).datepicker({
- dateFormat : 'dd/mm/yy',
- showOn: "both",
- buttonImage: "/public/img/calendar-icon.png",
- buttonImageOnly: true,
- buttonText: "Select date",
- changeMonth: true,
- changeYear: true,
- yearRange: "-100:+0"
- }); 
-});
+	$(function() {
+	 	$( ".date" ).datepicker({
+		 	dateFormat : 'yy-mm-dd',
+		 	showOn: "both",
+		 	buttonImage: "/public/img/calendar-icon.png",
+		 	buttonImageOnly: true,
+		 	buttonText: "Select date",
+		 	changeMonth: true,
+		 	changeYear: true,
+		 	yearRange: "-100:+100"
+		}); 
+	});
+
+	$( ".datepicker" ).change(function(){
+		var date  = $(this).val();
+		var user_booking_detail_id = '{{$user_booking_detail_id}}';
+		window.location = '/personal/schedulers?user_booking_detail_id=' + user_booking_detail_id+'&date='+date;
+    });
+
 </script>
 
 <script>
@@ -286,10 +265,17 @@ $(function() {
 					date:'{{$filter_date->format("Y-m-d")}}',
 					timeid:sid,
 					odid:odid,
+					businessId:'{{$businessId}}',
 				},
 				success: function (response) { /*alert(response);*/
-					$('#success-reservation').modal('show');
- 					$(".activity-schedule-tabs").load(location.href+" .activity-schedule-tabs>*","");
+					if(response == 'success'){
+						$('.pay-confirm').addClass('green-fonts');
+						$('.pay-confirm').html('Your Reservation Is Confirmed.');
+						$('#success-reservation').modal('show');
+	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
+					}else{
+						window.location = '/activities';
+					}
 					//swindow.location.reload();
 				}
 		   	});

@@ -1,6 +1,6 @@
 @php 
   use Carbon\Carbon;
-  use App\StaffMembers;
+  use App\BusinessStaff;
 @endphp
 
 <div class="row">
@@ -29,7 +29,7 @@
                               <td>
                               {{$visit->status_term()}}
                               </td>
-                              <td>{{StaffMembers::getinstructorname($visit->order_detail->business_services->instructor_id)}}</td>
+                              <td>{{BusinessStaff::getinstructorname($visit->order_detail->business_services->instructor_id)}}</td>
                           </tr>
                       @endforeach
                   </tbody>

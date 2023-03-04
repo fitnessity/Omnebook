@@ -33,7 +33,7 @@ class Recurring extends Authenticatable
     }
 
     public function UserBookingDetail(){
-        return $this->belongsTo(UserBookingDetails::class, 'business_id');
+        return $this->belongsTo(UserBookingDetail::class, 'booking_detail_id');
     }
 
     public static function autoPayRemaining($totalCount,$id){
@@ -64,7 +64,6 @@ class Recurring extends Authenticatable
                 $brand = $payment_intent['charges']['data'][0]['payment_method_details']['card']['brand'];
 
                 $card_id =  $brand.'  XXXX'.$last4;
-                echo $card_id;exit;
             }catch(\Stripe\Exception\CardException $e) {
             }catch(Exception $e){
             }

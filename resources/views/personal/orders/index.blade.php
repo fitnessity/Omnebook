@@ -50,7 +50,7 @@
                                             
                                             <div class="booking-activity-view">
                                                 <a class="view-booking" href="{{route('personal.orders.index',['business_id'=>$bs->id])}}"> View Bookings</a>
-                                                <a class="view-schedule" href="{{route('personal.allActivitySchedule')}}"> View Schedule</a>
+                                                <a class="view-schedule" href="{{route('businessActivities',['business_id'=>$bs->id])}}"> View Schedule</a>
                                             </div>
                                          </div>
                                      </div>

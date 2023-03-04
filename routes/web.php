@@ -59,6 +59,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
 Route::group(['middleware' => ['auth']], function(){
+    Route::get('activities/{business_id}', 'BusinessController@activities')->name('businessActivities');
+
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');

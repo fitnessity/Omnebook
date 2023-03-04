@@ -16,4 +16,14 @@ class BusinessStaff extends Model
     protected $fillable = [
        'id','business_id','first_name','last_name','phone','email','position'
     ];
+
+    public static function getinstructorname($id)
+    {
+        $name = '—';
+        $staff =  BusinessStaff::select('first_name','last_name')->where('id', $id)->first();
+        if($staff != ''){
+            $name = $staff->first_name.' '.$staff->last_name;
+        }
+        return $name;
+    }
 }
