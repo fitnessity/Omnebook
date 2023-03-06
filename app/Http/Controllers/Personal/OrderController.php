@@ -31,14 +31,18 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
+
         $user = Auth::user();
 
 
         if($request->business_id){
+
             $bookingDetail = [];
             $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $request->business_id);
             $currentbookingstatus =[];
+
             $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$request->business_id);
+            
 
             return view('personal.orders.index', [
                 'bookingDetail' => $bookingDetail ,
