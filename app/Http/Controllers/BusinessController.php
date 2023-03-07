@@ -1348,20 +1348,25 @@ class BusinessController extends Controller
 
     public function activities(Request $request, $business_id){
         $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
-        $servicetype = 'classes';
+        $servicetype = 'all';
         if($request->stype){
             $servicetype = $request->stype;
         }
+
         $orderdata = [];
         foreach($order as $odt){
             $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
             foreach($orderdetaildata as $odetail){
-                if($odetail->business_services->service_type ==   $servicetype ){
+                if($servicetype != 'all'){
+                    if($odetail->business_services->service_type ==   $servicetype ){
+                        $orderdata []= $odetail;
+                    }
+                }else{
                     $orderdata []= $odetail;
-                }
+                } 
             }
         }
-
+        
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
