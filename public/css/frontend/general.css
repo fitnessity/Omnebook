@@ -24497,3 +24497,11 @@ padding-left: 0px;
 .valor-mix-title label{
 	font-size: 14px !important;
 }
+.customer-custom-sparetor{
+	border-bottom: 2px solid black;
+	margin-right: -15px !important;
+	margin-left: -15px !important;
+}
+.links-space{
+	margin-bottom: 11px;
+}
