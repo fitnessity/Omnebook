@@ -1333,6 +1333,8 @@
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
 	.add-family-frnd{width: 48% !important; margin-bottom: 15px; margin-left: 5px !important;}
+	.schedulers-arrows .owl-nav .owl-prev {  position: absolute;  top: 32px;  left: -11px !important;}
+	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 31px;  right: -11px !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2411,6 +2413,8 @@
 	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
 	.sticky-book-now{font-size: 20px;}
 	.add-family-frnd{width: 100% !important; margin-bottom: 15px; margin-left: 0px !important;}
+	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
+	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
 }
 
 @media(max-width: 575px) {

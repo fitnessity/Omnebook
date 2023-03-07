@@ -147,7 +147,7 @@
                                                         <div class="headboxes">
                                                             <img src="{{$pic}}" class="imgboxes" alt="">
                                                             <h4 class="fontsize">{{$book_details->business_services->program_name}}</h4>
-                                                            <a class="openreceiptmodel" orderid = '{{$book_details->booking_id}}' orderdetailid="{{$book_details->id}}">
+                                                            <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details->booking_id , 'orderdetailid'=>$book_details->id])}}" data-modal-width="900px">
                                                                 <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                             </a>
                                                             <div class="highlighted_box">Confirmed</div>
@@ -246,7 +246,7 @@
                                                                <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                             </div>
                                                             <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details->business_services->id}}" style="display:none;">
-                                                                <a href="" target="_blank">View Provider</a>
+                                                                <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id; ?>" target="_blank">View Provider</a>
                                                             </div>
                                                             <div class="viewmore_links">
                                                                 <a id="viewmore_cu_{{$i}}_{{$book_details->business_services->id}}" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
@@ -319,7 +319,7 @@
                                                     <div class="headboxes">
                                                         <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                        <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                        <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details['orderid'] , 'orderdetailid'=>$book_details['orderdetailid']])}}" data-modal-width="900px">
                                                             <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
@@ -510,7 +510,7 @@
                                                     <div class="headboxes">
                                                         <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                        <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                        <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details['orderid'] , 'orderdetailid'=>$book_details['orderdetailid']])}}" data-modal-width="900px">
                                                             <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
@@ -701,7 +701,7 @@
                                                     <div class="headboxes">
                                                         <img src="{{ $book_details['pro_pic']  }}" class="imgboxes" alt="">
                                                         <h4 class="fontsize">{{$book_details['program_name']}}</h4>
-                                                        <a class="openreceiptmodel" orderid = '{{$book_details["orderid"]}}' orderdetailid="{{$book_details['orderdetailid']}}">
+                                                        <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details['orderid'] , 'orderdetailid'=>$book_details['orderdetailid']])}}" data-modal-width="900px">
                                                             <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="highlighted_box">Confirmed</div>
@@ -893,13 +893,12 @@
         </div>
     </div>
 </div>
- 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
-
 <script>
 
     $( document ).ready(function() {
-        var tabValue = '{{request()->tabval}}';
+        var tabValue = '{{$tabval}}';
         if(tabValue == 'upcoming')
         {
             $('#nav-upcoming').addClass("active");
@@ -995,28 +994,6 @@
                 }
             });
         });*/
-
-
-        $(document).on('click', '.openreceiptmodel', function(e){
-            var orderdetailid = $(this).attr("orderdetailid");
-            var orderid =$(this).attr('orderid');
-            jQuery.noConflict();
-            $.ajax({
-                url: "{{route('getreceiptmodel')}}",
-                xhrFields: {
-                        withCredentials: true
-                    },
-                type: 'get',
-                data:{
-                    orderdetailid:orderdetailid,
-                    orderid:orderid,
-                },
-                success: function (response) {
-                    $("#bookingreceipt").modal('show');
-                    $('#receiptbody').html(response);
-                }
-            });
-        });
     });
 
     function getsearchdata(type){
@@ -1049,8 +1026,6 @@
         });
     }
     
-
-    
     $('.booking_date1').datepicker({
         dateFormat: "mm/dd/yy"
     })
@@ -1063,8 +1038,6 @@
     $('.booking-date').datepicker({
         dateFormat: "mm/dd/yy"
     })
-
-    
 </script>
 
 <script type="text/javascript">
@@ -1126,48 +1099,6 @@
         }
     }
 
-    function valid(email)
-    {
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        return emailReg.test(email); //this will either return true or false based on validation
-    }
-
-    function sendemail(odetailid,oid){
-        $('.reviewerro').html('');
-        var email = $('#email').val();
-        if(email == ''){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Add Email Address..');
-        }else if(!valid(email)){
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Please Enter Valid Email Address..');
-        }else{
-            $('.btn-modal-booking').attr('disabled',true);
-            $('.reviewerro').css('display','block');
-            $('.reviewerro').html('Sending...');
-            $.ajax({
-                url: "{{route('sendemailofreceipt')}}",
-                xhrFields: {
-                    withCredentials: true
-                },
-                type: 'get',
-                data:{
-                    odetailid:odetailid,
-                    oid:oid,
-                    email:email,
-                },
-                success: function (response) {
-                    $('.reviewerro').html('');
-                    $('.reviewerro').css('display','block');
-                    if(response == 'success'){
-                        $('.reviewerro').html('Email Successfully Sent..');
-                    }else{
-                        $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                    }
-                }
-            });
-        }
-    }
 </script>
 
 @endsection

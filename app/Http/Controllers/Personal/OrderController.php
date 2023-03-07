@@ -39,10 +39,12 @@ class OrderController extends PersonalBaseController
             $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $request->business_id);
             $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$request->business_id);
+            $tabval = $request->tab; 
 
             return view('personal.orders.index', [
                 'bookingDetail' => $bookingDetail ,
                 'currentbookingstatus'=>$currentbookingstatus, 
+                'tabval'=>$tabval, 
                 'business'=>[]]);
         }else{
             $company_information = [];
@@ -52,13 +54,11 @@ class OrderController extends PersonalBaseController
                 $company_information []= $bd->company_information;
             }
             $business = array_unique($company_information, SORT_REGULAR);
-
         }
         
-
-
         return view('personal.orders.index',[ 
             'business'=>$business, 
+            'tabval'=>'', 
             'bookingDetail' => []]);
     }
 

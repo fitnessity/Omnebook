@@ -22,7 +22,7 @@
 @php  use App\ActivityCancel; $service_type_ary = array("classes","individual","events","experience");@endphp
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
-		<div class="col-md-7 col-md-offset-3-custom">
+		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
 			<div class="valor-mix-title">
 				<h2>{{$companyName}}</h2>
 				<p>Booking Schedule</p>
@@ -43,7 +43,7 @@
 					@foreach($service_type_ary as $st)
 					<div class="tab-pane @if($serviceType == $st ) active @endif" id="tabs-{{$st}}" role="tabpanel">
 						<div class="row">
-							<div class="col-md-12 text-right">
+							<div class="col-md-12 col-sm-12 col-xs-12 text-right">
 								<div class="calendar-icon">
 									<input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
 								</div>
@@ -142,7 +142,7 @@
 														$current  = date('Y-m-d H:i:s');
 														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1)
 													@endphp
-															<div class="col-md-4 col-xs-12">
+															<div class="col-md-4 col-sm-5 col-xs-12">
 																<div class="classes-time">
 																	<button class="post-btn activity-scheduler @if($canceldata != '' || $checkindetail != '') gry-cancel @endif"  onclick="addtimedate({{$scary->id}},{{$odt->id}});" 
 																	@if($canceldata != '' || $checkindetail != '') disabled @endif>{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>

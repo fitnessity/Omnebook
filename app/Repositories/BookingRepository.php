@@ -67,17 +67,11 @@ class BookingRepository
     public function getCurrentUserBookingDetails($serviceType, $business_id){
         $user = Auth::user();
         $company = CompanyInformation::findOrFail($business_id);
-
         $BookingDetail = [];
-
-        
-        
         $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
-
-        $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
-
+        $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);  
         foreach ($userBookingDetails as $key => $bookValue) {
-            $bookingstatus =  $bookValue->booking;
+            $bookingstatus = $bookValue->booking;
             if($bookingstatus->user_type == 'user' ){
                 $customer = $bookValue->booking->user;
                 $customers['user'] = $customer;
@@ -87,9 +81,7 @@ class BookingRepository
             }
             $business_services = $bookValue->business_services;
             if(@$business_services != '' ){
-                
                 $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
-
                 $businessuser['businessuser'] = $business_services->company_information;
                 $BusinessServices['businessservices'] = $business_services;
                 $customers = json_decode(json_encode($customers), true);
@@ -519,7 +511,7 @@ class BookingRepository
         }
 
         $pmt_type = $booking_status->getPaymentDetail();
-        var_dump($pmt_type);
+        //var_dump($pmt_type);
         $last4 = $pmt_type;
 
         $one_array = array (
@@ -560,12 +552,12 @@ class BookingRepository
         return $one_array;
     }
 
-
     public function getreceipemailtbody($oid,$orderdetailid){
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
+        echo $booking_details;exit;
         $business_services = $booking_details->business_services;
-        $businessuser= $booking_details->business_services->company_information;
+        $businessuser = $booking_details->business_services->company_information;
         $BusinessPriceDetails = $booking_details->business_price_detail;
         $qty = $booking_details->getparticipate();
       
@@ -574,12 +566,47 @@ class BookingRepository
         $total = ($price + $booking_details->getperoderprice());
         $discount = $booking_details->getextrafees('discount');
         $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
+        if($expiretime != ''){
+            $expiretime =  date('m-d-Y',strtotime($expiretime));
+        }else{
+            $expiretime =  'N/A';
+        }
+
+        $contract_date ='N/A';
+        if($booking_details->contract_date != NULL || $booking_details->contract_date != ''){
+           $contract_date = date('m-d-Y',strtotime($booking_details->contract_date));
+        }
+
         if($booking_status->user_type == 'user'){
             $email = $booking_status->user->email; 
         }
 
         if($booking_status->user_type == 'customer'){
             $email = $booking_status->customer->email;
+        }
+
+        $bookingUrl = '';
+        if($booking_status->order_type  == 'checkout_register'){
+            if($expiretime > date('m-d-Y') && $expiretime != 'N/A'){
+                $tab = '';
+            }else{
+                $tab = 'past';
+            }
+        }else{
+            if($booking_details->bookedtime > date('Y-m-d')){
+                $tab = 'upcoming';
+            }else if($booking_details->bookedtime == date('Y-m-d')){
+                $tab = 'today';
+            }else {
+                $tab = 'past';
+            }
+        }
+        //$bookingUrl = "{{route('personal.orders.index', ['business_id' =>".$businessuser->id.",serviceType'=>'experience','tab'=>".$tab."])}}";
+
+        if($tab != ''){
+            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".$business_services->service_type."&tab=".$tab;
+        }else{
+            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".$business_services->service_type;
         }
 
         $one_array =[];
@@ -597,12 +624,13 @@ class BookingRepository
             "service_Type" => $business_services->service_type,  
             "membership_Duration" => $booking_details->expired_duration,  
             "purchase_Date" => date('m-d-Y',strtotime($booking_details->created_at)),  
-            "membership_Activation_Date" =>  date('m-d-Y',strtotime($booking_details->contract_date)),  
-            "membership_Expiration" => date('m-d-Y',strtotime($expiretime)),  
+            "membership_Activation_Date" =>  $contract_date,   
+            "membership_Expiration" => $expiretime,  
             "price" => $price,  
             "discount" => $discount,  
             "total" => $total,
             "email" => $email,
+            "bookingUrl" => $bookingUrl,
         );
 
         //return json_encode($one_array); 

@@ -62,7 +62,6 @@ class CustomerController extends Controller {
         $grouped_customers= array();
 		foreach ($customers as $customer) {
 		    $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
-            $url = url('/business/'.$business_id.'/orders/create?cus_id='.$customer->id);
 		}
 
 
