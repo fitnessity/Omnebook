@@ -417,7 +417,7 @@
 													<div id="collapseOne" class="panel-collapse collapse in">
 														<div class="panel-body">
 															@foreach ($active_booking_details as $booking_detail)
-																<div class="row">
+																<div class="row customer-custom-sparetor">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services->program_name}}</label>															<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
@@ -517,14 +517,16 @@
 																			</div>
 																		</div>
 																		<div class="row">
-																			<div class="col-md-4 col-xs-6">
+																			<div class="col-md-4 col-xs-4">
+																				<div class="links-space">
 																				<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
+																				</div>
 																			</div>
-																			<div class="col-md-4 col-xs-6 text-center">
+																			<div class="col-md-4 col-xs-4 text-center">
 																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="90%"> Edit Booking </a>
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
-																			<div class="col-md-4 col-xs-6">
+																			<div class="col-md-4 col-xs-4">
 																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
 																				<!-- <a class="auto-pay" data-toggle="modal" data-target="#auto-pay"> Auto Pay Details </a> -->
 																			</div>
