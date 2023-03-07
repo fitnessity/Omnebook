@@ -18,8 +18,10 @@
 	right: -25px;
 }
 </style>
-
-@php  use App\ActivityCancel; $service_type_ary = array("classes","individual","events","experience");@endphp
+!
+@php  use App\ActivityCancel; 
+	use App\Repositories\BookingRepository; 
+$service_type_ary = array("all","classes","individual","events","experience");@endphp
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
 		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
@@ -34,9 +36,16 @@
 			<div class="activity-schedule-tabs">
 				<ul class="nav nav-tabs" role="tablist">
 					@foreach($service_type_ary as $st)
+					<?php
+		
+						$BookingRepository = new BookingRepository;
+						$orderdata1 = $BookingRepository->getOrderDetail($businessId,$st);
+        			?>
+        			@if(!empty($orderdata1))
 					<li @if($serviceType == $st ) class="active" @endif>
 						<a class="nav-link" href="{{$request->fullUrlWithQuery(['stype' => $st])}}"  aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
 					</li>
+					@endif
 					@endforeach
 				</ul>
 				<div class="tab-content" style="min-height: 600px;">

@@ -444,8 +444,8 @@ class BookingRepository
             $discount = @$extra_fees['discount'];
             $service_fee = @$extra_fees['service_fee'];
             $service_fee = ($totprice_for_this * $service_fee )/100;
-            $main_total = $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee;
-            $nameofbookedby = number_format(( $booking_status->customer->fname.' '.$booking_status->customer->lname),2);
+            $main_total = number_format(( $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee),2);
+            $nameofbookedby = $booking_status->customer->fname.' '.$booking_status->customer->lname;
         }
 
         $parti_data = '';
@@ -1259,5 +1259,23 @@ class BookingRepository
     public function getCheckinDetail($sid,$date,$user_booking_detail_id,$customer_id){
         $checkinData = BookingCheckinDetails::where(['business_activity_scheduler_id'=>$sid,'customer_id' =>$customer_id , 'booking_detail_id' =>$user_booking_detail_id])->whereDate('checkin_date','=',date('Y-m-d',strtotime($date)))->first();
         return $checkinData;
+    }
+
+    public function getOrderDetail($businessId,$st){
+        $order = \app\UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
+        $orderdata1 = [];
+        foreach($order as $odt){
+            $orderdetaildata = \app\UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$businessId])->get();
+            foreach($orderdetaildata as $odetail){
+                if($st != 'all'){
+                    if($odetail->business_services->service_type ==   $st ){
+                        $orderdata1 []= $odetail;
+                    }
+                }else{
+                    $orderdata1 []= $odetail;
+                } 
+            }
+        }
+        return $orderdata1;
     }
 }

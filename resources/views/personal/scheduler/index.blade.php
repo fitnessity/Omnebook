@@ -36,11 +36,9 @@
 			</div> -->
 			<div class="activity-schedule-tabs">
 				<ul class="nav nav-tabs" role="tablist">
-					@foreach($service_type_ary as $st)
-					<li @if($serviceType== $st ) class="active" @endif>
-						<a class="nav-link" data-toggle="tab" href="#tabs-{{$st}}" role="tab" aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
+					<li class="active">
+						<a class="nav-link" data-toggle="tab" href="#tabs-{{$serviceType}}" role="tab" aria-expanded="true">@if( $serviceType == 'individual') PRIVATE LESSONS @else {{strtoupper($serviceType)}} @endif</a>
 					</li>
-					@endforeach
 				</ul>
 				<div class="tab-content" style="min-height: 600px;">
 					@foreach($service_type_ary as $st)
