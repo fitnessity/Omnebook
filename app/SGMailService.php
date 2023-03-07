@@ -32,7 +32,8 @@ class SGMailService{
 		    "membership_Expiration" => $email_detail['getreceipemailtbody']['membership_Expiration'],  
 		    "price" => $email_detail['getreceipemailtbody']['price'],  
 		    "discount" => $email_detail['getreceipemailtbody']['discount'],  
-		    "total" => $email_detail['getreceipemailtbody']['total'] 
+		    "total" => $email_detail['getreceipemailtbody']['total'],
+		    "bookingUrl" => $email_detail['getreceipemailtbody']['bookingUrl'],
 		];
 
 		$email->addDynamicTemplateDatas($substitutions);

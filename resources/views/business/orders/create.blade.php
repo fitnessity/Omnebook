@@ -1176,7 +1176,7 @@
           	}
 
 	        var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
-		              '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (52  Years Old)' : '') + '</label></p>' +
+		              '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
 		              '<p class="pstyle liaddress">' + item.email +'</p>' + 
 		              '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
 	       

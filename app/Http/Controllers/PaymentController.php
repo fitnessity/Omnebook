@@ -172,6 +172,8 @@ class PaymentController extends Controller {
                     }
                 }
 
+
+                $company_email =  $businessServices->company_information->business_email;
                 $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                 $email_detail = array(
                     'getreceipemailtbody' => $getreceipemailtbody,
