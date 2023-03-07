@@ -156,7 +156,7 @@ html {
     height: 45px  !important;
 }
 .liaddress{
-    font-size: 10px !important;
+    font-size: 13px !important;
     font-weight: 500;
 	margin-bottom: 0px;
 }
@@ -23800,6 +23800,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .collapse-img{
 	text-align: center;
 	margin-top: 4px;
+	margin-bottom: 4px;
 }
 .searchbox-img{
 	width: 50px;
@@ -23811,6 +23812,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	vertical-align: middle;
 	background-color: #ea1515;
 	margin-top: 4px;
+	margin-bottom: 4px;
 }
 .customer-list li:hover{
 	background-color: #e6e4e4;

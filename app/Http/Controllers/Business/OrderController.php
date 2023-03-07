@@ -384,21 +384,21 @@ class OrderController extends BusinessBaseController
 
                 if($key == 'adult'){
                     if($qty != '' && $qty != 0){
-                        $amount = $price_detail->recurring_first_pmt_adult;
+                        $amount = $qty * $price_detail->recurring_first_pmt_adult;
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                     }
                 }
 
                 if($key == 'child'){
                     if($qty != '' && $qty != 0){
-                        $amount = $price_detail->recurring_first_pmt_child;
+                        $amount = $qty * $price_detail->recurring_first_pmt_child;
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                     }
                 }
 
                 if($key == 'infant'){
                     if($qty != '' && $qty != 0){
-                        $amount = $price_detail->recurring_first_pmt_infant;
+                        $amount =  $qty * $price_detail->recurring_first_pmt_infant;
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                     }
                 }

@@ -2149,3 +2149,32 @@ a.tooltip-custom:hover {
 .claimyour-business .frm-claim #option-box ul li{
 	list-style: none !important;
 }
+
+.ui-menu .ui-menu-item {
+	list-style: none !important;
+}
+.ui-menu .ui-menu-item-wrapper {
+  padding: 0px !important;
+}
+.ui-menu.ui-widget .ui-menu-item .ui-menu-item-wrapper:hover{
+	border: none !important;
+	background: none !important;
+}
+.ui-state-active, .ui-widget-content .ui-state-active{
+	border: none !important;
+	background: none !important;
+	color: #000 !important; 
+	margin-top: 4px !important;
+	margin-bottom: 4px !important;
+}
+.ui-menu .ui-menu-item{
+	border-bottom: 1px solid #000;
+}
+.ui-menu .ui-state-active {
+  margin: -1px !important;
+}
+.ui-menu.ui-widget {
+	height: 400px;
+	overflow: auto;
+	overflow-x: hidden;
+}
