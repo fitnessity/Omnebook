@@ -227,16 +227,17 @@ class UserBookingDetail extends Model
     public function getperoderprice(){
         $fees = 0;
         $extra_fees =  json_decode($this->extra_fees, true);
-
-        foreach($extra_fees as $key => $value){
-            if($key == 'service_fee' ){
-                $fees += ($this->total() * $value) /100;
-            }else if($key == 'discount'){
-                $fees -= $value;
-            }else if($key == 'fitnessity_fee'){
-                $fees += 0;
-            }else{
-                $fees += $value;
+        if(!empty($extra_fees)){
+            foreach($extra_fees as $key => $value){
+                if($key == 'service_fee' ){
+                    $fees += ($this->total() * $value) /100;
+                }else if($key == 'discount'){
+                    $fees -= $value;
+                }else if($key == 'fitnessity_fee'){
+                    $fees += 0;
+                }else{
+                    $fees += $value;
+                }
             }
         }
         return $fees;

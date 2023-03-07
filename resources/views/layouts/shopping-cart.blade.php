@@ -46,15 +46,15 @@
                         $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
                         if(!empty($item['adult'])){
                             $totalquantity += $item['adult']['quantity'];
-                            $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
+                            $discount += $item['adult']['quantity'] * ($item['adult']['price'] *$serprice['adult_discount'])/100; 
                         }
                         if(!empty($item['child'])){
                             $totalquantity += $item['child']['quantity'];
-                            $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
+                            $discount += $item['child']['quantity'] *  ($item['child']['price'] *$serprice['child_discount'])/100;
                         }
                         if(!empty($item['infant'])){
                             $totalquantity += $item['infant']['quantity'];
-                            $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
+                            $discount += $item['infant']['quantity'] *  ($item['infant']['price'] *$serprice['infant_discount'])/100;
                         }
 
     					$item_price = $item_price + $item["totalprice"];
@@ -616,6 +616,9 @@
             <?php
     			$service_fee= ($item_price * $fees->service_fee)/100;
     			$tax= ($item_price * $fees->site_tax)/100;
+    			/*echo $tax.'<br>';
+    			echo $item_price.'<br>';
+    			echo $service_fee.'<br>';*/
     			$total_amount = number_format(($item_price + $service_fee + $tax - $discount),2);
     		?>
     		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
@@ -706,53 +709,24 @@
     						<button class="card-btns" type="button">Credit / Debit Card</button>
     						<!-- <button class="card-btns">Paypal</button>
     						<button class="card-btns">Venmo</button> -->
-                            <div > 
-        						<div class="row" >
-        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  required">
-        								<div id="card-number-field" class="card-no ">
-        									<label for="cardNumber">Card Number</label>
-        									<input  type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control card-num" > 
-        								</div>
-        							</div>
-        							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 required" >
-        								<div id="" class="card-no">
-        									<label for="owner">Name On Card</label>
-                                            <input type="text" name="owner" id="owner" placeholder="ENTER YOUR NAME HERE" class="form-control">
-        								</div>
-        							</div>
-        						</div>
-        						<div class="row">
-        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
-        								<div id="expiration-date" class="card-no">
-        									<label for="owner">Exp Month</label>
-                                            <input type="text" name="month" id="month" placeholder="MM" class="form-control card-expiry-month">
-        								</div>
-        							</div>
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 expiration required">
-                                        <div id="expiration-date" class="card-no">
-                                            <label for="owner">Exp Year</label>
-                                            <input  type="text" name="year" id="year" placeholder="YYYY" class="form-control card-expiry-year">
-                                        </div>
-                                    </div>
-        							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 cvc required">
-        								<div id="" class="card-no">
-        									<label for="cvv">CVV</label>
-                                            <input  type="text" name="cvv" id="cvv" placeholder="- - -" class="form-control card-cvc">
-        								</div>
-        							</div>
-                                    <div class="col-md-12">
-                                        <div class="save-pmt-checkbox">
-                                            <input type="checkbox" id="save_card" name="save_card" value="1">
-                                            <label>Save for future payments</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class='form-row row'>
-                                        <div class='col-md-12 hide error form-group'>
-                                            <div class='alert-danger alert'>Fix the errors before you begin.</div>
-                                        </div>
-                                    </div>
-        						</div>
+                            <div>
+                            	<div class="col-md-12 col-xs-12">
+									<div class="row" >
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div id="payment-element" style="margin-top: 8px;">
+	                                    	</div>
+										</div>
+									</div>
+	        						<div class="row">
+	                                    <div class="col-md-12 col-xs-12">
+	                                        <div class="save-pmt-checkbox">
+	                                            <input type="checkbox" id="save_card" name="save_card" value="1" checked>
+	                                            <input type="hidden" id="new_card_payment_method_id" name="new_card_payment_method_id" value="">
+	                                            <label>Save For Future Payments</label>
+	                                        </div>
+	                                    </div>
+	        						</div> 
+	        					</div>
                             </div>
     					</div>
     					@if (session('stripeErrorMsg'))
@@ -1066,6 +1040,18 @@
   
 <script type="text/javascript">
 	$(function() {
+		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
+		const client_secret = '{{$intent ? $intent->client_secret : null}}';
+		const options = {
+		  clientSecret: client_secret,
+		  // Fully customizable with appearance API.
+		  appearance: {/*...*/},
+		};
+		const elements = stripe.elements(options);
+		const paymentElement = elements.create('payment');
+
+		paymentElement.mount('#payment-element');
+
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
 	        $('#checkout-button').html('loading...').prop('disabled', true);
@@ -1103,17 +1089,36 @@
 	                    $errorStatus.removeClass('hide');
 	                    e.preventDefault();
 	                }
-	            });      
-	            if (!$form.data('cc-on-file')) {
-	                e.preventDefault();
-	                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-	                Stripe.createToken({
-	                    number: $('.card-num').val(),
-	                    cvc: $('.card-cvc').val(),
-	                    exp_month: $('.card-expiry-month').val(),
-	                    exp_year: $('.card-expiry-year').val()
-	                }, stripeHandleResponse);
-	            }
+	            });  
+
+	            stripe.confirmSetup({
+        	      	elements,
+        	      	redirect: 'if_required',
+        	      	confirmParams: {
+        	      	}
+        	    }).then(function(result){
+        	    	if (result.error) {
+        	    		$('.error').removeClass('hide').find('.alert').text(result.error.message);
+        	    		$('#checkout-button').html('Check Out').prop('disabled', false);
+        	    		return false;
+        	    	}else{
+        	    		$.ajax({
+        	    			url: '{{route('refresh_payment_methods', ['user_id' => $user->id])}}',
+        	    			success: function(data){
+        	    				console.log(data)
+        	    				console.log('success')
+        	    			}
+        	    		})
+        	    		$('#new_card_payment_method_id').val(result.setupIntent.payment_method)
+	        	    	$form.off('submit');
+
+		                $form.submit();
+        	    	}
+        	    });
+	        
+	        }else{
+    	    	$form.off('submit');
+                $form.submit();
 	        }
 	    });
 	  

@@ -42,9 +42,17 @@ class CartController extends Controller {
 		    }
 		}
 
+		$intent = null;
+		$intent = $stripe->setupIntents->create([
+            'payment_method_types' => ['card'],
+            'customer' => $user->stripe_customer_id,
+        ]);
+
     	return view('cart.index',[
 	        'cart' => $cart,
 	        'cardInfo' => $cardInfo,
+	        'intent' => $intent, 
+	        'user' => $user, 
     	]);
     }
 

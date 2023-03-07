@@ -822,6 +822,7 @@ Route::post('/activity_gift_model', 'CartController@activity_gift_model')->name(
 
 Route::post('/form_participate', 'PaymentController@form_participate')->name('form_participate');
 Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentinstant');
+Route::get('refresh_payment_methods', 'PaymentController@refresh_payment_methods')->name('refresh_payment_methods');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
 Route::any('/success-cart/{priceid}', 'LessonController@successcart')->name('successcart');
