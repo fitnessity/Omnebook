@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Business;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous};
@@ -26,7 +24,6 @@ class ServiceController extends BusinessBaseController
         $companyname = @$companyInfo->name;
         return view('business.services.index', compact('cart', 'companyname','companyid', 'companyservice'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -42,9 +39,7 @@ class ServiceController extends BusinessBaseController
         ];
         User::where('id', Auth::user()->id)->update(['bstep' => 71]);
         return redirect()->route('createNewBusinessProfile');
-    
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -53,8 +48,6 @@ class ServiceController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //print_r($request->all());exit;
-
         $serid_pay=$request->serviceid;
         $businessData = [
             "cid" => $request->cid,
@@ -70,12 +63,9 @@ class ServiceController extends BusinessBaseController
         } else {
             BusinessServicesMap::where('id', $request->serviceid)->where('cid', $request->cid)->where('userid', Auth::user()->id)->update($businessData);
         }
-
         $profile_picture = "";
         $datadayimg = [];
-
         $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
-
         if($request->service_type=='experience') {
             for ($i=0; $i <count($request->days_title) ; $i++) { 
                 if($request->file('dayplanpic_'.$i)){
@@ -95,7 +85,6 @@ class ServiceController extends BusinessBaseController
                 }
             }
         } 
-       
        
         if($bus_count != ''){
             if($bus_count->profile_pic != ''){
@@ -123,10 +112,7 @@ class ServiceController extends BusinessBaseController
             $profile_picture .= '';
         }
 
-
         $request->servicepic = rtrim($profile_picture,',');
-        /* print_r($request->file('imgUpload'));
-        echo $request->servicepic ;exit;*/
         $instant = $reserve = 0;
         
         $servicetype = $servicelocation = $programfor = $agerange = $numberofpeople = "";
@@ -161,7 +147,6 @@ class ServiceController extends BusinessBaseController
         if(isset($request->frm_cnumberofpeople) && !empty($request->frm_cnumberofpeople)) {
             $cnumberofpeople = @implode(",",$request->frm_cnumberofpeople);    
         }
-        
         $servicetype1 = $servicelocation1 = $programfor1 = $agerange1 = $experiencelevel1 = $teachingstyle1 = $servicefocuses1 =  $included_thing = $notincluded_thing = $frm_wear= "";  
         $days_dayplanpic = "";
         if(isset($request->frm_lservice) && !empty($request->frm_lservice)) {
@@ -213,20 +198,16 @@ class ServiceController extends BusinessBaseController
         /*if(isset($request->dayplanpic) && !empty($request->dayplanpic)) {
             $days_dayplanpic = json_encode($datadayimg);
         }*/
-        
         if($request->has('instantbooking')){
             $instant = 1;
         }else{
             $instant = 0;
         }
-
         if($request->has('requestbooking')){
             $reserve = 1;
         }else{
             $reserve = 0;
         }
-
-        //echo $safe_varification; exit;
         if($request->service_type=='experience') {
             $businessData = [
                 "cid" => $request->cid,
@@ -423,7 +404,6 @@ class ServiceController extends BusinessBaseController
         if(isset($request->pay_after) && !empty($request->pay_after)) {
             $pay_after = @implode(",",$request->pay_after);    
         }
-        
         if(isset($request->membership_type) && !empty($request->membership_type)) {
             $membership_type = @implode(",",$request->membership_type);    
         }
@@ -474,7 +454,6 @@ class ServiceController extends BusinessBaseController
         } else { 
             BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id', $serid_pay)->update($businessData);
         }
-        //exit;
         $shift_start = $shift_end = $set_duration = $activity_days = "";
         if(isset($request->shift_start) && !empty($request->shift_start)) {
             $shift_start = @implode(",",$request->shift_start);    
@@ -488,8 +467,6 @@ class ServiceController extends BusinessBaseController
         if(isset($request->activity_days) && !empty($request->activity_days)) {
             $activity_days = @implode(",",$request->activity_days);    
         }
-       
-        
         $paycount = count($request->category_title);
         if($paycount > 0) {
             $alldata_cat = BusinessPriceDetailsAges::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid', $serid_pay)->get();
@@ -505,12 +482,10 @@ class ServiceController extends BusinessBaseController
             foreach($alldata_price as $data_all){
                 $idary_price[] =  $data_all['id'];
             }
-
             for($i=0; $i < $paycount; $i++) {
                 if($request->cat_id_db[$i] != ''){
                     $idary_cat1[] = $request->cat_id_db[$i];
                 }
-                
                 $businessages= [
                     "category_title" => isset($request->category_title[$i]) ? $request->category_title[$i] : '',
                     "cid" => $request->cid,
@@ -533,7 +508,6 @@ class ServiceController extends BusinessBaseController
                         if($request->input('price_id_db_'.$i.$y)){
                             $idary_price1[] = $request->input('price_id_db_'.$i.$y);
                         }
-
                         if($request->input('is_recurring_adult_'.$i.$y) == 1){
                             /*$recurring_every = $request->input('recurring_every_'.$i.$y);
                             $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
@@ -565,7 +539,6 @@ class ServiceController extends BusinessBaseController
                             $adultrecurring_total_contract_revenue = NULL;
                             $recurring_customer_chage_by_adult = NULL;
                         }
-
                         if($request->input('is_recurring_child_'.$i.$y) == 1){
                             /*$recurring_every = $request->input('recurring_every_'.$i.$y);
                             $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
@@ -597,7 +570,6 @@ class ServiceController extends BusinessBaseController
                             $childrecurring_total_contract_revenue = NULL;
                             $recurring_customer_chage_by_child = NULL;
                         }
-
                         if($request->input('is_recurring_infant_'.$i.$y) == 1){
                             /*$recurring_every = $request->input('recurring_every_'.$i.$y);
                             $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
@@ -670,7 +642,6 @@ class ServiceController extends BusinessBaseController
                             if($request->input('child_estearn_'.$i.$y) != 0){    
                                 $child_estearn = $request->input('child_estearn_'.$i.$y);
                             }
-
                             if($request->input('weekend_child_estearn_'.$i.$y) != 0){    
                                 $weekend_child_estearn = $request->input('weekend_child_estearn_'.$i.$y);
                             }
@@ -689,7 +660,6 @@ class ServiceController extends BusinessBaseController
 
                             if($request->input('weekend_infant_estearn_'.$i.$y) != 0){    $weekend_infant_estearn =  $request->input('weekend_infant_estearn_'.$i.$y);
                             }
-
                         }
 
                         $businessPayment = [
@@ -868,8 +838,15 @@ class ServiceController extends BusinessBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$business_id , $id )
     {
-        //
+        $company = $request->current_company;
+        $business_service = $company->service()->findOrFail($id);
+        $price = $business_service->price_details()->delete();
+        $category = $business_service->BusinessPriceDetailsAges()->delete();
+        $schedulers = $business_service->schedulers()->delete();
+        $reviews = $business_service->reviews()->delete();
+        $favourites = $business_service->favourites()->delete();
+        $business_service->delete();
     }
 }

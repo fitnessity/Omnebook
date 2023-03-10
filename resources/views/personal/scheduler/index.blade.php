@@ -81,10 +81,10 @@
 								</div>
 							</div>
 							<div class="activity-tabs">
-								@if($serviceType== $st && !empty($orderData)) 
+								@if($serviceType== $st && !empty($orderData) && $orderData->business_services !='')  
 									@php 
 										$catelist = '';
-										if($orderData->business_price_detail != ''){
+										if($orderData->business_price_detail != '' ){
 											$catelist = $orderData->business_price_detail->business_price_details_ages;
 										}
 

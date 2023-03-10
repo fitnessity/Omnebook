@@ -1268,8 +1268,10 @@ class BookingRepository
             $orderdetaildata = \app\UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$businessId])->get();
             foreach($orderdetaildata as $odetail){
                 if($st != 'all'){
-                    if($odetail->business_services->service_type ==   $st ){
-                        $orderdata1 []= $odetail;
+                    if($odetail->business_services()->exists()){
+                        if($odetail->business_services->service_type ==   $st ){
+                            $orderdata1 []= $odetail;
+                        }
                     }
                 }else{
                     $orderdata1 []= $odetail;

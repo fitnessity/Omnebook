@@ -18,15 +18,20 @@ class SchedulerController extends Controller
     public function index(Request $request)
     {   
         $serviceType='classes';
+        $programName =  $companyName= '';
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
-        $programName = $orderData->business_services->program_name;
-        $companyName = $orderData->business_services->company_information->company_name;
+        if($orderData->business_services()->exists()){
+            $programName = $orderData->business_services->program_name;
+            $companyName = $orderData->business_services->company_information->company_name;
+        }
+
         $businessId = $orderData->business_id;
         if($orderData->booking->user_id != Auth::user()->id){
             $orderData = [];
         }else{
-            
-            $serviceType= $orderData->business_services->service_type;
+            if($orderData->business_services()->exists()){
+                $serviceType = $orderData->business_services->service_type;
+            }
         }
         
         $filter_date = new DateTime();

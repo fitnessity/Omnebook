@@ -4,6 +4,7 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BusinessServices extends Model
 {
@@ -13,6 +14,7 @@ class BusinessServices extends Model
      *
      * @var string
      */
+     use SoftDeletes;
     protected $table = 'business_services';
 
     public $timestamps = false;

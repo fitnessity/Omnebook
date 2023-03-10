@@ -46,21 +46,16 @@ use View;
 use DateTime;
 
 class HomeController extends Controller {
-
     /**
      * The user repository instance.
      *
      * @var UserRepository
      */
     protected $users;
-
     public function __construct(UserRepository $users) {
-
         $this->users = $users;
     }
-
     public function index(Request $request) {
-        
         $companyData = $servicePrice = $businessSpec = [];
         $serviceData = BusinessServices::where('instant_booking', 1)->get();
         if (isset($serviceData)) {
@@ -86,11 +81,8 @@ class HomeController extends Controller {
         }
         
         $all_categories = SportsCategories::where('is_deleted', "0")->get();
-
         /*$most_searched_sports = Sports::latest()->limit(6)->get();*/
-
         $most_searched_sports = Sports::orderBy('id','DESC')->get();
-
         $fitnessity_data = Cms::where('status', '1')
                         ->where('content_alias', 'fitnessity')->get();
 
@@ -101,15 +93,12 @@ class HomeController extends Controller {
                         ->where('content_alias', 'about_us')->get();
 		
         $sliders = Slider::get();
-
         $trainers = Trainer::limit(5)->get();
         $onlines = Online::limit(9)->get();
         $persons = Person::limit(9)->get();
         $discovers = Discover::limit(6)->get();
-
         /*$count_trainer = Trainer::count();*/
         //$count_online = Online::count();
-
         /*$count_activity = BusinessServices::where('is_active',1)->count();
         $count_business = CompanyInformation::where('is_verified',1)->count();*/
         //$count_business = BusinessClaim::count();
@@ -118,22 +107,18 @@ class HomeController extends Controller {
 		/*$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');*/
 
         $hometracker = HomeTracker::where('id',1)->first();
-
         $count_trainer = $hometracker->trainers;
         $count_location = $hometracker->locations;
         $count_activity = $hometracker->activities;
         $count_business = $hometracker->businesses;
         $count_userbooking = $hometracker->bookings;
-       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
-        
         $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
-
         return view('home.index1', [
             'cart' => $cart,
             'serviceData' => $serviceData,
@@ -167,7 +152,6 @@ class HomeController extends Controller {
 	public function testleft (){
 		return view('profiles.leftPanel');
 	}
-
     public function all_trainings() {
         /* $all_categories = $this->sports_cat->getAllSportsCategories();
 
@@ -188,10 +172,8 @@ class HomeController extends Controller {
           $count_business = BusinessClaim::count();
           $count_userbooking = UserBookingDetail::count(); */
 
-
         return view('home.allTrainings');
     }
-
     public function all_sports() {
         /* $all_categories = $this->sports_cat->getAllSportsCategories();
 
@@ -211,7 +193,6 @@ class HomeController extends Controller {
           $count_online = Online::count();
           $count_business = BusinessClaim::count();
           $count_userbooking = UserBookingDetail::count(); */
-
 
         return view('home.allSports');
     }
@@ -255,8 +236,6 @@ class HomeController extends Controller {
 
     public function postRegistration(Request $request) {
         $postArr = $request->all();
-
-
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
@@ -309,7 +288,6 @@ class HomeController extends Controller {
                         'email'=> $postArr['email'],
                     ]);
                 $stripe_customer_id = $customer->id;
-
                 $userObj = New User();
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
@@ -375,7 +353,6 @@ class HomeController extends Controller {
         if (isset($code) && !empty($code)) {
 
             $user = User::SELECT('id', 'email', 'activated')->where('confirmation_code', $code)->first();
-
             if (@count($user) > 0 && $user->activated == 1) {
                 return redirect('/')->with('alert-success', 'Your account is already verified');
             } else if (@count($user) > 0 && $user->activated == 0) {
@@ -389,19 +366,12 @@ class HomeController extends Controller {
     }
 
     public function UserAccountVerify(Request $request) {
-        /* echo $request->confirmation_code;
-          exit; */
-
         if ($request->confirmation_code && $request->confirmation_code != '' && $request->confirmation_code != NULL) {
             $user = User::whereConfirmationCode($request->confirmation_code)->first();
-            //echo $user;
-
             if (!empty($user) > 0 && $user->activated == 0) {
                 $user->activated = 1;
                 $user->show_step = 2;
-
                 if ($user->save()) {
-
                     // MailService::sendEmailVerifiedAcknowledgement($user->id);
                     SGMailService::sendWelcomeMail($user->email);
                     Auth::login($user);
@@ -427,12 +397,10 @@ class HomeController extends Controller {
 
     public function VerifyCodeResend(Request $request) {
         $input = $request->all();
-
         if (isset($input) && !empty($input['user_id'])) {
             $user = User::findOrFail($input['user_id']);
 
             if (!empty($user)) {
-
                 if ($user->confirmation_code && !empty($user->confirmation_code)) {
                     MailService::resendEmailVerificationCode($user);
                     $response = array(

@@ -477,6 +477,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                 <a class="nav-link" data-toggle="tab" href="#saved" role="tab">
                                 Saved</a>
                             </li>
+
+                            <li>
+                                @if(@$loggedinUserorignal->id == $pic['user_id'])
+                                    <a class="nav-link" href="{{url('/profile/viewbusinessProfile/'.$compinfo->id)}}" >About</a>
+                                @else
+                                    <a class="nav-link" href="{{url('/businessprofile/'.strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id)" >About</a>
+                                @endif
+                            </li>
                             
 						</ul>
 					</div>

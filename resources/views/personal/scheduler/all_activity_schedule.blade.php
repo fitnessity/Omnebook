@@ -90,22 +90,24 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 							<div class="activity-tabs">
 								@if($serviceType == $st && !empty($orderdata))
 									@foreach($orderdata as $odt)
-									@php 
-										$catelist = '';
-										if($odt->business_price_detail != ''){
-											$catelist = $odt->business_price_detail->business_price_details_ages;
-										}
-										$sche_ary = [];
-										if($catelist != ''){
-											foreach($catelist->BusinessActivityScheduler as $sc){
-												if($sc->end_activity_date > $filter_date->format('Y-m-d')){
-													if(strpos($sc->activity_days, date("l")) !== false){
-														$sche_ary [] = $sc;
+										@php 
+											$catelist = '';
+											if($odt->business_price_detail != '' && $odt->business_services != ''){
+												$catelist = $odt->business_price_detail->business_price_details_ages;
+											}
+											$sche_ary = [];
+											if($catelist != ''){
+												foreach($catelist->BusinessActivityScheduler as $sc){
+													if($sc->end_activity_date > $filter_date->format('Y-m-d')){
+														if(strpos($sc->activity_days, date("l")) !== false){
+															$sche_ary [] = $sc;
+														}
 													}
-												}
-											} 
-										}
-									@endphp
+												} 
+											}
+
+											if($odt->business_price_detail != '' && $odt->business_services != ''){
+										@endphp
 									<div class="row">
 										<div class="col-md-6 col-sm-6 col-xs-12">
 											<div class="classes-info">
@@ -173,6 +175,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 											</div>
 										</div>
 									</div> 
+									@php } @endphp
 									@endforeach
 								@endif
 							</div>

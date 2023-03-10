@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\{User,BusinessCompanyDetail,CompanyInformation,BusinessServices,UserBookingStatus,BusinessActivityScheduler,BusinessPriceDetailsAges,BusinessPriceDetails,StaffMembers,UserBookingDetail,ActivityCancel,UserFamilyDetail,BusinessSubscriptionPlan,Customer,BookingActivityCancel,BookingCheckinDetails,BookingPostorder,SGMailService,MailService};
 use Auth;
@@ -27,7 +25,6 @@ class SchedulerController extends Controller
           $this->customers = $customers;
           $this->booking_repo = $booking_repo;
      }
-
      public function searchcustomerbooking(Request $request) {
           $filter_date = new DateTime();
           if($request->get('query'))
@@ -54,7 +51,6 @@ class SchedulerController extends Controller
 
           $schedule_data = BusinessActivityScheduler::findById($request->sid);
           $servicedata = $this->business_service_repo->findById(@$schedule_data->serviceid);
-
           $pricrdropdown = BusinessServices::find(@$schedule_data->serviceid)->price_details;
           $bookingdata = UserBookingDetail::where('sport',@$schedule_data->serviceid)->where('act_schedule_id',$request->sid)->where('bookedtime',date('Y-m-d'))->get();
           $output = '';
@@ -186,11 +182,9 @@ class SchedulerController extends Controller
           }
           return $output;
      }
-
      public function booking_request(){
           return view('scheduler.booking_request');
      }
-
      public function sendreceiptfromcheckout(Request $request){
           //print_r($request->all());
           $compare_chk=[];
@@ -219,7 +213,6 @@ class SchedulerController extends Controller
                 $status  = SGMailService::sendBookingReceipt($email_detail);
           }
      }
-
      public function getdropdowndata(Request $request){
           $output = '';
           $html = '';
@@ -271,7 +264,6 @@ class SchedulerController extends Controller
                if($total_price_val_infant == 0 &&  $total_price_val_infant == '' ){
                     $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
                }
-
                $aduid = "adultprice";
                $childtid = "childprice";
                $infantid = "infantprice";
@@ -391,8 +383,6 @@ class SchedulerController extends Controller
      public function getbookingcancelmodel(Request $request){
           $bookingdetail_data = UserBookingDetail::where('id',$request->order_detail_id)->first();
           $booking_data = $bookingdetail_data->booking;
-
-
           $cardInfo = [];
           if($booking_data->user_type == 'customer'){
                $cardInfo = $booking_data->customer->get_stripe_card_info();
@@ -403,8 +393,6 @@ class SchedulerController extends Controller
           $data = BookingActivityCancel::where(['booking_id'=> $request->oid,'order_detail_id'=> $request->order_detail_id])->first();
           $cancel_charge_amt = '';
           $html = '';
-
-
           $html .='<div class="row"> <div class="col-lg-12"><h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px;margin-bottom: 10px;">What happens if a customer late cancels or no show? </h4></div></div>';
           $html .='<div class="row">';
           $html .= '<form method="post" action="'. route('booking_activity_cancel') .'">';
@@ -419,7 +407,6 @@ class SchedulerController extends Controller
                     if(@$data->cancel_charge_action == 'nothing') {
                          $html .='checked';
                     }
-
                     $html .='>
                     <label for="nothing">Nothing</label><br>
                     
@@ -428,7 +415,6 @@ class SchedulerController extends Controller
                          $html .='checked';
                          $cancel_charge_amt = @$data->cancel_charge_amt;
                     }
-
                     $html .='>
                     <label for="fee">Charge Fee on Card</label>
                     <input type="text" class="form-control feeamount" name="cancel_charge_amt" id="cancel_charge_amt" placeholder="$ Fee Amount" value="'.@$cancel_charge_amt.'">
@@ -462,12 +448,10 @@ class SchedulerController extends Controller
                     }
                                          
                     $html .='</div><br>
-                    
                     <input type="radio" id="cancel_charge_action" name="cancel_charge_action" value="deduct_membership"';
                     if(@$data->cancel_charge_action == 'deduct_membership') {
                          $html .='checked';
                     }
-
                     $html .='>
                     <label for="javascript">Deduct from membership</label> 
                     <select class="form-control" name="membership" id="membership">
@@ -485,7 +469,6 @@ class SchedulerController extends Controller
           if (session()->has('cart_item')) {
                $cart_item = session()->get('cart_item');
           }
-          //print_r( $cart_item);exit;
           $html = '';
           $salestaxajax = 0;
           $duestaxajax = 0;
@@ -493,7 +476,6 @@ class SchedulerController extends Controller
           $cart = [];
           if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                $cart = $cart_item["cart_item"][$request->priceid];
-               //print_r( $cart);
                $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
                $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
                $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
@@ -510,11 +492,9 @@ class SchedulerController extends Controller
                     $childprice =  @$cartselectedpriceid['child_cus_weekly_price'];
                     $infantprice =  @$cartselectedpriceid['infant_cus_weekly_price']; 
                }
-
                if($cartselectedcategoryid->sales_tax != ''){
                     $salestaxajax = $cartselectedcategoryid->sales_tax ;
                }
-
                if($cartselectedcategoryid->dues_tax != ''){
                     $duestaxajax = $cartselectedcategoryid->dues_tax ;
                }
@@ -522,20 +502,17 @@ class SchedulerController extends Controller
                     if($cart['adult']['quantity']  != 0){
                         $aduqty  = $cart['adult']['quantity'];
                     }
-               } 
-
+               }
                if(!empty($cart['child'])) {
                     if($cart['child']['quantity']  != 0){
                         $childqty  = $cart['child']['quantity'];
                     }
                } 
-
                if(!empty($cart['infant'])) {
                     if($cart['infant']['quantity']  != 0){
                         $infantqty  = $cart['infant']['quantity'];
                     }
                }
-
                $actscheduleid = explode(' ' ,$cart["actscheduleid"]);
                $participate = $cart["participate_from_checkout_regi"]['pc_name'];
                $html='<div class="row">
