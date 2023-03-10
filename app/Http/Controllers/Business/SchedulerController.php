@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
@@ -49,9 +48,7 @@ class SchedulerController extends BusinessBaseController
   }
 
   public function index(Request $request){
-
     $filter_date = Carbon::parse($request->date);
-
     $business_schedulers = BusinessActivityScheduler::alldayschedule($filter_date,$request->activity_type)->where('cid', $request->current_company->id)->get();
 
     return view('business.scheduler.index', [
@@ -60,7 +57,6 @@ class SchedulerController extends BusinessBaseController
          'filter_date' => $filter_date,
     ]);
   }
-
   public function destroy(Request $request){
        if($request->has('cancel_date_chk')){
             $mail_type = 'cancel';
@@ -71,7 +67,6 @@ class SchedulerController extends BusinessBaseController
             $cancel_date_chk = 0;
             $act_cancel_chk = 0;
        }
-
        if($request->can_id == ''){
             $data = $request->all();
             if(@$data['cancel_date'] != ''){
@@ -209,5 +204,4 @@ class SchedulerController extends BusinessBaseController
             </form>';
        return $output;
   }
-
 }

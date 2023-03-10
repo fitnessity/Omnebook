@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     padding: 0;
@@ -6,7 +5,6 @@ body {
     background: #FFF;
     overflow-x: hidden
 }
-
 @font-face {
     font-family: 'bebasregular';
     src: url('../../fonts/bebas__-webfont.eot');
@@ -18,7 +16,6 @@ body {
     font-weight: normal;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'OswaldLight';
     src: url('../../fonts/oswald-light.eot');
@@ -27,25 +24,20 @@ body {
         url('../../fonts/oswald-light.ttf') format('truetype'),
         url('../../fonts/oswald-light.svg#OswaldLight') format('svg');
 }
-
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 input {
-    border: none;
-    background: #fff;
+    border: none; background: #fff;
 }
-
 *:before,
 *:after {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 h1,
 h2,
 h3,
@@ -58,68 +50,37 @@ p {
     margin: 0;
     padding: 0;
     list-style: none;
-    font-weight: normal
+    font-weight: normal;
 }
 
 a {
-    text-decoration: none;
-    transition: 0.5s
+    text-decoration: none; transition: 0.5s;
 }
-
 a:hover {
-    transition: 0.5s;
-    text-decoration: none;
+    transition: 0.5s; text-decoration: none;
 }
-
 a:focus {
-    outline: none
+    outline: none;
 }
-
 html {
-    font-size: 10px;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-size: 10px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
 .liimage{
-    text-align: justify; 
-    padding: 30px 20px 30px 20px !important;
-    font-size: 13px;
+    text-align: justify; padding: 30px 20px 30px 20px !important; font-size: 13px;
 }
-
-.h4color{
-        color: #f91942;
-        font-size: 14px;
-        font-weight:700;
-        padding-left:10px; 
-    }
+.h4color{ color: #f91942; font-size: 14px; font-weight:700; padding-left:10px; }
 .close-btn-design{
     margin-top: 0 !important;
     color: white !important;
     right: 18px !important;
     position: absolute !important;    opacity: 1.2;
 }
-.close-btn-design:hover{
- opacity: 1.2;
-}
-.info-display a:focus {
-    color: #fe0000 !important; 
-    text-decoration: none;
-}
-.info-display a:hover {
-    color: #000 !important; 
-    text-decoration: none;
-}
-
-.info-display a{
-    color: #fe0000 !important;
-}
-.linkdiv{
-    padding-right: 0 !important; 
-    padding-left: 0 !important;
-}
-.titletext{
-    text-align: left !important;
-}
+.close-btn-design:hover{ opacity: 1.2; }
+.info-display a:focus { color: #fe0000 !important; text-decoration: none; }
+.info-display a:hover { color: #000 !important; text-decoration: none; }
+.info-display a{ color: #fe0000 !important; }
+.linkdiv{ padding-right: 0 !important; padding-left: 0 !important; }
+.titletext{ text-align: left !important; }
 .closebtn{
     text-align: right!important;
     padding-right: 0 !important;
@@ -132,22 +93,10 @@ html {
     border-radius: 5px !important;
     float: right;
 }
-.divmargin{
-    margin-left: -17px !important;
-}
-.divsize{
-    width: 100% !important;
-}
-
-.divrightstyle{
-    text-align: right;
-}
-
-
-.labelstyle{
-    margin-bottom: 10px !important;
-}
-
+.divmargin{ margin-left: -17px !important; }
+.divsize{ width: 100% !important; }
+.divrightstyle{ text-align: right; }
+.labelstyle{ margin-bottom: 10px !important; }
 #bussiness-list .searchclick img {
     width: 45px  !important;
     margin: auto ;
@@ -155,47 +104,23 @@ html {
     max-width: 100%;
     height: 45px  !important;
 }
-.liaddress{
-    font-size: 13px !important;
-    font-weight: 500;
-	margin-bottom: 0px;
-}
+.liaddress{ font-size: 13px !important; font-weight: 500; margin-bottom: 0px; }
 .container {
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
 }
-.pstyle{
-    margin-bottom: 0px !important;
-}
+.pstyle{ margin-bottom: 0px !important; }
 .container:before,
-.container:after {
-    display: table;
-    content: " ";
-}
-
-.container:after {
-    clear: both;
-}
-
+.container:after { display: table; content: " "; }
+.container:after { clear: both; }
 .row:before,
-.row:after {
-    display: table;
-    content: " ";
-}
-
-.row:after {
-    clear: both;
-}
-
-.row {
-    margin-right: -15px;
-    margin-left: -15px;
-}
+.row:after { display: table; content: " "; }
+.row:after { clear: both; }
+.row { margin-right: -15px; margin-left: -15px; }
 
 /* Header */
-
 header {
     float: left;
     width: 100%;
@@ -206,13 +131,11 @@ header {
     left: 0;
     z-index: 9;
 }
-
 .header-right {
     float: right;
     padding: 0px 15px 0 0;
     text-align: right;
 }
-
 .header-right-menu {
     color: #fff;
     font-family: 'OswaldLight';
@@ -225,114 +148,60 @@ header {
     border: 1px solid #f53b49;
     display: inline-block;
 }
-
 .header-right-menu:hover {
     color: #f53b49;
     background: none;
     text-decoration: none
 }
-
 button.header-right-menu {
     margin: 0 4px 0 0;
     border-radius: 0;
     float: left;
     padding: 6px 13px 5px;
 }
-
 .header-right button:hover {
     color: #f53b49;
     background: none;
     border: 1px solid #f53b49;
 }
-
-.header-right > a:last-child {
-    margin-left: 15px;
-}
-
-.header-right i {
-    font-size: 24px;
-}
-
-#nav {
-    float: left;
-    padding-top: 10px
-}
-
+.header-right > a:last-child { margin-left: 15px; }
+.header-right i { font-size: 24px; }
+#nav { float: left; padding-top: 10px; }
 .header-search {
-    border: 1px solid #f53b49;
-    float: left;
-    font-family: 'OswaldLight';
-    font-size: 18px;
-    margin: 0 10px
-}
-
+    border: 1px solid #f53b49; float: left; font-family: 'OswaldLight'; font-size: 18px; margin: 0 10px }
 .header-search button {
     background: none;
     border: none;
     padding: 7px 15px;
     font-size: 18px;
 }
-
-.header-search button i {
-    font-size: 26px;
-    margin-left: 10px;
-}
-
+.header-search button i { font-size: 26px; margin-left: 10px; }
 .header-search-a {
     border-left: 1px solid #f53b49;
     float: right;
     margin: 8px 2px 6px;
     padding: 0 8px;
 }
-
-nav {
-    float: left;
-}
-
-.navbar {
-    margin: 0;
-}
-
+nav { float: left; }
+.navbar { margin: 0; }
 .navbar-inverse .navbar-nav > li > a {
     color: #fff;
     font-size: 18px;
     font-family: 'OswaldLight';
     padding: 10px 15px
 }
-
-.navbar-inverse .navbar-nav > li > a:hover {
-    color: #f53b49;
-}
-
+.navbar-inverse .navbar-nav > li > a:hover { color: #f53b49; }
 .btn.btn-info.btn-lg.header-search-a {
     border-left: 1px solid #f53b49;
     border-radius: 0;
     margin: 8px 3px 5px;
     padding: 0 5px;
 }
-
-.btn.btn-info.btn-lg.header-search-a:focus {
-    background: none;
-}
-
-.header-search ul {
-    float: left;
-}
-
-.header-search ul li {
-    position: relative;
-}
-
-.header-search ul li a {
-    font-family: 'OswaldLight';
-    font-size: 14px;
-    color: #fff
-}
-
-.header-search ul li a i {
-    margin-left: 15px;
-}
-
+.btn.btn-info.btn-lg.header-search-a:focus { background: none; }
+.header-search ul { float: left; }
+.header-search ul li { position: relative; }
+.header-search ul li a { font-family: 'OswaldLight'; font-size: 14px; color: #fff; }
+.header-search ul li a i { margin-left: 15px; }
 .header-search ul {
     display: none;
     position: absolute;
@@ -343,57 +212,19 @@ nav {
     width: 100px;
     background: rgba(0, 0, 0, 0.5)
 }
-
-.header-search ul li ul a {
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-.header-search ul li:hover ul {
-    display: block;
-}
-
+.header-search ul li ul a { color: #fff; padding: 5px 10px; font-size: 14px; }
+.header-search ul li:hover ul { display: block; }
 .search-button i {
     border-left: 1px solid #f53b49;
     padding: 5px 7px 5px 12px;
     margin-left: 5px
 }
-
-#cssmenu {
-    float: left;
-    padding-top: 10px
-}
-
-.logo {
-    float: left;
-    padding: 0 0 0 15px;
-    width: 16%;
-}
-
-.search-button {
-    color: #fff;
-}
-
-.how-it-works {
-    margin: -135px 0 0;
-    position: relative;
-    text-align: center;
-    z-index: 9;
-}
-
-.how-it-works span {
-    display: inline-block;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.main-slider {
-    float: left;
-    width: 100%;
-    position: relative
-}
-
+#cssmenu { float: left; padding-top: 10px }
+.logo { float: left; padding: 0 0 0 15px; width: 16%; }
+.search-button { color: #fff; }
+.how-it-works { margin: -135px 0 0; position: relative; text-align: center; z-index: 9; }
+.how-it-works span { display: inline-block; width: 100%; margin-top: 10px; }
+.main-slider { float: left; width: 100%; position: relative }
 .slider-block {
     position: absolute;
     bottom: 0;

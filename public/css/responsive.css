@@ -1258,7 +1258,7 @@
 	.title-show a{float: none !important;}
 	.direc-right{float: none !important;}
 	.leftside-kickboxing.kicks .col-map-show{width: 33% !important;}
-	.class-info{padding: 13px 5px 0px 5px !important;}
+	.class-info{padding: 13px 15px 0px 15px !important;}
 	.modal-dialog.modal-lg.business{width: 95% !important;}
 	.showall-btn{padding: 5px 10px !important; font-size: 12px;}
 	.modal-sidebox .modal-filter-instant p{float: right !important;}
@@ -1335,6 +1335,10 @@
 	.add-family-frnd{width: 48% !important; margin-bottom: 15px; margin-left: 5px !important;}
 	.schedulers-arrows .owl-nav .owl-prev {  position: absolute;  top: 32px;  left: -11px !important;}
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 31px;  right: -11px !important;}
+	.kickboxing-moredetails {padding-top: 114px !important;}
+	.modal-banner .bannar-size img{height: 210px !important;}
+	.inner-owl-slider-hire .owl-nav .owl-next{right: 0px !important; top: 35% !important;}  
+	.inner-owl-slider-hire .owl-nav .owl-prev{left: 0px !important; top: 35% !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1622,6 +1626,7 @@
 	.modal-dialog.book-client-training{width: 90%;}
 	.modal-dialog.booking-time{width: 55%;}
 	.modal-dialog.pay-details{width: 77%;}
+	.modal-dialog.familyorfrnd{width: 80% !important;}
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1714,6 +1719,7 @@
 	.booking-activity-view .view-booking {top: 36px !important;}
 	.modal-dialog.pay-details{width: 70%;}
 	.booking-activity-view .view-schedule { top: 36px !important;}
+	.modal-dialog.familyorfrnd{width: 60% !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
@@ -2684,6 +2690,7 @@
 	.home-black-section i{display: none;}
 	#dropBox {  min-width: 300px;}
 	.form-control.rs-birthdate {  width: 240px;}
+	.modal-banner .bannar-size img { height: 140px !important;}
 }
 
 @media(max-width: 280px){

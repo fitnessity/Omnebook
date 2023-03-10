@@ -1809,3 +1809,18 @@ a {
 .purchases-bt{
 	margin-bottom: 45px;
 }
+.editfamily_frnds .form-control {
+  border: 1px solid #000 !important;
+  padding: 8px 10px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #a8a8a8 !important;
+  height: 38px !important;
+}
+.close-btn-frnd{
+	margin-top: 0 !important;
+	color: white !important;
+	right: 21px !important;
+	position: absolute !important;
+	opacity: 1.2;
+}

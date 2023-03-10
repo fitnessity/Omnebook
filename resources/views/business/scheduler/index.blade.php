@@ -1,7 +1,6 @@
 @extends('layouts.header')
 @section('content')
 @include('layouts.userHeader')
-
 @php
 	 use App\StaffMembers;
 @endphp
@@ -84,7 +83,6 @@
 									</div>
 								</div>
 							</div>
-
 							<div id="bindscheduledata">
 								@php
 									$total_reservations = 0;
@@ -219,7 +217,6 @@
 							</div>
 						</div>
 					</div>
-					
 					<div class="row">
 						<div class="col-md-6 col-xs-12 col-sm-6">
 							<div class="activities-details">
@@ -266,27 +263,19 @@
 			</div>
 			<!-- end modal -->
 		</div>
-
 </div>
 
-
-<script type="text/javascript">
-	
-</script>
 <script type="text/javascript">
 	$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
 		e.preventDefault()
 
 		$(this).parents('form').submit();
 
-	})
-
+	});
 	$(document).on('click', '[data-behavior~=disable_scheduler]', function(e){
 		e.preventDefault()
 
-	})
+	});
 </script>
-
 @include('layouts.footer')
-
 @endsection

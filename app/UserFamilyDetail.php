@@ -4,6 +4,7 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class UserFamilyDetail extends Model
 {
@@ -23,5 +24,13 @@ class UserFamilyDetail extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getAge(){
+        if($this->birthday != null){
+            return Carbon::parse($this->birthday)->age;
+        }else{
+            return null;
+        }
     }
 }

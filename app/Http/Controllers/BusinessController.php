@@ -1358,8 +1358,10 @@ class BusinessController extends Controller
             $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
             foreach($orderdetaildata as $odetail){
                 if($servicetype != 'all'){
-                    if($odetail->business_services->service_type ==   $servicetype ){
-                        $orderdata []= $odetail;
+                    if($odetail->business_services()->exists()){
+                        if($odetail->business_services->service_type ==   $servicetype ){
+                            $orderdata []= $odetail;
+                        }
                     }
                 }else{
                     $orderdata []= $odetail;

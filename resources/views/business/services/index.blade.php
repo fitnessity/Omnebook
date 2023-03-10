@@ -1,10 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
-
 @section('content')
-
 <link href="{{ url('public/css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
-
 <style>
 .avatar {
   vertical-align: middle;
@@ -21,7 +18,7 @@ input,select {
   padding: 16px 10px;
   width: 100%;
 }
- </style>
+</style>
 <?php 
     use App\BusinessPriceDetailsAges;
     use App\BusinessPriceDetails;
@@ -37,14 +34,12 @@ input,select {
         <div class="col-md-2" style="background: black;">
            @include('business.businessSidebar')
         </div>
-
         <div class="col-md-10 nopadding">   
             <div class="business-offer-main manageservice-page">
                 <section class="row">
                     <div class="col-md-12 text-center">
                         <h2>Manage <?=$companyname?> Services</h2>
                     </div>
-                    
                     <form id="frmservice" name="frmservice" method="GET" action="{{route('business.services.create')}}">
                         <div class="col-md-10"></div>
                         <div class="col-md-2">
@@ -116,9 +111,13 @@ input,select {
                                                             <div class="col-xs-12 col-lg-1 col-md-1 col-sm-2">
                                                                 <input type="submit" class="btn btn-black" name="btnedit" id="btnedit" value="Edit" />
                                                             </div>
-                                                           <div class="col-lg-1 col-md-1 col-sm-1"></div>
+                                                            
+                                                            <div class="col-lg-1 col-md-1 col-sm-1"></div>
                                                             <div class="col-xs-12 col-lg-2 col-md-2 col-sm-2">
                                                                 <input type="submit" class="btn btn-red" name="btnactive" id="btnactive" value="{{ ($cservice->is_active==0) ? 'Active' : 'Inactive'}} " />
+                                                            </div>
+                                                            <div class="col-xs-12 col-lg-1 col-md-1 col-sm-2">
+                                                                <input type="button" class="btn btn-black" name="btndelete" id="btndelete"  data-id="{{ $cservice->id }}" value="Delete" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -238,14 +237,33 @@ input,select {
     </div>
 </div>
 
-
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 @include('layouts.footer')
 <script src="/public/js/jquery-ui.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-
 <script>
+
+    $(document).on('click', '#btndelete', function(event) {
+        alert('hii');
+        var sid = $(this).attr('data-id');
+        var companyid = '{{$companyid}}';
+        $.ajax({ 
+            //url:"{{route('business.services.destroy',['business_id' =>"+companyid +", 'service' =>"+sid+"])}}",
+
+            url:"/business/"+companyid+"/services/"+sid,
+            xhrFields: {
+                withCredentials: true
+            },
+            type:"delete",
+            data: { 
+                _token: '{{csrf_token()}}', 
+            },
+            success: function(html){
+                location.reload();
+            }
+        });
+    }); 
 
     function getbookingmodel(sid,chk){  
         let date = '';
@@ -277,7 +295,6 @@ input,select {
 </script>
 <script>
 $(document).ready(function(){
-    
     var popupid = '{{$popupserid}}';
     var companyid = '{{$companyid}}';
     if(popupid != ''){
