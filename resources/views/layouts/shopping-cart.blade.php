@@ -46,15 +46,15 @@
                         $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
                         if(!empty($item['adult'])){
                             $totalquantity += $item['adult']['quantity'];
-                            $discount += $item['adult']['quantity'] * ($item['adult']['price'] *$serprice['adult_discount'])/100; 
+                            $discount += $item['adult']['quantity'] * ($item['adult']['price'] *@$serprice['adult_discount'])/100; 
                         }
                         if(!empty($item['child'])){
                             $totalquantity += $item['child']['quantity'];
-                            $discount += $item['child']['quantity'] *  ($item['child']['price'] *$serprice['child_discount'])/100;
+                            $discount += $item['child']['quantity'] *  ($item['child']['price'] *@$serprice['child_discount'])/100;
                         }
                         if(!empty($item['infant'])){
                             $totalquantity += $item['infant']['quantity'];
-                            $discount += $item['infant']['quantity'] *  ($item['infant']['price'] *$serprice['infant_discount'])/100;
+                            $discount += $item['infant']['quantity'] *  ($item['infant']['price'] *@$serprice['infant_discount'])/100;
                         }
 
     					$item_price = $item_price + $item["totalprice"];
@@ -66,15 +66,15 @@
     						}
     					}else{ $profilePic = url('/public/images/service-nofound.jpg'); }
     					
-                        $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
+                        $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->orderBy('id', 'ASC')->first();
 
                         $tot_cart_qty = ($db_totalquantity + $totalquantity);
-                        if( $bookscheduler[0]['spots_available'] <  $tot_cart_qty ){
+                        if( @$bookscheduler['spots_available'] <  $tot_cart_qty ){
                             $soldout_chk = 1;
                             $Sold_out = "Sold Out";
                         }
     					$act = BusinessServices::where('id', $item["code"])->first();
-                        $BusinessTerms = BusinessTerms::where('cid',$act["cid"])->first();
+                        $BusinessTerms = BusinessTerms::where('cid',@$act["cid"])->first();
                         $termcondfaqtext = @$BusinessTerms->termcondfaqtext;
                         $contracttermstext = @$BusinessTerms->contracttermstext;
                         $liabilitytext = @$BusinessTerms->liabilitytext;
@@ -121,8 +121,8 @@
 											</div>
 										</div>
                                         <?php
-                                        if(@$bookscheduler[0]['set_duration']!=''){
-                                            $tm=explode(' ',$bookscheduler[0]['set_duration']);
+                                        if(@@$bookscheduler['set_duration']!=''){
+                                            $tm=explode(' ',$bookscheduler[@'set_duration']);
                                             $hr=''; $min=''; $sec='';
                                             if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
                                             if($tm[2]!=0){ $min=$tm[2].'min. '; }
@@ -130,8 +130,8 @@
                                             if($hr!='' || $min!='' || $sec!='')
                                             { $timeval = $hr.$min.$sec; } 
                                         }
-                                        if(@$bookscheduler[0]['shift_end']!=''){
-    										echo '<div class="row"><div class="col-md-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( $bookscheduler[0]['shift_start'] )).' to '.date('h:ia', strtotime( $bookscheduler[0]['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
+                                        if(@@$bookscheduler['shift_end']!=''){
+    										echo '<div class="row"><div class="col-md-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( @$bookscheduler['shift_start'] )).' to '.date('h:ia', strtotime( @$bookscheduler['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
     									} 
     									?>
                                         
@@ -303,7 +303,7 @@
 											</div>
 											<div class="col-md-6">	
 												<div class="info-display info-align">
-													<span>{{$act->company_information->company_name}}</span>
+													<span>{{@$act->company_information->company_name}}</span>
 												</div>
 											</div>
 										</div>
@@ -316,9 +316,9 @@
                                         <h4>
                                         	@if($item['adult'])
                                         	  x{{$item['adult']['quantity']}} Adult
-                                        	  @if($serprice['child_discount'])
+                                        	  @if(@$serprice['child_discount'])
                                         	    @php
-                                        	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * $serprice['child_discount'])/100)
+                                        	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * @$serprice['child_discount'])/100)
                                         	    @endphp
                                         	    ${{$child_discount_price}}<strike> ${{$item['adult']['price']}}</strike>/person
                                         	  @endif
@@ -327,9 +327,9 @@
 
                                         	@if($item['child'])
                                         	  x{{$item['child']['quantity']}} Child
-                                        	  @if($serprice['child_discount'])
+                                        	  @if(@$serprice['child_discount'])
                                         	    @php
-                                        	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * $serprice['child_discount'])/100)
+                                        	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * @$serprice['child_discount'])/100)
                                         	    @endphp
                                         	    ${{$child_discount_price}}<strike> ${{$item['child']['price']}}</strike>/person
                                         	  @endif
@@ -338,9 +338,9 @@
 
                                         	@if($item['infant'])
                                         	  x{{$item['infant']['quantity']}} Infant
-                                        	  @if($serprice['child_discount'])
+                                        	  @if(@$serprice['child_discount'])
                                         	    @php
-                                        	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * $serprice['child_discount'])/100)
+                                        	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * @$serprice['child_discount'])/100)
                                         	    @endphp
                                         	    ${{$child_discount_price}}<strike> ${{$item['infant']['price']}}</strike>/person
                                         	  @endif
@@ -423,17 +423,17 @@
                                     	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails terms-txt"> View the terms and conditions from this provider below </span>
                                         <div>
                                             @if($termcondfaqtext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{@$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
                                             
                                             @if($liabilitytext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{$act['cid']}}">Liability Waiver</a> | @endif 
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{@$act['cid']}}">Liability Waiver</a> | @endif 
                                             @if($covidtext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{$act['cid']}}">Covid - 19 Protocols</a> |
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{@$act['cid']}}">Covid - 19 Protocols</a> |
                                             @endif
                                             @if($contracttermstext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{$act['cid']}}">Contract Terms</a> | @endif 
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{@$act['cid']}}">Contract Terms</a> | @endif 
                                             @if($refundpolicytext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{$act['cid']}}">Refund Policy</a> @endif
+                                                <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{@$act['cid']}}">Refund Policy</a> @endif
                                         </div> 
                                     @endif
                                 </div>
@@ -483,7 +483,7 @@
     				</script>
                     <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
 
-                    <div class="modal fade compare-model" id="termsModal_{{$act['cid']}}">
+                    <div class="modal fade compare-model" id="termsModal_{{@$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -508,7 +508,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="contractModal_{{$act['cid']}}">
+                    <div class="modal fade compare-model" id="contractModal_{{@$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
@@ -533,7 +533,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="liabilityModal_{{$act['cid']}}">
+                    <div class="modal fade compare-model" id="liabilityModal_{{@$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -558,7 +558,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="covidModal_{{$act['cid']}}">
+                    <div class="modal fade compare-model" id="covidModal_{{@$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
@@ -583,7 +583,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade compare-model" id="refundModal_{{$act['cid']}}">
+                    <div class="modal fade compare-model" id="refundModal_{{@$act['cid']}}">
                         <div class="modal-dialog modal-lg business">
                             <div class="modal-content">
                                 <div class="modal-header"> 
