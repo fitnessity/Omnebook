@@ -2152,7 +2152,6 @@ class UserProfileController extends Controller {
         
         return 200;
         return redirect()->route('profile-viewProfile');
-
     }
     
     public function setCoverPhoto(Request $request) {
@@ -2165,7 +2164,6 @@ class UserProfileController extends Controller {
         }
 
         return redirect()->route('profile-viewProfile');
-
     }
     
     public function unsetCoverPhoto(Request $request) {
@@ -2591,7 +2589,6 @@ class UserProfileController extends Controller {
                 'expActivity', 
                 'expLevel', 
                 'getTimeSlot'));
-
     }
 
     public function searchResultLocation1(Request $request) {
@@ -8942,21 +8939,21 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('error', 'Problem in password change.');
     }
 
-    public function addFamilyMember(Request $request) {
+    /*public function addFamilyMember(Request $request) {
         //dd($request->all());
         //dd(date('Y-m-d',strtotime($request['birthdate'][0])));
-        /* $request->validate([
+        // $request->validate([
 
-          'fname' => 'required',
-          'lname' => 'required|min:8',
-          'email' => 'required|email|unique:users',
-          'mobile' => 'required',
-          'emergency_contact' => 'required',
-          'relationship' => 'required',
-          'gender' => 'required',
-          'birthdate' => 'required',
-          'emergency_name' => 'required'
-          ]); */
+        //   'fname' => 'required',
+        //   'lname' => 'required|min:8',
+        //   'email' => 'required|email|unique:users',
+        //   'mobile' => 'required',
+        //   'emergency_contact' => 'required',
+        //   'relationship' => 'required',
+        //   'gender' => 'required',
+        //   'birthdate' => 'required',
+        //   'emergency_name' => 'required'
+        //   ]); 
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
@@ -9023,13 +9020,57 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('success', 'Family details has been updated successfully.');
         else
             return Redirect::back()->with('error', 'Problem in updating family details.');
+    }*/
+
+
+    public function addFamilyMember(Request $request) {
+        if($request->id != ''){
+            $user = Auth::user();
+            $familyData = $user->user_family_details()->findOrFail($request->id);
+            $familyData->first_name = $request->fname;
+            $familyData->last_name = $request->lname;
+            $familyData->gender = $request->gender;
+            $familyData->email = $request->email;
+            $familyData->relationship = $request->relationship;
+            $familyData->birthday = $request->birthdate;
+            $familyData->mobile = $request->mobile;
+            $familyData->emergency_contact_name = $request->emergency_name;
+            $familyData->emergency_contact = $request->emergency_contact;
+            $familyData->update();
+        }else{
+            $data = UserFamilyDetail::create([
+                'user_id' => Auth::user()->id,
+                'first_name' => $request->fname,
+                'last_name' => $request->lname,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'emergency_contact' => $request->emergency_contact,
+                'relationship' => $request->relationship,
+                'gender' => $request->gender,
+                'birthday' => $request->birthdate,
+                'emergency_contact_name' => $request->emergency_name,
+            ]);
+        }   
+
+        return redirect()->route('addFamily');
+    }
+    
+    public function showFamilyMember(Request $request) {
+        $familyData = '';
+        if($request->has('id')){
+            $user = Auth::user();
+            $familyData = $user->user_family_details()->findOrFail($request->id);
+        }
+        return view('personal-profile.add-edit-family',compact('familyData'));
     }
 
     public function removefamily(Request $request) {
+        //print_r($request->all());exit;
 
-        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->rm . '"');
-        return Redirect::back()->with('success', 'Family Member Delete.');
+        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+        return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
+
     public function spotify() 
     {
         return view('spotify');

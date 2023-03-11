@@ -683,7 +683,7 @@ Route::post('/follower_company', 'UserProfileController@Pfollower')->name('follo
 Route::post('/unfollower_company', 'UserProfileController@Punfollower')->name('unfollower_company');
 Route::post('/company-image-upload', 'UserProfileController@companyImageUpload');
 Route::post('/user-multi-image-upload', 'UserProfileController@userImageUpload');
-Route::get('personal-profile/add-family', 'UserProfileController@addFamily');
+Route::get('personal-profile/add-family', 'UserProfileController@addFamily')->name('addFamily');
 Route::post('/gallery-upload', 'UserProfileController@galleryUpload')->name('file-upload');
 Route::get('gallery-picture/{user_id}', 'UserProfileController@galleryList')->name('file-list');
 Route::post('profile/editProfilePicture', 'UserProfileController@editProfilePicture');
@@ -946,7 +946,8 @@ Route::post('savemycoverphoto', 'UserProfileController@savemycoverphoto')->name(
 Route::post('removeusercoverphoto', 'UserProfileController@removeusercoverphoto')->name('removeusercoverphoto');
 Route::post('updatechangepassword', 'UserProfileController@updatechangepassword')->name('updatechangepassword');
 Route::post('addFamilyMember', 'UserProfileController@addFamilyMember')->name('addFamilyMember');
-Route::post('removefamily', 'UserProfileController@removefamily')->name('removefamily');
+Route::get('showFamilyMember', 'UserProfileController@showFamilyMember')->name('showFamilyMember');
+Route::get('removefamily', 'UserProfileController@removefamily')->name('removefamily');
 
 
 Route::post('/followProfile', 'UserProfileController@followProfile')->name('followProfile');

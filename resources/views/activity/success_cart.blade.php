@@ -736,6 +736,8 @@ if(!empty($cart["cart_item"])) {
 								<div class="register-pop-title ftitle1">
 									<h3>Tell Us About You</h3>
 								</div>
+								<br>
+								<h4>To make sure you are 18, please complete these steps</h4>
 								<div id='systemMessage' class="alert-msgs"></div>
                     			<input type="hidden" name="_token" value="{{csrf_token()}}">
 								<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">

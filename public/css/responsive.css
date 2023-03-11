@@ -1720,6 +1720,7 @@
 	.modal-dialog.pay-details{width: 70%;}
 	.booking-activity-view .view-schedule { top: 36px !important;}
 	.modal-dialog.familyorfrnd{width: 60% !important;}
+	.add-family-frnd .cards-content .familyfrnd-info .edit-family{left: 156px !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
