@@ -20,6 +20,7 @@ use App\User;
 use App\CustomerFamilyDetail;
 
 use App\Miscellaneous;
+use App\SGMailService;
 use App\Repositories\CustomerRepository;
 
 class RegistrationController extends Controller
@@ -201,27 +202,33 @@ class RegistrationController extends Controller
     }
 
     public function submitFamilyCustomer(Request $request) {
+
         $postArr = $request->all();
-        
-        $customerObj = New Customer();
-        $customerObj->parent_cus_id = Input::get('cust_id');
-        $customerObj->business_id = Input::get('business_id');
-        $customerObj->fname = Input::get('first_name');
-        $customerObj->lname = Input::get('last_name');
-        $customerObj->relationship = Input::get('relationship');
-        $customerObj->email = Input::get('email');
-        $customerObj->country = 'US';
-        $customerObj->status = 0;
-        $customerObj->phone_number = Input::get('mobile');
-        $customerObj->birthdate = date('Y-m-d',strtotime(Input::get('birthday')));
-        $customerObj->emergency_contact = Input::get('emergency_contact');
-        $customerObj->gender =  Input::get('gender');
 
-        $customerObj->save();
-
-        if ($customerObj) {      
-            SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+        for($i=0;$i<=$request->familycnt;$i++){
+            $date = NULL;
+            if($request->birthday_date[$i] != ''){
+                $date = date('Y-m-d',strtotime($request->birthday_date[$i]));
+            }
+            $customerObj = New Customer();
+            $customerObj->parent_cus_id = $request->cust_id;
+            $customerObj->business_id = $request->business_id;
+            $customerObj->fname = $request->fname[$i];
+            $customerObj->lname = $request->lname[$i];
+            $customerObj->relationship = $request->relationship[$i];
+            $customerObj->email = $request->emailid[$i];
+            $customerObj->country = 'US';
+            $customerObj->status = 0;
+            $customerObj->phone_number = $request->mphone[$i];
+            $customerObj->birthdate = $date;
+            $customerObj->emergency_contact = $request->emergency_phone[$i];
+            $customerObj->gender =  $request->gender[$i];
+            $customerObj->save();
+            if ($customerObj) {      
+                SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+            }
         }
+        
 
         $url = '/viewcustomer/'.$request->cust_id;
         $response = array(
