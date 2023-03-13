@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth']], function(){
         //Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
+        Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
         /*Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');*/
         // Services
         //Route::get('/services', 'UserProfileController@manageService')->name('manageService');

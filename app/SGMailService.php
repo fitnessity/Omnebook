@@ -72,7 +72,6 @@ class SGMailService{
 		return $response;
 	}
 
-
 	public static function sendWelcomeMailToCustomer($id,$business_id){
 		$customer = Customer::findOrFail($id);
 		$businessdata = CompanyInformation::findOrFail($business_id);
@@ -114,5 +113,33 @@ class SGMailService{
 			$response = 'fail';
 		}
 		return $response;
+	}
+
+	public static function requestAccessMail($customer){
+		$businessdata = CompanyInformation::findOrFail($customer->business_id);
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $customer->email,
+		);
+
+		$substitutions = [
+			"ProviderName" => $businessdata->company_name,  
+			"CustomerName" => @$customer->fname.' '.@$customer->lname,  
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+
+		$email->setTemplateId("d-6530330f52e8409ca171d446fbc8c248");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+
 	}
 }

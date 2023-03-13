@@ -41,6 +41,7 @@
     .removepost{ height: auto !important; }
 </style>
 <?php
+$loggedinUserorignal = '';
 $compinfo = CompanyInformation::where('id',request()->id)->first();
 $loggedinUser = User::where('id',$compinfo->user_id)->first();
 $customerName = @$loggedinUser->firstname . ' ' . @$loggedinUser->lastname;
@@ -60,6 +61,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     </script>
     <?php
 }
+
 
 ?>
 
@@ -479,10 +481,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                             </li>
 
                             <li>
-                                @if(@$loggedinUserorignal->id == $pic['user_id'])
+                                @if(@$loggedinUserorignal->id == @$pic['user_id'])
                                     <a class="nav-link" href="{{url('/profile/viewbusinessProfile/'.$compinfo->id)}}" >About</a>
                                 @else
-                                    <a class="nav-link" href="{{url('/businessprofile/'.strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id)" >About</a>
+                                <?php $comUrl = strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>
+                                    <a class="nav-link" href="{{url('/businessprofile/'.$comUrl)}}">About</a>
                                 @endif
                             </li>
                             
@@ -1016,30 +1019,39 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
                 <div class="tab-pane" id="photos" role="tabpanel">
                     <div class="desc-text" id="mydesc">
-                        <?php 
-                            if (!empty($images)) 
-                            {
-                                foreach($images as $data)
+                        <div class="row">
+                            <?php 
+                                if (!empty($images)) 
                                 {
-                                    $img_part = explode("|",$data->images);
-                                    $imgCount = count($img_part);
-                                    for ($i=0; $i <$imgCount ; $i++) 
-                                    { ?>
-                                        <div class="col-sm-3 col-md-4 col-lg-4">
-                                            <div class="photo-tab-imgs">
-                                                <figure>
-                                                    <a href="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" class="postfancyimg" data-fancybox="photogallery">
-                                                        <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
-                                                    </a>
-                                                </figure>
-                                                <!-- <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}"> -->
-                                            </div>
-                                        </div>
-                                    <?php 
+                                    $y=0;
+                                    foreach($images as $data)
+                                    {
+                                        $img_part = explode("|",$data->images);
+                                        $imgCount = count($img_part);
+                                        for ($i=0; $i <$imgCount ; $i++) 
+                                        { 
+                                            if($y<12){?>
+                                                <div class="col-sm-3 col-md-4 col-lg-4">
+                                                    <div class="photo-tab-imgs">
+                                                        <figure>
+                                                            <a href="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}" class="postfancyimg" data-fancybox="photogallery">
+                                                                <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                            </a>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            <?php }
+                                            $y++;
+                                        }
                                     }
                                 }
-                            }
-                        ?>
+                            ?>
+                        </div>
+
+                       <?php $companyUrl = strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>
+                        <span >
+                            <a href="{{url('/businessprofile/'.$companyUrl.'#photos')}}" class="show-more-photos"> Show More <i class="fas fa-caret-right"></i> </a>
+                        </span> 
                     </div>
                 </div>
 
@@ -1086,26 +1098,30 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     </figure>
                                         <div class="friend-name">
                                             <?php
-                                            $postsave = PagePostSave::where('user_id',Auth::user()->id)->where('post_id',$posts_post->id)->get();
-                                            ?>      
-                                            @if(@$loggedinUserorignal->id == $posts_post['user_id'])                                     
-                                            <div class="more">
-                                                <div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
-                                                    <ul>
-                                                         @if(@$loggedinUserorignal->id == $posts_post['user_id'])
-                                                        <li><a id="{{$posts_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
-                                                        <li><a href="{{route('delPost',$posts_post['id'])}}"><i class="fa fa-trash"></i>Delete Post</a></li>
-                                                        @endif
+                                            /*$postsave = PagePostSave::where('user_id',Auth::user()->id)->where('post_id',$posts_post->id)->get();*/
+                                            $postsave = PagePostSave::where('user_id',@$loggedinUserorignal->id)->where('post_id',$posts_post->id)->get();
+                                            if(!empty($loggedinUserorignal)) {
+                                                if( @$loggedinUserorignal->id == $posts_post['user_id']){?>                           
+                                                <div class="more">
+                                                    <div class="more-post-optns"><i class="fa fa-ellipsis-h"></i>
+                                                        <ul>
+                                                            @if(@$loggedinUserorignal->id == @$posts_post['user_id'])
+                                                            <li><a id="{{@$posts_post['id']}}" class="editpopup" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>Edit Post</a></li>
+                                                            <li><a href="{{route('delPost',@$posts_post['id'])}}"><i class="fa fa-trash"></i>Delete Post</a></li>
+                                                            @endif
 
-                                                        @if((@$loggedinUserorignal->id != $posts_post->user_id) && $postsave->count() == 0 )
-                                                            <li><a href="{{route('savePost',['pid'=>$posts_post['id'],'uid'=>$posts_post['user_id']])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
-                                                        @elseif ($postsave->count() > 0)
-                                                            <li><a href="{{route('RemovesavePost',['pid'=>$posts_post->id,'uid'=>$posts_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
-                                                        @endif
-                                                    </ul>
+                                                            @if((@$loggedinUserorignal->id != $posts_post->user_id) && $postsave->count() == 0 )
+                                                                <li><a href="{{route('savePost',['pid'=>@$posts_post['id'],'uid'=>@$posts_post['user_id']])}}"><i class="far fa-bookmark"></i>Save Post</a></li>
+                                                            @elseif ($postsave->count() > 0)
+                                                                <li><a href="{{route('RemovesavePost',['pid'=>@$posts_post->id,'uid'=>@$posts_post->user_id])}}"><i class="fas fa-bookmark"></i>Remove from saved</a></li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            @endif
+                                            <?php
+                                                }
+                                            } ?>
+
                                             <ins><a href="#" title="">{{ucfirst($userData->firstname)}} {{ucfirst($userData->lastname)}} </a> Post Album</ins>
                                             <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($posts_post['created_at']))}}</span>
                                         </div><!-- friend-name -->
@@ -1451,7 +1467,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                 <p>{{$comment->comment}}</p>
                                                                 <div class="inline-itms" id="commentlikediv<?php echo $comment->id; ?>">
                                                                 <?php
-                                                                    $cmntUlike =  PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',Auth::user()->id)->count();
+                                                                    $cmntUlike =  PagePostCommentsLike::where('comment_id',$comment->id)->where('user_id',@$loggedinUserorignal->id)->count();
                                                                 ?>
                                                                     <span>{{$comment->created_at->diffForHumans()}}</span>
                                                                     <!--<a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>-->
@@ -2180,7 +2196,7 @@ $(document).ready(function () {
 	$("#resetPassword").click(function () {
         var email1='';
         if('<?php Auth::user() ?>'){
-            email1 = '{{Auth::user()->email}}';
+            email1 = '{{@$loggedinUserorignal->email}}';
         }
 		formdata = new FormData();
 		var token = '{{csrf_token()}}';

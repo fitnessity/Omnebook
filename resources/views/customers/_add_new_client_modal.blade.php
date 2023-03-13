@@ -250,7 +250,7 @@
 							</div>
 
 							<div id="divstep6" style="display:none;">
-								<form action="#">
+								<form action="#" id="familyform">
 									<h4 class="heading-step" >Step 5</h4>
 				                    <div class="sign-step_5">
 				                        <div class="filledstep-bar">
@@ -268,58 +268,79 @@
 				                                <h2>Activities are much more fun with family</h2>
 				                                <div class='error' id='systemMessage'></div>
 				                                <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
-				                                <div class="form-group">
-				                                    <input type="text" name="fname" id="fname" class="form-control first_name" placeholder="First Name">
-				                                    <span class="error" id="err_fname"></span>
-				                                </div>
-				                                <div class="form-group">
-				                                    <input type="text" name="lname" id="lname" class="form-control last_name" placeholder="Last Name">
-				                                    <span class="error" id="err_lname"></span>
-				                                </div>
-				                                <div>
-				                                    <div class="birthday_date-position">
-				                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
-				                                        <span class="error" id="err_birthday_date"></span>
-				                                    </div>
-				                                </div>
-				                                <div class="form-group">
-				                                    <select name="relationship" id="relationship" class="form-control relationship">
-				                                        <option value="">Select Relationship</option>
-				                                        <option value="Brother">Brother</option>
-				                                        <option value="Sister">Sister</option>
-				                                        <option value="Father">Father</option>
-				                                        <option value="Mother">Mother</option>
-				                                        <option value="Wife">Wife</option>
-				                                        <option value="Husband">Husband</option>
-				                                        <option value="Son">Son</option>
-				                                        <option value="Daughter">Daughter</option>
-				                                    </select>
-				                                    <span class="error" id="err_relationship"></span>
-				                                </div>
-				                                <div class="form-group">
-				                                    <input maxlength="14" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('mphone')">
-				                                    <span class="error" id="err_mphone"></span>
-				                                </div>
-				                                <div class="form-group">
-				                                    <input maxlength="14" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('emergency_phone')">
-				                                    <span class="error" id="err_emergency_phone" ></span>
-				                                </div>
-				                                <div class="form-group">
-				                                    <select name="gender" id="gender" class="form-control gender">
-				                                        <option value="">Select Gender</option>
-				                                        <option value="male">Male</option>
-				                                        <option value="female">Female</option>
-				                                        <option value="other">Specify other</option>
-				                                    </select>
-				                                    <span class="error" id="err_gender"></span>
-				                                </div>
-				                                <div class="form-group">
-				                                    <input type="email" name="emailid" id="emailid" class="form-control email" placeholder="Email">
-				                                    <span class="error" id="err_emailid"></span>
+				                                <input type="hidden" name="familycnt" id="familycnt" value="0">
+				                                <div id="familymaindiv">
+				                                	<div class="new-client" id="familydiv0">
+														<div class="panel-group wrap" id="accordion" role="tablist" aria-multiselectable="true">
+															 <div class="panel">
+																<div class="panel-heading" role="tab" id="heading0">
+																  <h4 class="panel-title">
+																		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="true" aria-controls="collapse0">
+																		Family Member #1
+																		</a>
+																	</h4>
+																</div>
+																<div id="collapse0" class="panel-collapse collapse show in" role="tabpanel" aria-labelledby="heading0">
+																	<div class="panel-body">
+																		<div class="form-group">
+																			<input type="text" name="fname[]" id="fname" class="form-control first_name" placeholder="First Name">
+																			<span class="error" id="err_fname"></span>
+																		</div>
+																		<div class="form-group">
+																			<input type="text" name="lname[]" id="lname" class="form-control last_name" placeholder="Last Name">
+																			<span class="error" id="err_lname"></span>
+																		</div>
+																		<div>
+																			<div class="birthday_date-position">
+																				<input type="text" name="birthday_date[]" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+																				<span class="error" id="err_birthday_date"></span>
+																			</div>
+																		</div>
+																		<div class="form-group">
+																			<select name="relationship[]" id="relationship" class="form-control relationship">
+																				<option value="">Select Relationship</option>
+																				<option value="Brother">Brother</option>
+																				<option value="Sister">Sister</option>
+																				<option value="Father">Father</option>
+																				<option value="Mother">Mother</option>
+																				<option value="Wife">Wife</option>
+																				<option value="Husband">Husband</option>
+																				<option value="Son">Son</option>
+																				<option value="Daughter">Daughter</option>
+																			</select>
+																			<span class="error" id="err_relationship"></span>
+																		</div>
+																		<div class="form-group">
+																			<input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('mphone')">
+																			<span class="error" id="err_mphone"></span>
+																		</div>
+																		<div class="form-group">
+																			<input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('emergency_phone')">
+																			<span class="error" id="err_emergency_phone" ></span>
+																		</div>
+																		<div class="form-group">
+																			<select name="gender[]" id="gender" class="form-control gender">
+																				<option value="">Select Gender</option>
+																				<option value="male">Male</option>
+																				<option value="female">Female</option>
+																				<option value="other">Specify other</option>
+																			</select>
+																			<span class="error" id="err_gender"></span>
+																		</div>
+																		<div class="form-group">
+																			<input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email">
+																			<span class="error" id="err_emailid"></span>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+					                                </div>
 				                                </div>
 				                            </div>
 				                        </div>
 				                        <div class="signup-step-btn">
+											<button type="button" class="signbutton-next" id="add_family">Add New Family Member</button>
 				                            <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
 				                            <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
 				                        </div>
@@ -347,3 +368,35 @@
     </div>
 </div>
 
+<script>
+	$(document).on("click",'#add_family',function(e){
+		var cnt = $('#familycnt').val();
+		var old_cnt = cnt;
+		cnt++;
+		var txtcount = cnt;
+		txtcount += 1;
+		var data = '';
+		data += '<div class="new-client" id="familydiv'+cnt+'">';
+        data += $('#familydiv'+old_cnt).html();
+        data += '</div>';
+        var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
+        re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
+        re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
+        $('#familymaindiv').append(re);
+        $('#familycnt').val(cnt);
+	});
+</script>
+
+<script>
+$(document).ready(function() {
+  $('.collapse.in').prev('.panel-heading').addClass('active');
+  $('#accordion, #bs-collapse')
+    .on('show.bs.collapse', function(a) {
+      $(a.target).prev('.panel-heading').addClass('active');
+    })
+    .on('hide.bs.collapse', function(a) {
+      $(a.target).prev('.panel-heading').removeClass('active');
+    });
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script>

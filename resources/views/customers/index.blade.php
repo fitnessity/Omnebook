@@ -526,7 +526,7 @@
 
   	$(document).on('click', '#step5_next', function () {
       
-        var fname = $('#fname').val();
+        /*var fname = $('#fname').val();
         var lname = $('#lname').val();
         var birthday_date = $('#birthday_date').val();
         var relationship = $('#relationship').val();
@@ -576,13 +576,15 @@
             $('#err_emailid').html('Please enter emailid');
             $('#emailid').focus();
             return false;
-        }
+        }*/
         
+        var form = $('#familyform')[0];
         var posturl = '/submitfamilyCustomer';
-        var formdata = new FormData();
+        var formdata = new FormData(form);
         formdata.append('_token', '{{csrf_token()}}')
+        formdata.append('cust_id', $('#cust_id').val())
         formdata.append('business_id', '{{$company->id}}')
-        formdata.append('first_name', $('.first_name').val())
+        /* formdata.append('first_name', $('.first_name').val())
         formdata.append('last_name', $('.last_name').val())
         formdata.append('email', $('.email').val())
         formdata.append('relationship', $('.relationship').val())
@@ -590,7 +592,7 @@
         formdata.append('emergency_phone', $('.emergency_phone').val())
         formdata.append('birthday', $('#birthday_date').val())
         formdata.append('gender', $('.gender').val())
-        formdata.append('cust_id', $('#cust_id').val())
+        */
 
         setTimeout(function () {
             $.ajax({

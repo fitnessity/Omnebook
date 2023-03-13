@@ -225,7 +225,7 @@ class CustomerController extends Controller {
         }
     }
 
-   /* public function activity_visits(Request $request, $business_id, $id){
+    /* public function activity_visits(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($id);
@@ -505,6 +505,13 @@ class CustomerController extends Controller {
             $status  = SGMailService::sendBookingReceipt($email_detail);
         }
 
+        return $status;
+    }
+
+    public function request_access_mail(Request $request){
+        $business = Auth::user()->current_company;
+        $customer = $business->customers()->findOrFail($request->id);
+        $status = SGMailService::requestAccessMail($customer);
         return $status;
     }
 

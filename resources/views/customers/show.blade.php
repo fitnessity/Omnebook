@@ -148,15 +148,22 @@
 				<div class="col-md-12 col-xs-12 mobile-custom">
 					<div class="view-customer">
 						<ul class="nav nav-tabs" id="CustTab" role="tablist">
-						  <li class="nav-item active">
-							<a class="nav-link" id="customer-info-tab" data-toggle="tab" href="#customer-info" role="tab" aria-controls="customer-info" aria-selected="true">Customer Info</a>
-						  </li>
-						  <li class="nav-item">
-							<a class="nav-link" id="visits-tab" data-toggle="tab" href="#visits" role="tab" aria-controls="visits" aria-selected="false">Visits</a>
-						  </li>
-						  <li class="nav-item">
-							<a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
-						  </li>
+						  	<li class="nav-item active">
+								<a class="nav-link" id="customer-info-tab" data-toggle="tab" href="#customer-info" role="tab" aria-controls="customer-info" aria-selected="true">Customer Info</a>
+						  	</li>
+						  	<li class="nav-item">
+								<a class="nav-link" id="visits-tab" data-toggle="tab" href="#visits" role="tab" aria-controls="visits" aria-selected="false">Visits</a>
+						  	</li>
+						  	<li class="nav-item">
+								<a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
+						  	</li>
+						  	@if($customerdata->request_status == 0)
+						  		<li><button type="button" class="btn-nxt" id="request_access">Request Access</button></li>
+						  	@elseif($customerdata->request_status == 1 && $customerdata->last_sync == '')
+						  		<li><button type="button" class="btn-nxt" >Access Granted, Sync Now</button></li>
+						  	@else
+						  		<li>{{date('m-d-Y',strtotime($customerdata->last_sync))}}</li>
+						  	@endif
 						</ul>
 					</div>
 					<div  id="errordiv" class="activity-msg"></div>
@@ -929,6 +936,30 @@
 		$('#span_membership_activation').html($('#membershipactivationdate').val());
 		$('#span_membership_activation').addClass('red-fonts');
 	}
+
+	$("#request_access").on('click', function(){
+		 $.ajax({
+            type: 'get',
+            url:'{{route("request_access_mail")}}',
+            data: {
+                _token: '{{csrf_token()}}',
+                id:'{{$customerdata->id}}'
+            },
+            success: function(data) {
+            	$('#errordiv').html('');
+            	$('#errordiv').removeClass('green-fonts');
+            	$('#errordiv').removeClass('reviewerro');
+                $('#errordiv').css('display','block');
+                if(data == 'success'){
+                	$('#errordiv').addClass('green-fonts');
+                    $('#errordiv').html('Email Successfully Sent..');
+                }else{
+                	$('#errordiv').addClass('reviewerro');
+                    $('#errordiv').html("Can't Mail on this Address. Plese Check your Email..");
+                }
+            }
+        });
+	});
 
     $("#confirm-purchase").on('click', function(){
     	var cardNumber = $('#cardNumber').val()
