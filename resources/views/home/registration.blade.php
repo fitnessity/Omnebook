@@ -254,7 +254,7 @@
                     </div>
                 </form>
                 @else
-                <form action="#">
+                <form action="#" id="familyform">
                     <div class="sign-step_5">
                         <div class="filledstep-bar">
                             <div class="row">
@@ -271,67 +271,150 @@
                                 <h2>Activities are much more fun with family</h2>
                                 <div class='error' id='systemMessage'></div>
                                 <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
-                                <div class="form-group">
-                                    <input type="text" name="fname" id="fname" class="form-control first_name" placeholder="First Name">
-                                    <span class="error" id="err_fname"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" name="lname" id="lname" class="form-control last_name" placeholder="Last Name">
-                                    <span class="error" id="err_lname"></span>
-                                </div>
-                                <div>
-                                    <div class="birthday_date-position">
-                                        <input type="text" name="birthday_date" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
-                                        <span class="error" id="err_birthday_date"></span>
+                                <div class="error" id="familyerrormessage"></div>
+                                <input type="hidden" name="familycnt" id="familycnt" value="0">
+                                <div id="familymaindiv">
+                                    <div class="new-client" id="familydiv0">
+										<div class="content1">
+											<div class="panel-group" id="accordion">
+												<div class="panel panel-default">
+													 <div class="panel-heading">
+													   <h4 class="panel-title">
+														 <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
+													   </h4>
+													 </div>
+													<div id="collapse0" class="panel-collapse collapse in">
+														 <div class="panel-body">
+															  <div class="form-group">
+                                                            <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
+                                                            <span class="error" id="err_fname" ></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="text" name="last_name[]" id="last_name" class="form-control last_name required" placeholder="Last Name" >
+                                                            <span class="error" id="err_lname"></span>
+                                                        </div>
+                                                        <div>
+                                                            <div class="birthday_date-position">
+                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepicker" />
+                                                                <span class="error" id="err_birthday_date"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select name="relationship[]" id="relationship required" class="form-control relationship">
+                                                                <option value="">Select Relationship</option>
+                                                                <option value="Brother">Brother</option>
+                                                                <option value="Sister">Sister</option>
+                                                                <option value="Father">Father</option>
+                                                                <option value="Mother">Mother</option>
+                                                                <option value="Wife">Wife</option>
+                                                                <option value="Husband">Husband</option>
+                                                                <option value="Son">Son</option>
+                                                                <option value="Daughter">Daughter</option>
+                                                            </select>
+                                                            <span class="error" id="err_relationship"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number required" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                            <span class="error" id="err_mphone"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone " placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                            <span class="error" id="err_emergency_phone" ></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select name="gender[]" id="gender" class="form-control gender" required>
+                                                                <option value="">Select Gender</option>
+                                                                <option value="male">Male</option>
+                                                                <option value="female">Female</option>
+                                                                <option value="other">Specify other</option>
+                                                            </select>
+                                                            <span class="error" id="err_gender"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="email" name="email[]" id="email" class="form-control email required" placeholder="Email">
+                                                            <span class="error" id="err_emailid"></span>
+                                                        </div>
+														  </div>
+													</div>
+												</div>
+											</div>
+										</div>
+                                     <!--   <div class="panel-group wrap" id="accordion" role="tablist" aria-multiselectable="true">
+                                             <div class="panel">
+                                                <div class="panel-heading" role="tab" id="heading0">
+                                                  <h4 class="panel-title">
+                                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="true" aria-controls="collapse0">
+                                                        Family Member #1
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse0" class="panel-collapse collapse show in" role="tabpanel" aria-labelledby="heading0">
+                                                    <div class="panel-body">
+                                                        <div class="form-group">
+                                                            <input type="text" name="fname[]" id="fname" class="form-control first_name" placeholder="First Name">
+                                                            <span class="error" id="err_fname" required></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="text" name="lname[]" id="lname" class="form-control last_name" placeholder="Last Name" required>
+                                                            <span class="error" id="err_lname"></span>
+                                                        </div>
+                                                        <div>
+                                                            <div class="birthday_date-position">
+                                                                <input type="text" name="birthday_date[]" id="birthday_date0" class="form-control birthday" placeholder="mm/dd/yyyy" data-behavior="datepicker" required/>
+                                                                <span class="error" id="err_birthday_date"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select name="relationship[]" id="relationship" class="form-control relationship" required>
+                                                                <option value="">Select Relationship</option>
+                                                                <option value="Brother">Brother</option>
+                                                                <option value="Sister">Sister</option>
+                                                                <option value="Father">Father</option>
+                                                                <option value="Mother">Mother</option>
+                                                                <option value="Wife">Wife</option>
+                                                                <option value="Husband">Husband</option>
+                                                                <option value="Son">Son</option>
+                                                                <option value="Daughter">Daughter</option>
+                                                            </select>
+                                                            <span class="error" id="err_relationship"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                            <span class="error" id="err_mphone"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                            <span class="error" id="err_emergency_phone" ></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select name="gender[]" id="gender" class="form-control gender" required>
+                                                                <option value="">Select Gender</option>
+                                                                <option value="male">Male</option>
+                                                                <option value="female">Female</option>
+                                                                <option value="other">Specify other</option>
+                                                            </select>
+                                                            <span class="error" id="err_gender"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email" required>
+                                                            <span class="error" id="err_emailid"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <select name="relationship" id="relationship" class="form-control relationship">
-                                        <option value="">Select Relationship</option>
-                                        <option value="Brother">Brother</option>
-                                        <option value="Sister">Sister</option>
-                                        <option value="Father">Father</option>
-                                        <option value="Mother">Mother</option>
-                                        <option value="Wife">Wife</option>
-                                        <option value="Husband">Husband</option>
-                                        <option value="Son">Son</option>
-                                        <option value="Daughter">Daughter</option>
-                                    </select>
-                                    <span class="error" id="err_relationship"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input maxlength="14" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                    <span class="error" id="err_mphone"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input maxlength="14" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                    <span class="error" id="err_emergency_phone" ></span>
-                                </div>
-                                <div class="form-group">
-                                    <select name="gender" id="gender" class="form-control gender">
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Specify other</option>
-                                    </select>
-                                    <span class="error" id="err_gender"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Email</label>
-                                    <input type="email" name="emailid" id="emailid" class="form-control email" placeholder="Email">
-                                    <span class="error" id="err_emailid"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="signup-step-btn">
+                            <button type="button" class="signbutton-next" id="add_family">Add New Family Member</button>
                             <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
                             <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
                         </div>
                     </div>
                 </form>
-
                 @endif
-
             </div>
         </div>
     </div>
@@ -339,6 +422,27 @@
 </section>
 
 @include('layouts.footer')
+
+
+<script>
+    $(document).on("click",'#add_family',function(e){
+        var cnt = $('#familycnt').val();
+        var old_cnt = cnt;
+        cnt++;
+        var txtcount = cnt;
+        txtcount += 1;
+        var data = '';
+        data += '<div class="new-client" id="familydiv'+cnt+'">';
+        data += $('#familydiv'+old_cnt).html();
+        data += '</div>';
+        var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
+        re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
+        re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
+        re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
+        $('#familymaindiv').append(re);
+        $('#familycnt').val(cnt);
+    });
+</script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css" type="text/css">
 <script src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
@@ -646,73 +750,30 @@
     });
 
     $(document).on('click', '#step5_next', function () {
-        
-        var fname = $('#fname').val();
-        var lname = $('#lname').val();
-        var birthday_date = $('#birthday_date').val();
-        var relationship = $('#relationship').val();
-        var mphone = $('#mphone').val();
-        var gender = $('#gender').val();
-        var emailid = $('#emailid').val();
-        
-        $('#err_fname').html('');
-        $('#err_lname').html('');
-        $('#err_birthday_date').html('');
-        $('#err_relationship').html('');
-        $('#err_mphone').html('');
-        $('#err_gender').html('');
-        $('#err_emailid').html('');
-        
-        if(fname == ''){
-            $('#err_fname').html('Please enter first name');
-            $('#fname').focus();
-            return false;
-        }
-        if(lname == ''){
-            $('#err_lname').html('Please enter last name');
-            $('#lname').focus();
-            return false;
-        }
-        if(birthday_date == ''){
-            $('#err_birthday_date').html('Please enter birth date');
-            $('#birthday_date').focus();
-            return false;
-        }
-        if(relationship == ''){
-            $('#err_relationship').html('Please select relationship');
-            $('#relationship').focus();
-            return false;
-        }
-        /*if(mphone == ''){
-            $('#err_mphone').html('Please enter mobile number');
-            $('#mphone').focus();
-            return false;
-        }*/
-        if(gender == ''){
-            $('#err_gender').html('Please select gender');
-            $('#gender').focus();
-            return false;
-        }
-        /*if(emailid == ''){
-            $('#err_emailid').html('Please enter emailid');
-            $('#emailid').focus();
-            return false;
-        }*/
-        
-        var posturl = '/submit-family-form1';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('first_name', $('.first_name').val())
-        formdata.append('last_name', $('.last_name').val())
-        formdata.append('email', $('.email').val())
-        formdata.append('relationship', $('.relationship').val())
-        formdata.append('mobile_number', $('.mobile_number').val())
-        formdata.append('emergency_phone', $('.emergency_phone').val())
-        formdata.append('birthday', $('#birthday_date').val())
-        formdata.append('gender', $('.gender').val())
-        formdata.append('show_step', 6)
 
-        setTimeout(function () {
+        $(".required").each(function() {
+            $(this).removeClass("redClass");
+        });
+        var counter = 0;
+        $(".required").each(function() {
+            if ($(this).val() === "") {
+                $(this).addClass("redClass");
+                counter++;
+            }
+        });
+        if(counter > 0){
+            $('#systemMessage').html("");
+
+            $('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
+            return false;
+        }else{
+            var posturl = '/submit-family-form1';
+            var form = $('#familyform')[0];
+            var formdata = new FormData(form);
+            formdata.append('_token', '{{csrf_token()}}')
+            formdata.append('show_step', 6)
+
+            setTimeout(function () {
             $.ajax({
                 url: posturl,
                 type: 'POST',
@@ -742,6 +803,7 @@
                 }
             });
         }, 1000)
+        }
     });
 
 
@@ -1012,6 +1074,7 @@
         }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
+
 
 </body>
 </html>

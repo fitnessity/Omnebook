@@ -187,6 +187,8 @@
         });
 
         $(document).on('focus', '[data-behavior~=datepicker]', function(e){
+            /*var id = this.id;
+            $("#"+id).datepicker( { });*/ 
             $("[data-behavior~=datepicker]").datepicker( { 
                /* minDate: 0,*/
                 changeMonth: true,
