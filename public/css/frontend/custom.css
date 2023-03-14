@@ -898,3 +898,7 @@ a.active{
     background: #ed1b24;
     color: #fae3e2 !important;
 }
+
+.form-control.redClass{
+    border: 2px solid red !important;
+}

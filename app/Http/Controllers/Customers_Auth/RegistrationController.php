@@ -105,7 +105,7 @@ class RegistrationController extends Controller
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $customerObj->username = $postArr['username'];
-                /*$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));*/
+                $customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $customerObj->email = $postArr['email'];
                 $customerObj->country = 'US';
                 $customerObj->status = 0;
@@ -132,6 +132,20 @@ class RegistrationController extends Controller
                 }
                 
                 $customerObj->save();
+
+                $userObj = New User();
+                $userObj->role = 'customer';
+                $userObj->firstname = $postArr['firstname'];
+                $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
+                $userObj->username = $postArr['username'];
+                $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $userObj->buddy_key = $postArr['password'];
+                $userObj->email = $postArr['email'];
+                $userObj->country = 'US';
+                $userObj->phone_number = $postArr['contact'];
+                $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
+                $userObj->stripe_customer_id = $stripe_customer_id;
+                $userObj->save();
 
                 if ($customerObj) {    
                     SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']); 
@@ -206,26 +220,28 @@ class RegistrationController extends Controller
         $postArr = $request->all();
 
         for($i=0;$i<=$request->familycnt;$i++){
-            $date = NULL;
-            if($request->birthday_date[$i] != ''){
-                $date = date('Y-m-d',strtotime($request->birthday_date[$i]));
-            }
-            $customerObj = New Customer();
-            $customerObj->parent_cus_id = $request->cust_id;
-            $customerObj->business_id = $request->business_id;
-            $customerObj->fname = $request->fname[$i];
-            $customerObj->lname = $request->lname[$i];
-            $customerObj->relationship = $request->relationship[$i];
-            $customerObj->email = $request->emailid[$i];
-            $customerObj->country = 'US';
-            $customerObj->status = 0;
-            $customerObj->phone_number = $request->mphone[$i];
-            $customerObj->birthdate = $date;
-            $customerObj->emergency_contact = $request->emergency_phone[$i];
-            $customerObj->gender =  $request->gender[$i];
-            $customerObj->save();
-            if ($customerObj) {      
-                SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+            if($request->fname[$i] != ''){
+                $date = NULL;
+                if($request->birthday_date[$i] != ''){
+                    $date = date('Y-m-d',strtotime($request->birthday_date[$i]));
+                }
+                $customerObj = New Customer();
+                $customerObj->parent_cus_id = $request->cust_id;
+                $customerObj->business_id = $request->business_id;
+                $customerObj->fname = $request->fname[$i];
+                $customerObj->lname = $request->lname[$i];
+                $customerObj->relationship = $request->relationship[$i];
+                $customerObj->email = $request->emailid[$i];
+                $customerObj->country = 'US';
+                $customerObj->status = 0;
+                $customerObj->phone_number = $request->mphone[$i];
+                $customerObj->birthdate = $date;
+                $customerObj->emergency_contact = $request->emergency_phone[$i];
+                $customerObj->gender =  $request->gender[$i];
+                $customerObj->save();
+                if ($customerObj) {      
+                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+                }
             }
         }
         
@@ -234,7 +250,7 @@ class RegistrationController extends Controller
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully added family member',
-            'redirecturl' => route('business_customer_show',['business_id' => $customerObj->company_information->id, 'id'=>$customerObj->id])
+            'redirecturl' => route('business_customer_show',['business_id' =>$request->business_id, 'id'=>$request->cust_id])
         );
 
         return Response::json($response);

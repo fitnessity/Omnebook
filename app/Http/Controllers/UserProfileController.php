@@ -4762,7 +4762,25 @@ class UserProfileController extends Controller {
     }
 
     public function submitFamilyForm1(Request $request) {
-        $family = new UserFamilyDetail();
+        //print_r($request->all());exit();
+        for($i=0;$i<=$request->familycnt;$i++){
+            if($request->first_name[$i] != ''){
+                
+                $family = new UserFamilyDetail();
+                $family->user_id = Auth::user()->id;
+                $family->first_name = $request->first_name[$i];
+                $family->last_name = $request->last_name[$i];
+                $family->email = $request->email[$i];
+                $family->mobile = $request->mobile[$i];
+                $family->gender = $request->gender[$i];
+                $family->relationship = $request->relationship[$i];
+                $family->emergency_contact = $request->emergency_phone[$i];
+                $family->birthday = date('Y-m-d',strtotime($request->birthday[$i]));
+                $family->save();
+            }
+        }
+
+       /* $family = new UserFamilyDetail();
         $family->user_id = Auth::user()->id;
         $family->first_name = $request->first_name;
         $family->last_name = $request->last_name;
@@ -4772,9 +4790,8 @@ class UserProfileController extends Controller {
         $family->relationship = $request->relationship;
         $family->emergency_contact = $request->emergency_phone;
         //$dateee = \DateTime::createFromFormat("m-d-Y" , $request->birthday);
-
         $family->birthday = $request->birthday;
-        $family->save();
+        $family->save();*/
 
         Auth::loginUsingId(Input::get('user_id'), true);
 

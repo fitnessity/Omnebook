@@ -27,9 +27,9 @@
 									<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
 									<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
-									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('contact')">
-									<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
-									<!-- <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off"> -->
+									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+									<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepicker">
+									<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 									<!-- <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off"> -->
 									<div class="row check-txt-center">
 										<div class="col-md-8">
@@ -263,11 +263,13 @@
 				                                </div>
 				                            </div>
 				                        </div>
+
 				                        <div class="row">
 				                            <div class="col-sm-12">
 				                                <h2>Activities are much more fun with family</h2>
 				                                <div class='error' id='systemMessage'></div>
 				                                <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
+				                                <div class="error" id="familyerrormessage"></div>
 				                                <input type="hidden" name="familycnt" id="familycnt" value="0">
 				                                <div id="familymaindiv">
 				                                	<div class="new-client" id="familydiv0">
@@ -283,21 +285,21 @@
 																<div id="collapse0" class="panel-collapse collapse show in" role="tabpanel" aria-labelledby="heading0">
 																	<div class="panel-body">
 																		<div class="form-group">
-																			<input type="text" name="fname[]" id="fname" class="form-control first_name" placeholder="First Name">
-																			<span class="error" id="err_fname"></span>
+																			<input type="text" name="fname[]" id="fname" class="form-control first_name required" placeholder="First Name" >
+																			<span class="error" id="err_fname" ></span>
 																		</div>
 																		<div class="form-group">
-																			<input type="text" name="lname[]" id="lname" class="form-control last_name" placeholder="Last Name">
+																			<input type="text" name="lname[]" id="lname" class="form-control last_name required" placeholder="Last Name" >
 																			<span class="error" id="err_lname"></span>
 																		</div>
 																		<div>
 																			<div class="birthday_date-position">
-																				<input type="text" name="birthday_date[]" id="birthday_date" class="form-control birthday" placeholder="mm/dd/yyyy"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+																				<input type="text" name="birthday_date[]" id="birthday_date0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepicker" />
 																				<span class="error" id="err_birthday_date"></span>
 																			</div>
 																		</div>
 																		<div class="form-group">
-																			<select name="relationship[]" id="relationship" class="form-control relationship">
+																			<select name="relationship[]" id="relationship" class="form-control relationship required" >
 																				<option value="">Select Relationship</option>
 																				<option value="Brother">Brother</option>
 																				<option value="Sister">Sister</option>
@@ -311,15 +313,15 @@
 																			<span class="error" id="err_relationship"></span>
 																		</div>
 																		<div class="form-group">
-																			<input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('mphone')">
+																			<input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number required" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 																			<span class="error" id="err_mphone"></span>
 																		</div>
 																		<div class="form-group">
-																			<input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate_fami_pho('emergency_phone')">
+																			<input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 																			<span class="error" id="err_emergency_phone" ></span>
 																		</div>
 																		<div class="form-group">
-																			<select name="gender[]" id="gender" class="form-control gender">
+																			<select name="gender[]" id="gender" class="form-control gender " >
 																				<option value="">Select Gender</option>
 																				<option value="male">Male</option>
 																				<option value="female">Female</option>
@@ -328,7 +330,7 @@
 																			<span class="error" id="err_gender"></span>
 																		</div>
 																		<div class="form-group">
-																			<input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email">
+																			<input type="email" name="emailid[]" id="emailid" class="form-control email required" placeholder="Email" >
 																			<span class="error" id="err_emailid"></span>
 																		</div>
 																	</div>
@@ -381,6 +383,7 @@
         data += '</div>';
         var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
         re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
+        re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
         $('#familymaindiv').append(re);
         $('#familycnt').val(cnt);

@@ -51,7 +51,7 @@
 
 	                        @foreach($UserFamilyDetails as $family)
 	                        @php 
-	                            $mobile_num = $family->mobile;
+	                            $mobile_num = $family->phone_number;
 	                            if (preg_match('/()-/', $mobile_num)){ 
 	                                $mobile = $mobile_num;
 	                            }else{
@@ -114,7 +114,7 @@
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group dob">
 	                                    <label>mm/dd/yyyy</label>
-	                                    <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control birthdate_{{$fam_cnt}} dobcustomerfamily" value="{{date('m/d/Y',strtotime('$family->birthdate'))}}" required="required" maxlength="10" data-behavior="datepicker">
+	                                    <input type="text" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" placeholder="Birthday" class="form-control birthdate_{{$fam_cnt}} dobcustomerfamily" value="{{date('m/d/Y',strtotime($family->birthdate))}}" required="required" maxlength="10" data-behavior="datepicker">
 	                                </div>
 	                            </div>
 

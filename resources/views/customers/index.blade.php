@@ -378,6 +378,7 @@
               firstname: "required",
               lastname: "required",
               username: "required",
+              password: "required",
               email: {
                   required: true,
                   email: true
@@ -387,6 +388,7 @@
               firstname: "Enter your Firstname",
               lastname: "Enter your Lastname",
               username: "Enter your Username",
+              username: "Enter your Password",
               email: {
                   required: "Please enter a valid email address",
                   minlength: "Please enter a valid email address",
@@ -412,7 +414,7 @@
                 $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
             }
         });
-  });*/
+  	});*/
 
     $(document).on('click', '#step3_next', function () {
         $("#err_gender").html("");
@@ -525,76 +527,30 @@
   	});
 
   	$(document).on('click', '#step5_next', function () {
-      
-        /*var fname = $('#fname').val();
-        var lname = $('#lname').val();
-        var birthday_date = $('#birthday_date').val();
-        var relationship = $('#relationship').val();
-        var mphone = $('#mphone').val();
-        var gender = $('#gender').val();
-        var emailid = $('#emailid').val();
-        
-        $('#err_fname').html('');
-        $('#err_lname').html('');
-        $('#err_birthday_date').html('');
-        $('#err_relationship').html('');
-        $('#err_mphone').html('');
-        $('#err_gender').html('');
-        $('#err_emailid').html('');
-        
-        if(fname == ''){
-            $('#err_fname').html('Please enter first name');
-            $('#fname').focus();
-            return false;
-        }
-        if(lname == ''){
-            $('#err_lname').html('Please enter last name');
-            $('#lname').focus();
-            return false;
-        }
-        if(birthday_date == ''){
-            $('#err_birthday_date').html('Please enter birth date');
-            $('#birthday_date').focus();
-            return false;
-        }
-        if(relationship == ''){
-            $('#err_relationship').html('Please select relationship');
-            $('#relationship').focus();
-            return false;
-        }
-        if(mphone == ''){
-            $('#err_mphone').html('Please enter mobile number');
-            $('#mphone').focus();
-            return false;
-        }
-        if(gender == ''){
-            $('#err_gender').html('Please select gender');
-            $('#gender').focus();
-            return false;
-        }
-        if(emailid == ''){
-            $('#err_emailid').html('Please enter emailid');
-            $('#emailid').focus();
-            return false;
-        }*/
-        
-        var form = $('#familyform')[0];
-        var posturl = '/submitfamilyCustomer';
-        var formdata = new FormData(form);
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('cust_id', $('#cust_id').val())
-        formdata.append('business_id', '{{$company->id}}')
-        /* formdata.append('first_name', $('.first_name').val())
-        formdata.append('last_name', $('.last_name').val())
-        formdata.append('email', $('.email').val())
-        formdata.append('relationship', $('.relationship').val())
-        formdata.append('mobile_number', $('.mobile_number').val())
-        formdata.append('emergency_phone', $('.emergency_phone').val())
-        formdata.append('birthday', $('#birthday_date').val())
-        formdata.append('gender', $('.gender').val())
-        */
+       
+  		$(".required").each(function() {
+	        $(this).removeClass("redClass");
+	    });
+        var counter = 0;
+	    $(".required").each(function() {
+	        if ($(this).val() === "") {
+	            $(this).addClass("redClass");
+	            counter++;
+	        }
+	    });
+	    if(counter > 0){
+	    	$('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
+	    	return false;
+	    }else{
 
-        setTimeout(function () {
+	        var form = $('#familyform')[0];
+	        var posturl = '/submitfamilyCustomer';
+	        var formdata = new FormData(form);
+	        formdata.append('_token', '{{csrf_token()}}')
+	        formdata.append('cust_id', $('#cust_id').val())
+	        formdata.append('business_id', '{{$company->id}}')
+	     
+        	setTimeout(function () {
             $.ajax({
                 url: posturl,
                 type: 'POST',
@@ -623,6 +579,7 @@
                 }
             });
         }, 1000)
+        }
     });
 
     $(document).on('click', '#skip5_next', function () {
