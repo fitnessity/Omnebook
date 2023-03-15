@@ -702,141 +702,16 @@ input:disabled{
 								</div>
 							</div>
 						</div>
-						@php $date = date('l').', '.date('F d,  Y'); @endphp 
+						@php 
+							$date = date('l').', '.date('F d,  Y'); 
+							$totalquantity = 0;
+						@endphp 
 						<?php /*?><button id="submitcartbtn">submitcart</button><?php */?>
 						<div id="updatefilterforcart">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="choose-calendar-time">
 									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<h3 class="date-title">{{$date}}</h3>
-									
-											<label>Step: 1 </label> <span class="">Select Category</span>
-											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book','simple')">
-												<?php $c=1;  
-													if (!empty($sercate)) { 
-														foreach ($sercate as  $sc) {
-															echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-															$c++;
-														}
-													}
-												?>
-											</select>
-											
-											<label>Step: 2 </label> <span class=""> Select Membership Type</span>
-											<div id="memberoption">
-												<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember({{$serviceid}});">												<?php echo $mbox; ?>
-												</select>
-											</div>
-											<label>Step: 3 </label> <span class="">Select Price Option</span>
-											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
-												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
-													<?php echo $selectval; ?>
-												</select>
-											</div>	
-											<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-												$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
-												?>
-											<label>Step: 4 </label> <span class=""> Select Time</span>
-											<div class="row" id="timeschedule">
-												<?php $i=1;$totalquantity = 0;?>
-												@if(!empty(@$bschedule) && count(@$bschedule)>0 &&  $chk_found =='Not')
-												@foreach(@$bschedule as $bdata)
-												<?php $SpotsLeftdis = 0; ?>
-												<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
-													$totalquantity = 0;
-													foreach($SpotsLeft as $data){
-														$item = json_decode($data['qty'],true);
-														if($item['adult'] != '')
-								                            $totalquantity += $item['adult'];
-								                        if($item['child'] != '')
-								                            $totalquantity += $item['child'];
-								                        if($item['infant'] != '')
-								                            $totalquantity += $item['infant'];
-													}
-												if( $bdata['spots_available'] != ''){
-    												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
-    											} ?>
-												<div class="col-md-6">
-													<div class="donate-now">
-														<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
-														@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
-															<label for="{{$bdata['id']}}" >
-                                                            <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
-                                                            </label>
-															<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
-													</div>
-												</div>
-												@endforeach
-												@else 
-													<p class="notimeoption">No time option available Select category to view available times</p>
-														
-												@endif
-											</div>
-										</div>
 										
-										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-											<div class="membership-details">
-												<!-- <h3 class="date-title">Booking Details</h3> -->
-												
-												<h3 class="date-title">Booking Summary</h3>
-												<div id="book<?php echo $service["id"].$service["id"]; ?>" >
-													
-													<div class=" pt-20">
-														<label>Category:</label>
-														@if(@$sercatefirst['category_title'] != '')
-															<span>{{@$sercatefirst['category_title']}}</span>
-														@endif
-													</div>
-													
-													
-													<div id="timeduration">
-														<label>Duration:</label>
-														@if($timedata != '')
-															<span>{{$timedata}}</span>
-														@endif
-													</div>
-													
-													<div>
-														<label>Price Title:</label>
-														@if(@$servicePrfirst['price_title'] != '')
-															<span>{{@$servicePrfirst['price_title']}}</span>
-														@endif	
-													</div>
-														
-													<div>
-														<label>Price Option:</label>
-														@if(@$servicePrfirst['pay_session'] != '')
-														<span>{{@$servicePrfirst['pay_session']}} Session</span>@endif
-													</div>
-													
-													
-													<div>
-														<label>Membership:</label>
-														@if(@$servicePrfirst['membership_type'] != '')
-														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
-														@endif
-													</div>
-													
-													<div class="personcategory" >
-														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
-														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
-														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
-													</div>
-													
-													<div class="mt-20 cartstotal">
-														<label>Total </label>
-														@if(@$total_price_val != '')
-															<span id="totalprice">
-														${{@$total_price_val}} USD</span>
-														@else
-															<span id="totalprice">
-														$0 USD</span>
-														@endif
-													</div>
-												</div>
-											</div>
-										</div>
 									</div>
 								</div>
 							</div>
