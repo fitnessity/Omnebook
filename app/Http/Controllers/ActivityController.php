@@ -167,6 +167,7 @@ class ActivityController extends Controller {
 
 	public function index(Request $request,$filtervalue = null)
 	{
+
 		/*if(!empty($request->all() )){
 			print_r($request->all());exit;
 		}
@@ -176,9 +177,10 @@ class ActivityController extends Controller {
 
 		$cart = [];
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
-
+			
 		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience' || $filtervalue == 'all' || $filtervalue == 'thismonth' || $filtervalue == 'most_popular' || $filtervalue == 'trainers_coaches' || $filtervalue == 'ways_to_workout'|| $filtervalue == 'active_wth_fun_things_to_do' || $filtervalue == 'events_in_your_area' )
 		{
+
 			$getstarteddata = '';
 			$all_activities = BusinessServices::where('business_services.is_active', 1);
 			$todayservicedata = [];
@@ -256,7 +258,7 @@ class ActivityController extends Controller {
 			$serviceLocation = Miscellaneous::serviceLocation();
 
 			/*print_r($todayservicedata);exit;*/
-		
+			//echo "hii";exit;
 			return view('activity.getstartedfast',[
 				'allactivities'=>$allactivities,
 				'bookschedulers'=>$bookschedulers,

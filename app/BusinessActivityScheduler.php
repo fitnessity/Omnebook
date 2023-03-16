@@ -203,7 +203,7 @@ class BusinessActivityScheduler extends Model
                               $query->where('service_type',$chkval);
                         })->orderBy('shift_start')->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);
         }else{
-            return BusinessActivityScheduler::with(['business_service','company_information'])->orderBy('shift_start')->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);
+            return BusinessActivityScheduler::with(['business_service','company_information'])->orderBy('shift_start')->whereDate('starting', '<=',  $datetime->format("Y-m-d") )->whereDate('end_activity_date', '>=',  $datetime->format("Y-m-d") )->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%']);
         }
                                            
     }

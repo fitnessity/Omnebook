@@ -15,6 +15,9 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Customers_Auth\HomeController;
 
 
+
+Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
 
     // Scheduler
@@ -57,6 +60,27 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 });
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
+
+// Activitys
+Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
+Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
+Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
+Route::get('/activities/get_started/events','ActivityController@events')->name('get_started_activities_events');
+Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
+Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
+Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
+
+Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
+
+
+Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
+Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
+Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
+Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
+Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
+Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
+
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('activities/{business_id}', 'BusinessController@activities')->name('businessActivities');
@@ -198,6 +222,42 @@ View::composer(['*'],function($view){
 });
 
 
+Route::post('searchbussinessaction','HomeController@searchbussinessaction');
+Route::post('searchaction','HomeController@searchaction');
+Route::post('searchactioncity','HomeController@searchactioncity');
+Route::post('searchactionlocation','HomeController@searchactionlocation');
+Route::post('searchactionactivity','HomeController@searchactionactivity');
+Route::get('/profile/editCustomerProfile/{user_id}','UserProfileController@familyProfileUpdate');
+Route::post('/submit-family-form','UserProfileController@submitFamilyForm');
+Route::post('/submit-family-form1','UserProfileController@submitFamilyForm1');
+Route::post('/skip-family-form1','UserProfileController@skipFamilyForm1');
+Route::post('/submit-family-form-with-skip','UserProfileController@submitFamilyFormWithSkip');
+Route::get('/join/{id}/{user_id?}','ZoomController@index')->name('call');
+Route::group(['middleware' => ['auth']], function()
+{
+	Route::get('/createmeeting','ZoomController@createmeeting');
+	Route::get('/oncall/{mid}','ZoomController@oncall')->name('oncall');
+	Route::post('/store','ZoomController@store')->name('store');
+	Route::post('/invite','ZoomController@invite')->name('invite');
+    Route::any('/addcustomerbusiness', 'BusinessController@addbusinesscustomer')->name('addbusinesscustomer');
+    Route::post('/add_business_customer', 'BusinessController@add_business_customer')->name('add_business_customer');
+});
+
+/* 09-june 2020 */
+Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
+Route::get('/cart','LessonController@getcart');
+Route::get('/deletecart/{id}/{bid}','LessonController@deletecart');
+Route::get('/addnote/{b}/{n}','LessonController@addnote');
+Route::get('/pay','LessonController@pay');
+Route::get('/payment/{token}','LessonController@payment');
+Route::get('/editcart/{bkid}/{cid}/{user_id}','LessonController@editcart');
+Route::get('/savetime/{u}/{t}','LessonController@times');
+Route::get('/get-booking-service-data','LessonController@getBookingServiceData');
+Route::post('/savetimes','LessonController@savetime');
+Route::post('/updatecart','LessonController@updatecart');
+Route::post('/samfilter','LessonController@samfilter')->name('samfilter');
+
+
 Route::get('/check',function(){
    $show_step = 1;
    return view('home.registration',compact('show_step'));
@@ -231,61 +291,7 @@ Route::any('logout', function (Request $request) {
 });
 
 
-Route::post('searchbussinessaction','HomeController@searchbussinessaction');
-Route::post('searchaction','HomeController@searchaction');
-Route::post('searchactioncity','HomeController@searchactioncity');
-Route::post('searchactionlocation','HomeController@searchactionlocation');
-Route::post('searchactionactivity','HomeController@searchactionactivity');
-Route::get('/profile/editCustomerProfile/{user_id}','UserProfileController@familyProfileUpdate');
-Route::post('/submit-family-form','UserProfileController@submitFamilyForm');
-Route::post('/submit-family-form1','UserProfileController@submitFamilyForm1');
-Route::post('/skip-family-form1','UserProfileController@skipFamilyForm1');
-Route::post('/submit-family-form-with-skip','UserProfileController@submitFamilyFormWithSkip');
-Route::get('/join/{id}/{user_id?}','ZoomController@index')->name('call');
-Route::group(['middleware' => ['auth']], function()
-{
-	Route::get('/createmeeting','ZoomController@createmeeting');
-	Route::get('/oncall/{mid}','ZoomController@oncall')->name('oncall');
-	Route::post('/store','ZoomController@store')->name('store');
-	Route::post('/invite','ZoomController@invite')->name('invite');
-    Route::any('/addcustomerbusiness', 'BusinessController@addbusinesscustomer')->name('addbusinesscustomer');
-    Route::post('/add_business_customer', 'BusinessController@add_business_customer')->name('add_business_customer');
-});
 
-
-// Activitys
-Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
-Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
-Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
-Route::get('/activities/get_started/events','ActivityController@events')->name('get_started_activities_events');
-Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
-Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
-Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
-
-Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
-
-
-Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
-Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
-Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
-Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
-Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
-Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
-Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
-
-/* 09-june 2020 */
-Route::get('/getactivitychoice/{userid}/{ser_id}','LessonController@getactivity')->name('activitychoice');
-Route::get('/cart','LessonController@getcart');
-Route::get('/deletecart/{id}/{bid}','LessonController@deletecart');
-Route::get('/addnote/{b}/{n}','LessonController@addnote');
-Route::get('/pay','LessonController@pay');
-Route::get('/payment/{token}','LessonController@payment');
-Route::get('/editcart/{bkid}/{cid}/{user_id}','LessonController@editcart');
-Route::get('/savetime/{u}/{t}','LessonController@times');
-Route::get('/get-booking-service-data','LessonController@getBookingServiceData');
-Route::post('/savetimes','LessonController@savetime');
-Route::post('/updatecart','LessonController@updatecart');
-Route::post('/samfilter','LessonController@samfilter')->name('samfilter');
 
 /* 09-june 2020 end */
 Route::get('/allSports', 'HomeController@allSports')->name('list-all-sports');
@@ -938,7 +944,8 @@ Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');
 Route::get('/personal-profile/payment-info', 'UserProfileController@paymentinfo');
-Route::post('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
+//Route::post('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
+Route::get('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
 Route::post('/personal-profile/payment-delete', 'UserProfileController@paymentdelete')->name('paymentdelete');
 Route::get('/personal-profile/review', 'UserProfileController@review');
 Route::get('/personal-profile/user-profile', 'UserProfileController@userprofile')->name('user-profile');

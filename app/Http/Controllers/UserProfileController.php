@@ -88,6 +88,7 @@ use App\UserBookingStatus;
 use App\UserBookingDetail;
 use App\ProfilePostViews;
 use App\BusinessPostViews;
+use App\StripePaymentMethod;
 use Carbon\Carbon;
 
 use Request as resAll;
@@ -8439,23 +8440,37 @@ class UserProfileController extends Controller {
     }
     
     public function paymentdelete(Request $request) {
-        /*print_r($request->all());*/
         $user = User::where('id', Auth::user()->id)->first();
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $stripval = $stripe->customers->deleteSource(
-            $user->stripe_customer_id,
-            $request->cardid,
-            []
-        );
-        echo $stripval;
-       /* DB::delete('DELETE FROM users_payment_info WHERE card_stripe_id = "' . $request->cardid . '"');*/
-        /*return Redirect::back()->with('success', 'Card Deleted Successfully.');*/
+        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
+
+        $stripePaymentMethod->delete();
+       
     }
     
     public function paymentsave(Request $request) {
-        /*dd($request->all());*/
+        $user = User::where('id', Auth::user()->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
+
+        foreach($payment_methods as $payment_method){
+            
+            $stripePaymentMethod = StripePaymentMethod::firstOrNew([
+                'payment_id' => $payment_method['id'],
+                'user_type' => 'User',
+                'user_id' => $user->id,
+            ]);
+
+            $stripePaymentMethod->pay_type = $payment_method['type'];
+            $stripePaymentMethod->brand = $payment_method['card']['brand'];
+            $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+            $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+            $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+            $stripePaymentMethod->save();
+
+        }
+
+        /*$stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
         $user = User::where('id', Auth::user()->id)->first();
        
         $carddetails = $stripe->tokens->create([
@@ -8471,24 +8486,9 @@ class UserProfileController extends Controller {
             $user->stripe_customer_id,
             [ 'source' =>$carddetails->id]
         );
-       /* print_r($carddetails);exit;*/
         $userId = Auth::user()->id;
-        DB::insert('insert into users_payment_info (user_id,card_stripe_id,card_token_id) values (?, ?, ?)', [$userId, $carddetails['card']->id, $carddetails->id]);
+        DB::insert('insert into users_payment_info (user_id,card_stripe_id,card_token_id) values (?, ?, ?)', [$userId, $carddetails['card']->id, $carddetails->id]);*/
         
-
-        /*$adminId = Auth::user()->id;
-        $payment_type = $request->payment_type;
-        $event = DB::select('select count(id) as cnt from users_payment_info where user_id = ? and card_number = ?', [$adminId, $request->cardNumber]);
-        $flag = 0;*/
-        /*print_r($event);exit;*/
-       /* if ($event[0]->cnt == 0) {
-            DB::insert('insert into users_payment_info (user_id, card_owner, card_cvv, card_number, card_exp_month, card_exp_year, card_type) values (?, ?, ?, ?, ?, ?, ?)', [$adminId, $request->owner, $request->cvv, $request->cardNumber, $request->card_month, $request->card_year, $request->card_type]);
-        } else {
-            DB::update('update users_payment_info set card_owner = ?, card_cvv = ?, card_number = ?, card_exp_month = ?, card_exp_year = ?, card_type = ? where user_id = ? and card_number = ?', [$request->owner, $request->cvv, $request->cardNumber, $request->card_month, $request->card_year, $request->card_type, $adminId, $request->cardNumber]);
-            if($payment_type == 'insert') {
-                $flag = 1;
-            }
-        }*/
         
         return redirect('/personal-profile/payment-info');
         
@@ -8497,48 +8497,23 @@ class UserProfileController extends Controller {
     public function paymentinfo(Request $request) {
 
         $cardInfo = [];
+        $intent = null;
         $user = User::where('id', Auth::user()->id)->first();
-        /*$savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);*/
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         if($user->stripe_customer_id != ''){
-            $savedEvents = $stripe->customers->allSources(
-                $user->stripe_customer_id,
-                ['object' => 'card' ,'limit' => 30]
-            );
-            $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            $cardInfo = $savedEvents['data'];
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $user->stripe_customer_id,
+            ]);
         }
 
-        $city = AddrCities::where('id', $user->city)->first();
+        $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
+
+        $UserProfileDetail['firstname'] =  $user->firstname;
+
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        
+       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
@@ -8547,7 +8522,8 @@ class UserProfileController extends Controller {
         return view('personal-profile.payment-info', [
             'UserProfileDetail' => $UserProfileDetail, 
             'cardInfo' => $cardInfo,
-            'cart' => $cart
+            'cart' => $cart,
+            'intent' => $intent 
         ]);
     }
 

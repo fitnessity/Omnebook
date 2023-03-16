@@ -134,7 +134,82 @@
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
                                                 </div>
+												<div class="col-md-2 col-sm-12">
+													<a href="#" class="access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                                </div>
                                             </div>
+											<!-- Modal Start -->
+											<div class="modal fade compare-model" id="accessreq">
+												<div class="modal-dialog modal-lg business">
+													<div class="modal-content">
+														<div class="modal-header" style="text-align: right;"> 
+															<div class="closebtn">
+																<button type="button" class="close close-btn-design btn-grant" data-dismiss="modal" aria-label="Close">
+																	<span aria-hidden="true">×</span>
+																</button>
+															</div>
+														</div>
+
+														<!-- Modal body -->
+														<div class="modal-body">
+															<div class="row contentPop"> 
+																<div class="col-lg-12">
+																	<div class="modal-access-autho">
+																		<h4 class="modal-title">Access Authorization</h4>
+																		<span>to {provider Name}</span>
+																	</div>
+																</div>
+																<div class="col-lg-12">
+																	<div class="autho-inner-txt">
+																		<p>Your in control of what information is shared. Allow the provider the abilility to seamlessly sync to your Fitnessity account, and take what’s needed to complete your sign up process so you don’t have to do extra work.</p>
+																		<label>Note: <p class="sync-req">You must approve all current & future account sync request</p></label>
+																	</div>
+																	<div class="granting-access">
+																		<p>Take a look at what your granting access to. First time account syncs requires all information in order to complete bookings. Any future snyc request, you have control over what is shared.</p>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Name </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Age </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Phone number  </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Address </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Email </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Booking & purchase history with requesting provider </label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck"> Added family & family booking & purchase history</label> 
+																		</div>
+																		<div class="check-access">
+																			<input type="checkbox" id="myCheck">
+																			<label for="myCheck">Credit Card Information (for faster payment process)</label> 
+																		</div>
+																		
+																	</div>
+																</div>
+																<div class="col-lg-12 btns-modal">
+																	<button class="addbusiness-btn-modal acc-btn-grant">Grant Access</button>
+																</div>
+															 </div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- Modal End -->
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_current">
@@ -247,7 +322,9 @@
                                                         </div>
                                                         <div class="foterboxes">
                                                             <div class="threebtn_fboxes">
+                                                                @if($book_details->booking->order_type == 'checkout_register')
                                                                 <a href="{{route('personal.schedulers.index',['user_booking_detail_id' => $book_details['id'] ])}}" target="_blank">Schedule</a>
+                                                                @endif
                                                                <!-- <button class="canclebtn" type="button" onclick="cancelorder({{@$book_details['user_booking_detail']['id']}});">Cancel</button> -->
                                                             </div>
                                                             <div class="threebtn_fboxes" id="anothertwobtn{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}" style="display:none;">
