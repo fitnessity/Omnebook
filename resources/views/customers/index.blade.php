@@ -287,8 +287,39 @@
 	}
 </script>
 
+<script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
+
+<script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
+ 
+
+<script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
+<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/>
 <script type="text/javascript">
-	$("#business_name").keyup(function() {
+	
+	$(document).ready(function () {
+		var business_id = '{{$company->id}}';
+		var url = "{{ url('/business/business_id/customers') }}";
+		url = url.replace('business_id', business_id);
+
+    	$( "#clients_name" ).autocomplete({
+      		source: url,
+      		focus: function( event, ui ) {
+      			 return false;
+        	},
+        	select: function( event, ui ) {
+        		var cName = ui.item.fname +' '+ ui.item.lname
+	            $('#clients_name').val(cName); 
+	        }
+    	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+        .append( "<p>" + item.fname + " " + item.lname + "</p>" )
+        .appendTo( ul );
+	    };
+  	});
+</script>
+
+<script type="text/javascript">
+	/*$("#business_name").keyup(function() {
       $.ajax({
           type: "POST",
           url: "/searchcustomersaction",
@@ -300,7 +331,7 @@
               $("#business_name").css("background", "#FFF");
           }
       });
-  	});
+  	});*/
 
 	function registerUser() {
     	

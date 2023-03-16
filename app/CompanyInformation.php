@@ -107,6 +107,10 @@ class CompanyInformation extends Model {
     public function business_services(){
         return $this->hasMany(BusinessServices::class, 'cid');
     }
+    
+    public function business_services_with_trashed(){
+        return $this->hasMany(BusinessServices::class, 'cid')->withTrashed();
+    }
 
     public function businessterms() {
         return $this->hasOne(BusinessTerms::class, 'cid');

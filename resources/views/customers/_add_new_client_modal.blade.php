@@ -352,15 +352,25 @@
 						</div>
                     </div>
 					<div class="col-lg-6 col-xs-12 space-remover manage-customer-gray-bg">
-                        <div class="manage-customer-search">
+                        <div class="manage-customer-search search-info">
+							<h3>Onboard A New Client Fast</h3>
 							<h4>Search for your clients on Fitnessity</h4>
-							<p>Save time by searching for your clients on Fitnessity. They could already have a profile.</p>
+							<p>“Your client could already have an account on Fitnessity.If so, get access and sync their information fast.”</p>
 						</div>
 						<div class="row check-txt-center claimyour-business">
 							<div class="col-md-10 col-xs-10 frm-claim">
-								<input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" />
-			                    <div id="option-box">
-			                    </div>
+								<input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" />
+			                    
+								<!-- <div class="request-access">
+									<p>To import the name, contact information, family members and credit card information for {customer name}, they must authorize you access.</p>
+									<label>Steps </label>
+									<div class="request-step">
+										<p>1. Click the Request Access button below. </p>
+										<p>2. Fitnessity will send an email to the customer to authorize you access.</p>
+										<p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p>
+										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="request_access">Request Access</button>
+									</div>
+								</div> -->
 							</div>
 						</div>
                     </div>

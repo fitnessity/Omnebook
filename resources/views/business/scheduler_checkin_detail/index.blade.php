@@ -44,12 +44,12 @@
                             <label>Spots: </label><span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}} </span>
                          </div>
                     </div>
-                    <div class="col-md-3 col-sm-12 col-sm-6">
+                    <div class="col-md-4 col-sm-12 col-sm-6">
                         <div class="row">
                             <div class="col-md-10 col-sm-12 col-sm-6">
                                 <div class="manage-search manage-space">
                                     <div class="sub">
-                                        <input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}">
+                                        <input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}" >
                                         <div id="serch_postorder_client_box" style="display:none;">
                                             <ul class="customer-list">
                                             </ul>
@@ -220,7 +220,48 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 @include('layouts.footer')
+
+<script>
+    
+    $(document).ready(function () {
+        var business_id = '{{request()->current_company->id}}';
+        var url = "{{ url('/business/business_id/customers') }}";
+        url = url.replace('business_id', business_id);
+
+        $( "#search_postorder_client" ).autocomplete({
+            source: url,
+            focus: function( event, ui ) {
+                 return false;
+            },
+            select: function( event, ui ) {
+                $("#search_postorder_client").val( ui.item.fname + ' ' +  ui.item.lname);
+                $('#search_postorder_client').data('customer-id', ui.item.id)
+                $("[data-behavior~=add_client_to_booking_post_order]").show();
+                 return false;
+            }
+        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+            if(item.profile_pic_url){
+                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+            }
+
+            var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
+           
+            return $( "<li></li>" )
+                    .data( "item.autocomplete", item )
+                    .append(inner_html)
+                    .appendTo( ul );
+        };
+    });
+
+</script>
+
 
 <script type="text/javascript">
 
@@ -267,7 +308,7 @@
         $("#serch_postorder_client_box").hide();
     })
 
-    $(document).on('keyup', '#search_postorder_client', function() {
+    /*$(document).on('keyup', '#search_postorder_client', function() {
       $.ajax({
           type: "GET",
           url: "{{route("business_customer_index", ['business_id' => request()->current_company->id])}}",
@@ -298,7 +339,7 @@
             $("#serch_postorder_client_box").show();
           }
       });
-    });
+    });*/
 
     $(document).on('click', '.click_to_input', function(e){
         e.preventDefault()

@@ -13964,14 +13964,13 @@ div#CreateCompanyModal #preview img.header_img {
 
 /*.cstm-bnner #option-box{display:inline-block;}*/
 .claimyour-business {
-    padding: 60px 0;
+    padding: 20px 0;
 }
 
 .claimyour-business .frm-claim {
     max-width: 100%;
     margin: auto;
     display: block;
-    padding-right: 50px;
 }
 
 .formfield-block {
@@ -24397,5 +24396,94 @@ padding-left: 0px;
   border-radius: 0;
   transition: border-radius linear 0s;
 }
+.search-info p{
+	padding: 0 45px;
+	margin-top: 15px;
+}
+.request-access{
+	background: #fff;
+	padding: 20px 20px 20px 20px;
+	margin-top: 15px;
+}
+.request-access p{
+	text-align: center;
+	font-size: 15px;
+	margin-bottom: 15px;
+}
+.request-step p{
+	text-align: left;
+	margin-bottom: 5px !important;;
+}
 
-
+.request-step button{
+	width: 50%;
+}
+.request-step{
+	text-align: center;
+}
+.search-info h3{
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+}
+.search-info h4{
+	margin-top: 70px;
+}
+.access-req{
+	background: #f91942;
+	border: none;
+	padding: 10px 11px;
+	color: #fff;
+	border-radius: 4px;
+}
+.access-req:focus{
+	color: #fff;
+}
+.access-req:hover{
+	color: #fff;
+}
+.modal-access-autho h4{
+	text-align: center; 
+	color: #000; 
+	line-height: inherit; 
+	font-weight: 600; 
+	border-bottom: 2px solid #ea1515;
+	font-size: 21px;
+}
+.modal-access-autho{
+	text-align: center;
+	font-size: 16px;
+	margin-bottom: 13px;
+}
+.autho-inner-txt p{
+	text-align: center;
+	margin-bottom: 25px;
+}
+.autho-inner-txt{
+	text-align: center;
+}
+.autho-inner-txt label{
+	display: inline-flex !important;
+}
+.sync-req{
+	margin-left: 7px;
+}
+.granting-access{
+	border: 1px solid #ea1515;
+	padding: 20px 20px 20px 20px;
+	border-radius: 10px;
+}
+.granting-access p{
+	margin-bottom: 16px;
+	text-align: center;
+	font-size: 15px;
+}
+.check-access label{
+	font-weight: 400 !important;
+}
+.acc-btn-grant{
+	border: none;
+}
+.btn-grant{
+	right: 20px !important;
+}

@@ -51,10 +51,10 @@
 									<div class="manage-search serchcustomer">
 										<div class="sub">
 											<input type="text" id="serchclient" name="fname" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{$username}}" data-id="{{$pageid}}">
-											<div id="option-box1" style="display:none;">
+											<!-- <div id="option-box1" style="display:none;">
 						                        <ul class="customer-list">
 						                        </ul>
-						                    </div>
+						                    </div> -->
 											<button ><i class="fa fa-search"></i></button>
 										</div>
 									</div>

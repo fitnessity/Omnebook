@@ -132,7 +132,7 @@ class CustomerController extends Controller
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
 
-
+        //print_r($payment_methods);exit;
         foreach($payment_methods as $payment_method){
             
             $stripePaymentMethod = StripePaymentMethod::firstOrNew([

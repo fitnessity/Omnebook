@@ -64,6 +64,11 @@ class UserBookingDetail extends Model
     public function business_services(){
         return $this->belongsTo(BusinessServices::class, 'sport');
     }
+
+    public function business_services_with_trashed(){
+        return $this->belongsTo(BusinessServices::class, 'sport')->withTrashed();
+    }
+
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'business_id');
     }

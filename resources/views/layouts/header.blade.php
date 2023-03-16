@@ -890,6 +890,7 @@ function closeNav() {
 	document.getElementById("mySidepanel").style.width = "0";
 }
 </script>
+
 <link href=
 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
