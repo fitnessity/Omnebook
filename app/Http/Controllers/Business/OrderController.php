@@ -105,6 +105,9 @@ class OrderController extends BusinessBaseController
 
            $user_type = 'customer';
            $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
+           if($customer->parent_cus_id){
+             return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
+           }
            $book_data = @$customerdata->getlastbooking();
            $username  =  @$customerdata->fname.' '. @$customerdata->lname;
            $age = Carbon::parse( @$customerdata->birthdate)->age; 
@@ -316,7 +319,7 @@ class OrderController extends BusinessBaseController
         }
 
         $userBookingStatus = UserBookingStatus::create([
-            'customer_id' =>  $customer->id ,
+            'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,
             'user_type' => 'customer',
             'status' => 'active',
             'currency_code' => 'usd',
@@ -337,6 +340,7 @@ class OrderController extends BusinessBaseController
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
+
             $now = new DateTime();
             $contact_date = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
@@ -362,6 +366,7 @@ class OrderController extends BusinessBaseController
                 'transfer_provider_status' =>'unpaid',
                 'payment_number' => '{}',
             ]);
+            $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];

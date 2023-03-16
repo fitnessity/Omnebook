@@ -2307,8 +2307,23 @@ $('#frmeditProfile').submit(function (e) {
 });
 
 // fill modal form with user details
-var UserProfileDetail = <?php echo json_encode($UserProfileDetail); ?>;
-var ProfessionalDetail = <?php echo json_encode($UserProfileDetail['ProfessionalDetail']); ?>;
+<?php
+if($UserProfileDetail){
+?>
+    var UserProfileDetail = '<?php echo json_encode($UserProfileDetail); ?>';
+    var ProfessionalDetail = '<?php echo json_encode($UserProfileDetail['ProfessionalDetail']); ?>';
+<?php
+}else{
+?>
+    var UserProfileDetail = null;
+    var ProfessionalDetail = null;
+<?php
+
+}
+?>
+
+
+
 $("#editProfileDetailModal").on("show.bs.modal", function () {
 	$('#editProfileDetailModal').find('#frm_firstname').val(UserProfileDetail.firstname);
     $('#editProfileDetailModal').find('#frm_lastname').val(UserProfileDetail.lastname);
