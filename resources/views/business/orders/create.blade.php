@@ -113,7 +113,11 @@
 														<option value="{{@$user_data->id}}~~{{$pc_user_tp}}">{{$username}}(me)</option>
 														@if(!empty($userfamily))
 														@foreach($userfamily as $ufd)
-															<option value="{{$ufd->id}}~~family^^{{$username}}">@if($pc_user_tp == 'customer'){{$ufd->fname}} {{$ufd->lname}} @else {{$ufd->first_name}} {{$ufd->last_name}} @endif</option>
+															<option value="{{$ufd->id}}~~family^^{{$username}}"
+																@if($ufd->id == request()->participate_id)
+																	selected
+																@endif
+																>@if($pc_user_tp == 'customer'){{$ufd->fname}} {{$ufd->lname}} @else {{$ufd->first_name}} {{$ufd->last_name}} @endif</option>
 														@endforeach
 														@endif
 													</select>
@@ -596,7 +600,7 @@
 								@php  	
 									if($subtotal != $discount){
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
-								 		$grand_total = ($service_fee + $subtotal + $tip + $taxes) - $discount;
+								 		$grand_total = ($subtotal + $tip + $taxes) - $discount;
 								 		$grand_total = number_format($grand_total,2);
 								 		$tax_ser_fees = ($service_fee + $taxes);
 								 	}else{
@@ -630,18 +634,18 @@
 												</div>
 												
 												<div class="col-md-6 col-sm-6 col-xs-6">
-													<label>Taxes & Fees </label>
+													<label>Taxes </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6">
-													<span>${{$tax_ser_fees}}</span>
+													<span>${{$taxes}}</span>
 												</div>
 												
-												{{-- <div class="col-md-6 col-sm-6 col-xs-6">
-													<label>Service Fee: {{$tax->service_fee}}% </label>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<label>Service Fee: {{Auth::user()->recurring_fee}}% </label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6">
 													<span> ${{$service_fee}}</span>
-												</div> --}}
+												</div>
 												<div class="col-md-12 col-sm-12 col-xs-12">
 													<div class="checkout-sapre-tor">
 													</div>

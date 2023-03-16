@@ -1924,23 +1924,17 @@ class ActivityController extends Controller {
                                                         $c++;
                                                     }
                                                 }
-                                        $actbox .= '</select>
+                                        $actbox .= '</select>';
 
-                                        <label>Step: 2 </label> <span class=""> Select Membership Type</span>
-                                        <div id="memberoption">
-                                            <select id="actfilmtype'.$serviceid.'" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember('.$serviceid.');">';   
-                                                $actbox .=  $mbox;
-                                             $actbox .= '</select>
-                                        </div>
 
-                                        <label>Step: 3 </label> <span class="">Select Price Option</span>
+                                        $actbox .= '<label>Step: 2 </label> <span class="">Select Price Option</span>
                                         <div class="priceoption" id="pricechng'.$serviceid.''.$serviceid.'">
                                             <select id="selprice'.$serviceid.'" name="selprice'.$serviceid.'" class="price-select-control" onchange="changeactpr('.$changeactpr_para.')">';
                                                 $actbox .= $selectval; 
                                             $actbox .= '</select>
                                         </div>  
 
-                                        <label>Step: 4 </label> <span class=""> Select Time</span>
+                                        <label>Step: 3 </label> <span class=""> Select Time</span>
                                         <div class="row" id="timeschedule">';
 		                                    $SpotsLeftdis = 0;
 		                                    $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
@@ -2278,15 +2272,24 @@ class ActivityController extends Controller {
         }
 
         $current_day = date('l',strtotime($request->dateval));
+        $total_price_val_adult =  @$pricedata['adult_cus_weekly_price'];
+        $total_price_val_child =  $pricedata['child_cus_weekly_price'];
+        $total_price_val_infant =  @$pricedata['infant_cus_weekly_price']; 
+
         if($current_day == 'Saturday' || $current_day == 'Sunday'){ 
 
-            $total_price_val_adult =  @$pricedata['adult_weekend_price_diff'];
-            $total_price_val_child =  $pricedata['child_weekend_price_diff'];
-            $total_price_val_infant =  @$pricedata['infant_weekend_price_diff'];
-        }else{
-            $total_price_val_adult =  @$pricedata['adult_cus_weekly_price'];
-            $total_price_val_child =  $pricedata['child_cus_weekly_price'];
-            $total_price_val_infant =  @$pricedata['infant_cus_weekly_price']; 
+        	if($pricedata['adult_weekend_price_diff']){
+            	$total_price_val_adult =  $pricedata['adult_weekend_price_diff'];
+            }
+
+            if($pricedata['child_weekend_price_diff']){
+            	$total_price_val_child =  $pricedata['child_weekend_price_diff'];	
+            }
+
+            if($pricedata['infant_weekend_price_diff']){
+            	$total_price_val_infant =  $pricedata['infant_weekend_price_diff'];	
+            }
+            
         }
         
         $child_dis = @$pricedata['child_discount'];
@@ -2310,7 +2313,6 @@ class ActivityController extends Controller {
         }else{
 			$infant_discount = $total_price_val_infant ; 
         }
-
 
         $stactbox.='<div class="row"><div class="col-lg-12">
                         <h4 class="modal-title partcipate-model">Select The Number of Participants</h4>

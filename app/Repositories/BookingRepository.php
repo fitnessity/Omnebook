@@ -39,8 +39,8 @@ class BookingRepository
 
     public function getcurrenttabdata($type,$cid){
         $bookingDetails = [];
-        $user = Auth::user();
-        $company = $user->company()->findOrFail($cid);
+        $user = Auth::User();
+        $company = CompanyInformation::findOrFail($cid);
 
         $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
         //print_r($bookingStatus);exit;
