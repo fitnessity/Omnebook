@@ -48,7 +48,7 @@ if(!empty(@$response)){
                             <i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook
                         </a>
                     </div>
-                    <a href="/auth/jsModalpassword" data-toggle="modal" data-target="#password_modal" onclick="openLoginModal('password')" class="forgotpass">Forgot Password?</a>
+                    <a class="forgotpass" data-behavior="ajax_html_modal" data-url="{{route('jsModalpassword')}}">Forgot Password?</a>
                     <p class="already">Don't have an account?
                         <a href="{{ Config::get('constants.SITE_URL') }}/registration">SIGN UP</a>
                     </p>

@@ -600,7 +600,10 @@ Route::get('login/google', 'LoginController@redirectToGoogle')->name('login.goog
 Route::get('login/google/callback', 'LoginController@handleGoogleCallback');
 
 // Password reset link request routes...
-// Route::post('/password/email', 'Auth\PasswordController@postEmail');
+Route::post('/password/email', 'Auth\PasswordController@postEmail')->name('postEmail');
+Route::get('/reset-password/{id}', 'Auth\PasswordController@ResetPassword')->name('ResetPassword');
+Route::post('/postResetPassword', 'Auth\PasswordController@postResetPassword')->name('postResetPassword');
+
 
 // Password reset routes...
 Route::get('/password/reset/{token}', 'Auth\PasswordController@getReset');
@@ -609,7 +612,7 @@ Route::post('/password/reset', 'Auth\PasswordController@postReset')->name('passw
 Route::get('auth/jsModallogin', 'Auth\AuthController@jsModallogin');
 Route::get('auth/jsModallogin/{sport_id}', 'Auth\AuthController@jsModallogin');
 Route::get('auth/jsModalregister', 'Auth\AuthController@jsModalregister');
-Route::get('auth/jsModalpassword', 'Auth\AuthController@jsModalpassword');
+Route::get('auth/jsModalpassword', 'Auth\AuthController@jsModalpassword')->name('jsModalpassword');
 Route::post('newsletters/saveNewsletter','NewsletterController@saveNewsletter');
 Route::get('unsubscribe', 'NewsletterController@getUnsubscribe');
 Route::post('unsubscribe', 'NewsletterController@unsubscribe');
