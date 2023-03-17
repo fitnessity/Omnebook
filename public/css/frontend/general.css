@@ -24487,3 +24487,46 @@ padding-left: 0px;
 .btn-grant{
 	right: 20px !important;
 }
+.reset-title{
+	text-align: center;
+	padding-top: 40px;
+	padding-left: 30px;
+}
+.reset-title h3{
+	color: #04344d;
+	font-size: 24px;
+	font-family: 'bebasregular';
+	letter-spacing: 2px;
+	word-spacing: 5px;
+}
+.reset-passthru input{
+	padding: 11px;
+	color: #04344d;
+	border: 2px solid #04344d;
+	font-size: 16px;
+	outline: none;
+	border-radius: 16px;
+	min-height: 45px;
+	display: block;
+	float: none;
+	margin: 20px auto;
+	width: 100%;
+	font-style: italic;
+}
+.reset-passthru form{
+	padding: 0 110px;
+}
+.reset-passthru p{
+	width: 100%;
+	float: left;
+	text-align: center;
+	color: #3e4148;
+	font-size: 18px;
+	padding: 0px 0 30px;
+	font-family: 'Roboto Condensed', sans-serif;
+	text-transform: uppercase;
+	margin-top: 15px;
+}
+.reset-div{
+	margin-top: 77px;
+}

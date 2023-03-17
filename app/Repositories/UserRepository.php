@@ -28,7 +28,8 @@ class UserRepository
 
     public function findByEmail($email)
     {
-        return User::where('email', $email)->get();
+        //return User::where('email', $email)->get();
+        return User::where('email', $email)->first();
     }
     
     public function findByToken($token)

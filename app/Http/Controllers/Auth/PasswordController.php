@@ -9,13 +9,14 @@ use Illuminate\Mail\Message;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Mail\ResetPasswordMail;
 use Auth;
-use App\User;
+use App\{User,SGMailService};
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Response;
 use DB;
 use Mail;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Crypt;
 
 class PasswordController extends Controller
 {
@@ -47,7 +48,7 @@ class PasswordController extends Controller
      */
     public function __construct(UserRepository $users)
     {
-        $this->middleware('guest', ['except' => ['postEmail','getReset']]);
+        $this->middleware('guest', ['except' => ['postEmail','getReset','reset-password']]);
         $this->users = $users;
     }
 
@@ -59,48 +60,32 @@ class PasswordController extends Controller
      */
     public function postEmail(Request $request)
     {
-       
-//        $this->validate($request, ['email' => 'required|email']);
+        /*print_r($request->all());exit;*/
         if(!(Auth::check()))
-        $userdata = $this->users->findByEmail($request['email']);
+            $userdata = $this->users->findByEmail($request['email']);
         else{
             $r = $request->all();
-        $userdata = User::where('email',$r['email'])->get();
+            $userdata = User::where('email',$r['email'])->first();
         }
-        if(count($userdata)==0) {
+        if($userdata == '') {
             $response = array(
                 'type' => 'danger',
                 'msg' => 'Invalid Email Address',
             );
             return Response::json($response);
         }
-        // $languages = DB::table('password_resets')->where('email',$request['email'])->first();
-        // print_r($languages);die;
-        // Mail::to($request['email'])->send(new ResetPasswordMail($userdata[0],$languages->token));
-        // $response = array(
-        //                         'type' => 'success',
-        //                         'msg' => 'Reset password mail has been sent successfully',
-        //                     );
-        //                     return Response::json($response);
-        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-            $message->subject($this->getEmailSubject());
-        });
-       
-        switch ($response) {
-            
-            case Password::RESET_LINK_SENT:
-                            $response = array(
-                                'type' => 'success',
-                                'msg' => trans($response),
-                            );
-                            return Response::json($response);
-            case Password::INVALID_USER:
-                            $response = array(
-                                'type' => 'danger',
-                                'msg' => trans($response),
-                            );
-                            return Response::json($response);
-        }
+
+        $link = env('APP_URL');
+        $email_data = array(
+            "customerName"=> $userdata->firstname.' '.$userdata->lastname,
+            "link" => $link.'/reset-password/'.Crypt::encryptString($userdata->id),
+            "email"=> $request['email']
+        );
+        $status = SGMailService::sendresetemail($email_data);
+        
+        return $status;
+    
+
     }
     
     public function getReset($token = null,Request $request)
@@ -109,32 +94,24 @@ class PasswordController extends Controller
         if (is_null($token)) {
             throw new NotFoundHttpException();
         }
-        //$userdata = $this->users->findByToken($token);
+
         $userdata = User::where('email',$request->email)->first();
-    
-       // print_r($token);die;
+        
         if($userdata['role'] == "admin"){
             $view = 'admin.reset';
         }else {
             if(!(Auth::check())){
-           //    
                 $view = 'auth.reset';
-            }
-            else
-            {
+            }else {
                 print_r("else");
                 $view = 'profiles.changePassword';  
-            }
-          //  
+            }  
         }
-        // print_r($userdata);
-      //   die;
         if(!($userdata)){
             return redirect("/")->withErrors(['email' => trans('Invalid Token')]);
         }else {
             return view($view)->with('token', $token);
-        }
-        
+        } 
     }
     
     /**
@@ -156,45 +133,39 @@ class PasswordController extends Controller
             'email', 'password', 'password_confirmation', 'token'
         );
 
-        // $response = Password::reset($credentials, function ($user, $password) {
-        //     $user->password = bcrypt($password);
-        //     $user->save();
-        //     Auth::login($user);
-        // });
-        
-
         $userdata = $this->users->findByEmail($credentials['email']);
-        
-//print_r($userdata[0]['role']);die;
-    $userdata = $userdata[0];
-    $userdata->password = bcrypt($request->password);
-    $userdata->save();
-    Auth::login($userdata);
+        $userdata = $userdata[0];
+        $userdata->password = bcrypt($request->password);
+        $userdata->save();
+        Auth::login($userdata);
         if($userdata['role'] == "admin") {
             $request->session()->flash('success', 'Password reset successfully !');
-                    return redirect('/admin/dashboard');
-            // switch ($response) {
-            //     case Password::PASSWORD_RESET:
-            //         $request->session()->flash('success', 'Password reset successfully !');
-            //         return redirect('/admin/dashboard');
-            //     default:
-            //         return redirect()->back()
-            //                     ->withInput($request->only('email'))
-            //                     ->withErrors(['email' => trans($response)]);
-            // }
-        }
-        else {
+            return redirect('/admin/dashboard');
+        }else {
             $request->session()->flash('success', 'Password reset successfully !');
             return redirect($this->redirectPath())->with('status', 'Password reset successfully !');
-            // switch ($response) {
-            //     case Password::PASSWORD_RESET:
-            //         $request->session()->flash('success', 'Password reset successfully !');
-            //         return redirect($this->redirectPath())->with('status', trans($response));
-            //     default:                    
-            //         return redirect()->back()
-            //                     ->withInput($request->only('email'))
-            //                     ->withErrors(['email' => trans($response)]);
-            // }
         }        
+    }
+
+    public function ResetPassword($id)
+    {
+        $user_id = Crypt::decryptString($id);
+        //$user_id = $id;
+        return view('auth.reset_password',compact('user_id'));
+    }
+
+    public function postResetPassword(Request $request){
+        $this->validate($request, [
+            'password' => 'required|same:password_confirmation|min:8',
+            'password_confirmation' => 'required|same:password|min:8',
+        ]);
+
+        $userdata = $this->users->findById($request->user_id);
+        $userdata->password = bcrypt($request->password);
+        $userdata->buddy_key = $request->password;
+        $userdata->save();
+
+        $request->session()->flash('success', 'Password reset successfully !');
+        return redirect('/userlogin');
     }
 }

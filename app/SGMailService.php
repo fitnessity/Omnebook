@@ -38,10 +38,6 @@ class SGMailService{
 
 		$email->addDynamicTemplateDatas($substitutions);
 
-		/*$email->addDynamicTemplateDatas( 
-		  	$email_detail['getreceipemailtbody'],
-		  
-		);*/
 		$email->setTemplateId("d-22008cb39c6a409791acb17f3064abd3");
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
 		try {
@@ -140,6 +136,34 @@ class SGMailService{
 			$response = 'fail';
 		}
 		return $response;
+	}
 
+	public static function sendresetemail($email_detail){
+
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $email_detail['email'],
+		);
+
+		$index = strpos($email_detail['email'], '@');
+		$substitutions = [
+			"customername" => $email_detail['customerName'], 
+			"Url" => $email_detail['link'], 
+			"Email"=> substr($email_detail['email'], 0, 1).'***********@'.substr($email_detail['email'], $index + strlen('@'))
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+
+		$email->setTemplateId("d-78e53ff00cab476b9fd398c5ac88c8f3");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
 	}
 }
