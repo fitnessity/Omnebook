@@ -891,8 +891,9 @@ function closeNav() {
 }
 </script>
 
-<link href=
-'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'>
+<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
+<!-- <link href=
+'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
 <script type="text/javascript">
 $(document).ready(function () { 

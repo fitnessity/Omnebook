@@ -295,10 +295,13 @@ class User extends Authenticatable
         return $this->hasMany(CompanyInformation::class, 'user_id');
     }
 
-    public function getFullUserBookingStatus(){
-        $customer_ids = Customer::where('user_id', $this->id)->pluck('id')->toArray();
+    public function getFullUserBookingStatus($business_id){
 
-        return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in (?)))', [$this->id, $customer_ids]);
+        //$customer_ids = Customer::where('user_id', $this->id)->pluck('id')->toArray();
+        $customer_ids = Customer::where('business_id', $business_id)->pluck('id')->toArray();
+        $customer_ids = implode(',',$customer_ids);
+        //return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in (?)))', [$this->id,$customer_ids]); 
+        return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in ('.$customer_ids.')))', [$this->id]); 
     }
 
 }

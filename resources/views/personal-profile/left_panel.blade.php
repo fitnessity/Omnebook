@@ -15,12 +15,6 @@
                                 </a>
                             </li>
                             <?php ?>
-                            <li class=" {{ (request()->is('personal-profile/payment-info*')) ? 'active' : '' }}">
-                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info">
-                                    <img src="{{ url('public/img/menu-icon2.svg') }}" alt="">
-                                    <span>Payment Info</span>
-                                </a>
-                            </li>
                             
                             <li class=" {{ (request()->is('personal-profile/calendar*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar">
@@ -42,6 +36,15 @@
                                     <span>Reviews</span>
                                 </a>
                             </li> <?php */?>
+
+                            <li class=" {{ (request()->is('personal-profile/payment-info*')) ? 'active' : '' }}">
+                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info">
+                                    <img src="{{ url('public/img/menu-icon2.svg') }}" alt="">
+                                    <span>Payment Info</span>
+                                </a>
+                            </li>
+                            
+                            
                             <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
                                 <a href="{{ route('personal.orders.index')}}">
                                     <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">

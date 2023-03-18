@@ -44,6 +44,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
 
     Route::resource('staff', 'StaffController')->only(['index','create','edit','store','update', 'destroy']);
+
+    Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
+  
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -1044,8 +1047,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('getdropdowndata', 'SchedulerController@getdropdowndata')->name('getdropdowndata');
     Route::post('booking_activity_cancel', 'SchedulerController@booking_activity_cancel')->name('booking_activity_cancel');
     Route::get('getbookingcancelmodel', 'SchedulerController@getbookingcancelmodel')->name('getbookingcancelmodel');
-    Route::post('editcartmodel', 'SchedulerController@editcartmodel')->name('editcartmodel');
-  
     Route::get('sendreceiptfromcheckout', 'SchedulerController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout');
 });
 
