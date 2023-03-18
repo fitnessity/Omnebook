@@ -1309,7 +1309,7 @@
 		var pageid = $(this).attr('data-pageid');
 		//alert(code);
 		$.ajax({
-			url: '{{route("editcartmodel")}}',
+			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
 			data:  {
 				'priceid':priceid,

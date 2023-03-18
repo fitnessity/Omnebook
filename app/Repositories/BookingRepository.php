@@ -42,7 +42,7 @@ class BookingRepository
         $user = Auth::User();
         $company = CompanyInformation::findOrFail($cid);
 
-        $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
+        $bookingStatus = $user->getFullUserBookingStatus($cid)->pluck('id')->toArray();
         //print_r($bookingStatus);exit;
         $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
 
@@ -68,9 +68,9 @@ class BookingRepository
         $user = Auth::user();
         $company = CompanyInformation::findOrFail($business_id);
         $BookingDetail = [];
-        $bookingStatus = $user->getFullUserBookingStatus()->pluck('id')->toArray();
+        $bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
         $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
-        /*print_r($userBookingDetails);exit;*/
+        //print_r($bookingStatus);exit;
         foreach ($userBookingDetails as $key => $bookValue) {
             $bookingstatus = $bookValue->booking;
             if($bookingstatus->user_type == 'user' ){
