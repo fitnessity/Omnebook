@@ -64,6 +64,7 @@ class PaymentController extends Controller {
                 'channel' =>'',
                 'kind' => 'comp',
                 'transaction_id' => '',
+                'stripe_payment_method_id' => '',
                 'amount' => $request->grand_total,
                 'qty' =>'1',
                 'status' =>'processing',
@@ -200,9 +201,10 @@ class PaymentController extends Controller {
                     $cnt++;
                     unset($cart['cart_item'][$key]);
                 }
-           } 
-           $qty_c = $price_c= [];
-           foreach($cartnew as $crt){
+            } 
+
+            $qty_c = $price_c= [];
+            foreach($cartnew as $crt){
                 $encodeqty ='' ; $aduqnt = $childqnt = $infantqnt = 0;
                   $aduprice = $childprice = $infantprice = 0;
                 if(!empty($crt['adult'])){
@@ -270,16 +272,15 @@ class PaymentController extends Controller {
                     'getreceipemailtbody' => $getreceipemailtbody,
                     'email' => Auth::user()->email);
                 SGMailService::sendBookingReceipt($email_detail);
-           }
+            }
 
-           session()->forget('stripepayid');
-           session()->forget('stripechargeid');
-           session()->put('cart_item', $cart);*/
-
+            session()->forget('stripepayid');
+            session()->forget('stripechargeid');
+            session()->put('cart_item', $cart);*/
 
             $updatedCartitems = $cartService->updatedCartitems();
             session()->put('cart_item', $updatedCartitems);
-           return view('jobpost.confirm-payment-instant');
+            return view('jobpost.confirm-payment-instant');
         }else{
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -326,6 +327,7 @@ class PaymentController extends Controller {
                             'channel' =>'stripe',
                             'kind' => 'card',
                             'transaction_id' => $onFilePaymentIntent["id"],
+                            'stripe_payment_method_id' => $onFilePaymentMethodId,
                             'amount' => $totalprice,
                             'qty' =>'1',
                             'status' =>'complete',
@@ -356,15 +358,12 @@ class PaymentController extends Controller {
                         'confirm' => true,
                         'metadata' => [],
                     ]);
-                   // print_r($newCardPaymentIntent);exit;
                     if(!$request->has('save_card')){
                         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
                         $stripePaymentMethod->delete();
                     }
 
-                   // echo $newCardPaymentIntent['status'];exit;
                     if($newCardPaymentIntent['status'] == 'succeeded'){
-                      //  echo "hii";exit;
                         $orderdata = array(
                             'user_id' => Auth::user()->id,
                             'status' => 'active',
@@ -382,6 +381,7 @@ class PaymentController extends Controller {
                             'channel' =>'stripe',
                             'kind' => 'card',
                             'transaction_id' => $newCardPaymentIntent["id"],
+                            'stripe_payment_method_id' => $newCardPaymentMethodId,
                             'amount' => $totalprice,
                             'qty' =>'1',
                             'status' =>'complete',

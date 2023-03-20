@@ -106,4 +106,8 @@ class BusinessPriceDetails extends Model
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
     }
 
+    public function business_price_details_ages_with_trashed(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')->withTrashed();
+    }
+
 }

@@ -375,8 +375,8 @@
 															<td>
 																{{date('h:i A', strtotime($visit->checked_at))}}
 															</td>
-															<td>{{$visit->order_detail->business_services->program_name}}</td>
-															<td>{{$visit->order_detail->business_price_detail->price_title}}</td>
+															<td>{{$visit->order_detail->business_services_with_trashed->program_name}}</td>
+															<td>{{$visit->order_detail->business_price_detail_with_trashed->price_title}}</td>
 															
 															<td>
 																@if($visit->status_term())
@@ -386,7 +386,7 @@
 																@endif
 																
 															</td>
-															<td>{{BusinessStaff::getinstructorname($visit->order_detail->business_services->instructor_id)}}</td>
+															<td>{{BusinessStaff::getinstructorname($visit->order_detail->business_services_with_trashed->instructor_id)}}</td>
 														</tr>
 													@endforeach
 												</tbody>
@@ -427,7 +427,7 @@
 																<div class="row customer-custom-sparetor">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
-																			<label> {{$booking_detail->business_services->program_name}}</label>															<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
+																			<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>															<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
 																			
 																		</div>
 																		<div class="customer-profile-info">
@@ -466,7 +466,7 @@
 																					<label>PROGRAM NAME:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->business_services->program_name}} </span>
+																					<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
@@ -488,7 +488,7 @@
 																					<label>BOOKING TIME: </label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span> {{date('h:i A', strtotime($booking_detail->business_services->shift_start))}}</span>
+																					<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
 																				</div>
 																				@if ($booking_detail->booking->user)
 																					<div class="col-md-6 col-xs-6">
@@ -512,14 +512,14 @@
 																					<label>ACTIVITY TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->business_services->sport_activity}}</span>
+																					<span>{{$booking_detail->business_services_with_trashed->sport_activity}}</span>
 																				</div>
 																				
 																				<div class="col-md-6 col-xs-6">
 																					<label>SERVICE TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->business_services->formal_service_types()}}</span>
+																					<span>{{$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
 																				</div>
 																			</div>
 																		</div>
@@ -565,8 +565,8 @@
 																<div class="row">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
-																			@if ($booking_detail->business_services)
-																				<label> {{$booking_detail->business_services->program_name}}</label>	
+																			@if ($booking_detail->business_services_with_trashed)
+																				<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>	
 																			@endif
 																			
 																		</div>
@@ -593,7 +593,7 @@
 																					<span> </span>
 																				</div>
 
-																				@if ($booking_detail->business_price_detail)
+																				@if ($booking_detail->business_price_detail_with_trashed)
 																					<div class="col-md-6 col-xs-6">
 																						<label>TOTAL REMAINING:</label>
 																					</div>
@@ -607,8 +607,8 @@
 																					<label>PROGRAM NAME:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					@if ($booking_detail->business_services)
-																					<span>{{$booking_detail->business_services->program_name}} </span>
+																					@if ($booking_detail->business_services_with_trashed)
+																					<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
 																					}
 																					@endif
 																				</div>
@@ -628,12 +628,12 @@
 																					<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
 																				</div>
 																				
-																				@if ($booking_detail->business_services)
+																				@if ($booking_detail->business_services_with_trashed)
 																					<div class="col-md-6 col-xs-6">
 																						<label>BOOKING TIME: </label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span> {{date('h:i A', strtotime($booking_detail->business_services->shift_start))}}</span>
+																						<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
 																					</div>
 																				@endif
 																				@if ($booking_detail->booking->user)
@@ -653,21 +653,21 @@
 																					</div>
 																				@endif
 																				
-																				@if ($booking_detail->business_services)
+																				@if ($booking_detail->business_services_with_trashed)
 																					<div class="col-md-6 col-xs-6">
 																						<label>ACTIVITY TYPE:</label>
 																					</div>
 																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->business_services->sport_activity}}</span>
+																						<span>{{$booking_detail->business_services_with_trashed->sport_activity}}</span>
 																					</div>
 																				@endif
 																				
-																				@if ($booking_detail->business_services)
+																				@if ($booking_detail->business_services_with_trashed)
 																				<div class="col-md-6 col-xs-6">
 																					<label>SERVICE TYPE:</label>
 																				</div>
 																				<div class="col-md-6 col-xs-6">
-																					<span>{{$booking_detail->business_services->formal_service_types()}}</span>
+																					<span>{{$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
 																				</div>
 																				@endif
 																			</div>
@@ -702,11 +702,11 @@
 												@foreach ($purchase_history as $history)
 													<tr>
 														<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-														<td>{!!$history->item_description()!!}</td>
+														<td>{!!$history->item_description()['itemDescription']!!}</td>
 														<td>{{$history->item_type_terms()}}</td>
 														<td>{{$history->getPmtMethod()}}</td>
 														<td>${{$history->amount}}</td>
-														<td>{{$history->qty}}</td>
+														<td>{{$history->item_description()['qty']}}</td>
 														<td>Refund | Void</td>
 														<td>
 															<div class="table-icons-staff mailRecipt" class="mailRecipt" data-booking-detail-id="" data-booking-id ="{{$history->item_id}}" data-item-type="{{$history->item_type_terms()}}">

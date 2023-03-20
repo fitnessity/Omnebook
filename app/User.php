@@ -171,6 +171,11 @@ class User extends Authenticatable
         return $this->hasMany(UserEmploymentHistory::class)->orderBy('is_present', 'desc')->orderBy('service_start', 'desc');
     }
 
+    public function Transaction()
+    {
+        return $this->hasMany(Transaction::class,'user_id');
+    }
+
     public function company()
     {
         return $this->hasMany(CompanyInformation::class);

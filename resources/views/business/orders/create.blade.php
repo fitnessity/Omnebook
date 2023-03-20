@@ -106,8 +106,14 @@
 													<label>Who's Participating </label>
 													<select name="participate_list" id="participate_list" class="form-control" onchange="loaddropdown('participat',this,this.value);">
 														@php  
-															$pc_regi_id = @$user_data->id;
-															$pc_value = $username.'(me)';
+															if(request()->participate_id != ''){
+																$pc_regi_id = request()->participate_id;
+																$pc_value = $participateName;
+															}else{
+																$pc_regi_id = @$user_data->id;
+																$pc_value = $username.'(me)';
+															}
+
 															$pc_user_tp = $user_type;
 														@endphp
 														<option value="{{@$user_data->id}}~~{{$pc_user_tp}}">{{$username}}(me)</option>
@@ -348,7 +354,7 @@
 													<label>Who's Participating</label>
 												</div>
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
-													<span id="participate">{{$username}}</span>
+													<span id="participate">@if($participateName != '') {{$participateName}} @else {{$username}} @endif</span>
 												</div>
 													
 												<div class="col-md-6 col-sm-6 col-xs-6"> 
