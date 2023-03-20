@@ -341,14 +341,15 @@ class Customer extends Authenticatable
         $user = $this->user;
         $customer = $this;
         $company = $this->company_information;
-        $user_id = $user ? $user->id : "no_user_id";
+        $booking_details = UserBookingDetail::where(['user_id'=>$customer->id,'user_type'=>"customer"]);
+        /*$user_id = $user ? $user->id : "no_user_id";
 
         $booking_details = UserBookingDetail::whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-        });
-
+        });*/
+        //print_r($booking_details->get());exit;
         return $booking_details;
     }
 

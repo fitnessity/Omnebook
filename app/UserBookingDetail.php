@@ -78,6 +78,9 @@ class UserBookingDetail extends Model
         return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
 
     }
+    public function business_price_detail_with_trashed(){
+        return $this->belongsTo(BusinessPriceDetails::class, 'priceid')->withTrashed();
+    }
 
     public function business_activity_scheduler(){
 

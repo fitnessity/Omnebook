@@ -42,7 +42,7 @@
                                     foreach($cardInfo as $card) {
                                         $brandname = strtolower($card['brand']);
                                     ?>
-                                        <div class="cards-block dispalycard" style="cursor: pointer" data-name="<?=$card['name']?>" data-cvv="" data-cnumber="<?=$card['last4']?>" data-month="<?=$card['exp_month']?>" data-year="<?=$card['exp_year']?>" data-type="{{$brandname}}" data-ptype="update">
+                                        <div class="cards-block dispalycard" style="cursor: pointer" data-name="<?=$card['name']?>" data-cvv="" data-cnumber="<?=$card['last4']?>" data-month="<?=$card['exp_month']?>" data-year="<?=$card['exp_year']?>" data-type="{{$brandname}}" data-id="{{$card['id']}}" data-ptype="update">
                                     <div class="cards-content" style="color:#ffffff; background-image: url({{ url('public/img/visa-card-bg.jpg')}} );">
                                         <img src="{{ url('/public/images/creditcard/'.$brandname.'.jpg') }}" alt="">
                                         <span style="float:right"><?=$card['name']?></span>
@@ -52,8 +52,6 @@
                                         </span>
 
                                         <a style="float:right" data-behavior="delete_card" data-url="{{route('paymentdelete', ['stripe_payment_method' => $card['payment_id']])}}" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i> </a>
-
-                                        <!-- <span style="float:right" data-cardid="<?=$card['id']?>" title="Delete Card" class="delCard"><i class="fa fa-trash"></i></span> -->
                                     </div>
                                         </div>
                                     <?php } ?>
@@ -85,90 +83,22 @@
                                         <button class="post-btn-red" type="submit" id="submit">Save</button>
                                     </form>
                                 </div>
-                            
-                                <!-- <form method="post" id="frmpayment" action="{{Route('paymentsave')}}" class="billing-block col-lg-7">
-                                    <input type="hidden" name="payment_type" id="payment_type" value="insert" />
-                                    <input type="hidden" name="_token" value="{{csrf_token()}}" />
-                                    <input type="hidden" name="card_type" id="card_type" value="visa" />
-                                    <div style="color:red" id="card-error"></div>
-                                    <div class="sacecard-title">Billing Address</div>
-
-                                    <div class="row">
-
-                                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-8 col-12 form-group">
-                                            <label for="owner">Name On Card</label>
-                                            <input required type="text" name="owner" id="owner" placeholder="" class="form-control">
-                                        </div>
-
-                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-12 form-group">
-                                            <label for="cvv">CVV</label>
-                                            <input required type="text" name="cvv" id="cvv" placeholder="" class="form-control">
-                                        </div>
-
-                                        <div id="card-number-field" class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 form-group">
-                                            <label for="cardNumber">Card Number</label>
-                                            <input required type="text" name="cardNumber" id="cardNumber" placeholder="" class="form-control">
-                                        </div>
-                                        
-                                        <div id="expiration-date" class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 form-group">
-                                            
-                                            <select required id="card_month" name="card_month">
-                                                <option value="">Mon</option>
-                                                <option value="01">Jan</option>
-                                                <option value="02">Feb</option>
-                                                <option value="03">Mar</option>
-                                                <option value="04">Apr</option>
-                                                <option value="05">May</option>
-                                                <option value="06">Jun</option>
-                                                <option value="07">Jul</option>
-                                                <option value="08">Aug</option>
-                                                <option value="09">Sep</option>
-                                                <option value="10">Oct</option>
-                                                <option value="11">Nov</option>
-                                                <option value="12">Dec</option>
-                                            </select>
-                                            <select required id="card_year" name="card_year">
-                                                <option value="">Year</option>
-                                                <option value="2021">2021</option>
-                                                <option value="2022">2022</option>
-                                                <option value="2023">2023</option>
-                                                <option value="2024">2024</option>
-                                                <option value="2025">2025</option>
-                                                <option value="2026">2026</option>
-                                                <option value="2027">2027</option>
-                                                <option value="2028">2028</option>
-                                                <option value="2029">2029</option>
-                                                <option value="2030">2030</option>
-                                                <option value="2031">2031</option>
-                                                <option value="2032">2032</option>
-                                                <option value="2033">2033</option>
-                                                <option value="2034">2034</option>
-                                                <option value="2035">2035</option>
-                                                <option value="2036">2036</option>
-                                                <option value="2037">2037</option>
-                                                <option value="2038">2038</option>
-                                                <option value="2039">2039</option>
-                                                <option value="2040">2040</option>
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="row">
-                                        <div id="pay-now" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 form-group">
-                                            <input type="submit" id="confirm-purchase" value="Confirm" class="btn-style-one">
-                                        </div>
-                                        
-                                        <div id="credit_cards" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 form-group">
-                                            <img src="/public/images/creditcard/visa.jpg" id="visa">
-                                            <img src="/public/images/creditcard/mastercard.jpg" id="mastercard">
-                                            <img src="/public/images/creditcard/amex.jpg" id="amex">
-                                        </div>
-                                   
-                                        
-
-                                    </div>
-                                </form> -->
-                            </div>
+							</div>
+							<!-- <table id="example" class="table table-striped table-bordered" style="width:100%" style="display:none;"> -->
+                            <table id="historyTable" class="table table-striped table-bordered" style="display:none;width: 100%">
+								<thead>
+									<tr>
+										<th>Sale Date</th>
+										<th>Item Description</th>
+										<th>Item Type</th>
+										<th>Pay Method</th>
+										<th>Price</th>
+										<th>Qty</th>
+									</tr>
+								</thead>
+								<tbody id="tbodydetail">
+								</tbody>
+							</table>
                         </div>
                     </div>
                 </div>
@@ -264,7 +194,29 @@
         }
     });
     
-   /* $(".delCard").on("click", function(){
+    $(".dispalycard").on("click", function(){
+        $('#stripediv').css('display','none');
+        $('#historyTable').css('display','inline-table');
+        var pid = $(this).data('id');
+        $.ajax({
+            type: 'POST',
+            url: '{{route("card_purchase_history")}}',
+            data: {
+                _token: '{{csrf_token()}}',
+                pid: pid
+            },
+            success: function(data) {
+                $('#tbodydetail').html(data);
+            }
+        });
+    });
+
+    $(".addcard").on("click", function(){
+        $('#stripediv').css('display','block');
+        $('#historyTable').css('display','none');
+    });
+
+    /* $(".delCard").on("click", function(){
         $("#owner").val("");
         $("#cvv").val("");
         $("#cardNumber").val("");
@@ -316,14 +268,6 @@
         $("#credit_cards img").addClass('transparent');
         $("#"+$(this).data('type')).removeClass('transparent');
     });*/
-    
-    $(".addcard").on("click", function(){
-        $('#stripediv').css('display','block');
-    });
-
-    $(".dispalycard").on("click", function(){
-        $('#stripediv').css('display','none');
-    });
 
     function chkmonth(id) {
         if(id==1)return "Jan";

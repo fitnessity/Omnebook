@@ -685,7 +685,7 @@
                                         @php $brandname = strtolower($card['brand']); @endphp
                                         <div class="col-md-6">
                                             <label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
-                                                <input name="cardinfo" class="payment-radio" type="radio" value ="{{$card['id']}}">
+                                                <input name="cardinfo" class="payment-radio" type="radio" value ="{{$card['payment_id']}}">
                                                 <span class="plan-details">
                                                     <div class="row">
                                                         <div class="col-md-12">

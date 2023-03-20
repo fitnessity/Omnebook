@@ -2,93 +2,31 @@
 namespace App\Http\Controllers;
 
 use Redirect;
-use App\User;
-use App\UserEmploymentHistory;
-use App\UserEducation;
-use App\UserCertification;
-use App\UserService;
-use App\UserSecurityQuestion;
-use App\UserMembership;
-use App\UserProfessionalDetail;
-use App\UserSkillAward;
-use App\UserFamilyDetail;
-use App\UserCustomerDetail;
-use App\BusinessPriceDetailsAges;
-use App\AddrStates;
-use App\AddrCities;
-use App\ProfilePost;
-use App\Event;
-use App\Repositories\PlanRepository;
-use App\Repositories\ProfessionalRepository;
-use App\Repositories\BookingRepository;
 use Validator;
-use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
 use Input;
 use Response;
 use Auth;
 use Hash;
-use App\Http\Requests;
-use Illuminate\Http\Request;
-use App\Miscellaneous;
 use Image;
 use File;
+use View;
+use Mail;
+use Session;
+use DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
-use DB;
-use App\Fit_background_check_faq;
-use App\Fit_vetted_business_faq;
-use App\MailService;
-use App\Evident;
-use App\Evidents;
-use App\Sports;
-use App\ProfileSave;
-use App\InstantForms;
-use Session;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction};
 use App\Repositories\SportsRepository;
-use View;
-use App\BusinessClaim;
-use Mail;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
 use App\Services\TwilioService;
 use Twilio\TwiML\VoiceResponse;
-use App\Languages;
-use App\UserFavourite;
-use App\UserFollow;
-use App\UserFollower;
-use App\Review;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessService;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessSubscriptionPlan;
-use App\CompanyInformation;
-use App\BusinessActivityScheduler;
-use App\ProfileFollow;
-use App\ProfileFav;
-use App\InquiryBox;
-use App\ProfileView;
-use App\PostLike;
-use App\PostReport;
-use App\PostComment;
-use App\PostCommentLike;
-use App\PagePost;
-use App\PagePostSave;
-use App\Notification;
-use App\BusinessServicesFavorite;
-use App\UserBookingStatus;
-use App\UserBookingDetail;
-use App\ProfilePostViews;
-use App\BusinessPostViews;
-use App\StripePaymentMethod;
 use Carbon\Carbon;
 
 use Request as resAll;
@@ -8525,6 +8463,25 @@ class UserProfileController extends Controller {
             'cart' => $cart,
             'intent' => $intent 
         ]);
+    }
+
+    public function card_purchase_history(Request $request){
+        // /print_r($request->all());exit;
+        $cardDetail = StripePaymentMethod::findOrFail($request->pid);
+        $user = Auth::user();
+        $transactionDetail = $user->Transaction()->where('stripe_payment_method_id',$cardDetail->payment_id)->get();
+        $html = '';
+        foreach($transactionDetail as $history){
+            $html .= '<tr>
+                <td>'.date('m/d/Y',strtotime($history->created_at)).'</td>
+                <td>'.$history->item_description()['itemDescription'].'</td>
+                <td>'.$history->item_type_terms().'</td>
+                <td>'.$history->getPmtMethod().'</td>
+                <td>$'.$history->amount.'</td>
+                <td>'.$history->item_description()['qty'].'</td>
+            </tr>';
+        }
+        return $html;
     }
 
     public function review(Request $request) {

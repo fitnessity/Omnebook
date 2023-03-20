@@ -950,6 +950,7 @@ Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');
 Route::get('/personal-profile/payment-info', 'UserProfileController@paymentinfo');
+Route::post('/personal-profile/get-card-purchase-history', 'UserProfileController@card_purchase_history')->name('card_purchase_history');
 //Route::post('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
 Route::get('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
 Route::post('/personal-profile/payment-delete', 'UserProfileController@paymentdelete')->name('paymentdelete');

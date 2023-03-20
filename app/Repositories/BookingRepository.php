@@ -555,7 +555,6 @@ class BookingRepository
     public function getreceipemailtbody($oid,$orderdetailid){
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
-        echo $booking_details;exit;
         $business_services = $booking_details->business_services;
         $businessuser = $booking_details->business_services->company_information;
         $BusinessPriceDetails = $booking_details->business_price_detail;

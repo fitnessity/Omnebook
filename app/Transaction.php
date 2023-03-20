@@ -18,13 +18,16 @@ class Transaction extends Model
     public $timestamps = true;
 	
 	protected $fillable = [
-        'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount',
-		'payload'
+        'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount','payload','stripe_payment_method_id'
     ];
 
     /**
      * Get the user that owns the task.
      */
+
+    public function User(){
+        return $this->belongsTo(User::class,'user_id')->where('user_type','user');
+    }
 
     public function UserBookingStatus(){
         return $this->belongsTo(UserBookingStatus::class,'item_id');
@@ -57,29 +60,33 @@ class Transaction extends Model
         }
     }
 
-
     public function item_description(){
         $itemDescription = '';
+        $qty = 0;
+        $arry = [];
         if($this->item_type == 'UserBookingStatus'){
             $bookingData = $this->userBookingStatus->UserBookingDetail;
             if(!empty($bookingData)){
                 foreach($bookingData as $bd){
-                    $activityName = $bd->business_services->program_name;
-                    $categoryName = $bd->business_price_detail->business_price_details_ages->category_title;
-                    $priceOption = $bd->business_price_detail->price_title;
+                    $activityName = $bd->business_services_with_trashed->program_name;
+                    $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                    $priceOption = $bd->business_price_detail_with_trashed->price_title;
                     $itemDescription .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                    $qty++;
                 }
             }
             //echo $booking_data;exit();
         }else if ($this->item_type == 'Recurring') {
             $bookingData = $this->Recurring->UserBookingDetail;
             if($bookingData != ''){
-                $activityName = $bookingData->business_services->program_name;
-                $categoryName = $bookingData->business_price_detail->business_price_details_ages->category_title;
-                $priceOption = $bookingData->business_price_detail->price_title;
+                $activityName = $bookingData->business_services_with_trashed->program_name;
+                $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
                 $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
+                $qty++;
             }
         }
-        return $itemDescription;
+        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription);
+        return $arry;
     }
 }

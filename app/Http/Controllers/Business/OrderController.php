@@ -66,6 +66,7 @@ class OrderController extends BusinessBaseController
         $user_data = '';
         $intent = null;
         $customer = null;
+        $participateName = '';
         if($request->book_id){
             var_dump('no this cases');
             exit();
@@ -103,37 +104,44 @@ class OrderController extends BusinessBaseController
            //  $price_title  = @$last_book[1];  
         }else if($request->cus_id != ''){
 
-           $user_type = 'customer';
-           $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
-           if($customer->parent_cus_id){
-             return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
-           }
-           $book_data = @$customerdata->getlastbooking();
-           $username  =  @$customerdata->fname.' '. @$customerdata->lname;
-           $age = Carbon::parse( @$customerdata->birthdate)->age; 
-           $user_data =  @$customerdata;
-           $visits = $customerdata->visits_count();
-           $activated = @$customerdata->is_active();
-           $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
-           $address = @$customerdata->full_address();
-           $book_id = @$customerdata->id;
-           $book_cnt =@$customerdata->memberships();
-           $current_membership = @$customerdata->get_current_membership();
-           $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
-           $last_book = explode("~~", $last_book_data);
-           $purchasefor  = @$last_book[0];
-           $price_title  = @$last_book[1];
-           $pageid = $request->cus_id;
-           $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-           $intent = $stripe->setupIntents->create([
-             'payment_method_types' => ['card'],
-             'customer' => $customerdata->stripe_customer_id,
-           ]);
+            $user_type = 'customer';
+            $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
+            if($customer->parent_cus_id){
+                return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
+            }
+
+            $username  =  @$customerdata->fname.' '. @$customerdata->lname;
+            if($request->participate_id != ''){
+                $cusData = $request->current_company->customers->find($request->participate_id);
+                $age = Carbon::parse($cusData->birthdate)->age;
+                $participateName  =  @$cusData->fname.' '. @$cusData->lname  .' ('.$age .' yrs) '.$cusData->relationship .' (Paid For by '.$username.')';;
+            }
+
+            $book_data = @$customerdata->getlastbooking();
+            $age = Carbon::parse( @$customerdata->birthdate)->age; 
+            $user_data =  @$customerdata;
+            $visits = $customerdata->visits_count();
+            $activated = @$customerdata->is_active();
+            $userfamilydata = Customer::where('parent_cus_id',@$customerdata->id)->get();
+            $address = @$customerdata->full_address();
+            $book_id = @$customerdata->id;
+            $book_cnt =@$customerdata->memberships();
+            $current_membership = @$customerdata->get_current_membership();
+            $last_book_data = $this->booking_repo->lastbookingbyUserid(@$user_data->id);
+            $last_book = explode("~~", $last_book_data);
+            $purchasefor  = @$last_book[0];
+            $price_title  = @$last_book[1];
+            $pageid = $request->cus_id;
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $customerdata->stripe_customer_id,
+            ]);
         }
         if($activated == 0){
-           $status = "InActive";
+            $status = "InActive";
         }else{
-           $status = "Active";
+            $status = "Active";
         }
           
         $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->get();
@@ -173,6 +181,7 @@ class OrderController extends BusinessBaseController
            'current_membership' => $current_membership,
            'intent' => $intent, 
            'customer' => $customer,
+           'participateName' => $participateName,
         ]);
     }
 
@@ -320,7 +329,9 @@ class OrderController extends BusinessBaseController
         }
 
         $userBookingStatus = UserBookingStatus::create([
-            'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,
+            'user_id' => Auth::user()->id,
+            /*'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,*/
+            'customer_id' => $request->user_id,
             'user_type' => 'customer',
             'status' => 'active',
             'currency_code' => 'usd',

@@ -292,8 +292,8 @@
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
  
 
-<script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
-<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/>
+<!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
+<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
 <script type="text/javascript">
 	
 	$(document).ready(function () {
