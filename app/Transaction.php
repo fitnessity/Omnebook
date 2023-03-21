@@ -65,14 +65,16 @@ class Transaction extends Model
         $qty = 0;
         $arry = [];
         if($this->item_type == 'UserBookingStatus'){
-            $bookingData = $this->userBookingStatus->UserBookingDetail;
-            if(!empty($bookingData)){
-                foreach($bookingData as $bd){
-                    $activityName = $bd->business_services_with_trashed->program_name;
-                    $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
-                    $priceOption = $bd->business_price_detail_with_trashed->price_title;
-                    $itemDescription .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
-                    $qty++;
+            if($this->userBookingStatus != ''){
+                $bookingData = $this->userBookingStatus->UserBookingDetail;
+                if(!empty($bookingData)){
+                    foreach($bookingData as $bd){
+                        $activityName = $bd->business_services_with_trashed->program_name;
+                        $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                        $priceOption = $bd->business_price_detail_with_trashed->price_title;
+                        $itemDescription .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                        $qty++;
+                    }
                 }
             }
             //echo $booking_data;exit();

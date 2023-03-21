@@ -22067,8 +22067,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .manage-customer-modal-title h4{
 	background: #969696;
 	color: #fff;
-	font-size: 20px;
-	padding: 13px;
+	font-size: 34px;
+	padding: 8px;
 	text-align: center;
 }
 .space-remover{
@@ -24425,6 +24425,7 @@ padding-left: 0px;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
+	font-size: 34px;
 }
 .search-info h4{
 	margin-top: 70px;
@@ -24532,4 +24533,19 @@ padding-left: 0px;
 }
 .delCard i{
 	color: #fff;
+}
+.manage-customer-modal-title{
+	position: relative;
+}
+.manage-customer-modal-title h3{
+	position: absolute;
+	top: 10px !important;
+	left: 494px !important;
+	color: #2d2d2d;
+	width: 13%;
+	background: #fff;
+	z-index: 99;
+	text-align: center;
+	border-radius: 5px;
+	padding: 4px;
 }

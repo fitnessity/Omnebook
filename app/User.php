@@ -166,6 +166,11 @@ class User extends Authenticatable
     // }
 
 
+    public function customers()
+    {
+        return $this->belongsTo(Customer::class,'user_id');
+    }
+
     public function employmenthistory()
     {
         return $this->hasMany(UserEmploymentHistory::class)->orderBy('is_present', 'desc')->orderBy('service_start', 'desc');

@@ -68,7 +68,7 @@ class SGMailService{
 		return $response;
 	}
 
-	public static function sendWelcomeMailToCustomer($id,$business_id){
+	public static function sendWelcomeMailToCustomer($id,$business_id,$password){
 		$customer = Customer::findOrFail($id);
 		$businessdata = CompanyInformation::findOrFail($business_id);
 
@@ -88,14 +88,16 @@ class SGMailService{
 
 		$substitutions = [
 			"providerName" => $businessdata->company_name,  
-			"CustomerName" => @$customer->fname.' '.@$customer->lname,  
-			"CompanyName" => $businessdata->company_name,  
+			"Customer_Name" => @$customer->fname.' '.@$customer->lname,  
+			"Customer_Email" => $customer->email,  
+			"temppassword" => $password,  
+			"Company_Name" => $businessdata->company_name,  
 		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
 		    "address" => $businessdata->company_address(),   
 		    "PhoneNumber" => $businessdata->business_phone,   
 		    "Email" => $businessdata->business_email,  
 		    "website" => $businessdata->business_website,
-		    "ImageUrl" => $ImageUrl,
+		    "ProviderBusinessLogo" => $ImageUrl,
 		    "url" => $businessdata->users->username
 		];
 
@@ -112,7 +114,6 @@ class SGMailService{
 	}
 
 	public static function requestAccessMail($customer){
-		$businessdata = CompanyInformation::findOrFail($customer->business_id);
 		$email = new Mail();
 		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
 		
@@ -121,8 +122,9 @@ class SGMailService{
 		);
 
 		$substitutions = [
-			"ProviderName" => $businessdata->company_name,  
-			"CustomerName" => @$customer->fname.' '.@$customer->lname,  
+			"ProviderName" => $customer['cName'],  
+			"CustomerName" => $customer['pName'],  
+			"Url" => $customer['url'],
 		];
 
 		$email->addDynamicTemplateDatas($substitutions);

@@ -157,11 +157,11 @@
 						  	<li class="nav-item">
 								<a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
 						  	</li>
-						  	@if($customerdata->request_status == 0)
+						  	@if($customerdata->user_id == '')
 						  		<li><button type="button" class="btn-nxt" id="request_access">Request Access</button></li>
-						  	@elseif($customerdata->request_status == 1 && $customerdata->last_sync == '')
-						  		<li><button type="button" class="btn-nxt" >Access Granted, Sync Now</button></li>
-						  	@else
+						  	<!-- ($customerdata->request_status == 1 && $customerdata->last_sync == '')
+						  		<li><button type="button" class="btn-nxt" >Access Granted, Sync Now</button></li> -->
+						  	@elseif($customerdata->last_sync != '')
 						  		<li>{{date('m-d-Y',strtotime($customerdata->last_sync))}}</li>
 						  	@endif
 						</ul>

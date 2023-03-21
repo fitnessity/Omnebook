@@ -39,7 +39,7 @@
 									$('#systemMessage_frgtpwd').html('Link Successfully Sent To Your Email');
 	          	}else{
 	          			$('#systemMessage_frgtpwd').addClass('red-fonts');
-									$('#systemMessage_frgtpwd').html("Can't Send A Link To Your Email. Please Check Your Email Once..");
+									$('#systemMessage_frgtpwd').html("Your Email Is Not In Our System. Plese Check It Again.");
 	          	}
 	          }
 	        });

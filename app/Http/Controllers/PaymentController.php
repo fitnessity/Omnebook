@@ -76,12 +76,15 @@ class PaymentController extends Controller {
             $lastid = $status->id; 
 
             foreach($cartService->items() as $item){
+                $userCustomerId = Customer::where('user_id', $loggedinUser->id)->first(['id'])->id;
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->users;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
                 $booking_detail = UserBookingDetail::create([                 
                     'booking_id' => $userBookingStatus->id,
+                    'user_id'=> $userCustomerId,
+                    'user_type'=> 'customer',
                     'sport' => $item['code'],
                     'business_id'=> $businessServices->cid,
                     'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
@@ -404,12 +407,15 @@ class PaymentController extends Controller {
             $tax = $bspdata->site_tax;
 
             foreach($cartService->items() as $item){
+                $userCustomerId =Customer::where('user_id', $loggedinUser->id)->first(['id'])->id;
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->user;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
                 $booking_detail = UserBookingDetail::create([                 
                     'booking_id' => $userBookingStatus->id,
+                    'user_id'=> $userCustomerId,
+                    'user_type'=> 'customer',
                     'sport' => $item['code'],
                     'business_id'=> $businessServices->cid,
                     'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
