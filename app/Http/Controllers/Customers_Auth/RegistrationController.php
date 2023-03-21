@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Customers_Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use Hash;
 use Redirect;
 use Response;
 use App\Api;
@@ -100,12 +100,16 @@ class RegistrationController extends Controller
                     ]);
                 $stripe_customer_id = $customer->id;  
 
+
+                $random_password = Str::random(8);
+
                 $customerObj = New Customer();
                 $customerObj->business_id = $company->id;
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $customerObj->username = $postArr['username'];
-                $customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                //$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $customerObj->password = Hash::make($random_password);
                 $customerObj->email = $postArr['email'];
                 $customerObj->country = 'US';
                 $customerObj->status = 0;
@@ -138,8 +142,10 @@ class RegistrationController extends Controller
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $userObj->username = $postArr['username'];
-                $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
-                $userObj->buddy_key = $postArr['password'];
+                /*$userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $userObj->buddy_key = $postArr['password'];*/
+                $userObj->password = $customerObj->password;
+                $userObj->buddy_key = $random_password;
                 $userObj->email = $postArr['email'];
                 $userObj->country = 'US';
                 $userObj->phone_number = $postArr['contact'];
@@ -148,7 +154,7 @@ class RegistrationController extends Controller
                 $userObj->save();
 
                 if ($customerObj) {    
-                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']); 
+                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],$random_password); 
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',

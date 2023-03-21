@@ -276,7 +276,7 @@ Route::get('/new-register', 'Auth\AuthController@newRegister');
 Route::post('/auth/uploadProfile', 'Auth\AuthController@uploadProfile111');
 Route::get('/all-trainings', 'Frontend\HomeController@all_trainings');
 Route::get('/all-sports', 'Frontend\HomeController@all_sports');
-Route::get('/registration', 'Frontend\HomeController@registration')->name('registration');
+Route::get('/registration/{id?}', 'Frontend\HomeController@registration')->name('registration');
 Route::get('emailvalidation', 'Frontend\HomeController@emailvalidation')->name('emailvalidation');
 
 Route::post('/auth/registration', 'Frontend\HomeController@postRegistration')->name('auth/registration');

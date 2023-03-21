@@ -135,6 +135,10 @@
 								</div>
 							</div>
 							<script type="text/javascript">
+								var counter = '{{$customer_count}}';
+								if(counter == 1){
+									$("#collapse_{{$section_letter}}").addClass('show in');
+								}
 								$("#collapse_{{$section_letter}}").click(function(){
 									$(".panel-collapse").removeClass('show in');
 									$("#collapse_{{$section_letter}}").addClass('show in');
@@ -147,29 +151,29 @@
 		</div>
 	</div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel">Upload File for Customer</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-              <label>Choose File: </label>
-              <input type="file" name="file" id="file" onchange="readURL(this)" />
-              <p class='err' style="color:red;padding-top:10px;"></p>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="upload-csv" class="btn btn-secondary">Upload File</button>
-        </div>
-      </div>
-    </div>
-</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h4 class="modal-title" id="exampleModalLabel">Upload File for Customer</h4>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+	        <div class="modal-body">
+	          <form>
+	              <label>Choose File: </label>
+	              <input type="file" name="file" id="file" onchange="readURL(this)" />
+	              <p class='err' style="color:red;padding-top:10px;"></p>
+	          </form>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	          <button type="button" id="upload-csv" class="btn btn-secondary">Upload File</button>
+	        </div>
+	      </div>
+	    </div>
+	</div>
 </div>
 
 
@@ -318,23 +322,9 @@
   	});
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script> 
 <script type="text/javascript">
-	/*$("#business_name").keyup(function() {
-      $.ajax({
-          type: "POST",
-          url: "/searchcustomersaction",
-          data: { query: $(this).val(),  _token: '{{csrf_token()}}', },
-         
-          success: function(data) {
-              $("#option-box").show();
-              $("#option-box").html(data);
-              $("#business_name").css("background", "#FFF");
-          }
-      });
-  	});*/
-
 	function registerUser() {
-    	
         var validForm = $('#frmregister').valid();
         var posturl = '/customers/registration';
         if (!jQuery("#b_trm1").is(":checked")) {
@@ -374,6 +364,32 @@
         }
     }
 
+    $("#frmregister").submit(function (e) {
+      	e.preventDefault();
+      	$('#frmregister').validate({
+          	rules: {
+	            firstname: "required",
+	            lastname: "required",
+	            username: "required",
+	            email: {
+	                required: true,
+	                email: true
+	            },
+          	},
+          	messages: {
+              	firstname: "Enter your Firstname",
+              lastname: "Enter your Lastname",
+              username: "Enter your Username",
+              email: {
+                  required: "Please enter a valid email address",
+                  minlength: "Please enter a valid email address",
+                  remote: jQuery.validator.format("{0} is already in use")
+              },
+          },
+          submitHandler: registerUser
+      });
+  	});
+
   	function changeformate_fami_pho(idname) {
       /*alert($('#contact').val());*/
       var con = $('#'+idname).val();
@@ -401,34 +417,6 @@
             $(this).val($(this).val() + "/");
         }
     });
-
-	$("#frmregister").submit(function (e) {
-      e.preventDefault();
-      $('#frmregister').validate({
-          rules: {
-              firstname: "required",
-              lastname: "required",
-              username: "required",
-              password: "required",
-              email: {
-                  required: true,
-                  email: true
-              },
-          },
-          messages: {
-              firstname: "Enter your Firstname",
-              lastname: "Enter your Lastname",
-              username: "Enter your Username",
-              username: "Enter your Password",
-              email: {
-                  required: "Please enter a valid email address",
-                  minlength: "Please enter a valid email address",
-                  remote: jQuery.validator.format("{0} is already in use")
-              },
-          },
-          submitHandler: registerUser
-      });
-  	});
 
     /*$('#email').on('blur', function() {
       var posturl = '{{route("emailvalidation_customer")}}';

@@ -1,5 +1,5 @@
 <div class="modal fade compare-model" id="newclient">
-    <div class="modal-dialog manage-customer">
+    <div class="modal-dialog manage-customer mobile-1920">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
@@ -14,7 +14,7 @@
 				<div class="row"> 
                     <div class="col-lg-6 col-xs-12 space-remover">
 						<div class="manage-customer-modal-title">
-							<h4>Add New Client</h4>
+							<h4>Add A New Client Manually</h4> <h3>- Or -</h3>
 						</div>
 						<div class="manage-customer-from">
 							<div id="divstep1">
@@ -29,7 +29,7 @@
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 									<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepicker">
-									<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+									<!-- <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off"> -->
 									<!-- <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off"> -->
 									<div class="row check-txt-center">
 										<div class="col-md-8">
@@ -355,7 +355,7 @@
                         <div class="manage-customer-search search-info">
 							<h3>Onboard A New Client Fast</h3>
 							<h4>Search for your clients on Fitnessity</h4>
-							<p>“Your client could already have an account on Fitnessity.If so, get access and sync their information fast.”</p>
+							<p>“Your client could already have an account on Fitnessity.<br>If so, get access and sync their information fast.”</p>
 						</div>
 						<div class="row check-txt-center claimyour-business">
 							<div class="col-md-10 col-xs-10 frm-claim">

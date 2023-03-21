@@ -20,6 +20,8 @@ use Mail;
 use Config;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Crypt;
+
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
 
 use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus};
@@ -51,19 +53,22 @@ class CustomerController extends Controller {
         /*if($request->fname){
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
         }*/
-
         if($request->term){
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+        }
+
+        if($request->customer_id){
+            $customers = $customers->where('id',$request->customer_id);
         }
 
         $customer_count = $customers->count();
         $customers = $customers->get();
         $url = '';
         $grouped_customers= array();
+
 		foreach ($customers as $customer) {
 		    $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
 		}
-
 
         if ($request->ajax()) {
             return response()->json($customers);
@@ -511,7 +516,12 @@ class CustomerController extends Controller {
     public function request_access_mail(Request $request){
         $business = Auth::user()->current_company;
         $customer = $business->customers()->findOrFail($request->id);
-        $status = SGMailService::requestAccessMail($customer);
+        $data = array(
+            "cName"=> @$customer->fname.' '.@$customer->lname,
+            "pName"=>$business->company_name,
+            "url"=> env('APP_URL').'/registration/'.Crypt::encryptString($customer->id)
+        );
+        $status = SGMailService::requestAccessMail($data);
         return $status;
     }
 
