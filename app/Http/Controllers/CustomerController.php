@@ -517,12 +517,33 @@ class CustomerController extends Controller {
         $business = Auth::user()->current_company;
         $customer = $business->customers()->findOrFail($request->id);
         $data = array(
+            "email"=> @$customer->email,
             "cName"=> @$customer->fname.' '.@$customer->lname,
             "pName"=>$business->company_name,
             "url"=> env('APP_URL').'/registration/'.Crypt::encryptString($customer->id)
         );
         $status = SGMailService::requestAccessMail($data);
         return $status;
+    }
+
+    public function grant_access($id,$business_id){
+        $user_id = Crypt::decryptString($id);
+        $bId = Crypt::decryptString($business_id);
+        $user = User::where('id',$user_id)->first();
+        $customer = Customer::create([
+            'business_id' => $bId,
+            'fname' => $user->firstname,
+            'lname' => ($user->lastname) ? $user->lastname : '',
+            'username' => $user->username,
+            'email' => $user->email,
+            'country' => 'US',
+            'status' => 0,
+            'phone_number' => $user->phone_number,
+            'birthdate' => $user->birthdate,
+            'user_id' => $user->id
+        ]);
+        return Redirect()->route('personal.orders.index');
+
     }
 
 }

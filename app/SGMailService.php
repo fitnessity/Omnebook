@@ -118,12 +118,12 @@ class SGMailService{
 		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
 		
 		$email->addTo(
-		    $customer->email,
+		    $customer['email'],
 		);
 
 		$substitutions = [
-			"ProviderName" => $customer['cName'],  
-			"CustomerName" => $customer['pName'],  
+			"ProviderName" => $customer['pName'],  
+			"CustomerName" => $customer['cName'],  
 			"Url" => $customer['url'],
 		];
 

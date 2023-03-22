@@ -112,6 +112,10 @@ class Customer extends Authenticatable
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function bookingDetail(){
+        return $this->hasMany(UserBookingDetail::class,'user_id');
+    }
+
     public function bookingStatus()
     {
         return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$this->user_id, $this->id]);
@@ -496,6 +500,11 @@ class Customer extends Authenticatable
     public function recurring($booking_detail_id){
         return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer']);
     }
+
+    public function getFullUserBookingStatus($business_id){
+        return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in ('.$this->id.')))', [$this->user_id]); 
+    }
+
     
 }
    

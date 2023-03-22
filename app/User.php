@@ -168,7 +168,7 @@ class User extends Authenticatable
 
     public function customers()
     {
-        return $this->belongsTo(Customer::class,'user_id');
+        return $this->hasMany(Customer::class,'user_id');
     }
 
     public function employmenthistory()

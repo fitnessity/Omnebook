@@ -40,9 +40,10 @@ class BookingRepository
     public function getcurrenttabdata($type,$cid){
         $bookingDetails = [];
         $user = Auth::User();
+        $customer = Customer::where(['business_id'=>$cid,'user_id'=>$user->id])->first();
         $company = CompanyInformation::findOrFail($cid);
 
-        $bookingStatus = $user->getFullUserBookingStatus($cid)->pluck('id')->toArray();
+        $bookingStatus = $customer->getFullUserBookingStatus($cid)->pluck('id')->toArray();
         //print_r($bookingStatus);exit;
         $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
 
@@ -66,9 +67,11 @@ class BookingRepository
 
     public function getCurrentUserBookingDetails($serviceType, $business_id){
         $user = Auth::user();
+        $customer = Customer::where(['business_id'=>$business_id,'user_id'=>$user->id])->first();
         $company = CompanyInformation::findOrFail($business_id);
         $BookingDetail = [];
-        $bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
+        //$bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
+        $bookingStatus = $customer->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
         $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
         //print_r($bookingStatus);exit;
         foreach ($userBookingDetails as $key => $bookValue) {
