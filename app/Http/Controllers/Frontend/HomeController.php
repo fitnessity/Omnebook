@@ -5,21 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Slider;
-use App\SportsCategories;
-use App\Cms;
-use App\Sports;
-use App\Trainer;
-use App\Online;
-use App\BusinessClaim;
-use App\UserBookingDetail;
-use App\Repositories\SportsCategoriesRepository;
-use App\Repositories\SportsRepository;
-use App\Repositories\ProfessionalRepository;
-use App\Person;
-use App\Discover;
-use App\Miscellaneous;
-use App\Languages;
 use Validator;
 use ReCaptcha\ReCaptcha;
 use Image;
@@ -27,23 +12,14 @@ use Image;
 use Hash;
 use Redirect;
 use Response;
-use App\Api;
 use Str;
-use App\MailService;
 use DB;
-use App\User;
-use App\Repositories\UserRepository;
-use App\Repositories\ReviewRepository;
-use App\BusinessServices;
-use App\CompanyInformation;
-use App\BusinessPriceDetails;
-use App\BusinessService;
-use App\BusinessCompanyDetail;
-use App\BusinessActivityScheduler;
-use App\HomeTracker;
-use App\SGMailService;
+use App\Repositories\{UserRepository,ReviewRepository,SportsCategoriesRepository,SportsRepository,ProfessionalRepository};
+use App\{Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService};
 use View;
 use DateTime;
+
+use Illuminate\Support\Facades\Crypt;
 
 class HomeController extends Controller {
     /**
@@ -197,7 +173,7 @@ class HomeController extends Controller {
         return view('home.allSports');
     }
 
-    public function registration(Request $request) {
+    public function registration(Request $request,$id) {
         if (Auth::check()) {
             $show_step = Auth::user()->show_step;
         } else {
@@ -207,9 +183,13 @@ class HomeController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
+        if($id != ''){
+            $id = Crypt::decryptString($id);
+        }
         return view('home.registration', [
             'show_step' => $show_step,
-            'cart' => $cart
+            'cart' => $cart,
+            'customerId'=>$id
         ]);
     }
     public function emailvalidation(Request $request) {
@@ -309,6 +289,10 @@ class HomeController extends Controller {
                 //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
                 $userObj->save();
+
+                if($request->customerId != ''){
+                    Customer::where('id',$request->customerId)->update(['user_id'=>$userObj->id]);
+                }
 
                 if ($userObj) {                    
                     //send notification email to user

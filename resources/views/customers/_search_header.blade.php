@@ -61,38 +61,8 @@
 </script>
 
 <script>
-/*$(document).on('keyup', '#serchclient', function() {
-  $.ajax({
-      type: "GET",
-      url: "{{route("business_customer_index", ['business_id' => $company_id])}}",
-      data: { fname: $(this).val(),  _token: '{{csrf_token()}}', },
-      success: function(data) {
+    $(document).on('click', 'body', function(){
         $("#option-box1 .customer-list").html('');
-        console.log(data);
-        let customer_row = $('<li class="searchclick"><div class="row rowclass-controller"></div></li>');
-        $.each(data, function(index, customer){
-          let content = customer_row.find('.rowclass-controller');
-          let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
-
-          if(customer.profile_pic_url){
-            profile_img = '<img class="img-circle" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50px">';            
-          }
-          customer_row.append('<div class="col-md-3">' + profile_img + '</div>');
-          customer_row.append('<div class="col-md-9 div-controller"><a style="color: black;" href="/business/' + {{$company_id}} +'/customers/'+ customer.id + '">' + 
-              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (' + customer.age+ '  Years Old)' : '') + '</label></p>' +
-              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
-              '<p class="pstyle liaddress">' + customer.phone_number + '</p></a></div>');
-          
-        })
-
-        $("#option-box1 .customer-list").append(customer_row);
-        $("#option-box1").show();
-      }
-  });
-});*/
-
-$(document).on('click', 'body', function(){
-    $("#option-box1 .customer-list").html('');
-    $("#option-box1").hide();
-})
+        $("#option-box1").hide();
+    })
 </script>

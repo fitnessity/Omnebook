@@ -28,6 +28,7 @@
                     </div>
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" name="customerId" value="{{$customerId}}">
                     <input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
                     <input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">

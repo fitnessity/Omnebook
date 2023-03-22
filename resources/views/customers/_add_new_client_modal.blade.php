@@ -1,3 +1,9 @@
+<style>
+		.ui-autocomplete {
+		  z-index: 1050 !important;
+		}
+</style>
+
 <div class="modal fade compare-model" id="newclient">
     <div class="modal-dialog manage-customer mobile-1920">
         <div class="modal-content">
@@ -359,18 +365,10 @@
 						</div>
 						<div class="row check-txt-center claimyour-business">
 							<div class="col-md-10 col-xs-10 frm-claim">
-								<input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" />
+								<input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" data-customer-id=""/>
 			                    
-								<!-- <div class="request-access">
-									<p>To import the name, contact information, family members and credit card information for {customer name}, they must authorize you access.</p>
-									<label>Steps </label>
-									<div class="request-step">
-										<p>1. Click the Request Access button below. </p>
-										<p>2. Fitnessity will send an email to the customer to authorize you access.</p>
-										<p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p>
-										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="request_access">Request Access</button>
-									</div>
-								</div> -->
+								<div class="request-access" style="display:none">
+								</div>
 							</div>
 						</div>
                     </div>
@@ -379,6 +377,9 @@
         </div>
     </div>
 </div>
+
+<!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
+<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
 
 <script>
 	$(document).on("click",'#add_family',function(e){
@@ -398,6 +399,33 @@
         $('#familymaindiv').append(re);
         $('#familycnt').val(cnt);
 	});
+
+
+	$(document).on("click",'#request_access_btn',function(e){
+		$.ajax({
+            url: "{{route('sendgrantaccessmail')}}",
+            method: "POST",
+            data: { 
+                _token: '{{csrf_token()}}', 
+                id:$('#clients_name').data('customer-id'),
+                business_id:'{{$business_id}}'
+            },
+            success: function(response){
+            	$('.errclass').removeClass('green-fonts');
+              	if(response == 'already'){
+              		$('.errclass').html("<p> Request Access Already Granted..</p>");
+              		$('.request_access_btn').attr('disabled', 'disabled');
+              	}else if(response == 'success'){
+              		$('.errclass').removeClass('error');
+              		$('.errclass').addClass('green-fonts');
+              		$('.errclass').html("<p>Email Successfully Sent..</p>");
+              	}else{
+              		$('.errclass').html("<p>Can't Send Mail to your mail..</p>");
+              	}
+            }
+        });
+	});
+
 </script>
 
 <script>

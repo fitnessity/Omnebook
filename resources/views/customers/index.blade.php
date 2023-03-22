@@ -298,27 +298,40 @@
 
 <!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
 <link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
+
 <script type="text/javascript">
 	
 	$(document).ready(function () {
-		var business_id = '{{$company->id}}';
-		var url = "{{ url('/business/business_id/customers') }}";
-		url = url.replace('business_id', business_id);
-
+		var url = "{{ url('/searchuser') }}";
     	$( "#clients_name" ).autocomplete({
       		source: url,
       		focus: function( event, ui ) {
       			 return false;
         	},
         	select: function( event, ui ) {
-        		var cName = ui.item.fname +' '+ ui.item.lname
-	            $('#clients_name').val(cName); 
+        		$("#clients_name").val( ui.item.firstname + ' ' +  ui.item.lastname);
+        		$('#clients_name').data('customer-id', ui.item.id);
+        		$('.request-access').css('display','block');
+        		$('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
+                 return false;
 	        }
-    	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-        return $( "<li></li>" )
-        .append( "<p>" + item.fname + " " + item.lname + "</p>" )
-        .appendTo( ul );
-	    };
+    	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+            if(item.profile_pic){
+                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic ? item.profile_pic : '') + '" style="">';            
+            }
+
+            var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+                      '<p class="pstyle"><label class="liaddress">' + item.firstname + ' ' +  item.lastname  + '</label></p>' +
+                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
+           
+            return $( "<li></li>" )
+                    .data( "item.autocomplete", item )
+                    .append(inner_html)
+                    .appendTo( ul );
+        };
   	});
 </script>
 

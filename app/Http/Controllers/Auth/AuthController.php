@@ -305,6 +305,7 @@ class AuthController extends Controller
         else{
         $show_step=1;
         }
+        $customerId = '';
         return view('home.registration',compact('show_step'));
     }
 

@@ -151,8 +151,10 @@ class RegistrationController extends Controller
                 $userObj->phone_number = $postArr['contact'];
                 $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
                 $userObj->stripe_customer_id = $stripe_customer_id;
-                $userObj->save();
-
+                $userObj->save(); 
+               
+                $customerObj->user_id = $userObj->id;
+                 $customerObj->save();
                 if ($customerObj) {    
                     $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],$random_password); 
                     $response = array(

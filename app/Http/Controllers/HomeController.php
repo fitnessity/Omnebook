@@ -3,24 +3,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
 use Auth;
-use App\Sports;
-use App\Repositories\SportsCategoriesRepository;
-use App\Repositories\SportsRepository;
-use App\Repositories\ProfessionalRepository;
-use App\AddrStates;
-use App\AddrCities;
-use App\AddrCountries;
-use App\CompanyInformation;
-use App\BusinessServices;
-use App\BusinessClaim;
-use App\Miscellaneous;
-use App\Languages;
+use App\Repositories\{SportsCategoriesRepository,SportsRepository,ProfessionalRepository,UserRepository};
 use DB;
-use App\User;
 use Session;
-use App\MailService;
+use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User};
+
+use Illuminate\Support\Facades\Crypt;
 
 class HomeController extends Controller
 {
@@ -451,4 +440,30 @@ class HomeController extends Controller
     	echo $status;exit;
     }
 
+    public function searchuser(Request $request) {
+    	$user = User::orderby('created_at','desc');
+    	if($request->term){
+            $user = $user->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+        }
+        $user = $user->get();
+    	return response()->json($user);
+    }
+
+    public function sendGrantAccessMail(Request $request){
+    	$user = User::where('id',$request->id)->first();
+    	$company = CompanyInformation::findOrFail($request->business_id);
+    	$customer = $user->customers()->get();
+    	if(count($customer) >0 && !empty($customer)){
+    		return "already";
+    	}else{
+    		$data = array(
+    			"email"=> @$user->email,
+    			"cName"=>$user->firstname.' '.$user->lastname ,
+    			"pName"=>$company->company_name,
+    			"url"=> env('APP_URL').'/grant_access/'.Crypt::encryptString($user->id).'/'.Crypt::encryptString($request->business_id)
+    		);
+    		$status = SGMailService::requestAccessMail($data);
+    		return $status;
+    	}
+    }
 }

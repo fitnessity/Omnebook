@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Personal\PersonalBaseController;
 use Illuminate\Http\Request;
 use Auth;
-use App\{MailService,user};
+use App\{MailService,user,Customer};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 
 class OrderController extends PersonalBaseController
@@ -34,11 +34,12 @@ class OrderController extends PersonalBaseController
 
         $user = Auth::user();
         if($request->business_id){
-
+            
+            /*echo $customer;exit;*/
             $bookingDetail = [];
             $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $request->business_id);
-            $currentbookingstatus =[];
 
+            $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$request->business_id);
             $tabval = $request->tab; 
 
@@ -49,11 +50,16 @@ class OrderController extends PersonalBaseController
                 'business'=>[]]);
         }else{
             $company_information = [];
-            $bookingStatus = $user->bookingStatus;
+            $customer = $user->customers;
+            foreach($customer as $cs){
+                $company_information []= $cs->company_information;
+            }
+            /*$bookingStatus = $user->bookingStatus;
             foreach($bookingStatus as $bs){
                 foreach($bs->UserBookingDetail as $bd)
-                $company_information []= $bd->company_information;
-            }
+                    $company_information []= $bd->company_information;
+                }
+            }*/
             $business = array_unique($company_information, SORT_REGULAR);
         }
         

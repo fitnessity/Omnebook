@@ -76,14 +76,33 @@ class PaymentController extends Controller {
             $lastid = $status->id; 
 
             foreach($cartService->items() as $item){
-                $userCustomerId = Customer::where('user_id', $loggedinUser->id)->first(['id'])->id;
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->users;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
+                
+                $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
+
+                if(!$customer){
+                    $customer = Customer::create([
+                        'business_id' => $businessServices->cid,
+                        'fname' => Auth::user()->firstname,
+                        'lname' => (Auth::user()->lastname) ? Auth::user()->lastname : '',
+                        'username' => Auth::user()->username,
+                        'email' => Auth::user()->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => Auth::user()->phone_number,
+                        'birthdate' => Auth::user()->birthdate,
+                        'user_id' => Auth::user()->id
+                    ]);
+
+                    $customer->create_stripe_customer_id();
+                }
+
                 $booking_detail = UserBookingDetail::create([                 
                     'booking_id' => $userBookingStatus->id,
-                    'user_id'=> $userCustomerId,
+                    'user_id'=> $customer->id,
                     'user_type'=> 'customer',
                     'sport' => $item['code'],
                     'business_id'=> $businessServices->cid,
@@ -91,6 +110,7 @@ class PaymentController extends Controller {
                     'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
                     'priceid' => $item['priceid'],
                     'pay_session' => $price_detail->pay_session,
+                    'act_schedule_id' => $activityScheduler->id,
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
                     'subtotal' => $cartService->getSubTotalByItem($item, $user),
@@ -175,6 +195,15 @@ class PaymentController extends Controller {
                         }
                     }
                 }
+
+                BookingCheckinDetails::create([
+                    'business_activity_scheduler_id' => $activityScheduler->id,
+                    'customer_id' => $customer->id,
+                    'booking_detail_id' => $booking_detail->id,
+                    'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                    'use_session_amount' => 0,
+                    'source_type' => 'marketplace',
+                ]);
 
 
                 $company_email =  $businessServices->company_information->business_email;
@@ -407,14 +436,34 @@ class PaymentController extends Controller {
             $tax = $bspdata->site_tax;
 
             foreach($cartService->items() as $item){
-                $userCustomerId =Customer::where('user_id', $loggedinUser->id)->first(['id'])->id;
+              
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->user;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
+
+                $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
+
+                if(!$customer){
+                    $customer = Customer::create([
+                        'business_id' => $businessServices->cid,
+                        'fname' => Auth::user()->firstname,
+                        'lname' => (Auth::user()->lastname) ? Auth::user()->lastname : '',
+                        'username' => Auth::user()->username,
+                        'email' => Auth::user()->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => Auth::user()->phone_number,
+                        'birthdate' => Auth::user()->birthdate,
+                        'user_id' => Auth::user()->id
+                    ]);
+
+                    $customer->create_stripe_customer_id();
+                }
+
                 $booking_detail = UserBookingDetail::create([                 
                     'booking_id' => $userBookingStatus->id,
-                    'user_id'=> $userCustomerId,
+                    'user_id'=> $customer->id,
                     'user_type'=> 'customer',
                     'sport' => $item['code'],
                     'business_id'=> $businessServices->cid,
@@ -422,6 +471,7 @@ class PaymentController extends Controller {
                     'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
                     'priceid' => $item['priceid'],
                     'pay_session' => $price_detail->pay_session,
+                    'act_schedule_id' => $activityScheduler->id,
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
                     'subtotal' => $cartService->getSubTotalByItem($item, $user),
@@ -506,6 +556,15 @@ class PaymentController extends Controller {
                         }
                     }
                 }
+
+                BookingCheckinDetails::create([
+                    'business_activity_scheduler_id' => $activityScheduler->id,
+                    'customer_id' => $customer->id,
+                    'booking_detail_id' => $booking_detail->id,
+                    'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                    'use_session_amount' => 0,
+                    'source_type' => 'marketplace',
+                ]);
 
                 $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                 $email_detail = array(

@@ -225,6 +225,8 @@ View::composer(['*'],function($view){
 });
 
 
+Route::get('/searchuser','HomeController@searchuser');
+Route::post('/sendgrantaccessmail','HomeController@sendGrantAccessMail')->name('sendgrantaccessmail');
 Route::post('searchbussinessaction','HomeController@searchbussinessaction');
 Route::post('searchaction','HomeController@searchaction');
 Route::post('searchactioncity','HomeController@searchactioncity');
@@ -1026,6 +1028,7 @@ Route::namespace('Customers_Auth')->group(function(){
 Route::group(['middleware' => ['auth']], function()
 {
     
+    Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
