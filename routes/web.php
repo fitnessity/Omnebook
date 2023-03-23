@@ -86,7 +86,7 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::get('activities/{business_id}', 'BusinessController@activities')->name('businessActivities');
+    Route::get('activities/{business_id}/schedulers', 'BusinessController@activities')->name('business_activities_schedulers');
 
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');

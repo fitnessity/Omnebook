@@ -173,7 +173,7 @@
 					</div>
 					@endforeach
 					<div class="valor-mix-title"> 
-						<a href="{{route('businessActivities',['business_id'=>$businessId])}}">Want to see full scheduler?</a>
+						<a href="{{route('business_activities_schedulers',['business_id'=>$businessId])}}">Want to see full scheduler?</a>
 						<h2></h2>
 					</div>
 				</div>
