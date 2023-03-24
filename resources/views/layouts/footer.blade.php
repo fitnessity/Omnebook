@@ -164,6 +164,7 @@
   <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
 		$(document).on('focus', '[data-behavior~=text-phone]', function(e){
+            //jQuery.noConflict();
 			$('[data-behavior~=text-phone]').usPhoneFormat({
             	format: '(xxx) xxx-xxxx',
 			});
@@ -189,6 +190,7 @@
         $(document).on('focus', '[data-behavior~=datepicker]', function(e){
             /*var id = this.id;
             $("#"+id).datepicker( { });*/ 
+            //jQuery.noConflict();
             $("[data-behavior~=datepicker]").datepicker( { 
                /* minDate: 0,*/
                 changeMonth: true,

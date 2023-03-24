@@ -177,10 +177,372 @@
 </div>
 
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
 @include('layouts.footer')
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>  -->
+<script type="text/javascript">
+	/*function registerUser() {
+        var validForm = $('#frmregister').valid();
+        var posturl = '/customers/registration';
+        if (!jQuery("#b_trm1").is(":checked")) {
+           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+            return false;
+        }
+        if (validForm) {
+            var formData = $("#frmregister").serialize();
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: formData,
+                beforeSend: function () {
+                    $('#register_submit').prop('disabled', true).css('background','#999999');
+                    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                },
+                complete: function () {
+                
+                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                },
+                success: function (response) {
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    showSystemMessages('#systemMessage', response.type, response.msg);
+                    if (response.type === 'success') {
+                    	// $("#frmregister")[0].reset();
+                    	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    	$("#divstep1").css("display","none");
+                    	$("#divstep3").css("display","block");
+                    	$("#cust_id").val(response.id);
+                    } else {
+                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                    }
+                }
+            });
+        }
+    }*/
+
+    jQuery(function ($) {
+      	
+      	$('#frmregister').validate({
+          	rules: {
+	            firstname: "required",
+	            lastname: "required",
+	            username: "required",
+	            email: {
+	                required: true,
+	                email: true
+	            },
+          	},
+          	messages: {
+              	firstname: "Enter your Firstname",
+              	lastname: "Enter your Lastname",
+             	username: "Enter your Username",
+              	email: {
+                  	required: "Please enter a valid email address",
+                  	minlength: "Please enter a valid email address",
+                  	remote: jQuery.validator.format("{0} is already in use")
+              	},
+          	},
+          	submitHandler: function (form) {
+          		if (!jQuery("#b_trm1").is(":checked")) {
+		           	$("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+		            return false;
+        		}
+
+        		var formData = $("#frmregister").serialize();
+            	$.ajax({
+                url: '/customers/registration',
+                type: 'POST',
+                dataType: 'json',
+                data: formData,
+                beforeSend: function () {
+                    $('#register_submit').prop('disabled', true).css('background','#999999');
+                    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                },
+                complete: function () {
+                
+                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                },
+                success: function (response) {
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    showSystemMessages('#systemMessage', response.type, response.msg);
+                    if (response.type === 'success') {
+                    	// $("#frmregister")[0].reset();
+                    	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                    	$("#divstep1").css("display","none");
+                    	$("#divstep3").css("display","block");
+                    	$("#cust_id").val(response.id);
+                    } else {
+                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                    }
+                }
+            });
+          	}
+      	});
+  	});
+
+  	function changeformate_fami_pho(idname) {
+      /*alert($('#contact').val());*/
+      var con = $('#'+idname).val();
+      var curchr = con.length;
+      if (curchr == 3) {
+          $('#'+idname).val("(" + con + ")" + "-");
+      } else if (curchr == 9) {
+          $('#'+idname).val(con + "-");
+      }
+    }
+
+
+    $(".dobdate").keyup(function(){
+      if ($(this).val().length == 2){
+          $(this).val($(this).val() + "/");
+      }else if ($(this).val().length == 5){
+          $(this).val($(this).val() + "/");
+      }
+  	});
+
+    $(".birthday").keyup(function(){
+        if ($(this).val().length == 2){
+            $(this).val($(this).val() + "/");
+        }else if ($(this).val().length == 5){
+            $(this).val($(this).val() + "/");
+        }
+    });
+
+    /*$('#email').on('blur', function() {
+      var posturl = '{{route("emailvalidation_customer")}}';
+      var formData = $("#frmregister").serialize();
+      $.ajax({
+            url: posturl,
+            type: 'get',
+            dataType: 'json',
+            data: formData,  
+             beforeSend: function () {
+                $("#systemMessage").html('');
+            },             
+            success: function (response) {                    
+                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
+            }
+        });
+  	});*/
+
+    $(document).on('click', '#step3_next', function () {
+        $("#err_gender").html("");
+
+    	if ($('input[name="gender"]:checked').val() == '' || $('input[name="gender"]:checked').val() == 'undefined' || $('input[name="gender"]:checked').val() == undefined) {
+            $("#err_gender").html('Please select your gender');
+        } else {
+            if ($('input[name="gender"]:checked').val() == 'other' && $('#othergender').val() == '') {
+                $("#err_gender").html('Please enter other gender');
+            }else{
+	            var posturl = '/customers/savegender';
+	            var formdata = new FormData();
+	            formdata.append('_token', '{{csrf_token()}}')
+	            formdata.append('cust_id', $('#cust_id').val())
+	            var g = $('input[name="gender"]:checked').val() == 'other' ? $('#othergender').val() : $('input[name="gender"]:checked').val();
+	            formdata.append('gender', g);
+	            $.ajax({
+	                url: posturl,
+	                type: 'POST',
+	                dataType: 'json',
+	                data: formdata,
+	                processData: false,
+	                contentType: false,
+	                headers: {
+	                    'X-CSRF-TOKEN': $("#_token").val()
+	                },                
+	                beforeSend: function () {
+	                    $('.step3_next').prop('disabled', true).css('background','#999999');
+	                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+	                },
+	                complete: function () {
+	                    $('.step3_next').prop('disabled', false).css('background','#ed1b24');
+	                },
+	                success: function (response) {
+	                   $("#divstep3").css("display","none");
+	                   $("#divstep4").css("display","block");
+	                }
+	            });
+	        }
+        }
+    });
+
+    $(document).on('click', '#step4_next', function () {
+      
+        var address_sign = $('#b_address').val();
+        var country_sign = $('#b_country').val();
+        var city_sign = $('#b_city').val();
+        var state_sign = $('#b_state').val();
+        var zipcode_sign = $('#b_zipcode').val();
+        var lon = $('#lon').val();
+        var lat = $('#lat').val();
+        
+        $('#err_address_sign').html('');
+        $('#err_country_sign').html('');
+        $('#err_city_sign').html('');
+        $('#err_state_sign').html('');
+        $('#err_zipcode_sign').html('');
+
+    	if(address_sign == ''){
+    		$('#err_address_sign').html('Please enter address.');
+    	}else{
+    		var posturl = '/customers/saveaddress';
+	        var formdata = new FormData();
+	        formdata.append('_token', '{{csrf_token()}}')
+	        formdata.append('address', address_sign)
+	        formdata.append('country', country_sign)
+	        formdata.append('city', city_sign)
+	        formdata.append('state', state_sign)
+	        formdata.append('zipcode', zipcode_sign)
+	        formdata.append('lon', lon)
+	        formdata.append('lat', lat)
+	        formdata.append('cust_id', $('#cust_id').val())
+	        $.ajax({
+	            url: posturl,
+	            type: 'POST',
+	            dataType: 'json',
+	            data: formdata,
+	            processData: false,
+	            contentType: false,
+	            headers: {
+	                'X-CSRF-TOKEN': $("#_token").val()
+	            },
+	            beforeSend: function () {
+	                $('.step4_next').prop('disabled', true).css('background','#999999');
+	                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+	            },
+	            complete: function () {
+	                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
+	            },
+	            success: function (response) {
+	                $("#divstep4").css("display","none");
+	                $("#divstep5").css("display","block");
+	            }
+	        });
+	    	}
+    });
+
+    $(document).on('click', '#step44_next', function () {
+      	var posturl = '/customers/savephoto';
+       	var getData = new FormData($("#myformprofile")[0]);
+      	getData.append('_token', '{{csrf_token()}}')       
+      	getData.append('cust_id', $('#cust_id').val())       
+      	$.ajax({
+            url: posturl,
+            type: 'POST',
+            dataType: 'json',
+            data: getData,
+            cache: true,
+            processData: false,
+            contentType: false,
+           
+            success: function (response) {
+                $("#divstep5").css("display","none");
+                $("#divstep6").css("display","block");
+            }
+        });
+  	});
+
+  	$(document).on('click', '#step5_next', function () {
+       $('.relationship').each(function(e) {
+        	$(this).removeClass("redClass");
+        });
+       	$('.gender').each(function(e) {
+        	$(this).removeClass("redClass");
+        });
+
+  		$(".required").each(function() {
+	        $(this).removeClass("redClass");
+	    });
+        var counter = 0;
+
+        $('.relationship').each(function(e) {
+        	if ($(this).val() === "") {
+	            $(this).addClass("redClass");
+	            counter++;
+	        }
+        });
+
+
+	    $(".required").each(function() {
+	        if ($(this).val() === "") {
+	            $(this).addClass("redClass");
+	            counter++;
+	        }
+	    });
+
+	    $('.gender').each(function(e) {
+        	if ($(this).val() === "") {
+	            $(this).addClass("redClass");
+	            counter++;
+	        }
+        });
+
+		
+	    if(counter > 0){
+	    	$('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
+	    	return false;
+	    }else{
+
+	        var form = $('#familyform')[0];
+	        var posturl = '/submitfamilyCustomer';
+	        var formdata = new FormData(form);
+	        formdata.append('_token', '{{csrf_token()}}')
+	        formdata.append('cust_id', $('#cust_id').val())
+	        formdata.append('business_id', '{{$company->id}}')
+	     
+        	setTimeout(function () {
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $("#_token").val()
+                },
+                beforeSend: function () {
+                    $('#step5_next').prop('disabled', true).css('background','#999999');
+                  
+                    $("#systemMessage").html('Please wait while we submitting the data.')
+                },
+                complete: function () {
+                    $('#step5_next').prop('disabled', true).css('background','#999999');
+                },
+                success: function (response) {
+                    $("#systemMessage").html(response.msg);
+                    if (response.type === 'success') {
+                        window.location.href = response.redirecturl;
+                    } else {
+                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
+                    }
+                }
+            });
+        }, 1000)
+        }
+    });
+
+    $(document).on('click', '#skip5_next', function () {
+    	window.location.href = '/business/{{$company->id}}/customers/'+$('#cust_id').val();
+    });
+
+    function getAge() {
+        var dateString = document.getElementById("dob").value;
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        if(age < 13)
+        {
+            var agechk = '0';
+        } else {
+           var agechk = '1';
+        }
+        return agechk;
+    }
+</script>
+
 
 <script>
 	$(document).on('click', '.delcustomer', function(e){
@@ -218,8 +580,8 @@
 	      reader.readAsDataURL(input.files[0]);
 	    }
   	} 
-
 </script>
+
 <script type="text/javascript">
 	$(document).ready(function () {
 		  $("#collapse_A").addClass('show in');
@@ -291,14 +653,10 @@
 	}
 </script>
 
-<script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
+<!-- <script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script> -->
 
 <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
  
-
-<!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
-<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
-
 <script type="text/javascript">
 	
 	$(document).ready(function () {
@@ -333,304 +691,6 @@
                     .appendTo( ul );
         };
   	});
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script> 
-<script type="text/javascript">
-	function registerUser() {
-        var validForm = $('#frmregister').valid();
-        var posturl = '/customers/registration';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if (validForm) {
-            var formData = $("#frmregister").serialize();
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formData,
-                beforeSend: function () {
-                    $('#register_submit').prop('disabled', true).css('background','#999999');
-                    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                },
-                complete: function () {
-                
-                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                },
-                success: function (response) {
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                    showSystemMessages('#systemMessage', response.type, response.msg);
-                    if (response.type === 'success') {
-                    	// $("#frmregister")[0].reset();
-                    	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                    	$("#divstep1").css("display","none");
-                    	$("#divstep3").css("display","block");
-                    	$("#cust_id").val(response.id);
-                    } else {
-                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }
-    }
-
-    $("#frmregister").submit(function (e) {
-      	e.preventDefault();
-      	$('#frmregister').validate({
-          	rules: {
-	            firstname: "required",
-	            lastname: "required",
-	            username: "required",
-	            email: {
-	                required: true,
-	                email: true
-	            },
-          	},
-          	messages: {
-              	firstname: "Enter your Firstname",
-              lastname: "Enter your Lastname",
-              username: "Enter your Username",
-              email: {
-                  required: "Please enter a valid email address",
-                  minlength: "Please enter a valid email address",
-                  remote: jQuery.validator.format("{0} is already in use")
-              },
-          },
-          submitHandler: registerUser
-      });
-  	});
-
-  	function changeformate_fami_pho(idname) {
-      /*alert($('#contact').val());*/
-      var con = $('#'+idname).val();
-      var curchr = con.length;
-      if (curchr == 3) {
-          $('#'+idname).val("(" + con + ")" + "-");
-      } else if (curchr == 9) {
-          $('#'+idname).val(con + "-");
-      }
-    }
-
-
-    $(".dobdate").keyup(function(){
-      if ($(this).val().length == 2){
-          $(this).val($(this).val() + "/");
-      }else if ($(this).val().length == 5){
-          $(this).val($(this).val() + "/");
-      }
-  	});
-
-    $(".birthday").keyup(function(){
-        if ($(this).val().length == 2){
-            $(this).val($(this).val() + "/");
-        }else if ($(this).val().length == 5){
-            $(this).val($(this).val() + "/");
-        }
-    });
-
-    /*$('#email').on('blur', function() {
-      var posturl = '{{route("emailvalidation_customer")}}';
-      var formData = $("#frmregister").serialize();
-      $.ajax({
-            url: posturl,
-            type: 'get',
-            dataType: 'json',
-            data: formData,  
-             beforeSend: function () {
-                $("#systemMessage").html('');
-            },             
-            success: function (response) {                    
-                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
-            }
-        });
-  	});*/
-
-    $(document).on('click', '#step3_next', function () {
-        $("#err_gender").html("");
-   
-            if ($('input[name="gender"]:checked').val() == 'other' && $('#othergender').val() == '') {
-                $("#err_gender").html('Please enter other gender');
-            } else {
-                var posturl = '/customers/savegender';
-                var formdata = new FormData();
-                formdata.append('_token', '{{csrf_token()}}')
-                formdata.append('cust_id', $('#cust_id').val())
-                var g = $('input[name="gender"]:checked').val() == 'other' ? $('#othergender').val() : $('input[name="gender"]:checked').val();
-                formdata.append('gender', g);
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formdata,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $("#_token").val()
-                    },                
-                    beforeSend: function () {
-                        $('.step3_next').prop('disabled', true).css('background','#999999');
-                        $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-                    },
-                    complete: function () {
-                        $('.step3_next').prop('disabled', false).css('background','#ed1b24');
-                    },
-                    success: function (response) {
-                       $("#divstep3").css("display","none");
-                       $("#divstep4").css("display","block");
-                    }
-                });
-            }
-    });
-
-    $(document).on('click', '#step4_next', function () {
-      
-        var address_sign = $('#b_address').val();
-        var country_sign = $('#b_country').val();
-        var city_sign = $('#b_city').val();
-        var state_sign = $('#b_state').val();
-        var zipcode_sign = $('#b_zipcode').val();
-        var lon = $('#lon').val();
-        var lat = $('#lat').val();
-        
-        $('#err_address_sign').html('');
-        $('#err_country_sign').html('');
-        $('#err_city_sign').html('');
-        $('#err_state_sign').html('');
-        $('#err_zipcode_sign').html('');
-    
-        var posturl = '/customers/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('cust_id', $('#cust_id').val())
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                $("#divstep4").css("display","none");
-                $("#divstep5").css("display","block");
-            }
-        });
-       
-    });
-
-    $(document).on('click', '#step44_next', function () {
-      	var posturl = '/customers/savephoto';
-       	var getData = new FormData($("#myformprofile")[0]);
-      	getData.append('_token', '{{csrf_token()}}')       
-      	getData.append('cust_id', $('#cust_id').val())       
-      	$.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: getData,
-            cache: true,
-            processData: false,
-            contentType: false,
-           
-            success: function (response) {
-                $("#divstep5").css("display","none");
-                $("#divstep6").css("display","block");
-            }
-        });
-  	});
-
-  	$(document).on('click', '#step5_next', function () {
-       
-  		$(".required").each(function() {
-	        $(this).removeClass("redClass");
-	    });
-        var counter = 0;
-	    $(".required").each(function() {
-	        if ($(this).val() === "") {
-	            $(this).addClass("redClass");
-	            counter++;
-	        }
-	    });
-	    if(counter > 0){
-	    	$('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
-	    	return false;
-	    }else{
-
-	        var form = $('#familyform')[0];
-	        var posturl = '/submitfamilyCustomer';
-	        var formdata = new FormData(form);
-	        formdata.append('_token', '{{csrf_token()}}')
-	        formdata.append('cust_id', $('#cust_id').val())
-	        formdata.append('business_id', '{{$company->id}}')
-	     
-        	setTimeout(function () {
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $("#_token").val()
-                },
-                beforeSend: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                  
-                    $("#systemMessage").html('Please wait while we submitting the data.')
-                },
-                complete: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                },
-                success: function (response) {
-                    $("#systemMessage").html(response.msg);
-                    if (response.type === 'success') {
-                        window.location.href = response.redirecturl;
-                    } else {
-                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }, 1000)
-        }
-    });
-
-    $(document).on('click', '#skip5_next', function () {
-    	window.location.href = '/business/{{$company->id}}/customers/'+$('#cust_id').val();
-    });
-
-    function getAge() {
-        var dateString = document.getElementById("dob").value;
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        if(age < 13)
-        {
-            var agechk = '0';
-        } else {
-           var agechk = '1';
-        }
-        return agechk;
-    }
 </script>
 
 <script type="text/javascript">
