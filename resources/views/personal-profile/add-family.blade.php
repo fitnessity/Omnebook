@@ -63,21 +63,24 @@
                             </div>
                         </div>
 
-                        @foreach($UserFamilyDetails as $cFamily)
-                            @foreach($cFamily as $family)
-                            <?php/* print_r($family);exit;*/ ?>
+                        @foreach($UserFamilyDetails as $family)
+                            @php if($family->parent_cus_id != ''){
+                                   $type = 'customer'; 
+                                }else{
+                                    $type= 'user';
+                                }
+                            @endphp
                             <div class="add-family-frnd" style="cursor: pointer">
                                 <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png);">
-                                    <h2>{{$family->fname}} {{$family->lname}} </h2>
+                                    <h2>{{$family->full_name}}</h2>
                                     <p>({{$family->relationship}} {{$family->age}} yrs old)</p>
                                     <div class="familyfrnd-info">
                                         <a class="view-booikng" href="{{route('personal.orders.index')}}"> View Booking </a>
-                                        <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id])}}" data-modal-width="1200px"> Edit </a>
-                                        <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id])}}"> Delete </a>
+                                        <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px"> Edit </a>
+                                        <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
                         @endforeach
 
                         <a class="add-fm-a" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">
