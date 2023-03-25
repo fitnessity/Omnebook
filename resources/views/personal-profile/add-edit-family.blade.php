@@ -7,6 +7,19 @@
 		}else{
 			$title = "Add";
 		}
+
+		if($type == 'user'){
+			$first_name = @$familyData->first_name;
+			$last_name = @$familyData->last_name;
+			$phone_number = @$familyData->mobile;
+			$birthday = @$familyData->birthday;
+		}else{
+			$first_name = @$familyData->fname;
+			$last_name = @$familyData->lname;
+			$phone_number = @$familyData->phone_number;
+			$birthday = @$familyData->birthdate;
+		}
+
 	@endphp
 
 	<div class="row contentPop"> 
@@ -15,16 +28,17 @@
 		</div>
 	</div>
 	<input type="hidden" name="id" value="{{@$familyData->id}}">
+	<input type="hidden" name="type" value="{{@$type}}">
 	<div class="editfamily_frnds">
 		<div class="row">	
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
-					<input type="text" name="fname" placeholder="First Name" class="form-control" required="required" value="{{@$familyData->first_name}}">
+					<input type="text" name="fname" placeholder="First Name" class="form-control" required="required" value="{{$first_name}}">
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
-					<input type="text" name="lname" id="lname" placeholder="Last Name" class="form-control" required="required" value="{{@$familyData->last_name}}">
+					<input type="text" name="lname" id="lname" placeholder="Last Name" class="form-control" required="required" value="{{$last_name}}">
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
@@ -60,19 +74,21 @@
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group dob">
 					<label>mm/dd/yyyy</label>
-					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{@$familyData->birthday}}" required="required" data-behavior="datepicker">
+					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{@$birthday}}" required="required" data-behavior="datepicker">
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
-					<input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{@$familyData->mobile}}" data-behavior="text-phone" maxlength="14">
+					<input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{@$phone_number}}" data-behavior="text-phone" maxlength="14">
 				</div>
 			</div>
+			@if($type == 'user')
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
 					<input type="text" name="emergency_name" id="emergency_name" placeholder="Emergency Contact Name" class="form-control" value="{{@$familyData->emergency_contact_name}}">
 				</div>
 			</div>
+			@endif
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
 					<input type="text" name="emergency_contact" id="emergency_contact" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{@$familyData->emergency_contact}}" data-behavior="text-phone" >

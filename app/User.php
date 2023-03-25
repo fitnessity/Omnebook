@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','new_password_key','username','is_deleted','isguestuser','fitnessity_fee'
+        'name', 'email', 'password','new_password_key','username','is_deleted','isguestuser','fitnessity_fee','firstname','lastname','birthdate'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -36,9 +36,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = ['about_me','network_count','about_business', 'full_name','age'];
+
     public $timestamps = false;
     
-    protected $appends = ['about_me','network_count','about_business', 'full_name'];
     
     public static function boot(){
         parent::boot();
@@ -54,6 +56,16 @@ class User extends Authenticatable
                 $model->create_stripe_customer_id();
             }
         });
+    }
+    
+
+    public function getAgeAttribute()
+    {
+        if($this->birthdate != null){
+            return Carbon::parse($this->birthdate)->age;
+        }else{
+            return null;
+        }
     }
     
     public function getFullNameAttribute(){
