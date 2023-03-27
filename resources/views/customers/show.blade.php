@@ -795,7 +795,7 @@
 								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Address </label>
-										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->full_address()}}">
+										<input class="form-control" type="text" id="b_address" name="address" placeholder="Address" value="{{$customerdata->address}}">
 									</div>
 								</div>
 								 <div id="map" style="display: none;"></div>
@@ -1113,7 +1113,7 @@
             // Location details
             for (var i = 0; i < place.address_components.length; i++) {
                 if(place.address_components[i].types[0] == 'postal_code'){
-                  $('#zipcode').val(place.address_components[i].long_name);
+                  $('#zipcode1').val(place.address_components[i].long_name);
                 }
                 if(place.address_components[i].types[0] == 'country'){
                   $('#country').val(place.address_components[i].long_name);

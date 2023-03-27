@@ -212,12 +212,7 @@ class RegistrationController extends Controller
     {   
         $customers = Customer::where('id',$request->cust_id)->first();
         if ($request->hasFile('file_upload_profile')) {
-            $name = $request->file('file_upload_profile')->getClientOriginalName();
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers' ;
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'customers';
-    
-            /*  $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('file_upload_profile'), $file_upload_path, 1, $thumb_upload_path, '415', '354');*/
-            //$customers->profile_pic =  $image_upload['filename']; 
+           $customers->profile_pic =  $request->file('file_upload_profile')->store('customer');
         }
         $customers->save();
         return response()->json(['status'=>200]);

@@ -440,10 +440,7 @@ class CustomerController extends Controller {
               Session::put('strpecarderror', $statusmsg);
             }   
         }elseif($request->chk == 'update_personal'){
-            
-            
             $data = $request->all();
-
             if($request->hasFile('profile_pic')){
                 $data['profile_pic'] = $request->file('profile_pic')->store('customer');
             }
@@ -471,6 +468,7 @@ class CustomerController extends Controller {
             $cust = Customer::find($request->cus_id);
             $cust->update($data);
         }
+        
         $cust = Customer::find($request->cus_id);
         
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
