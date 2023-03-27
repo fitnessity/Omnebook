@@ -13,7 +13,7 @@
 	<div class="col-md-5">
 		<div>
 			<label>Contract Details:</label>
-			<span>{{$booking_detail->business_price_detail->business_price_details_ages->category_title}} , {{$booking_detail->business_price_detail->price_title}}</span>
+			<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} , {{$booking_detail->business_price_detail_with_trashed->price_title}}</span>
 		</div>
 	</div>
 	<div class="col-md-7">
