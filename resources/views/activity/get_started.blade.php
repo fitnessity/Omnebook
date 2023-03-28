@@ -19,6 +19,7 @@
 <style>
 	section.instant-hire{
 		margin-top: 69px;
+		text-align: center;
 	}
 </style>
 

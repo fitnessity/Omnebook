@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			@foreach($getstarteddata as $getdatafast)
-			<div class="col-md-3 col-sm-4 col-xs-12">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<div class="instant-section-info">
 					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
 					<h4>{{$getdatafast['title']}}</h4>
@@ -77,7 +77,7 @@
 						</div>
 					</div>
 					@foreach ($bookschedulers as $bookscheduler)
-						<div class="col-md-4">
+						<div class="col-md-4 col-sm-6">
 							<div class="find-activity">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">

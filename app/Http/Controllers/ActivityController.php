@@ -1272,7 +1272,8 @@ class ActivityController extends Controller {
             $data["profile_" . $profile->id]['state'] = (isset($profile->state)?$profile->state:'');
             $data["profile_" . $profile->id]['zip_code'] = (isset($profile->zip_code)?$profile->zip_code:'');
             $data["profile_" . $profile->id]['instructor_habit'] = (isset($profile->instructor_habit)?$profile->instructor_habit:'');
-            $data["profile_" . $profile->id]['reviews'] = '<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i> <a href="#" onclick="viewActreview('.$profile->id.')"> View </a>';
+            $reviews_count = BusinessServiceReview::where('service_id', $profile->id)->count();
+            $data["profile_" . $profile->id]['reviews'] = '<i class="fa fa-star" aria-hidden="true"></i> '.$reviews_count.'<a href="#" onclick="viewActreview('.$profile->id.')"> View </a>';
         
             
             $arrComp = CompanyInformation::find($data["profile_" . $profile->id]['business']->cid);

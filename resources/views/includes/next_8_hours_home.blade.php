@@ -4,11 +4,11 @@
 	$date = strtotime("+8 hours", $date);
 ?>
 
-<div class="home-black-section">
-	<label>EXPLORE & RESERVE YOUR SPOT IN  AN ACTIVITY <br> HAPPENING IN THE NEXT 8 HRS</label>
-	<i class="fa fa-caret-down"></i>
-</div>
 @if(count($bookschedulers) > 0)
+	<div class="home-black-section">
+		<label>EXPLORE & RESERVE YOUR SPOT IN  AN ACTIVITY <br> HAPPENING IN THE NEXT 8 HRS</label>
+		<i class="fa fa-caret-down"></i>
+	</div>
 	<div class="fsth-0 fsbh-1">
 		<div class="container-fluid">
 			<div class="row">
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 				@foreach($bookschedulers as $bookscheduler)
-					<div class="col-md-4">
+					<div class="col-md-4 col-sm-6">
 						<div class="find-activity">
 							<div class="row">
 								<div class="col-md-4 col-sm-4">
