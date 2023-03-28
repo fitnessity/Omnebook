@@ -2785,11 +2785,11 @@ class LessonController extends Controller {
                                 if(!empty($reviews_people)){
                                     foreach($reviews_people as $people){
                                         $userinfo = User::find($people->user_id);
-                                        $data .='<a href="'.config('app.url').'/userprofile/'.@$userinfo->username.'" target="_blank" title="'.$userinfo->firstname.' '.$userinfo->lastname.'" data-toggle="tooltip">';
+                                        $data .='<a href="'.config('app.url').'/userprofile/'.@$userinfo->username.'" target="_blank" title="'.@$userinfo->firstname.' '.@$userinfo->lastname.'" data-toggle="tooltip">';
                                         
-                                        if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+                                        if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
                                         {
-                                            $data .='<img src="/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic.'" alt="'.$userinfo->firstname.''.$userinfo->lastname.'">';
+                                            $data .='<img src="/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic.'" alt="'.@$userinfo->firstname.''.@$userinfo->lastname.'">';
                                         }
                                         else
                                         {
@@ -2809,7 +2809,7 @@ class LessonController extends Controller {
                         if(!empty($reviews)) {
                             foreach($reviews as $review) {
                                  $userinfo = User::find($review->user_id);
-                                 if($userinfo->profile_pic!='')
+                                 if(@$userinfo->profile_pic!='')
                                  {
                                      $pic="/public/uploads/profile_pic/thumb/".$userinfo->profile_pic;
                                  }
@@ -2817,19 +2817,19 @@ class LessonController extends Controller {
                                  $data .='<div class="ser-rev-user">
                                             <div class="row">
                                                 <div class="col-md-2">';
-                                                if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+                                                if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
                                                 {
                                                     $data .='<img class="rev-img" src="'.$pic.'" 
-                                                    alt="'.$userinfo->firstname.' '.$userinfo->lastname.'">';
+                                                    alt="'.@$userinfo->firstname.' '.@$userinfo->lastname.'">';
                                                 }
                                                 else
                                                 {
-                                                    $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+                                                    $pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
                                                     $data .='<div class="reviewlist-img-text"><p>'.$pf.'</p></div>';
                                                 }
                                                 $data .='</div>
                                                         <div class="col-md-10">
-                                                            <h4>'.$userinfo->firstname.' '.$userinfo->lastname.'
+                                                            <h4>'.@$userinfo->firstname.' '.@$userinfo->lastname.'
                                                             <div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> '.$review->rating.' </div> </h4> 
                                                             <p class="rev-time">'.date('d M-Y',strtotime($review->created_at)).'</p>
                                                         </div>

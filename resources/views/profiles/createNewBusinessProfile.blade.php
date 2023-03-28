@@ -5575,7 +5575,7 @@
 
                                                             <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_adult{{$i}}{{$j}}" name="is_recurring_adult_{{$i}}{{$j}}" @if($price['is_recurring_adult'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'adult');" >
 
-                                                            <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Adults @if($editmodeltextadult != '') {{$editmodeltextadult}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_adult{{$i}}{{$j}}" class="modelbox-edit-link" >Edit</button> )@endif</p>
+                                                            <p class="recurring-pmt" id="adult_recurring_p">Is This A Recurring Payment? Set the monthly payment terms for Adults @if($editmodeltextadult != '') {{$editmodeltextadult}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_adult{{$i}}{{$j}}" class="modelbox-edit-link" >Edit</button> )@endif</p>
 
                                                             <button style="display:none" id="btn_recurring_adult{{$i}}{{$j}}" name="btn_recurring_adult_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_adult{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'adult');">Launch demo modal</button>
 
@@ -5670,7 +5670,7 @@
                                                         <div class="priceselect sp-select modelmargin">
                                                             <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_child{{$i}}{{$j}}" name="is_recurring_child_{{$i}}{{$j}}" @if($price['is_recurring_child'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'child');" >
 
-                                                            <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Children @if($editmodeltextchild != '') {{$editmodeltextchild}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_child{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
+                                                            <p class="recurring-pmt" id="child_recurring_p">Is This A Recurring Payment? Set the monthly payment terms for Children @if($editmodeltextchild != '') {{$editmodeltextchild}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_child{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
 
                                                             <button style="display:none" id="btn_recurring_child{{$i}}{{$j}}" name="btn_recurring_child_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_child{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'child');">Launch demo modal</button>
 
@@ -5762,7 +5762,7 @@
                                                     <div class="col-md-12">
                                                         <div class="priceselect sp-select modelmargin">
                                                             <input class="modelcheckbox"  data-count="0"  type="checkbox" id="is_recurring_infant{{$i}}{{$j}}" name="is_recurring_infant_{{$i}}{{$j}}" @if($price['is_recurring_infant'] == '1') Checked value="1" @else value="0"  @endif onclick="openmodelbox({{$i}},{{$j}},'infant');" >
-                                                            <p class="recurring-pmt">Is This A Recurring Payment? Set the monthly payment terms for Infants @if($editmodeltextinfant != '') {{$editmodeltextinfant}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_infant{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
+                                                            <p class="recurring-pmt" id="infant_recurring_p">Is This A Recurring Payment? Set the monthly payment terms for Infants @if($editmodeltextinfant != '') {{$editmodeltextinfant}} <button type="button" data-toggle="modal" data-target="#ModelRecurring_infant{{$i}}{{$j}}" class="modelbox-edit-link">Edit</button> )@endif</p>
 
                                                             <button style="display:none" id="btn_recurring_infant{{$i}}{{$j}}" name="btn_recurring_infant_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id" data-toggle="modal" data-target="#ModelRecurring_infant{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'infant');">Launch demo modal</button>
                                                         </div>
@@ -6206,13 +6206,13 @@
 
                                                                             <div class="col-md-8">
                                                                                 <select class="form-control" name="recurring_customer_chage_by_infant_{{$i}}{{$j}}" id="recurring_customer_chage_by_infant{{$i}}{{$j}}">
-                                                                                        <option value="1 Week" @if($recurring_customer_chage_by_infant == '1 Week') selected @endif>1 week</option>
-                                                                                        <option value="2 Week" @if($recurring_customer_chage_by_infant == '2 Week') selected @endif>2 week</option>
-                                                                                        <option value="1 Month" @if($recurring_customer_chage_by_infant == '1 Month') selected @endif>1 Month</option>
-                                                                                        <option value="3 Month" @if($recurring_customer_chage_by_infant == '3 Month') selected @endif>3 Month</option>
-                                                                                        <option value="6 Month" @if($recurring_customer_chage_by_infant == '6 Month') selected @endif>6 Month</option> 
-                                                                                        <option value="1 Year" @if($recurring_customer_chage_by_infant == '1 Year') selected @endif>1 Year</option>
-                                                                                    </select>
+                                                                                    <option value="1 Week" @if($recurring_customer_chage_by_infant == '1 Week') selected @endif>1 week</option>
+                                                                                    <option value="2 Week" @if($recurring_customer_chage_by_infant == '2 Week') selected @endif>2 week</option>
+                                                                                    <option value="1 Month" @if($recurring_customer_chage_by_infant == '1 Month') selected @endif>1 Month</option>
+                                                                                    <option value="3 Month" @if($recurring_customer_chage_by_infant == '3 Month') selected @endif>3 Month</option>
+                                                                                    <option value="6 Month" @if($recurring_customer_chage_by_infant == '6 Month') selected @endif>6 Month</option> 
+                                                                                    <option value="1 Year" @if($recurring_customer_chage_by_infant == '1 Year') selected @endif>1 Year</option>
+                                                                                </select>
                                                                             </div>
                                                                         </div>
 
@@ -8817,6 +8817,8 @@
         $('#'+val+'_cus_weekly_price'+i+j).val(pay_price);
         var discount =  $('#'+val+'_discount'+i+j).val();
         $('#'+val+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
+
+        $('#'+val+'_recurring_p').html('Is This A Recurring Payment? Set the monthly payment terms for '+val +' ('+autopay+' Months contract | $'+pay_price+' A Month for '+autopay+' Months | Totalling $'+contract_revenue+' <button type="button" data-toggle="modal" data-target="#ModelRecurring_'+val+i+j+'" class="modelbox-edit-link">Edit</button> )');   
         /*adultchangeestprice(i,j);
         childchangeestprice(i,j);
         infantchangeestprice(i,j);*/
@@ -9140,7 +9142,7 @@
 
     }
 
-    function getnumberofpmt(i,j,val){
+    function getnumberofpmt(i,j,val){  
         var part  = $("#nuberofautopays_"+val+i+j).val();
         var price = $("#recurring_price_"+val+i+j).val();
         if(price == 0 || price == ''){
@@ -9170,7 +9172,8 @@
         $("#first_pmt_"+val+i+j).val(price);
         $("#recurring_pmt_"+val+i+j).val(price);
         $("#contractsettings_"+val+i+j).html('What happens after '+part +' payments?');        
-        $("#renew_"+val+i+j).html('Contract Automaitcally Renews Every '+part +' payments');        
+        $("#renew_"+val+i+j).html('Contract Automaitcally Renews Every '+part +' payments');
+        $('#'+val+'_recurring_p').html('Is This A Recurring Payment? Set the monthly payment terms for '+val +' ('+part+' Months contract | $'+price+' A Month for '+part+' Months | Totalling $'+total+' <button type="button" data-toggle="modal" data-target="#ModelRecurring_'+val+i+j+'" class="modelbox-edit-link">Edit</button> )');     
     }
 
     function changedesclenght(i){
