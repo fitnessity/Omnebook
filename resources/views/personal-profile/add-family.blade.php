@@ -64,24 +64,33 @@
                         </div>
 
                         @foreach($UserFamilyDetails as $family)
-                        <div class="add-family-frnd" style="cursor: pointer">
-                            <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png);">
-                                <h2>{{$family->first_name}} {{$family->last_name}} </h2>
-                                <p>({{$family->relationship}} {{$family->getAge()}} yrs old)</p>
-                                <div class="familyfrnd-info">
-                                    <a class="view-booikng" href="{{route('personal.orders.index')}}"> View Booking </a>
-                                    <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id])}}" data-modal-width="1200px"> Edit </a>
-                                    <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id])}}"> Delete </a>
+                            @php if($family->parent_cus_id != ''){
+                                   $type = 'customer'; 
+                                }else{
+                                    $type= 'user';
+                                }
+                            @endphp
+                            <div class="add-family-frnd" style="cursor: pointer">
+                                <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png);">
+                                    <h2>{{$family->full_name}}</h2>
+                                    <p>({{$family->relationship}} {{$family->age}} yrs old)</p>
+                                    <div class="familyfrnd-info">
+                                        <a class="view-booikng" href="{{route('personal.orders.index')}}"> View Booking </a>
+                                        <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px"> Edit </a>
+                                        <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endforeach
-                        <div class="add-family-frnd" style="cursor: pointer">
-                            <div class="cards-content" style="color:#ffffff; background-image: url('/public/img/add-family.png');">
-                                <h2>( + )</h2>
-                                <a class="add-fm-a" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">Add Family Member or Friend</a>
-                             </div>
-                        </div>
+
+                        <a class="add-fm-a" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">
+                            <div class="add-family-frnd" style="cursor: pointer">
+                                <div class="cards-content" style="color:#ffffff; background-image: url('/public/img/add-family.png');">
+                                    <h2>( + )</h2>
+                                    <p>Add Family Member or Friend</p>
+                                 </div>
+                            </div>
+                        </a>
                     </div>
                     
                     <!-- <div class="row">

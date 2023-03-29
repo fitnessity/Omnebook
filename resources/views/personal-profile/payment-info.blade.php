@@ -85,7 +85,7 @@
                                 </div>
 							</div>
 							<!-- <table id="example" class="table table-striped table-bordered" style="width:100%" style="display:none;"> -->
-                            <table id="historyTable" class="table table-striped table-bordered" style="display:none;width: 100%">
+                            <table id="historyTable" class="table table-striped table-bordered" style="width: 100%">
 								<thead>
 									<tr>
 										<th>Sale Date</th>
@@ -97,6 +97,16 @@
 									</tr>
 								</thead>
 								<tbody id="tbodydetail">
+                                    @foreach($transactionDetail as $history )
+                                    <tr>
+                                        <td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+                                        <td>{!!$history->item_description()['itemDescription']!!}</td>
+                                        <td>{{$history->item_type_terms()}}</td>
+                                        <td>{{$history->getPmtMethod()}}</td>
+                                        <td>${{$history->amount}}</td>
+                                        <td>{{$history->item_description()['qty']}}</td>
+                                    </tr>
+                                    @endforeach
 								</tbody>
 							</table>
                         </div>
@@ -196,7 +206,7 @@
     
     $(".dispalycard").on("click", function(){
         $('#stripediv').css('display','none');
-        $('#historyTable').css('display','inline-table');
+        /*$('#historyTable').css('display','inline-table');
         var pid = $(this).data('id');
         $.ajax({
             type: 'POST',
@@ -208,12 +218,12 @@
             success: function(data) {
                 $('#tbodydetail').html(data);
             }
-        });
+        });*/
     });
 
     $(".addcard").on("click", function(){
         $('#stripediv').css('display','block');
-        $('#historyTable').css('display','none');
+       /* $('#historyTable').css('display','none');*/
     });
 
     /* $(".delCard").on("click", function(){

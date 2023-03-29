@@ -21,7 +21,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
-use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer};
 use App\Repositories\SportsRepository;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
@@ -1874,107 +1874,28 @@ class UserProfileController extends Controller {
     }
 
     public function addFamily(Request $request) {
-
-        if (!Gate::allows('profile_view_access')) {
-
-            $request->session()->flash('alert-danger', 'Access Restricted');
-
-            return redirect('/');
-        }
-
         $loggedinUser = Auth::user();
+        $customer = $loggedinUser->customers;
+        $UserFamilyDetails = [];
 
-
-
-        $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
-
-
-
-        if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
-
-            $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
+        foreach($customer as $cs){
+            foreach ($cs->get_families() as $fm){
+                $UserFamilyDetails [] = $fm;
+            }  
         }
-
-        $UserFamilyDetails = UserFamilyDetail::where('user_id', $loggedinUser['id'])->get();
-        $sports_names = $this->sports->getAllSportsNames();
-        $approve = Evidents::where('user_id', $loggedinUser['id'])->get();
-        $serviceType = Miscellaneous::businessType();
-        $programType = Miscellaneous::programType();
-        $programFor = Miscellaneous::programFor();
-        $numberOfPeople = Miscellaneous::numberOfPeople();
-        $ageRange = Miscellaneous::ageRange();
-        $expLevel = Miscellaneous::expLevel();
-        $serviceLocation = Miscellaneous::serviceLocation();
-        $pFocuses = Miscellaneous::pFocuses();
-        $duration = Miscellaneous::duration();
-        $servicePriceOption = Miscellaneous::servicePriceOption();
-        $specialDeals = Miscellaneous::specialDeals();
-        //$loggedinUser['role'] = 'customer';
-        //$loggedinUser->save();
-        //dd($UserProfileDetail);die;
-
-        if ($loggedinUser['role'] == 'business' || $loggedinUser['role'] == 'professional' || $loggedinUser['role'] == 'admin') {
-            $view = 'profiles.viewProfile';
-        } elseif ($loggedinUser['role'] == 'customer') {
-            $view = 'profiles.viewProfileCustomer';
+        //print_r($UserFamilyDetails);exit;
+        $userfamily = $loggedinUser->user_family_details;
+        foreach($userfamily as $uf){
+            $UserFamilyDetails [] = $uf;
         }
-        $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
-        $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
-
-        //  dd($this->users->getStateList($UserProfileDetail['country']));
-        //die;
-
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        $firstCompany = CompanyInformation::where('user_id', Auth::user()->id)->first();
-        $companies = CompanyInformation::where('user_id', Auth::user()->id)->get();
-
-        $view = 'personal-profile.add-family';
-        
+        //print_r( $UserFamilyDetails);exit;
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
         
-        return view($view, [
-            'cart' => $cart,
-            'UserProfileDetail' => $UserProfileDetail,
-            'firstCompany' => $firstCompany,
-            'countries' => $this->users->getCountriesList(),
-            'states' => $this->users->getStateList($UserProfileDetail['country']),
-            'cities' => $this->users->getCityList($UserProfileDetail['state']),
-            'phonecode' => Miscellaneous::getPhoneCode(),
-            'sports_names' => $sports_names,
-            'serviceType' => $serviceType,
-            'programType' => $programType,
-            'programFor' => $programFor,
-            'numberOfPeople' => $numberOfPeople,
-            'ageRange' => $ageRange,
-            'expLevel' => $expLevel,
-            'serviceLocation' => $serviceLocation,
-            'pFocuses' => $pFocuses,
-            'duration' => $duration,
-            'specialDeals' => $specialDeals,
-            'servicePriceOption' => $servicePriceOption,
-            'pageTitle' => "PROFILE",
-            'approve' => $approve,
-            'family' => $family,
-            'business_details' => $business_details,
-            'companies' => $companies,
+        return view('personal-profile.add-family', [
+            'cart' => $cart,       
             'UserFamilyDetails' => $UserFamilyDetails,
         ]);
     }
@@ -8339,22 +8260,8 @@ class UserProfileController extends Controller {
         $UserProfileDetail['email'] = $user->email;
         $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
         $UserProfileDetail['email'] = $user->email;
-
         $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
+        
 
         /*$follow = UserFollow::select("company_informations.company_name", "company_informations.first_name", "company_informations.last_name", "company_informations.id", "company_informations.logo")
                 ->join("company_informations", "users_follow.follow_id", "=", "company_informations.id")
@@ -8406,30 +8313,7 @@ class UserProfileController extends Controller {
             $stripePaymentMethod->save();
 
         }
-
-        /*$stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
-        $user = User::where('id', Auth::user()->id)->first();
-       
-        $carddetails = $stripe->tokens->create([
-            'card' => [
-                'number' => $request->cardNumber,
-                'exp_month' =>  $request->card_month,
-                'exp_year' =>  $request->card_year,
-                'cvc' =>  $request->cvv,
-                'name' =>  $request->owner,
-            ],
-        ]);
-        $customer_source = $stripe->customers->createSource(
-            $user->stripe_customer_id,
-            [ 'source' =>$carddetails->id]
-        );
-        $userId = Auth::user()->id;
-        DB::insert('insert into users_payment_info (user_id,card_stripe_id,card_token_id) values (?, ?, ?)', [$userId, $carddetails['card']->id, $carddetails->id]);*/
-        
-        
-        return redirect('/personal-profile/payment-info');
-        
+        return redirect('/personal-profile/payment-info'); 
     }
 
     public function paymentinfo(Request $request) {
@@ -8437,6 +8321,12 @@ class UserProfileController extends Controller {
         $cardInfo = [];
         $intent = null;
         $user = User::where('id', Auth::user()->id)->first();
+        $customers = $user->customers()->pluck('id')->toArray();
+        $customer_ids = implode(',',$customers);
+        $cardInfo = StripePaymentMethod::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at','desc')->get(); 
+        
+        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->get(); 
+
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         if($user->stripe_customer_id != ''){
@@ -8446,19 +8336,20 @@ class UserProfileController extends Controller {
             ]);
         }
 
-        $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
-
         $UserProfileDetail['firstname'] =  $user->firstname;
-
-        $UserProfileDetail['firstname'] = $user->firstname;
        
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
+
+        /*$stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);*/
+        // /echo $payment_methods;exit;
         
         return view('personal-profile.payment-info', [
             'UserProfileDetail' => $UserProfileDetail, 
+            'transactionDetail' => $transactionDetail, 
             'cardInfo' => $cardInfo,
             'cart' => $cart,
             'intent' => $intent 
@@ -8975,18 +8866,31 @@ class UserProfileController extends Controller {
 
     public function addFamilyMember(Request $request) {
         if($request->id != ''){
-            $user = Auth::user();
-            $familyData = $user->user_family_details()->findOrFail($request->id);
-            $familyData->first_name = $request->fname;
-            $familyData->last_name = $request->lname;
-            $familyData->gender = $request->gender;
-            $familyData->email = $request->email;
-            $familyData->relationship = $request->relationship;
-            $familyData->birthday = $request->birthdate;
-            $familyData->mobile = $request->mobile;
-            $familyData->emergency_contact_name = $request->emergency_name;
-            $familyData->emergency_contact = $request->emergency_contact;
-            $familyData->update();
+            if($request->type == 'user'){
+                $user = Auth::user();
+                $familyData = $user->user_family_details()->findOrFail($request->id);
+                $familyData->first_name = $request->fname;
+                $familyData->last_name = $request->lname;
+                $familyData->gender = $request->gender;
+                $familyData->email = $request->email;
+                $familyData->relationship = $request->relationship;
+                $familyData->birthday = $request->birthdate;
+                $familyData->mobile = $request->mobile;
+                $familyData->emergency_contact_name = $request->emergency_name;
+                $familyData->emergency_contact = $request->emergency_contact;
+                $familyData->update();
+            }else{
+                $familyData = Customer::where('id',$request->id)->first();
+                $familyData->fname = $request->fname;
+                $familyData->lname = $request->lname;
+                $familyData->gender = $request->gender;
+                $familyData->email = $request->email;
+                $familyData->relationship = $request->relationship;
+                $familyData->birthdate = $request->birthdate;
+                $familyData->phone_number = $request->mobile;
+                $familyData->emergency_contact = $request->emergency_contact;
+                $familyData->update();
+            }
         }else{
             $data = UserFamilyDetail::create([
                 'user_id' => Auth::user()->id,
@@ -9007,17 +8911,28 @@ class UserProfileController extends Controller {
     
     public function showFamilyMember(Request $request) {
         $familyData = '';
+        $type = $request->type;
         if($request->has('id')){
             $user = Auth::user();
-            $familyData = $user->user_family_details()->findOrFail($request->id);
+            if($request->type == 'user'){
+                $familyData = $user->user_family_details()->findOrFail($request->id);
+            }else{
+                $familyData = Customer::where('id',$request->id)->first();
+            }
         }
-        return view('personal-profile.add-edit-family',compact('familyData'));
+
+        return view('personal-profile.add-edit-family',compact('familyData','type'));
     }
 
     public function removefamily(Request $request) {
         //print_r($request->all());exit;
 
-        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+        if($request->type == 'user'){
+            DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+        }else{
+            DB::delete('DELETE FROM  customers WHERE id = "' . $request->id . '"');
+        }
+       
         return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
 
