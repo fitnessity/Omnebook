@@ -15,7 +15,7 @@ use Response;
 use Str;
 use DB;
 use App\Repositories\{UserRepository,ReviewRepository,SportsCategoriesRepository,SportsRepository,ProfessionalRepository};
-use App\{Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService};
+use App\{Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService,Customer};
 use View;
 use DateTime;
 
@@ -173,7 +173,7 @@ class HomeController extends Controller {
         return view('home.allSports');
     }
 
-    public function registration(Request $request,$id) {
+    public function registration(Request $request,$id = null) {
         if (Auth::check()) {
             $show_step = Auth::user()->show_step;
         } else {

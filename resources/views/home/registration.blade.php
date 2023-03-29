@@ -34,7 +34,7 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepicker" >
 
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                     <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
@@ -810,13 +810,13 @@
 
     $(document).ready(function () {
         
-        $(".dobdate").keyup(function(){
+        /*$(".dobdate").keyup(function(){
             if ($(this).val().length == 2){
                 $(this).val($(this).val() + "/");
             }else if ($(this).val().length == 5){
                 $(this).val($(this).val() + "/");
             }
-        });
+        });*/
 
         $(".birthday").keyup(function(){
             if ($(this).val().length == 2){

@@ -42,27 +42,21 @@ class BookingRepository
         $user = Auth::User();
         $customer = Customer::where(['business_id'=>$cid,'user_id'=>$user->id])->first();
         $company = CompanyInformation::findOrFail($cid);
-
         $bookingStatus = $customer->getFullUserBookingStatus($cid)->pluck('id')->toArray();
-        //print_r($bookingStatus);exit;
         $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
-
-        // /$company_booking
         $current_date = new DateTime();
         foreach($company_booking as $bd){
             if(new DateTime($bd->expired_at) > $current_date && $bd->expired_at != ''){
                 if($type == null){
                     $bookingDetails [] = $bd; 
                 }else{
-                    if($bd->business_services != '' && $bd->business_services->service_type == $type){
+                    if($bd->business_services_with_trashed != '' && $bd->business_services_with_trashed->service_type == $type){
                         $bookingDetails [] = $bd; 
                     }
                 }
             }
         }
         return $bookingDetails;
-        
-        //print_r($bookingDetails);exit;
     }
 
     public function getCurrentUserBookingDetails($serviceType, $business_id){
@@ -72,10 +66,17 @@ class BookingRepository
         $BookingDetail = [];
         //$bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
         $bookingStatus = $customer->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
-        $userBookingDetails = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
-        //print_r($bookingStatus);exit;
-        foreach ($userBookingDetails as $key => $bookValue) {
-            $bookingstatus = $bookValue->booking;
+        $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
+       // print_r($company_booking);exit;
+        foreach ($company_booking as $key => $bookValue) {
+            $business_services = $bookValue->business_services_with_trashed;
+            if(@$business_services->service_type == $serviceType){
+                $BookingDetail [] = $bookValue; 
+            }else if($serviceType == null || $serviceType == 'all'){
+                $BookingDetail [] = $bookValue; 
+            }
+
+            /*$bookingstatus = $bookValue->booking;
             if($bookingstatus->user_type == 'user' ){
                 $customer = $bookValue->booking->user;
                 $customers['user'] = $customer;
@@ -104,23 +105,38 @@ class BookingRepository
                         }
                     }    
                 }
-            }
+            }*/
         }
         return $BookingDetail;
     }
 
-    public function getdeepdetailoforder($BookingDetail,$chk){
+    public function getdeepdetailoforder($BookingDetail,$chkVal){
         $full_ary = [];
         foreach($BookingDetail as $book_details){
             $one_array = [];
-            $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['user_booking_detail']['id']])->sum('use_session_amount');
-            $remaining = $book_details['user_booking_detail']['pay_session'] - $checkindetailscnt;
-            $scheduleddata = json_decode(@$book_details['user_booking_detail']['booking_detail'],true);
-            if(@$scheduleddata['sessiondate'] == ''){
-                $sc_date = date("m-d-Y", strtotime($book_details['user_booking_detail']['expired_at']));
+            $chk = $chkVal;
+            /*$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['id']])->sum('use_session_amount');
+            $remaining = $book_details['pay_session'] - $checkindetailscnt;*/
+            //$scheduleddata = json_decode(@$book_details['booking_detail'],true);
+            /*if(@$scheduleddata['sessiondate'] == ''){
+                $sc_date = date("m-d-Y", strtotime($book_details['expired_at']));
             }else{
                 $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
+            }*/
+
+
+            if(@$book_details['bookedtime'] != '' && @$book_details['expired_at'] != '' ){
+                if(date("Y-m-d", strtotime($book_details['bookedtime'])) < date('Y-m-d') && date("Y-m-d", strtotime($book_details['expired_at'])) > date('Y-m-d')){
+                        $chk = 'not';
+                }
             }
+           
+            if(@$book_details['bookedtime'] == '' ){
+                $sc_date = date("m-d-Y", strtotime($book_details['expired_at']));
+            }else{
+                $sc_date = date("m-d-Y", strtotime($book_details['bookedtime']));
+            }
+
             $sc_date = str_replace('-', '/', $sc_date);  
             $datechk = 0;
             if(date('Y-m-d',strtotime($sc_date)) == date('Y-m-d') && $chk == 'today'){
@@ -137,8 +153,10 @@ class BookingRepository
                 $datechk = 1;
                 $dateforchk = date('Y-m-d',strtotime($sc_date));
             }
+
             if($datechk == 1){
-                $serviceactdata = BusinessActivityScheduler::findById($book_details['user_booking_detail']['act_schedule_id']);
+                $full_ary[] =  $book_details;
+                /*$serviceactdata = BusinessActivityScheduler::findById($book_details['user_booking_detail']['act_schedule_id']);
                 $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
 
                 if(@$book_details['businessservices']['service_type']=='individual'){ 
@@ -285,15 +303,15 @@ class BookingRepository
                     $full_ary []= $one_array;
                 }else if($chk == 'past' ){
                     $full_ary []= $one_array;
-                }
-
-               
+                }*/
             }   
         }
-        $arayy =array_values(array_unique($full_ary, SORT_REGULAR));
-        return $arayy;
+
+        /*$arayy =array_values(array_unique($full_ary, SORT_REGULAR));*/
+        //return $arayy;
        // print_r($full_ary);                            
         //exit;
+        return $full_ary;
     }
 
     public function getdeepdetailofcurrentorder($BookingDetail){

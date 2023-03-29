@@ -38,9 +38,10 @@ class OrderController extends PersonalBaseController
             /*echo $customer;exit;*/
             $bookingDetail = [];
             $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $request->business_id);
-
+            //print_r($bookingDetail);exit;
             $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$request->business_id);
+            //print_r($currentbookingstatus );exit;
             $tabval = $request->tab; 
 
             return view('personal.orders.index', [

@@ -298,5 +298,9 @@ class UserBookingDetail extends Model
         }
         return trim($string);
     }
+
+    public function can_schedule(){
+        
+    }
 }
 

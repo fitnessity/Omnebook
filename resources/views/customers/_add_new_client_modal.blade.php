@@ -147,6 +147,7 @@
 				                                <ul class="nav nav-tabs nav-stacked">
 				                                    <li class="active"><a data-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
 				                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+				                                    <li><a data-toggle="tab" href="#"><span class="stp-numbr">5</span> <span>Adding Family Member</span></a></li>
 				                                </ul>
 				                                
 				                                <div class="tab-content">
@@ -225,8 +226,8 @@
 				                                    <li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
 				                                </ul>
 				                                <ul class="nav nav-tabs nav-stacked">
-				                                   
 				                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+				                                    <li><a data-toggle="tab" href="#"><span class="stp-numbr">5</span> <span>Adding Family Member</span></a></li>
 				                                </ul>
 				                                
 				                                <div class="tab-content">
@@ -300,7 +301,7 @@
 																		</div>
 																		<div>
 																			<div class="birthday_date-position">
-																				<input type="text" name="birthday_date[]" id="birthday_date0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepicker" />
+																				<input type="text" name="birthday_date[]" id="birthday_date0" class="form-control " placeholder="mm/dd/yyyy" data-behavior="datepicker" />
 																				<span class="error" id="err_birthday_date"></span>
 																			</div>
 																		</div>
@@ -319,7 +320,7 @@
 																			<span class="error" id="err_relationship"></span>
 																		</div>
 																		<div class="form-group">
-																			<input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number required" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+																			<input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 																			<span class="error" id="err_mphone"></span>
 																		</div>
 																		<div class="form-group">
@@ -327,7 +328,7 @@
 																			<span class="error" id="err_emergency_phone" ></span>
 																		</div>
 																		<div class="form-group">
-																			<select name="gender[]" id="gender" class="form-control gender " >
+																			<select name="gender[]" id="gender" class="form-control gender" required>
 																				<option value="">Select Gender</option>
 																				<option value="male">Male</option>
 																				<option value="female">Female</option>
@@ -336,7 +337,7 @@
 																			<span class="error" id="err_gender"></span>
 																		</div>
 																		<div class="form-group">
-																			<input type="email" name="emailid[]" id="emailid" class="form-control email required" placeholder="Email" >
+																			<input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email" >
 																			<span class="error" id="err_emailid"></span>
 																		</div>
 																	</div>
@@ -397,6 +398,16 @@
         re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
         $('#familymaindiv').append(re);
+        $('.relationship').each(function(e) {
+        	$(this).removeClass("redClass");
+        });
+       	$('.gender').each(function(e) {
+        	$(this).removeClass("redClass");
+        });
+
+  		$(".required").each(function() {
+	        $(this).removeClass("redClass");
+	    });
         $('#familycnt').val(cnt);
 	});
 
@@ -440,4 +451,5 @@ $(document).ready(function() {
     });
 });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script>

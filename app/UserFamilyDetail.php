@@ -21,6 +21,22 @@ class UserFamilyDetail extends Model
 	 protected $fillable = [
        'user_id', 'first_name', 'last_name','email', 'mobile','emergency_contact','emergency_contact_name','relationship','gender','birthday',
     ];
+
+    protected $appends = ['full_name','age'];
+
+    public function getAgeAttribute()
+    {
+        if($this->birthday != null){
+            return Carbon::parse($this->birthday)->age;
+        }else{
+            return null;
+        }
+    }
+    
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -33,4 +49,6 @@ class UserFamilyDetail extends Model
             return null;
         }
     }
+
+
 }
