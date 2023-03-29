@@ -15,7 +15,7 @@
 				<div class="find-activity">
 					<div class="row">
 						<div class="col-md-4 col-sm-4" style="overflow: hidden;">
-							<img style="width: 100%;height: 148px;" src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" >
+							<img class="personal-find-activity" style="" src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" >
 						</div>
 						<div class="col-md-8 col-sm-8 activity-data">
 							<div class="row">
