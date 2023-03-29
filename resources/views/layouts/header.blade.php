@@ -412,7 +412,7 @@ $total_quantity = 0;
 					</div>
                 
 					<div class="top-area">
-                    <?php if( !request()->is('/') ) { ?>
+                    <?php /*if( !request()->is('/') ) {*/ ?>
                         <div class="top-search">
                             <!-- <form method="get" action="/instant-hire"> -->
                             <form method="get" action="/activities/">
@@ -421,7 +421,7 @@ $total_quantity = 0;
                                 <button id="serchbtn" ><i class="fa fa-search"></i></button>
                             </form>
 						</div>
-					<?php } ?>
+					<?php /*}*/ ?>
                         <?php /*?>
 						<ul class="setting-area">
                             <li><a href="{{ url('') }}" title="Home" data-ripple=""><i class="fa fa-home"></i></a></li>
@@ -467,9 +467,6 @@ $total_quantity = 0;
                                 </li>
 							@endif
                             </ul>
-							<!--<a href="{{route('pricedetails')}}" class="btn btn-list-business business-sp">Price detail</a>-->
-
-							<?php /*?><a href="{{route('senddummymail')}}" class="btn btn-list-business business-sp">sendMail</a> <?php */?>
 
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>
