@@ -145,7 +145,7 @@ class CompanyInformation extends Model {
         return $this->hasMany(BusinessActivityScheduler::class, 'cid');
     }
 
-    public function visits_count(){
+    public function visits_count_by_user_id(){
         $company = $this;
         $user_id = Auth::user()->id;
         $booking_details = UserBookingDetail::whereIn('sport', function($query) use ($company){
@@ -164,7 +164,7 @@ class CompanyInformation extends Model {
         return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc')->where('checked_at',"!=",NULL)->count();
     }
 
-    public function active_memberships_count(){
+    /*public function active_memberships_count(){
         $company = $this;
         $user_id = Auth::user()->id;
         $now = Carbon::now();
@@ -181,9 +181,27 @@ class CompanyInformation extends Model {
         $result->count();
         //dd(\DB::getQueryLog());
        return $result->count(); 
+    }*/
+
+    public function active_memberships_count_by_user_id(){
+        $company = $this;
+        $user = Auth::user();
+         $now = Carbon::now();
+        $customer = Customer::where(['business_id'=>$this->id,'user_id'=>$user->id])->first();
+        $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+            $query->select('id')
+                  ->from('business_services')
+                  ->where('cid', $this->id);
+        })->whereIn('booking_id', function($query) use ($customer){
+            $query->select('id')
+                  ->from('user_booking_status')->where('user_type','customer')
+                  ->where('user_id',$customer->id);
+        })->whereDate('expired_at', '>=',  $now)->where('pay_session', ">" ,0);
+        $result->count();
+        return $result->count(); 
     }
 
-    public function completed_memberships_count(){
+    public function completed_memberships_count_by_user_id(){
         $company = $this;
         $now = Carbon::now();
         $user_id = Auth::user()->id;
@@ -200,7 +218,7 @@ class CompanyInformation extends Model {
         return $result->count(); 
     }
 
-    public function expired_soon(){
+    public function expired_soon_memberships_count_by_user_id(){
         $company = $this;
         $user_id = Auth::user()->id;
 

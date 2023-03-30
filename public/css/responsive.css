@@ -1284,8 +1284,10 @@
 	.find-activity img{width: 100% !important; min-height: 125px;}
 	.activity-time-main{float: right;}
 	.top-search {  width: 65% !important;}
-	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%;}
-	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%;}
+	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
+	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 5px; left: 9px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 5px; right: 9px;}
 	.find-activity img{max-height: 145px !important;} 
 	.show-all{margin-top: 140px;}
 	.show-all .join-btn{padding: 0px;margin-top: 18px;}
@@ -1337,12 +1339,15 @@
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 31px;  right: -11px !important;}
 	.kickboxing-moredetails {padding-top: 114px !important;}
 	.modal-banner .bannar-size img{height: 210px !important;}
-	.inner-owl-slider-hire .owl-nav .owl-next{right: 0px !important; top: 35% !important;}  
-	.inner-owl-slider-hire .owl-nav .owl-prev{left: 0px !important; top: 35% !important;}
+	.inner-owl-slider-hire .owl-nav .owl-next{right: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}  
+	.inner-owl-slider-hire .owl-nav .owl-prev{left: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}
+	.inner-owl-slider-hire .owl-nav .owl-next i {color: #000; font-size: 13px; position: absolute; top: 6px; left: 9px;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i {color: #000; font-size: 13px; position: absolute; top: 6px; right: 9px;}
 	.home-black-section label{font-size: 25px;}
 	.home-black-section i {top: 7%; left: 46%;}
 	.instant-hire .title h3{margin-bottom: 0px;}
 	.main-slider .slide{padding-top: 310px; min-height: 675px;}
+	
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2453,7 +2458,6 @@
 	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 8px; right: 11px;}
 }
 
-	
 
 @media(max-width: 575px) {
 

@@ -8926,13 +8926,8 @@ class UserProfileController extends Controller {
 
     public function removefamily(Request $request) {
         //print_r($request->all());exit;
-
-        if($request->type == 'user'){
-            DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
-        }else{
-            DB::delete('DELETE FROM  customers WHERE id = "' . $request->id . '"');
-        }
-       
+        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+    
         return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
 

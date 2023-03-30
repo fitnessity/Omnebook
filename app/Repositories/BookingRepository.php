@@ -37,10 +37,15 @@ class BookingRepository
         return UserBookingDetail::where('booking_id',$bid)->get();
     }
 
-    public function getcurrenttabdata($type,$cid){
+    public function getcurrenttabdata($type,$cid, $customer){
         $bookingDetails = [];
         $user = Auth::User();
-        $customer = Customer::where(['business_id'=>$cid,'user_id'=>$user->id])->first();
+         if($customer == ''){
+            $customer = Customer::where(['business_id'=>$cid,'user_id'=>$user->id])->first();
+        }else{
+            $customer = Customer::where(['id'=>$customer])->first();
+        }
+        
         $company = CompanyInformation::findOrFail($cid);
         $bookingStatus = $customer->getFullUserBookingStatus($cid)->pluck('id')->toArray();
         $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
@@ -59,15 +64,20 @@ class BookingRepository
         return $bookingDetails;
     }
 
-    public function getCurrentUserBookingDetails($serviceType, $business_id){
+    public function getCurrentUserBookingDetails($serviceType, $business_id, $customer){
         $user = Auth::user();
-        $customer = Customer::where(['business_id'=>$business_id,'user_id'=>$user->id])->first();
+        if($customer == ''){
+            $customer = Customer::where(['business_id'=>$business_id,'user_id'=>$user->id])->first();
+        }else{
+            $customer = Customer::where(['id'=>$customer])->first();
+        }
+        
         $company = CompanyInformation::findOrFail($business_id);
         $BookingDetail = [];
         //$bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
         $bookingStatus = $customer->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
         $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
-       // print_r($company_booking);exit;
+        // print_r($company_booking);exit;
         foreach ($company_booking as $key => $bookValue) {
             $business_services = $bookValue->business_services_with_trashed;
             if(@$business_services->service_type == $serviceType){

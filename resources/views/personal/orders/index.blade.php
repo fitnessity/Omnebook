@@ -24,7 +24,8 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY</h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
+                            != '') FOR {{strtoupper($customerUsername)}} @endif </h4>
                     </div>
 
                     @if(request()->business_id == '')
@@ -42,10 +43,10 @@
                                             <h2>{{ $bs->company_name}}</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
-                                                <span> Active Memberships: {{$bs->active_memberships_count()}}</span>
-                                                <span> Completed Memberships: {{$bs->completed_memberships_count()}} </span>
-                                                <span> Expiring Memberships: {{$bs->expired_soon()}} </span>
-                                                <span> Number of visits: {{$bs->visits_count()}} </span>
+                                                <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
+                                                <span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id()}} </span>
+                                                <span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id()}} </span>
+                                                <span> Number of visits: {{$bs->visits_count_by_user_id()}} </span>
                                             </div>
                                             
                                             <div class="booking-activity-view">
@@ -66,7 +67,6 @@
                                 </div>
                             </div>
                         </div>
-
                     @else
                         <div class="booking-info-menu">
                             <div class='row'>
