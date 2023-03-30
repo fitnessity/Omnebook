@@ -52,6 +52,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
 
     Route::resource('orders', 'OrderController')->only(['index','show']);
+    Route::resource('family_members', 'FamilyMemberController')->only(['index','show']);
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
 });

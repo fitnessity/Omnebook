@@ -75,9 +75,15 @@
                                     <h2>{{$family->full_name}}</h2>
                                     <p>({{$family->relationship}} {{$family->age}} yrs old)</p>
                                     <div class="familyfrnd-info">
-                                        <a class="view-booikng" href="{{route('personal.orders.index')}}"> View Booking </a>
+                                        @if( $type == 'customer')
+                                            <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> View Booking </a>
+                                        @endif
                                         <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px"> Edit </a>
-                                        <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
+                                        @if( $type == 'user')
+                                            <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
+                                        @else
+                                            <a class="delete-family" href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> Delete </a>
+                                        @endif 
                                     </div>
                                 </div>
                             </div>
