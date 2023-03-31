@@ -105,8 +105,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 													}
 												} 
 											}
-
-											if($odt->business_price_detail != '' && $odt->business_services != ''){
+											print_r($sche_ary);
+											if($odt->business_price_detail != '' && $odt->business_services != '' && !empty($sche_ary)){
 										@endphp
 									<div class="row">
 										<div class="col-md-6 col-sm-6 col-xs-12">
