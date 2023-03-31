@@ -30,7 +30,10 @@ class FamilyMemberController extends Controller
     {
         $user = Auth::user();
         $customer = Customer::where(['id'=>$request->customerId])->first();
-        //echo $customer;exit;
+        $username = $customer->username;
+        if($username == ''){
+            $username = $customer->fname.' '.$customer->lname;
+        }
         $bookingDetail = [];
         $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $customer->business_id,$customer->id);
         //print_r($bookingDetail);exit;
@@ -43,7 +46,7 @@ class FamilyMemberController extends Controller
             'bookingDetail' => $bookingDetail ,
             'currentbookingstatus'=>$currentbookingstatus, 
             'tabval'=>$tabval, 
-            'customerUsername'=>$customer->username, 
+            'customerUsername'=>$username, 
             'business'=>[]]);
     }
 

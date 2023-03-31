@@ -24,8 +24,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper($customerUsername)}} @endif </h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY FOR {{strtoupper($customerUsername)}} </h4>
                     </div>
 
                     <div class="booking-info-menu">
