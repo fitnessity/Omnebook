@@ -40,15 +40,16 @@ class BookingRepository
     public function getcurrenttabdata($type,$cid, $customer){
         $bookingDetails = [];
         $user = Auth::User();
-         if($customer == ''){
+        $company = CompanyInformation::findOrFail($cid);
+        if($customer == ''){
             $customer = Customer::where(['business_id'=>$cid,'user_id'=>$user->id])->first();
+            $bookingStatus = $customer->getFullUserBookingStatus($cid)->pluck('id')->toArray();
+            $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
         }else{
             $customer = Customer::where(['id'=>$customer])->first();
+            $company_booking = $company->UserBookingDetails->where('user_id',$customer->id); 
         }
         
-        $company = CompanyInformation::findOrFail($cid);
-        $bookingStatus = $customer->getFullUserBookingStatus($cid)->pluck('id')->toArray();
-        $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus);
         $current_date = new DateTime();
         foreach($company_booking as $bd){
             if(new DateTime($bd->expired_at) > $current_date && $bd->expired_at != ''){
@@ -66,18 +67,19 @@ class BookingRepository
 
     public function getCurrentUserBookingDetails($serviceType, $business_id, $customer){
         $user = Auth::user();
+        $BookingDetail = [];
+         $company = CompanyInformation::findOrFail($business_id);
         if($customer == ''){
             $customer = Customer::where(['business_id'=>$business_id,'user_id'=>$user->id])->first();
+            $bookingStatus = $customer->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
+            $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
         }else{
             $customer = Customer::where(['id'=>$customer])->first();
+            $company_booking = $company->UserBookingDetails->where('user_id',$customer->id); 
         }
         
-        $company = CompanyInformation::findOrFail($business_id);
-        $BookingDetail = [];
         //$bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
-        $bookingStatus = $customer->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
-        $company_booking = $company->UserBookingDetails->whereIn('booking_id', $bookingStatus); 
-        // print_r($company_booking);exit;
+        //print_r($company_booking);exit;
         foreach ($company_booking as $key => $bookValue) {
             $business_services = $bookValue->business_services_with_trashed;
             if(@$business_services->service_type == $serviceType){
