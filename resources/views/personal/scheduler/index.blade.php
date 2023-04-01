@@ -272,7 +272,8 @@
 						$('#success-reservation').modal('show');
 	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
 					}else{
-						window.location = '/activities';
+						/*window.location = '/activities';*/
+						alert('schedule failed');
 					}
 					//swindow.location.reload();
 				}

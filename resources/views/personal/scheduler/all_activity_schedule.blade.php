@@ -18,7 +18,7 @@
 	right: -25px;
 }
 </style>
-!
+
 @php  use App\ActivityCancel; 
 	use App\Repositories\BookingRepository; 
 $service_type_ary = array("all","classes","individual","events","experience");@endphp
@@ -105,7 +105,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 													}
 												} 
 											}
-											print_r($sche_ary);
+											
 											if($odt->business_price_detail != '' && $odt->business_services != '' && !empty($sche_ary)){
 										@endphp
 									<div class="row">
@@ -281,7 +281,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 						$('#success-reservation').modal('show');
 	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
 					}else{
-						window.location = '/activities';
+						/*window.location = '/activities';*/
+						alert('schedule failed');
 					}
 
 					//swindow.location.reload();
