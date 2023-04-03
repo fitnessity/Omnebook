@@ -97,7 +97,7 @@ class CustomerController extends Controller {
 
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
-        $active_booking_details = $customerdata->active_booking_details()->get();
+        $active_memberships = $customerdata->active_memberships()->get();
         $purchase_history = $customerdata->Transaction()->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
@@ -112,7 +112,7 @@ class CustomerController extends Controller {
             'terms'=> $terms,
             'visits' => $visits,
             'purchase_history' => $purchase_history,
-            'active_booking_details' => $active_booking_details,
+            'active_memberships' => $active_memberships,
             'complete_booking_details' => $complete_booking_details
         ]);
     }

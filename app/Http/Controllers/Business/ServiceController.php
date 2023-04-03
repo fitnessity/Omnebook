@@ -522,7 +522,7 @@ class ServiceController extends BusinessBaseController
                             $adultrecurring_first_pmt = $request->input('first_pmt_adult_'.$i.$y);
                             $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
                             $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
-                            $recurring_customer_chage_by_adult = $request->input('recurring_customer_chage_by_adult_'.$i.$y);
+                            $recurring_customer_chage_by_adult = $request->input('customer_charged_num_adult_'.$i.$y).' '.$request->input('customer_charged_time_adult_'.$i.$y);
                         }else{
                             /*$recurring_every = NULL;
                             $recurring_duration = NULL;*/
@@ -553,7 +553,7 @@ class ServiceController extends BusinessBaseController
                             $childrecurring_first_pmt = $request->input('first_pmt_child_'.$i.$y);
                             $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
                             $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
-                            $recurring_customer_chage_by_child = $request->input('recurring_customer_chage_by_child_'.$i.$y);
+                            $recurring_customer_chage_by_child = $request->input('customer_charged_num_child_'.$i.$y).' '.$request->input('customer_charged_time_child_'.$i.$y);
                         }else{
                             /*$childrecurring_every = NULL;
                             $childrecurring_duration = NULL;*/
@@ -584,7 +584,7 @@ class ServiceController extends BusinessBaseController
                             $infantrecurring_first_pmt = $request->input('first_pmt_infant_'.$i.$y);
                             $infantrecurring_recurring_pmt = $request->input('recurring_pmt_infant_'.$i.$y);
                             $infantrecurring_total_contract_revenue = $request->input('total_contract_revenue_infant_'.$i.$y);
-                            $recurring_customer_chage_by_infant = $request->input('recurring_customer_chage_by_infant_'.$i.$y);
+                            $recurring_customer_chage_by_infant = $request->input('customer_charged_num_infant_'.$i.$y).' '.$request->input('customer_charged_time_infant_'.$i.$y);
                         }else{
                             /*$infantrecurring_every = NULL;
                             $infantrecurring_duration = NULL;*/
@@ -610,7 +610,7 @@ class ServiceController extends BusinessBaseController
 
                         $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  NULL; 
                         if($request->input('sectiondisplay'.$i.$y) == 'freeprice'){
-                            $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0;
+                            $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0 ;
                         }else{
                             if($request->input('adult_cus_weekly_price_'.$i.$y) != 0){
                                 $adult_cus_weekly_price =  $request->input('adult_cus_weekly_price_'.$i.$y);

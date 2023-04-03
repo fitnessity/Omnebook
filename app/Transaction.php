@@ -68,11 +68,11 @@ class Transaction extends Model
             if($this->userBookingStatus != ''){
                 $bookingData = $this->userBookingStatus->UserBookingDetail;
                 if(!empty($bookingData)){
-                    foreach($bookingData as $bd){
+                    foreach($bookingData as $key => $bd){
                         $activityName = $bd->business_services_with_trashed->program_name;
                         $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                         $priceOption = $bd->business_price_detail_with_trashed->price_title;
-                        $itemDescription .= $activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                        $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
                         $qty++;
                     }
                 }
