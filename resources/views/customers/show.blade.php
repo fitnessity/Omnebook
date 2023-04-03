@@ -216,7 +216,7 @@
 												<label>Active Memberships</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span class="green-fonts">{{$customerdata->active_memberships()}}</span>
+												<span class="green-fonts">{{$customerdata->active_memberships()->count()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -417,13 +417,13 @@
 													<div class="inner-arrow panel-heading">
 														<h4 class="panel-title">
 															<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-															Active Bookings ({{$active_booking_details->count()}})   
+															Active Bookings ({{$active_memberships->count()}})   
 															</a>
 														</h4>
 													</div>
 													<div id="collapseOne" class="panel-collapse collapse in">
 														<div class="panel-body">
-															@foreach ($active_booking_details as $booking_detail)
+															@foreach ($active_memberships as $booking_detail)
 																<div class="row customer-custom-sparetor">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">

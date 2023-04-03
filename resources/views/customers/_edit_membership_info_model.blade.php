@@ -742,7 +742,7 @@
 						</div>
 						<div class="radio-text">
 							<form action="">
-							<input type="radio" id="void" name="fav_language" value="HTML">
+							<input type="radio" id="void" name="fav_language" value="void"  @if($booking_detail->status == 'void') checked @endif>
 							  <label for="void">Void This Sale (Made a booking mistake? Training or testing a sale? You can void this membership.)</label>
 							</form>
 						</div>
@@ -763,10 +763,19 @@
 								<div class="red-sparetor"></div>
 							</div>
 						</div>
+						<?php $suspensionStartDate = $booking_detail->suspend_started; 
+							$suspensionEndDate = $booking_detail->suspend_ended; 
+							if($suspensionStartDate == ''){
+								$suspensionStartDate = date('m/d/Y');
+							}
+							if($suspensionEndDate == ''){
+								$suspensionEndDate = date('m/d/Y');
+							}
+						?>
 						
 						<div class="radio-text">
 							<form action="">
-							<input type="radio" id="void" name="fav_language" value="HTML">
+							<input type="radio" id="refund" name="fav_language" value="refund" @if($booking_detail->status == 'refund') checked @endif>
 							  <label for="void">Issue a Refund</label>
 							</form>
 						</div>
@@ -782,15 +791,15 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Refund Amount:  </label>
-							<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="">
+							<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="{{$booking_detail->refund_amount}}">
 							<h4>(Refund amount can’t be greater than the total amount paid)</h4>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Refund Method: </label>
-							<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500"></textarea>
+							<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500">{{$booking_detail->refund_method}}</textarea>
 						</div>
 						<div class="refund-details text-center">
-							<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+							<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->refund_reason}}</textarea>
 							<button type="button" class="btn-nxt mb-00 mt-00" id="" data-behavior="refund_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
 						</div>
 						
@@ -1034,33 +1043,42 @@
 						</div>
 						<div class="radio-text">
 							<form action="">
-							<input type="radio" id="void" name="fav_language" value="HTML">
+							<input type="radio" id="suspend" name="fav_language" value="suspend" @if($booking_detail->status == 'suspend') checked @endif>
 							  <label for="void">Suspend/Freeze (Seeting a membership or contract suspension will freeze this membership for a duration of time.)</label>
 							</form>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Reason for Suspension: </label>
-							<textarea class="form-control" rows="2" name="suspension_reason" id="suspension_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+							<textarea class="form-control" rows="2" name="suspension_reason" id="suspension_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_reason}}</textarea>
 						</div>
+						<?php $suspensionStartDate = $booking_detail->suspend_started; 
+							$suspensionEndDate = $booking_detail->suspend_ended; 
+							if($suspensionStartDate == ''){
+								$suspensionStartDate = date('m/d/Y');
+							}
+							if($suspensionEndDate == ''){
+								$suspensionEndDate = date('m/d/Y');
+							}
+						?>
 						<div class="refund-details refund-method"> 
 							<label>Suspension Start Date: </label>
 							<div class="date-activity-check start-date">
-								<input type="text"  id="suspensionstartdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+								<input type="text"  id="suspensionstartdate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{$suspensionStartDate}}" onchange="changedate('simple');">
 							</div>
 							<label>Suspension End Date: </label>
 							<div class="date-activity-check start-date">
-								<input type="text"  id="suspensionenddate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{date('m/d/Y')}}" onchange="changedate('simple');">
+								<input type="text"  id="suspensionenddate" placeholder="Search By Date" class="form-control activity-scheduler-date w-80" autocomplete="off" value="{{$suspensionEndDate}}" onchange="changedate('simple');">
 							</div>
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Suspension Fee: </label>
-							<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$">
+							<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$" value="{{$booking_detail->suspend_fee}}">
 						</div>
 						<div class="row">
 							<div class="col-md-6 col-xs-12">
 								<div class="refundcomment">
 									<label>Leave a comment:</label>
-									<textarea class="form-control" rows="2" name="suspension_comment" id="suspension_comment" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+									<textarea class="form-control" rows="2" name="suspension_comment" id="suspension_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_comment}}</textarea>
 								</div>
 							</div>
 							<div class="col-md-6 col-xs-12">
@@ -1079,16 +1097,23 @@
 							</div>
 						</div>
 						
+						<?php $terminationDate = $booking_detail->terminated_at; 
+							if($terminationDate == ''){
+								$terminationDate = date('m/d/Y');
+							}
+						?>
+
 						<div class="radio-text">
 							<form action="">
-							<input type="radio" id="void" name="fav_language" value="HTML">
+							<input type="radio" id="termination" name="fav_language" value="termination" @if($booking_detail->status == 'cancel') checked @endif>
 							  <label for="void">Terminate/Cancel (Terminate/Cancel this membership)	  </label>
 							</form>
 						</div>
 						<div class="refund-details refund-method"> 
 							<label>Reason for Termination:  </label>
-							<textarea class="form-control" rows="2" name="terminate_reason" id="terminate_reason" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+							<textarea class="form-control" rows="2" name="terminate_reason" id="terminate_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_reason}}</textarea>
 						</div>
+						
 						<div class="refund-details refund-method"> 
 							<label>Termination  Date:</label>
 							<div class="date-activity-check start-date">
@@ -1097,13 +1122,13 @@
 						</div>
 						<div class="refund-details refund-amount"> 
 							<label>Termination Fee: </label>
-							<input class="form-control" type="text" id="terminate_fee" name="terminate_fee" placeholder="$">
+							<input class="form-control" type="text" id="terminate_fee" name="terminate_fee" placeholder="$" value="{{$booking_detail->terminate_fee}}">
 						</div>
 						<div class="row">
 							<div class="col-md-5 col-xs-12">
 								<div class="refundcomment">
 									<label>Leave a comment:</label>
-									<textarea class="form-control" rows="2" name="terminate_comment" id="terminate_comment" placeholder="Leave a note for the reason of the refund" maxlength="500"></textarea>
+									<textarea class="form-control" rows="2" name="terminate_comment" id="terminate_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_comment}}</textarea>
 								</div>
 							</div>
 							<div class="col-md-7 col-xs-12">
