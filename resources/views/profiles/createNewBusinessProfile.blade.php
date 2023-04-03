@@ -5855,14 +5855,18 @@
                                                                             <div class="col-md-4">
                                                                                 <label class="contractsettings">How often will customers be charged?</label>
                                                                             </div>
-                                                                            <div class="col-md-8">
-                                                                                <select class="form-control" name="recurring_customer_chage_by_adult_{{$i}}{{$j}}" id="recurring_customer_chage_by_adult{{$i}}{{$j}}">
-                                                                                    <option value="1 Week" @if($recurring_customer_chage_by_adult == '1 Week') selected @endif>1 week</option>
-                                                                                    <option value="2 Week" @if($recurring_customer_chage_by_adult == '2 Week') selected @endif>2 week</option>
-                                                                                    <option value="1 Month" @if($recurring_customer_chage_by_adult == '1 Month') selected @endif>1 Month</option>
-                                                                                    <option value="3 Month" @if($recurring_customer_chage_by_adult == '3 Month') selected @endif>3 Month</option>
-                                                                                    <option value="6 Month" @if($recurring_customer_chage_by_adult == '6 Month') selected @endif>6 Month</option> 
-                                                                                    <option value="1 Year" @if($recurring_customer_chage_by_adult == '1 Year') selected @endif>1 Year</option>
+                                                                            <div class="col-md-2">
+                                                                                Every
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <input type="text" class="form-control valid" placeholder="12" value="1">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                
+                                                                                <select class="form-control" >
+                                                                                    <option value="Week" @if($recurring_customer_chage_by_adult == 'Week') selected @endif>week</option>
+                                                                                    <option value="Month" @if($recurring_customer_chage_by_adult == 'Month') selected @endif>Month</option>
+                                                                                    <option value="Year" @if($recurring_customer_chage_by_adult == 'Year') selected @endif>Year</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -6025,15 +6029,18 @@
                                                                             <div class="col-md-4">
                                                                                 <label class="contractsettings">How often will customers be charged?</label>
                                                                             </div>
-
-                                                                            <div class="col-md-8">
-                                                                                <select class="form-control" name="recurring_customer_chage_by_child_{{$i}}{{$j}}" id="recurring_customer_chage_by_child{{$i}}{{$j}}">
-                                                                                    <option value="1 Week" @if($recurring_customer_chage_by_child == '1 Week') selected @endif>1 week</option>
-                                                                                    <option value="2 Week" @if($recurring_customer_chage_by_child == '2 Week') selected @endif>2 week</option>
-                                                                                    <option value="1 Month" @if($recurring_customer_chage_by_child == '1 Month') selected @endif>1 Month</option>
-                                                                                    <option value="3 Month" @if($recurring_customer_chage_by_child == '3 Month') selected @endif>3 Month</option>
-                                                                                    <option value="6 Month" @if($recurring_customer_chage_by_child == '6 Month') selected @endif>6 Month</option> 
-                                                                                    <option value="1 Year" @if($recurring_customer_chage_by_child == '1 Year') selected @endif>1 Year</option>
+                                                                            <div class="col-md-2">
+                                                                                Every
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <input type="text" class="form-control valid" placeholder="12" value="1">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                
+                                                                                <select class="form-control" >
+                                                                                    <option value="Week" @if($recurring_customer_chage_by_adult == 'Week') selected @endif>week</option>
+                                                                                    <option value="Month" @if($recurring_customer_chage_by_adult == 'Month') selected @endif>Month</option>
+                                                                                    <option value="Year" @if($recurring_customer_chage_by_adult == 'Year') selected @endif>Year</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -6203,15 +6210,18 @@
                                                                             <div class="col-md-4">
                                                                                 <label class="contractsettings">How often will customers be charged?</label>
                                                                             </div>
-
-                                                                            <div class="col-md-8">
-                                                                                <select class="form-control" name="recurring_customer_chage_by_infant_{{$i}}{{$j}}" id="recurring_customer_chage_by_infant{{$i}}{{$j}}">
-                                                                                    <option value="1 Week" @if($recurring_customer_chage_by_infant == '1 Week') selected @endif>1 week</option>
-                                                                                    <option value="2 Week" @if($recurring_customer_chage_by_infant == '2 Week') selected @endif>2 week</option>
-                                                                                    <option value="1 Month" @if($recurring_customer_chage_by_infant == '1 Month') selected @endif>1 Month</option>
-                                                                                    <option value="3 Month" @if($recurring_customer_chage_by_infant == '3 Month') selected @endif>3 Month</option>
-                                                                                    <option value="6 Month" @if($recurring_customer_chage_by_infant == '6 Month') selected @endif>6 Month</option> 
-                                                                                    <option value="1 Year" @if($recurring_customer_chage_by_infant == '1 Year') selected @endif>1 Year</option>
+                                                                            <div class="col-md-2">
+                                                                                Every
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <input type="text" class="form-control valid" placeholder="12" value="1">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                
+                                                                                <select class="form-control" >
+                                                                                    <option value="Week" @if($recurring_customer_chage_by_adult == 'Week') selected @endif>week</option>
+                                                                                    <option value="Month" @if($recurring_customer_chage_by_adult == 'Month') selected @endif>Month</option>
+                                                                                    <option value="Year" @if($recurring_customer_chage_by_adult == 'Year') selected @endif>Year</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
