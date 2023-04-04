@@ -1336,13 +1336,6 @@
 
 <script type="text/javascript">
 
-	function valid(email)
-    {
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        return emailReg.test(email); //this will either return true or false based on validation
-    }
-    
-
 	function saveparticipate(){
 		$('#qty').html('');
 		var aducnt = $('#adultcnt').val();
@@ -2069,6 +2062,4 @@
 </script>
 
 @include('layouts.footer')
-
-
 @endsection

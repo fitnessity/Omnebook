@@ -34,7 +34,7 @@
       >
       <label for="javascript">Deduct from membership</label> 
       <select class="form-control" name="booking_detail_id">
-          @foreach($booking_checkin_detail->customer->active_booking_details()->get() as $customer_booking_detail)
+          @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
             @if($customer_booking_detail->business_price_detail)
                <option value="{{$customer_booking_detail->id}}" >
                    {{$customer_booking_detail->business_price_detail['price_title']}}

@@ -148,8 +148,8 @@ class OrderController extends BusinessBaseController
 
         $modelchk = 0;
         $modeldata = '';
-        /*$ordermodelary = array('758');*/
-        $ordermodelary = session()->get('ordermodelary');
+        $ordermodelary = array('790');
+        //$ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
             $modeldata = $this->getmultipleodermodel($ordermodelary);

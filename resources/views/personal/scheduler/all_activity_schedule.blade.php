@@ -122,12 +122,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 													<div class="col-md-12 col-xs-12">
 														<label>Instructor: </label> <span>@if($odt->business_services->StaffMembers != '') {{$odt->business_services->StaffMembers->name}} @endif</span>
 													</div>
-													<div class="col-md-12 col-xs-12">
-														<label>Remaining Session: </label> 
-														<span>
-															{{$odt->getremainingsession()}}
-														</span>
-													</div>
+													
 												</div>
 											</div>
 										</div>
