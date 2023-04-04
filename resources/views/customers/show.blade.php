@@ -427,8 +427,8 @@
 																<div class="row customer-custom-sparetor">
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
-																			<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>															<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <div class="mailRecipt" data-behaiver="mail_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></div>
-																			
+																			<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>	
+																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <!-- <a class="mailRecipt" data-behaiver="send_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></a> --><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>$booking_detail->id,'oid'=>$booking_detail->booking_id])}}" data-item-type="no" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																		</div>
 																		<div class="customer-profile-info">
 																			<div class="row">
@@ -709,9 +709,11 @@
 														<td>{{$history->item_description()['qty']}}</td>
 														<td>Refund | Void</td>
 														<td>
-															<div class="table-icons-staff mailRecipt" class="mailRecipt" data-booking-detail-id="" data-booking-id ="{{$history->item_id}}" data-item-type="{{$history->item_type_terms()}}">
+															<a  class="table-icons-staff mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>'','oid'=>$history->item_id])}}" data-item-type="{{$history->item_type_terms()}}" ><i class="fas fa-receipt" aria-hidden="true"></i></a>
+
+															<!-- <div class="table-icons-staff mailRecipt" class="mailRecipt" data-booking-detail-id="" data-booking-id ="{{$history->item_id}}" data-item-type="{{$history->item_type_terms()}}">
 																<i class="fas fa-receipt"></i>
-															</div>
+															</div> -->
 														</td>
 													</tr>
 												@endforeach
@@ -1160,7 +1162,7 @@
 		responsive: true
 	} );
 
-	$(".mailRecipt").click(function(){
+	/*$(".mailRecipt").click(function(){
 		var item_type = $(this).data('item-type');
 		if(item_type == 'no' || item_type == 'Membership'){
 			var confirm_value = confirm("Do you want to mail the receipt to this Customer? ");
@@ -1191,12 +1193,12 @@
 	            });
 			}
 		}
-	});
+	});*/
 
 
-	$(document).on('click', '[data-behavior~=mail_receipt]', function(e){
+	/*$(document).on('click', '[data-behavior~=mail_receipt]', function(e){
 		alert('hii');
-		/*confirm("Do you want to mail the receipt to this Customer? ");
+		confirm("Do you want to mail the receipt to this Customer? ");
 		if(confirm){
 			$.ajax({
 				url: "{{route('sendReceiptToCustomer')}}",
@@ -1216,8 +1218,8 @@
 	                }
 	            }
             });
-		}*/
-	});
+		}
+	});*/
 	
 
 	$('#visitstable').dataTable( {
