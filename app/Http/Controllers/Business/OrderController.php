@@ -148,7 +148,7 @@ class OrderController extends BusinessBaseController
 
         $modelchk = 0;
         $modeldata = '';
-        $ordermodelary = array('790');
+        $ordermodelary = array();
         //$ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
@@ -552,9 +552,11 @@ class OrderController extends BusinessBaseController
                     <div class="modal-booking-info">
                         <h3>Booking Receipt</h3>';
         $idarry = '';         
+
         foreach($array as $or){
             $order_detail = UserBookingDetail::where('id',$or)->first();
             $idarry .= $or.',';
+
             $odt = $this->booking_repo->getorderdetailsfromodid($order_detail->booking_id,$or);
             $totaltax += $odt['tax_for_this'];
             $tot_dis += $odt['discount'];
