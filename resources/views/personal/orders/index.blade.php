@@ -51,7 +51,7 @@
                                             
                                             <div class="booking-activity-view">
                                                 <a class="view-booking" href="{{route('personal.orders.index',['business_id'=>$bs->id])}}"> View Bookings</a>
-                                                <a class="view-schedule" href="{{route('business_activities_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
+                                                <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
                                             </div>
                                          </div>
                                      </div>
@@ -251,11 +251,11 @@
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_today">
-                                            @php  $i = 1;
+                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'today');
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType);
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today']) 
                                         </div>
                                     </div>
 
@@ -293,9 +293,9 @@
                                         <div class="row" id="searchbydate_upcoming">
                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'upcoming');
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType);
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
                                         </div>
                                     </div><!-- tab panel-->
 
@@ -331,11 +331,11 @@
                                             </div>
                                         </div>  
                                         <div class="row" id="searchbydate_past">
-                                        @php  $i = 1;
+                                         @php  $i = 1;
                                             $br = new \App\Repositories\BookingRepository;
-                                            $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'past');
+                                            $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType);
                                         @endphp
-                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past'])
+                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past']) 
                                         </div>
                                     </div><!-- tab-pane -->
 

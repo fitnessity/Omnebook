@@ -44,7 +44,6 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
 
     Route::resource('staff', 'StaffController')->only(['index','create','edit','store','update', 'destroy']);
-    Route::resource('business_activity_schedulers', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
   
@@ -63,6 +62,10 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/add_family','DesignController@add_family')->name('add_family');
     Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
 });
+
+//Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
+
+Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
@@ -89,7 +92,7 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 Route::group(['middleware' => ['auth']], function(){
    // Route::get('activities/{business_id}/schedulers', 'BusinessController@activities')->name('business_activities_schedulers');
-    Route::get('business_activity_schedulers/{business_id}/', 'BusinessController@activities')->name('business_activities_schedulers');
+    //Route::get('business_activity_schedulers/{business_id}/', 'BusinessController@activities')->name('business_activities_schedulers');
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');

@@ -37,7 +37,7 @@ class BookingRepository
         return UserBookingDetail::where('booking_id',$bid)->get();
     }
 
-    public function getcurrenttabdata($type,$cid, $customer){
+    /*public function getcurrenttabdata($type,$cid, $customer){
         $bookingDetails = [];
         $user = Auth::User();
         $company = CompanyInformation::findOrFail($cid);
@@ -63,9 +63,9 @@ class BookingRepository
             }
         }
         return $bookingDetails;
-    }
+    }*/
 
-    public function getCurrentUserBookingDetails($serviceType, $business_id, $customer){
+    /*public function getCurrentUserBookingDetails($serviceType, $business_id, $customer){
         $user = Auth::user();
         $BookingDetail = [];
          $company = CompanyInformation::findOrFail($business_id);
@@ -78,8 +78,6 @@ class BookingRepository
             $company_booking = $company->UserBookingDetails->where('user_id',$customer->id); 
         }
         
-        //$bookingStatus = $user->getFullUserBookingStatus($business_id)->pluck('id')->toArray();
-        //print_r($company_booking);exit;
         foreach ($company_booking as $key => $bookValue) {
             $business_services = $bookValue->business_services_with_trashed;
             if(@$business_services->service_type == $serviceType){
@@ -87,55 +85,14 @@ class BookingRepository
             }else if($serviceType == null || $serviceType == 'all'){
                 $BookingDetail [] = $bookValue; 
             }
-
-            /*$bookingstatus = $bookValue->booking;
-            if($bookingstatus->user_type == 'user' ){
-                $customer = $bookValue->booking->user;
-                $customers['user'] = $customer;
-            }else{
-                $customer = $bookValue->booking->customer;
-                $customers['customer'] = $customer;
-            }
-            $business_services = $bookValue->business_services_with_trashed;
-            
-            if(@$business_services != '' ){
-                $BookingDetail_1 = $this->getBookingDetailnew($bookValue->booking_id);
-                $businessuser['businessuser'] = $business_services->company_information;
-                $BusinessServices['businessservices'] = $business_services;
-                $customers = json_decode(json_encode($customers), true);
-                $businessuser = json_decode(json_encode($businessuser), true);
-                $BusinessServices = json_decode(json_encode($BusinessServices), true);
-                foreach($BookingDetail_1['user_booking_detail'] as  $key => $details){
-                    if($details['sport'] == $bookValue->sport){
-                        if($BookingDetail_1['user_booking_detail'][$key]['booking_id'] = $bookValue->booking_id){
-                            $BookingDetail_1['user_booking_detail'] = $details;
-                        }
-                        if(@$business_services->service_type == $serviceType){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
-                        }else if($serviceType == null){
-                            $BookingDetail[] = array_merge($BookingDetail_1,$businessuser,$BusinessServices,$customers);
-                        }
-                    }    
-                }
-            }*/
         }
         return $BookingDetail;
-    }
+    }*/
 
     public function getdeepdetailoforder($BookingDetail,$chkVal){
         $full_ary = [];
         foreach($BookingDetail as $book_details){
-            $one_array = [];
             $chk = $chkVal;
-            /*$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $book_details['id']])->sum('use_session_amount');
-            $remaining = $book_details['pay_session'] - $checkindetailscnt;*/
-            //$scheduleddata = json_decode(@$book_details['booking_detail'],true);
-            /*if(@$scheduleddata['sessiondate'] == ''){
-                $sc_date = date("m-d-Y", strtotime($book_details['expired_at']));
-            }else{
-                $sc_date = date("m-d-Y", strtotime($scheduleddata['sessiondate']));
-            }*/
-
 
             if(@$book_details['bookedtime'] != '' && @$book_details['expired_at'] != '' ){
                 if(date("Y-m-d", strtotime($book_details['bookedtime'])) < date('Y-m-d') && date("Y-m-d", strtotime($book_details['expired_at'])) > date('Y-m-d')){
@@ -168,162 +125,58 @@ class BookingRepository
 
             if($datechk == 1){
                 $full_ary[] =  $book_details;
-                /*$serviceactdata = BusinessActivityScheduler::findById($book_details['user_booking_detail']['act_schedule_id']);
-                $BusinessPriceDetails = BusinessPriceDetails::where(['id'=>@$book_details['user_booking_detail']['priceid'],'serviceid' =>@$book_details['user_booking_detail']['sport']])->first();
-
-                if(@$book_details['businessservices']['service_type']=='individual'){ 
-                    $b_type = 'Personal Training'; 
-                }else { 
-                    $b_type =ucfirst($book_details['businessservices']['service_type']); 
-                }
-
-                $pro_pic = url('/public/images/service-nofound.jpg');
-                if ($book_details['businessservices']['profile_pic']!="") {
-                    $pictures = explode(',',$book_details['businessservices']['profile_pic']);
-                    if(!empty($pictures)){
-                        if (file_exists( public_path() . '/uploads/profile_pic/' . $pictures[0])) {
-                           $pro_pic = url('/public/uploads/profile_pic/'.$pictures[0]);
-                        }
-                    }
-                }
-
-                $SpotsLeftdis = 0;
-
-                $SpotsLeft = UserBookingDetail::where(['act_schedule_id' => $book_details['user_booking_detail']['act_schedule_id']])->whereDate('bookedtime', '=', $dateforchk)->get()->toArray();
-
-                $totalquantity = 0;
-                foreach($SpotsLeft as $data1){
-                    $item = json_decode($data1['qty'],true);
-                    if($item['adult'] != '')
-                        $totalquantity += $item['adult'];
-                    if($item['child'] != '')
-                        $totalquantity += $item['child'];
-                    if($item['infant'] != '')
-                        $totalquantity += $item['infant'];
-                }
-                
-
-                $language_name = BusinessService::where('cid',@$book_details['businessservices']['cid'])->first(); 
-                $language = @$language_name->languages;
-
-                $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$book_details['user_booking_detail']['booking_id'])->get();
-                $sub_totprice = 0;
-                foreach( $booking_details_for_sub_total as $bds){
-                    $aprice = json_decode($bds->price,true); 
-                    $sub_price_adu = $sub_price_chi = $sub_price_inf = 0;
-                    if( !empty($aprice['adult']) ){ 
-                        $sub_price_adu = $aprice['adult']; 
-                    }
-                    if( !empty($aprice['child']) ){
-                        $sub_price_chi = $aprice['child']; 
-                    }
-                    if( !empty($aprice['infant']) ){
-                        $sub_price_inf = $aprice['infant']; 
-                    }
-
-                    $a = json_decode($bds->qty,true);
-                    if( !empty($a['adult']) ){  
-                        $sub_totprice += $sub_price_adu * $a['adult'];
-                    }
-                    if( !empty($a['child']) ){
-                        $sub_totprice += $sub_price_chi * $a['child'];
-                    }
-                    if( !empty($a['infant']) ){ 
-                        $sub_totprice += $sub_price_inf * $a['infant'];
-                    }
-                }
-
-                $tot_amount_cart = 0;
-                if(@$book_details['amount'] != ''){
-                    $tot_amount_cart = @$book_details['amount'];
-                }
-                
-                $taxval = 0;
-                $totprice_for_this = 0;
-
-                $aprice = json_decode(@$book_details['user_booking_detail']['price'],true); 
-                $aprice_adu = $aprice_chi = $aprice_inf = 0;
-                if( !empty($aprice['adult']) ){ 
-                    $aprice_adu = $aprice['adult']; 
-                }
-                if( !empty($aprice['child']) ){
-                    $aprice_chi = $aprice['child']; 
-                }
-                if( !empty($aprice['infant']) ){
-                    $aprice_inf = $aprice['infant']; 
-                }
-
-                $a = json_decode(@$book_details['user_booking_detail']['qty'],true);
-                if( !empty($a['adult']) ){ 
-                    $totprice_for_this += $aprice_adu * $a['adult'];
-                }
-                if( !empty($a['child']) ){
-                    $totprice_for_this += $aprice_chi * $a['child'];
-                }
-                if( !empty($a['infant']) ){
-                    $totprice_for_this += $aprice_inf * $a['infant'];
-                }
-
-                if(@$book_details['user_type'] == 'user'){
-                    $userdata = User::where('id',$book_details['user_id'])->first();
-                    $acc_url = config('app.url').'/userprofile/'.$userdata->username;
-                    $taxval = $tot_amount_cart - $sub_totprice; 
-                    $tax_for_this = $taxval / count(@$booking_details_for_sub_total);
-                    $main_total =  number_format(($tax_for_this + $totprice_for_this),2);
-
-                    $name =  @$book_details['user']['firstname'].' '.@$book_details['user']['lastname'];
-                }else{  
-                    $userdata = Customer::where('id',$book_details['customer_id'])->first();
-                    $acc_url = config('app.url').'/business/'.$userdata->business_id.'/customers/'.$userdata->id;
-                    $extra_fees = json_decode(@$book_details['user_booking_detail']['extra_fees'],true); 
-                    $tax = @$extra_fees['tax'];
-                    $tip = @$extra_fees['tip'];
-                    $discount = @$extra_fees['discount'];
-                    $service_fee = @$extra_fees['service_fee'];
-                    $service_fee = ($totprice_for_this * $service_fee )/100;
-                    $main_total = number_format(($tip + $tax + $totprice_for_this - $discount + $service_fee),2);
-                    $name =  @$book_details['customer']['fname'].' '.@$book_details['customer']['lname'];
-                }
-
-                $one_array = array (
-                    "pro_pic" => $pro_pic,
-                    "program_name" => $book_details['businessservices']['program_name'],
-                    "orderid" => $book_details["id"],
-                    "orderdetailid" => $book_details['user_booking_detail']['id'],
-                    "confirm_id" => $book_details["order_id"],
-                    "price_title" => @$BusinessPriceDetails['price_title'],
-                    "pay_session" => @$BusinessPriceDetails['pay_session'],
-                    "SpotsLeftdis" => $remaining,
-                    "spots_available" =>  $book_details['user_booking_detail']['pay_session'],
-                    "sc_date" => @$sc_date,
-                    "shift_start" => @$serviceactdata['shift_start'],
-                    "shift_end" => @$serviceactdata['shift_end'],
-                    "main_total" => @$main_total,
-                    "name" => $name,
-                    "language" => $language,
-                    "participate" => $book_details['user_booking_detail']['qty'],
-                    "participate_name" => $book_details['user_booking_detail']['participate'],
-                    "membership_type" => @$BusinessPriceDetails['membership_type'],
-                    "b_type" => $b_type,
-                    "company_name" =>  $book_details['businessuser']['company_name'] ,
-                    "company_id" =>  $book_details['businessuser']['id'] ,
-                    "businessservices" =>  $book_details['businessservices'],
-                    "acc_url" =>  $acc_url,
-                );
-
-                if($chk != 'past' && $book_details['order_type'] == 'simpleorder'){
-                    $full_ary []= $one_array;
-                }else if($chk == 'past' ){
-                    $full_ary []= $one_array;
-                }*/
             }   
         }
-
-        /*$arayy =array_values(array_unique($full_ary, SORT_REGULAR));*/
-        //return $arayy;
-       // print_r($full_ary);                            
-        //exit;
         return $full_ary;
+    }
+
+    public function currentTab($serviceType, $business_id,$customer){
+        $bookingDetail = [];
+        if($serviceType== null || $serviceType == 'all'){
+            $bookingDetail = UserBookingDetail::where('user_id',$customer->id)->get();
+        }else{
+            $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',$customer->id)->get();
+        }
+        //print_r($bookingDetail);exit;
+        return $bookingDetail;
+    } 
+
+    public function otherTab($serviceType,$business_id,$customer){
+        $checkInDetail = BookingCheckinDetails::where('customer_id',$customer->id)->get();
+        return $checkInDetail;
+    }
+
+    public function tabFilterData($checkInDetail,$chkVal,$serviceType){
+        $full_ary = $bookingDetail= [];
+        /*foreach($checkInDetail as $chkD){
+            $datechk = 0;
+            $chk = $chkVal;
+            if(date('Y-m-d',strtotime($chkD->checkin_date)) == date('Y-m-d') && $chk == 'today'){
+                $datechk = 1;
+                $dateforchk = date('Y-m-d');
+            }
+            if(date('Y-m-d',strtotime($chkD->checkin_date)) >  date('Y-m-d') && $chk == 'upcoming'){
+                $datechk = 1;
+                $dateforchk = date('Y-m-d');
+            }if(date('Y-m-d',strtotime($chkD->checkin_date)) < date('Y-m-d') && $chk == 'past'){
+                $datechk = 1;
+                $dateforchk = date('Y-m-d');
+            }
+
+            if($datechk == 1){
+                $full_ary[] =  $chkD;
+            }
+        }*/
+
+        /*foreach($full_ary as $chkInDetail) { 
+            if($serviceType== null || $serviceType == 'all'){
+                $bookingDetail [] = UserBookingDetail::where('id',$chkInDetail->booking_detail_id)->get();
+            }else{
+                $bookingDetail [] = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->get();
+            }
+        }*/
+        //print_r($bookingDetail);exit;
+        return $bookingDetail;
     }
 
     public function getdeepdetailofcurrentorder($BookingDetail){

@@ -3,14 +3,14 @@
     @php 
         $pic = url('/public/uploads/profile_pic');                 
         
-        $pic =  url('/public/uploads/profile_pic/'.$book_details->business_services()->withTrashed()->first()->first_profile_pic());
+        $pic =  url('/public/uploads/profile_pic/'.@$book_details->business_services()->withTrashed()->first()->first_profile_pic());
         
     @endphp
         <div class="col-md-4 col-sm-6 ">
             <div class="boxes_arts">
                 <div class="headboxes">
                     <img src="{{$pic}}" class="imgboxes" alt="">
-                    <h4 class="fontsize">{{$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
+                    <h4 class="fontsize">{{@$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
                     <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details->booking_id , 'orderdetailid'=>$book_details->id])}}" data-modal-width="900px">
                         <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                     </a>
@@ -106,10 +106,8 @@
                 </div>
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
-                        @if($tabname == 'current')
-                            @if($book_details->booking->order_type == 'checkout_register')
-                                <a href="{{route('personal.schedulers.index',['user_booking_detail_id' => $book_details['id'] ])}}" target="_blank">Schedule</a>
-                            @endif
+                        @if($tabname == 'current' || $tabname == 'upcoming' )
+                            <a href="{{route('personal.schedulers.index',['user_booking_detail_id' => $book_details['id'] ])}}" target="_blank">Schedule</a>
                         @endif
                         @if($tabname == 'past')
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
@@ -141,6 +139,7 @@
                 </div>
             </div>
         </div>
-    @php  $i++;@endphp
+    @php  $i++;  @endphp
+
     @endforeach
 @endif
