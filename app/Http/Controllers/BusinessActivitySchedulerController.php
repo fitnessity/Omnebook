@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Business;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\CompanyInformation;
+use App\{CompanyInformation,UserBookingStatus,UserBookingDetail};
+use DateTime;
 
 class BusinessActivitySchedulerController extends Controller
 {
@@ -16,16 +17,15 @@ class BusinessActivitySchedulerController extends Controller
     public function index(Request $request , $business_id)
     {
         $company = CompanyInformation::findOrFail($business_id);
-        $services = $company->service()->get();
-
-        $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
+        $services = $company->service()->orderBy('created_at','desc')->get();
         $servicetype = 'all';
         if($request->stype){
             $servicetype = $request->stype;
         }
 
+        $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
         $orderdata = [];
-        foreach($order as $odt){
+        foreach($order as $odt){    
             $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
             foreach($orderdetaildata as $odetail){
                 if($servicetype != 'all'){
@@ -39,6 +39,7 @@ class BusinessActivitySchedulerController extends Controller
                 } 
             }
         }
+        
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -52,8 +53,8 @@ class BusinessActivitySchedulerController extends Controller
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
 
-        $companyName = $companyData->company_name;
-        return view('personal.scheduler.all_activity_schedule',[
+        $companyName = $company->company_name;
+        return view('business-activity-schedular.index',[
             'days' => $days,
             'filter_date' => $filter_date,
             'orderdata' => $orderdata,
