@@ -31,7 +31,6 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
-
         $user = Auth::user();
         if($request->business_id){
             $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>$user->id])->first();

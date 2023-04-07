@@ -47,7 +47,7 @@
 									</li>
 									<li class="nav-item">
 										<a class="active" href="#" data-toggle="tab">
-											<figure><img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg" alt="">
+											<figure><img src="{{ url('/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg')}}" alt="">
 											</figure>
 											<div class="user-name-chat">
 												<label class="green-fonts"> Past guest </label> 
@@ -146,14 +146,14 @@
 							<div class="mesge-area">
 								<ul class="conversations ps-container ps-theme-default ps-active-y" data-ps-id="a09f1cee-be3a-4828-9010-a253f1c03544">
 									<li>
-										<figure><img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg" alt=""></figure>
+										<figure><img src="{{ url('/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg')}}" alt=""></figure>
 										<div class="text-box">
 											<label>Jonasiah <span> 2:32PM</span></label>
 											<p>Hey I'm trying to open this lockbox can you explain how to open it I put in the code</p>
 										</div>
 									</li>
 									<li class="me">
-										<figure><img src="/public/images/newimage/bus-experience.png" alt=""></figure>
+										<figure><img src="{{ url('/public/images/newimage/bus-experience.png')}}" alt=""></figure>
 										<div class="text-box">
 											<label>Darryl <span> 2:32PM</span></label>
 											<p>Hey! Please give me a call at 929-351-1258 again</p>
@@ -197,7 +197,7 @@
 							<div class="col-md-12">
 								<div class="new-client-info">
 									<figure>
-			            				<img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg" alt="Fitnessity">
+			            				<img src="{{ url('/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg')}}" alt="Fitnessity">
 			                		</figure>
 									<div class="page-meta">
 										<label> New Client </label>

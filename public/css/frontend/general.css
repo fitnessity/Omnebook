@@ -21400,6 +21400,29 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	right: 103px;
 	font-size: 16px !important;
 }
+.booking-active{
+    position: absolute;
+    top: 0px;
+    left: 103px;
+}
+
+.booking-active-color{
+    background: black;
+    color: #fff;
+    padding: 0px 15px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.booking-inactive-color{
+    background: #dbd9d9;
+    color: black;
+    padding: 0px 15px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 700;
+}
 .your-booking-page {
   display: inline-block;
   width: 100%;

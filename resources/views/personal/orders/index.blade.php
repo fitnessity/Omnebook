@@ -126,7 +126,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -213,7 +213,7 @@
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_current">
-                                            @php    $i = 1; @endphp
+                                            @php $i = 1; @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current'])
                                         </div>
                                     </div> 
@@ -251,11 +251,11 @@
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_today">
-                                             @php  $i = 1;
+                                            @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType);
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today']) 
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
                                         </div>
                                     </div>
 
@@ -296,6 +296,7 @@
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType);
                                             @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
+
                                         </div>
                                     </div><!-- tab panel-->
 
