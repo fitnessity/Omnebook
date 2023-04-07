@@ -180,7 +180,8 @@ class UserBookingDetail extends Model
                     $name = str_replace('(me)','',$pr['pc_name']);
                     $all_pr .= $name.' </br> ';
                 }else{
-                    if($this->user_type == 'customer'){
+                     
+                    if($this->booking->user_type == 'customer'){
                         $name = str_replace('(me)','',$pr['pc_name']);
                         $all_pr .= $name.' </br> ';
                     }else{

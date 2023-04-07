@@ -148,7 +148,7 @@ class BookingRepository
 
     public function tabFilterData($checkInDetail,$chkVal,$serviceType){
         $full_ary = $bookingDetail= [];
-        /*foreach($checkInDetail as $chkD){
+        foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
             if(date('Y-m-d',strtotime($chkD->checkin_date)) == date('Y-m-d') && $chk == 'today'){
@@ -166,15 +166,22 @@ class BookingRepository
             if($datechk == 1){
                 $full_ary[] =  $chkD;
             }
-        }*/
+        }
 
-        /*foreach($full_ary as $chkInDetail) { 
+       foreach($full_ary as $chkInDetail) { 
             if($serviceType== null || $serviceType == 'all'){
-                $bookingDetail [] = UserBookingDetail::where('id',$chkInDetail->booking_detail_id)->get();
+                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id)->first();
+                if(!empty($userBookinDetail) ){
+                    $bookingDetail [] = $userBookinDetail;
+                }
             }else{
-                $bookingDetail [] = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->get();
+                $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->first();
+                if(!empty($userBookinDetail) ){
+                    $bookingDetail [] = $userBookinDetail;
+                }
             }
-        }*/
+        }
+
         //print_r($bookingDetail);exit;
         return $bookingDetail;
     }

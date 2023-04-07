@@ -17,29 +17,22 @@ class BusinessActivitySchedulerController extends Controller
     public function index(Request $request , $business_id)
     {
         $company = CompanyInformation::findOrFail($business_id);
-        $services = $company->service()->orderBy('created_at','desc')->get();
+        $services = $company->service()->where('is_active',1)->orderBy('created_at','desc')->get();
         $servicetype = 'all';
-        if($request->stype){
+        if($request->stype && $request->business_service_id == ''){
             $servicetype = $request->stype;
-        }
-
-        $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
-        $orderdata = [];
-        foreach($order as $odt){    
-            $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
-            foreach($orderdetaildata as $odetail){
-                if($servicetype != 'all'){
-                    if($odetail->business_services()->exists()){
-                        if($odetail->business_services->service_type ==   $servicetype ){
-                            $orderdata []= $odetail;
-                        }
-                    }
-                }else{
-                    $orderdata []= $odetail;
-                } 
+            if($request->stype != 'all'){
+                $services = $company->service()->where(['is_active'=>1, 'service_type' => $servicetype])->orderBy('created_at','desc')->get();
+            }else{
+                $services = $company->service()->where('is_active',1)->orderBy('created_at','desc')->get();
             }
         }
-        
+
+        if($request->business_service_id){
+            $services = $company->service()->where('id',$request->business_service_id)->get();
+            //print_r($services);exit;
+            $servicetype = $request->stype;
+        }
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -57,8 +50,9 @@ class BusinessActivitySchedulerController extends Controller
         return view('business-activity-schedular.index',[
             'days' => $days,
             'filter_date' => $filter_date,
-            'orderdata' => $orderdata,
+            /*'orderdata' => $orderdata,*/
             'serviceType' => $servicetype,
+            'services' => $services,
             'companyName' => $companyName,
             'businessId' => $business_id,
         ]);

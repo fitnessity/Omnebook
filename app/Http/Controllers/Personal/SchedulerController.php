@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus};
+use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus,BusinessActivityScheduler};
 use Auth;
 use DateTime;
 
@@ -77,25 +77,27 @@ class SchedulerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $company = Auth::user()->company()->find($request->businessId);
-        if($company  != ''){
-            $data = $company->UserBookingDetails()->findOrFail($request->odid);
-            $array = json_decode($data['booking_detail'],true);
-            $array['sessiondate'] = $request->date;
-            UserBookingDetail::where('id',$request->odid)->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date,'booking_detail'=>json_encode($array)]);
-            BookingCheckinDetails::create([
-                "business_activity_scheduler_id"=>$request->timeid, 
-                "customer_id" => $data->booking->customer_id,
-                'booking_detail_id'=> $request->odid ,
-                "checkin_date"=>$request->date ,
-                "use_session_amount" => 1,
-                "source_type" => 'online_scheduler'
-            ]);
+    {   
+        $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
+        $customer = Auth::user()->customers()->where('business_id',$request->businessId)->first();
+        $UserBookingDetails = $customer->bookingDetail()->where('bookedtime' , NULL)->orderby('created_at','desc')->first();
+        //echo  $UserBookingDetails;exit();
+        if($UserBookingDetails != ''){
+            $UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
+            if($UserBookingDetails->booking->order_type == 'checkout_register'){
+                BookingCheckinDetails::create([
+                    "business_activity_scheduler_id"=>$request->timeid, 
+                    "customer_id" => $customer->id,
+                    'booking_detail_id'=> $UserBookingDetails->id ,
+                    "checkin_date"=>$request->date ,
+                    "use_session_amount" => 1,
+                    "source_type" => 'online_scheduler'
+                ]);
+            }
             return "success";
         }else{
             return "fail";
-        }
+        }   
     }
 
     /**
