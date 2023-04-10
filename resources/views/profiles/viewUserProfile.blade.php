@@ -21,7 +21,7 @@
     <?php /*?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><?php */?>
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/comment-icons.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/jquery-ui.css') }}">
-    <link rel="stylesheet" href="{{ url('public/css/date-range-picker.css') }}">
+   <!--  <link rel="stylesheet" href="{{ url('public/css/date-range-picker.css') }}"> -->
     <link href="{{ url('public/css/frontend/userprofile.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ url('public/css/frontend/jquery.fancybox.min.css') }}">
@@ -705,7 +705,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                             <img  src="{{ url('public/images/newimage/fitness-img-1.jpg') }}">
                                                                             <label> Joined Fitnessity on </label>
                                                                             <span class="spanstyle"><?php 
-                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"d/m/Y"); ?>
+                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"m/d/Y"); ?>
                                                                                     
                                                                             </span>
                                                                         </div>
@@ -1290,7 +1290,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="{{ url('public/js/pixelarity-face.js') }}"></script>
+<!-- <script src="{{ url('public/js/pixelarity-face.js') }}"></script> -->
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -1300,7 +1300,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/jquery.emojiarea.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/emoji-picker.js') }}"></script>
-<script src="{{ url('public/js/date-range-picker.js') }}"></script>
+<!-- <script src="{{ url('public/js/date-range-picker.js') }}"></script> -->
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 
 
@@ -1443,12 +1443,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             });
 </script>
 
-<script>
+<!-- <script>
     $(document).ready(function(){
         $('a.share').shares();
     });
 
-</script>
+</script> -->
 <script>
     $(function() {
         // Initializes and creates emoji set from sprite sheet
@@ -1925,7 +1925,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 }
             });
         });
-        $('#datepicker-on-change').Zebra_DatePicker({
+        /*$('#datepicker-on-change').Zebra_DatePicker({
             default_position: 'below',
             container: $('.datepicker-position')
         });
@@ -1934,7 +1934,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             direction: -1,
             format: 'm-d-Y',
             container: $('#datepicker-position')
-        });
+        });*/
     });
 
     $(function () {
@@ -2354,10 +2354,10 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
 <script>
     $("#myDate").datepicker({ 
-        // an array of excluded dates
+       // an array of excluded dates
         disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
         // an array of pre-selected dates
-        daterange = [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")
+        daterange: [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")],
         // appearance options
         showButtonPanel:true,  
         showWeek: true,
@@ -2372,11 +2372,11 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     r.getDateRange()
 </script>
 
-<script>
+<!-- <script>
     document.querySelector('.show-btn').addEventListener('click', function() {
       document.querySelector('.sm-menu').classList.toggle('active');
     });
-</script>
+</script> -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 

@@ -1034,6 +1034,7 @@ Route::group(['middleware' => ['auth']], function()
 {
     
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
+    Route::get('/remove_grant_access/{id?}/','CustomerController@remove_grant_access')->name('remove_grant_access');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
@@ -1043,7 +1044,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
     Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
     Route::get('/send-receipt-to-customer', 'CustomerController@sendReceiptToCustomer')->name('sendReceiptToCustomer');
-    
 });
 
 
