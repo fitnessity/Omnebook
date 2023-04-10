@@ -35,10 +35,10 @@ class FamilyMemberController extends Controller
             $username = $customer->fname.' '.$customer->lname;
         }
         $bookingDetail = [];
-        $bookingDetail =  $this->booking_repo->getCurrentUserBookingDetails($request->serviceType, $customer->business_id,$customer->id);
+        $bookingDetail =  $this->booking_repo->otherTab($request->serviceType, $customer->business_id,$customer);
         //print_r($bookingDetail);exit;
         $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->getcurrenttabdata($request->serviceType,$customer->business_id,$customer->id);
+        $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$customer->business_id,$customer);
         //print_r($currentbookingstatus );exit;
         $tabval = $request->tab; 
 
@@ -46,7 +46,7 @@ class FamilyMemberController extends Controller
             'bookingDetail' => $bookingDetail ,
             'currentbookingstatus'=>$currentbookingstatus, 
             'tabval'=>$tabval, 
-            'customerUsername'=>$username, 
+            'customer'=>$customer, 
             'business'=>[]]);
     }
 
