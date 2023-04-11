@@ -24,7 +24,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY FOR {{strtoupper($customerUsername)}} </h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY FOR {{strtoupper($customer->full_name)}} </h4>
                     </div>
 
                     <div class="booking-info-menu">

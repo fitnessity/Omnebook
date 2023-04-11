@@ -1347,7 +1347,9 @@
 	.home-black-section i {top: 7%; left: 46%;}
 	.instant-hire .title h3{margin-bottom: 0px;}
 	.main-slider .slide{padding-top: 310px; min-height: 675px;}
-	
+	.d-none{display: none;}
+	.get-start-sp{margin-top: 55px;}
+	.desktop-none{display: flex;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1618,7 +1620,7 @@
 	.modal-dialog.modal-lg.business{width: 40% !important;}
 	.dob input{width: 222px !important;}
 	.w-38 {  width: 70%;}
-	.w-85 {  width: 80% !important;}
+	.w-85 {  width: 72% !important;}
 	.modal-dialog.modal-lg.staff-modal{width: 80% !important;}
 	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
 	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
@@ -2456,6 +2458,8 @@
 	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 8px; left: 11px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev{background: #dadada; right: 40px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 8px; right: 11px;}
+	.d-none{display: none;}
+	.desktop-none{display: flex;}
 }
 
 

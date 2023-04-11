@@ -541,7 +541,16 @@ class CustomerController extends Controller {
             'user_id' => $user->id
         ]);
         return Redirect()->route('personal.orders.index');
-
     }
 
+    public function remove_grant_access($id){
+        $customers = Customer::where('business_id',$id)->get();
+        if( !empty($customers)){
+            foreach($customers as $cus) { 
+                Customer::where('id',$cus)->update(['user_id'=>'']);
+            }
+        }
+
+        return Redirect()->route('personal.orders.index',['business_id'=>$id]);
+    }
 }

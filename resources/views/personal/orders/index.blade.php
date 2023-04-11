@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper($customerUsername)}} @endif </h4>
+                            != '') FOR {{strtoupper($customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(request()->business_id == '')
@@ -108,7 +108,7 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-3 col-sm-12">
+                                                <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -130,12 +130,15 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
                                                 </div>
-												<div class="col-md-2 col-sm-12">
-													<a href="#" class="access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+												<div class="col-md-2 col-sm-12 nopadding">
+													<a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 ">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}" class="access-req booking-access-req">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->

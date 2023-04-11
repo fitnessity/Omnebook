@@ -30,13 +30,60 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
-				<div class="title">
+				<div class="title get-start-sp">
 					<h3>Get Started Fast</h3>
+				</div>
+			</div>
+			<div class="col-md-12 desktop-none">
+				<div class="mobile-slider owl-carousel">
+					@foreach($getstarteddata as $getdatafast)
+						<div class="card-info instant-section-info">
+							<div class="img">
+							   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+							</div>
+							<h4>{{$getdatafast['title']}}</h4>
+							<p>{{$getdatafast['small_text']}}</p>
+							@if($getdatafast['id'] == 1)
+								<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+							@elseif($getdatafast['id'] == 2)
+								<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+							@elseif($getdatafast['id'] == 3)
+								<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+							@else
+								<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+							@endif
+						</div>
+					@endforeach
+
+					<!-- <div class="card-info instant-section-info">
+						<div class="img">
+						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" alt="">
+						</div>
+						<h4>Find Ways to Workout</h4>
+						<p>Book classes, seminars, workshops, camps, and more</p>
+						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/ways_to_workout">Show all</a>
+					</div>
+					<div class="card-info instant-section-info">
+						<div class="img">
+						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" alt="">
+						</div>
+						<h4>Stay  Active With Fun Things To Do</h4>
+						<p>Turn your weekend of vacation into an adventure</p>
+						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/experiences">Show all</a>
+					</div>
+					<div class="card-info instant-section-info">
+						<div class="img">
+						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1670251820-events.jpg" alt="">
+						</div>
+						<h4>Event</h4>
+						<p>Event</p>
+						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/events">Show all</a>
+					</div> -->
 				</div>
 			</div>
 			@foreach($getstarteddata as $getdatafast)
 			<div class="col-md-3 col-sm-3 col-xs-12">
-				<div class="instant-section-info">
+				<div class="instant-section-info d-none">
 					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
 					<h4>{{$getdatafast['title']}}</h4>
 					<p>{{$getdatafast['small_text']}}</p>
@@ -2817,5 +2864,36 @@ $(document).ready(function() {
   });
  
 });
+</script>
+<script>
+$(".mobile-slider").owlCarousel({
+	loop: true,
+	autoplay: true,
+	autoplayTimeout: 2000, //2000ms = 2s;
+	autoplayHoverPause: true,
+	responsiveClass: true,
+	responsive: {
+			0: {
+			  items: 1
+			},
+
+			600: {
+			  items: 2
+			},
+
+			1024: {
+			  items: 2
+			},
+			
+			1200: {
+			  items: 3
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	
 </script>
 @endsection

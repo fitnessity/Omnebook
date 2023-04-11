@@ -903,7 +903,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																		<img  src="{{ url('public/images/newimage/fitness-img-1.jpg') }}">
 																		<label> Joined Fitnessity on </label>
 																		<span class="spanstyle"><?php 
-                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"d/m/Y"); ?>
+                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"m/d/Y"); ?>
                                                                         </span>
 																	</div>
 																</div>

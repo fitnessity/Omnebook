@@ -604,6 +604,7 @@
 									</div>
 								</div>
 								@php  	
+								$merchant_fee = 0;
 									if($subtotal != $discount){
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 										$merchant_fee = round(($subtotal + $tip - $discount) * 0.039, 2);
