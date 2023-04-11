@@ -56,6 +56,16 @@ class CompanyInformation extends Model {
         "is_verified",
     ];
 
+    protected $appends = ['full_name', 'first_letter'];
+
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->first_name[0] . ' ' . $this->last_name[0];
+    }
+    
     public function employmenthistory() {
         return $this->hasMany(UserEmploymentHistory::class, 'company_id');
     }

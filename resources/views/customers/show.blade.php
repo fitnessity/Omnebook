@@ -428,7 +428,10 @@
 																	<div class="col-md-12 col-xs-12">
 																		<div class="inner-accordion-titles">
 																			<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>	
-																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> <!-- <a class="mailRecipt" data-behaiver="send_receipt" data-booking-detail-id="{{$booking_detail->id}}"data-booking-id ="{{$booking_detail->booking_id}}" data-item-type="no" ><i class="far fa-file-alt"></i></a> --><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>$booking_detail->id,'oid'=>$booking_detail->booking_id])}}" data-item-type="no" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+																			<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> 
+																			<!-- <a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>$booking_detail->id,'oid'=>$booking_detail->booking_id])}}" data-item-type="no" ><i class="far fa-file-alt" aria-hidden="true"></i></a> -->
+
+																			<a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=> $booking_detail->booking_id ,'customer'=>$customerdata->id])}}" data-item-type="no" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																		</div>
 																		<div class="customer-profile-info">
 																			<div class="row">
@@ -709,11 +712,8 @@
 														<td>{{$history->item_description()['qty']}}</td>
 														<td>Refund | Void</td>
 														<td>
-															<a  class="table-icons-staff mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>'','oid'=>$history->item_id])}}" data-item-type="{{$history->item_type_terms()}}" ><i class="fas fa-receipt" aria-hidden="true"></i></a>
-
-															<!-- <div class="table-icons-staff mailRecipt" class="mailRecipt" data-booking-detail-id="" data-booking-id ="{{$history->item_id}}" data-item-type="{{$history->item_type_terms()}}">
-																<i class="fas fa-receipt"></i>
-															</div> -->
+															<!-- <a  class="table-icons-staff mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>'','oid'=>$history->item_id])}}" data-item-type="{{$history->item_type_terms()}}" ><i class="fas fa-receipt" aria-hidden="true"></i></a> -->
+															<a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 														</td>
 													</tr>
 												@endforeach
