@@ -611,7 +611,7 @@
 								 		$grand_total = number_format($grand_total,2);
 								 		$tax_ser_fees = ($service_fee + $taxes);
 								 	}else{
-								 		$grand_total  = $subtotal  = $tax_ser_fees = 0 ;
+								 		$grand_total  = $merchant_fee = $subtotal  = $tax_ser_fees = 0 ;
 								 	}
 							 		//echo $tax_ser_fees;
 								@endphp
