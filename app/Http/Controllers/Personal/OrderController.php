@@ -47,7 +47,7 @@ class OrderController extends PersonalBaseController
                 'bookingDetails' => $bookingDetails ,
                 'currentbookingstatus'=>$currentbookingstatus, 
                 'tabval'=>$tabval, 
-                'customerUsername'=>$customer->username, 
+                'customer'=>$customer, 
                 'business'=>[]]);
         }else{
             $company_information = [];

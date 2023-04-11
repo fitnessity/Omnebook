@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges};
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use App\Services\CheckoutRegisterCartService;
 
@@ -149,7 +149,7 @@ class OrderController extends BusinessBaseController
         $modelchk = 0;
         $modeldata = '';
         $ordermodelary = array();
-        //$ordermodelary = session()->get('ordermodelary');
+        $ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
             $modeldata = $this->getmultipleodermodel($ordermodelary);
@@ -358,8 +358,11 @@ class OrderController extends BusinessBaseController
             $now->modify('+'. $item['actscheduleid']);
             $expired_at = $now;
             $cUid = NULL;
+            $participateName = NULL;
             if(@$item['participate_from_checkout_regi']['id'] != ''){
                 $cUid = $item['participate_from_checkout_regi']['id'];
+                $cUid = $item['participate_from_checkout_regi']['id'];
+                $participateName =  trim($item['participate_from_checkout_regi']['pc_name'],"(me)");
             }
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
@@ -458,6 +461,24 @@ class OrderController extends BusinessBaseController
                     }
                 }
             }
+
+            $businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
+            $email_detail = array(
+                "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
+                "CustomerName" => $participateName, 
+                "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
+                "CompanyName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
+                "BookedPerson"=> $checkoutRegisterCartService->getbookedPerson($request->user_id),
+                "ParticipantsName"=> $participateName,
+                "date"=> "N/A",
+                "time"=>  "N/A",
+                "duration"=>  "N/A",
+                "ActivitiyType"=> $businessService->service_type,
+                "ProgramName"=> $businessService->program_name,
+                "CategoryName"=> $checkoutRegisterCartService->getCategory($item['priceid']));
+
+            SGMailService::confirmationMail($email_detail);
+
         }
 
         session()->forget('cart_item');

@@ -49,7 +49,6 @@ class SGMailService{
 		return $response;
 	}
 
-
 	public static function sendWelcomeMail($email_name){
 		$email = new Mail();
 		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
@@ -159,6 +158,41 @@ class SGMailService{
 		$email->addDynamicTemplateDatas($substitutions);
 
 		$email->setTemplateId("d-78e53ff00cab476b9fd398c5ac88c8f3");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
+
+	public static function confirmationMail($email_detail){
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $email_detail['email'],
+		);
+
+		$substitutions = [
+			"CustomerName" => $email_detail['CustomerName'], 
+			"Url" => $email_detail['Url'], 
+			"CompanyName"=> $email_detail['CompanyName'],
+			"BookedPerson"=> $email_detail['BookedPerson'],
+			"ParticipantsName"=> $email_detail['ParticipantsName'],
+			"date"=> $email_detail['date'],
+			"time"=> $email_detail['time'],
+			"duration"=> $email_detail['duration'],
+			"ActivitiyType"=> $email_detail['ActivitiyType'],
+			"ProgramName"=> $email_detail['ProgramName'],
+			"CategoryName"=> $email_detail['CategoryName'],
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+
+		$email->setTemplateId("d-7a39c17eac4a45f5b2bbf030c5c82f4f");
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
 		try {
 		    $sendgrid->send($email);
