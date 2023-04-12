@@ -77,8 +77,8 @@ class CartService
         $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
         $tax = $bspdata->site_tax;
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
-        $service_fee = $this->getRecurringFeeByItem($item, $user);
-        return $pretaxSubTotal + $service_fee + ($pretaxSubTotal * $tax)/100;
+
+        return $pretaxSubTotal + ($pretaxSubTotal * $tax)/100;
     }
 
     public function getRecurringFeeByItem($item, $user){
