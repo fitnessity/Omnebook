@@ -122,6 +122,9 @@ class UserBookingDetail extends Model
         
         $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
         $transfer_amount = 0;
+
+        $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
+        
         foreach($transactions as $transaction){
 
           $payment_intent = $stripe->paymentIntents->retrieve(
@@ -129,8 +132,15 @@ class UserBookingDetail extends Model
               []
           );
           try {
+            if($transaction->amount > $total_fitnessity_fee){
+                $transfer_amount = $transaction->amount - $total_fitnessity_fee;
+            }else{
+                $transfer_amount = $transaction->amount;
+            }
+            var_dump($transfer_amount);
+            
             $transfer = $stripe->transfers->create([
-                'amount' => $transaction->amount * 100,
+                'amount' => $transfer_amount * 100,
                 'currency' => 'usd',
                 'source_transaction' => $payment_intent->charges->data[0]->id,
                 'destination' => $company_information->stripe_connect_id,
@@ -141,6 +151,7 @@ class UserBookingDetail extends Model
               $transfer_amount += $transaction->amount;
             }
           } catch(\Exception $e) {
+            var_dump($e);
             $this->update(['transfer_provider_status'=>'paid', 
                            'provider_amount' => 0]);
             return;
