@@ -607,10 +607,9 @@
 								$merchant_fee = 0;
 									if($subtotal != $discount){
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
-										$merchant_fee = round(($subtotal + $tip - $discount) * 0.039, 2);
+										$merchant_fee = round(($subtotal + $tip - $discount + $taxes) * 0.039, 2);
 								 		$grand_total = ($subtotal + $tip + $taxes) - $discount + $merchant_fee;
 								 		$grand_total = number_format($grand_total,2);
-								 		$tax_ser_fees = ($service_fee + $taxes);
 								 	}else{
 								 		$grand_total  = $merchant_fee = $subtotal  = $tax_ser_fees = 0 ;
 								 	}

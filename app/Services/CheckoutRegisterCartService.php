@@ -88,9 +88,8 @@ class CheckoutRegisterCartService
     public function getSubTotalByItem($item, $user){
         
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
-        $service_fee = $this->getRecurringFeeByItem($item, $user);
 
-        return $pretaxSubTotal + $service_fee + $item["tax"];
+        return $pretaxSubTotal + $item["tax"];
     }
 
     public function getPriceDetail($priceid){

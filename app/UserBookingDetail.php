@@ -114,45 +114,83 @@ class UserBookingDetail extends Model
     }
 
     public function transfer_to_provider(){
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+      $company_information = $this->business_services->company_information;
 
-        $company_information = $this->business_services->company_information;
+      $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+      if($this->booking->order_type == 'checkout_register'){
+        
+        $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
+        $transfer_amount = 0;
+        foreach($transactions as $transaction){
+
+          $payment_intent = $stripe->paymentIntents->retrieve(
+              $transaction->transaction_id,
+              []
+          );
+          try {
+            $transfer = $stripe->transfers->create([
+                'amount' => $transaction->amount * 100,
+                'currency' => 'usd',
+                'source_transaction' => $payment_intent->charges->data[0]->id,
+                'destination' => $company_information->stripe_connect_id,
+            ]);
+
+
+            if($transfer->id){
+              $transfer_amount += $transaction->amount;
+            }
+          } catch(\Exception $e) {
+            $this->update(['transfer_provider_status'=>'paid', 
+                           'provider_amount' => 0]);
+            return;
+          }    
+        }
+
+        if($transfer->id){
+            $this->update(['transfer_provider_status'=>'paid', 
+                           'provider_amount' => $transfer_amount]);
+        }
+
+        return;
+      }
+        
         /*print_r($this->business_services);
         print_r($this->business_services->company_information);
-        echo $company_information;exit;*/
-        try {
-            $transfer_amount = $this->provider_get_total();
-            $stripe_account  = $stripe->accounts->retrieveCapability(
-                $company_information->stripe_connect_id,
-                'transfers',
-                []
-            );
+      echo $company_information;exit;*/
+      try {
+          $transfer_amount = $this->provider_get_total();
+          $stripe_account  = $stripe->accounts->retrieveCapability(
+              $company_information->stripe_connect_id,
+              'transfers',
+              []
+          );
 
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $this->booking->stripe_id,
-                []
-            );
+          $payment_intent = $stripe->paymentIntents->retrieve(
+              $this->booking->stripe_id,
+              []
+          );
 
-            if($stripe_account['status'] == 'active'){
-                    
-                $transfer = $stripe->transfers->create([
-                    'amount' => $transfer_amount * 100,
-                    'currency' => 'usd',
-                    'source_transaction' => $payment_intent->charges->data[0]->id,
-                    'destination' => $company_information->stripe_connect_id,
-                ]);
+          if($stripe_account['status'] == 'active'){
+                  
+              $transfer = $stripe->transfers->create([
+                  'amount' => $transfer_amount * 100,
+                  'currency' => 'usd',
+                  'source_transaction' => $payment_intent->charges->data[0]->id,
+                  'destination' => $company_information->stripe_connect_id,
+              ]);
 
-                if($transfer->id){
-                    $this->update(['transfer_provider_status'=>'paid', 
-                                   'provider_amount' => $transfer_amount ,
-                                   'provider_transaction_id' => $transfer->id]);
-                }
+              if($transfer->id){
+                  $this->update(['transfer_provider_status'=>'paid', 
+                                 'provider_amount' => $transfer_amount ,
+                                 'provider_transaction_id' => $transfer->id]);
+              }
 
-            }
-            
+          }
+          
 
-        } catch(\Exception $e) {
-        }    
+      } catch(\Exception $e) {
+      }    
     }
 
     public function getparticipate(){
