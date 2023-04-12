@@ -115,7 +115,7 @@ class PaymentController extends Controller {
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
                     'subtotal' => $cartService->getSubTotalByItem($item, $user),
-                    'fitnessity_fee' => 0,
+                    'fitnessity_fee' => $cartService->getFitnessityFeeByItem($item, $user),
                     'tax' => 0,
                     'tip' => 0,
                     'discount' => 0,
@@ -123,6 +123,8 @@ class PaymentController extends Controller {
                     'transfer_provider_status' =>'unpaid',
                     'payment_number' => '{}',
                 ]);
+
+                $booking_detail->transfer_to_provider();
 
                 $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
@@ -398,7 +400,7 @@ class PaymentController extends Controller {
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
                     'subtotal' => $cartService->getSubTotalByItem($item, $user),
-                    'fitnessity_fee' => 0,
+                    'fitnessity_fee' => $cartService->getFitnessityFeeByItem($item, $user),
                     'tax' =>  ($cartService->getGrossSubtotalByItem($item) * $tax )/100,
                     'tip' => 0,
                     'discount' => $cartService->getDiscountTotal($item),
@@ -406,6 +408,8 @@ class PaymentController extends Controller {
                     'transfer_provider_status' =>'unpaid',
                     'payment_number' => '{}',
                 ]);
+
+                $booking_detail->transfer_to_provider();
 
                 $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
