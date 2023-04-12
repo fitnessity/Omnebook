@@ -134,9 +134,9 @@ class UserBookingDetail extends Model
           );
           try {
             if($transaction->amount > $total_fitnessity_fee){
-                $transfer_amount = $transaction->amount - $total_fitnessity_fee - $tax;
+                $transfer_amount = ($transaction->amount/1.039) - $total_fitnessity_fee - $tax;
             }else{
-                $transfer_amount = $transaction->amount;
+                $transfer_amount = ($transaction->amount/1.039);
             }
             var_dump($transfer_amount);
             
