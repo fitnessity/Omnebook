@@ -728,6 +728,11 @@
 	                                            <input type="hidden" id="new_card_payment_method_id" name="new_card_payment_method_id" value="">
 	                                            <label>Save For Future Payments</label>
 	                                        </div>
+	                                        <div class='form-row row'>
+											    <div class='col-md-12 hide error form-group'>
+											        <div class='alert-danger alert'>Fix the errors before you begin.</div>
+											    </div>
+											</div>
 	                                    </div>
 	        						</div> 
 	        					</div>
@@ -952,9 +957,7 @@
 
 <script>
 	function opengiftpopup(pid,img,name,date){
-		/*alert('hii');*/
 		var checkBox = document.getElementById("payforcheckbox"+pid);
-		//alert(checkBox.checked );
 		if (checkBox.checked == true){
 			$.ajax({
 	           type:'post',
@@ -983,7 +986,6 @@
 	}
 
 	function addemail(pid) {
-		//alert('hii');
 		$('#emaildiv').append('<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">');
 	}
  
@@ -1041,7 +1043,9 @@
 <!-- <script src="{{ url('public/js/creditcard.js') }}"></script> -->
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-  
+<script src="{{ url('/public/js/front/jquery-ui.js') }}"></script>
+<link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/>
+
 <script type="text/javascript">
 	$(function() {
 		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
@@ -1059,6 +1063,9 @@
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
 	    	e.preventDefault()
+	    	var $form = $(this);
+	    	$('.error').addClass('hide').find('.alert').text('');
+
 	        $('#checkout-button').html('loading...').prop('disabled', true);
 	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
 	        if(check == null) {
@@ -1075,7 +1082,7 @@
 	        }else{
 	             $('#save_card').val(1);
 	        }
-
+	       
 	        if(cardinfoRadio == null) {
 
 	            var $form  = $(".validation"),
@@ -1083,7 +1090,7 @@
 	                                 'input[type=text]', 'input[type=file]',
 	                                 'textarea'].join(', '),
 	                $inputs       = $form.find('.required').find(inputVal),
-	                $errorStatus = $form.find('div.error'),
+	                $errorStatus  = $form.find('div.error'),
 	                valid         = true;
 	                $errorStatus.addClass('hide');
 	         

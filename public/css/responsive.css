@@ -1282,7 +1282,7 @@
 	.top-area ul.setting-area{padding-left: 0px !important;}
 	.selectProduct { width: 100%;}
 	.find-activity img{width: 100% !important; min-height: 125px;}
-	.activity-time-main{float: left;}
+	.activity-time-main{float: left; margin-top: 5px;}
 	.top-search {  width: 65% !important;}
 	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
@@ -1353,10 +1353,11 @@
 	.float-none{float: none !important;}
 	.title-show{float: right;}
 	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
-	.activity-information {  text-align: left !important;  line-height: 16px;}
+	.activity-information {  text-align: left !important;  line-height: 16px; margin-top: 0px !important; margin-bottom: 5px !important;}
 	.companyalink {  font-size: 13px;}
 	.activity-information span { font-size: 13px !important;}
 	.activity-information p {  font-size: 13px !important; margin-bottom: 0px !important;}
+	.mysidepanel {  height: 100% !important;}
 	
 }
 
@@ -2309,7 +2310,7 @@
 	.special-offer{margin-bottom: 8px !important;}
 	.find-activity img{width: 100% !important;}
 	.activity-data {  padding-left: 15px !important; }
-	.dollar-person{margin-bottom: 6px;}
+	.dollar-person{margin-bottom: 0px;}
 	.dollar-person span { font-size: 13px;}
 	.activity-time-main span {  font-size: 13px;}
 	.title-show a{float: none !important;}
@@ -2359,7 +2360,7 @@
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
 	.points-cards-home-text {  display: block;}
-	.activity-time-main{float: left;}
+	.activity-time-main{float: left; margin-top: 4px;}
 	.find-activity img{margin-bottom: 0px !important; min-height: 150px !important;}
 	.nav-sliders-activites{float: left;}
 	.instant-banner h4{top: 60%; width: 70%; left: 15px;}
@@ -2452,16 +2453,15 @@
 	.main-slider .slide{padding-top: 200px; min-height: 575px;}
 	.top-search{width: 100% !important; margin-top: 21px !important;}
 	.personal-find-activity{height: 245px;}
-	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 23%; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}
-	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 23%; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
+	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
 	.inner-owl-slider-hire .owl-nav .owl-next i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
 	.kickboxing-block .kickboxing-topimg-content img{height: 191px; min-height: 0px !important;}
-	.activity-information{text-align: left !important; line-height: 16px;}
+	.activity-information{ line-height: 16px; margin-top: 0px !important;}
 	.class-info{height: 45px !important; }
-	.showall-btn{float: left;}
-	.addToCompare{float: right; margin-right: 7px;}
+	.addToCompare{margin-right: 7px;}
 	.bottom-content { height: 216px; }
 	.kickboxing-slider-activites .owl-nav .owl-next{background: #dadada;}
 	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 8px; left: 11px;}
@@ -2473,17 +2473,28 @@
 	.padding-r0{padding-right: 0px;}
 	.activity-inner-data{font-size: 11px;}
 	.activity-hours span{font-size: 10px;}
-	.activity-city span{font-size: 11px;}
+	.activity-city span{font-size: 12px;}
 	.companyalink{font-size: 14px;}
 	.activity-information span{font-size: 13px !important; }
 	.activity-information p{font-size: 13px;}
 	.dollar-person{font-size: 13px;}
 	#popular-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#carousel-slider .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#find-trainers .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#ways-to-workout .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#all-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#inarea-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#trainers-coaches .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	.title-show{float: right;}
 	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
-	.find-business p{text-align: left !important;}
-	.find-business .btn-txt { text-align: left !important; padding: 11px 0 !important;}
-	.mtxt-cnter{text-align: center;}
+	.find-business .btn-txt { padding: 11px 0 !important;}}
+	.footer-bottom-left ul{margin-bottom: 19px;}
+	.instant-hire .title .f-16{font-size: 16px; line-height: 26px;}
+	.float-left{text-align: left !important;}
+	.mysidepanel{height: 100% !important;}
+	.pc-sidebar .pc-link {display: flex !important;}
+	.pri-1 a{display: inline !important;}
+	.navbar-content a{color: #fff;}
 }
 
 
