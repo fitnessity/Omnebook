@@ -616,10 +616,11 @@
             <?php
     			$service_fee= ($item_price * $fees->service_fee)/100;
     			$tax= ($item_price * $fees->site_tax)/100;
+    			$merchant_fee = ($item_price * 3.9)/100;
     			/*echo $tax.'<br>';
     			echo $item_price.'<br>';
     			echo $service_fee.'<br>';*/
-    			$total_amount = number_format(($item_price + $service_fee + $tax - $discount),2);
+    			$total_amount = number_format(($item_price + $service_fee + $tax - $discount + $merchant_fee),2);
     		?>
     		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
     		<div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
@@ -632,6 +633,7 @@
     								<label>Bookings</label>
     								<label>Subtotal </label>
     								<label>Taxes & Fees: </label>
+    								<label>Merchant Fee: </label>
     							</div>
     						</div>
     						<div class="col-lg-6 col-xs-6 booking-txt-rs-left"> 
@@ -646,6 +648,8 @@
     									
     								</span>
     								<span> <?php echo "$ " .(number_format(($tax + $service_fee),2)); ?> </span>
+    								<span> <?php echo "$ " .(number_format(($merchant_fee),2)); ?> </span>
+    								
     							</div>
     						</div>
     					</div>
@@ -1054,6 +1058,7 @@
 
 	    var $form = $(".validation");
 	    $('form.validation').bind('submit', function(e) {
+	    	e.preventDefault()
 	        $('#checkout-button').html('loading...').prop('disabled', true);
 	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
 	        if(check == null) {
@@ -1072,6 +1077,7 @@
 	        }
 
 	        if(cardinfoRadio == null) {
+
 	            var $form  = $(".validation"),
 	                inputVal = ['input[type=email]', 'input[type=password]',
 	                                 'input[type=text]', 'input[type=file]',
@@ -1102,13 +1108,16 @@
         	    		$('#checkout-button').html('Check Out').prop('disabled', false);
         	    		return false;
         	    	}else{
+        	    		console.log(result)
         	    		$.ajax({
         	    			url: '{{route('refresh_payment_methods', ['user_id' => $user->id])}}',
         	    			success: function(data){
         	    				console.log(data)
         	    				console.log('success')
+		        	    		
         	    			}
         	    		})
+
         	    		$('#new_card_payment_method_id').val(result.setupIntent.payment_method)
 	        	    	$form.off('submit');
 
@@ -1117,6 +1126,7 @@
         	    });
 	        
 	        }else{
+
     	    	$form.off('submit');
                 $form.submit();
 	        }

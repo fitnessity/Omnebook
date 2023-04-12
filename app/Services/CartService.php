@@ -81,10 +81,8 @@ class CartService
         return $pretaxSubTotal + ($pretaxSubTotal * $tax)/100;
     }
 
-    public function getRecurringFeeByItem($item, $user){
-        $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
-        $service_fee = $bspdata->service_fee;
-        return $this->getGrossSubtotalByItem($item) * $service_fee/100;
+    public function getFitnessityFeeByItem($item, $user){
+        return $this->getGrossSubtotalByItem($item) * $user->fitnessity_fee/100;
     }
 
     public function getGrossSubtotalByItem($item){
