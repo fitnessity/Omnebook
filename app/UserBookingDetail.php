@@ -172,7 +172,7 @@ class UserBookingDetail extends Model
         $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
 
 
-        $transfer_amount = round($this->subtotal - $this->fitnessity_fee, 2);
+        $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
 
 
         $payment_intent = $stripe->paymentIntents->retrieve(
