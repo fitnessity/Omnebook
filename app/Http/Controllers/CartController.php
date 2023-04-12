@@ -36,8 +36,10 @@ class CartController extends Controller {
 	    
 	    $cardInfo = $savedEvents['data'];*/
 	    $cart = [];
+	    // session()->forget('cart_item');
 	    $cartdata  =  $request->session()->get('cart_item', []);
-	    if(!empty($cartdata )){
+	  
+	    if(!empty($cartdata ) && count($cartdata) >0 ) {
 		    foreach($cartdata['cart_item'] as $key=>$dt){
 		    	if($dt['chk'] != 'activity_purchase'){
 		    		$cart['cart_item'] [$key]= $dt;
