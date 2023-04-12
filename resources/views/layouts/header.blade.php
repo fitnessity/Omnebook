@@ -368,7 +368,6 @@ $total_quantity = 0;
 			}
 			.help-us-side{
 				font-size: 11px;
-				margin-left: 35px;
 			}
 			.border-sidebar{
 				border-bottom: 1px solid #fff;
@@ -472,7 +471,7 @@ $total_quantity = 0;
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
-							<div  class="cartitmclass">
+							<div  class="cartitmclass d-none">
 								<?php 
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
@@ -491,8 +490,9 @@ $total_quantity = 0;
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
 							</div>
+							
                         	@if(Auth::check())
-						 	<div class="userblock">
+						 	<div class="userblock d-none">
                         		<div class="login_links" onclick="openNav()">
                                 
                                 @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
@@ -886,6 +886,7 @@ function openNav() {
 function closeNav() {
 	document.getElementById("mySidepanel").style.width = "0";
 }
+
 </script>
 
 <link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>

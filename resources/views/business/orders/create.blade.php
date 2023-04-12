@@ -182,13 +182,13 @@
 													<div class="set-price">
 														<i class="fas fa-dollar-sign"></i>
 													</div>
-													<input type="text" class="form-control valid" id="price" placeholder="$0.00" class="manualprice">
+													<input type="text" class="form-control valid" id="price" placeholder="$0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 												</div>
 											</div>
 											<div class="col-md-2 col-sm-4 col-xs-12">
 												<div class="select0service pricedollar">
 													<label>Session</label>
-													<input type="text" class="form-control valid" id="p_session" name="p_session" placeholder="1">
+													<input type="text" class="form-control valid" id="p_session" name="p_session" placeholder="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 												</div>
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
@@ -206,7 +206,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
 															<div class="choose-tip">
-																<input type="text" class="form-control valid" id="dis_amt" name="dis_amt" placeholder="Enter Amount" onkeyup="gettotal('','');">
+																<input type="text" class="form-control valid" id="dis_amt" name="dis_amt" placeholder="Enter Amount" onkeyup="gettotal('','');" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 															</div>
 														</div>
 													</div>
@@ -227,7 +227,7 @@
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
 															<div class="choose-tip">
-																<input type="text" class="form-control valid" id="tip_amt" name="tip_amt" placeholder="Enter Amount" onkeyup="gettotal('','');">
+																<input type="text" class="form-control valid" id="tip_amt" name="tip_amt" placeholder="Enter Amount" onkeyup="gettotal('','');" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 															</div>
 														</div>
 													</div>
@@ -250,7 +250,7 @@
 													<label>Duration</label>
 													<div class="row">
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-															<input type="text" class="form-control valid" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();">
+															<input type="text" class="form-control valid" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-6 col-sm-6 col-xs-6 nopadding">
 															<div class="choose-tip">
@@ -809,7 +809,7 @@
 															</div>
 														</div>
 														<div class="col-md-3 col-xs-6 col-sm-3">
-															<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="0" data-behavior="calculateRemaining">
+															<input type="text" class="form-control valid" id="cash_amt" name="cash_amt" placeholder="0.00"  value="0" data-behavior="calculateRemaining" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-8 col-xs-4 col-sm-3">
 															<label>Cash</label>
@@ -826,7 +826,7 @@
 															</div>
 														</div>
 														<div class="col-md-3 col-sm-4 col-xs-6 nopadding">
-															<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00"  value="0" data-behavior="calculateChange">
+															<input type="text" class="form-control valid" id="cash_amt_tender" name="cash_amt_tender" placeholder="0.00"  value="0" data-behavior="calculateChange" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-2 col-sm-4 col-xs-6 nopadding">
 															<div class="cash-tend-option">
@@ -860,7 +860,7 @@
 															</div>
 														</div>
 														<div class="col-md-3">
-															<input type="text" class="form-control valid" id="cc_amt" name="cc_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+															<input type="text" class="form-control valid" id="cc_amt" name="cc_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-8">
 															<label>CC(Key/Stored)</label>
@@ -888,7 +888,7 @@
 															</div>
 														</div>
 														<div class="col-md-3 col-sm-4 col-xs-10">
-															<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+															<input type="text" class="form-control valid" id="cc_new_card_amt" name="cc_new_card_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-8 col-sm-4 col-xs-12">
 															<label>CC(Input Card)</label>
@@ -926,7 +926,7 @@
 															</div>
 														</div>
 														<div class="col-md-3 col-sm-4 col-xs-6">
-															<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining">
+															<input type="text" class="form-control valid" id="check_amt" name="check_amt" placeholder="0.00" value="0" data-behavior="calculateRemaining" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 														</div>
 														<div class="col-md-8 col-sm-4 col-xs-2">
 															<label>Check</label>
@@ -1084,36 +1084,6 @@
 <link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/>
 
 <script>
-  	
-  	/*$(document).on('keyup', '#serchclient', function() {
-    	var _token = '{{csrf_token()}}';
-	  	$.ajax({
-	      	type: "GET",
-	      	url: "{{route('business_customer_index')}}",
-	      	data: { fname: $(this).val(),  _token: _token, },
-	      	success: function(data) {
-	        	$("#option-box1 .customer-list").html('');
-	        	console.log(data);
-	        	$.each(data, function(index, customer){
-	        		let customer_row = $('<li class="searchclick" onClick="searchclick(' + customer.id + ')"><input type="hidden" name="_token" value="'+_token+'"><div class="row rowclass-controller"></div>');
-		          	let content = customer_row.find('.rowclass-controller');
-		          	let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
-
-		          	if(customer.profile_pic_url){
-		            	profile_img = '<img class="searchbox-img" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="">';            
-		          	}
-		          	customer_row.append('<div class="col-md-3 nopadding text-center">' + profile_img + '</div>');
-		          	customer_row.append('<div class="col-md-9 div-controller">' + 
-		              '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (52  Years Old)' : '') + '</label></p>' +
-		              '<p class="pstyle liaddress">' + customer.email +'</p>' + 
-		              '<p class="pstyle liaddress">' + customer.phone_number + '</p></div></li>');
-		          	$("#option-box1 .customer-list").append(customer_row);
-		        })
-	        	$("#option-box1").show();
-	      	}
-	  	});
-	});*/
-
 	$(document).ready(function () {
 		var business_id = '{{$companyId}}';
 		var url = "{{ url('/business/business_id/customers') }}";
@@ -1145,7 +1115,6 @@
 	                .appendTo( ul );
 	    };
   	});
-
 </script>
 
 <script type="text/javascript">
@@ -1315,7 +1284,6 @@
 	$(document).on('click', '.editcartitemaks', function () {
 		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
-		//alert(code);
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
@@ -1571,8 +1539,6 @@
 	}
 
 	function loaddropdown(chk,val,id){
-		//alert('hii');
-
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pid').val(id);
@@ -1725,7 +1691,6 @@
 	 		
 	 		$('#taxvalspan').html('$'+tax);
 	 		var tot = price + sub_tot_tip - sub_tot_dis;
-	 		//alert(tot);
 	 		if(dropval !=''){
 	 			tot = dropval * tot;
 	 		}
@@ -1810,10 +1775,6 @@
 		gettotal('','');
 	};
 
-
-	
-
-
 	$('.close-div').click(function() {
 		var name = $(this).parent('div').parent('div').attr('id');
 		$("#"+name).css('display','none');
@@ -1832,7 +1793,6 @@
 		
 		calculateTotalRemaining();
 	});
-	
 	
 	$('input[type=radio][name=cardinfo]').change(function() {
 
@@ -1882,7 +1842,13 @@
 	$(document).on("keyup", '[data-behavior=calculateChange]', function(e){
 		let cash_amt = $('#cash_amt').val();
 		let cash_amt_tender = $('#cash_amt_tender').val()
-		$('#cash_change').val(cash_amt - cash_amt_tender);
+		$('#cash_change').val(parseFloat(cash_amt - cash_amt_tender).toFixed(2));
+		$('#cash_amt_change').html(parseFloat(cash_amt - cash_amt_tender).toFixed(2));
+		let total_remaing = 0;
+		if(cash_amt_tender < cash_amt){
+			total_remaing = Math.abs(parseFloat(cash_amt - cash_amt_tender).toFixed(2));
+		}
+		$('#total_remaing').html('Total Amount Remaining $' +  total_remaing);
 	})
 	// document.getElementById("cash_amt").onkeyup = function() {calculateTotalRemaining()};
 	//document.getElementById("cc_new_card_amt").onkeyup = function() {calculateTotalRemaining()};
@@ -1897,7 +1863,6 @@
 		let cc_amt = $('#cc_amt').val();
 		let cc_new_card_amt = $('#cc_new_card_amt').val();
 		let check_amt = $('#check_amt').val();
-
 		$('#total_remaing').html('Total Amount Remaining $' + parseFloat(total - cash_amt - cc_amt - cc_new_card_amt - check_amt).toFixed(2));
 		// var grand_total = '{{$grand_total}}';
 		// var cash_amt_tender = parseFloat($('#cash_amt_tender').val());
@@ -1983,7 +1948,6 @@
 		// 	}
 		// }
 	}
-
 
     $(document).on('keyup', '#p_session', function() {
     	$('#pay_session').val($(this).val());

@@ -2,7 +2,7 @@
 	<ul class="list-inline menu-left mb-0">
     	<li class="float-left"><button class="button-menu-mobile open-left"><i class="fas fa-bars"></i></button></li>
    	</ul>
-	<div class="left side-menu">
+	<div class="left side-menu d-none">
 		<div class="slimscroll-menu" id="remove-scroll">
 			<div id="sidebar-menu">
 				<ul class="metismenu" id="side-menu">

@@ -1140,7 +1140,7 @@ input:disabled{
 	</div>
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm book-now-skicky" style="background: none; border-top: none;">
   <div class="container">
 	<div class="col-xs-12">
     <p class="navbar-text navbar-right" style="text-align:center;">
