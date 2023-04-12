@@ -135,10 +135,10 @@
                                                     <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
                                                 </div>
 												<div class="col-md-2 col-sm-12 nopadding">
-													<a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+													<a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 ">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}" class="access-req booking-access-req">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
