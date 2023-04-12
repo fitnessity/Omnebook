@@ -124,6 +124,7 @@ class UserBookingDetail extends Model
         $transfer_amount = 0;
 
         $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
+        $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
         
         foreach($transactions as $transaction){
 
@@ -133,7 +134,7 @@ class UserBookingDetail extends Model
           );
           try {
             if($transaction->amount > $total_fitnessity_fee){
-                $transfer_amount = $transaction->amount - $total_fitnessity_fee;
+                $transfer_amount = $transaction->amount - $total_fitnessity_fee - $tax;
             }else{
                 $transfer_amount = $transaction->amount;
             }
