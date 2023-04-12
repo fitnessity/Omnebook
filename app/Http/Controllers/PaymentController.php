@@ -105,7 +105,7 @@ class PaymentController extends Controller {
                     'user_id'=> $customer->id,
                     'user_type'=> 'customer',
                     'sport' => $item['code'],
-                    'bookedtime' => Carbon::now()->format('Y-m-d'),
+                    'bookedtime' => $item['sesdate'],
                     'business_id'=> $businessServices->cid,
                     'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
                     'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
@@ -213,6 +213,23 @@ class PaymentController extends Controller {
                     'getreceipemailtbody' => $getreceipemailtbody,
                     'email' => Auth::user()->email);
                 SGMailService::sendBookingReceipt($email_detail);
+
+
+                $email_detail2 = array(
+                    "email" => $company_email, 
+                    "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
+                    "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
+                    "BusinessName"=> @$cartService->getCompany($businessServices->cid)->company_name,
+                    "BookedPerson"=> Auth::user()->full_name,
+                    "ParticipantsName"=> @$cartService->getParticipateByComa($item['participate']),
+                    "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+                    "time"=> $activityScheduler->activity_time(),
+                    "duration"=> $activityScheduler->get_clean_duration(),
+                    "ActivitiyType"=> $businessServices->service_type,
+                    "ProgramName"=> $businessServices->program_name,
+                    "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
+
+                SGMailService::confirmationMail($email_detail2);
             }
 
             $updatedCartitems = $cartService->updatedCartitems();
@@ -477,6 +494,22 @@ class PaymentController extends Controller {
                     'getreceipemailtbody' => $getreceipemailtbody,
                     'email' => Auth::user()->email);
                 SGMailService::sendBookingReceipt($email_detail);
+               
+                $email_detail2 = array(
+                    "email" => @$cartService->getCompany($businessServices->cid)->business_email, 
+                    "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
+                    "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
+                    "BusinessName"=> @$cartService->getCompany($businessServices->cid)->company_name,
+                    "BookedPerson"=> Auth::user()->full_name,
+                    "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($item['participate'])),
+                    "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+                    "time"=> $activityScheduler->activity_time(),
+                    "duration"=> $activityScheduler->get_clean_duration(),
+                    "ActivitiyType"=> $businessServices->service_type,
+                    "ProgramName"=> $businessServices->program_name,
+                    "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
+
+                SGMailService::confirmationMail($email_detail2);
             }
 
             $updatedCartitems = $cartService->updatedCartitems();

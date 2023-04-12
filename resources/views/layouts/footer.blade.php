@@ -186,7 +186,7 @@
         })
     });
 
-    $(document).on('click', '[data-behavior~=send_receipt]', function(e){
+    /*$(document).on('click', '[data-behavior~=send_receipt]', function(e){
         var item_type = $(this).data('item-type');
         e.preventDefault()
         if(item_type == 'no' || item_type == 'Membership'){
@@ -210,6 +210,29 @@
                     }
                 });
             }
+        }else{
+            alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
+        }
+    });*/
+
+    $(document).on('click', '[data-behavior~=send_receipt]', function(e){
+        var item_type = $(this).data('item-type');
+        e.preventDefault()
+        if(item_type == 'no' || item_type == 'Membership'){
+            var width = $(this).data('modal-width');
+            if(width == undefined){
+                width = '600px';
+            }  
+            $.ajax({
+                url: $(this).data('url'),
+                success: function(html){
+                    $('#ajax_html_modal .modal-body').html(html)
+                    $('#ajax_html_modal .modal-dialog').css({width:width});
+                    $('#ajax_html_modal').modal('show')
+                }
+            });
+        }else{
+            alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
         }
     });
 

@@ -21494,7 +21494,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	padding: 5px 25px 5px 0;
 	font-size: 12px;
 	font-weight: 600;
-	color: #a8a8a8;
+	color: #000;
 	height: auto !important;
 	box-shadow: none;
 	border: none !important;
@@ -24640,4 +24640,29 @@ padding-left: 0px;
 }
 .desktop-none{
 	display: none;
+}
+.y-middle{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+.shortcut-sticky{
+	text-align: center;
+	margin-top: 8px;
+}
+.shortcut-sticky a{
+	display: grid;
+	background: none;
+	color: #333;
+}
+.shortcut-sticky a i{
+	font-size: 15px;
+}
+.shortcut-sticky a label{
+	font-size: 11px;
+	font-weight: 600;
+}
+.short-links.active{
+	color: #f91942;
+	background: none;
 }

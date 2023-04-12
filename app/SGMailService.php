@@ -179,7 +179,7 @@ class SGMailService{
 		$substitutions = [
 			"CustomerName" => $email_detail['CustomerName'], 
 			"Url" => $email_detail['Url'], 
-			"CompanyName"=> $email_detail['CompanyName'],
+			"BusinessName"=> $email_detail['BusinessName'],
 			"BookedPerson"=> $email_detail['BookedPerson'],
 			"ParticipantsName"=> $email_detail['ParticipantsName'],
 			"date"=> $email_detail['date'],

@@ -465,9 +465,9 @@ class OrderController extends BusinessBaseController
             $businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
             $email_detail = array(
                 "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
-                "CustomerName" => $participateName, 
+                "CustomerName" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->full_name, 
                 "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
-                "CompanyName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
+                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
                 "BookedPerson"=> $checkoutRegisterCartService->getbookedPerson($request->user_id),
                 "ParticipantsName"=> $participateName,
                 "date"=> "N/A",
@@ -535,12 +535,8 @@ class OrderController extends BusinessBaseController
 
     public function getmultipleodermodel($array)
     {    
-        $html = '';
-        $totaltax = 0;
-        $subtotaltax = 0;
-        $tot_dis = 0;
-        $tot_tip = 0;
-        $service_fee = 0;
+        $html = $idarry = '';
+        $totaltax =  $subtotaltax = $tot_dis = $tot_tip = $service_fee = 0;
 
         $html .= '<div class="row"> 
                 <div class="col-lg-4 bg-sidebar">
@@ -572,8 +568,7 @@ class OrderController extends BusinessBaseController
                 <div class="col-lg-8">
                     <div class="modal-booking-info">
                         <h3>Booking Receipt</h3>';
-        $idarry = '';         
-
+    
         foreach($array as $or){
             $order_detail = UserBookingDetail::where('id',$or)->first();
             $idarry .= $or.',';

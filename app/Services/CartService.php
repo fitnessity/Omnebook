@@ -2,7 +2,7 @@
 
 
 namespace App\Services;
-use App\{BusinessPriceDetails,BusinessSubscriptionPlan};
+use App\{BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,UserFamilyDetail,User};
 
 class CartService
 {
@@ -133,10 +133,32 @@ class CartService
         return $discount;
     }
 
-        
+    public function getCompany($id){
+        $company = CompanyInformation::where('id',$id)->first();
+        return $company;
+    }
 
-
-
+    public function getParticipateByComa($participateData){
+        $participate =  json_decode($participateData,true);
+        $names = '';
+        if(!empty($participate)){
+            foreach($participate as $p){
+                if($p['from'] == 'family'){
+                    $data = UserFamilyDetail::where('id',$p['id'])->first();
+                    if($data != '' ){
+                        $names .= $data->full_name.' ,';
+                    }
+                }else{
+                    $data = User::where('id',$p['id'])->first();
+                    if($data != '' ){
+                        $names .= $data->full_name.' ,';
+                    }
+                } 
+            }
+            $names = rtrim($names ,' ,');
+        }
+        return $names;
+    }
 
     /*[
         {'activity_id': 1, 'price_detail_id': 1, }
