@@ -134,11 +134,10 @@ class UserBookingDetail extends Model
           );
           try {
             if($transaction->amount > $total_fitnessity_fee){
-                $transfer_amount = ($transaction->amount/1.039) - $total_fitnessity_fee - $tax;
+                $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
             }else{
-                $transfer_amount = ($transaction->amount/1.039);
+                $transfer_amount = round($transaction->amount/1.039, 2);
             }
-            var_dump($transfer_amount);
             
             $transfer = $stripe->transfers->create([
                 'amount' => $transfer_amount * 100,
@@ -152,12 +151,13 @@ class UserBookingDetail extends Model
               $transfer_amount += $transaction->amount;
             }
           } catch(\Exception $e) {
-            var_dump($e);
+
             $this->update(['transfer_provider_status'=>'paid', 
                            'provider_amount' => 0]);
             return;
           }    
         }
+
 
         if($transfer->id){
             $this->update(['transfer_provider_status'=>'paid', 
