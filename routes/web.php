@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
+
         /*Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');*/
         // Services
         //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
@@ -1035,6 +1036,7 @@ Route::group(['middleware' => ['auth']], function()
     
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
     Route::get('/remove_grant_access/{id?}/','CustomerController@remove_grant_access')->name('remove_grant_access');
+    Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');

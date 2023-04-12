@@ -1282,7 +1282,7 @@
 	.top-area ul.setting-area{padding-left: 0px !important;}
 	.selectProduct { width: 100%;}
 	.find-activity img{width: 100% !important; min-height: 125px;}
-	.activity-time-main{float: right;}
+	.activity-time-main{float: left;}
 	.top-search {  width: 65% !important;}
 	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
@@ -1350,6 +1350,14 @@
 	.d-none{display: none;}
 	.get-start-sp{margin-top: 55px;}
 	.desktop-none{display: flex;}
+	.float-none{float: none !important;}
+	.title-show{float: right;}
+	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
+	.activity-information {  text-align: left !important;  line-height: 16px;}
+	.companyalink {  font-size: 13px;}
+	.activity-information span { font-size: 13px !important;}
+	.activity-information p {  font-size: 13px !important; margin-bottom: 0px !important;}
+	
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2351,8 +2359,8 @@
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
 	.points-cards-home-text {  display: block;}
-	.activity-time-main{float: right;}
-	.find-activity img{margin-bottom: 15px !important;}
+	.activity-time-main{float: left;}
+	.find-activity img{margin-bottom: 0px !important; min-height: 150px !important;}
 	.nav-sliders-activites{float: left;}
 	.instant-banner h4{top: 60%; width: 70%; left: 15px;}
 	.instant-banner img{max-height: 300px;}
@@ -2437,21 +2445,22 @@
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 	.form-control.rs-birthdate{width: 295px;}
 	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
-	.sticky-book-now{font-size: 20px;}
+	.sticky-book-now{font-size: 20px; margin-bottom: 15px;}
 	.add-family-frnd{width: 100% !important; margin-bottom: 15px; margin-left: 0px !important;}
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
 	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
 	.main-slider .slide{padding-top: 200px; min-height: 575px;}
 	.top-search{width: 100% !important; margin-top: 21px !important;}
 	.personal-find-activity{height: 245px;}
-	.inner-owl-slider-hire .owl-nav .owl-prev { width: 30px; height: 30px; text-align: center; opacity: 1; border-radius: 50px; top: 45%; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 23%; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}
-	.inner-owl-slider-hire .owl-nav .owl-next { width: 30px; height: 30px; text-align: center; opacity: 1; border-radius: 50px; top: 45%; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;}
-	.inner-owl-slider-hire .owl-nav .owl-next i{position: absolute; top: 7px; left: 11px;}
+	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 23%; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
+	.inner-owl-slider-hire .owl-nav .owl-next i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
 	.kickboxing-block .kickboxing-topimg-content img{height: 191px; min-height: 0px !important;}
-	.activity-information{text-align: left !important; margin-left: 7px;}
+	.activity-information{text-align: left !important; line-height: 16px;}
 	.class-info{height: 45px !important; }
-	.showall-btn{float: left; margin-left: 7px;}
+	.showall-btn{float: left;}
 	.addToCompare{float: right; margin-right: 7px;}
 	.bottom-content { height: 216px; }
 	.kickboxing-slider-activites .owl-nav .owl-next{background: #dadada;}
@@ -2460,6 +2469,21 @@
 	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 8px; right: 11px;}
 	.d-none{display: none;}
 	.desktop-none{display: flex;}
+	.float-none{float: none !important;}
+	.padding-r0{padding-right: 0px;}
+	.activity-inner-data{font-size: 11px;}
+	.activity-hours span{font-size: 10px;}
+	.activity-city span{font-size: 11px;}
+	.companyalink{font-size: 14px;}
+	.activity-information span{font-size: 13px !important; }
+	.activity-information p{font-size: 13px;}
+	.dollar-person{font-size: 13px;}
+	#popular-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	.title-show{float: right;}
+	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
+	.find-business p{text-align: left !important;}
+	.find-business .btn-txt { text-align: left !important; padding: 11px 0 !important;}
+	.mtxt-cnter{text-align: center;}
 }
 
 

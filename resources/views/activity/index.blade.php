@@ -34,71 +34,49 @@
 					<h3>Get Started Fast</h3>
 				</div>
 			</div>
+			<!-- Mobile Slider -->
 			<div class="col-md-12 desktop-none">
-				<div class="mobile-slider owl-carousel">
+				<div class="mobile-slider owl-carousel owl-theme">
 					@foreach($getstarteddata as $getdatafast)
-						<div class="card-info instant-section-info">
-							<div class="img">
-							   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+						<div class="owl-item" style="width: 300px;">
+							<div class="card-info instant-section-info">
+								<div class="img">
+								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+								</div>
+								<h4>{{$getdatafast['title']}}</h4>
+								<p>{{$getdatafast['small_text']}}</p>
+								@if($getdatafast['id'] == 1)
+									<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+								@elseif($getdatafast['id'] == 2)
+									<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+								@elseif($getdatafast['id'] == 3)
+									<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+								@else
+									<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+								@endif
 							</div>
-							<h4>{{$getdatafast['title']}}</h4>
-							<p>{{$getdatafast['small_text']}}</p>
-							@if($getdatafast['id'] == 1)
-								<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
-							@elseif($getdatafast['id'] == 2)
-								<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
-							@elseif($getdatafast['id'] == 3)
-								<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
-							@else
-								<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
-							@endif
 						</div>
 					@endforeach
-
-					<!-- <div class="card-info instant-section-info">
-						<div class="img">
-						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" alt="">
-						</div>
-						<h4>Find Ways to Workout</h4>
-						<p>Book classes, seminars, workshops, camps, and more</p>
-						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/ways_to_workout">Show all</a>
-					</div>
-					<div class="card-info instant-section-info">
-						<div class="img">
-						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" alt="">
-						</div>
-						<h4>Stay  Active With Fun Things To Do</h4>
-						<p>Turn your weekend of vacation into an adventure</p>
-						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/experiences">Show all</a>
-					</div>
-					<div class="card-info instant-section-info">
-						<div class="img">
-						   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1670251820-events.jpg" alt="">
-						</div>
-						<h4>Event</h4>
-						<p>Event</p>
-						<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/events">Show all</a>
-					</div> -->
 				</div>
 			</div>
+			
 			@foreach($getstarteddata as $getdatafast)
-			<div class="col-md-3 col-sm-3 col-xs-12">
-				<div class="instant-section-info d-none">
-					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
-					<h4>{{$getdatafast['title']}}</h4>
-					<p>{{$getdatafast['small_text']}}</p>
-					@if($getdatafast['id'] == 1)
-						<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
-					@elseif($getdatafast['id'] == 2)
-						<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
-					@elseif($getdatafast['id'] == 3)
-						<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
-					@else
-						<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
-					@endif
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="instant-section-info d-none">
+						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
+						<h4>{{$getdatafast['title']}}</h4>
+						<p>{{$getdatafast['small_text']}}</p>
+						@if($getdatafast['id'] == 1)
+							<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+						@elseif($getdatafast['id'] == 2)
+							<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+						@elseif($getdatafast['id'] == 3)
+							<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+						@else
+							<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+						@endif
+					</div>
 				</div>
-			</div>
-	
 			@endforeach
 		</div>
 		@include('includes.search_category_sidebar')
@@ -107,25 +85,107 @@
 			$date = strtotime($start_date);
 			$date = strtotime("+8 hours", $date);
 			/*print_r($todayservicedata);*/
-			
 		?>
-
+		
 		@if(count($bookschedulers) > 0)
 			<div class="fst-0 fsb-1">
 				<div class="row">
 					<div class="col-md-10">
 						<div class="title">
-							<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="desktop-none">Find Activities Starting In The Next 8 Hrs for <br><?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="d-none">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 						</div>
 					</div>
-					<div class="col-md-2"> 
-						<div class="title-show">
+					<div class="col-md-2 col-xs-12"> 
+						<div class="title-show desktop-none show-all-page">
+							<a href="{{route('activities_next_8_hours')}}"><i class="fas fa-chevron-right"></i></a>
+						</div>
+						<div class="title-show d-none">
 							<a href="{{route('activities_next_8_hours')}}">Show All</a>
 						</div>
 					</div>
-					@foreach ($bookschedulers as $bookscheduler)
+					<!-- Mobile Slider -->
+					
+						<div class="col-md-12 desktop-none">
+							<div class="find-activity-owl owl-carousel owl-theme">
+								@foreach ($bookschedulers as $bookscheduler) 
+								<div class="owl-item" style="width: 300px;">
+									<div class="card-info">
+										<div class="row">
+											<div class="col-xs-12 col-sm-12">
+												<div class="find-activity">
+													<div class="row y-middle">
+														<div class="col-xs-4 col-sm-4 padding-r0">
+															<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}">
+														</div>
+														
+														<div class="col-xs-8 col-sm-8 activity-data">
+															<div class="row">
+																<div class="col-xs-12 text-right">
+																	@auth
+																		<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+																			<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+																				<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+																		</div>
+																	@endauth
+																	@guest
+																		<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="f
+																			ar fa-heart"></i></a>
+																	@endguest
+																</div>
+																<div class="col-xs-12">
+																	<div class="activity-inner-data">
+																		<i class="fas fa-star"></i>
+																		<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}})</span>
+																	</div>
+
+																	<div class="activity-hours">
+																		<span>{{$bookscheduler->get_duration_hours()}}</span>
+																	</div>
+																	<div class="activity-city float-none">
+																		<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
+																	</div>
+																</div>
+															</div>
+
+															<div class="activity-information ">
+																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+																<div class="dollar-person">
+																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
+																</div>
+																
+															</div>
+
+															<div class="row">
+																<div class="col-xs-12">
+																	<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
+																	<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
+																		<span>Starts in 
+																		@if ($bookscheduler->time_left($current_date)->h)
+																			{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
+																		@endif
+																		@if ($bookscheduler->time_left($current_date)->i)
+																			{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
+																		@endif</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								@endforeach
+							</div>
+						</div>
+
+					@foreach ($bookschedulers as 	$bookscheduler)
 						<div class="col-md-4 col-sm-6">
-							<div class="find-activity">
+							<div class="find-activity d-none">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
 										<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}" >
@@ -2337,10 +2397,154 @@
     </div>
 <!-- end modal -->
 
+<div class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+  <div class="container">
+	<div class="col-xs-2">
+		<div class="shortcut-sticky">
+			<a href="{{route('activities_index')}}" class="short-links active">
+				<i class="far fa-file-alt"></i>
+				<label>Book</label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-2">
+		<div class="shortcut-sticky">
+			<a href="{{route('profile-viewProfile')}}" class="short-links">
+				<i class="fas fa-plus"></i>
+				<label>Post</label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-2">
+		<div class="shortcut-sticky">
+			<a href="{{route('carts_index')}}" class="short-links">
+				<i class="fas fa-shopping-cart"></i>
+				<label>Cart </label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-3">
+		<div class="shortcut-sticky">
+			<a href="{{route('personal.orders.index')}}" class="short-links">
+				<i class="fas fa-info"></i>
+				<label>Bookings</label>
+			</a>
+		</div>
+	</div>
+	@if(Auth::check())
+	<div class="col-xs-3">
+		<div class="shortcut-sticky">
+			<a class="short-links" onclick="openNav()">
+				<i class="fas fa-user"></i>
+				<label>Profile</label>
+			</a>
+			
+			<nav class="pc-sidebar">
+				<div class="navbar-wrapper">
+					<div id="mySidepanel" class="sidepanel">
+						<div class="navbar-content ps">
+							<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
+							<ul class="pc-navbar">
+								<li style="text-align: center;"> 
+									@if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
+                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
+                                    @else
+                                    <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
+                                      @endif
+								</li>
+								<li class="pc-caption"><span> Welcome</span></li>
+                                <li class="pc-caption-1">
+                                    <span> {{ Auth::user()->firstname }} </span>
+                                </li>
+								<li class="lp-tag">
+                                    <span><?php echo "@"; ?>{{ Auth::user()->username }} </span>
+                                </li>
+                                <li class="lp-per-pro"> <span> Personal Profile </span> </li>
+                                <li class="border-1">
+                                    <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
+                                </li>
+                                <li class="pc-link">
+                                   <span class="pc-micon"><i class="fa fa-user"></i></span>
+                                    <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
+								</li>
+                                <?php /*?> <li class="pc-link">
+                                      <span class="pc-micon"><i class="fa fa-user"></i></span>
+                                      <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
+                                 </li><?php */?>
+                                 <li class="pc-link">
+                                     <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
+                                  </li>
+								<!-- <li class="pc-link">
+                                       <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
+                                 </li> -->
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
+                                </li>
+								<li class="pc-link">
+                                     <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+									<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
+                                </li>
+                                <li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-file-alt"></i></span>
+									<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
+                                </li>
+								<!-- <li class="pc-link">
+                                         <span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
+                                 </li> -->
+								<li><div class="border-sidebar"></div></li>
+								<li class="lp-per-pro"> <span>Business Center </span></li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
+                                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
+                                </li>
+                                <li class="pc-link">
+                                    <span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
+                                </li>
+								<li><div class="border-sidebar"></div></li>
+								<li class="lp-per-pro"> <span>Support </span> </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-comments"></i></span>
+                                    <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
+								</li>	
+                                <li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-question-circle"></i></span>
+                                    <a href="{{route('help')}}" style="color: white;">Help Desk</a>
+                                </li>
+                                <!-- <li class="pc-link">
+                                          <span class="pc-micon"><i class="fa fa-user-plus"></i></span>
+                                          <a href="#" style="color: white;">Invite Friends</a>
+                                 </li> -->
+                                 <li><div class="border-sidebar"></div></li>
+                                 <li class="pc-link">
+                                      <span class="pc-micon"><i class="fa fa-right-from-bracket"></i></span>
+                                      <a href="{{ Config::get('constants.SITE_URL') }}/userlogout" style="color: white;">Logout </a>
+                                  </li>
+							</ul>
+						</div>
+						<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
+						<p class="pri-2">Fitnessity, Inc 2021</p>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	@endif
+	
+		<!--<p class="navbar-text navbar-right" style="text-align:center;">
+			<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+		</p>-->
+	
+  </div>
+</div>
+
 @include('layouts.footer')
 	
 <script type="text/javascript">
 	$(document).ready(function () {
+		function openNav() {
+			document.getElementById("mySidepanel").style.width = "300px";
+		}
+
 
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
@@ -2624,24 +2828,28 @@ function viewActreview(aid)
 	  },
 	});
 </script>
+
 <script>
+jQuery(document).ready(function(){
 	jQuery("#popular-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
 	  animateOut: 'fadeOut',
 	  animateIn: 'fadeIn',
 	  */
-	  responsiveClass: true,
 	  autoHeight: true,
 	  autoplayTimeout: 7000,
 	  smartSpeed: 800,
 	  nav: true,
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsiveClass:true,
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2660,6 +2868,7 @@ function viewActreview(aid)
 	      items: 5
 	    },
 	  },
+	});
 	});
 </script>
 <script>
@@ -2867,8 +3076,9 @@ $(document).ready(function() {
 </script>
 <script>
 $(".mobile-slider").owlCarousel({
-	loop: true,
-	autoplay: true,
+	loop: false,
+	autoWidth: true,
+	autoplay: false,
 	autoplayTimeout: 2000, //2000ms = 2s;
 	autoplayHoverPause: true,
 	responsiveClass: true,
@@ -2895,5 +3105,38 @@ $(".mobile-slider").owlCarousel({
 		  },
 		});
 	
+</script>
+<script>
+$(".find-activity-owl").owlCarousel({
+	loop: false,
+	autoWidth: true,
+	autoplay: false,
+	margin: 10,
+	autoplayTimeout: 2000, //2000ms = 2s;
+	autoplayHoverPause: true,
+	responsiveClass: true,
+	responsive: {
+			0: {
+			  items: 1
+			},
+
+			600: {
+			  items: 2
+			},
+
+			1024: {
+			  items: 2
+			},
+			
+			1200: {
+			  items: 3
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		
+ });
 </script>
 @endsection
