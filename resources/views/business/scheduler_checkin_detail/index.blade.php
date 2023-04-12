@@ -155,7 +155,7 @@
                                                         
 
                                                     </select>
-                                                    @if($booking_checkin_detail->customer->active_memberships() < 1)
+                                                    @if($booking_checkin_detail->customer->active_memberships()->count() < 1)
                                                         <span style="color:red;text-align:left;">No Active memberships</span>
                                                     @endif
                                                 </div>
