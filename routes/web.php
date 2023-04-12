@@ -1035,7 +1035,7 @@ Route::group(['middleware' => ['auth']], function()
 {
     
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
-    Route::get('/remove_grant_access/{id?}/','CustomerController@remove_grant_access')->name('remove_grant_access');
+    Route::get('/remove_grant_access/{id?}/{customerId?}','CustomerController@remove_grant_access')->name('remove_grant_access');
     Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');

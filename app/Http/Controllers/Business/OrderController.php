@@ -46,7 +46,7 @@ class OrderController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request ,$business_id)
-    {    
+    {    //print_r($request->all());
         $cart_item = [];
         if (session()->has('cart_item')) {
             $cart_item = session()->get('cart_item');
@@ -137,6 +137,17 @@ class OrderController extends BusinessBaseController
                 'payment_method_types' => ['card'],
                 'customer' => $customerdata->stripe_customer_id,
             ]);
+        }
+
+        if($request->cus_id == ''){
+            if(!empty($cart_item)){
+                foreach($cart_item['cart_item'] as $key=>$item){
+                    if($item['chk'] == 'activity_purchase'){
+                        unset($cart_item['cart_item'][$key]);
+                    }
+                }
+                session()->put('cart_item',$cart_item);
+            }
         }
         if($activated == 0){
             $status = "InActive";
@@ -348,7 +359,6 @@ class OrderController extends BusinessBaseController
                 'item_type' =>'UserBookingStatus',
                 'item_id' => $userBookingStatus->id,
             ]));
-
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
@@ -478,7 +488,6 @@ class OrderController extends BusinessBaseController
                 "CategoryName"=> $checkoutRegisterCartService->getCategory($item['priceid']));
 
             SGMailService::confirmationMail($email_detail);
-
         }
 
         session()->forget('cart_item');

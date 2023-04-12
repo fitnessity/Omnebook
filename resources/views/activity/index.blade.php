@@ -18,13 +18,7 @@
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
-<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
-<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
 
 <section class="instant-hire" >
 	<div class="container-fluid">
@@ -92,7 +86,7 @@
 				<div class="row">
 					<div class="col-md-10">
 						<div class="title">
-							<h3 class="desktop-none">Find Activities Starting In The Next 8 Hrs for <br><?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="desktop-none f-16">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 							<h3 class="d-none">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 						</div>
 					</div>
@@ -142,13 +136,15 @@
 																	<div class="activity-hours">
 																		<span>{{$bookscheduler->get_duration_hours()}}</span>
 																	</div>
+																</div>
+																<div class="col-xs-12">
 																	<div class="activity-city float-none">
 																		<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
 																	</div>
 																</div>
 															</div>
 
-															<div class="activity-information ">
+															<div class="activity-information float-left">
 																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
 																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
@@ -161,6 +157,8 @@
 															<div class="row">
 																<div class="col-xs-12">
 																	<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
+																</div>
+																<div class="col-xs-12">
 																	<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
 																		<span>Starts in 
 																		@if ($bookscheduler->time_left($current_date)->h)
@@ -812,8 +810,12 @@
 													</div>
 													<hr>
 													<div class="all-details">
+														<div class="col-md-12 col-xs-12">
 														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														</div>
+														<div class="col-md-12 col-xs-12">
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -2397,153 +2399,19 @@
     </div>
 <!-- end modal -->
 
-<div class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
-  <div class="container">
-	<div class="col-xs-2">
-		<div class="shortcut-sticky">
-			<a href="{{route('activities_index')}}" class="short-links active">
-				<i class="far fa-file-alt"></i>
-				<label>Book</label>
-			</a>
-		</div>
-	</div>
-	<div class="col-xs-2">
-		<div class="shortcut-sticky">
-			<a href="{{route('profile-viewProfile')}}" class="short-links">
-				<i class="fas fa-plus"></i>
-				<label>Post</label>
-			</a>
-		</div>
-	</div>
-	<div class="col-xs-2">
-		<div class="shortcut-sticky">
-			<a href="{{route('carts_index')}}" class="short-links">
-				<i class="fas fa-shopping-cart"></i>
-				<label>Cart </label>
-			</a>
-		</div>
-	</div>
-	<div class="col-xs-3">
-		<div class="shortcut-sticky">
-			<a href="{{route('personal.orders.index')}}" class="short-links">
-				<i class="fas fa-info"></i>
-				<label>Bookings</label>
-			</a>
-		</div>
-	</div>
-	@if(Auth::check())
-	<div class="col-xs-3">
-		<div class="shortcut-sticky">
-			<a class="short-links" onclick="openNav()">
-				<i class="fas fa-user"></i>
-				<label>Profile</label>
-			</a>
-			
-			<nav class="pc-sidebar">
-				<div class="navbar-wrapper">
-					<div id="mySidepanel" class="sidepanel">
-						<div class="navbar-content ps">
-							<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
-							<ul class="pc-navbar">
-								<li style="text-align: center;"> 
-									@if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-                                    @else
-                                    <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-                                      @endif
-								</li>
-								<li class="pc-caption"><span> Welcome</span></li>
-                                <li class="pc-caption-1">
-                                    <span> {{ Auth::user()->firstname }} </span>
-                                </li>
-								<li class="lp-tag">
-                                    <span><?php echo "@"; ?>{{ Auth::user()->username }} </span>
-                                </li>
-                                <li class="lp-per-pro"> <span> Personal Profile </span> </li>
-                                <li class="border-1">
-                                    <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
-                                </li>
-                                <li class="pc-link">
-                                   <span class="pc-micon"><i class="fa fa-user"></i></span>
-                                    <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
-								</li>
-                                <?php /*?> <li class="pc-link">
-                                      <span class="pc-micon"><i class="fa fa-user"></i></span>
-                                      <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
-                                 </li><?php */?>
-                                 <li class="pc-link">
-                                     <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
-                                  </li>
-								<!-- <li class="pc-link">
-                                       <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-                                 </li> -->
-								<li class="pc-link">
-                                    <span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
-                                </li>
-								<li class="pc-link">
-                                     <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-									<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
-                                </li>
-                                <li class="pc-link">
-                                    <span class="pc-micon"><i class="fas fa-file-alt"></i></span>
-									<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                </li>
-								<!-- <li class="pc-link">
-                                         <span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
-                                 </li> -->
-								<li><div class="border-sidebar"></div></li>
-								<li class="lp-per-pro"> <span>Business Center </span></li>
-								<li class="pc-link">
-                                    <span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-                                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
-                                </li>
-                                <li class="pc-link">
-                                    <span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
-                                </li>
-								<li><div class="border-sidebar"></div></li>
-								<li class="lp-per-pro"> <span>Support </span> </li>
-								<li class="pc-link">
-                                    <span class="pc-micon"><i class="fas fa-comments"></i></span>
-                                    <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
-								</li>	
-                                <li class="pc-link">
-                                    <span class="pc-micon"><i class="fas fa-question-circle"></i></span>
-                                    <a href="{{route('help')}}" style="color: white;">Help Desk</a>
-                                </li>
-                                <!-- <li class="pc-link">
-                                          <span class="pc-micon"><i class="fa fa-user-plus"></i></span>
-                                          <a href="#" style="color: white;">Invite Friends</a>
-                                 </li> -->
-                                 <li><div class="border-sidebar"></div></li>
-                                 <li class="pc-link">
-                                      <span class="pc-micon"><i class="fa fa-right-from-bracket"></i></span>
-                                      <a href="{{ Config::get('constants.SITE_URL') }}/userlogout" style="color: white;">Logout </a>
-                                  </li>
-							</ul>
-						</div>
-						<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-						<p class="pri-2">Fitnessity, Inc 2021</p>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
-	@endif
-	
-		<!--<p class="navbar-text navbar-right" style="text-align:center;">
-			<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
-		</p>-->
-	
-  </div>
-</div>
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
 
 @include('layouts.footer')
 	
 <script type="text/javascript">
 	$(document).ready(function () {
-		function openNav() {
-			document.getElementById("mySidepanel").style.width = "300px";
-		}
+		
 
 
 		$(document).on('click', '.serv_fav1', function(){
@@ -2791,6 +2659,7 @@ function viewActreview(aid)
 </script> -->
 
 <script>
+jQuery(document).ready(function(){
 	jQuery("#carousel-slider").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
@@ -2805,46 +2674,6 @@ function viewActreview(aid)
 	  smartSpeed: 800,
 	  nav: true,
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
-	});
-</script>
-
-<script>
-jQuery(document).ready(function(){
-	jQuery("#popular-activities").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsiveClass:true,
 	  responsive: {
 	    0: {
 	      items: 1,
@@ -2869,11 +2698,55 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+});
+</script>
+
+<script>
+jQuery(document).ready(function(){
+	jQuery("#popular-activities").owlCarousel({
+	  autoplay: false,
+	  rewind: true, /* use rewind if you don't want loop */
+	  margin: 20,
+	   /*
+	  animateOut: 'fadeOut',
+	  animateIn: 'fadeIn',
+	  */
+	  responsiveClass: true,
+	  autoHeight: true,
+	  autoplayTimeout: 7000,
+	  smartSpeed: 800,
+	  nav: true,
+	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  responsive: {
+	    0: {
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
+	    },
+
+	    600: {
+	      items: 3
+	    },
+
+	    1024: {
+	      items: 3
+	    },
+		
+		1200: {
+	      items: 5
+	    },
+		
+	    1366: {
+	      items: 5
+	    },
+	  },
 	});
+ });
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#inarea-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2888,7 +2761,9 @@ jQuery(document).ready(function(){
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2908,10 +2783,12 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#find-trainers").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2926,7 +2803,9 @@ jQuery(document).ready(function(){
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2946,10 +2825,12 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#ways-to-workout").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2964,7 +2845,9 @@ jQuery(document).ready(function(){
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2984,10 +2867,12 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+ });
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#all-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true,
 	  margin: 20,
 	   /*
@@ -3002,7 +2887,9 @@ jQuery(document).ready(function(){
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -3022,10 +2909,12 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#trainers-coaches").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true,
 	  margin: 20,
 	   /*
@@ -3040,7 +2929,9 @@ jQuery(document).ready(function(){
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -3060,6 +2951,7 @@ jQuery(document).ready(function(){
 	    },
 	  },
 	});
+});
 </script>
 <script>
 $(document).ready(function() {

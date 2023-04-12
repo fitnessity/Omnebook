@@ -144,6 +144,162 @@
 <p id="back-top" title="Back To Top">
     <a href="#top" class="cd-top"><span class="fa fa-arrow-up"></span></a>
 </p>
+
+<!-- Sticky Footer -->
+<div  id="mysticky" class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+  <div class="container">
+	<div class="col-xs-2">
+		<div class="shortcut-sticky ">
+			<a href="{{route('activities_index')}}" class="short-links active">
+				<i class="far fa-file-alt"></i>
+				<label>Book</label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-2">
+		<div class="shortcut-sticky">
+			<a href="{{route('profile-viewProfile')}}" class="short-links">
+				<i class="fas fa-plus"></i>
+				<label>Post</label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-2">
+		<div class="shortcut-sticky">
+			<a href="{{route('carts_index')}}" class="short-links">
+				<i class="fas fa-shopping-cart"></i>
+				<label>Cart </label>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-3">
+		<div class="shortcut-sticky">
+			<a href="{{route('personal.orders.index')}}" class="short-links">
+				<i class="fas fa-info"></i>
+				<label>Bookings</label>
+			</a>
+		</div>
+	</div>
+	@if(Auth::check())
+	<div class="col-xs-3">
+		<div class="shortcut-sticky">
+			<a class="short-links" onclick="openMobileNav()">
+				<i class="fas fa-user"></i>
+				<label>Profile</label>
+			</a>
+			
+			<nav class="pc-sidebar">
+				<div class="navbar-wrapper">
+					<div id="myMobileSidepanel" class="sidepanel mysidepanel">
+						<div class="navbar-content ps">
+							<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeMobileNav()"></a>
+							<ul class="pc-navbar">
+								<li style="text-align: center;"> 
+									@if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
+                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
+                                    @else
+                                    <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
+                                      @endif
+								</li>
+								<li class="pc-caption"><span> Welcome</span></li>
+                                <li class="pc-caption-1">
+                                    <span> {{ Auth::user()->firstname }} </span>
+                                </li>
+								<li class="lp-tag">
+                                    <span><?php echo "@"; ?>{{ Auth::user()->username }} </span>
+                                </li>
+                                <li class="lp-per-pro"> <span> Personal Profile </span> </li>
+                                <li class="border-1">
+                                    <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
+                                </li>
+                                <li class="pc-link">
+                                   <span class="pc-micon"><i class="fa fa-user"></i></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
+								</li>
+                                <?php /*?> <li class="pc-link">
+                                      <span class="pc-micon"><i class="fa fa-user"></i></span>
+                                      <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
+                                 </li><?php */?>
+                                 <li class="pc-link">
+                                     <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Edit Personal Profile</a>
+                                  </li>
+								<!-- <li class="pc-link">
+                                       <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
+                                 </li> -->
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Family</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><img src="{{ url('public/img/menu-icon2.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info" style="color: white;">Payment Info</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
+                                </li>
+								<li class="pc-link">
+                                     <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;"> Inbox</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite" style="color: white;">Favorite</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/followers" style="color: white;">Followers</a>
+                                </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/following" style="color: white;">Following</a>
+                                </li>
+                                
+								 <?php /*?><li class="pc-link">
+                                     <span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/user-profile" style="color: white;">User Profile</a>
+                                </li><?php */?>
+								
+								
+								<!-- <li class="pc-link">
+                                         <span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
+                                 </li> -->
+								<li><div class="border-sidebar"></div></li>
+								<li class="lp-per-pro"> <span>Business Center </span></li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
+                                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
+                                </li>
+                                <li class="pc-link">
+                                    <span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
+                                </li>
+								<li><div class="border-sidebar"></div></li>
+								<li class="lp-per-pro"> <span>Support </span> </li>
+								<li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-comments"></i></span>
+                                    <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
+								</li>	
+                                <li class="pc-link">
+                                    <span class="pc-micon"><i class="fas fa-question-circle"></i></span>
+                                    <a href="{{route('help')}}" style="color: white;">Help Desk</a>
+                                </li>
+                                <!-- <li class="pc-link">
+                                          <span class="pc-micon"><i class="fa fa-user-plus"></i></span>
+                                          <a href="#" style="color: white;">Invite Friends</a>
+                                 </li> -->
+                                 <li><div class="border-sidebar"></div></li>
+                                 <li class="pc-link">
+                                      <span class="pc-micon"><i class="fa fa-right-from-bracket"></i></span>
+                                      <a href="{{ Config::get('constants.SITE_URL') }}/userlogout" style="color: white;">Logout </a>
+                                  </li>
+							</ul>
+						</div>
+						<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
+						<p class="pri-2">Fitnessity, Inc 2021</p>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	@endif
+  </div>
+</div>
+<!-- Sticky Footer  -->
+
 <script src="https://js.stripe.com/v3/"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
@@ -162,6 +318,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>
+function openMobileNav() {
+	document.getElementById("myMobileSidepanel").style.width = "300px";
+}
+
+function closeMobileNav() {
+	document.getElementById("myMobileSidepanel").style.width = "0";
+}
+</script>
+
 <script>
 	$(document).on('focus', '[data-behavior~=text-phone]', function(e){
         //jQuery.noConflict();

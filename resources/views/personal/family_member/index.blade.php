@@ -67,7 +67,7 @@
                                 <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
-                                            <div class="col-md-3 col-sm-12">
+                                            <div class="col-md-2 col-sm-12 nopadding">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
                                             <!-- <div class="col-md-2 col-sm-6">
@@ -85,16 +85,19 @@
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
-                                                    <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                    <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
                                                     <i class="far fa-calendar-alt"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            <div class="col-md-3 col-sm-12">
                                                 <label for="">Search:</label>
                                                 <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
                                             </div>
-											<div class="col-md-2 col-sm-12">
-												<a href="#" class="access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 ">
+                                                <a href="{{route('remove_grant_access',['id'=> $customer->business_id ,'customerId' => $customer->id ])}}" class="access-req booking-access-req">Remove Access</a>
                                             </div>
                                         </div>
 										<!-- Modal Start -->
@@ -180,7 +183,7 @@
                                 <div class="tab-pane" id="nav-today" role="tabpanel" aria-labelledby="nav-today-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
-                                            <div class="col-md-3 col-sm-12">
+                                            <div class="col-md-2 col-sm-12 nopadding">
                                                 <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
                                             <!-- <div class="col-md-2 col-sm-6">
@@ -198,13 +201,19 @@
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
-                                                    <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                    <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
                                                     <i class="far fa-calendar-alt"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            <div class="col-md-3 col-sm-12">
                                                 <label for="">Search:</label>
                                                 <input type="search" id="search_today" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('today');">
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 ">
+                                                <a href="{{route('remove_grant_access',['id'=> $customer->business_id ,'customerId' => $customer->id ])}}" class="access-req booking-access-req">Remove Access</a>
                                             </div>
                                         </div>
                                     </div>
@@ -221,8 +230,8 @@
                                 <div class="tab-pane" id="nav-upcoming" role="tabpanel" aria-labelledby="nav-upcoming-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
-                                            <div class="col-md-3 col-sm-12">
-                                                <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
                                             <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
@@ -239,13 +248,19 @@
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
-                                                    <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                    <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
                                                     <i class="far fa-calendar-alt"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            <div class="col-md-3 col-sm-12">
                                                 <label for="">Search:</label>
                                                 <input type="search" id="search_upcoming" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('upcoming');">
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 ">
+                                                <a href="{{route('remove_grant_access',['id'=> $customer->business_id ,'customerId' => $customer->id ])}}" class="access-req booking-access-req">Remove Access</a>
                                             </div>
                                         </div>
                                     </div>
@@ -261,8 +276,8 @@
                                 <div class="tab-pane" id="nav-past" role="tabpanel" aria-labelledby="nav-past-tab">
                                     <div class="col-lg-12 col-md-12 book-info-sear">
                                         <div class='row'>
-                                            <div class="col-md-3 col-sm-12">
-                                                <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                             </div>
                                             <!-- <div class="col-md-2 col-sm-6">
                                                 <div class="show_block">
@@ -279,13 +294,19 @@
                                             <div class="col-md-3 col-sm-6">
                                                 <div class="date_block">
                                                     <label for="">Date:</label>
-                                                    <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                    <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
                                                     <i class="far fa-calendar-alt"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            <div class="col-md-3 col-sm-12">
                                                 <label for="">Search:</label>
                                                 <input type="search" id="search_past" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('past');">
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 nopadding">
+                                                <a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 ">
+                                                <a href="{{route('remove_grant_access',['id'=> $customer->business_id ,'customerId' => $customer->id ])}}" class="access-req booking-access-req">Remove Access</a>
                                             </div>
                                         </div>
                                     </div>  
