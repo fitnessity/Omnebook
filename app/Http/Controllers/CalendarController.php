@@ -8,7 +8,7 @@ use App\AddrCities;
 use App\AddrStates;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
-use App\BusinessServices;
+use App\{BusinessServices,Customer};
 use Auth;
 use DB;
 use DateTime;
@@ -21,42 +21,22 @@ class CalendarController extends Controller
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start')
+       
+        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start,bdetails.user_id')
                 ->leftjoin("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
                 ->join("business_services as ser", DB::raw('ser.id'), '=', 'bdetails.sport')
                 ->join("business_activity_scheduler as ser_sche", DB::raw('ser_sche.id'), '=', 'bdetails.act_schedule_id')
                 ->where('user_booking_status.user_id', Auth::user()->id)
                 ->get();
-        //echo "<pre>";print_r($data);exit;
+       // echo "<pre>";print_r($data);exit;
         $fullary= [];
+
         foreach($data as $dt){
+            $full_name = "N/A";
+            if(@$dt->user_id != ''){
+                $full_name = Customer::where('id',$dt->user_id)->first()->full_name;
+                $full_name = ucwords($full_name);
+            }
             if(@$dt->set_duration != ''){
                 $tm = explode(' ',$dt->set_duration);
                 $hr=''; $min=''; $sec='';
@@ -79,7 +59,8 @@ class CalendarController extends Controller
                 "shift_start"=>$shift_start,
                 "shift_end"=>$shift_end,
                 "time"=>$time,
-                "start"=>$dt['start']);
+                "start"=>$dt['start'],
+                "full_name"=>$full_name);
         }
 
         //print_r($fullary);exit;
@@ -98,9 +79,13 @@ class CalendarController extends Controller
         $html = ''; 
         $booking_detail = UserBookingDetail::where('id',$request->id)->first();
         if( $booking_detail != ''){
-            $ser_data = BusinessServices::select('service_type','program_name')->where('id', $booking_detail->sport)->first();
+            $ser_data = BusinessServices::select('service_type','program_name','cid','id')->where('id', $booking_detail->sport)->first();
+            $time = "N/A";
+            if( $booking_detail->act_schedule_id != ''){
+                $time = $booking_detail->business_activity_scheduler->activity_time().' ('. $booking_detail->business_activity_scheduler->get_clean_duration().')';
+            }
+            $participate = $booking_detail->decodeparticipate();
             if($ser_data != ''){
-
                 if(date('Y-m-d') > date('Y-m-d',strtotime($booking_detail->bookedtime) ) ){
                     $tabval = "past";
                 }else if(date('Y-m-d') == date('Y-m-d',strtotime($booking_detail->bookedtime) ) ){
@@ -108,100 +93,29 @@ class CalendarController extends Controller
                 }else{
                     $tabval = "upcoming";
                 }
-                $html .='<div class="calendar-body">';
-                if($ser_data->service_type == 'individual'){
-                    $html .='<h3>'.$ser_data->program_name.'</h3>
-                            <p>with Valor Mixed Martial Arts</p>
-                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
-                           <div class="calendar-time">
-                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
-                            </div>
-                            <div class="calendar-time">
-                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
-                                    </div>
+                $html .='<div class="calendar-body">
+                        <h3>'.$ser_data->program_name.'</h3>
+                        <p>'.$ser_data->company_information->company_name.'</p>
+                        <p class="calendar-address">'.$ser_data->company_information->company_address().'</p>
+                       <div class="calendar-time">
+                            <label>Time: </label> <span>'.$time.'</span>
+                        </div>
+                        <div class="calendar-time">
+                            <label>Who\'s Participating: </label> <span>'.$participate.' </span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="calendar-btns">
+                                   <a class="btn btn-reschedule" href="'.route("business_activity_schedulers",['business_id' => $ser_data->cid, 'business_service_id' => $ser_data->id, 'stype' =>  $ser_data->service_type]).'" target="_blank">Reschedule</a> 
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                        <a class="btn btn-danger" href="'.route("personal.orders.index", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
-                                    </div>
-                                </div>
-                            </div>';
-                            
-                }else if($ser_data->service_type == 'classes'){
-                    $html .='<h3>'.$ser_data->program_name.'</h3>
-                            <p>with Valor Mixed Martial Arts</p>
-                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
-                            <div class="calendar-time">
-                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
                             </div>
-                            <div class="calendar-time">
-                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
+                            <div class="col-md-6">
+                                <div class="calendar-btns">
+                                    <a class="btn btn-danger" href="'.route("personal.orders.index", ['business_id' => $ser_data->cid, 'serviceType'=>$ser_data->service_type, 'tab' => $tabval]).'" target="_blank">View Booking</a> 
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                        <a class="btn btn-danger" href="'.route("personal.booking_gym_studio", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
-                                    </div>
-                                </div>
-                            </div>';
-
-                }else if($ser_data->service_type == 'experience'){
-                    $html .='<h3>'.$ser_data->program_name.'</h3>
-                            <p>with Valor Mixed Martial Arts</p>
-                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
-                            <div class="calendar-time">
-                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
-                            </div>
-                            <div class="calendar-time">
-                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                        <a class="btn btn-danger" href="'.route("personal.experience_page", ['tabval' => $tabval]).'" target="_blank">View Booking</a>
-                                    </div> 
-                                </div>
-                            </div>';
-                }else {
-                    $html .='<h3>'.$ser_data->program_name.'</h3>
-                            <p>with Valor Mixed Martial Arts</p>
-                            <p class="calendar-address">2063 broadaway ,7th Fl, New York,NY 10023</p>
-                            <div class="calendar-time">
-                                <label>Time: </label> <span>03:45 am to 4:15 am (30min)</span>
-                            </div>
-                            <div class="calendar-time">
-                                <label>Whos Participating: </label> <span>Erica Adams(35 years Old)</span>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                       <a class="btn btn-reschedule" href="" target="_blank">Reschedule</a> 
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="calendar-btns">
-                                        <a class="btn btn-danger" href="'.route("personal.events_page", ['tabval' => $tabval]).'" target="_blank">View Booking</a> 
-                                    </div>
-                                </div>
-                            </div>'; 
-                }
-                $html .='</div>';
+                        </div>
+                    </div>';
             }
             
         }   
@@ -210,7 +124,7 @@ class CalendarController extends Controller
 
     public function provider_calendar(Request $request) {
         
-        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start')
+        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start,bdetails.user_id')
                 ->leftjoin("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
                 ->join("business_services as ser", DB::raw('ser.id'), '=', 'bdetails.sport')
                 ->join("business_activity_scheduler as ser_sche", DB::raw('ser_sche.id'), '=', 'bdetails.act_schedule_id')
@@ -219,6 +133,11 @@ class CalendarController extends Controller
         /*echo "<pre>";print_r($data);exit;*/
         $fullary= [];
         foreach($data as $dt){
+            $full_name = "N/A";
+            if(@$dt->user_id != ''){
+                $full_name = Customer::where('id',$dt->user_id)->first()->full_name;
+                $full_name = ucwords($full_name);
+            }
             if(@$dt->set_duration != ''){
                 $tm = explode(' ',$dt->set_duration);
                 $hr=''; $min=''; $sec='';
@@ -241,7 +160,8 @@ class CalendarController extends Controller
                 "shift_start"=>$shift_start,
                 "shift_end"=>$shift_end,
                 "time"=>$time,
-                "start"=>$dt['start']);
+                "start"=>$dt['start'],
+                "full_name"=>$full_name);
         }
 
         //print_r($fullary);exit;

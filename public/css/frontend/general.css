@@ -24676,3 +24676,18 @@ padding-left: 0px;
 	width: 17px;
 	display: inline-block;
 }
+#familymaindiv .panel-heading .panel-title a::after{
+
+	content: "\e114";
+	font-family: 'Glyphicons Halflings';
+	position: absolute;
+	right: 30px;
+	color: #fff;
+	font-size: 15px;
+	font-weight: 200;
+	top: 23px;
+	transform: translateY(-50%);
+}
+#familymaindiv .panel-heading .panel-title .collapsed:after {
+    content: "\e113";
+}

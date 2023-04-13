@@ -609,7 +609,7 @@
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 										$merchant_fee = round(($subtotal + $tip - $discount + $taxes) * 0.039, 2);
 								 		$grand_total = ($subtotal + $tip + $taxes) - $discount + $merchant_fee;
-								 		$grand_total = number_format($grand_total,2);
+								 		$grand_total = number_format($grand_total, 2, '.', '');
 								 	}else{
 								 		$grand_total  = $merchant_fee = $subtotal  = $tax_ser_fees = 0 ;
 								 	}
@@ -1982,6 +1982,41 @@
             $(this).val($(this).val() + "/");
         }
     });
+
+    function sendemail(){
+        $('.reviewerro').html('');
+        var email = $('#email').val();
+        var orderdetalidary = $('#orderdetalidary').val();
+        var booking_id = $('#booking_id').val();
+        if(email == ''){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Add Email Address..');
+        }else if(!valid(email)){
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Please Enter Valid Email Address..');
+        }else{
+            $('.btn-modal-booking').attr('disabled',true);
+            $('.reviewerro').css('display','block');
+            $('.reviewerro').html('Sending...');
+            $.ajax({
+                url: "{{route('sendreceiptfromcheckout')}}",
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: 'get',
+                data:{
+                    orderdetalidary:orderdetalidary,
+                    email:email,
+                    booking_id:booking_id,
+                },
+                success: function (response) {
+                    $('.reviewerro').html('');
+                    $('.reviewerro').css('display','block');
+                    $('.reviewerro').html('Email Successfully Sent..');
+                }
+            });
+        }
+    }
 
     function getAge() {
         var dateString = document.getElementById("dob").value;

@@ -230,15 +230,6 @@ class CustomerController extends Controller {
         }
     }
 
-    /* public function activity_visits(Request $request, $business_id, $id){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customer = $company->customers->find($id);
-        $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
-        
-        return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
-    }*/
-
     public function visit_modal(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -269,7 +260,7 @@ class CustomerController extends Controller {
     }
 
     public function addFamilyMemberCustomer(Request $request) {
-        //print_r($request->all());exit;
+        //print_r($request->all());
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $prev = $request['previous_family_count'];       
         $request['family_count'] . "---" . '----' . $prev;
@@ -341,18 +332,18 @@ class CustomerController extends Controller {
                         ]);
                     $stripe_customer_id = $customer->id;
                     $data = Customer::create([
-                                'business_id' => $request['business_id'],
-                                'fname' => $request['fname'][$j],
-                                'lname' => $request['lname'][$j],
-                                'email' => $request['email'][$j],
-                                'phone_number' => $request['mobile'][$j],
-                                'emergency_contact' => $request['emergency_contact'][$j],
-                                'relationship' => $request['relationship'][$j],
-                                'gender' => $request['gender'][$j],
-                                'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
-                                'parent_cus_id' => $request['parent_cus_id'],
-                                'stripe_customer_id' => $stripe_customer_id,
-                            ]);
+                            'business_id' => $request['business_id'],
+                            'fname' => $request['fname'][$j],
+                            'lname' => $request['lname'][$j],
+                            'email' => $request['email'][$j],
+                            'phone_number' => $request['mobile'][$j],
+                            'emergency_contact' => $request['emergency_contact'][$j],
+                            'relationship' => $request['relationship'][$j],
+                            'gender' => $request['gender'][$j],
+                            'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
+                            'parent_cus_id' => $request['parent_cus_id'],
+                            'stripe_customer_id' => $stripe_customer_id,
+                        ]);
                 }
             }
         }

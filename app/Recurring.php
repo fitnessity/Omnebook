@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use DB;
 use App\Transaction;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+// /use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recurring extends Authenticatable
 {

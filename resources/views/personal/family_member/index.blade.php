@@ -101,7 +101,7 @@
                                             </div>
                                         </div>
 										<!-- Modal Start -->
-										<div class="modal fade compare-model" id="accessreq">
+										<!-- <div class="modal fade compare-model" id="accessreq">
 											<div class="modal-dialog modal-lg business">
 												<div class="modal-content">
 													<div class="modal-header" style="text-align: right;"> 
@@ -112,7 +112,6 @@
 														</div>
 													</div>
 
-													<!-- Modal body -->
 													<div class="modal-body">
 														<div class="row contentPop"> 
 															<div class="col-lg-12">
@@ -170,7 +169,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div> -->
 										<!-- Modal End -->
                                     </div>
                                 

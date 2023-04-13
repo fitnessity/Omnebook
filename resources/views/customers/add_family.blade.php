@@ -10,7 +10,7 @@
 		<div class="col-md-10 col-sm-12">
 			<div class="container-fluid p-0">
 				<div class="row">
-					<div class="col-md-6 col-xs-6">
+					<div class="col-md-6 col-xs-12">
 						<div class="tab-hed ">Add Family or Friends</div>
 					</div>
 				</div>
@@ -90,7 +90,7 @@
 
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control" value="{{$family->email}}">
+	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control" value="{{$family->email}}"required="required">
 	                                </div>
 	                            </div>
 
@@ -162,7 +162,7 @@
 
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control">
+	                                    <input type="email" name="email[{{$fam_cnt}}]" id="email[{{$fam_cnt}}]" placeholder="Email" class="form-control" required="required">
 	                                </div>
 	                            </div>
 
@@ -192,13 +192,13 @@
 
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" required="required" data-behavior="text-phone">
+	                                    <input type="text" name="mobile[{{$fam_cnt}}]" id="mobile{{$fam_cnt}}" placeholder="Mobile" maxlength="14" class="form-control" data-behavior="text-phone">
 	                                </div>
 	                            </div>
 	                            
 	                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12">
 	                                <div class="form-group">
-	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control" required="required" data-behavior="text-phone" >										
+	                                    <input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact[{{$fam_cnt}}]" maxlength="14" placeholder="Emergency Contact Number" class="form-control"  data-behavior="text-phone" >										
 	                                    <input type="text" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="" />
 	                                </div>
 	                            </div>
@@ -240,7 +240,7 @@
             var mobileid = "\'mobile" + cnt + "\'";
             var emerconid = "\'emergency_contact" + cnt + "\'";
             var str = '<div class="addfmaily_content mt-3">' +
-                    '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control birthdate_' + cnt + '" value="" maxlength="10" data-behavior="datepicker"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+mobileid+')"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+emerconid+')"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px;text-align: right;" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
+                    '<div class="row" id="familydiv' + cnt + '"><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" placeholder="Email" class="form-control" required="required"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-control" required="required" ><option value="" hidden>Select Relationship</option><option>Brother</option><option>Sister</option><option>Father</option><option>Mother</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Friend</option></select></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group dob"><label>mm/dd/yyyy</label><input  required="required"  type="text" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']"  placeholder="Birthday" class="form-control birthdate_' + cnt + '" value="" maxlength="10" data-behavior="datepicker"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="mobile[' + cnt + ']" id="mobile' + cnt + '" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+mobileid+')"></div></div><div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"><div class="form-group"><input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact' + cnt + '" placeholder="Emergency Contact Number" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate('+emerconid+')"><input type="text" name="removed_family[' + cnt + ']" id="removed_family' + cnt + '" value="" /></div></div><div style="border-bottom:1px #999999 solid;margin-bottom:10px;text-align: right;" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><i class="fas fa-trash delete-icon deleterem" data-del="' + cnt + '"></i></div></div></div>';
             cnt = parseInt(cnt) + parseInt(1);
             $('#family_count').val(cnt);
             $(".addfmaily_block").append(str);

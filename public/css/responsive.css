@@ -1224,7 +1224,7 @@
 	.claimyour-business .frm-claim .addbusiness-block button{padding: 6px 12px 6px;}
 	.claim-rightblock{padding-top: 40px;}
 	.side-menu{max-width: 20% !important;}
-	.page-content-wrapper{padding-left: 20% !important;}
+	.page-content-wrapper{padding-left: 0px !important;}
 	.fc-head .fc-widget-header span{font-size: 12px; word-wrap: break-word;}
 	.dob input{width: 166px !important;}
 	.date_block{margin-bottom: 15px;}
@@ -1358,7 +1358,20 @@
 	.activity-information span { font-size: 13px !important;}
 	.activity-information p {  font-size: 13px !important; margin-bottom: 0px !important;}
 	.mysidepanel {  height: 100% !important;}
-	
+	.calendar-address { padding: 0 115px;}
+	.calendar-btns {  margin-top: 10px;}
+	.mdisplay-none{display: none !important;}
+	.cards-block{width: 100% !important;}
+	.mobile-slider .card-info.payment-side{height: 175px !important;}
+	.payment-info .owl-stage-outer{height: 175px !important;}
+	.cards-block .cards-content{box-shadow: 0px 10px 15px 0px #fff !important;}
+	.booking-info-history .cards-content p{padding: 0 12px !important;}
+	.search-wid{width: 75% !important;}
+	.booking-active{left: 125px;}
+	#ajax_html_modal .modal-dialog{width: 95% !important; }
+	.your-booking-page.side-part { min-height: 369px;}
+	.powered-img{width: 100%;}
+	.booking-modal-logo img { width: 30%;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2277,7 +2290,7 @@
 	.followers-block .followers-content{display: block ruby !important;}
 	.booking-info-menu ul li{padding: 0px 8px !important;}
 	.booking-info-tab .nav-tabs{margin-top: 15px;}
-	.book-info-sear .date_block i{right: 30px !important; top: 28px !important;}
+	.book-info-sear .date_block i{right: 40px !important; top: 8px !important;}
 	.date_block{margin-top: 15px; margin-bottom: 15px;}
 	.w-85 {  width: 100% !important;}
 	/*.page-content-wrapper .content-page label{width: 16%;}*/
@@ -2487,7 +2500,7 @@
 	#trainers-coaches .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	.title-show{float: right;}
 	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
-	.find-business .btn-txt { padding: 11px 0 !important;}}
+	.find-business .btn-txt { padding: 11px 0 !important;}
 	.footer-bottom-left ul{margin-bottom: 19px;}
 	.instant-hire .title .f-16{font-size: 16px; line-height: 26px;}
 	.float-left{text-align: left !important;}
@@ -2495,6 +2508,22 @@
 	.pc-sidebar .pc-link {display: flex !important;}
 	.pri-1 a{display: inline !important;}
 	.navbar-content a{color: #fff;}
+	.classes-time label{text-align: right; width: 50%; margin-top: 36px;}
+	.post-btn.activity-scheduler{width: 50%;}
+	.classes-time {  display: flex; }
+	.sacecard-title{font-size: 17px !important;}
+	.booking-access-req{margin-top: 16px;}
+	.search-wid {width: 72% !important;}
+	.calendar-address {  padding: 0 25px;}
+	.mdisplay-none{display: none !important;}
+	.mobile-slider .card-info.payment-side{height: 175px !important;}
+	.payment-info .owl-stage-outer{height: 175px !important;}
+	.cards-block .cards-content{box-shadow: 0px 10px 15px 0px #fff !important;}
+	.padding-1{padding: 10px !important; }
+	.booking-info-history .cards-content p{padding: 0 23px !important;}
+	.booking-info-tab .nav-item {padding: 0px 5px !important;}
+	#ajax_html_modal .modal-dialog{width: 95% !important; }
+	.your-booking-page.side-part { min-height: 369px;}
 }
 
 
@@ -2683,6 +2712,8 @@
     }
 	.w-38 { width: 70% !important;}
 	.dob input { width: 249px !important;}
+	.booking-active{left: 147px;} 
+	.book-info-sear .date_block i {  right: 59px !important;}
 }
 
 @media(max-width: 400px) {
@@ -2715,7 +2746,7 @@
 	.home-black-section i{display: none;}
 	#dropBox { min-width: 330px;}
 	.form-control.rs-birthdate {  width: 272px;}
-	
+	.booking-active {  left: 120px;}
 }
 
 @media(max-width: 376px) {
@@ -2766,6 +2797,7 @@
 	#dropBox {  min-width: 300px;}
 	.form-control.rs-birthdate {  width: 240px;}
 	.modal-banner .bannar-size img { height: 140px !important;}
+	.booking-active {  left: 95px;}
 }
 
 @media(max-width: 280px){
@@ -2832,5 +2864,13 @@
 	.home-black-section label {  font-size: 18px;}
 	.main-slider .slide{min-height: 345px; padding-top: 118px;}
 	.instant-banner h4{width: 90%;}
+	.booking-info-history .cards-content p {  padding: 0 0px !important;}
+	.booking-info-history .cards-content {  padding: 17px 8px !important;}
+	.booking-activity-view .view-booking{font-size: 12px;}
+	.booking-activity-view .view-schedule{font-size: 12px;}
+	.booking-activity-view .view-booking{left: 0px !important;}
+	.booking-activity-view .view-schedule{right: 0px !important;}
+	.padding-2 {  padding: 15px 10px 15px;}
+	.booking-active{left: 56px;}
 }
 /*MEDIA QUEREIS EDN HERE
