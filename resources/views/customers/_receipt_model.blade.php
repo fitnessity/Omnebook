@@ -231,17 +231,6 @@
                     </div>
 
                     <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                            <label style="color:#fe0000">DISCOUNT:</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                            <span>${{$odt['discount']}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-xs-6">
                         <div class="">
                             <label>TOTAL:</label>
                         </div>
@@ -282,7 +271,7 @@
                 </div>
                 <div class="col-md-6 col-xs-6">
                     <div class="total-titles">
-                        <span>${{$tot_tip}}</span>
+                        <span>${{UserBookingDetail::where('booking_id', $orderId)->sum('tip')}}</span>
                     </div>
                 </div>
             </div>
@@ -295,7 +284,7 @@
                 </div>
                 <div class="col-md-6 col-xs-6">
                    <div class="total-titles">
-                        <span>${{$tot_dis}}</span>
+                        <span>${{UserBookingDetail::where('booking_id', $orderId)->sum('discount')}}</span>
                    </div>
                 </div>
             </div>
@@ -308,10 +297,25 @@
                 </div>
                 <div class="col-md-6 col-xs-6">
                     <div class="total-titles">
-                        <span>${{ ($totaltax +  $service_fee )}}</span>
+                        <span>${{ (UserBookingDetail::where('booking_id', $orderId)->sum('tax') )}}</span>
                     </div>
                 </div>
             </div>
+
+            <div class="row border-xx">
+                <div class="col-md-6 col-xs-6">
+                    <div class="total-titles">
+                        <label>MERCHANT FEE</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <div class="total-titles">
+                        <span>${{ ($odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row border-xx">
                 <div class="col-md-6 col-xs-6">
                     <div class="total-titles">
