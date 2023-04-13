@@ -16,30 +16,10 @@
         <div class="col-md-10 col-sm-12">
 			<div class="container-fluid p-0">
 				<div class="row">
-					<div class="col-md-6 col-xs-6">
+					<div class="col-md-6 col-xs-12">
 						<div class="tab-hed ">Manage Customers</div>
 					</div>
-					<!-- <div class="col-md-6 col-xs-6">
-						<div class="row">
-							<div class="col-md-4">
-								<button type="button" class="btn-nxt manage-cus-btn">Add New Client</button>
-							</div>
-							<div class="col-md-5">
-								<div class="manage-search">
-									<form method="get" action="/activities/">
-										<input type="text" name="label" id="" placeholder="Search for client" autocomplete="off" value="">
-										<button id="serchbtn"><i class="fa fa-search"></i></button>
-									</form>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<button type="button" class="btn-nxt search-btn-sp">Search</button>
-							</div>
-						</div>
-					</div> -->
-				</div>
-                <!--<div class="tab-hed">Manage Customers</div>-->
-                <hr style="border: 3px solid black; width: 115%; margin-left: -38px; margin-top: 5px;">
+                	<hr style="border: 3px solid black; width: 115%; margin-left: -38px; margin-top: 5px;">
             </div>
             @if($strpecarderror != '')
 				<div id="sessionerr" class="red-fonts">{{$strpecarderror}}</div>
@@ -538,7 +518,6 @@
 																			</div>
 																			<div class="col-md-4 col-xs-4">
 																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
-																				<!-- <a class="auto-pay" data-toggle="modal" data-target="#auto-pay"> Auto Pay Details </a> -->
 																			</div>
 																		</div>
 																	</div>
@@ -712,7 +691,6 @@
 														<td>{{$history->item_description()['qty']}}</td>
 														<td>Refund | Void</td>
 														<td>
-															<!-- <a  class="table-icons-staff mailRecipt" data-behavior="send_receipt" data-url="{{route('sendReceiptToCustomer',['odetailid'=>'','oid'=>$history->item_id])}}" data-item-type="{{$history->item_type_terms()}}" ><i class="fas fa-receipt" aria-hidden="true"></i></a> -->
 															<a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 														</td>
 													</tr>
@@ -924,15 +902,10 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function() {
-    	$('.cards-block').click();
-    });
-
     var query_error = '<?=isset($_GET['error'])?$_GET['error']:0;?>';
     if(query_error == 1) {
         $("#card-error").html("Requested card number is already exists.");
     }
-
 
 	function changedate(){
 		$('#span_membership_activation').html($('#membershipactivationdate').val());
@@ -986,14 +959,11 @@
     	}else{
  			$( "#frmpayment" ).submit();
     	}
-  
     });
 
     $(document).on("click", "[data-behavior~=delete_card]", function(e){
     	e.preventDefault()
-
         if (confirm('You are sure to delete card?')) {
-
             var cardid = $(this).data("cardid");
             $.ajax({
                 type: 'DELETE',
@@ -1003,56 +973,13 @@
 
                 },
                 success: function(data) {
-
-                   /* alert("Card removed successfully.");*/
                     location.reload();
                 }
             });
         } else {
-            //alert('Why did you press cancel? You should have confirmed');
         }
     });
     
-    $(".cards-block").on("click", function(){
-        /*alert($(this).data('type'));*/
-        $("#card-error").html('');
-        $("#payment_type").val($(this).data('ptype'));
-        $("#owner").val($(this).data('name'));
-        if($(this).data('month') != "") {
-            $("#card_month option:selected").text(chkmonth($(this).data('month')));
-            $("#card_year option:selected").text($(this).data('year'));
-            $("#cardNumber").val('************'+$(this).data('cnumber'));
-            $("#card_monthhidden").val($(this).data('month'));
-            $("#card_yearhidden").val($(this).data('year'));
-            $("#cvv").val('***');
-            /*$("#confirm-purchase").attr('disabled', true);*/
-        } else {
-            $("#card_month option:selected").text("Mon");
-            $("#card_year option:selected").text("Year");
-            $("#cardNumber").val($(this).data('cnumber'));
-            $("#cvv").val($(this).data('cvv'));
-            $("#confirm-purchase").attr('disabled', false);
-        }
-       /* $("#card_month option:selected").val($(this).data('month'));*/
-        $("#card_type").val($(this).data('type'));
-        $("#credit_cards img").addClass('transparent');
-        $("#"+$(this).data('type')).removeClass('transparent');
-    });
-    
-    function chkmonth(id) {
-        if(id==1)return "Jan";
-        if(id==2)return "Feb";
-        if(id==3)return "Mar";
-        if(id==4)return "Apr";
-        if(id==5)return "May";
-        if(id==6)return "Jun";
-        if(id==7)return "Jul";
-        if(id==8)return "Aug";
-        if(id==9)return "Sep";
-        if(id==10)return "Oct";
-        if(id==11)return "Nov";
-        if(id==12)return "Dec";
-    }
 </script>
 
 <script type="text/javascript">
@@ -1161,66 +1088,6 @@
 		$('#visitstable').DataTable();
 		responsive: true
 	} );
-
-	/*$(".mailRecipt").click(function(){
-		var item_type = $(this).data('item-type');
-		if(item_type == 'no' || item_type == 'Membership'){
-			var confirm_value = confirm("Do you want to mail the receipt to this Customer? ");
-			if(confirm_value == true){
-				$.ajax({
-					url: "{{route('sendReceiptToCustomer')}}",
-		            xhrFields: {
-		                withCredentials: true
-		            },
-		            type: 'get',
-		            data:{
-		                odetailid: $(this).data('booking-detail-id'),
-		                oid: $(this).data('booking-id'),
-		           	},
-		            success: function (response) {
-		            	$('#errordiv').html('');
-		            	$('#errordiv').removeClass('green-fonts');
-		            	$('#errordiv').removeClass('reviewerro');
-	                    $('#errordiv').css('display','block');
-		                if(response == 'success'){
-		                	$('#errordiv').addClass('green-fonts');
-		                    $('#errordiv').html('Email Successfully Sent..');
-		                }else{
-		                	$('#errordiv').addClass('reviewerro');
-		                    $('#errordiv').html("Can't Mail on this Address. Plese Check your Email..");
-		                }
-		            }
-	            });
-			}
-		}
-	});*/
-
-
-	/*$(document).on('click', '[data-behavior~=mail_receipt]', function(e){
-		alert('hii');
-		confirm("Do you want to mail the receipt to this Customer? ");
-		if(confirm){
-			$.ajax({
-				url: "{{route('sendReceiptToCustomer')}}",
-	            xhrFields: {
-	                withCredentials: true
-	            },
-	            type: 'get',
-	            data:{
-	                odetailid: $(this).data('booking-detail-id'),
-	                oid: $(this).data('booking-id'),
-	           	},
-	            success: function (response) {
-	                if(response == 'success'){
-	                    $('.reviewerro').html('Email Successfully Sent..');
-	                }else{
-	                    $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-	                }
-	            }
-            });
-		}
-	});*/
-	
 
 	$('#visitstable').dataTable( {
 		"searching": false,

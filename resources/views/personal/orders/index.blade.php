@@ -37,7 +37,7 @@
                             </div>
                             <div class="row">
                                 @foreach($business as $bs)
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
                                             <h2>{{ $bs->company_name}}</h2>
@@ -108,7 +108,7 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                <div class="col-md-2 col-sm-6 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -130,19 +130,19 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
+                                                <div class="col-md-3 col-sm-6">
                                                     <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
+                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
                                                 </div>
-												<div class="col-md-2 col-sm-12 nopadding">
+												<div class="col-md-2 col-sm-3 nopadding">
 													<a href="#" class="access-req booking-access-req" data-toggle="modal" data-target="#accessreq" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
-											<div class="modal fade compare-model" id="accessreq">
+											<!-- <div class="modal fade compare-model" id="accessreq">
 												<div class="modal-dialog modal-lg business">
 													<div class="modal-content">
 														<div class="modal-header" style="text-align: right;"> 
@@ -153,7 +153,6 @@
 															</div>
 														</div>
 
-														<!-- Modal body -->
 														<div class="modal-body">
 															<div class="row contentPop"> 
 																<div class="col-lg-12">
@@ -211,7 +210,7 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											<!-- Modal End -->
                                         </div>
                                     

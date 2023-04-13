@@ -315,7 +315,7 @@
                                                             <span class="error" id="err_relationship"></span>
                                                         </div>
                                                         <div class="form-group">
-                                                            <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number required" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                            <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                                             <span class="error" id="err_mphone"></span>
                                                         </div>
                                                         <div class="form-group">
@@ -809,14 +809,6 @@
 
 
     $(document).ready(function () {
-        
-        /*$(".dobdate").keyup(function(){
-            if ($(this).val().length == 2){
-                $(this).val($(this).val() + "/");
-            }else if ($(this).val().length == 5){
-                $(this).val($(this).val() + "/");
-            }
-        });*/
 
         $(".birthday").keyup(function(){
             if ($(this).val().length == 2){
@@ -830,11 +822,8 @@
             e.preventDefault();
             $('#frmregister').submit();
         });*/
-        /*$('.dobdate').Zebra_DatePicker({
-            format: 'm/d/Y',
-            default_position: 'below'
-        });*/
-        $("#frmregister").submit(function (e) {
+       
+        /*$("#frmregister").submit(function (e) {
             e.preventDefault();
             $('#frmregister').validate({
                 rules: {
@@ -856,11 +845,7 @@
                         required: true,
                         minlength: 8,
                         equalTo: "#password"
-                    },
-                   /* b_trm1: {
-                        required: true,
-                    },*/
-                },
+                    },                },
                 messages: {
                     firstname: "Enter your Firstname",
                     lastname: "Enter your Lastname",
@@ -882,13 +867,10 @@
                         minlength: jQuery.validator.format("Enter at least {0} characters"),
                         equalTo: "Enter the same password as above"
                     },
-                    /*b_trm1: {
-                        required: "Plese select Terms of Service and Privacy Policy",
-                    },*/
                 },
                 submitHandler: registerUser
             });
-        });
+        });*/
     });
 
     $('#email').on('blur', function() {
@@ -923,11 +905,12 @@
         return agechk;
     }
 
-    function registerUser() {
+    /*function registerUser() {
         var valchk = getAge();
-        /*alert(valchk);*/
+        //alert(valchk);
         var validForm = $('#frmregister').valid();
         var posturl = '/auth/registration';
+
         if (!jQuery("#b_trm1").is(":checked")) {
            $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
             return false;
@@ -968,10 +951,108 @@
         }else{
             $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
         }
-    }
+    }*/
 
 </script>
+<script type="text/javascript">
+    
+    jQuery(function ($) {
+        $('#frmregister').validate({
+            rules: {
+                firstname: "required",
+                lastname: "required",
+                username: "required",
+                email: {
+                    required: true,
+                    email: true
+                },
+                dob: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "#password"
+                },
+               /* b_trm1: {
+                    required: true,
+                },*/
+            },
+            messages: {
+                firstname: "Enter your Firstname",
+                lastname: "Enter your Lastname",
+                username: "Enter your Username",
+                email: {
+                    required: "Please enter a valid email address",
+                    minlength: "Please enter a valid email address",
+                    remote: jQuery.validator.format("{0} is already in use")
+                },
+                dob: {
+                    required: "Please provide your date of birth",
+                },
+                password: {
+                    required: "Provide a password",
+                    minlength: jQuery.validator.format("Enter at least {0} characters")
+                },
+                confirm_password: {
+                    required: "Repeat your password",
+                    minlength: jQuery.validator.format("Enter at least {0} characters"),
+                    equalTo: "Enter the same password as above"
+                },
+                /*b_trm1: {
+                    required: "Plese select Terms of Service and Privacy Policy",
+                },*/
+            },
+            submitHandler: function (form) {
+                if (!jQuery("#b_trm1").is(":checked")) {
+                    $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+                    return false;
+                }
+                var valchk = getAge();
+                if(valchk == 1){
+                    $('#register_submit').prop('disabled', true);
+                    if (validForm) {
 
+                        var formData = $("#frmregister").serialize();
+                        $.ajax({
+                            url: posturl,
+                            type: 'POST',
+                            dataType: 'json',
+                            data: formData,
+                            beforeSend: function () {
+                                
+                                $('#register_submit').prop('disabled', true).css('background','#999999');
+                                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                                $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                            },
+                            complete: function () {
+                            
+                                $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                            },
+                            success: function (response) {
+                                //alert(response.msg);
+                                
+                                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                                showSystemMessages('#systemMessage', response.type, response.msg);
+                                if (response.type === 'success') {
+                                    window.location.href = response.redirecturl;
+                                } else {
+                                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                                }
+                            }
+                        });
+                    }
+                }else{
+                    $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+                }
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
         function initMap() {

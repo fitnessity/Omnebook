@@ -43,26 +43,26 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($autopaylist as $list)
+				@foreach($autopaylist as $key=>$list)
 					<tr>
 						<td>
 							<div class="special-date">
-								<input  type="text" class="form-control" id="payment_date{{$i}}" name="payment_date" placeholder="" autocomplete="off" data-behavior="datepicker" value="{{$list['payment_date']}}">
+								<input  type="text" class="form-control"  name="payment_date"  id="payment_date{{$list->id}}" placeholder="" autocomplete="off" data-behavior="datepicker" value="{{date('m/d/Y' ,strtotime($list['payment_date']))}}">
 							</div>
 						</td>
 						<td> 
 							<div class="auto-amount">
 								<label>$</label>
-								<input type="text" class="form-control valid" name="amount"  placeholder="0" value="{{$list['amount']}}">
+								<input type="text" class="form-control valid" name="amount"  id="amount{{$list->id}}" placeholder="0" value="{{$list['amount']}}">
 							</div>
 						</td>
 						<td>${{$list['tax']}}</td>
 						<td>@if($list['charged_amount'] != '') ${{$list['charged_amount']}} @else $0 @endif</td>
 						<td> {{$list->getStripeCard()}} </td> 
 						<td>{{$list['status']}}</td>
-						<td><input type="checkbox" id="chkbox" name="chkbox[]" class="custom_chkbox"></td>
+						<td><input type="checkbox" id="chkbox{{$list->id}}" name="chkbox[]" class="custom_chkbox" value="{{$list->id}}"></td>
 						<td>
-							<button type="submit" class="btn-nxt cancel-modal">Save</button>
+							<button id="submit" type="button" class="btn-nxt cancel-modal" data-behavior="updateAutoPay" data-recurring-id="{{$list->id}}">Save</button>
 						</td>
 					</tr>
 					@php $i++; @endphp
@@ -71,12 +71,48 @@
 		</table>
 	</div>
 	<div class="col-md-12 text-right">
-		<button type="submit" class="auto-pay-btns">Delete Checked Items</button> |
-		<button type="submit" class="auto-pay-btns">Pay Checked Items</button>							
+		<button type="button" class="auto-pay-btns" data-behavior="delete_recurring_detail">Delete Checked Items</button> |
+		<button type="button" class="auto-pay-btns">Pay Checked Items</button>							
 	</div>
 </div>
 
 <script type="text/javascript">
+
+	$(document).on('click', '[data-behavior~=updateAutoPay]', function(e){
+        e.preventDefault()
+        $.ajax({
+            url: "/business/{{$business_id}}/recurring/" + $(this).data('recurring-id'),
+            method: "PATCH",
+            data: { 
+                _token: '{{csrf_token()}}', 
+                amount: $('#amount'+$(this).data('recurring-id')).val(), 
+                payment_date: $('#payment_date'+$(this).data('recurring-id')).val(), 
+            },
+            success: function(html){
+                location.reload();
+            }
+        });
+    });
+
+    $(document).on('click', '[data-behavior~=delete_recurring_detail]', function(e){
+        e.preventDefault()
+
+        var ids =$("input[type='checkbox']:checked").map(function () {
+            return this.value;
+        }).get().join(',');
+
+        $.ajax({
+            url: "/business/{{$business_id}}/recurring/" + ids,
+            method: "DELETE",
+            data: { 
+                _token: '{{csrf_token()}}', 
+            },
+            success: function(html){
+                location.reload();
+            }
+        })
+    });
+
 	$(".checkAll").on("click", function(){
 		if($(".checkAll").is(':checked')) {
 	        $(".custom_chkbox").each(function(){

@@ -20,10 +20,10 @@ class RecurringController extends Controller
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $booking_detail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopaylist = $customer->recurring($request->booking_detail_id)->get();
+        $autopaylist = $customer->recurring($request->booking_detail_id)->orderby('created_at','desc')->get();
         $remaining = Recurring::autoPayRemaining(count($autopaylist),$request->booking_detail_id);
         //print_r($autopaylist );exit;
-        return view('business.recurring.index', ['autopaylist' => $autopaylist, 'customer' => $customer,'booking_detail'=>$booking_detail,'remaining'=>$remaining ,'i'=>1]);
+        return view('business.recurring.index', ['autopaylist' => $autopaylist, 'customer' => $customer,'booking_detail'=>$booking_detail,'remaining'=>$remaining ,'i'=>1 ,'business_id'=>$business_id]);
     }
 
     /**
@@ -76,9 +76,10 @@ class RecurringController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $business_id ,$id)
     {
-        //
+        $rec = Recurring::where('id',$id)->first();
+        $rec->update(["payment_date" =>date('Y-m-d',strtotime($request->payment_date)) ,"amount" =>$request->amount]);
     }
 
     /**
@@ -87,8 +88,12 @@ class RecurringController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($business_id,$id)
     {
-        //
+        $ids = explode(",",$id);
+        foreach($ids as $i){
+            $recurring_detail = Recurring::findOrFail($id);
+            $recurring_detail->delete();
+        }
     }
 }

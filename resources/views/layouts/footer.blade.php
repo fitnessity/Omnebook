@@ -150,7 +150,7 @@
   <div class="container">
 	<div class="col-xs-2">
 		<div class="shortcut-sticky ">
-			<a href="{{route('activities_index')}}" class="short-links active">
+			<a href="{{route('activities_index')}}" class="short-links">
 				<i class="far fa-file-alt"></i>
 				<label>Book</label>
 			</a>
@@ -326,6 +326,8 @@ function openMobileNav() {
 function closeMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "0";
 }
+
+
 </script>
 
 <script>
