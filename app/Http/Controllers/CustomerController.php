@@ -565,6 +565,6 @@ class CustomerController extends Controller {
     public function receiptmodel($orderId,$customer){
         $customerData = Customer::where('id',$customer)->first();
         $bookingArray = UserBookingDetail::where('booking_id',$orderId)->pluck('id')->toArray();
-        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email ]);
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $orderId ]);
     }
 }
