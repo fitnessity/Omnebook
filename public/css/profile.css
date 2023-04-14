@@ -640,7 +640,7 @@
 }
 
 .followers-block .followers-content {
-    width: 86%;
+    width: 100%;
     display: inline-block;
 }
 
@@ -670,7 +670,7 @@
 .followers-block .followers-content .admin-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 100%; }
 
 .followers-block .followers-content .followers-right-content {
-    width: 80%;
+    width: 100%;
     display: inline-block;
     vertical-align: middle;
     padding-left: 15px;
@@ -683,7 +683,7 @@
 .followers-block .followers-content .followers-right-content ul {
     display: flex;
     flex-flow: wrap;
-    width: 55%;
+    width: 100%;
 }
 
 .followers-block .followers-content .followers-right-content ul li {
@@ -1851,4 +1851,10 @@ a {
 }
 .editfamily_frnds{
 	margin-bottom: 15px;
+}
+.mt-15{
+	margin-top: 15px;
+}
+.mt-35{
+	margin-top: 35px;
 }

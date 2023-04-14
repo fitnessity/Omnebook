@@ -8198,7 +8198,8 @@ class UserProfileController extends Controller {
                 $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
                 $testdata .='
                 <div class="followers-block">
-                    <div class="followers-content">';
+                    <div class="followers-content">
+						<div class="col-md-1 col-xs-4 nopadding">';
                             if(File::exists(public_path("/uploads/profile_pic/thumb/".$logo )))
                                 $testdata .= '<div class="admin-img">
                                     <img src="/public/uploads/profile_pic/thumb/'.$logo.'" alt="Fitnessity">';
@@ -8208,27 +8209,34 @@ class UserProfileController extends Controller {
                                 $pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
                                 $testdata .= '<p>'.$pf.'</p>';
                             }
-                        $testdata .= '</div>
-                        <div class="followers-right-content">
-                          <h5> '.$fname.' '.$lname.' </h5>
-                          <ul>
-                              <li><span>Follower </span> '.$queryUserfollowersdata->count().' </li>
-                              <li><span>Member Since</span> '.date('F Y',strtotime($user->created_at)).'</li>
-                              <li><span>Following </span> '.$queryUserfollowingdata->count().' </li>
-                               
-                          </ul>
-                        </div> ';
-                        if ($isfollow->count()>0) {
-                            $testdata .='Following';
-                        } else {
-                            $testdata .='<a class="followback" id="'.$id.'" data-user="'.$user_id.'">Follow</a> ';
-                        }
+							$testdata .= '</div>
+						</div>
+						<div class="col-md-7 col-xs-7">
+							<div class="followers-right-content mt-15">
+								<h5> '.$fname.' '.$lname.' </h5>
+								<ul>
+									  <li><span>Follower </span> '.$queryUserfollowersdata->count().' </li>
+									  <li><span>Member Since</span> '.date('F Y',strtotime($user->created_at)).'</li>
+									  <li><span>Following </span> '.$queryUserfollowingdata->count().' </li>
+								   
+								</ul>
+							</div> 
+						</div>
+						<div class="col-md-2 col-xs-6 mt-35">';
+							if ($isfollow->count()>0) {
+								$testdata .='Following';
+							} else {
+								$testdata .='<a class="followback" id="'.$id.'" data-user="'.$user_id.'">Follow</a> ';
+							}
 
-                    $testdata .=' </div>
-                    <div class="followers-button">
-                        <a class="following-btn follow-btn remove-btn" id="'.$user_id.'">Remove</a>
-                    </div>
-                </div>';
+						$testdata .=' </div>
+						<div class="col-md-2 col-xs-6">
+							<div class="followers-button">
+								<a class="following-btn follow-btn remove-btn" id="'.$user_id.'">Remove</a>
+							</div>
+						</div>
+					</div>
+				</div>';
             }
         }
         }

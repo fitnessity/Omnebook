@@ -24691,3 +24691,41 @@ padding-left: 0px;
 #familymaindiv .panel-heading .panel-title .collapsed:after {
     content: "\e113";
 }
+.addbusiness-btn-black{
+	background: #fff;
+	color: #000;
+	padding: 12px 15px;
+	display: inline-block;
+	border-radius: 4px;
+	font-weight: 700;
+	font-size: 13px;
+	margin: 10px 0;
+	font-family: "Segoe UI",Arial,sans-serif;
+	text-transform: uppercase;
+	border: 1px solid #ede9e9;
+}
+.addbusiness-btn-black:hover {
+  color: #ea1515 !important;
+}
+.modal-middle{
+	margin: 0 auto;
+	top: 25%;
+}
+.autopay-schedule #pay-details{
+	margin-top: 15px;
+}
+.autopay-schedule .nav-tabs > li > a.active{
+	  background: #ed1b24;
+	color: #fff;
+	font-size: 15px;
+}
+.autopay-schedule .nav-tabs > li > a{
+	color: #000;
+}
+.history-tabs{
+	width: 100%;
+}
+.autopay-text{
+	font-size: 20px;
+    margin-bottom: 10px;
+}

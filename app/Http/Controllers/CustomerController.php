@@ -106,6 +106,13 @@ class CustomerController extends Controller {
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
         }
+
+        $auto_pay_payment_msg = '';
+        if($request->session()->has('recurringPayment')){
+            $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
+            $request->session()->forget('recurringPayment');
+        }
+
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -113,7 +120,8 @@ class CustomerController extends Controller {
             'visits' => $visits,
             'purchase_history' => $purchase_history,
             'active_memberships' => $active_memberships,
-            'complete_booking_details' => $complete_booking_details
+            'complete_booking_details' => $complete_booking_details,
+            'auto_pay_payment_msg' =>$auto_pay_payment_msg
         ]);
     }
 

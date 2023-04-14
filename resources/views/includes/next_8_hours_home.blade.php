@@ -17,11 +17,46 @@
 						<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 					</div>
 				</div>
-				<div class="col-md-2"> 
+				<div class="col-md-2 col-xs-12"> 
 					<div class="title-show">
 						<a href="{{route('activities_next_8_hours')}}">Show All</a>
 					</div>
 				</div>
+				
+				<!--<div class="col-md-12 desktop-none">
+					<div id="happning-eighthr" class="mobile-slider owl-carousel owl-theme">
+						<div class="owl-item" style="width: 300px;">
+							 <div class="card-info instant-section-info">
+								<div class="img">
+								   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" alt="">
+								</div>
+								<h4>Find Ways to Workout</h4>
+								<p>Book classes, seminars, workshops, camps, and more</p>
+								<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/ways_to_workout">Show all</a>
+							</div>
+						</div>
+						<div class="owl-item" style="width: 300px;">
+							<div class="card-info instant-section-info">
+								<div class="img">
+								   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" alt="">
+								</div>
+								<h4>Stay  Active With Fun Things To Do</h4>
+								<p>Turn your weekend of vacation into an adventure</p>
+								<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/experiences">Show all</a>
+							</div>
+						</div>
+						<div class="owl-item" style="width: 300px;">
+							<div class="card-info instant-section-info">
+								<div class="img">
+								   <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1670251820-events.jpg" alt="">
+								</div>
+								<h4>Event</h4>
+								<p>Event</p>
+								<a class="showall-btn btn-position" href="http://dev.fitnessity.co/activities/get_started/events">Show all</a>
+							</div> 
+						</div>
+					</div>
+				</div>-->
 				@foreach($bookschedulers as $bookscheduler)
 					<div class="col-md-4 col-sm-6">
 						<div class="find-activity">
@@ -90,3 +125,38 @@
 		</div>
 	</div>
 @endif
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+<script>
+
+$("#happning-eighthr").owlCarousel({
+	loop: true,
+	autoWidth: true,
+	autoplay: true,
+	autoplayTimeout: 2000, //2000ms = 2s;
+	autoplayHoverPause: true,
+	responsiveClass: true,
+	responsive: {
+			0: {
+			  items: 1
+			},
+
+			600: {
+			  items: 2
+			},
+
+			1024: {
+			  items: 2
+			},
+			
+			1200: {
+			  items: 3
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	
+</script>

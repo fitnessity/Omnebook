@@ -141,7 +141,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 													@endphp
 													<div class="col-md-4 col-sm-5 col-xs-12">
 														<div class="classes-time">
-															<button class="post-btn activity-scheduler" onclick="addtimedate({{$scary->id}} , {{$ser->id}});" >{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
+															<button class="post-btn activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}});" >{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
 
 															<!-- @if(@$checkindetail != '' && $difference >= 24)
 																<a onclick="ReScheduleOrder({{@$checkindetail->id}});">Reschedule</a>
@@ -192,10 +192,91 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	    </div>
 	</div> 
 
+	<div class="modal fade compare-model in modal-middle" id="ajax_html_modal">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header" style="text-align: right;"> 
+	                <div class="closebtn">
+	                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">×</span>
+	                    </button>
+	                </div>
+	            </div>
+	            <div class="modal-body" id='booking-time-model'>
+	                
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
 </div>
 
 
 @include('layouts.footer')
+
+
+<script>
+	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {
+		$( '.activity-schedule-tabs .nav-tabs' ).find( 'li.active' ).removeClass( 'active' );
+		$( this ).parent( 'li' ).addClass( 'active' );
+	});
+
+
+	function timeBookingPopUP(scheduleId,sid) {
+		$('#ajax_html_modal').modal('show');
+		$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' , '+sid+')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>');
+	}
+
+	function addtimedate(scheduleId,sid){
+		//jQuery.noConflict();
+		/*let text = "Are You Sure To Book This Date And Time?";
+		if (confirm(text) == true) {*/
+		   	$.ajax({
+		   		url: "{{route('personal.schedulers.store')}}",
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+		    	},
+		    	data:{
+					_token: '{{csrf_token()}}',
+					date:'{{$filter_date->format("Y-m-d")}}',
+					timeid:scheduleId,
+					businessId:'{{$businessId}}',
+				},
+				success: function (response) { /*alert(response);*/
+					if(response == 'success'){
+						$('.pay-confirm').addClass('green-fonts');
+						$('.pay-confirm').html('Your Reservation Is Confirmed.');
+						$('#success-reservation').modal('show');
+	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
+					}else{
+						window.location = '/activity-details/'+sid;
+						//alert('schedule failed');
+					}
+
+					//swindow.location.reload();
+				}
+		   	});
+		// }
+	}
+
+	function ReScheduleOrder(checkinId){
+		let text = "Are You Sure To ReSchedule This Booking?";
+		if (confirm(text) == true) {
+		   	$.ajax({
+		   		url: "/personal/schedulers/" + checkinId,
+				method: "DELETE",
+		    	data:{
+					_token: '{{csrf_token()}}',
+				},
+				success: function (response) { /*alert(response);*/
+ 					location.reload();
+				}
+		   	});
+		}
+	}
+</script>
+
 <script>
 	$('.owl-carousel').owlCarousel({
 	    loop:true,
@@ -237,62 +318,6 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		var serviceType = '{{$serviceType}}';
 		window.location = '/business_activity_schedulers/'+businessId+'?stype=' + serviceType+'&date='+date;
     });
-</script>
-
-<script>
-	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {
-		$( '.activity-schedule-tabs .nav-tabs' ).find( 'li.active' ).removeClass( 'active' );
-		$( this ).parent( 'li' ).addClass( 'active' );
-	});
-
-	function addtimedate(scheduleId,sid){
-		//jQuery.noConflict();
-		let text = "Are You Sure To Book This Date And Time?";
-		if (confirm(text) == true) {
-		   	$.ajax({
-		   		url: "{{route('personal.schedulers.store')}}",
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-		    	},
-		    	data:{
-					_token: '{{csrf_token()}}',
-					date:'{{$filter_date->format("Y-m-d")}}',
-					timeid:scheduleId,
-					businessId:'{{$businessId}}',
-				},
-				success: function (response) { /*alert(response);*/
-					if(response == 'success'){
-						$('.pay-confirm').addClass('green-fonts');
-						$('.pay-confirm').html('Your Reservation Is Confirmed.');
-						$('#success-reservation').modal('show');
-	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
-					}else{
-						window.location = '/activity-details/'+sid;
-						//alert('schedule failed');
-					}
-
-					//swindow.location.reload();
-				}
-		   	});
-		}
-	}
-
-	function ReScheduleOrder(checkinId){
-		let text = "Are You Sure To ReSchedule This Booking?";
-		if (confirm(text) == true) {
-		   	$.ajax({
-		   		url: "/personal/schedulers/" + checkinId,
-				method: "DELETE",
-		    	data:{
-					_token: '{{csrf_token()}}',
-				},
-				success: function (response) { /*alert(response);*/
- 					location.reload();
-				}
-		   	});
-		}
-	}
 </script>
 
 @endsection

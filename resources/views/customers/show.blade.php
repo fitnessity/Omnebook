@@ -24,6 +24,10 @@
             @if($strpecarderror != '')
 				<div id="sessionerr" class="red-fonts">{{$strpecarderror}}</div>
 			@endif
+
+			@if($auto_pay_payment_msg)
+				<div id="sessionerr" class="red-fonts autopay-text">{{$auto_pay_payment_msg}}</div>
+			@endif
 					
 			<div class="row">
 				<div class="col-md-12">

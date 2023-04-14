@@ -331,8 +331,8 @@ class Customer extends Authenticatable
         //refund to customer
     }
 
-    public function recurring($booking_detail_id){
-        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer']);
+    public function recurring($booking_detail_id ,$type){
+        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer','status' => $type]);
     }
 
     public function getFullUserBookingStatus($business_id){
