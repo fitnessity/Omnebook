@@ -36,12 +36,19 @@ class Recurring extends Authenticatable
         return $this->belongsTo(UserBookingDetail::class, 'booking_detail_id');
     }
 
+    public function Customer(){
+        return $this->belongsTo(Customer::class, 'user_id');
+    }
+
+    public function User(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public static function autoPayRemaining($totalCount,$id){
         $paymentDoneCount = Recurring::where('booking_detail_id',$id)->where('stripe_payment_id' ,'!=' , '')->where('user_type','customer')->count();
         $remaining = $totalCount - $paymentDoneCount;
         return $remaining;
     }
-
 
     public function getStripeCard(){
         $stripe = new \Stripe\StripeClient(
