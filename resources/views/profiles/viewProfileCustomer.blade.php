@@ -582,7 +582,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-3 col-lg-3">
-                <div class="widget">            
+                <div class="widget mdisplay-none ipad-display">            
                 	<h4 class="widget-title">Profile Intro</h4>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
@@ -719,7 +719,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             
             		<div class="row">
             			<div class="col-sm-12 col-md-12 col-lg-12">
-                			<div class="box-red mdisplay-none">
+                			<div class="box-red mdisplay-none ipad-display">
 								<h1 class="red-box-font">VERIFICATION</h1>
 								<div class="veri-icon-new-1">
 									<span>
@@ -865,7 +865,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														<!-- <input id="file-input" type="file" onclick="return showWebCam()" id="webCamButton"/> -->
 													</li>
                                                     <li class="emojili"><div class="emojilidiv"> </div></li>
-													<li class="preview-btn mdisplay-none">
+													<li class="preview-btn mdisplay-none ipad-display">
                                                     	<button class="post-btn-preview preview" type="button" data-ripple="">Preview</button>
                                                     </li>
 												</ul>
