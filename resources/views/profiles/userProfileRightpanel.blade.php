@@ -28,7 +28,7 @@
 			</ul>
 		</div>
 	</div>
-    <div class="widget mdisplay-none">
+    <div class="widget mdisplay-none ipad-display">
     	<h4 class="widget-title">Your page</h4> 
 		<div class="your-page">
         	<figure>
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	</div><!-- page like widget -->
-    <div class="widget-follower stick-widget mdisplay-none" style="">
+    <div class="widget-follower stick-widget mdisplay-none ipad-display" style="">
 		<h4 class="widget-title">Who's following</h4>
 		<?php
 			$following = UserFollow::select("user_id", "follow_id", "follower_id")

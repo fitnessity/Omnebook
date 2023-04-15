@@ -250,7 +250,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 						$('#success-reservation').modal('show');
 	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
 					}else{
-						window.location = '/activity-details/'+sid;
+						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>You don\'t have this membership.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">book An Activity</a></div> </div>');
+						//window.location = '/activity-details/'+sid;
 						//alert('schedule failed');
 					}
 

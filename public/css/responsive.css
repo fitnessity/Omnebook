@@ -1282,7 +1282,8 @@
 	.top-area ul.setting-area{padding-left: 0px !important;}
 	.selectProduct { width: 100%;}
 	.find-activity img{width: 100% !important; min-height: 125px;}
-	.activity-time-main{float: left; margin-top: 5px;}
+	.activity-time-main{float: left;  margin-left: 15px;}
+	.dollar-person{margin-top: 5px;}
 	.top-search {  width: 65% !important;}
 	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
@@ -1372,6 +1373,7 @@
 	.your-booking-page.side-part { min-height: 369px;}
 	.powered-img{width: 100%;}
 	.booking-modal-logo img { width: 30%;}
+	.ipad-display{display: block !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2088,6 +2090,8 @@
 
     .bepart_easy_content p {
         text-align: left;
+		margin-bottom: 7px;
+		line-height: 21px;
     }
 
     .button_title h3 .button_default_1 {
@@ -2318,7 +2322,7 @@
 	.show-all .header-bg-show .time-base {  float: none;}
 	.show-all .table-inner-data .mg-time {  font-size: 15px;}
 	.instant-hire{margin-top: 0px !important;}
-	.instant-section-info p{margin-top: 7px;}
+	.instant-section-info p{margin-top: 3px;}
 	.choose-sport-hire {  display: block !important;}
 	.activity-width{width: 100% !important;}
 	.special-offer{margin-bottom: 8px !important;}
@@ -2529,6 +2533,15 @@
 	#calendar .fc-toolbar.fc-header-toolbar .fc-center {margin-top: 22px;}
 	.profile-section .nav > li > a{padding: 10px 8px;}
 	.followers-block{border: none !important; display: flex;} 
+	.activites-price-details-left{padding-left: 15px;}
+	.activites-price-details{margin-top: 10px;}
+	.happning-eight-hr{height: 185px !important; }
+	.custom-fitnessity .title .f-16{font-size: 16px; line-height: 20px; margin-bottom: 5px;}
+	.create-post::before{left: -10px;}
+	.central-meta{padding: 20px 10px;}
+	.postcomment{padding: 5px 23px;}
+	.post-meta{margin-top: 0px;}
+	.post-meta .removepost {  margin-bottom: 0px;}
 }
 
 
