@@ -47,6 +47,10 @@ class UserBookingDetail extends Model
         return $this->hasMany(BookingCheckinDetails::class,'booking_detail_id');
     }
 
+    public function Recurring(){
+        return $this->hasMany(Recurring::class,'booking_detail_id');
+    }
+
     public function BookingActivityCancel(){
         return $this->hasMany(BookingActivityCancel::class,'booking_detail_id');
     }

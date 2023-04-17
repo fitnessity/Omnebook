@@ -16,12 +16,13 @@ class RecurringController extends Controller
      */
     public function index(Request $request, $business_id)
     {
+
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $booking_detail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $customer->recurring($request->booking_detail_id , 'Scheduled')->orderby('created_at','desc')->get();
-        $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('created_at','desc')->get();
+        $autopayListScheduled = $customer->recurring($request->booking_detail_id , 'Scheduled')->orderby('payment_date')->get();
+        $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
         $autopaylistcnt =  count($autopayListScheduled) + count($autopayListHistory);
         $remaining = Recurring::autoPayRemaining($autopaylistcnt,$request->booking_detail_id);
         //print_r($autopaylist );exit;

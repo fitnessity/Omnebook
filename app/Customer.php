@@ -270,8 +270,7 @@ class Customer extends Authenticatable
 
     public function complete_booking_details(){
         $company = $this->company_information;
-        $now = Carbon::now();
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereRaw('(pay_session <= 0 or pay_session is null)')->whereDate('expired_at', '<',  $now);
+        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
 
         return $booking_details;
     }

@@ -477,14 +477,6 @@
 																				<div class="col-md-6 col-xs-6">
 																					<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
 																				</div>
-																				@if ($booking_detail->booking->user)
-																					<div class="col-md-6 col-xs-6">
-																						<label>BOOKED BY:</label>
-																					</div>
-																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online Marketplace)</span>
-																					</div>
-																				@endif
 																				@if ($booking_detail->booking->customer)
 																					<div class="col-md-6 col-xs-6">
 																						<label>BOOKED BY:</label>
@@ -521,7 +513,9 @@
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
 																			<div class="col-md-4 col-xs-4">
-																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details </a>
+																				@if($booking_detail->Recurring()->count() > 0)
+																					<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details</a>
+																				@endif
 																			</div>
 																		</div>
 																	</div>
@@ -595,7 +589,6 @@
 																				<div class="col-md-6 col-xs-6">
 																					@if ($booking_detail->business_services_with_trashed)
 																					<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
-																					}
 																					@endif
 																				</div>
 																				
@@ -620,14 +613,6 @@
 																					</div>
 																					<div class="col-md-6 col-xs-6">
 																						<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
-																					</div>
-																				@endif
-																				@if ($booking_detail->booking->user)
-																					<div class="col-md-6 col-xs-6">
-																						<label>BOOKED BY:</label>
-																					</div>
-																					<div class="col-md-6 col-xs-6">
-																						<span>{{$booking_detail->booking->user->firstname}} {{$booking_detail->booking->user->lastname}} (Online Marketplace)</span>
 																					</div>
 																				@endif
 																				@if ($booking_detail->booking->customer)
@@ -656,6 +641,18 @@
 																					<span>{{$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
 																				</div>
 																				@endif
+																			</div>
+																			<div class="row">
+																				<div class="col-md-4 col-xs-4">
+																					<div class="links-space">
+																					<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}"> View Visits </a>
+																					</div>
+																				</div>
+																				<div class="col-md-4 col-xs-4">
+																					@if($booking_detail->Recurring()->count() > 0)
+																						<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details</a>
+																					@endif
+																				</div>
 																			</div>
 																		</div>
 																	</div>
