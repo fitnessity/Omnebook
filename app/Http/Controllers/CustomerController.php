@@ -98,7 +98,7 @@ class CustomerController extends Controller {
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
         $active_memberships = $customerdata->active_memberships()->get();
-        $purchase_history = $customerdata->Transaction()->get();
+        $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
 
