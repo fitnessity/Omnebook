@@ -1374,6 +1374,7 @@
 	.powered-img{width: 100%;}
 	.booking-modal-logo img { width: 30%;}
 	.ipad-display{display: block !important;}
+	.profile-section{display: inline-block !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2252,7 +2253,7 @@
 	.payment-toptabs ul li span{width: 23px; height: 23px;}
 	.payment-toptabs ul li{margin-bottom: 15px; margin-right: 0 !important;}
 	.payment-toptabs{padding: 40px 0 28px;}
-	.folw-detail{float: right; padding: 8px;}
+	.folw-detail{float: right; padding: 3px;}
 	.tabs-business-view .nav-tabs .nav-link{padding: 10px 8px;}
 	.your-page dt{padding: 0 210px 0 0;}
 	.txt-center{text-align: center !important;}
@@ -2542,6 +2543,7 @@
 	.postcomment{padding: 5px 23px;}
 	.post-meta{margin-top: 0px;}
 	.post-meta .removepost {  margin-bottom: 0px;}
+	.profile-section{display: inline-block !important;}
 }
 
 
@@ -2816,6 +2818,7 @@
 	.form-control.rs-birthdate {  width: 240px;}
 	.modal-banner .bannar-size img { height: 140px !important;}
 	.booking-active {  left: 95px;}
+	.profile-section .nav > li > a { padding: 10px 6px;}
 }
 
 @media(max-width: 280px){

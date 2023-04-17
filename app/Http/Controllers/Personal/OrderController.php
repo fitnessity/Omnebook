@@ -62,9 +62,7 @@ class OrderController extends PersonalBaseController
                 'tabval'=>'', 
                 'bookingDetail' => [],
                 'customerUsername' => '']);
-        }
-        
-        
+        }      
     }
 
     /**

@@ -92,35 +92,35 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 										@if(!empty($categoryList) && count($categoryList)>0)
 											@foreach($categoryList as $cList)
 												@php  $sche_ary = [];
-													foreach($cList->BusinessActivityScheduler as $sc){
-														if($sc->end_activity_date > $filter_date->format('Y-m-d')){
-															if(strpos($sc->activity_days, date("l")) !== false){
-																$sche_ary [] = $sc;
-															}
+												foreach($cList->BusinessActivityScheduler as $sc){
+													if($sc->end_activity_date > $filter_date->format('Y-m-d')){
+														if(strpos($sc->activity_days, date("l")) !== false){
+															$sche_ary [] = $sc;
 														}
-													} 
-													if(!empty($sche_ary)){
+													}
+												} 
+												if(!empty($sche_ary)){
 												@endphp
-														<div class="row">
-															<div class="col-md-6 col-sm-6 col-xs-12">
-																<div class="classes-info">
-																	<div class="row">
-																		<div class="col-md-12 col-xs-12">
-																			<h2>{{$ser->sport_activity}}</h2>
-																			<label>Program Name: </label> <span> {{$ser->program_name}}</span>
-																		</div>
-																		<div class="col-md-12 col-xs-12">
-																			<label>Category Name: </label> <span>{{@$cList->category_title}}</span>
-																		</div>
-																		<div class="col-md-12 col-xs-12">
-																			<label>Instructor: </label> <span>@if($ser->BusinessStaff != '') {{ucfirst($ser->BusinessStaff->full_name)}}  @else N/A @endif</span>
-																		</div>
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-12">
+															<div class="classes-info">
+																<div class="row">
+																	<div class="col-md-12 col-xs-12">
+																		<h2>{{$ser->sport_activity}}</h2>
+																		<label>Program Name: </label> <span> {{$ser->program_name}}</span>
+																	</div>
+																	<div class="col-md-12 col-xs-12">
+																		<label>Category Name: </label> <span>{{@$cList->category_title}}</span>
+																	</div>
+																	<div class="col-md-12 col-xs-12">
+																		<label>Instructor: </label> <span>@if($ser->BusinessStaff != '') {{ucfirst($ser->BusinessStaff->full_name)}}  @else N/A @endif</span>
 																	</div>
 																</div>
 															</div>
-															
-															<div class="col-md-6 col-sm-6 col-xs-12 nopadding">
-																<div class="row">
+														</div>
+														
+														<div class="col-md-6 col-sm-6 col-xs-12 nopadding">
+															<div class="row">
 											@if(!empty($sche_ary))
 												@foreach($sche_ary as $scary)
 													@php 
@@ -248,11 +248,14 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 						$('.pay-confirm').addClass('green-fonts');
 						$('.pay-confirm').html('Your Reservation Is Confirmed.');
 						$('#success-reservation').modal('show');
+						$('#ajax_html_modal').modal('hide');
 	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
-					}else{
-						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>You don\'t have this membership.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">book An Activity</a></div> </div>');
+					}else if(response == 'fail'){
+						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You don\'t have this membership.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">book An Activity</a></div> </div>');
 						//window.location = '/activity-details/'+sid;
 						//alert('schedule failed');
+					}else{
+						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>'+response+'</p></div> </div></div>');
 					}
 
 					//swindow.location.reload();

@@ -783,6 +783,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 					</div><?php */?>
             	</div>
             	<div class="col-sm-12 col-md-9 col-lg-9">
+					<!-- Mobile View Start -->
+					<div class="profile-section desktop-none">
+						<div class="row">
+                           <div class="col-sm-12 col-md-12 col-lg-3 followdiv">
+								<ol class="folw-detail">
+									<!-- <li><span>Posts</span><ins>101</ins></li> -->
+									<li><span>Followers</span><ins><?php echo $totFollowers; ?></ins></li>
+									<li><span>Following</span><ins><?php echo $totFollowing; ?></ins></li>
+								</ol>
+							</div>
+						</div>
+					</div>
+					<!-- Mobile View End -->
             		<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12">
 							<div class="profile-section">
@@ -809,7 +822,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 											</li>-->
 										</ul>
 									</div>
-                                    <div class="col-sm-12 col-md-12 col-lg-3 followdiv">
+                                    <div class="col-sm-12 col-md-12 col-lg-3 followdiv mdisplay-none">
 										<ol class="folw-detail">
 											<!-- <li><span>Posts</span><ins>101</ins></li> -->
 											<li><span>Followers</span><ins><?php echo $totFollowers; ?></ins></li>

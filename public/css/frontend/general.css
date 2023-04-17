@@ -24729,3 +24729,10 @@ padding-left: 0px;
 	font-size: 20px;
     margin-bottom: 10px;
 }
+
+.scheduler-time-txt p{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 20px;
+    font-weight: bold
+}

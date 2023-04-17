@@ -56,7 +56,11 @@ class BusinessActivityScheduler extends Model
     public static function findById($id){
         return BusinessActivityScheduler::where('id',$id)->first();
     }
-        
+
+    public static function getallscheduler($datetime){
+        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%'])->whereDate('end_activity_date' ,'>=', $datetime->format("Y-m-d"));                               
+    }
+
     public function next_available_date(){
         $start = new DateTime($this->starting);
         $end = new DateTime($this->end_activity_date);

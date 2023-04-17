@@ -28,7 +28,7 @@
                             != '') FOR {{strtoupper($customer->full_name)}} @endif </h4>
                     </div>
 
-                    @if(request()->business_id == '')
+                    @if(!request()->business_id)
                         <div class="payment_info_section padding-2 white-bg border-radius1 purchases-bt">
                             <div class="booking-history selecting-pro">
                                 <h3>Start by selecting a provider</h3>
@@ -126,8 +126,8 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
-                                                        <i class="far fa-calendar-alt"></i>
+                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('current')">
+                                                        <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
@@ -241,7 +241,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
+                                                        <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('today')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -261,7 +261,7 @@
                                         <div class="row"  id="searchbydate_today">
                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType);
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType ,date('Y-m-d'));
                                             @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
                                         </div>
@@ -288,7 +288,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
+                                                        <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('upcoming')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -307,7 +307,7 @@
                                         <div class="row" id="searchbydate_upcoming">
                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType);
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType,date('Y-m-d'));
                                             @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
 
@@ -335,7 +335,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker">
+                                                        <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('past')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -354,7 +354,7 @@
                                         <div class="row" id="searchbydate_past">
                                          @php  $i = 1;
                                             $br = new \App\Repositories\BookingRepository;
-                                            $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType);
+                                            $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType,date('Y-m-d'));
                                         @endphp
                                         @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past']) 
                                         </div>
@@ -381,7 +381,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80" onchange="serchDateData('pending')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -449,105 +449,32 @@
             $('#nav-upcoming-tab').removeClass("active");
             $('#nav-pending-tab').removeClass("active");
         }
-
-
-        $("input[id=dateserchfilter_today]").change(function(){
-            var date = $(this).val();
-            var type = 'today';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_today").html(data);
-                }
-            });
-        });
-
-        $("input[id=dateserchfilter_past]").change(function(){
-            var date = $(this).val();
-            var type = 'past';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_past").html(data);
-                }
-            });
-        });
-
-        $("input[id=dateserchfilter_upcoming]").change(function(){
-            var date = $(this).val();
-            var type = 'upcoming';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_upcoming").html(data);
-                }
-            });
-        });
-
-
-        /*$("input[id=search_today]").change(function(){
-            var text = $(this).val();
-            alert(text);
-            var type = 'today';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date},
-                success: function(data){
-                    $("#searchbydate_upcoming").html(data);
-                }
-            });
-        });*/
     });
 
     function getsearchdata(type){
-     
-        if(type == 'past'){
-            var text = $('#search_past').val();
-            var type = 'past';
-        }else if(type == 'today'){
-            var text = $('#search_today').val();
-            var type = 'today';
-        }else{
-            var text = $('#search_upcoming').val();
-            var type = 'upcoming';
-        }
-        
-       
+        var text = $('#search_'+type).val();
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
-            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"page":"personal"},
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
             success: function(data){
-                if(type == 'today'){
-                    $("#searchbydate_today").html(data);
-                }else if(type == 'past'){
-                    $("#searchbydate_past").html(data);
-                }else{
-                    $("#searchbydate_upcoming").html(data);
-                }
+                //alert(data);
+                $("#searchbydate_"+type).html(data);
             }
         });
     }
-    
-    $('.booking_date1').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking_date2').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking_date3').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking-date').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
+
+    function serchDateData(type){
+        var date = $('#dateserchfilter_'+type).val();
+        $.ajax({
+            type: "post",
+            url:'{{route("datefilterdata")}}',
+            data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
+            success: function(data){
+                $("#searchbydate_"+type).html(data);
+            }
+        });
+    }
 </script>
 
 <script type="text/javascript">
