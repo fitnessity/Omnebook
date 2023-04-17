@@ -32,7 +32,7 @@
                     </p>
                     <p>
                         <span>PRICE OPTION:</span>
-                        <span>{{@$book_details->business_price_detail->price_title}} - {{@$book_details['pay_session']}} Sessions
+                        <span>{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions
                         
                         </span>
                     </p>
@@ -55,7 +55,7 @@
                     </p>
                     <p>
                         <span>DATE BOOKED:</span>
-                        <span>{{date('m-d-Y',strtotime($book_details['created_at']))}}</span>
+                        <span>{{date('m-d-Y',strtotime($book_details->created_at))}}</span>
                     </p>
                     <p>
                         <span>RESERVED DATE:</span>

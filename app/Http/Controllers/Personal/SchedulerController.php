@@ -79,14 +79,23 @@ class SchedulerController extends Controller
     public function store(Request $request)
     {   
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
-        /*$today = date('Y-m-d');
-        echo $today;
-        exit;*/
         $customer = Auth::user()->customers()->where('business_id',$request->businessId)->first();
+        $UserBookingDetails = '';
+        $today = date('Y-m-d');
         $UserBookingDetails = $customer->bookingDetail()->where('bookedtime' , NULL)->orderby('created_at','desc')->first();
-        //echo  $UserBookingDetails;exit();
+        //echo $UserBookingDetails;exit();
         if($UserBookingDetails != ''){
+            if($request->date == $today){
+                $start = new DateTime($activitySchedulerData->shift_start);
+                $start_time = $start->format("H:i");
+                $current = new DateTime();
+                $current_time =  $current->format("H:i");
+                if($current_time > $start_time){
+                    return "You can't book this activity for today";
+                }
+            }
             $UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
+
             if($UserBookingDetails->booking->order_type == 'checkout_register'){
                 BookingCheckinDetails::create([
                     "business_activity_scheduler_id"=>$request->timeid, 
@@ -96,6 +105,10 @@ class SchedulerController extends Controller
                     "use_session_amount" => 1,
                     "source_type" => 'online_scheduler'
                 ]);
+            }else{
+                $BookingCheckinDetails = new BookingCheckinDetails;
+                $BookingCheckinDetails->update(["business_activity_scheduler_id"=>$request->timeid,
+                    "checkin_date"=>$request->date]);
             }
             return "success";
         }else{

@@ -146,21 +146,18 @@ class BookingRepository
         return $checkInDetail;
     }
 
-    public function tabFilterData($checkInDetail,$chkVal,$serviceType){
+    public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
         $full_ary = $bookingDetail= [];
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
-            if(date('Y-m-d',strtotime($chkD->checkin_date)) == date('Y-m-d') && $chk == 'today'){
+            if(date('Y-m-d',strtotime($chkD->checkin_date)) == $date && $chk == 'today'){
                 $datechk = 1;
-                $dateforchk = date('Y-m-d');
             }
-            if(date('Y-m-d',strtotime($chkD->checkin_date)) >  date('Y-m-d') && $chk == 'upcoming'){
+            if(date('Y-m-d',strtotime($chkD->checkin_date)) >  $date && $chk == 'upcoming'){
                 $datechk = 1;
-                $dateforchk = date('Y-m-d');
-            }if(date('Y-m-d',strtotime($chkD->checkin_date)) < date('Y-m-d') && $chk == 'past'){
+            }if(date('Y-m-d',strtotime($chkD->checkin_date)) < $date && $chk == 'past'){
                 $datechk = 1;
-                $dateforchk = date('Y-m-d');
             }
 
             if($datechk == 1){

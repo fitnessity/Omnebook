@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{CompanyInformation,UserBookingStatus,UserBookingDetail};
+use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler};
 use DateTime;
 
 class BusinessActivitySchedulerController extends Controller
@@ -17,20 +17,20 @@ class BusinessActivitySchedulerController extends Controller
     public function index(Request $request , $business_id)
     {
         $company = CompanyInformation::findOrFail($business_id);
-        $services = $company->service()->where('is_active',1)->orderBy('created_at','desc')->get();
+        $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
         $servicetype = 'all';
         if($request->stype && $request->business_service_id == ''){
             $servicetype = $request->stype;
             if($request->stype != 'all'){
-                $services = $company->service()->where(['is_active'=>1, 'service_type' => $servicetype])->orderBy('created_at','desc')->get();
+                $business_services = $company->service()->where(['is_active'=>1, 'service_type' => $servicetype])->orderBy('created_at','desc');
             }else{
-                $services = $company->service()->where('is_active',1)->orderBy('created_at','desc')->get();
+                $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
             }
         }
 
         if($request->business_service_id){
-            $services = $company->service()->where('id',$request->business_service_id)->get();
-            //print_r($services);exit;
+            $business_services = $company->service()->where('id',$request->business_service_id);
+            //print_r($business_services);exit;
             $servicetype = $request->stype;
         }
         $filter_date = new DateTime();
@@ -47,6 +47,16 @@ class BusinessActivitySchedulerController extends Controller
         }
 
         $companyName = $company->company_name;
+
+
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+        $services = [];
+
+        foreach($bookschedulers as $bs){
+            $services []= $bs->business_service;
+        }
+        $services = array_unique($services);
+        // /print_r( $services);exit;
         return view('business-activity-schedular.index',[
             'days' => $days,
             'filter_date' => $filter_date,
