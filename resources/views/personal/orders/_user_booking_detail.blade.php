@@ -16,7 +16,7 @@
                         <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                     </a>
                     @if($tabname == 'current')
-                        <div class="booking-active @if($book_details->pay_session >0 ) booking-active-color @else booking-inactive-color @endif">@if($book_details->pay_session >0 ) Active @else Inactive @endif</div>
+                       <!--  <div class="booking-active @if($book_details->pay_session >0 ) booking-active-color @else booking-inactive-color @endif">@if($book_details->pay_session >0 ) Active @else Inactive @endif</div> -->
                     @endif
                     <div class="highlighted_box">Confirmed</div>
                    

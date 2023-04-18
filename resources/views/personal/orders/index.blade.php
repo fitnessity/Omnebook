@@ -123,12 +123,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('current')">
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <label for="">Search:</label>
@@ -238,12 +242,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('today')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -285,12 +293,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('upcoming')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -332,12 +344,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('past')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -456,6 +472,19 @@
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
+            success: function(data){
+                //alert(data);
+                $("#searchbydate_"+type).html(data);
+            }
+        });
+    }
+
+    function serchByActivty(type){
+        var text = $('#serchByActivity_'+type).val();
+        $.ajax({
+            type: "post",
+            url:'{{route("searchfilteractivty")}}',
             data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
             success: function(data){
                 //alert(data);
