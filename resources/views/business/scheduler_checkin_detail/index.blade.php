@@ -151,7 +151,7 @@
                                                         <option value=""  @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
                                                         @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
                                                             @if($customer_booking_detail->business_price_detail)
-                                                                @if($customer_booking_detail->getremainingsession() > 0 || $customer_booking_detail->id == $booking_checkin_detail->order_detail->id)
+                                                                @if($customer_booking_detail->getremainingsession() > 0 || ($booking_checkin_detail->order_detail && $customer_booking_detail->id == $booking_checkin_detail->order_detail->id))
                                                                     <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
                                                                         {{$customer_booking_detail->business_price_detail->price_title}}
                                                                     </option>
