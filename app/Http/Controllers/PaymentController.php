@@ -182,8 +182,8 @@ class PaymentController extends Controller {
 
                                 $recurring = array(
                                     "booking_detail_id" => $booking_detail->id,
-                                    "user_id" => $loggedinUser->id,
-                                    "user_type" => 'user',
+                                    "user_id" => $loggedinUser->customers()->where('business_id',$booking_detail->business_id)->first()->id,
+                                    "user_type" => 'customer',
                                     "business_id" => $booking_detail->business_id ,
                                     "payment_date" => $payment_date,
                                     "amount" => $amount,
@@ -454,9 +454,9 @@ class PaymentController extends Controller {
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
                                 if($num==1){
-                                    $stripe_id =  '';
-                                    $stripe_charged_amount = 0;
-                                    $payment_method = '';
+                                    $stripe_id =  $transactionstatus->transaction_id;
+                                    $stripe_charged_amount = $transactionstatus->amount;
+                                    $payment_method = $transactionstatus->stripe_payment_method_id;
                                     $payment_date = $date->format('Y-m-d');
                                     $status = 'Completed';
                                 }else{

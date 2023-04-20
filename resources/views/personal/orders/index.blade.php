@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper($customer->full_name)}} @endif </h4>
+                            != '') FOR {{strtoupper(@$customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -142,7 +142,7 @@
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
@@ -220,7 +220,7 @@
                                     
                                         <div class="row"  id="searchbydate_current">
                                             @php $i = 1; @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current','customer'=>$customer])
                                         </div>
                                     </div> 
 
@@ -261,7 +261,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,7 +271,7 @@
                                                 $br = new \App\Repositories\BookingRepository;
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType ,date('Y-m-d'));
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today','customer'=>$customer])
                                         </div>
                                     </div>
 
@@ -312,7 +312,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -321,7 +321,7 @@
                                                 $br = new \App\Repositories\BookingRepository;
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType,date('Y-m-d'));
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming','customer'=>$customer])
 
                                         </div>
                                     </div><!-- tab panel-->
@@ -363,7 +363,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
@@ -372,7 +372,7 @@
                                             $br = new \App\Repositories\BookingRepository;
                                             $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType,date('Y-m-d'));
                                         @endphp
-                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past']) 
+                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past','customer'=>$customer]) 
                                         </div>
                                     </div><!-- tab-pane -->
 

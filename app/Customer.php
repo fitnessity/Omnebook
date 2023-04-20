@@ -232,7 +232,7 @@ class Customer extends Authenticatable
     public function active_memberships(){
         $company = $this->company_information;
         $now = Carbon::now();
-        $result = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0');
+        $result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
         return $result; 
     }
 
