@@ -111,10 +111,10 @@
                 </div>
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
-                        @if($tabname == 'current' || $tabname == 'upcoming' ||  $book_details->pay_session >0 )
-                            <a href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ] )}}" target="_blank">Schedule</a>
+                        @if($tabname == 'current' || $tabname == 'upcoming'  )
+                            <a href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>@$customer->id ] )}}" target="_blank">Schedule</a>
                         @endif
-                        @if($tabname == 'past' && $book_details->pay_session == 0)
+                        @if($tabname == 'past')
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
                         @endif
 
@@ -144,6 +144,6 @@
                 </div>
             </div>
         </div>
-    @php  $i++;@endphp
+    @php  $i++; @endphp
     @endforeach
 @endif

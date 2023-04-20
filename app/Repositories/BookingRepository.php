@@ -120,17 +120,20 @@ class BookingRepository
     public function currentTab($serviceType, $business_id,$customer){
         $bookingDetail = [];
         $now = Carbon::now();
-        if($serviceType== null || $serviceType == 'all'){
-            $bookingDetail = UserBookingDetail::where('user_id',$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
-        }else{
-            $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+        if($customer){
+            if($serviceType== null || $serviceType == 'all'){
+                $bookingDetail = @$customer->active_memberships()->get();
+                /*$bookingDetail = UserBookingDetail::where('user_id',@$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();*/
+            }else{
+                $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+            }
         }
         //print_r($bookingDetail);exit;
         return $bookingDetail;
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->get();
         return $checkInDetail;
     }
 
@@ -144,7 +147,7 @@ class BookingRepository
                     $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
+                $userBookinDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
                 if($chkVal == 'past'){
                     $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) or user_booking_details.expired_at < now())');
                 }
@@ -183,12 +186,12 @@ class BookingRepository
             if($serviceType== null || $serviceType == 'all'){
                 $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) and expired_at < now())');
                 }
             }else{
                 $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) or user_booking_details.expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) and user_booking_details.expired_at < now())');
                 }
             }
             

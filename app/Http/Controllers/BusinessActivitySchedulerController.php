@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler};
+use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler,Customer};
 use DateTime;
+use Auth;
 
 class BusinessActivitySchedulerController extends Controller
 {
@@ -28,10 +29,19 @@ class BusinessActivitySchedulerController extends Controller
             }
         }
 
+        $full_name = '';
+        if($request->customer_id){
+            $customer = Customer::where('id',$request->customer_id)->first();
+        }else{
+            $user= Auth::user();
+            $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
+        }
+
         if($request->business_service_id){
-            $business_services = $company->service()->where('id',$request->business_service_id);
-            //print_r($business_services);exit;
             $servicetype = $request->stype;
+            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]);
+            //print_r($business_services);exit;
+            
         }
         $filter_date = new DateTime();
         $shift = 1;
@@ -47,11 +57,10 @@ class BusinessActivitySchedulerController extends Controller
         }
 
         $companyName = $company->company_name;
-
-
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
         $services = [];
 
+        //print_r($bookschedulers);exit;
         foreach($bookschedulers as $bs){
             $services []= $bs->business_service;
         }
@@ -65,6 +74,8 @@ class BusinessActivitySchedulerController extends Controller
             'services' => $services,
             'companyName' => $companyName,
             'businessId' => $business_id,
+            'priceid' => $request->priceid,
+            'customer' => $customer,
         ]);
     }
 

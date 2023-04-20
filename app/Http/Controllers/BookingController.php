@@ -261,28 +261,31 @@ class BookingController extends Controller {
     public function searchfilteractivty(Request $request){
         $serviceType = $request->serviceType;
         if(!$request->customerId){
-            $customerID = Auth::user()->customers()->where('business_id' ,$request->businessId)->first()->id;
+            $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
+            $customerID = @$customer->id;
         }else{
             $customerID = $request->customerId;
         }
 
         $now = Carbon::now();
-        if($request->type == 'current'){
-            if($serviceType== null || $serviceType == 'all'){
-                $booking_details = UserBookingDetail::where('user_id',$customerID)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
-            }else{
-                $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
-            }
-
-            if(!empty($booking_details)){
-                foreach($booking_details  as $details){
-                    $BookingDetail [] = $details;
+        if($customerID){
+            if($request->type == 'current'){
+                if($serviceType== null || $serviceType == 'all'){
+                    $booking_details = UserBookingDetail::where('user_id',$customerID)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
+                }else{
+                    $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
                 }
+
+                if(!empty($booking_details)){
+                    foreach($booking_details  as $details){
+                        $BookingDetail [] = $details;
+                    }
+                }
+            }else{
+                $checkIndetail = []; $booking_details = [];
+                $checkIndetail = BookingCheckinDetails::where(['customer_id'=>$customerID])->get();
+                $BookingDetail = $this->bookings->tabFilterData($checkIndetail,$request->type,$request->serviceType,date('Y-m-d'));
             }
-        }else{
-            $checkIndetail = []; $booking_details = [];
-            $checkIndetail = BookingCheckinDetails::where(['customer_id'=>$customerID])->get();
-            $BookingDetail = $this->bookings->tabFilterData($checkIndetail,$request->type,$request->serviceType,date('Y-m-d'));
         }
 
         $html = '';
@@ -463,9 +466,9 @@ class BookingController extends Controller {
             if(!empty($bookingstatus)){
                 foreach($bookingstatus as $Bstatus){
                     if($serviceType== null || $serviceType == 'all'){
-                        $booking_details = UserBookingDetail::where(['booking_id'=>$Bstatus->id,'user_id'=>$customer->id ])->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
+                        $booking_details = UserBookingDetail::where(['booking_id'=>$Bstatus->id,'user_id'=>@$customer->id ])->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
                     }else{
-                        $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.booking_id',$Bstatus->id)->where('user_booking_details.user_id',$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+                        $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.booking_id',$Bstatus->id)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
                     }
 
                     if(!empty($booking_details)){
@@ -479,11 +482,11 @@ class BookingController extends Controller {
             $checkIndetail = []; $booking_details = [];
             if(!empty($bookingstatus)){
                 foreach($bookingstatus as $Bstatus){
-                    $booking_details  = UserBookingDetail::where(['booking_id'=>$Bstatus->id ,'user_id'=>$customer->id])->get();
+                    $booking_details  = UserBookingDetail::where(['booking_id'=>$Bstatus->id ,'user_id'=>@$customer->id])->get();
                     foreach($booking_details  as $details){
-                        $Booking_checked_inetail = BookingCheckinDetails::where('booking_detail_id',$details->id)->get();
-                        if(!empty($Booking_checked_inetail )){
-                            foreach($Booking_checked_inetail  as $chkDetail){
+                        $Booking_checked_indetail = BookingCheckinDetails::where(['booking_detail_id'=>$details->id,'user_id'=>@$customer->id])->get();
+                        if(!empty($Booking_checked_indetail )){
+                            foreach($Booking_checked_indetail  as $chkDetail){
                                 $checkIndetail []= $chkDetail;
                             }
                         }
