@@ -28,7 +28,11 @@
                          </div>
                          <div class="scheduler-info">
                             <label>Category: </label>
-                            <span>{{$business_activity_scheduler->businessPriceDetailsAges->category_title}}</span>
+                            @if($business_activity_scheduler->businessPriceDetailsAges)
+                                <span>{{$business_activity_scheduler->businessPriceDetailsAges->category_title}}</span>
+                            @else
+                                <span>N/A</span>
+                            @endif
                          </div>
                          
                          <div class="scheduler-info">
@@ -147,15 +151,17 @@
                                                         <option value=""  @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
                                                         @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
                                                             @if($customer_booking_detail->business_price_detail)
-                                                            <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
-                                                                {{$customer_booking_detail->business_price_detail->price_title}}
-                                                            </option>
+                                                                @if($customer_booking_detail->getremainingsession() > 0 || ($booking_checkin_detail->order_detail && $customer_booking_detail->id == $booking_checkin_detail->order_detail->id))
+                                                                    <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
+                                                                        {{$customer_booking_detail->business_price_detail->price_title}}
+                                                                    </option>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                         
 
                                                     </select>
-                                                    @if($booking_checkin_detail->customer->active_memberships() < 1)
+                                                    @if($booking_checkin_detail->customer->active_memberships()->count() < 1)
                                                         <span style="color:red;text-align:left;">No Active memberships</span>
                                                     @endif
                                                 </div>

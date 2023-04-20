@@ -29,7 +29,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
+
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
+    Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');
+
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
@@ -44,7 +47,6 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
 
     Route::resource('staff', 'StaffController')->only(['index','create','edit','store','update', 'destroy']);
-    Route::resource('business_activity_schedulers', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
   
@@ -63,6 +65,10 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/add_family','DesignController@add_family')->name('add_family');
     Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
 });
+
+//Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
+
+Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
@@ -89,7 +95,7 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 Route::group(['middleware' => ['auth']], function(){
    // Route::get('activities/{business_id}/schedulers', 'BusinessController@activities')->name('business_activities_schedulers');
-    Route::get('business_activity_schedulers/{business_id}/', 'BusinessController@activities')->name('business_activities_schedulers');
+    //Route::get('business_activity_schedulers/{business_id}/', 'BusinessController@activities')->name('business_activities_schedulers');
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
@@ -98,6 +104,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
+
         /*Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');*/
         // Services
         //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
@@ -1031,6 +1038,8 @@ Route::group(['middleware' => ['auth']], function()
 {
     
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
+    Route::get('/remove_grant_access/{id?}/{customerId?}','CustomerController@remove_grant_access')->name('remove_grant_access');
+    Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
@@ -1040,7 +1049,6 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
     Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
     Route::get('/send-receipt-to-customer', 'CustomerController@sendReceiptToCustomer')->name('sendReceiptToCustomer');
-    
 });
 
 

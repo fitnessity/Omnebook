@@ -127,9 +127,7 @@ class CustomerController extends Controller
 
 
     public function refresh_payment_methods(Request $request){
-        
         $customer = Customer::findOrFail($request->customer_id);
-
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
 

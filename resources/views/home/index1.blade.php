@@ -217,7 +217,7 @@
     </div>
 </section>
 
-<section class="bepart_wraper" style="background-image: url({{ asset('public/images/beapart_bg.jpg') }}) ">
+<section class="bepart_wraper mdisplay-none" style="background-image: url({{ asset('public/images/beapart_bg.jpg') }}) ">
     <div class="container">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="col-xs-4 col-lg-4">
@@ -555,7 +555,7 @@
 </section>
 
 @foreach($why_fitnessity as $whydata)
-<section class="ptb-65 plr-60 why_fitnessity" id="why-fitnessity" style=" background-image: url('/public/uploads/cms/{{ $whydata->banner_image }}')">
+<section class="ptb-65 plr-60 why_fitnessity mdisplay-none" id="why-fitnessity" style=" background-image: url('/public/uploads/cms/{{ $whydata->banner_image }}')">
     <div class="cat-container">
         <div class="col-md-6 col-sm-6 col-xs-12">
             {!!$whydata->content!!}
@@ -583,7 +583,7 @@
 </section>
 @endforeach
 
-<section class="ptb-65 plr-60 float-left w-100 discover_activities" id="discover" style="margin-top:100px">
+<section class="ptb-65 plr-60 float-left w-100 discover_activities mdisplay-none" id="discover" style="margin-top:100px">
     <div class="cat-container">
         <div class="about-services-title" style="margin-bottom:3%">
             <h1>DISCOVER ACTIVITIES</h1>

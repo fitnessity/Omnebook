@@ -28,7 +28,7 @@
 			</ul>
 		</div>
 	</div>
-    <div class="widget">
+    <div class="widget mdisplay-none ipad-display">
     	<h4 class="widget-title">Your page</h4> 
 		<div class="your-page">
         	<figure>
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	</div><!-- page like widget -->
-    <div class="widget-follower stick-widget" style="">
+    <div class="widget-follower stick-widget mdisplay-none ipad-display" style="">
 		<h4 class="widget-title">Who's following</h4>
 		<?php
 			$following = UserFollow::select("user_id", "follow_id", "follower_id")
@@ -167,7 +167,7 @@
 		foreach($getstarted as $start){
 	?>
     	@if(File::exists(public_path("/uploads/getstarted/thumb/".$start->image)))
-			<div class="get-started">
+			<div class="get-started mdisplay-none">
             	<div class="get-img"><img src="{{ url('/public/uploads/getstarted/thumb/'.$start->image) }}" alt="{{$start->title}}" class="img-fluid"></div>
                 @if ($start->title !='')
                 	<div class="get-text">{{$start->title}}</div>
@@ -183,7 +183,7 @@
 			foreach($bookact as $bc){
 		?>
             @if(File::exists(public_path("/uploads/book/thumb/".$bc->image)))
-                <div class="ad-img">
+                <div class="ad-img mdisplay-none">
                     <img src="{{ url('/public/uploads/book/thumb/'.$bc->image) }}" alt="images" class="img-fluid">
                 </div>
             @endif

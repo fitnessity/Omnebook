@@ -47,6 +47,10 @@ class UserBookingDetail extends Model
         return $this->hasMany(BookingCheckinDetails::class,'booking_detail_id');
     }
 
+    public function Recurring(){
+        return $this->hasMany(Recurring::class,'booking_detail_id');
+    }
+
     public function BookingActivityCancel(){
         return $this->hasMany(BookingActivityCancel::class,'booking_detail_id');
     }
@@ -114,44 +118,77 @@ class UserBookingDetail extends Model
     }
 
     public function transfer_to_provider(){
+        $company_information = $this->business_services->company_information;
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        $company_information = $this->business_services->company_information;
-        /*print_r($this->business_services);
-        print_r($this->business_services->company_information);
-        echo $company_information;exit;*/
+        if($this->booking->order_type == 'checkout_register'){
+            $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
+            $transfer_amount = 0;
+
+            $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
+            $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
+        
+            foreach($transactions as $transaction){
+                $payment_intent = $stripe->paymentIntents->retrieve(
+                    $transaction->transaction_id,
+                    []
+                );
+                try {
+                    if($transaction->amount > $total_fitnessity_fee){
+                        $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
+                    }else{
+                        $transfer_amount = round($transaction->amount/1.039, 2);
+                    }
+            
+                    $transfer = $stripe->transfers->create([
+                        'amount' => $transfer_amount * 100,
+                        'currency' => 'usd',
+                        'source_transaction' => $payment_intent->charges->data[0]->id,
+                        'destination' => $company_information->stripe_connect_id,
+                    ]);
+
+                    if($transfer->id){
+                      $transfer_amount += $transaction->amount;
+                    }
+                } catch(\Exception $e) {
+
+                    $this->update(['transfer_provider_status'=>'paid', 
+                           'provider_amount' => 0]);
+                    return;
+                }    
+            }
+
+            if(@$transfer->id){
+                $this->update(['transfer_provider_status'=>'paid', 
+                               'provider_amount' => $transfer_amount]);
+            }
+
+            return;
+        }
+        
         try {
-            $transfer_amount = $this->provider_get_total();
-            $stripe_account  = $stripe->accounts->retrieveCapability(
-                $company_information->stripe_connect_id,
-                'transfers',
-                []
-            );
+            $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
+            $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
 
             $payment_intent = $stripe->paymentIntents->retrieve(
-                $this->booking->stripe_id,
+                $transaction->transaction_id,
                 []
             );
 
-            if($stripe_account['status'] == 'active'){
-                    
-                $transfer = $stripe->transfers->create([
-                    'amount' => $transfer_amount * 100,
-                    'currency' => 'usd',
-                    'source_transaction' => $payment_intent->charges->data[0]->id,
-                    'destination' => $company_information->stripe_connect_id,
-                ]);
+            $transfer = $stripe->transfers->create([
+                'amount' => $transfer_amount * 100,
+                'currency' => 'usd',
+                'source_transaction' => $payment_intent->charges->data[0]->id,
+                'destination' => $company_information->stripe_connect_id,
+            ]);
 
-                if($transfer->id){
-                    $this->update(['transfer_provider_status'=>'paid', 
-                                   'provider_amount' => $transfer_amount ,
-                                   'provider_transaction_id' => $transfer->id]);
-                }
-
+            if($transfer->id){
+                $this->update(['transfer_provider_status'=>'paid', 
+                               'provider_amount' => $transfer_amount ,
+                               'provider_transaction_id' => $transfer->id]);
             }
-            
-
         } catch(\Exception $e) {
+            var_dump($e);
         }    
     }
 
@@ -180,7 +217,8 @@ class UserBookingDetail extends Model
                     $name = str_replace('(me)','',$pr['pc_name']);
                     $all_pr .= $name.' </br> ';
                 }else{
-                    if($this->user_type == 'customer'){
+                     
+                    if($this->booking->user_type == 'customer'){
                         $name = str_replace('(me)','',$pr['pc_name']);
                         $all_pr .= $name.' </br> ';
                     }else{
@@ -194,7 +232,12 @@ class UserBookingDetail extends Model
                 }
             }
         }
-        return  rtrim($all_pr,' </br> ');
+
+        if($all_pr != ''){
+            return  rtrim($all_pr,' </br> ');
+        }else{
+            return  "N/A";
+        }
     }
 
     public function getremainingsession(){
@@ -240,7 +283,7 @@ class UserBookingDetail extends Model
 
     public function getperoderprice(){
         $fees = 0;
-        $extra_fees =  json_decode($this->extra_fees, true);
+        /*$extra_fees =  json_decode($this->extra_fees, true);
         if(!empty($extra_fees)){
             foreach($extra_fees as $key => $value){
                 if($key == 'service_fee' ){
@@ -253,7 +296,21 @@ class UserBookingDetail extends Model
                     $fees += $value;
                 }
             }
+        }*/
+       
+        if($this->tax != 0){
+            $fees += $this->tax ;
         }
+        if($this->tip != 0){
+            $fees +=  $this->tip ;
+        }
+        if($this->discount != 0){
+            $fees -=  $this->discount ;
+        }
+        if($this->fitnessity_fee != 0){
+            $fees +=  $this->fitnessity_fee ;
+        }
+
         return $fees;
     }
 

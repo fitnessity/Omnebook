@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges};
+use App\{MailService,CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService};
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use App\Services\CheckoutRegisterCartService;
 
@@ -46,7 +46,7 @@ class OrderController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request ,$business_id)
-    {    
+    {    //print_r($request->all());
         $cart_item = [];
         if (session()->has('cart_item')) {
             $cart_item = session()->get('cart_item');
@@ -138,6 +138,17 @@ class OrderController extends BusinessBaseController
                 'customer' => $customerdata->stripe_customer_id,
             ]);
         }
+
+        if($request->cus_id == ''){
+            if(!empty($cart_item)){
+                foreach($cart_item['cart_item'] as $key=>$item){
+                    if($item['chk'] == 'activity_purchase'){
+                        unset($cart_item['cart_item'][$key]);
+                    }
+                }
+                session()->put('cart_item',$cart_item);
+            }
+        }
         if($activated == 0){
             $status = "InActive";
         }else{
@@ -149,7 +160,7 @@ class OrderController extends BusinessBaseController
         $modelchk = 0;
         $modeldata = '';
         $ordermodelary = array();
-        //$ordermodelary = session()->get('ordermodelary');
+        $ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
             $modeldata = $this->getmultipleodermodel($ordermodelary);
@@ -348,7 +359,6 @@ class OrderController extends BusinessBaseController
                 'item_type' =>'UserBookingStatus',
                 'item_id' => $userBookingStatus->id,
             ]));
-
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
@@ -358,8 +368,11 @@ class OrderController extends BusinessBaseController
             $now->modify('+'. $item['actscheduleid']);
             $expired_at = $now;
             $cUid = NULL;
+            $participateName = NULL;
             if(@$item['participate_from_checkout_regi']['id'] != ''){
                 $cUid = $item['participate_from_checkout_regi']['id'];
+                $cUid = $item['participate_from_checkout_regi']['id'];
+                $participateName =  trim($item['participate_from_checkout_regi']['pc_name'],"(me)");
             }
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
@@ -458,6 +471,23 @@ class OrderController extends BusinessBaseController
                     }
                 }
             }
+
+            $businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
+            $email_detail = array(
+                "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
+                "CustomerName" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->full_name, 
+                "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
+                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
+                "BookedPerson"=> $checkoutRegisterCartService->getbookedPerson($request->user_id),
+                "ParticipantsName"=> $participateName,
+                "date"=> "N/A",
+                "time"=>  "N/A",
+                "duration"=>  "N/A",
+                "ActivitiyType"=> $businessService->service_type,
+                "ProgramName"=> $businessService->program_name,
+                "CategoryName"=> $checkoutRegisterCartService->getCategory($item['priceid']));
+
+            SGMailService::confirmationMail($email_detail);
         }
 
         session()->forget('cart_item');
@@ -514,12 +544,8 @@ class OrderController extends BusinessBaseController
 
     public function getmultipleodermodel($array)
     {    
-        $html = '';
-        $totaltax = 0;
-        $subtotaltax = 0;
-        $tot_dis = 0;
-        $tot_tip = 0;
-        $service_fee = 0;
+        $html = $idarry = '';
+        $totaltax =  $subtotaltax = $tot_dis = $tot_tip = $service_fee = 0;
 
         $html .= '<div class="row"> 
                 <div class="col-lg-4 bg-sidebar">
@@ -551,8 +577,7 @@ class OrderController extends BusinessBaseController
                 <div class="col-lg-8">
                     <div class="modal-booking-info">
                         <h3>Booking Receipt</h3>';
-        $idarry = '';         
-
+    
         foreach($array as $or){
             $order_detail = UserBookingDetail::where('id',$or)->first();
             $idarry .= $or.',';

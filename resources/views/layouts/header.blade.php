@@ -30,16 +30,16 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
         <!-- <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> -->
-        <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
+        <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-		<script src="/public/js/ratings.js"></script>
+		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
         <style>/*
             .btn-style-one {
                 position: relative;
@@ -368,7 +368,6 @@ $total_quantity = 0;
 			}
 			.help-us-side{
 				font-size: 11px;
-				margin-left: 35px;
 			}
 			.border-sidebar{
 				border-bottom: 1px solid #fff;
@@ -472,7 +471,7 @@ $total_quantity = 0;
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
-							<div  class="cartitmclass">
+							<div  class="cartitmclass d-none">
 								<?php 
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
@@ -491,8 +490,9 @@ $total_quantity = 0;
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
 							</div>
+							
                         	@if(Auth::check())
-						 	<div class="userblock">
+						 	<div class="userblock d-none">
                         		<div class="login_links" onclick="openNav()">
                                 
                                 @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
@@ -886,6 +886,7 @@ function openNav() {
 function closeNav() {
 	document.getElementById("mySidepanel").style.width = "0";
 }
+
 </script>
 
 <link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>

@@ -11,10 +11,15 @@
                 <div class="headboxes">
                     <img src="{{$pic}}" class="imgboxes" alt="">
                     <h4 class="fontsize">{{$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
+
                     <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details->booking_id , 'orderdetailid'=>$book_details->id])}}" data-modal-width="900px">
                         <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
                     </a>
+                    @if($tabname == 'current')
+                        <div class="booking-active @if($book_details->pay_session >0 ) booking-active-color @else booking-inactive-color @endif">@if($book_details->pay_session >0 ) Active @else Inactive @endif</div>
+                    @endif
                     <div class="highlighted_box">Confirmed</div>
+                   
                 </div>
                 <div class="middleboxes middletoday" id="{{$tabname}}_<?php echo $i.'_'.$book_details->business_services()->withTrashed()->first()->id; ?>">
                     <p>
@@ -27,7 +32,7 @@
                     </p>
                     <p>
                         <span>PRICE OPTION:</span>
-                        <span>{{@$book_details->business_price_detail->price_title}} - {{@$book_details['pay_session']}} Sessions
+                        <span>{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions
                         
                         </span>
                     </p>
@@ -50,7 +55,7 @@
                     </p>
                     <p>
                         <span>DATE BOOKED:</span>
-                        <span>{{date('m-d-Y',strtotime($book_details['created_at']))}}</span>
+                        <span>{{date('m-d-Y',strtotime($book_details->created_at))}}</span>
                     </p>
                     <p>
                         <span>RESERVED DATE:</span>
@@ -106,12 +111,10 @@
                 </div>
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
-                        @if($tabname == 'current')
-                            @if($book_details->booking->order_type == 'checkout_register')
-                                <a href="{{route('personal.schedulers.index',['user_booking_detail_id' => $book_details['id'] ])}}" target="_blank">Schedule</a>
-                            @endif
+                        @if($tabname == 'current' || $tabname == 'upcoming' ||  $book_details->pay_session >0 )
+                            <a href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ] )}}" target="_blank">Schedule</a>
                         @endif
-                        @if($tabname == 'past')
+                        @if($tabname == 'past' && $book_details->pay_session == 0)
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
                         @endif
 
@@ -121,20 +124,20 @@
                         <a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id; ?>" target="_blank">View Provider</a>
                     </div>
                     <div class="viewmore_links">
-                        <a id="viewmore_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
-                        <a id="viewless_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
+                        <a id="viewmore_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}" style="display:block">View More <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
+                        <a id="viewless_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}" style="display:none">View Less <img src="{{ url('public/img/arrow-down.png') }}" alt=""></a>
                     </div>
                     <script>
-                        $("#viewmore_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").click(function () {
+                        $("#viewmore_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").click(function () {
                             $("#{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").addClass("intro");
-                            $("#viewless_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").show();
-                            $("#viewmore_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").hide();
+                            $("#viewless_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").show();
+                            $("#viewmore_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").hide();
                             $("#anothertwobtn{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").show();
                         });
-                        $("#viewless_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").click(function () {
+                        $("#viewless_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").click(function () {
                             $("#{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").removeClass("intro");
-                            $("#viewless_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").hide();
-                            $("#viewmore_cu_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").show();
+                            $("#viewless_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").hide();
+                            $("#viewmore_{{$tabname}}_{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").show();
                             $("#anothertwobtn{{$i}}_{{$book_details->business_services()->withTrashed()->first()->id}}").hide();
                         });
                     </script>

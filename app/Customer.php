@@ -55,7 +55,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id'
     ];
 
     /**
@@ -270,8 +270,7 @@ class Customer extends Authenticatable
 
     public function complete_booking_details(){
         $company = $this->company_information;
-        $now = Carbon::now();
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereRaw('(pay_session <= 0 or pay_session is null)')->whereDate('expired_at', '<',  $now);
+        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
 
         return $booking_details;
     }
@@ -331,8 +330,8 @@ class Customer extends Authenticatable
         //refund to customer
     }
 
-    public function recurring($booking_detail_id){
-        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer']);
+    public function recurring($booking_detail_id ,$type){
+        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer','status' => $type]);
     }
 
     public function getFullUserBookingStatus($business_id){

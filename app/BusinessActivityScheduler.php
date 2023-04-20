@@ -57,6 +57,10 @@ class BusinessActivityScheduler extends Model
         return BusinessActivityScheduler::where('id',$id)->first();
     }
 
+    public static function getallscheduler($datetime){
+        return BusinessActivityScheduler::with(['business_service', 'company_information'])->orderBy('shift_start')->whereRaw("activity_days like ?", ['%'.$datetime->format('l').'%'])->whereDate('end_activity_date' ,'>=', $datetime->format("Y-m-d"));                               
+    }
+
     public function next_available_date(){
         $start = new DateTime($this->starting);
         $end = new DateTime($this->end_activity_date);
@@ -116,6 +120,12 @@ class BusinessActivityScheduler extends Model
         return $this->hasMany(ActivityCancel::class, 'schedule_id');
     }
 
+    public function activity_time(){
+        $from = date("g:i a", strtotime($this->shift_start));
+        $to = date("g:i a", strtotime($this->shift_end));
+        return $from.' to '.$to;
+    }
+    
     public function get_clean_duration() {
         $string = "";
         $duration = date_parse(" +".$this->set_duration);

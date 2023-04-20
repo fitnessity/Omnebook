@@ -25,10 +25,10 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper($customerUsername)}} @endif </h4>
+                            != '') FOR {{strtoupper($customer->full_name)}} @endif </h4>
                     </div>
 
-                    @if(request()->business_id == '')
+                    @if(!request()->business_id)
                         <div class="payment_info_section padding-2 white-bg border-radius1 purchases-bt">
                             <div class="booking-history selecting-pro">
                                 <h3>Start by selecting a provider</h3>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="row">
                                 @foreach($business as $bs)
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png );">
                                             <h2>{{ $bs->company_name}}</h2>
@@ -51,7 +51,7 @@
                                             
                                             <div class="booking-activity-view">
                                                 <a class="view-booking" href="{{route('personal.orders.index',['business_id'=>$bs->id])}}"> View Bookings</a>
-                                                <a class="view-schedule" href="{{route('business_activities_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
+                                                <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
                                             </div>
                                          </div>
                                      </div>
@@ -108,7 +108,7 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-3 col-sm-12">
+                                                <div class="col-md-2 col-sm-6 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -126,20 +126,23 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80">
-                                                        <i class="far fa-calendar-alt"></i>
+                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('current')">
+                                                        <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-3 col-sm-6">
                                                     <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('current');">
+                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
                                                 </div>
-												<div class="col-md-2 col-sm-12">
-													<a href="#" class="access-req" data-toggle="modal" data-target="#accessreq">Access Requested</a>
+												<div class="col-md-2 col-sm-12 nopadding">
+													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
+                                                </div>
+                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
-											<div class="modal fade compare-model" id="accessreq">
+											<!-- <div class="modal fade compare-model" id="accessreq">
 												<div class="modal-dialog modal-lg business">
 													<div class="modal-content">
 														<div class="modal-header" style="text-align: right;"> 
@@ -150,7 +153,6 @@
 															</div>
 														</div>
 
-														<!-- Modal body -->
 														<div class="modal-body">
 															<div class="row contentPop"> 
 																<div class="col-lg-12">
@@ -208,12 +210,12 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											<!-- Modal End -->
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_current">
-                                            @php    $i = 1; @endphp
+                                            @php $i = 1; @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current'])
                                         </div>
                                     </div> 
@@ -221,7 +223,7 @@
                                     <div class="tab-pane" id="nav-today" role="tabpanel" aria-labelledby="nav-today-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-3 col-sm-12">
+                                                <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -239,13 +241,19 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('today')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_today" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('today');">
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                    <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +261,7 @@
                                         <div class="row"  id="searchbydate_today">
                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'today');
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType ,date('Y-m-d'));
                                             @endphp
                                             @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
                                         </div>
@@ -262,8 +270,8 @@
                                     <div class="tab-pane" id="nav-upcoming" role="tabpanel" aria-labelledby="nav-upcoming-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
+                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                    <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
                                                     <div class="show_block">
@@ -280,30 +288,37 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('upcoming')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_upcoming" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('upcoming');">
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                    <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row" id="searchbydate_upcoming">
                                             @php  $i = 1;
                                                 $br = new \App\Repositories\BookingRepository;
-                                                $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'upcoming');
+                                                $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType,date('Y-m-d'));
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
+
                                         </div>
                                     </div><!-- tab panel-->
 
                                     <div class="tab-pane" id="nav-past" role="tabpanel" aria-labelledby="nav-past-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
+                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                    <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
                                                     <div class="show_block">
@@ -320,22 +335,28 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('past')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_past" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('past');">
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                    <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
                                         <div class="row" id="searchbydate_past">
-                                        @php  $i = 1;
+                                         @php  $i = 1;
                                             $br = new \App\Repositories\BookingRepository;
-                                            $BookingDetail = $br->getdeepdetailoforder($bookingDetail,'past');
+                                            $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType,date('Y-m-d'));
                                         @endphp
-                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past'])
+                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past']) 
                                         </div>
                                     </div><!-- tab-pane -->
 
@@ -360,7 +381,7 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80">
+                                                        <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80" onchange="serchDateData('pending')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div>
@@ -428,105 +449,32 @@
             $('#nav-upcoming-tab').removeClass("active");
             $('#nav-pending-tab').removeClass("active");
         }
-
-
-        $("input[id=dateserchfilter_today]").change(function(){
-            var date = $(this).val();
-            var type = 'today';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_today").html(data);
-                }
-            });
-        });
-
-        $("input[id=dateserchfilter_past]").change(function(){
-            var date = $(this).val();
-            var type = 'past';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_past").html(data);
-                }
-            });
-        });
-
-        $("input[id=dateserchfilter_upcoming]").change(function(){
-            var date = $(this).val();
-            var type = 'upcoming';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"page":"personal"},
-                success: function(data){
-                    $("#searchbydate_upcoming").html(data);
-                }
-            });
-        });
-
-
-        /*$("input[id=search_today]").change(function(){
-            var text = $(this).val();
-            alert(text);
-            var type = 'today';
-            $.ajax({
-                type: "post",
-                url:'{{route("datefilterdata")}}',
-                data:{"_token":"{{csrf_token()}}" ,"date":date},
-                success: function(data){
-                    $("#searchbydate_upcoming").html(data);
-                }
-            });
-        });*/
     });
 
     function getsearchdata(type){
-     
-        if(type == 'past'){
-            var text = $('#search_past').val();
-            var type = 'past';
-        }else if(type == 'today'){
-            var text = $('#search_today').val();
-            var type = 'today';
-        }else{
-            var text = $('#search_upcoming').val();
-            var type = 'upcoming';
-        }
-        
-       
+        var text = $('#search_'+type).val();
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
-            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"page":"personal"},
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
             success: function(data){
-                if(type == 'today'){
-                    $("#searchbydate_today").html(data);
-                }else if(type == 'past'){
-                    $("#searchbydate_past").html(data);
-                }else{
-                    $("#searchbydate_upcoming").html(data);
-                }
+                //alert(data);
+                $("#searchbydate_"+type).html(data);
             }
         });
     }
-    
-    $('.booking_date1').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking_date2').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking_date3').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
-    $('.booking-date').datepicker({
-        dateFormat: "mm/dd/yy"
-    })
+
+    function serchDateData(type){
+        var date = $('#dateserchfilter_'+type).val();
+        $.ajax({
+            type: "post",
+            url:'{{route("datefilterdata")}}',
+            data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
+            success: function(data){
+                $("#searchbydate_"+type).html(data);
+            }
+        });
+    }
 </script>
 
 <script type="text/javascript">

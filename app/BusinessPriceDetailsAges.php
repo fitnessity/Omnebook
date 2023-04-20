@@ -35,6 +35,6 @@ class BusinessPriceDetailsAges extends Model
     
     public function BusinessActivityScheduler()
     {
-        return $this->hasMany(BusinessActivityScheduler::class ,'category_id');
+        return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->orderBy('shift_start');
     }
 }

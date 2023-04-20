@@ -82,7 +82,7 @@ class UserBookingStatus extends Model
     {
         return $this->hasMany(Jobpostbidding::class, 'jobid');
     }
-
+    
     public function getPaymentDetail(){
         $transaction = Transaction::where('item_type', 'UserBookingStatus')->where('item_id', $this->id)->first();
 

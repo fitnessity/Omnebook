@@ -181,46 +181,7 @@
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>  -->
 <script type="text/javascript">
-	/*function registerUser() {
-        var validForm = $('#frmregister').valid();
-        var posturl = '/customers/registration';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if (validForm) {
-            var formData = $("#frmregister").serialize();
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formData,
-                beforeSend: function () {
-                    $('#register_submit').prop('disabled', true).css('background','#999999');
-                    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                },
-                complete: function () {
-                
-                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                },
-                success: function (response) {
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                    showSystemMessages('#systemMessage', response.type, response.msg);
-                    if (response.type === 'success') {
-                    	// $("#frmregister")[0].reset();
-                    	$("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                    	$("#divstep1").css("display","none");
-                    	$("#divstep3").css("display","block");
-                    	$("#cust_id").val(response.id);
-                    } else {
-                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }
-    }*/
-
+	
     jQuery(function ($) {
       	
       	$('#frmregister').validate({

@@ -362,7 +362,7 @@ span.status::after {
 	text-transform: uppercase;
 }
 .rowclass-controller{
-	margin-bottom: 2px;
+	/*margin-bottom: 2px;*/
 }
 
 .div-controller{
