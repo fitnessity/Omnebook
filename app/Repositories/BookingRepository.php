@@ -1,25 +1,12 @@
 <?php
 
 namespace App\Repositories;
-
-use App\UserBookingStatus;
-use App\UserBookingDetail;
-use App\Jobpostquestions;
-use App\UserBookingQuote;
-use App\BusinessServices;
-use App\BusinessService;
-use App\CompanyInformation;
-use App\User;
-use App\Customer;
-use App\BusinessActivityScheduler;
-use App\BusinessPriceDetails;
-use App\BookingCheckinDetails;
 use DB;
 use Auth;
 use config;
-use App\MailService;
-use App\Fit_Cart;
+use App\{MailService,Fit_Cart,UserBookingStatus,UserBookingDetail,Jobpostquestions,UserBookingQuote,BusinessServices,BusinessService,CompanyInformation,User,Customer,BusinessActivityScheduler,BusinessPriceDetails,BookingCheckinDetails};
 use DateTime;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class BookingRepository
@@ -132,22 +119,53 @@ class BookingRepository
 
     public function currentTab($serviceType, $business_id,$customer){
         $bookingDetail = [];
-        if($serviceType== null || $serviceType == 'all'){
-            $bookingDetail = UserBookingDetail::where('user_id',$customer->id)->get();
-        }else{
-            $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',$customer->id)->get();
+        $now = Carbon::now();
+        if($customer){
+            if($serviceType== null || $serviceType == 'all'){
+                $bookingDetail = @$customer->active_memberships()->get();
+                /*$bookingDetail = UserBookingDetail::where('user_id',@$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();*/
+            }else{
+                $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+            }
         }
         //print_r($bookingDetail);exit;
         return $bookingDetail;
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->get();
         return $checkInDetail;
+    }
+
+    public function searchFilterData($checkInDetail,$chkVal,$serviceType ,$date){
+        $bookingDetail= [];
+        $now = Carbon::now();
+        foreach($checkInDetail as $chkInDetail) { 
+            if($serviceType== null || $serviceType == 'all'){
+                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
+                if($chkVal == 'past'){
+                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
+                }
+            }else{
+                $userBookinDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
+                if($chkVal == 'past'){
+                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) or user_booking_details.expired_at < now())');
+                }
+            }
+
+            $userBookinDetail = $userBookinDetail->first();
+            if(!empty($userBookinDetail) ){
+                $bookingDetail [] = $userBookinDetail;
+            }
+        }
+        $bookingDetail = array_unique($bookingDetail);
+        //print_r($bookingDetail);exit;
+        return $bookingDetail;
     }
 
     public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
         $full_ary = $bookingDetail= [];
+        $now = Carbon::now();
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
@@ -164,21 +182,26 @@ class BookingRepository
                 $full_ary[] =  $chkD;
             }
         }
-
-       foreach($full_ary as $chkInDetail) { 
+        foreach($full_ary as $chkInDetail) { 
             if($serviceType== null || $serviceType == 'all'){
-                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id)->first();
-                if(!empty($userBookinDetail) ){
-                    $bookingDetail [] = $userBookinDetail;
+                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
+                if($chkVal == 'past'){
+                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) and expired_at < now())');
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->first();
-                if(!empty($userBookinDetail) ){
-                    $bookingDetail [] = $userBookinDetail;
+                $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
+                if($chkVal == 'past'){
+                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) and user_booking_details.expired_at < now())');
                 }
+            }
+            
+            $userBookinDetail = $userBookinDetail->first();
+            if(!empty($userBookinDetail) ){
+                $bookingDetail [] = $userBookinDetail;
             }
         }
 
+        $bookingDetail = array_unique($bookingDetail);
         //print_r($bookingDetail);exit;
         return $bookingDetail;
     }

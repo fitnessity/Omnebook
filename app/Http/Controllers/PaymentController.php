@@ -182,8 +182,8 @@ class PaymentController extends Controller {
 
                                 $recurring = array(
                                     "booking_detail_id" => $booking_detail->id,
-                                    "user_id" => $loggedinUser->id,
-                                    "user_type" => 'user',
+                                    "user_id" => $loggedinUser->customers()->where('business_id',$booking_detail->business_id)->first()->id,
+                                    "user_type" => 'customer',
                                     "business_id" => $booking_detail->business_id ,
                                     "payment_date" => $payment_date,
                                     "amount" => $amount,
@@ -454,9 +454,9 @@ class PaymentController extends Controller {
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
                                 if($num==1){
-                                    $stripe_id =  '';
-                                    $stripe_charged_amount = 0;
-                                    $payment_method = '';
+                                    $stripe_id =  $transactionstatus->transaction_id;
+                                    $stripe_charged_amount = $transactionstatus->amount;
+                                    $payment_method = $transactionstatus->stripe_payment_method_id;
                                     $payment_date = $date->format('Y-m-d');
                                     $status = 'Completed';
                                 }else{
@@ -554,19 +554,27 @@ class PaymentController extends Controller {
         $user = User::findOrFail($request->user_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
+        $fingerprints = [];
         foreach($payment_methods as $payment_method){
-            $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                'payment_id' => $payment_method['id'],
-                'user_type' => 'User',
-                'user_id' => $user->id,
-            ]);
+            $fingerprint = $payment_method['card']['fingerprint'];
+            if (in_array($fingerprint, $fingerprints, true)) {
+                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->firstOrFail();
+                $deletePaymentMethod->delete();
+            } else {
+                $fingerprints[] = $fingerprint;
+                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
+                    'payment_id' => $payment_method['id'],
+                    'user_type' => 'User',
+                    'user_id' => $user->id,
+                ]);
 
-            $stripePaymentMethod->pay_type = $payment_method['type'];
-            $stripePaymentMethod->brand = $payment_method['card']['brand'];
-            $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-            $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-            $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-            $stripePaymentMethod->save();
+                $stripePaymentMethod->pay_type = $payment_method['type'];
+                $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                $stripePaymentMethod->save();
+            }
         }
         if($request->return_url)
             return redirect($request->return_url);

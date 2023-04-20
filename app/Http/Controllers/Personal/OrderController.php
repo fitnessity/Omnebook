@@ -36,10 +36,10 @@ class OrderController extends PersonalBaseController
             $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>$user->id])->first();
             /*echo $customer;exit;*/
             $bookingDetails = [];
-            $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,$customer);
+            $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
             //print_r($bookingDetail);exit;
             $currentbookingstatus =[];
-            $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,$customer);
+            $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
             //print_r($currentbookingstatus );exit;
             $tabval = $request->tab; 
 
