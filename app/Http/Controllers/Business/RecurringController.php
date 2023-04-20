@@ -21,7 +21,7 @@ class RecurringController extends Controller
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $booking_detail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $customer->recurring($request->booking_detail_id , 'Scheduled')->orderby('payment_date')->get();
+        $autopayListScheduled = $booking_detail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
         $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
         $autopaylistcnt =  count($autopayListScheduled) + count($autopayListHistory);
         $remaining = Recurring::autoPayRemaining($autopaylistcnt,$request->booking_detail_id);

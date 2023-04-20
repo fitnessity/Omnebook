@@ -46,6 +46,7 @@
 							<table id="pay-details" class="table table-striped table-bordered" style="width:100%">
 								<thead>
 									<tr>
+										<th>No.</th>
 										<th> Payment  Date </th>
 										<th> Amount </th>
 										<th> Tax </th>
@@ -57,8 +58,12 @@
 									</tr>
 								</thead>
 								<tbody>
+
 									@foreach($autopayListScheduled as $key=>$list)
 										<tr>
+											<td>
+												{{$key + 1}}
+											</td>
 											<td>
 												<div class="special-date">
 													<input  type="text" class="form-control"  name="payment_date"  id="payment_date{{$list->id}}" placeholder="" autocomplete="off" data-behavior="datepicker" value="{{date('m/d/Y' ,strtotime($list['payment_date']))}}">
