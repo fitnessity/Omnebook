@@ -8304,22 +8304,27 @@ class UserProfileController extends Controller {
         $user = User::where('id', Auth::user()->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
-
+        $fingerprints = [];
         foreach($payment_methods as $payment_method){
-            
-            $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                'payment_id' => $payment_method['id'],
-                'user_type' => 'User',
-                'user_id' => $user->id,
-            ]);
+            $fingerprint = $payment_method['card']['fingerprint'];
+            if (in_array($fingerprint, $fingerprints, true)) {
+                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->firstOrFail();
+                $deletePaymentMethod->delete();
+            } else {
+                $fingerprints[] = $fingerprint;
+                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
+                    'payment_id' => $payment_method['id'],
+                    'user_type' => 'User',
+                    'user_id' => $user->id,
+                ]);
 
-            $stripePaymentMethod->pay_type = $payment_method['type'];
-            $stripePaymentMethod->brand = $payment_method['card']['brand'];
-            $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-            $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-            $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-            $stripePaymentMethod->save();
-
+                $stripePaymentMethod->pay_type = $payment_method['type'];
+                $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                $stripePaymentMethod->save();
+            }
         }
         return redirect('/personal-profile/payment-info'); 
     }

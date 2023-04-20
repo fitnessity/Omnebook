@@ -1003,7 +1003,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <ins><a href="#" title="">{{ucfirst(@$userData->firstname)}} {{ucfirst(@$userData->lastname)}} </a> Post Album</ins>
                                                         <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($profile_post->created_at))}}</span>
 													</div><!-- friend-info -->
-													<div class="post-meta">
+													<div class="post-meta social-img">
 														<input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$profile_post->post_text}}" disabled="">
 														<?php 
 															$userid = $profile_post->user_id;

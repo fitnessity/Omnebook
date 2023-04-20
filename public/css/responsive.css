@@ -2542,8 +2542,13 @@
 	.central-meta{padding: 20px 10px;}
 	.postcomment{padding: 5px 23px;}
 	.post-meta{margin-top: 0px;}
-	.post-meta .removepost {  margin-bottom: 0px;}
+	.post-meta .removepost {  margin-bottom: 20px; margin-left: 15px; margin-top: 15px;}
 	.profile-section{display: inline-block !important;}
+	.social-img{margin-left: -11px;}
+	.social-img figure{width: 103%; padding: 0px;}
+	.we-video-info{margin-left: 15px;}
+	.video-box{padding: 15px 0;}
+	.video-tab-iframe iframe{height: 225px !important;}
 }
 
 
@@ -2893,5 +2898,7 @@
 	.booking-activity-view .view-schedule{right: 0px !important;}
 	.padding-2 {  padding: 15px 10px 15px;}
 	.booking-active{left: 56px;}
+	.social-img figure {  width: 104.5%; padding: 0px;}
+	.friend-name {  width: 79% !important;}
 }
 /*MEDIA QUEREIS EDN HERE

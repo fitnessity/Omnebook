@@ -27,7 +27,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
 			<div class="valor-mix-title">
 				<h2>{{$companyName}}</h2>
-				<p>Booking Schedule</p>
+				<p>Booking Schedule {{@$customer->full_name}}</p>
 			</div>
 			<div class="member-txt">
 				<p>If you already have a membership with multiple sessions. Reserve your spot here. If you don’t already have a membership, <a href="{{route('activities_index')}}">Book Here </a></p>
@@ -36,12 +36,10 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 			<div class="activity-schedule-tabs">
 				<ul class="nav nav-tabs" role="tablist">
 					@foreach($service_type_ary as $st)
-					
-        			@if(!empty($services))
-					<li @if($serviceType == $st ) class="active" @endif>
-						<a class="nav-link" href="{{$request->fullUrlWithQuery(['stype' => $st])}}"  aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
-					</li>
-					@endif
+						<li @if($serviceType == $st ) class="active" @endif>
+							<a class="nav-link" href="{{$request->fullUrlWithQuery(['stype' => $st])}}"  aria-expanded="true">@if( $st == 'individual') PRIVATE LESSONS @else {{strtoupper($st)}} @endif</a>
+						</li>
+						
 					@endforeach
 				</ul>
 				<div class="tab-content" style="min-height: 600px;">
@@ -87,7 +85,14 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 								@if($serviceType == $st && !empty($services))
 									@foreach($services as $ser)
 										@php  
-											$categoryList = @$ser->BusinessPriceDetailsAges;
+											$categoryList = [];
+											if($priceid != ''){
+												$pricelist =  @$ser->price_details()->find($priceid);
+												$categoryList []= @$pricelist->business_price_details_ages;
+											}else{
+												$categoryList = @$ser->BusinessPriceDetailsAges;
+											}
+											
 										@endphp
 										@if(!empty($categoryList) && count($categoryList)>0)
 											@foreach($categoryList as $cList)
@@ -137,11 +142,12 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 														$time = $scary->shift_start;
 														$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
 														$current  = date('Y-m-d H:i:s');
-														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1)
+														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
+														$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
 													@endphp
 													<div class="col-md-4 col-sm-5 col-xs-12">
 														<div class="classes-time">
-															<button class="post-btn activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}});" >{{date('h:i a', strtotime($scary->shift_start))}} <br>{{$duration}}</button>
+															<button class="post-btn activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}' , '{{$timeOfActivity}}');" >{{$timeOfActivity}} <br>{{$duration}}</button>
 
 															<!-- @if(@$checkindetail != '' && $difference >= 24)
 																<a onclick="ReScheduleOrder({{@$checkindetail->id}});">Reschedule</a>
@@ -222,15 +228,17 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	});
 
 
-	function timeBookingPopUP(scheduleId,sid) {
+	function timeBookingPopUP(scheduleId,sid,activityName,time) {
 		$('#ajax_html_modal').modal('show');
-		$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' , '+sid+')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>');
+
+		$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>');
 	}
 
-	function addtimedate(scheduleId,sid){
+	function addtimedate(scheduleId,sid,activityName,time){
 		//jQuery.noConflict();
 		/*let text = "Are You Sure To Book This Date And Time?";
 		if (confirm(text) == true) {*/
+			let date ='{{$filter_date->format("m-d-Y")}}';
 		   	$.ajax({
 		   		url: "{{route('personal.schedulers.store')}}",
 				type: 'POST',
@@ -242,16 +250,18 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 					date:'{{$filter_date->format("Y-m-d")}}',
 					timeid:scheduleId,
 					businessId:'{{$businessId}}',
+					customerID:'{{@$customer->id}}',
+					priceId:'{{@$priceid}}',
 				},
 				success: function (response) { /*alert(response);*/
 					if(response == 'success'){
 						$('.pay-confirm').addClass('green-fonts');
-						$('.pay-confirm').html('Your Reservation Is Confirmed.');
+						$('.pay-confirm').html('Confirm your reservation for '+activityName+' on '+date+' at '+time);
 						$('#success-reservation').modal('show');
 						$('#ajax_html_modal').modal('hide');
 	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
 					}else if(response == 'fail'){
-						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You don\'t have this membership.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">book An Activity</a></div> </div>');
+						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>No membership/sessions available to pay for this activity.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">Purchase Now</a></div> </div>');
 						//window.location = '/activity-details/'+sid;
 						//alert('schedule failed');
 					}else{
