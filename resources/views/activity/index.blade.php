@@ -18,40 +18,59 @@
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
-<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
-<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
 
 <section class="instant-hire" >
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
-				<div class="title">
+				<div class="title get-start-sp">
 					<h3>Get Started Fast</h3>
 				</div>
 			</div>
-			@foreach($getstarteddata as $getdatafast)
-			<div class="col-md-3 col-sm-3 col-xs-12">
-				<div class="instant-section-info">
-					<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
-					<h4>{{$getdatafast['title']}}</h4>
-					<p>{{$getdatafast['small_text']}}</p>
-					@if($getdatafast['id'] == 1)
-						<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
-					@elseif($getdatafast['id'] == 2)
-						<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
-					@elseif($getdatafast['id'] == 3)
-						<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
-					@else
-						<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
-					@endif
+			<!-- Mobile Slider -->
+			<div class="col-md-12 desktop-none">
+				<div class="mobile-slider owl-carousel owl-theme">
+					@foreach($getstarteddata as $getdatafast)
+						<div class="owl-item" style="width: 300px;">
+							<div class="card-info instant-section-info">
+								<div class="img">
+								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+								</div>
+								<h4>{{$getdatafast['title']}}</h4>
+								<p>{{$getdatafast['small_text']}}</p>
+								@if($getdatafast['id'] == 1)
+									<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+								@elseif($getdatafast['id'] == 2)
+									<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+								@elseif($getdatafast['id'] == 3)
+									<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+								@else
+									<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+								@endif
+							</div>
+						</div>
+					@endforeach
 				</div>
 			</div>
-	
+			
+			@foreach($getstarteddata as $getdatafast)
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="instant-section-info d-none">
+						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
+						<h4>{{$getdatafast['title']}}</h4>
+						<p>{{$getdatafast['small_text']}}</p>
+						@if($getdatafast['id'] == 1)
+							<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+						@elseif($getdatafast['id'] == 2)
+							<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+						@elseif($getdatafast['id'] == 3)
+							<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+						@else
+							<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+						@endif
+					</div>
+				</div>
 			@endforeach
 		</div>
 		@include('includes.search_category_sidebar')
@@ -60,25 +79,111 @@
 			$date = strtotime($start_date);
 			$date = strtotime("+8 hours", $date);
 			/*print_r($todayservicedata);*/
-			
 		?>
-
+		
 		@if(count($bookschedulers) > 0)
 			<div class="fst-0 fsb-1">
 				<div class="row">
 					<div class="col-md-10">
 						<div class="title">
-							<h3>Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="desktop-none f-16">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="d-none">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 						</div>
 					</div>
-					<div class="col-md-2"> 
-						<div class="title-show">
+					<div class="col-md-2 col-xs-12"> 
+						<div class="title-show desktop-none show-all-page">
+							<a href="{{route('activities_next_8_hours')}}"><i class="fas fa-chevron-right"></i></a>
+						</div>
+						<div class="title-show d-none">
 							<a href="{{route('activities_next_8_hours')}}">Show All</a>
 						</div>
 					</div>
-					@foreach ($bookschedulers as $bookscheduler)
+					<!-- Mobile Slider -->
+					
+						<div class="col-md-12 desktop-none">
+							<div class="find-activity-owl owl-carousel owl-theme">
+								@foreach ($bookschedulers as $bookscheduler) 
+								<div class="owl-item" style="width: 300px;">
+									<div class="card-info">
+										<div class="row">
+											<div class="col-xs-12 col-sm-12">
+												<div class="find-activity">
+													<div class="row y-middle">
+														<div class="col-xs-4 col-sm-4 padding-r0">
+															<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}">
+														</div>
+														
+														<div class="col-xs-8 col-sm-8 activity-data">
+															<div class="row">
+																<div class="col-xs-12 text-right">
+																	@auth
+																		<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+																			<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+																				<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+																		</div>
+																	@endauth
+																	@guest
+																		<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="f
+																			ar fa-heart"></i></a>
+																	@endguest
+																</div>
+																<div class="col-xs-12">
+																	<div class="activity-inner-data">
+																		<i class="fas fa-star"></i>
+																		<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}})</span>
+																	</div>
+
+																	<div class="activity-hours">
+																		<span>{{$bookscheduler->get_duration_hours()}}</span>
+																	</div>
+																</div>
+																<div class="col-xs-12">
+																	<div class="activity-city float-none">
+																		<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
+																	</div>
+																</div>
+															</div>
+
+															<div class="activity-information float-left">
+																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+																<div class="dollar-person">
+																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
+																</div>
+																
+															</div>
+
+															<div class="row">
+																<div class="col-xs-12">
+																	<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
+																</div>
+																<div class="col-xs-12">
+																	<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
+																		<span>Starts in 
+																		@if ($bookscheduler->time_left($current_date)->h)
+																			{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
+																		@endif
+																		@if ($bookscheduler->time_left($current_date)->i)
+																			{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
+																		@endif</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								@endforeach
+							</div>
+						</div>
+
+					@foreach ($bookschedulers as 	$bookscheduler)
 						<div class="col-md-4 col-sm-6">
-							<div class="find-activity">
+							<div class="find-activity d-none">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
 										<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}" >
@@ -705,8 +810,12 @@
 													</div>
 													<hr>
 													<div class="all-details">
+														<div class="col-md-12 col-xs-12">
 														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														</div>
+														<div class="col-md-12 col-xs-12">
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -2290,10 +2399,20 @@
     </div>
 <!-- end modal -->
 
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
+<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+
 @include('layouts.footer')
 	
 <script type="text/javascript">
 	$(document).ready(function () {
+		
+
 
 		$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
@@ -2540,6 +2659,7 @@ function viewActreview(aid)
 </script> -->
 
 <script>
+jQuery(document).ready(function(){
 	jQuery("#carousel-slider").owlCarousel({
 	  autoplay: true,
 	  rewind: true, /* use rewind if you don't want loop */
@@ -2556,7 +2676,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2576,10 +2698,13 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+});
 </script>
+
 <script>
+jQuery(document).ready(function(){
 	jQuery("#popular-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2594,7 +2719,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2614,10 +2741,12 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+ });
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#inarea-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2632,7 +2761,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2652,10 +2783,12 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#find-trainers").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2670,7 +2803,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2690,10 +2825,12 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#ways-to-workout").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true, /* use rewind if you don't want loop */
 	  margin: 20,
 	   /*
@@ -2708,7 +2845,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2728,10 +2867,12 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+ });
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#all-activities").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true,
 	  margin: 20,
 	   /*
@@ -2746,7 +2887,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2766,10 +2909,12 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+});
 </script>
 <script>
+jQuery(document).ready(function(){
 	jQuery("#trainers-coaches").owlCarousel({
-	  autoplay: true,
+	  autoplay: false,
 	  rewind: true,
 	  margin: 20,
 	   /*
@@ -2784,7 +2929,9 @@ function viewActreview(aid)
 	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	  responsive: {
 	    0: {
-	      items: 1
+	      items: 1,
+		  autoWidth: true,
+		  loop: false
 	    },
 
 	    600: {
@@ -2804,6 +2951,7 @@ function viewActreview(aid)
 	    },
 	  },
 	});
+});
 </script>
 <script>
 $(document).ready(function() {
@@ -2817,5 +2965,70 @@ $(document).ready(function() {
   });
  
 });
+</script>
+<script>
+$(".mobile-slider").owlCarousel({
+	loop: false,
+	autoWidth: true,
+	autoplay: false,
+	autoplayTimeout: 2000, //2000ms = 2s;
+	autoplayHoverPause: true,
+	responsiveClass: true,
+	responsive: {
+			0: {
+			  items: 1
+			},
+
+			600: {
+			  items: 2
+			},
+
+			1024: {
+			  items: 2
+			},
+			
+			1200: {
+			  items: 3
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	
+</script>
+<script>
+$(".find-activity-owl").owlCarousel({
+	loop: false,
+	autoWidth: true,
+	autoplay: false,
+	margin: 10,
+	autoplayTimeout: 2000, //2000ms = 2s;
+	autoplayHoverPause: true,
+	responsiveClass: true,
+	responsive: {
+			0: {
+			  items: 1
+			},
+
+			600: {
+			  items: 2
+			},
+
+			1024: {
+			  items: 2
+			},
+			
+			1200: {
+			  items: 3
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		
+ });
 </script>
 @endsection

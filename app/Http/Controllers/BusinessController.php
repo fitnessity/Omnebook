@@ -1242,7 +1242,6 @@ class BusinessController extends Controller
                     $imgpost = implode("|",$images);
                 }
             }
-           
 
             $data['lat'] = $request->lat;
             $data['lon'] = $request->lon;
@@ -1280,7 +1279,6 @@ class BusinessController extends Controller
                 'business_type' => $request->business_type,
             ];
 
-
             $data = CompanyInformation::create($companyData);
 
             $businessData = [
@@ -1308,8 +1306,6 @@ class BusinessController extends Controller
             BusinessCompanyDetail::create($businessData);
 
             $ip=$request->ip();
-
-            
 
             $createbus_review = array(
                 "rating"=>$request->rating,
@@ -1343,54 +1339,5 @@ class BusinessController extends Controller
 
         echo $var;
         exit;
-    }
-
-
-    public function activities(Request $request, $business_id){
-        $order = UserBookingStatus::where(['order_type'=>'checkout_register'])->get();
-        $servicetype = 'all';
-        if($request->stype){
-            $servicetype = $request->stype;
-        }
-
-        $orderdata = [];
-        foreach($order as $odt){
-            $orderdetaildata = UserBookingDetail::where(['booking_id'=>$odt->id,'business_id'=>$business_id])->get();
-            foreach($orderdetaildata as $odetail){
-                if($servicetype != 'all'){
-                    if($odetail->business_services()->exists()){
-                        if($odetail->business_services->service_type ==   $servicetype ){
-                            $orderdata []= $odetail;
-                        }
-                    }
-                }else{
-                    $orderdata []= $odetail;
-                } 
-            }
-        }
-        
-        $filter_date = new DateTime();
-        $shift = 1;
-        if($request->date && (new DateTime($request->date)) > $filter_date){
-            $filter_date = new DateTime($request->date); 
-            $shift = 0;
-        }
-        $days = [];
-        $days[] = new DateTime(date('Y-m-d'));
-        for($i = 0; $i<=100; $i++){
-            $d = clone($filter_date);
-            $days[] = $d->modify('+'.($i+$shift).' day');
-        }
-
-        $companyData = CompanyInformation::findOrFail($business_id);
-        $companyName = $companyData->company_name;
-        return view('personal.scheduler.all_activity_schedule',[
-            'days' => $days,
-            'filter_date' => $filter_date,
-            'orderdata' => $orderdata,
-            'serviceType' => $servicetype,
-            'companyName' => $companyName,
-            'businessId' => $business_id,
-        ]);
     }
 }

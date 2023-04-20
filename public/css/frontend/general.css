@@ -21400,6 +21400,29 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	right: 103px;
 	font-size: 16px !important;
 }
+.booking-active{
+    position: absolute;
+    top: 0px;
+    left: 103px;
+}
+
+.booking-active-color{
+    background: black;
+    color: #fff;
+    padding: 0px 15px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.booking-inactive-color{
+    background: #dbd9d9;
+    color: black;
+    padding: 0px 15px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 700;
+}
 .your-booking-page {
   display: inline-block;
   width: 100%;
@@ -21471,7 +21494,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	padding: 5px 25px 5px 0;
 	font-size: 12px;
 	font-weight: 600;
-	color: #a8a8a8;
+	color: #000;
 	height: auto !important;
 	box-shadow: none;
 	border: none !important;
@@ -24553,4 +24576,163 @@ padding-left: 0px;
 .personal-find-activity{
 	width: 100%;
 	height: 148px;
+}
+.booking-access-req{
+	width: 100%;
+	display: block;
+	text-align: center; 
+	padding: 7px 11px;
+}
+
+
+.mobile-slider .card-info{
+  flex: 1;
+  margin: 0 5px;
+  background: #fff;
+  margin-top: 10px;
+  height: 265px;
+  padding: 0px !important;
+}
+.mobile-slider .card-info .img{
+  height: 265px;
+  width: 100%;
+}
+.mobile-slider .card-info .img img{
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+.mobile-slider .card-info .content{
+  padding: 10px 20px;
+}
+.card-info .content .title{
+  font-size: 25px;
+  font-weight: 600;
+}
+.card-info .content .sub-title{
+  font-size: 20px;
+  font-weight: 600;
+  color: #e74c3c;
+  line-height: 20px;
+}
+.card-info .content p{
+  text-align: justify;
+  margin: 10px 0;
+}
+.card-info .content .btn{
+  display: block;
+  text-align: left;
+  margin: 10px 0;
+}
+.card-info .content .btn button{
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.card-info .content .btn button:hover{
+  transform: scale(0.9);
+}
+.desktop-none{
+	display: none;
+}
+.y-middle{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+.shortcut-sticky{
+	text-align: center;
+	margin-top: 17px;
+	margin-bottom: 8px;
+}
+.shortcut-sticky a{
+	display: grid;
+	background: none;
+	color: #f91942;
+}
+.shortcut-sticky a i{
+	font-size: 16px;
+}
+.shortcut-sticky a label{
+	font-size: 12px;
+	font-weight: 500;
+	color: #000;
+}
+.shortcut-sticky a.active{
+	color: #000;
+	background: none;
+}
+.book-now-skicky{
+	bottom: 65px;
+}
+.pc-link .pc-micon img {
+	vertical-align: inherit;
+	width: 17px;
+	display: inline-block;
+}
+#familymaindiv .panel-heading .panel-title a::after{
+
+	content: "\e114";
+	font-family: 'Glyphicons Halflings';
+	position: absolute;
+	right: 30px;
+	color: #fff;
+	font-size: 15px;
+	font-weight: 200;
+	top: 23px;
+	transform: translateY(-50%);
+}
+#familymaindiv .panel-heading .panel-title .collapsed:after {
+    content: "\e113";
+}
+.addbusiness-btn-black{
+	background: #fff;
+	color: #000;
+	padding: 12px 15px;
+	display: inline-block;
+	border-radius: 4px;
+	font-weight: 700;
+	font-size: 13px;
+	margin: 10px 0;
+	font-family: "Segoe UI",Arial,sans-serif;
+	text-transform: uppercase;
+	border: 1px solid #ede9e9;
+}
+.addbusiness-btn-black:hover {
+  color: #ea1515 !important;
+}
+.modal-middle{
+	margin: 0 auto;
+	top: 25%;
+}
+.autopay-schedule #pay-details{
+	margin-top: 15px;
+}
+.autopay-schedule .nav-tabs > li > a.active{
+	  background: #ed1b24;
+	color: #fff;
+	font-size: 15px;
+}
+.autopay-schedule .nav-tabs > li > a{
+	color: #000;
+}
+.history-tabs{
+	width: 100%;
+}
+.autopay-text{
+	font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.scheduler-time-txt p{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 20px;
+    font-weight: bold
 }

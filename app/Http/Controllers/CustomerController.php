@@ -98,7 +98,7 @@ class CustomerController extends Controller {
         $customerdata = $company->customers->find($id);
         $visits = $customerdata->visits()->get();
         $active_memberships = $customerdata->active_memberships()->get();
-        $purchase_history = $customerdata->Transaction()->get();
+        $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
 
@@ -106,6 +106,13 @@ class CustomerController extends Controller {
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
         }
+
+        $auto_pay_payment_msg = '';
+        if($request->session()->has('recurringPayment')){
+            $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
+            $request->session()->forget('recurringPayment');
+        }
+
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -113,7 +120,8 @@ class CustomerController extends Controller {
             'visits' => $visits,
             'purchase_history' => $purchase_history,
             'active_memberships' => $active_memberships,
-            'complete_booking_details' => $complete_booking_details
+            'complete_booking_details' => $complete_booking_details,
+            'auto_pay_payment_msg' =>$auto_pay_payment_msg
         ]);
     }
 
@@ -230,15 +238,6 @@ class CustomerController extends Controller {
         }
     }
 
-    /* public function activity_visits(Request $request, $business_id, $id){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customer = $company->customers->find($id);
-        $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
-        
-        return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
-    }*/
-
     public function visit_modal(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -269,7 +268,7 @@ class CustomerController extends Controller {
     }
 
     public function addFamilyMemberCustomer(Request $request) {
-        //print_r($request->all());exit;
+        //print_r($request->all());
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $prev = $request['previous_family_count'];       
         $request['family_count'] . "---" . '----' . $prev;
@@ -341,18 +340,18 @@ class CustomerController extends Controller {
                         ]);
                     $stripe_customer_id = $customer->id;
                     $data = Customer::create([
-                                'business_id' => $request['business_id'],
-                                'fname' => $request['fname'][$j],
-                                'lname' => $request['lname'][$j],
-                                'email' => $request['email'][$j],
-                                'phone_number' => $request['mobile'][$j],
-                                'emergency_contact' => $request['emergency_contact'][$j],
-                                'relationship' => $request['relationship'][$j],
-                                'gender' => $request['gender'][$j],
-                                'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
-                                'parent_cus_id' => $request['parent_cus_id'],
-                                'stripe_customer_id' => $stripe_customer_id,
-                            ]);
+                            'business_id' => $request['business_id'],
+                            'fname' => $request['fname'][$j],
+                            'lname' => $request['lname'][$j],
+                            'email' => $request['email'][$j],
+                            'phone_number' => $request['mobile'][$j],
+                            'emergency_contact' => $request['emergency_contact'][$j],
+                            'relationship' => $request['relationship'][$j],
+                            'gender' => $request['gender'][$j],
+                            'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
+                            'parent_cus_id' => $request['parent_cus_id'],
+                            'stripe_customer_id' => $stripe_customer_id,
+                        ]);
                 }
             }
         }
@@ -541,7 +540,30 @@ class CustomerController extends Controller {
             'user_id' => $user->id
         ]);
         return Redirect()->route('personal.orders.index');
+    }
+
+    public function remove_grant_access($id,$customerId = null){
+        if($customerId  == ''){
+            $customers = Customer::where('business_id',$id)->get();
+            if( !empty($customers)){
+                foreach($customers as $cus) { 
+                    Customer::where('id',$cus)->update(['user_id'=>'']);
+                }
+            }
+            return Redirect()->route('personal.orders.index',['business_id'=>$id]);
+        }else{
+            $customers = Customer::where('id',$customerId)->first();
+            $customers->update(['user_id'=>'']);
+
+            return Redirect()->route('personal.family_members.index',['customerId'=>$customerId]);
+        }
 
     }
 
+
+    public function receiptmodel($orderId,$customer){
+        $customerData = Customer::where('id',$customer)->first();
+        $bookingArray = UserBookingDetail::where('booking_id',$orderId)->pluck('id')->toArray();
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $orderId ]);
+    }
 }

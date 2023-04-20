@@ -680,7 +680,7 @@ input:disabled{
 			</div>	
 				
 	        <div class="col-lg-6 col-sm-12 col-xs-12">
-            	<h3 class="subtitle details-sp mb-30" id="check_availability"> Check Availability </h3>
+            	<h3 class="subtitle details-sp mb-30 mtxt-cnter" id="check_availability"> Check Availability </h3>
             	<div class="activered" id="spoterror"></div>
             	<div class="mainboxborder black-border">	
 					<div class="row">
@@ -1140,11 +1140,13 @@ input:disabled{
 	</div>
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm book-now-skicky" style="background: none; border-top: none;">
   <div class="container">
+	<div class="col-xs-12">
     <p class="navbar-text navbar-right" style="text-align:center;">
     	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
     </p>
+	</div>
   </div>
 </nav>
 

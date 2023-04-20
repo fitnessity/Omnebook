@@ -617,7 +617,7 @@
                 {
                     allDay : false,
                     id:'{{$dt["id"]}}',
-                    title:'{{$dt["title"] . ' \n '.date("h:i a", strtotime( $dt["shift_start"] )).' - '.$dt["time"]}}',    
+                    title:'{{$dt["title"] . ' \n '.date("h:i a", strtotime( $dt["shift_start"] )).' - '.$dt["time"] . ' \n '.$dt["full_name"]}}',    
                     //start:'{{$dt["start"]}}',
                     start:'{{$dt["start"].' '.date("h:i", strtotime( $dt["shift_start"]) )}}',
                     end:'{{$dt["start"].' '.date("h:i", strtotime( $dt["shift_end"]) )}}',

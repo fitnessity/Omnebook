@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-use App\BusinessPriceDetails;
+use App\{BusinessPriceDetails,BusinessServices,Customer,CompanyInformation};
 class CheckoutRegisterCartService
 {
     /**
@@ -16,7 +16,6 @@ class CheckoutRegisterCartService
     public function __construct()
     {
         $this->_cart = session()->get('cart_item', []);
-
     }
 
     // with tax + 
@@ -29,10 +28,7 @@ class CheckoutRegisterCartService
             $pretaxTotal = $item['totalprice'] + $item['tip']  - $item['discount'];
             $taxTotal += $item["tax"];
         }
-
-
         $service_fee = ($pretaxTotal * $user->recurring_fee) / 100;
-
         return $pretaxTotal + $service_fee + $taxTotal;
     }
 
@@ -44,12 +40,10 @@ class CheckoutRegisterCartService
                 $cart['cart_item'][] = $c;
             }
         }
-
         return $cart['cart_item'];
     }
 
     public function getQtyPriceByItem($item){
-        
         $result = [];
         foreach(['adult', 'child', 'infant'] as $role){
             if(array_key_exists("quantity",$item[$role])){
@@ -63,9 +57,7 @@ class CheckoutRegisterCartService
             }else{
                 $result['price'][$role] = 0;
             }
-            
         }
-
         return $result;
     }
 
@@ -96,12 +88,31 @@ class CheckoutRegisterCartService
     public function getSubTotalByItem($item, $user){
         
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
-        $service_fee = $this->getRecurringFeeByItem($item, $user);
 
-        return $pretaxSubTotal + $service_fee + $item["tax"];
+        return $pretaxSubTotal + $item["tax"];
     }
 
     public function getPriceDetail($priceid){
         return BusinessPriceDetails::find($priceid);
     }
+
+    public function getbusinessService($service){
+        return BusinessServices::find($service);
+    }
+
+    public function getCategory($priceid){
+        $BusinessPriceDetails =  BusinessPriceDetails::find($priceid);
+        return $BusinessPriceDetails->business_price_details_ages->category_title;
+    }
+
+    public function getbookedPerson($id){
+        $customer = Customer::where('id',$id)->first();
+        return $customer->full_name;
+    }
+
+    public function getCompany($id){
+        $company = CompanyInformation::where('id',$id)->first();
+        return $company;
+    }
+
 }

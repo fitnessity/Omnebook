@@ -186,9 +186,9 @@ class SchedulerController extends Controller
           return view('scheduler.booking_request');
      }
      public function sendreceiptfromcheckout(Request $request){
-          //print_r($request->all());
+          //print_r($request->all());exit;
           $compare_chk=[];
-          //$request->orderdetalidary = '637';
+          
           $odetail = explode("," , $request->orderdetalidary);
           foreach($odetail as $od){
                $book_data = UserBookingDetail::getbyid($od);
@@ -205,12 +205,16 @@ class SchedulerController extends Controller
                     $compare_chk  = $compare_chk + $newary;
                }
           }
+          //print_r($compare_chk);exit;
           foreach($compare_chk as $detail){
-               $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $detail['oid']);
-               $email_detail = array(
-                'getreceipemailtbody' => $getreceipemailtbody,
-                'email' => $request->email);
-                $status  = SGMailService::sendBookingReceipt($email_detail);
+               $orderId = explode("," , $detail['oid']);
+               foreach($orderId as $oid){
+                    $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $oid);
+                    $email_detail = array(
+                         'getreceipemailtbody' => $getreceipemailtbody,
+                         'email' => $request->email);
+                    $status  = SGMailService::sendBookingReceipt($email_detail);
+               }
           }
      }
      public function getdropdowndata(Request $request){
