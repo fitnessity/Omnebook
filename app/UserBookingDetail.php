@@ -60,7 +60,6 @@ class UserBookingDetail extends Model
 		return $this->belongsTo(UserBookingStatus::class, 'booking_id');
     }
 
-
     public function booking(){
         return $this->belongsTo(UserBookingStatus::class, 'booking_id');
     }

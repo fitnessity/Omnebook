@@ -17,10 +17,8 @@ class SchedulerCheckinDetailController extends BusinessBaseController
    */
   public function index(Request $request, $business_id, $scheduler_id)
   {
-
     $company = $request->current_company;
     $date = Carbon::parse($request->date);
-
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
     $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->get();
 
@@ -29,7 +27,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $pricrdropdown = BusinessServices::find($business_activity_scheduler->serviceid)->price_details;
     $bookingdata = UserBookingDetail::where('sport',$business_activity_scheduler->serviceid)->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
     
-
     return view('business.scheduler_checkin_detail.index', [
         'booking_checkin_details' => $booking_checkin_details,
         'business_activity_scheduler' =>$business_activity_scheduler,

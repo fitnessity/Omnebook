@@ -947,6 +947,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
+    Route::post('/searchfilteractivty', 'BookingController@searchfilteractivty')->name('searchfilteractivty');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');

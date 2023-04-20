@@ -79,10 +79,10 @@ class SchedulerController extends Controller
     public function store(Request $request)
     {   
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
-        $customer = Auth::user()->customers()->where('business_id',$request->businessId)->first();
+        $customer = Customer::where(['id'=>$request->customerID,'business_id',$request->businessId])->first();
         $UserBookingDetails = '';
         $today = date('Y-m-d');
-        $UserBookingDetails = $customer->bookingDetail()->where('bookedtime' , NULL)->orderby('created_at','desc')->first();
+        $UserBookingDetails = $customer->bookingDetail()->where(['bookedtime' => NULL,'priceid'=>$request->priceId])->orderby('created_at','desc')->first();
         //echo $UserBookingDetails;exit();
         if($UserBookingDetails != ''){
             if($request->date == $today){
