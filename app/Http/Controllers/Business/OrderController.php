@@ -251,6 +251,7 @@ class OrderController extends BusinessBaseController
                             'channel' =>'stripe',
                             'kind' => 'card',
                             'transaction_id' => $onFilePaymentIntent["id"],
+                            'stripe_payment_method_id' => $onFilePaymentMethodId ,
                             'amount' => $onFileTotal,
                             'qty' =>'1',
                             'status' =>'complete',
@@ -294,6 +295,7 @@ class OrderController extends BusinessBaseController
                             'channel' =>'stripe',
                             'kind' => 'card',
                             'transaction_id' => $newCardPaymentIntent["id"],
+                            'stripe_payment_method_id' => $newCardPaymentMethodId,
                             'amount' => $newCardTotal,
                             'qty' =>'1',
                             'status' =>'complete',
@@ -444,7 +446,7 @@ class OrderController extends BusinessBaseController
                             if($num==1){
                                 $stripe_id =  $tran_data['transaction_id'];
                                 $stripe_charged_amount = $tran_data['amount'];
-                                $payment_method = $tran_data['kind'];
+                                $payment_method = $tran_data['stripe_payment_method_id'];
                                 $payment_date = $date->format('Y-m-d');
                                 $status = 'Completed';
                             }else{
