@@ -1209,7 +1209,7 @@
 	#shopping-cart{margin: 10px !important;}
 	.ord-info {  margin-left: 0;}
 	.ord-img img{margin-bottom: 15px;}
-	.price-section{float: left;}
+	.price-section{float: left; width: 100%;}
 	.order-sum-rp{padding: 0px 0px 16px 14px;}
 	.modal-inner-txt p{font-size: 16px !important; padding: 25px 0 !important;}
 	.txt-center{text-align: center !important;}
@@ -1375,6 +1375,7 @@
 	.booking-modal-logo img { width: 30%;}
 	.ipad-display{display: block !important;}
 	.profile-section{display: inline-block !important;}
+	.mb-7{margin-bottom: 7px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2518,7 +2519,6 @@
 	.post-btn.activity-scheduler{width: 50%;}
 	.classes-time {  display: flex; }
 	.sacecard-title{font-size: 17px !important;}
-	.booking-access-req{margin-top: 16px;}
 	.search-wid {width: 72% !important;}
 	.calendar-address {  padding: 0 25px;}
 	.mdisplay-none{display: none !important;}
@@ -2542,8 +2542,16 @@
 	.central-meta{padding: 20px 10px;}
 	.postcomment{padding: 5px 23px;}
 	.post-meta{margin-top: 0px;}
-	.post-meta .removepost {  margin-bottom: 0px;}
+	.post-meta .removepost {  margin-bottom: 20px; margin-left: 15px; margin-top: 15px;}
 	.profile-section{display: inline-block !important;}
+	.social-img{margin-left: -11px;}
+	.social-img figure{width: 103%; padding: 0px;}
+	.we-video-info{margin-left: 15px;}
+	.video-box{padding: 15px 0;}
+	.video-tab-iframe iframe{height: 225px !important;}
+	.price-section {  float: right;  width: 100%;}
+	.mb-7{margin-bottom: 7px;}
+
 }
 
 
@@ -2734,6 +2742,7 @@
 	.dob input { width: 249px !important;}
 	.booking-active{left: 147px;} 
 	.book-info-sear .date_block i {  right: 59px !important;}
+	.social-img figure { width: 102.9%;}
 }
 
 @media(max-width: 400px) {
@@ -2819,6 +2828,10 @@
 	.modal-banner .bannar-size img { height: 140px !important;}
 	.booking-active {  left: 95px;}
 	.profile-section .nav > li > a { padding: 10px 6px;}
+	.social-img figure { width: 103.5%;  padding: 0px;}
+}
+@media(max-width: 384px) and (max-width: 890px) {
+	.social-img figure { width: 103.3%;  padding: 0px;}
 }
 
 @media(max-width: 280px){
@@ -2893,5 +2906,9 @@
 	.booking-activity-view .view-schedule{right: 0px !important;}
 	.padding-2 {  padding: 15px 10px 15px;}
 	.booking-active{left: 56px;}
+	.social-img figure {  width: 104.5%; padding: 0px;}
+	.friend-name {  width: 79% !important;}
+	.activity-schedule-tabs ul li a {padding: 7px 7px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
+	.pairets-inviable a{font-size: 14px;}
 }
 /*MEDIA QUEREIS EDN HERE

@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper($customer->full_name)}} @endif </h4>
+                            != '') - {{strtoupper(@$customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -108,7 +108,7 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-2 col-sm-6 nopadding">
+                                                <div class="col-md-2 col-sm-6 nopadding mb-7">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -123,22 +123,26 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('current')">
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6 mb-7">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
                                                 </div>
-												<div class="col-md-2 col-sm-12 nopadding">
+												<div class="col-md-2 col-sm-3 col-xs-12 nopadding mb-7">
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-3 col-xs-12" style="padding-top: 7px;">
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
@@ -216,7 +220,7 @@
                                     
                                         <div class="row"  id="searchbydate_current">
                                             @php $i = 1; @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => $currentbookingstatus, 'tabname' => 'current','customer'=>$customer])
                                         </div>
                                     </div> 
 
@@ -238,12 +242,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('today')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -253,7 +261,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -263,7 +271,7 @@
                                                 $br = new \App\Repositories\BookingRepository;
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'today',request()->serviceType ,date('Y-m-d'));
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today'])
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'today','customer'=>$customer])
                                         </div>
                                     </div>
 
@@ -285,12 +293,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('upcoming')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -300,7 +312,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -309,7 +321,7 @@
                                                 $br = new \App\Repositories\BookingRepository;
                                                 $BookingDetail = $br->tabFilterData($bookingDetails,'upcoming',request()->serviceType,date('Y-m-d'));
                                             @endphp
-                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming']);
+                                            @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'upcoming','customer'=>$customer])
 
                                         </div>
                                     </div><!-- tab panel-->
@@ -332,12 +344,16 @@
                                                         <label for="">Entries</label>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('past')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label for="">Search:</label>
+                                                    <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
                                                 <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
@@ -347,7 +363,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ])}}">Remove Access</a>
+                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
@@ -356,7 +372,7 @@
                                             $br = new \App\Repositories\BookingRepository;
                                             $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType,date('Y-m-d'));
                                         @endphp
-                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past']) 
+                                        @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past','customer'=>$customer]) 
                                         </div>
                                     </div><!-- tab-pane -->
 
@@ -456,6 +472,19 @@
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
+            success: function(data){
+                //alert(data);
+                $("#searchbydate_"+type).html(data);
+            }
+        });
+    }
+
+    function serchByActivty(type){
+        var text = $('#serchByActivity_'+type).val();
+        $.ajax({
+            type: "post",
+            url:'{{route("searchfilteractivty")}}',
             data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
             success: function(data){
                 //alert(data);
