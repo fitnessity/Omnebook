@@ -202,4 +202,67 @@ class SGMailService{
 		}
 		return $response;
 	}
+
+	public static function send_reminder_to_customer($email_detail){
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $email_detail['email'],
+		);
+
+		$substitutions = [
+			"CustomerName" => $email_detail['CustomerName'], 
+            "ProviderName"=> $email_detail['ProviderName'],
+            "CategoryName"=> $email_detail['CategoryName'],
+            "PriceOptionName"=> $email_detail['PriceOptionName'],
+			"ReNewUrl" => $email_detail['ReNewUrl'],
+			"ProfileUrl" => $email_detail['ProfileUrl'],
+			"CompleteDate" => $email_detail['CompleteDate'],
+			"ExpirationDate" => $email_detail['ExpirationDate'],
+			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
+			"ProviderEmail" => $email_detail['ProviderEmail'],
+			"ProviderAddress" => $email_detail['ProviderAddress'],
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+
+		$email->setTemplateId("d-3500159ca821409e8f8e68c4cd39e2ab");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
+
+	public static function send_reminder_to_provider($email_detail){
+		$email = new Mail();
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		
+		$email->addTo(
+		    $email_detail['email'],
+		);
+
+		$substitutions = [
+            "CustomerName" => $email_detail['CustomerName'], 
+            "ProviderName"=> $email_detail['ProviderName'],
+            "CategoryName"=> $email_detail['CategoryName'],
+            "PriceOptionName"=> $email_detail['PriceOptionName'],
+		];
+
+		$email->addDynamicTemplateDatas($substitutions);
+
+		$email->setTemplateId("d-23e938e2491c4d128d78d704787b3809");
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
 }

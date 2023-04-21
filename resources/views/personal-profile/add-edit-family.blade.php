@@ -52,7 +52,7 @@
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
-					<input type="email" name="email" id="email" placeholder="Email" class="form-control" value="{{@$familyData->email}}">
+					<input type="email" name="email" id="email" placeholder="Email" class="form-control" value="{{@$familyData->email}}" required="required">
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">

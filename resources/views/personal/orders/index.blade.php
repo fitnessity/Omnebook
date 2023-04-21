@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper(@$customer->full_name)}} @endif </h4>
+                            != '') - {{strtoupper(@$customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -108,7 +108,7 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-2 col-sm-6 nopadding">
+                                                <div class="col-md-2 col-sm-6 nopadding mb-7">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
                                                 <!-- <div class="col-md-2 col-sm-6">
@@ -130,18 +130,18 @@
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
                                                 </div>
-												<div class="col-md-2 col-sm-12 nopadding">
+												<div class="col-md-2 col-sm-3 col-xs-12 nopadding mb-7">
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-3 col-xs-12" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
                                                 </div>
                                             </div>
