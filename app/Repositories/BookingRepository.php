@@ -123,7 +123,7 @@ class BookingRepository
         if($customer){
             if($serviceType== null || $serviceType == 'all'){
                 $bookingDetail = @$customer->active_memberships()->get();
-                /*$bookingDetail = UserBookingDetail::where('user_id',@$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();*/
+                //$bookingDetail = UserBookingDetail::where('user_id',@$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
             }else{
                 $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
             }
