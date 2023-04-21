@@ -27,7 +27,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
 			<div class="valor-mix-title">
 				<h2>{{$companyName}}</h2>
-				<p>Booking Schedule {{@$customer->full_name}}</p>
+				<p>Booking Schedule {{ucwords(@$customer->full_name)}}</p>
 			</div>
 			<div class="member-txt">
 				<p>If you already have a membership with multiple sessions. Reserve your spot here. If you don’t already have a membership, <a href="{{route('activities_index')}}">Book Here </a></p>
@@ -299,7 +299,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 	    responsive:{
 	        0:{
-	            items:1
+	            items:3
 	        },
 	        600:{
 	            items:3
