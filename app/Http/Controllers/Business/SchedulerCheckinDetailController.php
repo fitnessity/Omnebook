@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{BusinessCompanyDetail,BusinessActivityScheduler,UserBookingDetail,BookingPostorder, BusinessServices, BookingCheckinDetails};
+use App\{BusinessCompanyDetail,BusinessActivityScheduler,UserBookingDetail,BookingPostorder, BusinessServices, BookingCheckinDetails,SGMailService};
 use Auth;
 use Carbon\Carbon;
 
@@ -126,9 +126,42 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             $overwrite['booking_detail_id'] = $request->booking_detail_id;
             break;
       }
-
     }
+
     $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+
+    if($request->checked_at){
+        $userbookingdetail = UserBookingDetail::find($business_checkin_detail->booking_detail_id);
+        $customer =  $userbookingdetail->Customer;
+        $business_price_detail =  $userbookingdetail->business_price_detail;
+        $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+        $reminingSession = $userbookingdetail->getremainingsession();
+        if($reminingSession == 0){
+            $email_detail_customer = array(
+                "email" =>$customer->email, 
+                "CustomerName" => $customer->full_name, 
+                "ReNewUrl" => env('APP_URL').'/activity-details/'.$userbookingdetail->sport, 
+                "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                "ProviderName"=> $company->full_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "CompleteDate"=> date('m-d-Y'),
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($userbookingdetail->expired_at)),
+                "ProviderPhoneNumber"=> $company->business_phone,
+                "ProviderEmail"=> $company->business_email,
+                "ProviderAddress"=> $company->company_address());
+
+            $email_detail_provider = array(
+                "email" => $company->business_email, 
+                "CustomerName" => $customer->full_name, 
+                "ProviderName"=> $company->full_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title );
+
+            SGMailService::send_reminder_to_customer($email_detail_customer);
+            SGMailService::send_reminder_to_provider($email_detail_provider);
+        }
+    }
 
     if (!$request->ajax()) {
       return redirect()->route('business.schedulers.checkin_details.index',[

@@ -1873,32 +1873,6 @@ class UserProfileController extends Controller {
         }
     }
 
-    public function addFamily(Request $request) {
-        $loggedinUser = Auth::user();
-        $customer = $loggedinUser->customers;
-        $UserFamilyDetails = [];
-
-        foreach($customer as $cs){
-            foreach ($cs->get_families() as $fm){
-                $UserFamilyDetails [] = $fm;
-            }  
-        }
-        //print_r($UserFamilyDetails);exit;
-        $userfamily = $loggedinUser->user_family_details;
-        foreach($userfamily as $uf){
-            $UserFamilyDetails [] = $uf;
-        }
-        //print_r( $UserFamilyDetails);exit;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.add-family', [
-            'cart' => $cart,       
-            'UserFamilyDetails' => $UserFamilyDetails,
-        ]);
-    }
 
     public function makeCall(Request $request, TwilioService $twilioService) {
         $sid = getenv("TWILIO_SID");
@@ -8793,101 +8767,17 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('error', 'Problem in password change.');
     }
 
-    /*public function addFamilyMember(Request $request) {
-        //dd($request->all());
-        //dd(date('Y-m-d',strtotime($request['birthdate'][0])));
-        // $request->validate([
-
-        //   'fname' => 'required',
-        //   'lname' => 'required|min:8',
-        //   'email' => 'required|email|unique:users',
-        //   'mobile' => 'required',
-        //   'emergency_contact' => 'required',
-        //   'relationship' => 'required',
-        //   'gender' => 'required',
-        //   'birthdate' => 'required',
-        //   'emergency_name' => 'required'
-        //   ]); 
-        if (!Gate::allows('profile_view_access')) {
-            $request->session()->flash('alert-danger', 'Access Restricted');
-            return redirect('/');
-        }
-        $prev = $request['previous_family_count'];       
-        $request['family_count'] . "---" . '----' . $prev;
-        $request['family_count'] - $prev;
-
-        $loggedinUser = Auth::user();
-        $user = User::where('id', Auth::user()->id)->first();
-        $data = '';
-
-        if ($prev == $request['family_count'] && $request['family_count'] == 0) {
-            if ($request['removed_family'][0] != 'delete') {
-                $data = UserFamilyDetail::create([
-                            'user_id' => Auth::user()->id,
-                            'first_name' => $request['fname'][0],
-                            'last_name' => $request['lname'][0],
-                            'email' => $request['email'][0],
-                            'mobile' => $request['mobile'][0],
-                            'emergency_contact' => $request['emergency_contact'][0],
-                            'relationship' => $request['relationship'][0],
-                            'gender' => $request['gender'][0],
-                            'birthday' => $request['birthdate'][0],
-                            'emergency_contact_name' => $request['emergency_name'][0],
-                ]);
-            }           
-        } else {          
-            for ($i = 0; $i < $prev; $i++) {
-                if ($request['removed_family'][$i] != 'delete') {
-                    $cat = UserFamilyDetail::find($request['fid'][$i]);
-                    $cat->first_name = $request['fname'][$i];
-                    $cat->last_name = $request['lname'][$i];
-                    $cat->email = $request['email'][$i];
-                    $cat->mobile = $request['mobile'][$i];
-                    $cat->emergency_contact = $request['emergency_contact'][$i];
-                    $cat->relationship = $request['relationship'][$i];
-                    $cat->gender = $request['gender'][$i];
-                    $cat->birthday = $request['birthdate'][$i];
-                    $cat->emergency_contact_name = $request['emergency_name'][$i];
-                    $data = $cat->update();
-                } else {
-                    $data = UserFamilyDetail::where('id', $request['fid'][$i])->delete();
-                }
-            }            
-            for ($j = $prev; $j < $request['family_count']; $j++) {
-                if ($request['removed_family'][$j] != 'delete') {
-                    $data = UserFamilyDetail::create([
-                                'user_id' => Auth::user()->id,
-                                'first_name' => $request['fname'][$j],
-                                'last_name' => $request['lname'][$j],
-                                'email' => $request['email'][$j],
-                                'mobile' => $request['mobile'][$j],
-                                'emergency_contact' => $request['emergency_contact'][$j],
-                                'relationship' => $request['relationship'][$j],
-                                'gender' => $request['gender'][$j],
-                                'birthday' => $request['birthdate'][$j],
-                                'emergency_contact_name' => $request['emergency_name'][$j],
-                    ]);
-                }
-            }
-        }
-        if ($data)
-            return Redirect::back()->with('success', 'Family details has been updated successfully.');
-        else
-            return Redirect::back()->with('error', 'Problem in updating family details.');
-    }*/
-
-
     public function addFamilyMember(Request $request) {
+        $user = Auth::user();
         if($request->id != ''){
             if($request->type == 'user'){
-                $user = Auth::user();
                 $familyData = $user->user_family_details()->findOrFail($request->id);
                 $familyData->first_name = $request->fname;
                 $familyData->last_name = $request->lname;
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthday = $request->birthdate;
+                $familyData->birthday = date('Y-m-d',strtotime($request->birthdate));
                 $familyData->mobile = $request->mobile;
                 $familyData->emergency_contact_name = $request->emergency_name;
                 $familyData->emergency_contact = $request->emergency_contact;
@@ -8899,7 +8789,7 @@ class UserProfileController extends Controller {
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthdate = $request->birthdate;
+                $familyData->birthdate =  date('Y-m-d',strtotime($request->birthdate));
                 $familyData->phone_number = $request->mobile;
                 $familyData->emergency_contact = $request->emergency_contact;
                 $familyData->update();
@@ -8914,14 +8804,56 @@ class UserProfileController extends Controller {
                 'emergency_contact' => $request->emergency_contact,
                 'relationship' => $request->relationship,
                 'gender' => $request->gender,
-                'birthday' => $request->birthdate,
+                'birthday' =>  date('Y-m-d',strtotime($request->birthdate)),
                 'emergency_contact_name' => $request->emergency_name,
             ]);
+
+            $company = $user->company;
+            foreach($company as $c){
+                $data = Customer::create([
+                    'business_id' => $c->id,
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'email' => $request->email,
+                    'phone_number' => $request->mobile,
+                    'emergency_contact' => $request->emergency_contact,
+                    'relationship' => $request->relationship,
+                    'gender' => $request->gender,
+                    'birthdate' =>  date('Y-m-d',strtotime($request->birthdate)),
+                ]);
+            }
         }   
 
         return redirect()->route('addFamily');
     }
-    
+
+    public function addFamily(Request $request) {
+        $loggedinUser = Auth::user();
+        $customer = $loggedinUser->customers;
+        $UserFamilyDetails = [];
+
+        foreach($customer as $cs){
+            foreach ($cs->get_families() as $fm){
+                $UserFamilyDetails [] = $fm;
+            }  
+        }
+        //print_r($UserFamilyDetails);exit;
+        $userfamily = $loggedinUser->user_family_details;
+        foreach($userfamily as $uf){
+            $UserFamilyDetails [] = $uf;
+        }
+        //print_r( $UserFamilyDetails);exit;
+        $cart = [];
+        if ($request->session()->has('cart_item')) {
+            $cart = $request->session()->get('cart_item');
+        }
+        
+        return view('personal-profile.add-family', [
+            'cart' => $cart,       
+            'UserFamilyDetails' => $UserFamilyDetails,
+        ]);
+    }
+
     public function showFamilyMember(Request $request) {
         $familyData = '';
         $type = $request->type;
