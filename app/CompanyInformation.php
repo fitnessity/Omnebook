@@ -63,7 +63,10 @@ class CompanyInformation extends Model {
     }
 
     public function getFirstLetterAttribute(){
-        return $this->first_name[0] . ' ' . $this->last_name[0];
+        if($this->first_name && $this->last_name){
+            return $this->first_name[0] . ' ' . $this->last_name[0];    
+        }
+        
     }
     
     public function employmenthistory() {
