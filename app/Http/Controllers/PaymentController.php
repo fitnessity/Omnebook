@@ -45,6 +45,7 @@ class PaymentController extends Controller {
 
         $cartService = new CartService();
 
+        $fees = BusinessSubscriptionPlan::where('id',1)->first();
         if($request->grand_total == 0){
             $orderdata = array(
                 'user_id' => $loggedinUser->id,
@@ -128,17 +129,7 @@ class PaymentController extends Controller {
 
                 $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
-
-                $tax_person = 0;
-                if($qty_c['adult'] != 0){
-                    $tax_person++;
-                }if($qty_c['child']!= 0){
-                    $tax_person++;
-                }if($qty_c['infant'] != 0){
-                    $tax_person++;
-                }
-
-                $per_person_tax = number_format(($tax / $tax_person),2);
+                
                 foreach($qty_c as $key=> $qty){
                     $re_i = 0;
                     $date = new Carbon;
@@ -165,6 +156,8 @@ class PaymentController extends Controller {
                         }
                     }
 
+                    $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+
                     if($qty != '' && $qty != 0){
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
@@ -190,7 +183,7 @@ class PaymentController extends Controller {
                                     'charged_amount'=> $stripe_charged_amount,
                                     'payment_method'=> $payment_method,
                                     'stripe_payment_id'=> $stripe_id,
-                                    "tax" => $per_person_tax,
+                                    "tax" => $tax_recurring,
                                     "status" => $status,
                                 );
                                 Recurring::create($recurring);
@@ -414,16 +407,6 @@ class PaymentController extends Controller {
                 $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
 
-                $tax_person = 0;
-                if($qty_c['adult'] != 0){
-                    $tax_person++;
-                }if($qty_c['child']!= 0){
-                    $tax_person++;
-                }if($qty_c['infant'] != 0){
-                    $tax_person++;
-                }
-
-                $per_person_tax = number_format(($tax / $tax_person),2); 
                 foreach($qty_c as $key=> $qty){
                     $re_i = 0;
                     $date = new Carbon;
@@ -450,6 +433,8 @@ class PaymentController extends Controller {
                         }
                     }
 
+                    $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+
                     if($qty != '' && $qty != 0){
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
@@ -475,7 +460,7 @@ class PaymentController extends Controller {
                                     'charged_amount'=> $stripe_charged_amount,
                                     'payment_method'=> $payment_method,
                                     'stripe_payment_id'=> $stripe_id,
-                                    "tax" => $per_person_tax,
+                                    "tax" => $tax_recurring ,
                                     "status" => $status,
                                 );
                                 Recurring::create($recurring);

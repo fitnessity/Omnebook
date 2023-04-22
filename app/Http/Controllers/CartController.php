@@ -12,6 +12,7 @@ class CartController extends Controller {
     }
 
     public function index(Request $request){
+
     	if($request->session()->has('checkoutsession')){
     	    $request->session()->forget('checkoutsession');
     	}
@@ -36,9 +37,9 @@ class CartController extends Controller {
 	    
 	    $cardInfo = $savedEvents['data'];*/
 	    $cart = [];
-	    // session()->forget('cart_item');
+	    //session()->forget('cart_item');
 	    $cartdata  =  $request->session()->get('cart_item', []);
-	  
+	 
 	    if(!empty($cartdata ) && count($cartdata) >0 ) {
 		    foreach($cartdata['cart_item'] as $key=>$dt){
 		    	if($dt['chk'] != 'activity_purchase'){

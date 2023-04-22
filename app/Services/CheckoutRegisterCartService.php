@@ -102,7 +102,7 @@ class CheckoutRegisterCartService
 
     public function getCategory($priceid){
         $BusinessPriceDetails =  BusinessPriceDetails::find($priceid);
-        return $BusinessPriceDetails->business_price_details_ages->category_title;
+        return $BusinessPriceDetails->business_price_details_ages;
     }
 
     public function getbookedPerson($id){

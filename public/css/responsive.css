@@ -1376,6 +1376,8 @@
 	.ipad-display{display: block !important;}
 	.profile-section{display: inline-block !important;}
 	.mb-7{margin-bottom: 7px;}
+	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
+	.highlight-fonts{font-weight: bold;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2551,6 +2553,8 @@
 	.video-tab-iframe iframe{height: 225px !important;}
 	.price-section {  float: right;  width: 100%;}
 	.mb-7{margin-bottom: 7px;}
+	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
+	.highlight-fonts{font-weight: bold;}
 
 }
 
@@ -2910,5 +2914,11 @@
 	.friend-name {  width: 79% !important;}
 	.activity-schedule-tabs ul li a {padding: 7px 7px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
 	.pairets-inviable a{font-size: 14px;}
+}
+
+@media(max-width: 250px){
+	.activity-schedule-tabs ul li a {padding: 5px 5px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
+	.pairets-inviable a{font-size: 12px;}
+	.pairets .calendar-btn{font-size: 12px;}
 }
 /*MEDIA QUEREIS EDN HERE
