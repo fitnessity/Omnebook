@@ -218,7 +218,6 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
-
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -404,16 +403,16 @@ class OrderController extends BusinessBaseController
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
 
-            $tax_person = 0;
-            if($qty_c['adult'] != 0){
-                $tax_person++;
-            }if($qty_c['child']!= 0){
-                $tax_person++;
-            }if($qty_c['infant'] != 0){
-                $tax_person++;
-            }
+            // $tax_person = 0;
+            // if($qty_c['adult'] != 0){
+            //     $tax_person++;
+            // }if($qty_c['child']!= 0){
+            //     $tax_person++;
+            // }if($qty_c['infant'] != 0){
+            //     $tax_person++;
+            // }
 
-            $per_person_tax = $item['tax'] / $tax_person; 
+            // $per_person_tax = $item['tax'] / $tax_person; 
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;
                 $date = new Carbon;
@@ -439,6 +438,17 @@ class OrderController extends BusinessBaseController
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                     }
                 }
+                $categoryData = $checkoutRegisterCartService->getCategory($item['priceid']);
+                $duesTax = $categoryData->dues_tax;
+                $salesTax = $categoryData->sales_tax;
+                if($duesTax == '' || $duesTax == null){
+                    $duesTax = 0;
+                }
+
+                if($salesTax == '' || $salesTax == null){
+                    $salesTax = 0;
+                }
+                $tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2);
 
                 if($qty != '' && $qty != 0){
                     if($re_i != '' && $re_i != 0 && $amount != ''){
@@ -465,7 +475,7 @@ class OrderController extends BusinessBaseController
                                 'charged_amount'=> $stripe_charged_amount,
                                 'payment_method'=> $payment_method,
                                 'stripe_payment_id'=> $stripe_id,
-                                "tax" => $per_person_tax,
+                                "tax" => $tax_recurring,
                                 "status" => $status,
                             );
                             Recurring::create($recurring);
@@ -487,7 +497,7 @@ class OrderController extends BusinessBaseController
                 "duration"=>  "N/A",
                 "ActivitiyType"=> $businessService->service_type,
                 "ProgramName"=> $businessService->program_name,
-                "CategoryName"=> $checkoutRegisterCartService->getCategory($item['priceid']));
+                "CategoryName"=> @$categoryData->category_title);
 
             SGMailService::confirmationMail($email_detail);
         }

@@ -315,7 +315,7 @@
                                     <div class="price-section">
                                         <h4>
                                         	@if($item['adult'])
-                                        	  x{{$item['adult']['quantity']}} Adult
+                                        	<label class="highlight-fonts">  x{{$item['adult']['quantity']}} Adult </label> 
                                         	  @if(@$serprice['child_discount'])
                                         	    @php
                                         	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * @$serprice['child_discount'])/100)
@@ -326,7 +326,7 @@
                                         	@endif
 
                                         	@if($item['child'])
-                                        	  x{{$item['child']['quantity']}} Child
+                                        	 <label class="highlight-fonts">  x{{$item['child']['quantity']}} Child </label>
                                         	  @if(@$serprice['child_discount'])
                                         	    @php
                                         	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * @$serprice['child_discount'])/100)
@@ -337,7 +337,7 @@
                                         	@endif
 
                                         	@if($item['infant'])
-                                        	  x{{$item['infant']['quantity']}} Infant
+                                        	 <label class="highlight-fonts">  x{{$item['infant']['quantity']}} Infant </label>
                                         	  @if(@$serprice['child_discount'])
                                         	    @php
                                         	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * @$serprice['child_discount'])/100)
@@ -346,7 +346,7 @@
                                         	  @endif
                                         	  <br/>
                                         	@endif
-                                        	total: <?= "$ " . number_format($item["totalprice"] - $discount, 2); ?>
+                                        	 <label class="highlight-fonts"> Total:</label> <?= "$ " . number_format($item["totalprice"] - $discount, 2); ?>
                                         </h4>
                                     </div>
                                     <div class="invite-share">

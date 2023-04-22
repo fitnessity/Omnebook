@@ -25,7 +25,6 @@ class RecurringController extends Controller
         $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
         $autopaylistcnt =  count($autopayListScheduled) + count($autopayListHistory);
         $remaining = Recurring::autoPayRemaining($autopaylistcnt,$request->booking_detail_id);
-        //print_r($autopaylist );exit;
         
         return view('business.recurring.index', ['autopayListScheduled' => $autopayListScheduled, 'autopayListHistory' => $autopayListHistory, 'customer' => $customer,'booking_detail'=>$booking_detail,'remaining'=>$remaining ,'i'=>1 ,'business_id'=>$business_id ,'autopaylistcnt' =>$autopaylistcnt]);
     }
@@ -109,7 +108,6 @@ class RecurringController extends Controller
         foreach($ids as $id){
             $recurring_detail = Recurring::findOrFail($id);
             $amount += $recurring_detail->amount + $recurring_detail->tax;
-            //$payment_intent = Transaction::where('item_type', 'UserBookingStatus')->where('item_id', $recurring_detail->UserBookingDetail->booking->id)->first()->transaction_id;
             $stripe_customer_id = $recurring_detail->Customer->stripe_customer_id;
             $card_id = StripePaymentMethod::where('user_id',$recurring_detail->user_id)->first()->payment_id;
         }

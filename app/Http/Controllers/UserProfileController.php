@@ -13,6 +13,7 @@ use View;
 use Mail;
 use Session;
 use DB;
+use Str;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,7 +22,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
-use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService};
 use App\Repositories\SportsRepository;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
@@ -8809,9 +8810,14 @@ class UserProfileController extends Controller {
             ]);
 
             $company = $user->company;
-            foreach($company as $c){
-                $data = Customer::create([
+            foreach($company as $key=>$c){
+                if($key == 0){
+                    $random_password = Str::random(8);
+                    $Password = Hash::make($random_password);
+                }
+                $Customer = Customer::create([
                     'business_id' => $c->id,
+                    'password' => $Password ,
                     'fname' => $request->fname,
                     'lname' => $request->lname,
                     'email' => $request->email,
@@ -8819,9 +8825,29 @@ class UserProfileController extends Controller {
                     'emergency_contact' => $request->emergency_contact,
                     'relationship' => $request->relationship,
                     'gender' => $request->gender,
-                    'birthdate' =>  date('Y-m-d',strtotime($request->birthdate)),
+                    'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
                 ]);
-            }
+
+                if($key == 0){
+                    $User = User::create([
+                        'role' => 'customer',
+                        'password' => $Password,
+                        'firstname' => $request->fname,
+                        'lastname' => $request->lname,
+                        'username' => $request->fname.' '.$request->lname,
+                        'email' => $request->email,
+                        'phone_number' => $request->mobile,
+                        'emergency_contact' => $request->emergency_contact,
+                        'relationship' => $request->relationship,
+                        'gender' => $request->gender,
+                        'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
+                        'stripe_customer_id' => $Customer->stripe_customer_id
+                    ]);
+
+                    $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
+                }
+                $Customer->update(['user_id'=>$User->id]);            
+            }   
         }   
 
         return redirect()->route('addFamily');
