@@ -238,7 +238,7 @@ class Customer extends Authenticatable
             ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])
             ->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')
             ->groupBy('user_booking_details.id')
-            ->havingRaw('COUNT(booking_checkin_details.use_session_amount) > 0')
+            ->havingRaw('(pay_session - checkin_count) > 0')
             ->whereDate('user_booking_details.expired_at', '>', $now);
         return $results; 
     }

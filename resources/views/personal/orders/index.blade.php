@@ -134,10 +134,6 @@
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6 mb-7">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
-                                                </div>
 												<div class="col-md-2 col-sm-3 col-xs-12 nopadding mb-7">
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
