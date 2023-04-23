@@ -200,7 +200,7 @@
 												<label>Active Memberships</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span class="green-fonts">{{$customerdata->active_memberships()->count()}}</span>
+												<span class="green-fonts">{{$customerdata->active_memberships()->get()->count()}}</span>
 											</div>
 										</div>
 										<div class="row">

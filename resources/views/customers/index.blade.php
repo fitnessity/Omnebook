@@ -105,7 +105,7 @@
 														<div class="col-md-2 col-xs-12 col-sm-3">
 															<div class="client-status">
 																<label>Active Memberships: </label>
-																<span class="green-fonts">{{$customer->active_memberships()->count()}}</span>
+																<span class="green-fonts">{{$customer->active_memberships()->get()->count()}}</span>
 															</div>
 														</div>
 														<div class="col-md-1 col-xs-12 col-sm-2">
