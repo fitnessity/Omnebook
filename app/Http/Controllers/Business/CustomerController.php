@@ -127,11 +127,12 @@ class CustomerController extends Controller
 
 
     public function refresh_payment_methods(Request $request){
+
         $customer = Customer::findOrFail($request->customer_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
         $fingerprints = [];
-        //print_r($payment_methods);exit;
+        //print_r($payment_methods);
         foreach($payment_methods as $payment_method){
             $fingerprint = $payment_method['card']['fingerprint'];
             if (in_array($fingerprint, $fingerprints, true)) {
@@ -153,6 +154,7 @@ class CustomerController extends Controller
                 $stripePaymentMethod->save();
             }
         }
+        // echo $request->return_url;exit;
         if($request->return_url)
             return redirect($request->return_url);
     }

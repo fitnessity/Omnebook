@@ -86,18 +86,18 @@ class Recurring extends Authenticatable
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        if($this->user_type == 'user'){
+        /*if($this->user_type == 'user'){
             $customer = User::findOrFail($this->user_id);
             $stripeCustomerId = $customer->stripe_customer_id;
             $cardDetails = DB::table('users_payment_info')->where('user_id', $customer->id)->latest()->first();
             $cardID = $cardDetails->card_stripe_id;
-        }else{
+        }else{*/
             $customer = Customer::findOrFail($this->user_id); 
             $stripeCustomerId = $customer->stripe_customer_id;  
-            $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'customer'])->latest()->first();
+           /* $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'customer'])->latest()->first();
             $cardID = $cardDetails->payment_id;
-        }
-
+        }*/
+        $cardID =  $this->payment_method;
         if($cardID != '' && $stripeCustomerId != ''){
             try {
                 $totalPrice = ($this->amount + $this->tax )*100;
@@ -112,7 +112,6 @@ class Recurring extends Authenticatable
 
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
-                $this->payment_method = 'card';
                 $this->status = 'Completed';
                 $this->save();
 

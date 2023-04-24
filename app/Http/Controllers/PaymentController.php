@@ -139,6 +139,7 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $qty * $price_detail->recurring_first_pmt_adult;
                             $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                            $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                         }
                     }
 
@@ -146,6 +147,7 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $qty * $price_detail->recurring_first_pmt_child;
                             $re_i = $price_detail->recurring_nuberofautopays_child; 
+                            $reCharge  = $price_detail->recurring_customer_chage_by_child;
                         }
                     }
 
@@ -153,23 +155,33 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $qty * $price_detail->recurring_first_pmt_infant;
                             $re_i = $price_detail->recurring_nuberofautopays_infant;
+                            $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                         }
                     }
 
-                    $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-
                     if($qty != '' && $qty != 0){
+                        $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                        $paymentMethod = $transactionstatus->stripe_payment_method_id;
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
                                 if($num==1){
-                                    $stripe_id =  '';
+                                    $stripe_id =  $transactionstatus->transaction_id;
                                     $stripe_charged_amount = 0;
-                                    $payment_method = '';
                                     $payment_date = $date->format('Y-m-d');
                                     $status = 'Completed';
                                 }else{
-                                    $month = $num - 1;
-                                    $payment_date = (Carbon::now()->addMonth($month))->format('Y-m-d');
+                                    $Chk = explode(" ",$reCharge);
+                                    $timeChk = @$Chk[1];
+                                    $afterHowmanytime = @$Chk[0];
+                                    $addTime  = $afterHowmanytime * ($num - 1);
+
+                                    if($timeChk == 'Month'){
+                                        $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                    }else if($timeChk == 'Week'){
+                                        $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                    }else if($timeChk == 'Year'){
+                                        $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                    }
                                     $status = 'Scheduled';
                                 } 
 
@@ -181,7 +193,7 @@ class PaymentController extends Controller {
                                     "payment_date" => $payment_date,
                                     "amount" => $amount,
                                     'charged_amount'=> $stripe_charged_amount,
-                                    'payment_method'=> $payment_method,
+                                    'payment_method'=> $paymentMethod,
                                     'stripe_payment_id'=> $stripe_id,
                                     "tax" => $tax_recurring,
                                     "status" => $status,
@@ -416,6 +428,7 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount = $qty * $price_detail->recurring_first_pmt_adult;
                             $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                            $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                         }
                     }
 
@@ -423,6 +436,7 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount =  $qty * $price_detail->recurring_first_pmt_child;
                             $re_i = $price_detail->recurring_nuberofautopays_child; 
+                            $reCharge  = $price_detail->recurring_customer_chage_by_child;
                         }
                     }
 
@@ -430,23 +444,33 @@ class PaymentController extends Controller {
                         if($qty != '' && $qty != 0){
                             $amount =  $qty * $price_detail->recurring_first_pmt_infant;
                             $re_i = $price_detail->recurring_nuberofautopays_infant;
+                            $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                         }
                     }
 
-                    $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-
                     if($qty != '' && $qty != 0){
+                        $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
                         if($re_i != '' && $re_i != 0 && $amount != ''){
                             for ($num = $re_i; $num >0 ; $num--) { 
+                                $payment_method = $transactionstatus->stripe_payment_method_id;
                                 if($num==1){
                                     $stripe_id =  $transactionstatus->transaction_id;
-                                    $stripe_charged_amount = $transactionstatus->amount;
-                                    $payment_method = $transactionstatus->stripe_payment_method_id;
-                                    $payment_date = $date->format('Y-m-d');
+                                    $stripe_charged_amount = number_format($transactionstatus->amount,2);
+                                    $paymentDate = $date->format('Y-m-d');
                                     $status = 'Completed';
                                 }else{
-                                    $month = $num - 1;
-                                    $payment_date = (Carbon::now()->addMonth($month))->format('Y-m-d');
+                                    $Chk = explode(" ",$reCharge);
+                                    $timeChk = @$Chk[1];
+                                    $afterHowmanytime = @$Chk[0];
+                                    $addTime  = $afterHowmanytime * ($num - 1);
+
+                                    if($timeChk == 'Month'){
+                                        $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                    }else if($timeChk == 'Week'){
+                                        $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                    }else if($timeChk == 'Year'){
+                                        $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                    }
                                     $status = 'Scheduled';
                                 } 
 
@@ -455,7 +479,7 @@ class PaymentController extends Controller {
                                     "user_id" => $loggedinUser->id,
                                     "user_type" => 'user',
                                     "business_id" => $booking_detail->business_id ,
-                                    "payment_date" => $payment_date,
+                                    "payment_date" => $paymentDate,
                                     "amount" => $amount,
                                     'charged_amount'=> $stripe_charged_amount,
                                     'payment_method'=> $payment_method,

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
-use App\{UserFamilyDetail,StripePaymentMethod,GiftedActivityDetails};
+use Hash;
+use Str;
+use App\{UserFamilyDetail,StripePaymentMethod,GiftedActivityDetails,Customer,User,SGMailService};
 
 class CartController extends Controller {
 
@@ -63,18 +65,58 @@ class CartController extends Controller {
     }
 
     public function addfamilyfromcart(Request $request){
+    	$user = Auth::user();
     	$data = UserFamilyDetail::create([
-                'user_id' => Auth::user()->id,
-                'first_name' => $request['fname'],
-                'last_name' => $request['lname'],
+            'user_id' => Auth::user()->id,
+            'first_name' => $request['fname'],
+            'last_name' => $request['lname'],
+            'email' => $request['email'],
+            'mobile' => $request['mobile'],
+            'emergency_contact' => $request['emergency_contact'],
+            'relationship' => $request['relationship'],
+            'gender' => $request['gender'],
+            'birthday' => date('Y-m-d', strtotime($request['birthdate'])),
+            'emergency_contact_name' => $request['emergency_name'],
+    	]);
+    	$company = $user->company;
+    	foreach($company as $key=>$c){
+            if($key == 0){
+                $random_password = Str::random(8);
+                $Password = Hash::make($random_password);
+            }
+            $Customer = Customer::create([
+                'business_id' => $c->id,
+                'password' => $Password ,
+                'fname' => $request['fname'],
+                'lname' => $request['lname'],
                 'email' => $request['email'],
-                'mobile' => $request['mobile'],
+                'phone_number' => $request['mobile'],
                 'emergency_contact' => $request['emergency_contact'],
                 'relationship' => $request['relationship'],
                 'gender' => $request['gender'],
-                'birthday' => $request['birthdate'],
-                'emergency_contact_name' => $request['emergency_name'],
-    	]);
+                'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
+            ]);
+
+            if($key == 0){
+                $User = User::create([
+                    'role' => 'customer',
+                    'password' => $Password,
+                    'firstname' => $request['fname'],
+                    'lastname' => $request['lname'],
+                    'username' => $request['fname'].' '.$request['lname'],
+                    'email' => $request['email'],
+                    'phone_number' => $request['mobile'],
+                    'emergency_contact' => $request['emergency_contact'],
+                    'relationship' => $request['relationship'],
+                    'gender' => $request['gender'],
+                    'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
+                    'stripe_customer_id' => $Customer->stripe_customer_id
+                ]);
+
+                $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
+            }
+            $Customer->update(['user_id'=>$User->id]);            
+        } 
 
     	return redirect('/carts');
     	/*if($data){
