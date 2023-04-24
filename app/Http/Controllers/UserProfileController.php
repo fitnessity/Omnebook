@@ -8313,7 +8313,7 @@ class UserProfileController extends Controller {
         $customer_ids = implode(',',$customers);
         $cardInfo = StripePaymentMethod::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at','desc')->get(); 
         
-        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->get(); 
+        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at' ,'DESC')->get(); 
 
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
