@@ -158,8 +158,8 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title );
 
-            SGMailService::send_reminder_to_customer($email_detail_customer);
-            SGMailService::send_reminder_to_provider($email_detail_provider);
+            SGMailService::sendReminderOfSessionExpireToCustomer($email_detail_customer);
+            SGMailService::sendReminderOfSessionExpireToProvider($email_detail_provider);
         }
     }
 

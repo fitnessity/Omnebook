@@ -835,7 +835,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         <div class="col-sm-12 col-md-8 col-lg-8">
 							<div class="tab-content">
 								<div class="tab-pane active" id="tabs-1" role="tabpanel">
-									<div class="central-meta postbox">
+									<div class="central-meta postbox central-box">
 										<form method="post" action="{{route('profilePost')}}" enctype="multipart/form-data" id="profilepostfrm">
                                         	@csrf
                                             <span class="create-post">Post Your Experiences</span>

@@ -6,13 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class SGMailService{
 
-	public static function sendBookingReceipt($email_detail){
+	public static function MailDetail($sendemail,$substitutions,$templateId){
 		$email = new Mail();
 		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
 		
 		$email->addTo(
-		    $email_detail['email'],
+		    $sendemail,
 		);
+		if(!empty($substitutions)){
+			$email->addDynamicTemplateDatas($substitutions);
+		}
+		$email->setTemplateId($templateId);
+		
+		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+		try {
+		    $sendgrid->send($email);
+		    $response = "success"; 
+		} catch (Exception $e) {
+			$response = 'fail';
+		}
+		return $response;
+	}
+
+	public static function sendBookingReceipt($email_detail){
 
 		$substitutions = [
 			"provider_Name" => $email_detail['getreceipemailtbody']['provider_Name'],  
@@ -36,35 +52,11 @@ class SGMailService{
 		    "bookingUrl" => $email_detail['getreceipemailtbody']['bookingUrl'],
 		];
 
-		$email->addDynamicTemplateDatas($substitutions);
-
-		$email->setTemplateId("d-22008cb39c6a409791acb17f3064abd3");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
 	}
 
 	public static function sendWelcomeMail($email_name){
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $email_name,
-		);
-		$email->setTemplateId("d-d42244ec709c4d91b23393393b2e05ef");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		     $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef');
 	}
 
 	public static function sendWelcomeMailToCustomer($id,$business_id,$password){
@@ -77,13 +69,6 @@ class SGMailService{
         }else{
         	$ImageUrl = env('APP_URL').'/uploads/profile_pic/thumb/'.$businessimg;
         }
-
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $customer->email,
-		);
 
 		$substitutions = [
 			"providerName" => $businessdata->company_name,  
@@ -99,54 +84,21 @@ class SGMailService{
 		    "ProviderBusinessLogo" => $ImageUrl,
 		    "url" => $businessdata->users->username
 		];
-
-		$email->addDynamicTemplateDatas($substitutions);
-		$email->setTemplateId("d-70af5c145eca4a4f878ec680469036b7");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		     $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');
 	}
 
 	public static function requestAccessMail($customer){
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
 		
-		$email->addTo(
-		    $customer['email'],
-		);
-
 		$substitutions = [
 			"ProviderName" => $customer['pName'],  
 			"CustomerName" => $customer['cName'],  
 			"Url" => $customer['url'],
 		];
 
-		$email->addDynamicTemplateDatas($substitutions);
-
-		$email->setTemplateId("d-6530330f52e8409ca171d446fbc8c248");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248');
 	}
 
 	public static function sendresetemail($email_detail){
-
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $email_detail['email'],
-		);
 
 		$index = strpos($email_detail['email'], '@');
 		$substitutions = [
@@ -155,27 +107,10 @@ class SGMailService{
 			"Email"=> substr($email_detail['email'], 0, 1).'***********@'.substr($email_detail['email'], $index + strlen('@'))
 		];
 
-		$email->addDynamicTemplateDatas($substitutions);
-
-		$email->setTemplateId("d-78e53ff00cab476b9fd398c5ac88c8f3");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-78e53ff00cab476b9fd398c5ac88c8f3');
 	}
 
 	public static function confirmationMail($email_detail){
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $email_detail['email'],
-		);
-
 		$substitutions = [
 			"CustomerName" => $email_detail['CustomerName'], 
 			"Url" => $email_detail['Url'], 
@@ -190,26 +125,10 @@ class SGMailService{
 			"CategoryName"=> $email_detail['CategoryName'],
 		];
 
-		$email->addDynamicTemplateDatas($substitutions);
-
-		$email->setTemplateId("d-7a39c17eac4a45f5b2bbf030c5c82f4f");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-7a39c17eac4a45f5b2bbf030c5c82f4f');
 	}
 
-	public static function send_reminder_to_customer($email_detail){
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $email_detail['email'],
-		);
+	public static function sendReminderOfSessionExpireToCustomer($email_detail){
 
 		$substitutions = [
 			"CustomerName" => $email_detail['CustomerName'], 
@@ -225,26 +144,10 @@ class SGMailService{
 			"ProviderAddress" => $email_detail['ProviderAddress'],
 		];
 
-		$email->addDynamicTemplateDatas($substitutions);
-
-		$email->setTemplateId("d-3500159ca821409e8f8e68c4cd39e2ab");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
-		}
-		return $response;
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-3500159ca821409e8f8e68c4cd39e2ab');		
 	}
 
-	public static function send_reminder_to_provider($email_detail){
-		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
-		
-		$email->addTo(
-		    $email_detail['email'],
-		);
+	public static function sendReminderOfSessionExpireToProvider($email_detail){
 
 		$substitutions = [
             "CustomerName" => $email_detail['CustomerName'], 
@@ -252,17 +155,61 @@ class SGMailService{
             "CategoryName"=> $email_detail['CategoryName'],
             "PriceOptionName"=> $email_detail['PriceOptionName'],
 		];
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-23e938e2491c4d128d78d704787b3809');		
+	}
 
-		$email->addDynamicTemplateDatas($substitutions);
+	public static function sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail){
+		$substitutions = [
+			"CustomerName" => $email_detail['CustomerName'], 
+            "ProviderName"=> $email_detail['ProviderName'],
+            "ProgramName"=> $email_detail['ProgramName'],
+            "CategoryName"=> $email_detail['CategoryName'],
+            "PriceOptionName"=> $email_detail['PriceOptionName'],
+			"ReNewUrl" => $email_detail['ReNewUrl'],
+			"ProfileUrl" => $email_detail['ProfileUrl'],
+			"ExpirationDate" => $email_detail['ExpirationDate'],
+			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
+			"ProviderEmail" => $email_detail['ProviderEmail'],
+			"ProviderAddress" => $email_detail['ProviderAddress'],
+		];
 
-		$email->setTemplateId("d-23e938e2491c4d128d78d704787b3809");
-		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
-		try {
-		    $sendgrid->send($email);
-		    $response = "success"; 
-		} catch (Exception $e) {
-			$response = 'fail';
+		if($email_detail['for'] == 'membership'){
+			$TemplateId = "d-40dc2e0d871b4a21b18e4b7e715c1ecb";
+		}else{
+			$TemplateId = "d-9fd81ddcd60b4ebea9406c5d523bed8a";
 		}
-		return $response;
+
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,$TemplateId);
+	}
+
+	public static function sendReminderOfMembershipExpireToProvider($email_detail){
+		
+		$substitutions = [
+			"CustomerName" => $email_detail['CustomerName'], 
+            "ProviderName"=> $email_detail['ProviderName'],
+            "ProgramName"=> $email_detail['ProgramName'],
+            "CategoryName"=> $email_detail['CategoryName'],
+            "PriceOptionName"=> $email_detail['PriceOptionName'],
+			"ExpirationDate" => $email_detail['ExpirationDate'],
+		];
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-db32cc27830244998a1467f4984a0b20');
+	}
+
+	public static function sendReminderOfMembershipExpireToCustomer($email_detail){
+		$substitutions = [
+			"CustomerName" => $email_detail['CustomerName'], 
+            "ProviderName"=> $email_detail['ProviderName'],
+            "ProgramName"=> $email_detail['ProgramName'],
+            "CategoryName"=> $email_detail['CategoryName'],
+            "PriceOptionName"=> $email_detail['PriceOptionName'],
+			"ReNewUrl" => $email_detail['ReNewUrl'],
+			"ProfileUrl" => $email_detail['ProfileUrl'],
+			"ExpirationDate" => $email_detail['ExpirationDate'],
+			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
+			"ProviderEmail" => $email_detail['ProviderEmail'],
+			"ProviderAddress" => $email_detail['ProviderAddress'],
+		];
+
+		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-b67277aa0c784091ab87ddd2ab5bc9ea');
 	}
 }

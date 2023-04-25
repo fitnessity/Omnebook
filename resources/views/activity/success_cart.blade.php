@@ -132,7 +132,7 @@ if(!empty($cart["cart_item"])) {
 						</div>
 
 						<div class="row">
-							<div class="col-md-12 col-xs-9">
+							<div class="col-md-12 col-xs-12">
 								<div class="img-title com-info">
 									<h4>{{@$companyData->company_name}}</h4>
 									<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
@@ -145,12 +145,12 @@ if(!empty($cart["cart_item"])) {
 							<h5>{{$cartdata['name']}}</h5>
 							<div class="cart-details">
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label></label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											@if($cart['cart_item'][$priceid]['adult'])
 											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Child
@@ -188,48 +188,48 @@ if(!empty($cart["cart_item"])) {
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label>Date Scheduled:</label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											<span>@if($cartdata["sesdate"]!='' && $cartdata["sesdate"]!='0') {{date('m/d/Y',strtotime($cartdata["sesdate"]))}} @endif</span>
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-6"> 
+									<div class="col-md-6 col-xs-6"> 
 										<div class="info-display">
 											<label>Time & Duration:</label>
 										</div>
 									</div> 
-									<div class="col-md-6"> 
+									<div class="col-md-6 col-xs-6"> 
 										<div class="info-display info-align"> 
 											<span>{{$timecart}} | {{$tot_dura}}</span>
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label>Category:</label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											<span>{{ @$serprice->business_price_details_ages->category_title}}</span>
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label>Price Option: </label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											<span>{{@$serprice['price_title']}}</span>
 										</div>
@@ -237,12 +237,12 @@ if(!empty($cart["cart_item"])) {
 								</div>
 								
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label>Date Booked: </label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											<span>{{date('m/d/Y')}}</span>
 										</div>
@@ -250,12 +250,12 @@ if(!empty($cart["cart_item"])) {
 								</div>
 
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display">
 											<label>Number of Sessions: </label>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											<span>{{@$serprice['pay_session']}} Sessions</span>
 										</div>
@@ -265,12 +265,12 @@ if(!empty($cart["cart_item"])) {
 								<div class="hide-part"> 
 								
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Membership Option: </label>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display info-align">
 												<span>{{@$serprice['membership_type']}}</span>
 											</div>
@@ -278,12 +278,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Participant Quantity: </label>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display info-align">
 												<span>@if(!empty($cartdata['adult'])) @if($cartdata['adult']['quantity']  != 0) Adult x {{$cartdata['adult']['quantity']}} @endif @endif</span> 
 												<span>@if(!empty($cartdata['child']))  @if($cartdata['child']['quantity']  != 0) Children x {{$cartdata['child']['quantity']}} @endif @endif</span>
@@ -293,12 +293,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Activity Type:</label>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display info-align">
 												<span>{{@$act['sport_activity']}}</span>
 											</div>
@@ -306,12 +306,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 									
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Service Type:</label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span> <?php echo @$act['select_service_type']; ?></span>
 											</div>
@@ -319,12 +319,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 										
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Membership Duration: </label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span>{{@$serprice['pay_setnum']}} {{@$serprice['pay_setduration']}}</span>
 											</div>
@@ -332,12 +332,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 									
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Purchase Date: </label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span>{{date('m/d/Y')}}</span>
 											</div>
@@ -345,12 +345,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Membership Activation Date: </label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span>{{date('m/d/Y')}}</span>
 											</div>
@@ -358,12 +358,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 								
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Membership Expiration: </label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span>{{$expired_at}}</span>
 											</div>
@@ -371,12 +371,12 @@ if(!empty($cart["cart_item"])) {
 									</div>
 
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 col-xs-6">
 											<div class="info-display">
 												<label>Provider Company: </label>
 											</div>
 										</div>
-										<div class="col-md-6">	
+										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
 												<span>{{$act->company_information->company_name}}</span>
 											</div>
@@ -744,8 +744,8 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
-								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
-								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
+								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" data-behavior="datepicker">
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">
@@ -780,13 +780,13 @@ if(!empty($cart["cart_item"])) {
 			event.preventDefault();
 		});
 
-		$(".dobdate").keyup(function(){
+		/*$(".dobdate").keyup(function(){
             if ($(this).val().length == 2){
                 $(this).val($(this).val() + "/");
             }else if ($(this).val().length == 5){
                 $(this).val($(this).val() + "/");
             }
-        });
+        });*/
 
 		$("#frmregister").submit(function (e) {
             e.preventDefault();

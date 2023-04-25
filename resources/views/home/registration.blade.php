@@ -1015,37 +1015,36 @@
                 var valchk = getAge();
                 if(valchk == 1){
                     $('#register_submit').prop('disabled', true);
-                    if (validForm) {
+                    var formData = $("#frmregister").serialize();
+                    var posturl = '/auth/registration';
 
-                        var formData = $("#frmregister").serialize();
-                        $.ajax({
-                            url: posturl,
-                            type: 'POST',
-                            dataType: 'json',
-                            data: formData,
-                            beforeSend: function () {
-                                
-                                $('#register_submit').prop('disabled', true).css('background','#999999');
-                                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                                $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                            },
-                            complete: function () {
+                    $.ajax({
+                        url: posturl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        beforeSend: function () {
                             
+                            $('#register_submit').prop('disabled', true).css('background','#999999');
+                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                            $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                        },
+                        complete: function () {
+                        
+                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                        },
+                        success: function (response) {
+                            //alert(response.msg);
+                            
+                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                            showSystemMessages('#systemMessage', response.type, response.msg);
+                            if (response.type === 'success') {
+                                window.location.href = response.redirecturl;
+                            } else {
                                 $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                            },
-                            success: function (response) {
-                                //alert(response.msg);
-                                
-                                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                                showSystemMessages('#systemMessage', response.type, response.msg);
-                                if (response.type === 'success') {
-                                    window.location.href = response.redirecturl;
-                                } else {
-                                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                                }
                             }
-                        });
-                    }
+                        }
+                    });  
                 }else{
                     $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
                 }
