@@ -4,7 +4,7 @@ namespace App;
 
 
 
-use App\User;
+use App\{User,SGMailService};
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -362,5 +362,78 @@ class UserBookingDetail extends Model
     public function can_schedule(){
         
     }
+
+    public function membershipOrSessionAboutToExpireAlert($type){
+        $customer =  $this->Customer;
+        if($customer){
+            $company = $this->company_information;
+            $business_price_detail =  $this->business_price_detail;
+            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $email_detail = array(
+                "email" =>$customer->email, 
+                "CustomerName" => $customer->full_name, 
+                "ReNewUrl" => env('APP_URL').'/activity-details/'.$this->sport, 
+                "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                "ProviderName"=> $company->full_name,
+                "ProgramName"=> $this->business_services->program_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ProviderPhoneNumber"=> $company->business_phone,
+                "ProviderEmail"=> $company->business_email,
+                "ProviderAddress"=> $company->company_address(),
+                "for" =>$type
+            );
+            if($type == 'membership'){
+                $date = Carbon::parse($this->expired_at)->subWeek()->format('Y-m-d');
+                $today = Carbon::now()->format('Y-m-d');
+                if( $date  == $today){
+                    SGMailService::sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail);
+                }
+            }else{
+                SGMailService::sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail);
+            } 
+        }
+    }
+
+
+    public function membershipExpiredAlert($type){
+        $customer =  $this->Customer;
+        if($customer){
+            $company = $this->company_information;
+            $business_price_detail =  $this->business_price_detail;
+            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $email_detail_provider = array(
+                "email" =>$company->business_email, 
+                "CustomerName" => $customer->full_name, 
+                "ProviderName"=> $company->full_name,
+                "ProgramName"=> $this->business_services->program_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+            );
+
+            $email_detail_customer = array(
+                "email" =>$customer->email, 
+                "CustomerName" => $customer->full_name, 
+                "ReNewUrl" => env('APP_URL').'/activity-details/'.$this->sport, 
+                "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                "ProviderName"=> $company->full_name,
+                "ProgramName"=> $this->business_services->program_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ProviderPhoneNumber"=> $company->business_phone,
+                "ProviderEmail"=> $company->business_email,
+                "ProviderAddress"=> $company->company_address(),
+            );
+            
+
+            SGMailService::sendReminderOfMembershipExpireToProvider($email_detail_provider);
+            SGMailService::sendReminderOfMembershipExpireToCustomer($email_detail_customer);
+            
+        }
+    }
+
 }
 

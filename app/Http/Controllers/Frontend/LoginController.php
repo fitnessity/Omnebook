@@ -112,7 +112,7 @@ class LoginController extends Controller {
                 }else if($claim_company != ''){
                     return redirect('/manage/company');
                 }else if($checkoutsession != ''){
-                    return redirect('/payments/card');
+                    return redirect('/carts');
                 }else{
                     //return redirect()->route('profile-viewProfile');
                     return redirect()->route('homepage');

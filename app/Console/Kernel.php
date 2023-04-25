@@ -4,8 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\UserBookingDetail;
-use App\Recurring;
+use App\{UserBookingDetail,Recurring};
+use DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -42,6 +42,30 @@ class Kernel extends ConsoleKernel
                 $recurringDetail->createRecurringPayment();
             }
         })->everyMinute();
+
+        $schedule->call(function () {
+            $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
+            foreach($userBookingDetails as $userBookingDetail){
+                $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
+            }
+        })->daily();
+
+        $schedule->call(function () {
+            $userBookingDetails = UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')
+            ->groupBy('user_booking_details.id')
+            ->havingRaw('(user_booking_details.pay_session - checkin_count) between 0 and 2')
+            ->whereDate('user_booking_details.expired_at', '>=', date('Y-m-d'))->get();
+
+            foreach($userBookingDetails as $userBookingDetail){
+                $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
+            }
+        })->daily();
+        $schedule->call(function () {
+            $userBookingDetails = UserBookingDetail::whereDate("expired_at", "=" ,date('Y-m-d'))->get();
+            foreach($userBookingDetails as $userBookingDetail){
+                $userBookingDetail->membershipExpiredAlert('membership');
+            }
+        })->daily();
        // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
 
     }

@@ -72,10 +72,278 @@
 <!-- <form method="post" action="/" id="frmsearch"> -->
 <!-- @csrf -->
 <input type="text" name="session">
+<!-- Mobile view filter start-->
+<div class="row desktop-none">
+	<div class="col-sm-12 ">
+		<button type="button" class="btn btn-primary modal-filter-btn" data-toggle="modal" data-target="#filtersModal">
+			<img class="filter-img" src="/public/img/filter-icon.png" width="25">Filters
+		</button>
+		<!-- Modal -->
+		<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filterModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="filterModal"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="choose-sport-hire">
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Select Activity</h2>
+										<select id="act_programservices" name="program_type[]" class="myfilter" multiple="multiple" onchange="actFilter()">
+											<option>Aerobics</option>
+											<option>Archery</option>
+											<option>Badminton</option>
+											<option>Barre</option>
+											<option>Baseball</option>
+											<option>Basketball</option>
+											<option>Beach Vollyball</option>
+											<option>Bouldering</option>
+											<option>Bungee Jumping</option>
+											<optgroup label="Camps & Clinics">
+												<option>Day Camp</option>
+												<option>Sleep Away</option>
+												<option>Winter Camp</option>
+											</optgroup>
+											<option>Canoeing</option>
+											<optgroup label="Cycling">
+												<option>Indoor cycling</option>
+											</optgroup>
+											<option>Dance</option>
+											<option>Diving</option>
+											<optgroup label="Field Hockey">
+												<option>Ice Hockey</option>
+											</optgroup>
+											<option>Football</option>
+											<option>Golf</option>
+											<option>Gymnastics</option>
+											<option>Hang Gliding</option>
+											<option>Hiit</option>
+											<option>Hiking - Backpacking</option>
+											<option>Horseback Riding</option>
+											<option>Ice Skating</option>
+											<option>Kayaking</option>
+											<option>lacrosse</option>
+											<option>Laser Tag</option>
+											<optgroup label="Martial Arts">
+												<option>Boxing</option>
+												<option>Jiu-Jitsu</option>
+												<option>Karate</option>
+												<option>Kickboxing</option>
+												<option>Kung Fu</option>
+												<option>MMA</option>
+												<option>Self-Defense</option>
+												<option>Tai Chi</option>
+												<option>Wrestling</option>
+											</optgroup>
+											<option>Massage Therapy</option>
+											<option>Nutrition</option>
+											<option>Paint Ball</option>
+											<option>Physical Therapy</option>
+											<option>Pilates</option>
+											<option>Rafting</option>
+											<option>Rapelling</option>
+											<option>Rock Climbing</option>
+											<option>Rowing</option>
+											<option>Running</option>
+											<optgroup label="Sightseeing Tours">
+												<option>Airplane Tour</option>
+												<option>ATV Tours</option>
+												<option>Boat Tours</option>
+												<option>Bus Tour</option>
+												<option>Caving Tours</option>
+												<option>Helicopter Tour</option>
+											</optgroup>
+											<option>Sailing</option>
+											<option>Scuba Diving</option>
+											<option>Sky diving</option>
+											<option>Snow Skiing</option>
+											<option>Snowboarding</option>
+											<option>Strength &amp; Conditioning</option>
+											<option>Surfing</option>
+											<option>Swimming</option>
+											<option>Tennis</option>
+											<option>Tours</option>
+											<option>Vollyball</option>
+											<option>Weight training</option>
+											<option>Windsurfing</option>
+											<option>Yoga</option>
+											<option>Zip-Line</option>
+											<option>Zumba</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_programservices'
+											});
+										</script>
+										 
+									</div>
+								</div>
+							</div>
+								
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Business Type</h2>
+										<select id="act_service_type" name="service_type[]" class="myfilter" multiple="multiple" onchange="actFilter()">
+											<option value="individual">Personal Trainer</option>
+											<option value="classes">Classes</option>
+											<option value="events">Events</option>
+											<option value="experience">Experience</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_service_type'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Service Type</h2>
+										<select id="act_servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  onchange="actFilter()">
+											<option>Personal Training</option>
+											<option>Coaching</option>
+											<option>Therapy</option>
+											<option>Group Class</option>
+											<option>Seminar</option>
+											<option>Workshop</option>
+											<option>Clinic</option>
+											<option>Camp</option>
+											<option>Team</option>
+											<option>Corporate</option>
+											<option>Tour</option>
+											<option>Adventure</option>
+											<option>Retreat</option>
+											<option>Workshop</option>
+											<option>Seminar</option>
+											<option>Private experience</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_servicetypetwo'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Great For</h2>
+										<select id="act_activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+											<option>Individual</option>
+											<option>Kids</option>
+											<option>Teens</option>
+											<option>Adults</option>
+											<option>Family</option>
+											<option>Groups</option>
+											<option>Paralympic</option>
+											<option>Prenatal</option>
+											<option>Any</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_activity_for'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+						
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Membership Type</h2>
+										<select id="act_membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+											<option>Drop In</option>
+											<option>Semester</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_membership_type'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Search By Location</h2>
+										<input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{$address}}" />
+									</div> 
+									<div id="map" style="display: none; position: relative; overflow: hidden;"></div>
+									<input type="hidden"  name="City" id="b_city1" value="{{$City}}">
+									<input type="hidden"  name="State" id="b_state1" value="{{$State}}">
+									<input type="hidden"  name="Country" id="country1" value="{{$Country}}">
+									<input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}">
+								</div> 
+							</div> 
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Location of Activity</h2>
+										<select id="act_activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+											@foreach (@$serviceLocation as $slkey => $slval)
+												<option value='{{$slval}}'>{{$slval}}</option>
+											@endforeach
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_activity_location'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2>Age Range</h2>
+										<select id="act_age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+											<option>Baby (0 to 12 months)</option>
+											<option>Toddler (1 to 3 yrs.)</option>
+											<option>Preschool (4 to 5 yrs.)</option>
+											<option>Grade School (6 to 12 yrs.)</option>
+											<option>Teen (13 to 17 yrs.)</option>
+											<option>Young Adult (18 to 21 yrs.)</option>
+											<option>Older Adult (21 to 39 yrs.)</option>
+											<option>Middle Age (40 to 59 yrs.) </option>
+											<option>Senior Adult (60 +)</option>
+											<option>Any</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_age_range'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+				  </div>
+				  
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Mobile view filter end-->
 <div class="row">
-    <div class="col-md-12">
-    	
-        
+    <div class="col-md-12 d-none">
 		<div class="choose-sport-hire">
 			<div class="activity-width">
 				<div class="special-offer">
@@ -286,8 +554,8 @@
                                 <input type="hidden"  name="State" id="b_state1" value="{{$State}}">
                                 <input type="hidden"  name="Country" id="country1" value="{{$Country}}">
                                 <input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}">
-                         </div> 
-                     </div> 
+							</div> 
+						</div> 
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">

@@ -1378,6 +1378,9 @@
 	.mb-7{margin-bottom: 7px;}
 	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
 	.highlight-fonts{font-weight: bold;}
+	.special-offer {  float: none !important; margin-bottom: 10px;}
+	.activity-width {  width: 100% !important; }
+	.choose-sport-hire { display: block !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2329,7 +2332,7 @@
 	.instant-section-info p{margin-top: 3px;}
 	.choose-sport-hire {  display: block !important;}
 	.activity-width{width: 100% !important;}
-	.special-offer{margin-bottom: 8px !important;}
+	.special-offer{margin-bottom: 8px !important; float: none;}
 	.find-activity img{width: 100% !important;}
 	.activity-data {  padding-left: 15px !important; }
 	.dollar-person{margin-bottom: 0px;}
@@ -2541,13 +2544,11 @@
 	.happning-eight-hr{height: 185px !important; }
 	.custom-fitnessity .title .f-16{font-size: 16px; line-height: 20px; margin-bottom: 5px;}
 	.create-post::before{left: -10px;}
-	.central-meta{padding: 20px 10px;}
+	.central-meta{padding: 20px 0px;}
 	.postcomment{padding: 5px 23px;}
 	.post-meta{margin-top: 0px;}
 	.post-meta .removepost {  margin-bottom: 20px; margin-left: 15px; margin-top: 15px;}
 	.profile-section{display: inline-block !important;}
-	.social-img{margin-left: -11px;}
-	.social-img figure{width: 103%; padding: 0px;}
 	.we-video-info{margin-left: 15px;}
 	.video-box{padding: 15px 0;}
 	.video-tab-iframe iframe{height: 225px !important;}
@@ -2555,7 +2556,8 @@
 	.mb-7{margin-bottom: 7px;}
 	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
 	.highlight-fonts{font-weight: bold;}
-
+	.central-box{padding-right: 10px; padding-left: 10px;}
+	.we-video-info{border-top: none !important;}
 }
 
 
@@ -2746,7 +2748,6 @@
 	.dob input { width: 249px !important;}
 	.booking-active{left: 147px;} 
 	.book-info-sear .date_block i {  right: 59px !important;}
-	.social-img figure { width: 102.9%;}
 }
 
 @media(max-width: 400px) {
@@ -2832,11 +2833,8 @@
 	.modal-banner .bannar-size img { height: 140px !important;}
 	.booking-active {  left: 95px;}
 	.profile-section .nav > li > a { padding: 10px 6px;}
-	.social-img figure { width: 103.5%;  padding: 0px;}
 }
-@media(max-width: 384px) and (max-width: 890px) {
-	.social-img figure { width: 103.3%;  padding: 0px;}
-}
+
 
 @media(max-width: 280px){
 	header .header-right{display: block ruby;}
@@ -2896,8 +2894,6 @@
 	.header-right a{margin-top: 5px;}
 	header .header-right .btn{margin-bottom: 5px; font-size: 11px; padding: 6px 6px;}
 	.pstyle{margin-left: 17px;}
-	.cartitmclass{width: 47%; display: inline-block; text-align: end;}
-	.userblock{width: 47%; display: inline-block; text-align: left; margin-left: 10px;}
 	.activites_content h3{height: auto !important;}
 	.home-black-section label {  font-size: 18px;}
 	.main-slider .slide{min-height: 345px; padding-top: 118px;}
@@ -2920,5 +2916,7 @@
 	.activity-schedule-tabs ul li a {padding: 5px 5px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
 	.pairets-inviable a{font-size: 12px;}
 	.pairets .calendar-btn{font-size: 12px;}
+	.pairets-inviable{padding: 10px 6px;}
+	.pairets{padding: 10px 6px;}
 }
 /*MEDIA QUEREIS EDN HERE
