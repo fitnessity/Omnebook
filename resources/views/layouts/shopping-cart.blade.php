@@ -109,12 +109,12 @@
                                     <div class="ord-info">
                                         <h4><?= $item["name"]; ?></h4>
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Date Scheduled:</label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>@if($item["sesdate"]!='' && $item["sesdate"]!='0') {{date('m/d/Y',strtotime($item["sesdate"]))}} @endif</span>
 												</div>
@@ -131,17 +131,17 @@
                                             { $timeval = $hr.$min.$sec; } 
                                         }
                                         if(@@$bookscheduler['shift_end']!=''){
-    										echo '<div class="row"><div class="col-md-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( @$bookscheduler['shift_start'] )).' to '.date('h:ia', strtotime( @$bookscheduler['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
+    										echo '<div class="row"><div class="col-md-6 col-xs-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6 col-xs-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( @$bookscheduler['shift_start'] )).' to '.date('h:ia', strtotime( @$bookscheduler['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
     									} 
     									?>
                                         
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Category:</label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{ @$serprice->business_price_details_ages->category_title}}</span>
 												</div>
@@ -149,12 +149,12 @@
 										</div>
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Price Option: </label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{@$serprice['price_title']}}</span>
 												</div>
@@ -162,12 +162,12 @@
 										</div>
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Date Booked: </label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{date('m/d/Y')}}</span>
 												</div>
@@ -175,12 +175,12 @@
 										</div>
 
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Number of Sessions: </label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{@$serprice['pay_session']}} Sessions</span>
 												</div>
@@ -190,12 +190,12 @@
 										<div class="hide-part"> 
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Membership Option: </label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{@$serprice['membership_type']}}</span>
 												</div>
@@ -203,12 +203,12 @@
 										</div>
 
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Participant Quantity: </label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult x {{$item['adult']['quantity']}} @endif @endif</span> 
 													<span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children x {{$item['child']['quantity']}} @endif @endif</span>
@@ -218,12 +218,12 @@
 										</div>
                                        
 									   <div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Activity Type:</label>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display info-align">
 													<span>{{@$act['sport_activity']}}</span>
 												</div>
@@ -231,12 +231,12 @@
 										</div>
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Service Type:</label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span> <?php echo @$act['select_service_type']; ?></span>
 												</div>
@@ -244,12 +244,12 @@
 										</div>
 											
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Membership Duration: </label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span>{{@$serprice['pay_setnum']}} {{@$serprice['pay_setduration']}}</span>
 												</div>
@@ -257,12 +257,12 @@
 										</div>
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Purchase Date: </label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span>{{date('m/d/Y')}}</span>
 												</div>
@@ -270,12 +270,12 @@
 										</div>
 
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Membership Activation Date: </label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span>{{date('m/d/Y')}}</span>
 												</div>
@@ -283,12 +283,12 @@
 										</div>
 									
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Membership Expiration: </label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span>{{$expired_at}}</span>
 												</div>
@@ -296,12 +296,12 @@
 										</div>
 
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Provider Company: </label>
 												</div>
 											</div>
-											<div class="col-md-6">	
+											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
 													<span>{{@$act->company_information->company_name}}</span>
 												</div>
