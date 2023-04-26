@@ -302,10 +302,10 @@ class BookingRepository
 
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
-        $business_services = $booking_details->business_services;
-        $businessuser= $booking_details->business_services->company_information;
-        $BusinessPriceDetails = $booking_details->business_price_detail;
-        $categoty_name = $BusinessPriceDetails->business_price_details_ages->category_title;
+        $business_services = $booking_details->business_services_with_trashed;
+        $businessuser= $booking_details->business_services_with_trashed->company_information;
+        $BusinessPriceDetails = $booking_details->business_price_detail_with_trashed;
+        $categoty_name = $BusinessPriceDetails->business_price_details_ages_with_trashed->category_title;
         $schedulerdata = $booking_details->business_activity_scheduler;
         $remaining = $booking_details->getremainingsession();
         if(@$businessuser->logo != "") {
@@ -379,7 +379,7 @@ class BookingRepository
         }
 
         if(@$schedulerdata->spots_available != ''){
-            $to_rem = $remaining.' / '.@$schedulerdata->spots_available;
+            $to_rem = $remaining.' / '.@$booking_details->pay_session;
         }
         
         if(@$business_services->program_name != ''){

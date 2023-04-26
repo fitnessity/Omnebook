@@ -248,7 +248,7 @@
                     </div>
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
-                            <span>{{ $odt['qty']}}</span>
+                            <span>{!! $odt['qty'] !!}</span>
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                     </div>
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
-                            <span>{{ $odt['parti_data']}}</span>
+                            <span>{!! $odt['parti_data'] !!}</span>
                         </div>
                     </div>
                 </div>
