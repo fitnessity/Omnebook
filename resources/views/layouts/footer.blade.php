@@ -146,7 +146,7 @@
 </p>
 
 <!-- Sticky Footer -->
-<div  id="mysticky" class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm" style="background: white;">
+<div  id="mysticky" class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm desktop-none" style="background: white;">
   <div class="container">
 	<div class="col-xs-2">
 		<div class="shortcut-sticky ">
@@ -318,7 +318,9 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr-custom.js"></script>
+@if(Route::current()->getName() != 'design.dashboard')
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap.min.js"></script>
+@endif
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/additional-methods.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>

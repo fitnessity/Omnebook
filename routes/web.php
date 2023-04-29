@@ -46,7 +46,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('customers', 'CustomerController')->only(['index', 'update', 'destroy', 'store']);
     Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
 
-    Route::resource('staff', 'StaffController')->only(['index','create','edit','store','update', 'destroy']);
+    Route::resource('staff', 'StaffController')->only(['index','create','show','edit','store','update', 'destroy']);
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
   
@@ -64,6 +64,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/orders','DesignController@orders')->name('orders');
     Route::get('/add_family','DesignController@add_family')->name('add_family');
     Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
+    Route::get('/dashboard','DesignController@dashboard')->name('dashboard');
+    Route::get('/staff_login','DesignController@staff_login')->name('staff_login');
 });
 
 //Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);

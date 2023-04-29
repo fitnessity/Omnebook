@@ -5068,19 +5068,22 @@
                                                 foreach($business_price_details as $price){ 
                                                     $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $dues_tax = $sales_tax = $price_title = $recurring_run_auto_pay_adult  = 
 
-                                                    $is_recurring_adult = $recurring_cust_be_charge_adult = $recurring_every_time_num_adult = $recurring_every_time_adult = $recurring_customer_chage_by_adult =$recurring_nuberofautopays_adult = $recurring_happens_aftr_12_pmt_adult = $recurring_client_be_charge_on_adult = "";
+                                                    $is_recurring_adult = $recurring_cust_be_charge_adult = $recurring_every_time_num_adult = $recurring_every_time_adult = $recurring_customer_chage_by_adult =$recurring_happens_aftr_12_pmt_adult = $recurring_client_be_charge_on_adult = "";
 
                                                     $recurring_first_pmt_adult = $recurring_recurring_pmt_adult = $recurring_total_contract_revenue_adult =$recurring_price_adult= 0 ;
 
                                                       $is_recurring_infant = 
-                                                    $recurring_run_auto_pay_infant  = $recurring_cust_be_charge_infant = $recurring_every_time_num_infant = $recurring_every_time_infant = $recurring_customer_chage_by_infant = $recurring_nuberofautopays_infant = $recurring_happens_aftr_12_pmt_infant = $recurring_client_be_charge_on_infant = "";
+                                                    $recurring_run_auto_pay_infant  = $recurring_cust_be_charge_infant = $recurring_every_time_num_infant = $recurring_every_time_infant = $recurring_customer_chage_by_infant =  $recurring_happens_aftr_12_pmt_infant = $recurring_client_be_charge_on_infant = "";
 
                                                        $recurring_first_pmt_infant = $recurring_recurring_pmt_infant = $recurring_total_contract_revenue_infant = $recurring_price_infant= 0 ;
 
-                                                      $is_recurring_child = $recurring_run_auto_pay_child  = $recurring_cust_be_charge_child = $recurring_every_time_num_child = $recurring_every_time_child = $recurring_customer_chage_by_child =$recurring_nuberofautopays_child = $recurring_happens_aftr_12_pmt_child = $recurring_client_be_charge_on_child = ""; 
+                                                      $is_recurring_child = $recurring_run_auto_pay_child  = $recurring_cust_be_charge_child = $recurring_every_time_num_child = $recurring_every_time_child = $recurring_customer_chage_by_child = $recurring_happens_aftr_12_pmt_child = $recurring_client_be_charge_on_child = ""; 
+                                                    $recurring_nuberofautopays_child = $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = $recurring_price_child=  0 ;
 
-                                                    $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = $recurring_price_child=  0 ;
-                                                $editmodeltextadult = $editmodeltextchild =  $editmodeltextinfant ="";
+                                                $editmodeltextadult = $editmodeltextchild =  $editmodeltextinfant = "" ;
+
+                                                $customer_charged_num_child = $customer_charged_num_adult = $customer_charged_num_infant = $recurring_nuberofautopays_adult = $recurring_nuberofautopays_infant =0;
+
                                                    /* print_r($price);*/
 
                                                     if(isset($price['pay_chk']) && !empty($price['pay_chk'])) {
@@ -5174,8 +5177,10 @@
 
                                                     if(isset($price['recurring_nuberofautopays_child']) && !empty($price['recurring_nuberofautopays_child'])) {
                                                         $recurring_nuberofautopays_child = $price['recurring_nuberofautopays_child'];
-                                                        $editmodeltextchild  .= 
-                                                        '( '.($recurring_nuberofautopays_child*$customer_charged_num_child).' '.@$customer_charged_time_child.' contract ';
+                                                        if($customer_charged_num_child == ''){
+                                                            $customer_charged_num_child = 0;
+                                                        }
+                                                        $editmodeltextchild  .= '( '.($recurring_nuberofautopays_child * $customer_charged_num_child).' '.@$customer_charged_time_child.' contract ';
                                                     }
 
                                                     if(isset($price['recurring_happens_aftr_12_pmt_child']) && !empty($price['recurring_happens_aftr_12_pmt_child'])) {
@@ -5240,6 +5245,9 @@
                                                         $recurring_customer_chage_by_infant = $price['recurring_customer_chage_by_infant'];
                                                         if($recurring_customer_chage_by_infant != ''){
                                                             $recurring_str = explode(" ",$recurring_customer_chage_by_infant);
+                                                            if($customer_charged_num_infant == ''){
+                                                                $customer_charged_num_infant = 0;
+                                                            }
                                                             $customer_charged_num_infant = $recurring_str[0];
                                                             $customer_charged_time_infant = $recurring_str[1];
                                                         }
@@ -5309,6 +5317,9 @@
                                                         $recurring_customer_chage_by_adult = $price['recurring_customer_chage_by_adult'];
                                                         if($recurring_customer_chage_by_adult != ''){
                                                             $recurring_str = explode(" ",$recurring_customer_chage_by_adult);
+                                                            if($customer_charged_num_adult == ''){
+                                                                $customer_charged_num_adult = 0;
+                                                            }
                                                             $customer_charged_num_adult = $recurring_str[0];
                                                             $customer_charged_time_adult = $recurring_str[1];
                                                         }
@@ -5456,17 +5467,18 @@
                                                                 <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" @if($price['dispaly_section'] == 'freeprice' ) checked @endif>
                                                                 <label class="recurring-pmt">Free</label>
                                                                 
-                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" @if($price['dispaly_section'] == 'weekdayprice' ) checked @endif>
+                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" @if($price['dispaly_section'] == 'weekdayprice'|| $price['adult_weekend_price_diff'] =='' ||  $price['child_weekend_price_diff'] =='' || $price['infant_weekend_price_diff'] =='' ) checked @endif>
                                                                 <label class="recurring-pmt">Everyday Price</label>
                                                                 
-                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice" @if($price['dispaly_section'] == 'weekendprice' ) checked @endif>
+                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice" @if($price['dispaly_section'] == 'weekendprice'  || $price['adult_weekend_price_diff'] !='' ||  $price['child_weekend_price_diff'] !='' || $price['infant_weekend_price_diff'] !=''  ) checked @endif>
                                                                 <label class="recurring-pmt">Weekend Price</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="displaysectiondiv{{$i}}{{$j}}" @if($price['dispaly_section'] == 'freeprice' ) style="display: none;"  @endif >
+                                            <div id="displaysectiondiv{{$i}}{{$j}}" 
+                                             @if($price['dispaly_section'] == 'freeprice' ) style="display: none;"  @endif >
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="setprice sp-select">
@@ -5543,7 +5555,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
+                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" 
+                                                    @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
                                                         <div class="cus-week-price earn sp-select">
                                                             <label>Weekend Estimated Earnings </label>
                                                             <input type="text" name="weekend_adult_estearn_{{$i}}{{$j}}" id="weekend_adult_estearn{{$i}}{{$j}}" placeholder="$" value="{{$price['weekend_adult_estearn']}}">

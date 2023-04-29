@@ -20,8 +20,15 @@ class DesignController extends Controller {
         return view('design.add_family_for_customer');
 	}
 
-
     public function add_family(Request $request){
         return view('design.add_family');
+    } 
+
+    public function dashboard(Request $request){
+        return view('design.dashboard');
+    }
+
+    public function staff_login(Request $request){
+        return view('design.staff_login');
     }
 }

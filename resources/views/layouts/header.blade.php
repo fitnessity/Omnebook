@@ -29,13 +29,20 @@ $total_quantity = 0;
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
-        <!-- <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> -->
+        <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> 
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css">
+		
+		@if(Route::current()->getName() != 'design.dashboard') 
+			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
+
+       		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+			
+			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
+       	@endif
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
+		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/header-footer.css">
+        
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -113,101 +120,10 @@ $total_quantity = 0;
 			  	cursor: pointer;
 			  	transition: all 0.2s ease;
 			}			
-			.pc-sidebar {
-				background: rgb(47 47 47);
-				box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-			   	/* width: 298px;*/
-				/*position: fixed;*/
-				top: 72px;
-				bottom: 0;
-				z-index: 1026;
-			}
-			.pc-sidebar .navbar-content { position: relative; /*height: calc(100vh - 70px);*/ }
-			.ps {
-				overflow: hidden !important;
-				overflow-anchor: none;
-				touch-action: auto;
-			}
-			.pc-sidebar ul {
-				list-style: none;
-				padding-left: 0;
-				margin-bottom: 0;
-			}
+			
 			.profile-img{ }
 			.text-lp{ color: white; /*padding: 15px 15px 15px 15px;*/ }
-			.pc-sidebar .pc-caption {
-				color: white;
-				display: block;
-				padding: 5px 28px 0px;
-				text-align: center;
-				font-size: 15px;
-			}
-			.pc-sidebar .pc-caption-1 {
-				color: white;
-				display: block;
-				text-align: center;
-				font-size: 18px;
-			}
-			.lp-tag{
-				color: white;
-				display: block;
-				padding: 0px 28px 0px;
-				font-size: 14px;
-				text-align: center;
-				margin-bottom: 10px;
-			}
-			.lp-per-pro{
-				color: white;
-				display: block;
-				padding: 0px 28px 5px;
-				font-size: 16px;
-				text-align: center;
-			}
-			.btn-lp{
-				background: #f91942;
-				color: white;
-				padding: 7px 25px 7px 25px;
-				border-radius: 7px;
-				margin-top: 0px;
-				margin-bottom: 15px;
-				border: 1px solid #f91942;
-			}
-			.pc-navbar .btn-lp:hover{
-				background: #000;
-				color: white;
-				padding: 7px 25px 7px 25px;
-				border-radius: 7px;
-				margin-top: 0px;
-				margin-bottom: 15px;
-				border: 1px solid #000;
-			}
-			.border-1{ border-bottom: 1.5px solid #c9c9c9; padding: 0px; text-align: center; margin-bottom: 7px; }
-			.pc-sidebar .pc-link {
-				display: block;
-				padding: 5px 30px;
-				color: white;
-				font-size: 15px;
-				font-weight: 400;
-				text-align: left;
-			}
-			.pc-micon{ margin-right: 15px; }
-			.pri-1{ color: white; text-align: center; margin-top: 12px; font-size: 10px; }
-			.pri-2{ color: white; text-align: center; font-size: 10px; }
-			.cancle{ color: white; padding: 15px; }
-			.cancle:hover{color: #fff;}
-			.sidepanel  {
-			  width: 0;
-			  position: fixed;
-			  z-index: 9;
-			  height: 100%;
-			  top: 0;
-			  /*left: 78%;*/
-			  right: 0;
-			  background-color: #2f2f2f;
-			  overflow-x: hidden;
-			  transition: 0.5s;
-			  padding-top: 10px;
-			}
+					
 			.openbtn {
 				font-size: 20px;
 				cursor: pointer;
@@ -217,33 +133,6 @@ $total_quantity = 0;
 				border: none;
 			}
 			
-			.top-search {
-			  float: left;
-			  margin-top: 0px;
-			  text-align: left;
-			  width: 32%;
-			}
-			.top-search form { display: inline-block; position: relative; width: 100%; }
-			.top-search button {
-			  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-			  color: #f91942;
-			  font-size: 15px;
-			  position: absolute;
-			  left: 6px;
-			  top: 47%;
-			  transform: translateY(-50%);
-			  padding: 9px;
-			  border: none;
-			}
-			.top-search form input {
-				background: white;
-				border: medium none;
-				font-size: 13px;
-				padding: 8px 40px;
-				width: 100%;
-				color: #2e2e2e;
-				border-radius: 5px;
-			}
 			.btn-style-srch {
 			  position: relative;
 			  display: inline-block;
@@ -263,22 +152,7 @@ $total_quantity = 0;
 			  margin: 0 !important;
 			  border: 0;
 			}
-			.logo {width: 100%;}
-			.top-area {
-			  display: contents;
-			  text-align: right;
-			  vertical-align: middle;
-			  width: 84%;
-			}
-			.top-area ul.setting-area {
-			  display: inline-block;
-			  float: left;
-			  list-style: outside none none;
-			  margin-bottom: 0;
-			  padding-left: 10px;
-			  vertical-align: middle;
-			}
-			.top-area ul.setting-area li { display: inline-block; position: relative; vertical-align: top; z-index: 2; }
+			
 			.top-area ul.setting-area li  a {
 			  color: #b9b9b9;
 			  font-size: 18px;
