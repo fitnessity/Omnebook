@@ -158,10 +158,8 @@
                                                                 @endif
                                                             @endif
                                                         @endforeach
-                                                        
-
                                                     </select>
-                                                    @if($booking_checkin_detail->customer->active_memberships()->count() < 1)
+                                                    @if(count($booking_checkin_detail->customer->active_memberships()->get()) < 1)
                                                         <span style="color:red;text-align:left;">No Active memberships</span>
                                                     @endif
                                                 </div>

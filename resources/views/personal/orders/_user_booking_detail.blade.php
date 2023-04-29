@@ -23,90 +23,90 @@
                 </div>
                 <div class="middleboxes middletoday" id="{{$tabname}}_<?php echo $i.'_'.$book_details->business_services()->withTrashed()->first()->id; ?>">
                     <p>
-                        <span>BOOKING CONFIRMATION #</span>
-                        <span>{{$book_details->booking->order_id}}</span>
+                        <span class="text-left">BOOKING CONFIRMATION #</span>
+                        <span class="text-rihgt">{{$book_details->booking->order_id}}</span>
                     </p>
                     <p>
-                        <span>TOTAL PRICE:</span>
-                        <span>@if($book_details->booking->getPaymentDetail() != 'Comp') {{$book_details->getperoderprice() + $book_details->total()}} @else 0 @endif </span>
+                        <span class="text-left">TOTAL PRICE:</span>
+                        <span class="text-rihgt">@if($book_details->booking->getPaymentDetail() != 'Comp') {{$book_details->getperoderprice() + $book_details->total()}} @else 0 @endif </span>
                     </p>
                     <p>
-                        <span>PRICE OPTION:</span>
-                        <span>{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions
+                        <span class="text-left">PRICE OPTION:</span>
+                        <span class="text-right">{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions
                         
                         </span>
                     </p>
                     <p>
-                        <span>PAYMENT TYPE:</span>
-                        <span> {{@$book_details['pay_session']}} Sessions</span>
+                        <span class="text-left">PAYMENT TYPE:</span>
+                        <span class="text-rihgt"> {{@$book_details['pay_session']}} Sessions</span>
                     </p>
 
                     <p>
-                        <span>TOTAL REMAINING:</span>
-                        <span>{{@$book_details->getremainingsession()}}/{{@$book_details['pay_session']}}</span>
+                        <span class="text-left">TOTAL REMAINING:</span>
+                        <span class="text-rihgt">{{@$book_details->getremainingsession()}}/{{@$book_details['pay_session']}}</span>
                     </p>
                     <p>
-                        <span>PROGRAM NAME:</span>
-                        <span>{{$book_details->business_services()->withTrashed()->first()->program_name}}</span>
+                        <span class="text-left">PROGRAM NAME:</span>
+                        <span class="text-rihgt">{{$book_details->business_services()->withTrashed()->first()->program_name}}</span>
                     </p>
                     <p>
-                        <span>EXPIRATION DATE:</span>
-                        <span>{{date('m-d-Y',strtotime($book_details->expired_at))}}</span>
+                        <span class="text-left">EXPIRATION DATE:</span>
+                        <span class="text-rihgt">{{date('m-d-Y',strtotime($book_details->expired_at))}}</span>
                     </p>
                     <p>
-                        <span>DATE BOOKED:</span>
-                        <span>{{date('m-d-Y',strtotime($book_details->created_at))}}</span>
+                        <span class="text-left">DATE BOOKED:</span>
+                        <span class="text-rihgt">{{date('m-d-Y',strtotime($book_details->created_at))}}</span>
                     </p>
                     <p>
-                        <span>RESERVED DATE:</span>
-                        <span>{{@$book_details->getReserveData('reserve_date')}}</span>
+                        <span class="text-left">RESERVED DATE:</span>
+                        <span class="text-rihgt">{{@$book_details->getReserveData('reserve_date')}}</span>
                     </p>
                 
                     <p>
-                        <span>BOOKED BY:</span>
-                        <span>{{$book_details->booking->getBookedFirstName()}} {{$book_details->booking->getBookedLastName()}} </span>
+                        <span class="text-left">BOOKED BY:</span>
+                        <span class="text-rihgt">{{$book_details->booking->getBookedFirstName()}} {{$book_details->booking->getBookedLastName()}} </span>
                     </p>
 
                     <p>
-                        <span>CHECK IN DATE:</span>
-                        <span>{{@$book_details->getReserveData('reserve_date')}}</span>
+                        <span class="text-left">CHECK IN DATE:</span>
+                        <span class="text-rihgt">{{@$book_details->getReserveData('reserve_date')}}</span>
                     </p> 
                     <p>
-                        <span>CHECK IN TIME:</span>
-                        <span>{{@$book_details->getReserveData('check_in_time')}}</span>
+                        <span class="text-left">CHECK IN TIME:</span>
+                        <span class="text-rihgt">{{@$book_details->getReserveData('check_in_time')}}</span>
                     </p>
 
                     <p>
-                        <span>ACTIVITY TYPE:</span>
-                        <span>{{$book_details->business_services()->withTrashed()->first()->sport_activity}}</span>
+                        <span class="text-left">ACTIVITY TYPE:</span>
+                        <span class="text-rihgt">{{$book_details->business_services()->withTrashed()->first()->sport_activity}}</span>
                     </p>
                     <p>
-                        <span>SERVICE TYPE:</span>
-                        <span>@if($book_details->business_services()->withTrashed()->first()->select_service_type != '') {{$book_details->business_services()->withTrashed()->first()->select_service_type}} @else — @endif</span>
+                        <span class="text-left">SERVICE TYPE:</span>
+                        <span class="text-rihgt">@if($book_details->business_services()->withTrashed()->first()->select_service_type != '') {{$book_details->business_services()->withTrashed()->first()->select_service_type}} @else — @endif</span>
                     </p>
                     
                     <p>
-                        <span>ACTIVITY LOCATION:</span>
-                        <span>{{$book_details->business_services()->withTrashed()->first()->activity_location}}</span>
+                        <span class="text-left">ACTIVITY LOCATION:</span>
+                        <span class="text-rihgt">{{$book_details->business_services()->withTrashed()->first()->activity_location}}</span>
                     </p> 
 
                     <p>
-                        <span>ACTIVITY DURATION:</span>
-                        <span>{{@$book_details->getReserveData('reserve_time')}}</span>
+                        <span class="text-left">ACTIVITY DURATION:</span>
+                        <span class="text-rihgt">{{@$book_details->getReserveData('reserve_time')}}</span>
                     </p>
 
                     <p>
-                        <span>GREAT FOR:</span>
-                        <span>{{$book_details->business_services()->withTrashed()->first()->activity_for}}</span>
+                        <span class="text-left">GREAT FOR:</span>
+                        <span class="text-rihgt">{{$book_details->business_services()->withTrashed()->first()->activity_for}}</span>
                     </p>
                    
                     <p>
-                        <span>PARTICIPANTS:</span>
-                        <span>{!!$book_details->getparticipate()!!}</span>
+                        <span class="text-left">PARTICIPANTS:</span>
+                        <span class="text-rihgt">{!!$book_details->getparticipate()!!}</span>
                     </p>
                     <p>
-                        <span>WHO IS PARTICIPATING?</span>
-                        <span>{!!$book_details->decodeparticipate()!!}</span>
+                        <span class="text-left">WHO IS PARTICIPATING?</span>
+                        <span class="text-rihgt">{!!$book_details->decodeparticipate()!!}</span>
                     </p>
                 </div>
                 <div class="foterboxes">

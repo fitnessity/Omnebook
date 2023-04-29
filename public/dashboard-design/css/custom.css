@@ -1,0 +1,40 @@
+.navbar-menu .navbar-nav .nav-link img{
+	display: inline-block;
+	width: 18px;
+	font-size: 18px;
+	line-height: inherit;
+	margin-right: 10px;
+}
+.desktop-none {
+  display: none;
+}
+.d-none{
+	display: block !important;
+}
+.dash-sidebar-menu{
+	 display: block;
+	 margin-top: 70px;
+}
+.add-client{
+	display: block;
+	text-align: center;
+	padding: 7px 21px;
+	color: #fff;
+	border-radius: 4px;
+	background: red;
+	margin-left: 15px;
+	font-size: 14px;
+}
+.white-box p{
+	font-size: 12px;
+}
+.increase p{
+	margin-bottom: 0px;
+	text-align: center;
+	color: #4b5259;
+}
+.decrease p{
+	margin-bottom: 0px;
+	text-align: center;
+	color: #4b5259;
+}
