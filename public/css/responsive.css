@@ -2565,7 +2565,7 @@
 	.user-img-sp .user-pic{margin-left: 10px;}
 	.friend-name{padding-left: 15px; padding-right: 7px;}
 	.post-meta.social-img input{padding-left: 15px;}
-}
+	.mobile-none{display:none;}
 
 
 @media(max-width: 575px) {

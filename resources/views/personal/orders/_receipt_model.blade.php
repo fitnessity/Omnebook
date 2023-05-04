@@ -157,7 +157,7 @@
                     </div>
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
-                            <span>{{ $odt['bookedtime']}}</span>
+                            <span>{{@$book_details->getReserveData('reserve_date')}}</span>
                         </div>
                     </div>
                 </div>
