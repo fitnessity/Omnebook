@@ -24,6 +24,7 @@
     $fees = BusinessSubscriptionPlan::where('id',1)->first();
 
     $soldout_chk = 0;
+    $time_chk = 0;
     $bookings = new BookingRepository ;
 ?>
 
@@ -41,7 +42,7 @@
                 <?php $item_price = $discount =0;  
     				foreach ($cart['cart_item'] as $item) {
                         $totalquantity = 0;
-                        $Sold_out = '';
+                        $Sold_out = $timechk_text = '';
                         $serprice = BusinessPriceDetails::where('id', $item['priceid'])->limit(1)->orderBy('id', 'ASC')->first();
                         $db_totalquantity = $bookings->gettotalbooking($item["actscheduleid"],$item["sesdate"]);
                         if(!empty($item['adult'])){
@@ -67,6 +68,16 @@
     					}else{ $profilePic = url('/public/images/service-nofound.jpg'); }
     					
                         $bookscheduler = BusinessActivityScheduler::where('id', $item["actscheduleid"])->orderBy('id', 'ASC')->first();
+                        if(date('Y-m-d',strtotime($item["sesdate"])) == date('Y-m-d')){
+			                $start = new DateTime($bookscheduler->shift_start);
+			                $start_time = $start->format("H:i");
+			                $current = new DateTime();
+			                $current_time =  $current->format("H:i");
+			                if($current_time > $start_time){
+			                   	$time_chk= 1;
+			                   	$timechk_text = "You can't book this activity for this date";
+			                }
+			            }
 
                         $tot_cart_qty = ($db_totalquantity + $totalquantity);
                         if( @$bookscheduler['spots_available'] <  $tot_cart_qty ){
@@ -95,9 +106,14 @@
                     <input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
                     <input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-9">
+                            <label class="soldout-text timechk-text">{{$timechk_text}}</label>
+                        </div> 
+                        <div class="col-md-3">
                             <label class="soldout-text">{{$Sold_out}}</label>
                         </div> 
+                    </div>
+                    <div class="row">
                         <div class="col-lg-3">	
                             <div class="ord-img"> 
                                 <img src="<?php echo $profilePic; ?>" alt="">
@@ -121,18 +137,18 @@
 											</div>
 										</div>
                                         <?php
-                                        if(@@$bookscheduler['set_duration']!=''){
-                                            $tm=explode(' ',$bookscheduler[@'set_duration']);
-                                            $hr=''; $min=''; $sec='';
-                                            if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                                            if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                                            if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                                            if($hr!='' || $min!='' || $sec!='')
-                                            { $timeval = $hr.$min.$sec; } 
-                                        }
-                                        if(@@$bookscheduler['shift_end']!=''){
-    										echo '<div class="row"><div class="col-md-6 col-xs-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6 col-xs-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( @$bookscheduler['shift_start'] )).' to '.date('h:ia', strtotime( @$bookscheduler['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
-    									} 
+	                                        if(@@$bookscheduler['set_duration']!=''){
+	                                            $tm=explode(' ',$bookscheduler[@'set_duration']);
+	                                            $hr=''; $min=''; $sec='';
+	                                            if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
+	                                            if($tm[2]!=0){ $min=$tm[2].'min. '; }
+	                                            if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
+	                                            if($hr!='' || $min!='' || $sec!='')
+	                                            { $timeval = $hr.$min.$sec; } 
+	                                        }
+	                                        if(@@$bookscheduler['shift_end']!=''){
+	    										echo '<div class="row"><div class="col-md-6 col-xs-6"> <div class="info-display"><label>Time & Duration:</label></div></div> <div class="col-md-6 col-xs-6"> <div class="info-display info-align"> <span>'.date('h:ia', strtotime( @$bookscheduler['shift_start'] )).' to '.date('h:ia', strtotime( @$bookscheduler['shift_end'] )).' | '.$timeval.'</span></div></div></div>';
+	    									} 
     									?>
                                         
 										<div class="row">
@@ -217,7 +233,7 @@
 											</div>
 										</div>
                                        
-									   <div class="row">
+									    <div class="row">
 											<div class="col-md-6 col-xs-6">
 												<div class="info-display">
 													<label>Activity Type:</label>
@@ -307,306 +323,297 @@
 												</div>
 											</div>
 										</div>
-										</div>
-										<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
-                                    </div>
+									</div>
+									<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
                                 </div>
-                                <div class="col-lg-5">
-                                    <div class="price-section">
-                                        <h4>
-                                        	@if($item['adult'])
-                                        	<label class="highlight-fonts">  x{{$item['adult']['quantity']}} Adult </label> 
-                                        	  @if(@$serprice['child_discount'])
-                                        	    @php
-                                        	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * @$serprice['child_discount'])/100)
-                                        	    @endphp
-                                        	    ${{$child_discount_price}}<strike> ${{$item['adult']['price']}}</strike>/person
-                                        	  @endif
-                                        	  <br/>
-                                        	@endif
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="price-section">
+                                    <h4>
+                                    	@if($item['adult'])
+                                    	<label class="highlight-fonts">  x{{$item['adult']['quantity']}} Adult </label> 
+                                    	  @if(@$serprice['child_discount'])
+                                    	    @php
+                                    	      $child_discount_price = ($item['adult']['price'] - ($item['adult']['price'] * @$serprice['child_discount'])/100)
+                                    	    @endphp
+                                    	    ${{$child_discount_price}}<strike> ${{$item['adult']['price']}}</strike>/person
+                                    	  @endif
+                                    	  <br/>
+                                    	@endif
 
-                                        	@if($item['child'])
-                                        	 <label class="highlight-fonts">  x{{$item['child']['quantity']}} Child </label>
-                                        	  @if(@$serprice['child_discount'])
-                                        	    @php
-                                        	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * @$serprice['child_discount'])/100)
-                                        	    @endphp
-                                        	    ${{$child_discount_price}}<strike> ${{$item['child']['price']}}</strike>/person
-                                        	  @endif
-                                        	  <br/>
-                                        	@endif
+                                    	@if($item['child'])
+                                    	 <label class="highlight-fonts">  x{{$item['child']['quantity']}} Child </label>
+                                    	  @if(@$serprice['child_discount'])
+                                    	    @php
+                                    	      $child_discount_price = ($item['child']['price'] - ($item['child']['price'] * @$serprice['child_discount'])/100)
+                                    	    @endphp
+                                    	    ${{$child_discount_price}}<strike> ${{$item['child']['price']}}</strike>/person
+                                    	  @endif
+                                    	  <br/>
+                                    	@endif
 
-                                        	@if($item['infant'])
-                                        	 <label class="highlight-fonts">  x{{$item['infant']['quantity']}} Infant </label>
-                                        	  @if(@$serprice['child_discount'])
-                                        	    @php
-                                        	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * @$serprice['child_discount'])/100)
-                                        	    @endphp
-                                        	    ${{$child_discount_price}}<strike> ${{$item['infant']['price']}}</strike>/person
-                                        	  @endif
-                                        	  <br/>
-                                        	@endif
-                                        	 <label class="highlight-fonts"> Total:</label> <?= "$ " . number_format($item["totalprice"] - $discount, 2); ?>
-                                        </h4>
-                                    </div>
-                                    <div class="invite-share">
-                                    	<!--<span>Invite Others</span>
-                                        <i class="fas fa-envelope email-icon-share"></i>
-                                        <a class="send-mesg" href="#" title="" data-toggle="tooltip" data-original-title="Send Message"><i class="fa fa-comment"></i></a>
-                                        <span class="pipe"> | </span>-->
-                                      <!--   <i class="fas fa-pencil-alt p-red-color"></i> -->
-                                       <i class="fas fa-share-alt"></i> <a href="/removetocart?priceid=<?php echo $item["priceid"]; ?>" class="p-red-color">
-										 <i class="fas fa-trash-alt p-red-color"></i></a>
-                                    </div>
-                                    <!--<div class="gift-activity">
-                                        <a href="#"><img src="/img/gift.png" alt="">Gift This Activity</a>
-                                    </div>-->
-                                    
-                                    <?php if (Auth::user()) { ?>
-                                    <label class="text-center participaingtxt">Select Who's Participating</label>
-                                    <div class="">
-                                    	<?php
-    										$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
-    										
-    										for($i=0; $i<$totalquantity ; $i++)
-    										{ ?>
-                                            <select class="select-participat familypart" name="participat[]" id="participats" >
-                                                <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
-                                                <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
-                                                <?php foreach($family as $fa){ 
+                                    	@if($item['infant'])
+                                    	 <label class="highlight-fonts">  x{{$item['infant']['quantity']}} Infant </label>
+                                    	  @if(@$serprice['child_discount'])
+                                    	    @php
+                                    	      $child_discount_price = ($item['infant']['price'] - ($item['infant']['price'] * @$serprice['child_discount'])/100)
+                                    	    @endphp
+                                    	    ${{$child_discount_price}}<strike> ${{$item['infant']['price']}}</strike>/person
+                                    	  @endif
+                                    	  <br/>
+                                    	@endif
+                                    	 <label class="highlight-fonts"> Total:</label> <?= "$ " . number_format($item["totalprice"] - $discount, 2); ?>
+                                    </h4>
+                                </div>
+                                <div class="invite-share">
+                                   <i class="fas fa-share-alt"></i> <a href="/removetocart?priceid=<?php echo $item["priceid"]; ?>" class="p-red-color">
+									 <i class="fas fa-trash-alt p-red-color"></i></a>
+                                </div>
+                                <?php if (Auth::user()) { ?>
+                                <label class="text-center participaingtxt">Select Who's Participating</label>
+                                <div class="">
+                                	<?php
+										$family = UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
+										
+										for($i=0; $i<$totalquantity ; $i++)
+										{ ?>
+                                        <select class="select-participat familypart" name="participat[]" id="participats" >
+                                            <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
+                                            <option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
+                                            <?php foreach($family as $fa){ 
 
-                                                   /* $date_now = date_create();
-                                                    $birthday = new DateTime($fa['birthday']);
-                                                    $age = $date_now->diff($birthday)->y;*/
-    												/*$age = date_diff($birthday,  $date_now)->y;*/
-                                                   /* echo $age;  */  											?>   
-                                                	<option value="<?php echo $fa['id']; ?>" 
-                                                        data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
-                                                        data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
-                                                        {{$fa['first_name']}} {{$fa['last_name']}}</option>
-                                                <?php } ?>
-                                                <option value="addparticipate">+ Add New Participant</option>
-                                            </select> 
-                                        <?php } ?>
-
-                                    </div>
-                                    <?php 
-                                        $participatearray = [];
-                                    ?>
-                                    <div class="mtp-15 info-details participaingdiv{{$item['priceid']}}">
-                                    	<?php
-                                            $ajaxname = Auth::user()->firstname.' '.Auth::user()->lastname;
-    										for($i=0; $i<$totalquantity; $i++)
-    										{ 
-                                                $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
-                                        		<p id='part<?php echo $i.$item["priceid"]; ?>'>
-                                                    <b>Participant#{{$i+1}}: </b> @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
-                                                </p>
-                                        <?php 
-                                            } 
-                                        ?>
-                                    </div>
+                                               /* $date_now = date_create();
+                                                $birthday = new DateTime($fa['birthday']);
+                                                $age = $date_now->diff($birthday)->y;*/
+												/*$age = date_diff($birthday,  $date_now)->y;*/
+                                               /* echo $age;  */  											?>   
+                                            	<option value="<?php echo $fa['id']; ?>" 
+                                                    data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
+                                                    data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
+                                                    {{$fa['first_name']}} {{$fa['last_name']}}</option>
+                                            <?php } ?>
+                                            <option value="addparticipate">+ Add New Participant</option>
+                                        </select> 
                                     <?php } ?>
-                                    <div class="select-sparetor">
-                                        <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}','{{$profilePic}}','{{$item["name"]}}','{{date("m/d/Y",strtotime($item["sesdate"]))}}')">
-                                        <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
-                                        <p class="payfor-ptag">Share the booking details with them</p>
-										<div class="btn-ord-txt">
-											<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
+
+                                </div>
+                                <?php 
+                                    $participatearray = [];
+                                ?>
+                                <div class="mtp-15 info-details participaingdiv{{$item['priceid']}}">
+                                	<?php
+                                        $ajaxname = Auth::user()->firstname.' '.Auth::user()->lastname;
+										for($i=0; $i<$totalquantity; $i++)
+										{ 
+                                            $family = UserFamilyDetail::where('id',@$item['participate'][$i]['id'])->first(); ?>
+                                    		<p id='part<?php echo $i.$item["priceid"]; ?>'>
+                                                <b>Participant#{{$i+1}}: </b> @if(@$item['participate'][$i]['from'] == 'user') {{Auth::user()->firstname}} {{ Auth::user()->lastname }}  @else {{@$family->first_name}} {{ @$family->last_name}} @endif
+                                            </p>
+                                    <?php 
+                                        } 
+                                    ?>
+                                </div>
+                                <?php } ?>
+                                <div class="select-sparetor">
+                                    <input class="payfor" type="checkbox" id="payforcheckbox{{$item['priceid']}}" name="payforcheckbox" value="" onclick="opengiftpopup('{{$item["priceid"]}}','{{$profilePic}}','{{$item["name"]}}','{{date("m/d/Y",strtotime($item["sesdate"]))}}')">
+                                    <label class="payfor-label" for="payforcheckbox{{$item['priceid']}}">Paying or gifting for someone?</label>
+                                    <p class="payfor-ptag">Share the booking details with them</p>
+									<div class="btn-ord-txt">
+										<a href="#" class="post-btn-red" data-toggle="modal" data-target="#leavegift" style="display:none;" id="giftanotheralink"></a>
+									</div>
+                                </div>
+                            </div>
+						</div>
+						<div class="row">
+                            <div class="col-md-12 divmargin cart-terms-dis">
+                                @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
+                                	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails terms-txt"> View the terms and conditions from this provider below </span>
+                                    <div>
+                                        @if($termcondfaqtext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{@$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
+                                        
+                                        @if($liabilitytext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{@$act['cid']}}">Liability Waiver</a> | @endif 
+                                        @if($covidtext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{@$act['cid']}}">Covid - 19 Protocols</a> |
+                                        @endif
+                                        @if($contracttermstext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{@$act['cid']}}">Contract Terms</a> | @endif 
+                                        @if($refundpolicytext != '')
+                                            <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{@$act['cid']}}">Refund Policy</a> @endif
+                                    </div> 
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+					$('.familypart').change(function() {
+						var value = $(this).children("option:selected").val();
+						if(value == 'addparticipate'){
+							$('#newparticipant').modal('show');
+						}else{
+    						var name = $(this).find(':selected').data('name');
+    						var cnt = $(this).find(':selected').data('cnt');
+    						var act = $(this).find(':selected').data('priceid');
+                            var type = $(this).find(':selected').data('type');
+    						// var age = $(this).find(':selected').data('age');
+    						
+    						var counter = cnt+1;
+    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
+                            
+                            if(name == undefined){
+                                name = '{{$ajaxname}}';
+                            }
+                            
+                            
+                            var txt= 'participant#'+counter+': '+name;
+    						$('#part'+cnt+act).text(txt);
+                           
+                            var _token = $('meta[name="csrf-token"]'). attr('content');
+                            $.ajax({
+                                type: 'POST',
+                                url: '{{route("form_participate")}}',
+                                data: {
+                                    _token: _token,
+                                    act: act,
+                                    familyid: value,
+                                    counter: cnt,
+                                    type: type,
+                                },
+                                success: function (data) {
+                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
+                                }
+                            });
+                       		}
+					});
+				</script>
+                <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
+
+                <div class="modal fade compare-model" id="termsModal_{{@$act['cid']}}">
+                    <div class="modal-dialog modal-lg business">
+                        <div class="modal-content">
+                            <div class="modal-header">
+								<div class="row">
+									<div class="col-md-6 col-xs-8 titletext"> 
+										<p>Terms, Conditions, FAQ</p>
+									</div>
+									<div class="col-md-6 col-xs-4">
+										<div class="closebtn">
+											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                             <p>{{$termcondfaqtext}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade compare-model" id="contractModal_{{@$act['cid']}}">
+                    <div class="modal-dialog modal-lg business">
+                        <div class="modal-content">
+                            <div class="modal-header"> 
+								<div class="row">
+									<div class="col-md-6 col-xs-8 titletext">
+										<p>Contarct Terms</p>
+									</div>
+									<div class="col-md-6 col-xs-4">
+										<div class="closebtn">
+											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                             <p>{{$contracttermstext}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade compare-model" id="liabilityModal_{{@$act['cid']}}">
+                    <div class="modal-dialog modal-lg business">
+                        <div class="modal-content">
+                            <div class="modal-header">
+								<div class="row">
+									<div class="col-md-6 col-xs-8 titletext">
+										<p>Liability Waiver</p>
+									</div>
+									<div class="col-md-6 col-xs-4">
+										<div class="closebtn">
+										   <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <p>{{$liabilitytext}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade compare-model" id="covidModal_{{@$act['cid']}}">
+                    <div class="modal-dialog modal-lg business">
+                        <div class="modal-content">
+                            <div class="modal-header"> 
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-8 titletext">
+                                        <p>Covid - 19 Protocols</p>
+                                    </div>
+                                    <div class="col-md-6 col-xs-4">
+										<div class="closebtn">
+											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
 										</div>
                                     </div>
                                 </div>
-    						</div>
-    						<div class="row">
-                                <div class="col-md-12 divmargin cart-terms-dis">
-                                    @if($termcondfaqtext != '' || $liabilitytext != '' || $covidtext != '' || $contracttermstext != '' || $refundpolicytext != '')
-                                    	<h4 class="termsdetails"> Terms: </h4> <span class="termsdetails terms-txt"> View the terms and conditions from this provider below </span>
-                                        <div>
-                                            @if($termcondfaqtext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#termsModal_{{@$act['cid']}}">Terms, Conditions, FAQ</a> | @endif 
-                                            
-                                            @if($liabilitytext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#liabilityModal_{{@$act['cid']}}">Liability Waiver</a> | @endif 
-                                            @if($covidtext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#covidModal_{{@$act['cid']}}">Covid - 19 Protocols</a> |
-                                            @endif
-                                            @if($contracttermstext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#contractModal_{{@$act['cid']}}">Contract Terms</a> | @endif 
-                                            @if($refundpolicytext != '')
-                                                <a href="" data-toggle="modal" class="font-13" data-target="#refundModal_{{@$act['cid']}}">Refund Policy</a> @endif
-                                        </div> 
-                                    @endif
-                                </div>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                             <p>{{$covidtext}}</p>
                             </div>
                         </div>
                     </div>
-                    <script>
-    					$('.familypart').change(function() {
-    						var value = $(this).children("option:selected").val();
-    						if(value == 'addparticipate'){
-    							$('#newparticipant').modal('show');
-    						}else{
-	    						var name = $(this).find(':selected').data('name');
-	    						var cnt = $(this).find(':selected').data('cnt');
-	    						var act = $(this).find(':selected').data('priceid');
-	                            var type = $(this).find(':selected').data('type');
-	    						// var age = $(this).find(':selected').data('age');
-	    						
-	    						var counter = cnt+1;
-	    						//var txt= 'participant#'+counter+': '+name+' ('+age+')';
-	                            
-	                            if(name == undefined){
-	                                name = '{{$ajaxname}}';
-	                            }
-	                            
-	                            
-	                            var txt= 'participant#'+counter+': '+name;
-	    						$('#part'+cnt+act).text(txt);
-	                           
-	                            var _token = $('meta[name="csrf-token"]'). attr('content');
-	                            $.ajax({
-	                                type: 'POST',
-	                                url: '{{route("form_participate")}}',
-	                                data: {
-	                                    _token: _token,
-	                                    act: act,
-	                                    familyid: value,
-	                                    counter: cnt,
-	                                    type: type,
-	                                },
-	                                success: function (data) {
-	                                    $(".participaingdiv"+act).load(" .participaingdiv"+act+">*");
-	                                }
-	                            });
-	                       		}
-    					});
-    				</script>
-                    <div class="border-wid-sp"><div class="border-wid-grey"></div></div>
+                </div>
 
-                    <div class="modal fade compare-model" id="termsModal_{{@$act['cid']}}">
-                        <div class="modal-dialog modal-lg business">
-                            <div class="modal-content">
-                                <div class="modal-header">
-    								<div class="row">
-    									<div class="col-md-6 col-xs-8 titletext"> 
-    										<p>Terms, Conditions, FAQ</p>
-    									</div>
-    									<div class="col-md-6 col-xs-4">
-    										<div class="closebtn">
-    											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-    												<span aria-hidden="true">×</span>
-    											</button>
-    										</div>
-    									</div>
-    								</div>
-                                </div>
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                 <p>{{$termcondfaqtext}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal fade compare-model" id="contractModal_{{@$act['cid']}}">
-                        <div class="modal-dialog modal-lg business">
-                            <div class="modal-content">
-                                <div class="modal-header"> 
-    								<div class="row">
-    									<div class="col-md-6 col-xs-8 titletext">
-    										<p>Contarct Terms</p>
-    									</div>
-    									<div class="col-md-6 col-xs-4">
-    										<div class="closebtn">
-    											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-    												<span aria-hidden="true">×</span>
-    											</button>
-    										</div>
-    									</div>
-    								</div>
-                                </div>
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                 <p>{{$contracttermstext}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal fade compare-model" id="liabilityModal_{{@$act['cid']}}">
-                        <div class="modal-dialog modal-lg business">
-                            <div class="modal-content">
-                                <div class="modal-header">
-    								<div class="row">
-    									<div class="col-md-6 col-xs-8 titletext">
-    										<p>Liability Waiver</p>
-    									</div>
-    									<div class="col-md-6 col-xs-4">
-    										<div class="closebtn">
-    										   <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-    												<span aria-hidden="true">×</span>
-    											</button>
-    										</div>
-    									</div>
-    								</div>
-                                </div>
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <p>{{$liabilitytext}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal fade compare-model" id="covidModal_{{@$act['cid']}}">
-                        <div class="modal-dialog modal-lg business">
-                            <div class="modal-content">
-                                <div class="modal-header"> 
-                                    <div class="row">
-                                        <div class="col-md-6 col-xs-8 titletext">
-                                            <p>Covid - 19 Protocols</p>
-                                        </div>
-                                        <div class="col-md-6 col-xs-4">
-    										<div class="closebtn">
-    											<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-    												<span aria-hidden="true">×</span>
-    											</button>
-    										</div>
+                <div class="modal fade compare-model" id="refundModal_{{@$act['cid']}}">
+                    <div class="modal-dialog modal-lg business">
+                        <div class="modal-content">
+                            <div class="modal-header"> 
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-8 titletext">
+                                        <p>Refund Policy</p>
+                                    </div>
+                                    <div class="col-md-6 col-xs-4">
+                                        <div class="closebtn">
+                                            <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                 <p>{{$covidtext}}</p>
-                                </div>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                             <p>{{$refundpolicytext}}</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="modal fade compare-model" id="refundModal_{{@$act['cid']}}">
-                        <div class="modal-dialog modal-lg business">
-                            <div class="modal-content">
-                                <div class="modal-header"> 
-                                    <div class="row">
-                                        <div class="col-md-6 col-xs-8 titletext">
-                                            <p>Refund Policy</p>
-                                        </div>
-                                        <div class="col-md-6 col-xs-4">
-                                            <div class="closebtn">
-                                                <button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                 <p>{{$refundpolicytext}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
 
     			<?php } ?>
         			<div class="btn-ord-txt">
@@ -616,11 +623,8 @@
             <?php
     			$service_fee= ($item_price * $fees->service_fee)/100;
     			$tax= ($item_price * $fees->site_tax)/100;
+    			$total_amount =  number_format(($item_price + $service_fee + $tax - $discount),2,'.','');
 
-    			/*echo $tax.'<br>';
-    			echo $item_price.'<br>';
-    			echo $service_fee.'<br>';*/
-    			$total_amount =  number_format(($item_price + $service_fee + $tax - $discount),2);
     		?>
     		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
     		<div class="col-sm-6 col-md-5 col-lg-5 order-sum-rp">
@@ -660,7 +664,7 @@
     						</div>
     						<div class="col-lg-6 col-xs-6">
     							<div class="total-grand">
-    								<span><?php echo "$ " . number_format($total_amount,2); ?> </span>
+    								<span>${{$total_amount}}</span>
     							</div>	
     						</div>
     					</div>
@@ -744,7 +748,7 @@
                         </div>
                         @endif
                         <div class="btn-ord-txt">
-                            <button class="post-btn-red" type="submit" id="checkout-button" @if($soldout_chk == 1) disabled @endif>Check Out</button>
+                            <button class="post-btn-red" type="submit" id="checkout-button" @if($soldout_chk == 1 || $time_chk == 1) disabled @endif>Check Out</button>
                         </div>
     				</div>
     			</div>
@@ -951,7 +955,6 @@
 		</div>
 	</div>
 <!-- end modal -->
-
 
 <script>
 	function opengiftpopup(pid,img,name,date){

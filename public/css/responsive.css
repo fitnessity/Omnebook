@@ -2476,7 +2476,7 @@
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
 	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
 	.main-slider .slide{padding-top: 200px; min-height: 575px;}
-	.top-search{width: 100% !important; margin-top: 21px !important;}
+	.top-search{width: 100% !important; margin-top: 10px !important;}
 	.personal-find-activity{height: 245px;}
 	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}

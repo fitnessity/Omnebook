@@ -8,9 +8,6 @@
 .desktop-none {
   display: none;
 }
-.d-none{
-	display: block !important;
-}
 .dash-sidebar-menu{
 	 display: block;
 	 margin-top: 70px;
@@ -38,3 +35,75 @@
 	text-align: center;
 	color: #4b5259;
 }
+.revenue{
+	font-size: 9px;
+}
+.calendar-title{
+	font-size: 13px;
+}
+.mini-stats-wid .mini-stat-icon{
+	color: #ea1515 !important;
+	font-size: 15px !important;
+}
+.multiple-activites{
+	display: grid;
+	padding-top: 3px;
+	text-align: center;
+}
+.multiple-activites label{
+	font-size: 7px;
+	color: #000;
+	margin-top: -5px;
+	text-align: center;
+}
+.activity-info{
+	text-align: center;
+}
+.activity-info p{
+	font-size: 12px;
+	line-height: 13px;
+}
+.color-black{
+	color: #000 !important;
+}
+.activity-show i{
+	font-size: 18px;
+	margin-left: 7px;
+}
+.activity-show{
+	cursor: pointer;
+}
+.payment-tracker{
+	font-size: 13px;
+}
+.scheduled-payments{
+	font-size: 22px;
+	margin-bottom: 10px;
+	margin-top: 20px;
+}
+.padding-15{
+	padding: 15px;
+}
+.set-data{
+	margin-bottom: 0px;
+}
+.month-year{
+	padding: 0px 15px;
+}
+.month-year h4{
+	font-size: 12px;
+	font-weight: normal;
+	margin-top: 8px;
+	margin-bottom: 15px !important;
+}
+.table-responsive {
+  overflow-x: auto !important;
+}
+.memberships-pack thead tr td{
+	font-weight: 600;
+	font-size: 15px;
+}
+#mysticky{
+	display: none;
+}
+header{ position: fixed !important; }
