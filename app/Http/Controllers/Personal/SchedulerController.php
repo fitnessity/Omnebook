@@ -84,7 +84,13 @@ class SchedulerController extends Controller
         $UserBookingDetails = '';
         $today = date('Y-m-d');
         //$UserBookingDetails = $customer->bookingDetail()->where(['priceid'=>$request->priceId,'bookedtime'=> null])->orderby('created_at','desc')->first();
-        $UserBookingDetails = $customer->bookingDetail()->where(['priceid'=>$request->priceId])->orderby('created_at','desc')->first();
+        $UserBookingDetails = $customer->bookingDetail()->where('sport',$request->serviceID);
+
+        if($request->priceId != ''){
+            $UserBookingDetails = $UserBookingDetails->orWhere(['priceid'=>$request->priceId]);
+        }
+
+        $UserBookingDetails = $UserBookingDetails->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
             $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->where(['checked_at' =>null])->first();
             if($request->date == $today){

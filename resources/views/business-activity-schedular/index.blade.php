@@ -250,6 +250,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 					date:'{{$filter_date->format("Y-m-d")}}',
 					timeid:scheduleId,
 					businessId:'{{$businessId}}',
+					serviceID:sid,
 					customerID:'{{@$customer->id}}',
 					priceId:'{{@$priceid}}',
 				},
