@@ -6719,12 +6719,6 @@ label.qh-radio-pri {
     #nav {
         width: 30%;
     }
-
-    .header-right {
-        width: 39%;
-        padding: 35px 15px 0 0;
-    }
-
     .logo {
         padding: 0 15px;
         width: 28%;
@@ -14395,24 +14389,6 @@ div#CreateCompanyModal #preview img.header_img {
 }
 
 @media(max-width: 769px) {
-    header {
-        padding: 15px 0;
-    }
-
-    header .logo {
-        width: 250px;
-    }
-
-    header .header-right {
-        float: right;
-        padding-top: 0;
-        margin-right: 15px;
-    }
-
-    header #nav {
-        width: 35%;
-        float: left;
-    }
 
     .main-slider .slider-block p {
         width: 100%;
@@ -14556,46 +14532,6 @@ div#CreateCompanyModal #preview img.header_img {
 @media(max-width: 767px) {
     .banner-bottom h1 {
         background-size: 290px;
-    }
-
-    header .logo {
-        text-align: center;
-        margin: auto;
-        float: none;
-    }
-
-    header .header-right {
-        margin: 13px auto 0;
-        display: block;
-        text-align: center;
-        float: none;
-        display: flex;
-        justify-content: center;
-    }
-
-    header .header-right .topbtn {
-        padding: 6px 13px 6px !important;
-    }
-
-    header .header-right form {
-        float: none !important;
-    }
-
-    header .header-right i {
-        font-size: 20px;
-        margin-left: 0;
-    }
-
-    header .header-right .btnlogout {
-        padding-top: 6px !important;
-        padding-bottom: 1px !important;
-    }
-
-    header .header-right-menu {
-        font-size: 14px;
-        float: none;
-        vertical-align: top;
-        margin: 0 5px;
     }
 
     .main-slider .slider-block h1 {
@@ -15115,37 +15051,6 @@ div#CreateCompanyModal #preview img.header_img {
         width: 90%;
     }
 
-    header .header-right {
-        display: block;
-        justify-content: center;
-    }
-
-    header .header-right .topbtn {
-        display: inline-block;
-        margin: 0;
-        margin-bottom: 5px;
-        padding: 6px 13px 4px !important;
-    }
-
-    header .header-right form {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    header .header-right .btnlogout {
-        padding-top: 8px !important;
-        padding-bottom: 3px !important;
-        display: inline-block;
-        margin: 0;
-        margin-bottom: 5px;
-    }
-
-    header .header-right-menu {
-        display: inline-block;
-        margin: 0;
-        margin-bottom: 5px;
-    }
-
     .viewprfl-sec .nw-dtl-edit {
         display: block;
     }
@@ -15262,10 +15167,6 @@ div#CreateCompanyModal #preview img.header_img {
 }
 
 @media(max-width: 419px) {
-    header .logo {
-        width: 50%;
-    }
-
     #chooseoption .pop-title h3,
     #signupoption .pop-title h3 {
         font-size: 20px;
@@ -24233,4 +24134,7 @@ padding-left: 0px;
 }
 .staff-remember{
 	font-size: 14px;
+}
+.timechk-text{
+	float: left !important;
 }

@@ -721,3 +721,111 @@ footer {
 }
 
 /*.footer-link-button-say .btn-info:focus { color: #fff; background-color: transparent; border-color: #f53b49 !important; }*/
+
+@media(max-width: 767px) {
+    header .logo {
+        text-align: center;
+        margin: auto;
+        float: none;
+    }
+
+    header .header-right {
+        margin: 5px auto 0;
+        display: block;
+        text-align: center;
+        float: none;
+        display: flex;
+        justify-content: center;
+    }
+
+    header .header-right .topbtn {
+        padding: 6px 13px 6px !important;
+    }
+
+    header .header-right form {
+        float: none !important;
+    }
+
+    header .header-right i {
+        font-size: 20px;
+        margin-left: 0;
+    }
+
+    header .header-right .btnlogout {
+        padding-top: 6px !important;
+        padding-bottom: 1px !important;
+    }
+
+    header .header-right-menu {
+        font-size: 14px;
+        float: none;
+        vertical-align: top;
+        margin: 0 5px;
+    }
+}
+
+@media(max-width: 769px) {
+    header {
+        padding: 15px 0;
+    }
+
+    header .logo {
+        width: 250px;
+    }
+
+    header .header-right {
+        float: right;
+        padding-top: 0;
+        margin-right: 0px; 
+    }
+
+    header #nav {
+        width: 35%;
+        float: left;
+    }
+}
+
+@media(max-width: 481px) {
+	header .header-right {
+        display: block;
+        justify-content: center;
+    }
+
+    header .header-right .topbtn {
+        display: inline-block;
+        margin: 0;
+        margin-bottom: 5px;
+        padding: 6px 13px 4px !important;
+    }
+
+    header .header-right form {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    header .header-right .btnlogout {
+        padding-top: 8px !important;
+        padding-bottom: 3px !important;
+        display: inline-block;
+        margin: 0;
+        margin-bottom: 5px;
+    }
+
+    header .header-right-menu {
+        display: inline-block;
+        margin: 0;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 1024px) {
+	 .header-right {
+        width: 39%;
+        padding: 35px 15px 0 0;
+    }
+}
+@media(max-width: 419px) {
+    header .logo {
+        width: 50%;
+    }
+}

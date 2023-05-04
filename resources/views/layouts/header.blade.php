@@ -277,14 +277,16 @@ $total_quantity = 0;
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
         <header>
-            <div class="col-lg-12">
-        		<div class="menu_nav">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="menu_nav">
                 
-					<div class="logo-header">
-                    <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
-					</div>
-                
-					<div class="top-area">
+						<div class="logo-header">
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
+						</div>
+					
+						<div class="top-area">
                     <?php /*if( !request()->is('/') ) {*/ ?>
                         <div class="top-search">
                             <!-- <form method="get" action="/instant-hire"> -->
@@ -345,7 +347,7 @@ $total_quantity = 0;
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
-							<div  class="cartitmclass d-none">
+							<div  class="cartitmclass ">
 								<?php 
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
@@ -366,7 +368,7 @@ $total_quantity = 0;
 							</div>
 							
                         	@if(Auth::check())
-						 	<div class="userblock d-none">
+						 	<div class="userblock">
                         		<div class="login_links" onclick="openNav()">
                                 
                                 @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
@@ -524,6 +526,8 @@ $total_quantity = 0;
                                 </ul>
                                 </div>
                             </div>-->
+					</div>
+				</div>
 					</div>
 				</div>
 			</div>

@@ -756,7 +756,6 @@ if(!empty($cart["cart_item"])) {
 										</div>
                     					<div id='termserror'></div><br>
 										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
-										<!-- <button type="button" style="margin-bottom: 10px; display: none;" class="signup-new" id="continue_cart" onclick="gotocart();">Continue</button> -->
 									</div>
 								</div>
 							</form>
@@ -770,6 +769,93 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 @include('layouts.footer')
+<script type="text/javascript">
+    
+    jQuery(function ($) {
+    	$('#frmregister').validate({
+	        rules: {
+	            firstname: "required",
+	            lastname: "required",
+	            username: "required",
+	            email: {
+	                required: true,
+	                email: true
+	            },
+	            dob: {
+	                required: true,
+	            },
+	            password: {
+	                required: true,
+	                minlength: 8
+	            },
+	            confirm_password: {
+	                required: true,
+	                minlength: 8,
+	                equalTo: "#password"
+	            },
+	        },
+	        messages: {
+	            firstname: "Enter your Firstname",
+	            lastname: "Enter your Lastname",
+	            username: "Enter your Username",
+	            email: {
+	                required: "Please enter a valid email address",
+	                minlength: "Please enter a valid email address",
+	                remote: jQuery.validator.format("{0} is already in use")
+	            },
+	            dob: {
+	                required: "Please provide your date of birth",
+	            },
+	            password: {
+	                required: "Provide a password",
+	                minlength: jQuery.validator.format("Enter at least {0} characters")
+	            },
+	            confirm_password: {
+	                required: "Repeat your password",
+	                minlength: jQuery.validator.format("Enter at least {0} characters"),
+	                equalTo: "Enter the same password as above"
+	            },
+	        },
+	        submitHandler:  function(form){
+	        	if (!jQuery("#b_trm1").is(":checked")) {
+		           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+		            return false;
+		        }
+		        var valchk = getAge();
+		        if(valchk == 1){
+		            $('#register_submit').prop('disabled', true);
+	                var formData = $("#frmregister").serialize();
+	                var posturl = '/auth/postRegistration_as_guest';
+	                $.ajax({
+	                    url: posturl,
+	                    type: 'POST',
+	                    dataType: 'json',
+	                    data: formData,
+	                    beforeSend: function () {
+	                        $('#register_submit').prop('disabled', true).css('background','#999999');
+	                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+	                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+	                    },
+	                    complete: function () {
+	                        $('#register_submit').prop('disabled', true).css('background','#999999');
+	                    },
+	                    success: function (response) {
+	                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+	                        showSystemMessages('#systemMessage', response.type, response.msg);
+	                        if (response.type === 'success') {
+	                            window.location.href = '{{route("carts_index")}}';
+	                        } else {
+	                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+	                        }
+	                    }
+	                });
+		        }else{
+		            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+		        }
+	        }
+	    });
+    });
+</script>
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -779,64 +865,6 @@ if(!empty($cart["cart_item"])) {
 			$(this).html(txt);
 			event.preventDefault();
 		});
-
-		/*$(".dobdate").keyup(function(){
-            if ($(this).val().length == 2){
-                $(this).val($(this).val() + "/");
-            }else if ($(this).val().length == 5){
-                $(this).val($(this).val() + "/");
-            }
-        });*/
-
-		$("#frmregister").submit(function (e) {
-            e.preventDefault();
-            $('#frmregister').validate({
-                rules: {
-                    firstname: "required",
-                    lastname: "required",
-                    username: "required",
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password"
-                    },
-                },
-                messages: {
-                    firstname: "Enter your Firstname",
-                    lastname: "Enter your Lastname",
-                    username: "Enter your Username",
-                    email: {
-                        required: "Please enter a valid email address",
-                        minlength: "Please enter a valid email address",
-                        remote: jQuery.validator.format("{0} is already in use")
-                    },
-                    dob: {
-                        required: "Please provide your date of birth",
-                    },
-                    password: {
-                        required: "Provide a password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters")
-                    },
-                    confirm_password: {
-                        required: "Repeat your password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters"),
-                        equalTo: "Enter the same password as above"
-                    },
-                },
-                submitHandler: registerUser
-            });
-        });
 
         $('#email').on('blur', function() {
 	        var posturl = '{{route("emailvalidation")}}';
@@ -855,37 +883,29 @@ if(!empty($cart["cart_item"])) {
             });
 	    });
 
-	    
-
 	  	$(document).on('click', '.serv_fav1', function(){
-        var ser_id = $(this).attr('ser_id');
-        // var _token = $("input[name='_token']").val();
-        var _token = $('meta[name="csrf-token"]'). attr('content');
-        $.ajax({
-            type: 'POST',
-            url: '{{route("service_fav")}}',
-            data: {
-                _token: _token,
-                ser_id: ser_id
-            },
-            success: function (data) {
-                if(data.status=='like')
-				{
-					$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
-				}
-				else
-				{
-					$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
-				}
-            }
-        });
-    });
+	        var ser_id = $(this).attr('ser_id');
+	        var _token = $('meta[name="csrf-token"]'). attr('content');
+	        $.ajax({
+	            type: 'POST',
+	            url: '{{route("service_fav")}}',
+	            data: {
+	                _token: _token,
+	                ser_id: ser_id
+	            },
+	            success: function (data) {
+	                if(data.status=='like')
+					{
+						$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+					}
+					else
+					{
+						$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+					}
+	            }
+	        });
+    	});
   	});
-
-
-	function gotocart(){
-		window.location = '{{route("payments_card")}}'
-	}
 
 	function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -899,53 +919,6 @@ if(!empty($cart["cart_item"])) {
            var agechk = '1';
         }
         return agechk;
-    }
-
-    function registerUser() {
-
-        var valchk = getAge();
-        var validForm = $('#frmregister').valid();
-        var posturl = '/auth/postRegistration_as_guest';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if(valchk == 1){
-            $('#register_submit').prop('disabled', true);
-            if (validForm) {
-
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                    },
-                    success: function (response) {
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                        	//$('#continue_cart').css('display','block');
-                            window.location.href = '{{route("carts_index")}}';
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
-                    }
-                });
-            }
-        
-        }else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }
     }
 
     function changeformate() {

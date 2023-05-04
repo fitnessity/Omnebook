@@ -290,7 +290,7 @@ body{
 	top: 74px;
     right:0;
     left:0;
-    z-index:1002;
+    z-index: 7;
     background-color:var(--vz-header-bg);
     -webkit-transition:all .1s ease-out;
     transition:all .1s ease-out;
@@ -924,7 +924,7 @@ body{
     transition-delay:.1s
 }
 .logo{
-    line-height:70px
+   /* line-height:70px*/
 }
 .logo .logo-sm{
     display:none
@@ -4207,7 +4207,7 @@ html{
     min-height:100%
 }
 :is(.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6){
-    color:var(--vz-heading-color);
+    color: #000;
     font-family:Inter,sans-serif
 }
 a{
@@ -11395,16 +11395,16 @@ span.flatpickr-weekday{
 }
 .upcoming-scheduled .flatpickr-calendar .flatpickr-day.today{
     color:#fff!important;
-    background-color:#45cb85;
-    border-color:#45cb85!important
+    background-color: #ea1515;
+    border-color: #ea1515!important
 }
 .upcoming-scheduled .flatpickr-calendar .flatpickr-day.today:hover{
-    color:#45cb85!important;
-    background-color:rgba(69,203,133,.2)!important
+    color: #ea1515!important;
+    background-color:rgba(234,21,21,.2)!important
 }
 .upcoming-scheduled .flatpickr-calendar .flatpickr-day.selected{
-    background-color:#45cb85!important;
-    border-color:#45cb85!important;
+    background-color: #ea1515!important;
+    border-color: #ea1515!important;
     color:#fff
 }
 .upcoming-scheduled .flatpickr-calendar .numInputWrapper{

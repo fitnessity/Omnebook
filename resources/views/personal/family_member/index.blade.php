@@ -129,18 +129,15 @@
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                               
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-3 col-xs-6 text-center" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
@@ -248,18 +245,15 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_today" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('today');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
@@ -299,18 +293,15 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_upcoming" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('upcoming');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
                                                 </div>
                                             </div>
@@ -350,18 +341,15 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_past" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('past');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
                                                     <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
                                                 </div>
                                             </div>

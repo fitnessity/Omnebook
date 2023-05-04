@@ -87,18 +87,6 @@ input:disabled{
 	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
 	$companyactid = $current_act[0]['cid'];
 	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
-	/*$address = '';*/
-	/*if(!empty($companycity)) { 
-		$address .= $companycity; 
-	}
-    if(!empty($companycountry)) 
-    { 
-    	$address .= ', '.$companycountry; 
-	}
-    if(!empty($companyzip)) {
-     	$address .=', '.$companyzip; 
- 	}*/ 
-
 
 	$servicePr=[]; $bus_schedule=[];
 	$servicePrfirst = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
@@ -114,13 +102,6 @@ input:disabled{
     $todaydate = date('m/d/Y');
     $maxspotValue = 0;
 	if(!empty(@$sercatefirst)){
-    	/*$bus_schedule =  DB::table('business_activity_scheduler')->where('business_activity_scheduler.category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",business_activity_scheduler.activity_days)')->where('business_activity_scheduler.starting','<=',date('Y-m-d') )->where('business_activity_scheduler.end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('d/m/Y').'",business_service.special_days_off)')->get();*/
-    	
-    	
-    	/*DB::enableQueryLog();*/
-    	/*$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('m/d/Y').'",business_service.special_days_off)')->get();*/
-    	/*dd(\DB::getQueryLog());*/
-
     	$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
     	$bus_service = BusinessService::where('cid' ,$service['cid'])->first();
     	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
@@ -265,7 +246,6 @@ input:disabled{
 		}
     }
 
-	
     $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
 
     $pro_pic = $service->profile_pic;
@@ -667,10 +647,6 @@ input:disabled{
 										}
 									?>                                    
 								</div>
-								<!-- <div class="rev-admin">
-									<h4> Author </h4>
-									<p> Thank you, Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-								</div> -->
 								@endforeach
 	        					@endif
 							</div>
@@ -694,11 +670,6 @@ input:disabled{
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
-									<!-- <div class="col-md-6 col-sm-6 col-xs-6">
-										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
-											<option value="">Participant #</option>
-										</select>
-									</div> -->
 								</div>
 							</div>
 						</div>
@@ -706,7 +677,6 @@ input:disabled{
 							$date = date('l').', '.date('F d,  Y'); 
 							$totalquantity = 0;
 						@endphp 
-						<?php /*?><button id="submitcartbtn">submitcart</button><?php */?>
 						<div id="updatefilterforcart">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="choose-calendar-time">
@@ -746,21 +716,18 @@ input:disabled{
 										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
 										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
 										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
+										<input type="hidden" name="timechk" value="" id="timechk" />
 										
 										<div id="cartadd">
-									
-										@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
-											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-										@else
-                                            @if( @$total_price_val !='' && $timedata != '')
-                                            	<div id="addcartdiv">
-                                                    <button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button>
-                                                    <!-- <div class="btn-cart-modal instant-detail-booknow">
-                                                        <input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
-                                                    </div> -->
-                                                </div>
-										  	@endif
-										@endif
+											@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
+												<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
+											@else
+	                                            @if( @$total_price_val !='' && $timedata != '')
+	                                            	<div id="addcartdiv">
+	                                                    <button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button>
+	                                                </div>
+											  	@endif
+											@endif
 										</div>
 									</form>
 								</div>
@@ -1050,13 +1017,8 @@ input:disabled{
 							<?php	} ?>
 						</div>
 
-					</div> <!-- 12 -->
-                        
-                        
-                        
-                        
-                        
-                        
+					</div>
+                       
 					</div>
 				</div>
             </div>
@@ -1064,7 +1026,6 @@ input:disabled{
 		</div>
    	</div>            
 <!-- end modal -->
-
 
 	<div class="modal fade" id="Countermodal">
 	    <div class="modal-dialog counter-modal-size">
@@ -1138,88 +1099,74 @@ input:disabled{
 			</div>                                                                       
 		</div>                                          
 	</div>
+	<div class="modal fade " id="ActivtityFail">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	            <div class="modal-body conuter-body">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                     		<h4 class="modal-title partcipate-model">You can't book this activity for today.Please add another time.</h4>
+                    	</div>
+                    </div>
+                </div>
+			</div>                                                                       
+		</div>                                          
+	</div>
 </div>
 
 <nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm book-now-skicky" style="background: none; border-top: none;">
-  <div class="container">
-	<div class="col-xs-12">
-    <p class="navbar-text navbar-right" style="text-align:center;">
-    	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
-    </p>
-	</div>
-  </div>
+  	<div class="container">
+		<div class="col-xs-12">
+	    	<p class="navbar-text navbar-right" style="text-align:center;">
+	    	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+	    	</p>
+		</div>
+  	</div>
 </nav>
 
 @include('layouts.footer')
 
 <script>
-$(document).ready(function() {
-	
-	/*$(document).on("click", "#btnaddcart", function(){
-		alert("The button is clicked in Ajax content!!");
-	}); */
-	
-	$(document).on("click", "#btnaddcart", function(){
-		$('#spoterror').html('');
-		var form = $("#addtocartform");
-        var url = '{{route("addtocart")}}';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            success: function(data) {
-                if(data == 'no_spots'){
-                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
-                }else{
-                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
-                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
-                }
-                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
-                // Ajax call completed successfully
-                //alert("Form Submited Successfully");
-            },
-            error: function(data) {
-                  
-                // Some error in ajax call
-                //alert("some Error");
-            }
-        });
-	}); 
-	<?php /*?>$("#addtocartfor111").on("submit", function(event){
-		alert('hii');
-		return false;
-        var form = $("#addtocartform");
-        var url = '{{route("addtocart")}}';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            success: function(data) {
-                  
-                // Ajax call completed successfully
-                alert("Form Submited Successfully");
-            },
-            error: function(data) {
-                  
-                // Some error in ajax call
-                alert("some Error");
-            }
-        });
-    });<?php */?>
+	$(document).ready(function() {
+		$(document).on("click", "#btnaddcart", function(){
+			$('#spoterror').html('');
+			var timechk = $('#timechk').val();
+			if(timechk == 1){
+				var form = $("#addtocartform");
+		        var url = '{{route("addtocart")}}';
+		        $.ajax({
+		            type: "POST",
+		            url: url,
+		            data: form.serialize(),
+		            success: function(data) {
+		                if(data == 'no_spots'){
+		                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
+		                }else{
+		                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
+		                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
+		                }
+		                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
+		            }
+		        });
+		    }else{
+		    	$('#ActivtityFail').modal('show');
+		    }
+		}); 
 
-	$('.showphotos').on('click', function(e) {
-		$('.firstfancyimg').click();
+		$('.showphotos').on('click', function(e) {
+			$('.firstfancyimg').click();
+		});
 	});
-});
-$('.firstfancyimg').click(function(){
-  $.fancybox.close();
-});
+
+	$('.firstfancyimg').click(function(){
+	  	$.fancybox.close();
+	});
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
 <script>
+
 $(document).ready(function () {
     var locations = @json($locations);
-   /* alert(locations);*/
     var map = ''
     var infowindow = ''
     var marker = ''
@@ -1299,14 +1246,6 @@ $(document).ready(function () {
         $('.mysrchmap').show()
     } else {
         $('#mapdetails').hide()
-        
-        /*console.log('else map');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom: 8,
-            center: new google.maps.LatLng(42.567200, -83.807250),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        $('.mysrchmap').show()*/
     }
 });
 </script>
@@ -1522,9 +1461,11 @@ $(document).ready(function () {
 			success: function (response) {
 				if(response != ''){
 					var data = response.split('~~');
+					var data1 = data[1].split('^^');
 					$('#Countermodalbody').html(data[0]);
-					$('#book'+sid+sid).html(data[1]);
+					$('#book'+sid+sid).html(data1[0]);
 					$('#cartadd').html('<div id="addcartdiv"></div>');
+					$('#timechk').val(data1[1]);
 				}
 			}
 		});
@@ -1549,8 +1490,6 @@ $(document).ready(function () {
 	function updatedetail(cid,sid){
 		var actdate = $('#actfildate_forcart').val();
 		var serviceid =sid;
-		/*$('#pricequantity'+sid+sid).val(Participant)
-		$('#sesdate'+sid+sid).val(date);*/
 		var _token = $("input[name='_token']").val();
 		$.ajax({
 			url: "{{route('act_detail_filter_for_cart')}}",
@@ -1573,8 +1512,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function actFilter(cid,sid)
-	{   
+	function actFilter(cid,sid){   
 		var actdate=$('#actfildate'+sid).val();
 		var actfilparticipant=$('#actfilparticipant'+sid).val();
 		var actoffer=$('#actfiloffer'+sid).val();
@@ -1624,6 +1562,7 @@ $(document).ready(function () {
 		});
 	}
 </script>
+
 <?php
 	$next_available_date = new DateTime();
 	$activities = BusinessActivityScheduler::where('serviceid', $activity->id)->get();
@@ -1637,8 +1576,7 @@ $(document).ready(function () {
 				$next_available_date = $activity_next_available_date;		
 			}
 		}
-		
-		
+
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
 ?>
@@ -1673,8 +1611,7 @@ $(document).ready(function () {
         		}
         		return [0];
         	}
-        	
-		} );
+		});
 	} );
 </script>
 <script>
@@ -1895,7 +1832,6 @@ $(document).ready(function () {
 
 	function changeactsession(main,aid,val,div,simple)
 	{   
-	   /* alert('hii');*/
 	    var price_title = $('#price_title_hidden'+main+aid).val();
 	    var sesdate = $('#sesdate'+aid).val();
 	    var time = $('#time_hidden'+main+aid).val();

@@ -1227,16 +1227,11 @@ class ActivityController extends Controller {
         if (isset($id) && $id != "") {
             $professional_id = explode(",", $id);
         }
-        //$profiledetail = $this->users->getUserProfileDetail2($professional_id, array('professional_detail', 'certification', 'service'));
-        //echo "<pre>";print_r($profiledetail);die;
-        //DB::enableQueryLog();
+
         $profiledetail = DB::table('business_services')->whereIn('business_services.id', $professional_id);
         $profiledetail = $profiledetail->join('company_informations', 'business_services.cid', '=', 'company_informations.id')->select('business_services.*','company_informations.first_name', 'company_informations.last_name', 'company_informations.email','company_informations.company_name', 'company_informations.address', 'company_informations.state', 'company_informations.city', 'company_informations.country', 'company_informations.zip_code' );
         $profiledetail = $profiledetail->join('business_price_details','business_services.id', '=', 'business_price_details.serviceid');
         $profiledetail = $profiledetail->get();
-        
-        //dd(\DB::getQueryLog());
-        //echo "<pre>";print_r($profiledetail);die;
         
         $return = array();
         if (count($professional_id) == 0) {
@@ -1249,17 +1244,7 @@ class ActivityController extends Controller {
         $sports_names = $this->sports->getAllSportsNames();
         $data = array();
         foreach ($profiledetail as $profile) {
-            //print_r($profile);
-            
             $c_names = '';
-            // foreach($profile->company as $x => $co) {
-            //     //if($x == 0)
-            //         $c_names = $c_names.$co->company_name;
-            //     if($x+1 != count($profile->company)){
-            //         $c_names = $c_names.', ';
-            //     }
-            // }
-            //print_r( json_decode(Miscellaneous::getBusinessProfileAnswers($profile->ProfessionalDetail->experience_level)));die;
             
             $servicePrice = BusinessPriceDetails::where('serviceid', $profile->id)->limit(1)->get()->toArray();
             $data["profile_" . $profile->id] = array();
@@ -1321,7 +1306,6 @@ class ActivityController extends Controller {
                 }
             }
     
-           
             $data["profile_" . $profile->id]['personality'] = "-";
             if (isset($profile->ProfessionalDetail->personality) &&  $profile->ProfessionalDetail->personality!== "") { 
                 if($this->isJson($profile->ProfessionalDetail->personality)){
@@ -1341,8 +1325,6 @@ class ActivityController extends Controller {
                 }
             }
 
-    
-
             $data["profile_" . $profile->id]['availability'] = '-';
             if (isset($profile->ProfessionalDetail->availability) && $profile->ProfessionalDetail->availability!== "") {
                 $checkAvailability = '';
@@ -1355,7 +1337,6 @@ class ActivityController extends Controller {
                 $data["profile_" . $profile->id]['availability'] = $checkAvailability;
             }
             
-            
             $data["profile_" . $profile->id]['professional_type'] = (isset($profile->
             ProfessionalDetail->professional_type) &&  $profile->
             ProfessionalDetail->professional_type!= "") ? ucfirst($profile->ProfessionalDetail->professional_type) : "-";
@@ -1365,43 +1346,10 @@ class ActivityController extends Controller {
             $data["profile_" . $profile->id]['certification'] = "-";
             $data["profile_" . $profile->id]['service'] = "-";
             $data["profile_" . $profile->id]['sport'] = "-";
-
-            /*if (count($profile->service) > 0) {
-                $userservice = array();
-                $sport = array();
-                foreach ($profile->service as $service) {
-                    if (isset($sports_names[$service->sport])) {
-                        $userservice[] = ucfirst($service->title);
-                        $sport[] = ucfirst($sports_names[$service->sport]);
-                    }
-                }
-
-                $data["profile_" . $profile->id]['service'] = implode(", ", $userservice);
-                $data["profile_" . $profile->id]['sport'] = implode(", ", array_unique($sport));
-
-                if ($data["profile_" . $profile->id]['service'] == '')
-                    $data["profile_" . $profile->id]['service'] = '-';
-                if ($data["profile_" . $profile->id]['sport'] == '')
-                    $data["profile_" . $profile->id]['sport'] = '-';
-            }*/
         }
         
         $arrItems = array();
         $setArray = array();
-        //$setArray['program_name'] = 'Program name';
-        //$setArray['description'] = 'Description';
-        //$setArray['sport_activity'] = 'Sport Activity';
-        //$setArray['reviews'] = 'Reviews';
-        //$setArray['price_renge'] = 'Price Renge';
-        //$setArray['address'] = 'State,City,Zip Code';
-        //$setArray['business_name'] = 'Business Name';
-        //$setArray['business_verified'] = 'Business Verified';
-        //$setArray['background_checked'] = 'Background Checked';
-        //$setArray['offers_services_to'] = 'Offers Services To';
-        //$setArray['other_activities_offerd'] = 'Other Activities Offerd';
-        //$setArray['type_of_service'] = 'Type of Service';
-        //$setArray['location_of_service'] = 'Location of Service';
-        //$setArray['experience_of_activity'] = 'Experience of Activity';
         
         if(count($data)>0){
             foreach($data as $k=>$val){
@@ -1413,8 +1361,6 @@ class ActivityController extends Controller {
                 if( !empty($val['business']->activity_for) ){ $offer .= ', '.$val['business']->activity_for;}
                 if( !empty($val['business']->activity_location) ){ $offer .= ', '.$val['business']->activity_location;}
                 
-                
-                //echo $getId[1]
                 $setArray['image_pic'][$indexid] = $indexid;
                 $setArray['program_name'][$indexid] = $val['business']->program_name;
                 $setArray['description'][$indexid] = (($val['description']!='')?substr($val['description'],0,30):'');
@@ -1432,21 +1378,9 @@ class ActivityController extends Controller {
                 $setArray['location_of_service'][$indexid] = $val['business']->activity_location;
                 $setArray['experience_of_activity'][$indexid] = $val['business']->activity_experience;
                 $setArray['details_button'][$indexid] = $val['business']->cid;
-                //$val['explevel'];
-                //$setArray[$getId[1]]['description'] = $val['description'];
-                //$setArr[$getId[1]]['program_name'] = $val['business']->program_name;
-                //$setArr[$getId[1]]['desc'] = (($val['description']!='')?substr($val['description'],0,70):'-');
-                //$data[] = $setArray;
             }
-            
-            //if(count($arrItems)>0){
-            //  $setArray[]
-            //}
-            
         }
-        //print_r($data);die;
         $data = $setArray;
-        //print_r($data);die;
         $return['status'] = true;
         $return['data'] = $data;
         return json_encode($return);
@@ -1940,7 +1874,16 @@ class ActivityController extends Controller {
 		                                    $SpotsLeftdis = 0;
 		                                    $bschedule = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();
 		            						$bschedulefirst = BusinessActivityScheduler::where('serviceid',$serviceid)->where('category_id',@$sercatefirst->id)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->first();
-		            						/*print_r( $bschedule);exit;*/
+		            						$timechk= 1;
+		            						if(date('Y-m-d',strtotime($actdate)) == date('Y-m-d')){
+								                $start = new DateTime($bschedulefirst->shift_start);
+								                $start_time = $start->format("H:i");
+								                $current = new DateTime();
+								                $current_time =  $current->format("H:i");
+								                if($current_time > $start_time){
+								                   	$timechk= 0;
+								                }
+								            }
                                             $i=1;
                                             if(!empty(@$bschedule) && count(@$bschedule)>0){
                                                 foreach(@$bschedule as $bdata){
@@ -2095,15 +2038,11 @@ class ActivityController extends Controller {
                                        <input type="hidden" name="price" id="price'.$serviceid.''.$serviceid.'" value="'.$total_price_val.'" class="product-price" />
                                         <input type="hidden" name="session" id="session'.$serviceid.'" value="'.@$servicePrfirst['pay_session'].'" />
                                         <input type="hidden" name="priceid" value="'.$priceid.'" id="priceid'.$serviceid.'" />
-                                        <input type="hidden" name="actscheduleid" value="'.@$bschedulefirst->id.'" id="actscheduleid'.$serviceid.'" />
+                                        <input type="hidden" name="actscheduleid" value="'.@$bschedulefirst->id.'" id="actscheduleid'.$serviceid.'" /> 
+                                        <input type="hidden" name="timechk" value="'.@$timechk.'" id="timechk" />
                                         <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.'" />
                                         <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$serviceid.$serviceid.'" />
                                         <div id="cartadd">';
-                                        /*$SpotsLeftdis = 0;
-										$SpotsLefthidden = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d'))->count();
-										if( @$bschedulefirst->spots_available != ''){
-											$SpotsLeftdis = @$bschedulefirst->spots_available - $SpotsLefthidden;
-										} */
                                         if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0){
                                            $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>';
                                         }else{
@@ -2237,14 +2176,13 @@ class ActivityController extends Controller {
                                     <input type="hidden" name="session" id="session'.$serviceid.'" value="" />
                                     <input type="hidden" name="priceid" value="'.$priceid.'" id="priceid'.$serviceid.'" />
                                     <input type="hidden" name="actscheduleid" value="" id="actscheduleid'.$serviceid.'" />
+                                    <input type="hidden" name="timechk" value="0" id="timechk" />
                                     <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.'" />
                                     <input type="hidden" name="cate_title" value="" id="cate_title'.$serviceid.$serviceid.'" />';
                                  $actbox .= '<div id="cartadd"></div><div id="addcartdiv"></div></form>
                             </div>
                         </div>';
         }
-
-
         echo $actbox;
     }
 
@@ -2255,8 +2193,17 @@ class ActivityController extends Controller {
         $pricedata = BusinessPriceDetails::where('id',$request->pricetitleid)->first();
         $actscheduledata = BusinessActivityScheduler::where('id',$request->actscheduleid)->first();
         $SpotsLeft = UserBookingDetail::where('act_schedule_id',$request->actscheduleid)->whereDate('bookedtime', '=', $dateformate)->get()->toArray();
-        $totalquantity = 0;
-        
+        $totalquantity =0;
+        $timechkfrommodel = 1;
+        if($dateformate == date('Y-m-d')){
+            $start = new DateTime($actscheduledata->shift_start);
+            $start_time = $start->format("H:i");
+            $current = new DateTime();
+            $current_time =  $current->format("H:i");
+            if($current_time > $start_time){
+                $timechkfrommodel = 0;
+            }
+        }
 		foreach($SpotsLeft as $data){
 			$item = json_decode($data['qty'],true);
 			if($item['adult'] != '')
@@ -2290,7 +2237,6 @@ class ActivityController extends Controller {
             if($pricedata['infant_weekend_price_diff']){
             	$total_price_val_infant =  $pricedata['infant_weekend_price_diff'];	
             }
-            
         }
         
         $child_dis = @$pricedata['child_discount'];
@@ -2300,19 +2246,19 @@ class ActivityController extends Controller {
         if($child_dis != '' && $total_price_val_child != 0){
         	$child_discount = ($total_price_val_child - ($total_price_val_child * $child_dis)/100); 
         }else{
-			$child_discount = $total_price_val_child ; 
+			$child_discount = $total_price_val_child; 
         }
 
         if($adult_dis != '' && $total_price_val_adult != 0){
         	$adult_discount = ($total_price_val_adult - ($total_price_val_adult * $adult_dis)/100); 
         }else{
-			$adult_discount = $total_price_val_adult ; 
+			$adult_discount = $total_price_val_adult; 
         }
 
         if($infant_dis != '' && $total_price_val_infant != 0){
         	$infant_discount = ($total_price_val_infant - ($total_price_val_infant * $infant_dis)/100); 
         }else{
-			$infant_discount = $total_price_val_infant ; 
+			$infant_discount = $total_price_val_infant; 
         }
 
         $stactbox.='<div class="row"><div class="col-lg-12">
@@ -2453,20 +2399,13 @@ class ActivityController extends Controller {
             <span>Infants x 0</span>
         </div>';
         
-       /* if(@$total_price_val_adult != '' ){*/
-            $bookdata .=' <div class="cartstotal mt-20">
-                <label>Total </label>
-                <span id="totalprice">$0 USD</span>
-            </div>';
-        /*}*/
-
-        echo $stactbox.'~~'.$bookdata;
+        $bookdata .=' <div class="cartstotal mt-20">
+            <label>Total </label>
+            <span id="totalprice">$0 USD</span>
+        </div>';
+       
+        echo $stactbox.'~~'.$bookdata.'^^'.$timechkfrommodel;
     }
-
-     /*public function activitiestype($activitiestype){
-     	echo $activitiestype;
-     	exit;
-     }*/
 
     public function pricecategory(Request $request){
         $actid = $request->actid;
