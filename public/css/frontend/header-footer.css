@@ -820,7 +820,7 @@ footer {
 
 @media (max-width: 1024px) {
 	 .header-right {
-        width: 39%;
+        width: 100%;
         padding: 35px 15px 0 0;
     }
 }

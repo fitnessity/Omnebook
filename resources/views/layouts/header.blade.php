@@ -347,7 +347,7 @@ $total_quantity = 0;
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
-							<div  class="cartitmclass ">
+							<div  class="cartitmclass mobile-none">
 								<?php 
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
@@ -368,7 +368,7 @@ $total_quantity = 0;
 							</div>
 							
                         	@if(Auth::check())
-						 	<div class="userblock">
+						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
                                 
                                 @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))

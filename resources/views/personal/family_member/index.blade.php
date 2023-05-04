@@ -42,10 +42,10 @@
                                             <h2>{{ $bs->company_name}}</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
-                                                <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
-                                                <span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id()}} </span>
-                                                <span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id()}} </span>
-                                                <span> Number of visits: {{$bs->visits_count_by_user_id()}} </span>
+                                                <span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customer->id)}}</span>
+                                                <span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customer->id)}} </span>
+                                                <span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customer->id)}} </span>
+                                                <span> Number of visits: {{$bs->visits_count_by_user_id(@$customer->id)}} </span>
                                             </div>
                                             
                                             <div class="booking-activity-view">
