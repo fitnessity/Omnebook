@@ -79,7 +79,6 @@ class SchedulerController extends Controller
     public function store(Request $request)
     {   
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
-
         $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
         $UserBookingDetails = '';
         $today = date('Y-m-d');
@@ -103,16 +102,15 @@ class SchedulerController extends Controller
                 }
             }
             if($checkIndetail != ''){
-                $BookingCheckinDetails = new BookingCheckinDetails;
-                $BookingCheckinDetails->update(["business_activity_scheduler_id"=>$request->timeid,
+                $checkIndetail->update(["business_activity_scheduler_id"=>$request->timeid,
                         "checkin_date"=>$request->date]);
             }else{
                 $UserBookingDetails->update(["act_schedule_id"=>$request->timeid]);
                 BookingCheckinDetails::create([
                     "business_activity_scheduler_id"=>$request->timeid, 
                     "customer_id" => $customer->id,
-                    'booking_detail_id'=> $UserBookingDetails->id ,
-                    "checkin_date"=>$request->date ,
+                    'booking_detail_id'=> $UserBookingDetails->id,
+                    "checkin_date"=>$request->date,
                     "use_session_amount" => 0,
                     "source_type" => 'online_scheduler'
                 ]);
@@ -168,9 +166,10 @@ class SchedulerController extends Controller
     {
         $checkinDetail = BookingCheckinDetails::findOrFail($id);
         $user_booking_detail = $checkinDetail->UserBookingDetail;
-        $array = json_decode($user_booking_detail->booking_detail,true);
+       /* $array = json_decode($user_booking_detail->booking_detail,true);
         $array['sessiondate'] = '';
-        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);
+        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);*/
+        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'']);
         $checkinDetail->delete();
     }
 
