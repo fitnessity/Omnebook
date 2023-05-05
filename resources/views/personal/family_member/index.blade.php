@@ -38,7 +38,7 @@
                                 @foreach($business as $bs)
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
-                                        <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
+                                        <div class="cards-content" style="color:#ffffff;  background-image: url(/public/img/add-family.png);">
                                             <h2>{{ $bs->company_name}}</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
