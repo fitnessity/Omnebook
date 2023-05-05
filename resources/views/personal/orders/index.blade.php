@@ -111,18 +111,6 @@
                                                 <div class="col-md-2 col-sm-6 nopadding mb-7">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -138,7 +126,7 @@
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-3 col-xs-6 text-center" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
@@ -226,18 +214,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -257,7 +233,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,18 +253,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -308,7 +272,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -328,18 +292,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -359,7 +311,7 @@
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
@@ -378,25 +330,13 @@
                                                 <div class="col-md-3 col-sm-12">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                                 </div>
-                                               <!--  <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80" onchange="serchDateData('pending')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md-4 col-sm-12 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_pending" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('pending');">
@@ -405,6 +345,34 @@
                                         </div>  
                                         <div class="row" id="searchbydate_pending">
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade compare-model" id="removeaccess">
+                            <div class="modal-dialog modal-lg business">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="text-align: right;"> 
+                                        <div class="closebtn">
+                                            <button type="button" class="close close-btn-design btn-grant" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row contentPop"> 
+                                            <div class="col-lg-12">
+                                                <div class="modal-access-autho">
+                                                    <p>You are about to remove your sync with {{$customer->company_information->company_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-12 btns-modal">
+                                                <a class="addbusiness-btn-modal acc-btn-grant" href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Deny Access</a>
+                                            </div>
+                                         </div>
                                     </div>
                                 </div>
                             </div>
