@@ -539,25 +539,12 @@ class CustomerController extends Controller {
     }
 
     public function remove_grant_access(Request $request, $id,$customerId,$type = null){
-        /*if($customerId  == ''){
-            $customers = Customer::where('business_id',$id)->get();
-            if( !empty($customers)){
-                foreach($customers as $cus) { 
-                    Customer::where('id',$cus)->update(['user_id'=>'']);
-                }
-            }
-            return Redirect()->route('personal.orders.index',['business_id'=>$id]);
-        }else{*/
-            $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
-
-            if($request->type){
-                return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
-            }else{
-                return Redirect()->route('personal.family_members.index',['customerId'=>$customerId]);
-            }
-           
-        //}
-
+        $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
+        if($request->type){
+            return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
+        }else{
+            return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
+        }
     }
 
 

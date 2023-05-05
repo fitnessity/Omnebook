@@ -31,4 +31,8 @@ class DesignController extends Controller {
     public function staff_login(Request $request){
         return view('design.staff_login');
     }
+
+    public function createNewBusinessProfile(Request $request){
+        return view('design.createNewBusinessProfile');
+    }
 }
