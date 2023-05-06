@@ -3634,7 +3634,7 @@
                                         <p>Which staff member(s) will lead this program?</p>
                                         <div class="selectstaff">
                                             <select name="instructor_id" id="instructor_id" class="form-control">
-                                                <option value="">Select Your Instructor </option>
+                                                <option value="">{{Auth::user()->current_company->full_name}}(Provider)</option>
                                                 @if(!empty($staffdata))
                                                     @foreach($staffdata as $data)
                                                         <option value="{{$data->id}}" @if($instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
