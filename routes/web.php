@@ -66,6 +66,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
     Route::get('/dashboard','DesignController@dashboard')->name('dashboard');
     Route::get('/staff_login','DesignController@staff_login')->name('staff_login');
+    Route::get('/createNewBusinessProfile','DesignController@createNewBusinessProfile')->name('createNewBusinessProfile');
+    Route::get('/createNewBusinessProfileone','DesignController@createNewBusinessProfileone')->name('createNewBusinessProfileone');
 });
 
 //Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);

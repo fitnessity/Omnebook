@@ -5698,7 +5698,7 @@ a,button{
 }
 .nav-tabs-custom .nav-item .nav-link::after{
     content:"";
-    background:#4b38b3;
+    background: #ed1b24;
     height:1px;
     position:absolute;
     width:100%;
@@ -5991,11 +5991,11 @@ a,button{
     background-color:var(--vz-card-bg-custom)
 }
 .nav-success.nav-tabs-custom .nav-link.active{
-    color:#45cb85;
+    color: #ed1b24;
     background-color:var(--vz-card-bg-custom)
 }
 .nav-success.nav-tabs-custom .nav-link.active::after{
-    background-color:#45cb85
+    background-color: #ed1b24;
 }
 .nav-success.arrow-navtabs .nav-link.active::before{
     border-top-color:#45cb85
