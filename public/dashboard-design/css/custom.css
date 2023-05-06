@@ -107,3 +107,100 @@
 	display: none;
 }
 header{ position: fixed !important; }
+
+.selecting-title{
+	padding: 4px 0px;
+	font-size: 19px;
+	font-weight: bold;
+	color: #000;
+	text-transform: uppercase;
+	text-align: center;
+	margin-top: 11px;
+}
+.add-client:hover{
+	background: #2d2d2d;
+	color: #fff;
+}
+.service-details p{
+	font-size: 15px;
+	color: #000;
+}
+.fix-box{
+	height: 330px;
+	cursor: pointer;
+}
+.fix-box:hover{
+	background: #ebebeb;
+}
+.page-heading label{
+	padding: 4px 0px;
+	margin-top: 10px;
+	font-size: 19px;
+	font-weight: 700;
+	color: #ed1b24;
+	text-transform: uppercase;
+}
+.page-sub-title label{
+	font-size: 16px;
+	font-weight: 600;
+	text-transform: uppercase;
+	display: block;
+	padding-bottom: 0;
+	color: #000;
+	margin-bottom: 2px;
+}
+.page-sub-title p{
+	color: #878a99;
+	font-size: 14px;
+}
+.nav-link:focus, .nav-link:hover {
+  color: #ed1b24;
+}
+.service-btn{
+	color: #ffffff;
+	background-color: #ea1515;
+}
+.service-btn:hover{
+	color: #ffffff;
+	background-color: #000;
+}
+.wp-100{
+	width: 100%;
+}
+.personal-trainer p{
+	color: #000;
+	font-size: 14px;
+	line-height: 21px;
+	margin-top: 15px;
+}
+
+.btn-selection {
+	background: #ea1515;
+	border: none;
+}
+.btn-selection:hover{
+	background: #000;
+}
+.btn.show{
+	background: #ea1515 !important;
+}
+.tips ul{
+	list-style: disc;
+	padding-left: 13px;
+}
+.tips ul li{
+	font-size: 14px;
+	color: #000;
+	line-height: 25px;
+}
+.tips-accordion .accordion-button:not(.collapsed) {
+  color: #ea1515;
+  background-color: rgba(46, 46, 46, 0.03);
+}
+
+.selection-item-wrap  li a{
+	white-space: normal;
+}
+.mb-15{
+	margin-bottom: 15px;
+}
