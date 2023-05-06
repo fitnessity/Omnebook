@@ -368,15 +368,16 @@ class UserBookingDetail extends Model
         if($customer){
             $company = $this->company_information;
             $business_price_detail =  $this->business_price_detail;
-            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $business_price_details_ages =  @$business_price_detail->business_price_details_ages_with_trashed;
+            $business_services = $this->business_services;
             $email_detail = array(
                 "email" =>$customer->email, 
                 "CustomerName" => $customer->full_name, 
                 "ReNewUrl" => env('APP_URL').'/activity-details/'.$this->sport, 
                 "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
                 "ProviderName"=> $company->company_name,
-                "ProgramName"=> $this->business_services->program_name,
-                "CategoryName"=> $business_price_details_ages->category_title,
+                "ProgramName"=> @$business_services->program_name,
+                "CategoryName"=> @$business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
                 "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
                 "ProviderPhoneNumber"=> $company->business_phone,

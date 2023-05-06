@@ -60,6 +60,7 @@ class Kernel extends ConsoleKernel
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
             }
         })->daily();
+        
         $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", "=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
