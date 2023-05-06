@@ -91,7 +91,7 @@ class SchedulerController extends Controller
 
         $UserBookingDetails = $UserBookingDetails->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
-            $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->where(['checked_at' =>null])->first();
+            $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$request->date)->where(['checked_at' =>null])->first();
             if($request->date == $today){
                 $start = new DateTime($activitySchedulerData->shift_start);
                 $start_time = $start->format("H:i");
