@@ -245,7 +245,6 @@ input,select {
 <script>
 
     $(document).on('click', '#btndelete', function(event) {
-        alert('hii');
         var sid = $(this).attr('data-id');
         var companyid = '{{$companyid}}';
         $.ajax({ 
