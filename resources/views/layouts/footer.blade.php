@@ -318,7 +318,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr-custom.js"></script>
-@if(Route::current()->getName() != 'design.dashboard')
+@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile')
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap.min.js"></script>
 @endif
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
@@ -366,35 +366,6 @@ function closeMobileNav() {
         })
     });
 
-    /*$(document).on('click', '[data-behavior~=send_receipt]', function(e){
-        var item_type = $(this).data('item-type');
-        e.preventDefault()
-        if(item_type == 'no' || item_type == 'Membership'){
-            var confirm_value = confirm("Do you want to mail the receipt to this Customer? ");
-            if(confirm_value == true){
-                $.ajax({
-                    url: $(this).data('url'),
-                    success: function(html){
-                        $('#errordiv').html('');
-                        $('#errordiv').removeClass('green-fonts');
-                        $('#errordiv').removeClass('reviewerro');
-                        $('#errordiv').css('display','block');
-                       
-                        if(html == 'success'){
-                            $('#errordiv').addClass('green-fonts');
-                            $('#errordiv').html('Email Successfully Sent..');
-                          }else{
-                            $('#errordiv').addClass('reviewerro');
-                            $('#errordiv').html("Can't Mail on this Address. Plese Check your Email..");
-                        }
-                    }
-                });
-            }
-        }else{
-            alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
-        }
-    });*/
-
     $(document).on('click', '[data-behavior~=send_receipt]', function(e){
         var item_type = $(this).data('item-type');
         e.preventDefault()
@@ -422,15 +393,22 @@ function closeMobileNav() {
         return emailReg.test(email); //this will either return true or false based on validation
     }
 
-    $(document).on('focus', '[data-behavior~=datepicker]', function(e){
-        /*var id = this.id;
-        $("#"+id).datepicker( { });*/ 
+    $(document).on('focus', '[data-behavior~=datepicker]', function(e){ 
         //jQuery.noConflict();
         $("[data-behavior~=datepicker]").datepicker( { 
            /* minDate: 0,*/
             changeMonth: true,
             changeYear: true ,
             yearRange: '1960:2060',
+        });
+    });
+
+    $(document).on('focus', '[data-behavior~=datepickerforbirtdate]', function(e){
+        $("[data-behavior~=datepickerforbirtdate]").datepicker( { 
+           /* minDate: 0,*/
+            changeMonth: true,
+            changeYear: true ,
+            yearRange: 'c-60:c',
         });
     });
 
