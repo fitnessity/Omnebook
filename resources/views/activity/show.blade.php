@@ -19,56 +19,49 @@ input:disabled{
 }  
 </style>
 <?php
-	use App\UserBookingDetail;
-	use App\BusinessServices;
-	use App\BusinessService;
-	use App\BusinessPriceDetails;
-	use App\BusinessPriceDetailsAges;
-	use App\BusinessServiceReview;
-	use App\BusinessTerms;
-	use App\User;
-	use App\BusinessActivityScheduler;
-	use App\BusinessServicesFavorite;
-	use App\CompanyInformation;
-	use App\BusinessReview;
+	use App\{UserBookingDetail,BusinessServices,BusinessService,BusinessPriceDetails,BusinessPriceDetailsAges,BusinessServiceReview,BusinessTerms,User,BusinessActivityScheduler,BusinessServicesFavorite,CompanyInformation,BusinessReview,BusinessStaff};
 	use Carbon\Carbon;
-    use App\BusinessStaff;
 
     $activity = $service;
-	$sid = $serviceid = $service->id;
-
-	$businessSp = BusinessService::where('cid', $service['cid'])->first();
-	if(!empty($businessSp)) {
-        $languages = $businessSp['languages'];
-    }     
+	$sid = $serviceid = $activity->id;
 
     $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
     $email = $companylat = $companylon  = $companylogo = '';
 
-    $houserules = $service['know_before_you_go'];
-    
-    $comp_data = CompanyInformation::where('id', $service['cid'])->first();
+    $houserules = $activity['know_before_you_go'];
+
+    $comp_data = $activity->company_information;
+
+    $businessSp = $comp_data->business_service;
+	if(!empty($businessSp)) {
+        $languages = $businessSp['languages'];
+    }  
+
     $address = '';
-	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
-	if($comp_data->address != ''){
-		$comp_address = $comp_data->address.', ';
-	}
+	$Instruname = $comp_data->full_name;
+	$comp_address = $comp_data->company_address();
 	if($comp_data->city != ''){
-		$comp_address .= $comp_data->city.', ';
 		$address .= ', '.$comp_data->city.', ';
 	}
-	if($comp_data->state != ''){
-		$comp_address .= $comp_data->state.', ';
-	}
 	if($comp_data->country != ''){
-		$comp_address .= $comp_data->country;
 		$address .= $comp_data->country.', ';
 	}
 	if($comp_data->zip_code != ''){
 		$address .= $comp_data->zip_code;
 	}
 
-	$staffdata = BusinessStaff::where(['id'=>$service->instructor_id])->first(); 
+	$profilePicact = url('/public/images/service-nofound.jpg'); 
+	if($activity->instructor_id != ''){
+		$staffdata = BusinessStaff::where(['id'=>$activity->instructor_id])->first();
+		if (@$staffdata->profile_pic != "") {
+	    	if (File::exists(public_path("/uploads/instructureimg/".$staffdata->profile_pic))){
+	    		$profilePicact = url('/public/uploads/instructureimg/'.$staffdata->profile_pic);
+	    	}
+	    }
+	}else{
+		$staffdata = $comp_data;
+		$profilePicact = url('/uploads/profile_pic/thumb/'.$staffdata->logo);
+	}
 
 	$companyname = $comp_data->company_name;
 	$companyid = $comp_data->id;
@@ -84,8 +77,7 @@ input:disabled{
 		$cleaning = $BusinessTerms->cleaning;
 	}
 
-	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
-	$companyactid = $current_act[0]['cid'];
+	$companyactid =$activity->cid;
 	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
 
 	$servicePr=[]; $bus_schedule=[];
@@ -361,7 +353,7 @@ input:disabled{
 							</div>
 							<div class="mb-10">
 								<label>Instructor:</label>
-								<span>@if(@$staffdata->first_name != '') {{@$staffdata->first_name }} {{@$staffdata->last_name }}  @else — @endif </span>
+								<span>@if(@$staffdata != '') {{@$staffdata->full_name}}  @else "N/A" @endif </span>
 							</div>
 						</div>
 					</div>
@@ -425,17 +417,11 @@ input:disabled{
 								<div class="mysrchmap">
 									<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
 								</div>
-								<div class="maparea">
-									<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
-								</div>
+								<div class="maparea"></div>
 							</div>
 							<?php   
 								$locations = []; 
 		                        if($companylat != '' || $companylon  != ''){
-		                          //  $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-		                    		//$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-									//$lat = 40.777671;
-									//$long = -73.9839877;
 									$lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 									$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
 		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
@@ -468,15 +454,6 @@ input:disabled{
 				</div>
 				
 				@if(@$staffdata != '') 
-				<?php 
-					if (@$staffdata->profile_pic != "") {
-				    	if (File::exists(public_path("/uploads/instructureimg/" . @$staffdata->profile_pic))){
-				    		$profilePicact = url('/public/uploads/instructureimg/' . @$staffdata->profile_pic);
-				    	}else{
-				    		$profilePicact = url('/public/images/service-nofound.jpg');
-				    	}
-				    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
-	    		?>
 				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
 					<div class="row">
 						<div class="col-md-3 col-sm-3 col-xs-12">
@@ -487,7 +464,7 @@ input:disabled{
 						<div class="col-md-9 col-sm-9 col-xs-12">
 							<div class="instructor-inner-details">
 								<label>Instructor:</label>
-								<span>{{@$staffdata->first_name}} {{@$staffdata->last_name}}</span>
+								<span>{{@$staffdata->full_name}}</span>
 							</div>
 							<div>
 								<p>{{@$staffdata->bio}}</p>
