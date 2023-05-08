@@ -105,7 +105,7 @@ if(!empty($cart["cart_item"])) {
 						</div>
 						<div class="col-md-10 col-xs-9">
 							<div class="img-title">
-								<span>{{@$companyData->company_name}}</span>
+								<span>{{@$companyData->dba_business_name}}</span>
 								<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 							</div>
 						</div>
@@ -134,7 +134,7 @@ if(!empty($cart["cart_item"])) {
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
 								<div class="img-title com-info">
-									<h4>{{@$companyData->company_name}}</h4>
+									<h4>{{@$companyData->dba_business_name}}</h4>
 									<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 								</div>
 							</div>
@@ -378,7 +378,7 @@ if(!empty($cart["cart_item"])) {
 										</div>
 										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
-												<span>{{$act->company_information->company_name}}</span>
+												<span>{{$act->company_information->dba_business_name}}</span>
 											</div>
 										</div>
 									</div>
@@ -420,7 +420,7 @@ if(!empty($cart["cart_item"])) {
 		<section class="ptb-65 plr-60 float-left w-100 discover_activities" id="counter">
 			<div class="container-fluid">
 				<div class="cart-sub-title">
-					<span>View Other Activities Provided by {{@$companyData->company_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
+					<span>View Other Activities Provided by {{@$companyData->dba_business_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
 				</div>
 				<?php if (isset($discovermore) && count($discovermore)>0) { ?>
 					<div class="owl-slider kickboxing-slider cart-slider">
@@ -438,7 +438,7 @@ if(!empty($cart["cart_item"])) {
 
 										$companyid = $companyData->id;
 										$companyaddress = $companyData->address;
-										$companyname = $companyData->company_name;
+										$companyname = $companyData->dba_business_name;
 										$companycity = $companyData->city;
 										$companycountry = $companyData->country;
 										$companylogo = $companyData->logo;

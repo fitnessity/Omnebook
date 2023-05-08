@@ -136,13 +136,13 @@
 	             if(File::exists(public_path("/uploads/profile_pic/thumb/".@$compinfo->logo))){ ?>
 	                <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$compinfo->logo) }}" alt="Fitnessity">
 	            <?php }else{ 
-	                $pf=substr(@$compinfo->company_name, 0, 1);
+	                $pf=substr(@$compinfo->dba_business_name, 0, 1);
 	                echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
 	            } 
 			}
 			else{ 
-				if(@$compinfo->company_name != '') {
-					$pf=substr(@$compinfo->company_name, 0, 1);
+				if(@$compinfo->dba_business_name != '') {
+					$pf=substr(@$compinfo->dba_business_name, 0, 1);
 	           		echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
 				}
 			} ?>

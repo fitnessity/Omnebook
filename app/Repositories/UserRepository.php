@@ -155,11 +155,6 @@ class UserRepository
                      ->with('employmenthistory')
                      ->with('education')
                      ->with('certification');
-                     
-                     // ->with('service')
-                     // ->with('sport')
-                     //->where('role', 'business');                     
-                     // ->where('status', 'approved');
         if(isset($selected_sport) && $selected_sport != null) {
             $query->join("user_services as service", DB::raw('service.user_id'), '=', 'users.id')
                   ->where("service.sport", $selected_sport);
@@ -170,42 +165,6 @@ class UserRepository
         }
         return $query->get();
     }
-
-    /*public function getAllFilteredProfessionalsProfiles($selected_sport=null, $experience_level=null, $train_to=null, $gender=null)
-    {
-        $query = User::select('users.*', 'users.id AS professional_id',
-                      DB::raw('group_concat(distinct(CONCAT(UCASE(LEFT(service.sport, 1)), SUBSTRING(service.sport, 2)))) as user_sports'))
-                     ->join("user_professional_details as professionaldetail", DB::raw('professionaldetail.user_id'), '=', 'users.id')
-                     ->leftjoin("user_services as service", DB::raw('service.user_id'), '=', 'users.id')
-                     // ->with('countries')
-                     // ->with('states')
-                     // ->with('cities')
-                     // ->with('employmenthistory')
-                     // ->with('education')
-                     // ->with('certification')
-                     ->where('role', 'business')
-                     ->where('activated', 1);
-
-        if(isset($selected_sport) && $selected_sport != null) {
-            $query->where("service.sport", $selected_sport);
-        }
-        if(isset($gender) && $gender != null && $gender != 'no_preference') {
-            $query->whereIn("users.gender", $gender);
-        }
-        if(isset($experience_level) && $experience_level != null) {
-            $query->whereIn("professionaldetail.experience_level", $experience_level);
-        }
-        if(isset($train_to) && $train_to != null) {
-            // $query->where("professionaldetail.train_to", $train_to);
-            $query->whereRaw('FIND_IN_SET("'.$train_to.'",professionaldetail.train_to)');
-        }
-        
-        if(Auth::user()->role == 'business') {
-            $query->where('users.id', '!=', Auth::user()->id);
-        }
-        $query->groupBy('users.id');
-        return $query->get();
-    }*/
 
     public function getAllFilteredProfessionals($selected_sport=null, $gender=null, $experience_level=null, $train_to=null, $personality=null, $availability=null,$selected_location=null,$professional_type=null,$filter_review_star=null,$miles_radius_filter=0,$selected_location_lat=null,$selected_location_lng=null)
     {
@@ -219,14 +178,8 @@ class UserRepository
                             $join->where('users_favourite.user_id','=',Auth::user()->id);
                         })
                      ->leftjoin(DB::raw('(select reviewfor_userid,round(avg(rating),2) as avg_rating from reviews group by reviewfor_userid) as reviews '), DB::raw('reviews.reviewfor_userid'), '=', 'users.id')
-                     // ->with('countries')
                      ->with('states')
-                     // ->with('cities')
-                     // ->with('employmenthistory')
-                     // ->with('education')
-                     // ->with('certification')
                      ->where('is_deleted', '0')
-                    // ->where('role', 'business')
                      ->where('activated', 1);
         // sports filter
         if(isset($selected_sport) && $selected_sport != null) {
@@ -243,12 +196,6 @@ class UserRepository
             $experience_level = is_array($experience_level) ? $experience_level : array($experience_level);
             $query->whereIn("professionaldetail.experience_level", $experience_level);
         }
-        
-        // provides training filter
-        // if(isset($train_to) && $train_to != null) {
-            // $query->where("professionaldetail.train_to", $train_to);
-        //     $query->whereRaw('FIND_IN_SET("'.$train_to.'",professionaldetail.train_to)');
-        // }
 
         if(isset($train_to) && $train_to != null) {
 
@@ -268,12 +215,6 @@ class UserRepository
 
             $query->whereRaw($setTrainquery);
         }
-
-        // personality filter
-        // if(isset($personality) && $personality != null) {
-        //     // $query->where("professionaldetail.personality", $personality);
-        //     $query->whereRaw('FIND_IN_SET("'.$personality.'",professionaldetail.personality)');
-        // }
 
         if(isset($personality) && $personality != null) {
 
@@ -569,27 +510,6 @@ class UserRepository
 
     public function getFilter($selected_label = NULL, $selected_location = NULL, $selected_zipcode = NULL)
     {
-        // $user_id = "";
-        // if(Auth::User()){
-        //     $user_id = Auth::User()->id;
-        // }
-
-        // $query = User::select('users.*', 'users.id AS professional_id', 
-        //                 DB::raw('group_concat(distinct(CONCAT(UCASE(LEFT(sports.sport_name, 1)), SUBSTRING(sports.sport_name, 2)))) as user_sports'))
-        //              ->join("user_professional_details as professionaldetail", DB::raw('professionaldetail.user_id'), '=', 'users.id')
-        //              ->leftjoin("user_services as service", DB::raw('service.user_id'), '=', 'users.id')
-        //              ->leftjoin("sports as sports", DB::raw('service.sport'), '=', 'sports.id')
-        //              ->with('states')
-        //              //->where("users.is_deleted",0);
-        //              //->where('role', 'business')
-        //              ->where('activated', 1)
-        //              ->where('status', 'approved');
-        //               if(isset($selected_zipcode) && $selected_zipcode != NULL) {
-                          
-        //     $query->where('zipcode', $selected_zipcode);
-        // }
-                     //->where('users.id', '!=', $user_id);
-                  
         $query = CompanyInformation::with('employmenthistory',
             'education',
             'users',
@@ -614,91 +534,9 @@ class UserRepository
         if(isset($selected_location) && $selected_location != NULL) {
             $query->where('city',$selected_location);
         }
-               
-             
-      // dd($query->get()->toArray());die;
-       
-       
-        // if($selected_label != NULL) {
-        //     $label_array = explode(" ",$selected_label);
-        //     $condition = array();
-        //     $sportscondition = array();
-        //     foreach($label_array as $label) {
-        //         $label = trim($label);
-        //         $condition[] = "(lower(users.firstname) like '%".strtolower($label)."%' ) ";
-        //         $condition[] = "(lower(users.lastname) like '%".strtolower($label)."%' ) ";
-        //         $condition[] = "(lower(users.email) like '%".strtolower($label)."%' ) ";
-        //         $condition[] = "(lower(users.company_name) like '%".strtolower($label)."%' ) ";
-
-        //         $sportscondition[] = "(lower(REPLACE(sports.sport_name, ' ', '')) like '%".strtolower($label)."%' )";
-        //     }
-
-        //     //match label for sports name and its sub sports
-        //     $sportscondition_string = " ( ".implode(" OR ", $sportscondition). " ) ";
-        //     $matchingSports = Sports::select('sports.id', 'subsports.id as subsportid')
-        //                     ->leftjoin("sports as subsports", DB::raw('subsports.parent_sport_id'), '=', 'sports.id')
-        //                     ->whereRaw($sportscondition_string)->get()->toArray();
-                            
-                         
-
-        //     if(count($matchingSports) > 0) {
-        //         $matchingSportsId = array();
-        //         foreach($matchingSports as $matchingSport) {
-        //             if($matchingSport['id'] > 0)
-        //                 $matchingSportsId[] = $matchingSport['id'];
-        //             if($matchingSport['subsportid'] > 0)
-        //             $matchingSportsId[] = $matchingSport['subsportid'];
-        //         }
-        //         $matchingSportsId = array_unique($matchingSportsId);
-
-        //         // apply filter of sports id in main query
-        //         $condition[] = "(service.sport IN (".implode(",", $matchingSportsId).")) ";
-        //     }
-               
-
-        //     $condition_string = " ( ".implode(" OR ", $condition). " ) ";
-        //     $query->whereRaw($condition_string);
-        // }
-    
-
-        // if(isset($selected_location) && $selected_location != NULL) {
-        //     $location = explode(",", $selected_location);
-        //     $city = trim($location[0]);
-        //   // $state = trim($location[1]);
-        //     $query->join('addr_cities as city', function($join) use ($city)
-        //             {
-        //                 $join->on('city.id', '=', 'users.city')
-        //                      ->where(DB::raw('lower(city.city_name)'), '=', strtolower($city));
-        //             });
-        // }
-
-       
-
-        // $query->groupBy('users.id');
-
-        //print_r($query->toSql());
-        //die;
+            
         $return = $query->get()->toArray();
         
-        
-       
-        // foreach($return as $key=>$value){
-        //     $use = DB::table('user_professional_details')
-        //       ->where('user_id',$value['id'])
-        //       ->first();
-        
-        //     if(!empty($use)) {
-        //         $company_id = $use->company_id;
-        //     }else{
-        //         $company_id = 0;
-        //     }
-            
-            
-        //     $return[$key]['company_id'] = $company_id;
-        // }
-      //  dd($return);die;
-         
-         
         return $return;
     }
 
@@ -728,7 +566,7 @@ class UserRepository
                 $condition[] = "(lower(users.firstname) like '%".strtolower($label)."%' ) ";
                 $condition[] = "(lower(users.lastname) like '%".strtolower($label)."%' ) ";
                 $condition[] = "(lower(users.email) like '%".strtolower($label)."%' ) ";
-                $condition[] = "(lower(users.company_name) like '%".strtolower($label)."%' ) ";
+                $condition[] = "(lower(users.dba_business_name) like '%".strtolower($label)."%' ) ";
                 $condition[] = "(users.zipcode = '".$label."' ) ";
 
                 //start for location search

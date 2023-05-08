@@ -286,7 +286,7 @@ class BookingRepository
                     "participate_name" => $book_details['user_booking_detail']['participate'],
                     "membership_type" => @$BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
-                    "company_name" =>  $book_details['businessuser']['company_name'] ,
+                    "company_name" =>  $book_details['businessuser']['dba_business_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
                     "acc_url" =>  $acc_url,
@@ -456,7 +456,7 @@ class BookingRepository
             "to_rem" => @$to_rem ,
             "totprice_for_this" => $totprice_for_this,
             "nameofbookedby" => $nameofbookedby,
-            "company_name" =>  @$businessuser->company_name,
+            "company_name" =>  @$businessuser->dba_business_name,
             "amount" =>   $booking_status->amount,
             "discount" =>  $discount ,
             "tip" =>  $tip,
@@ -527,7 +527,7 @@ class BookingRepository
 
         $one_array =[];
         $one_array = array (
-            "provider_Name" => $businessuser->company_name,  
+            "provider_Name" => $businessuser->dba_business_name,  
             "booking_ID" => $booking_status->order_id,  
             "program_Name" => $business_services->program_name,   
             "category" => $BusinessPriceDetails->business_price_details_ages->category_title,   

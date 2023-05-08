@@ -6,7 +6,7 @@
         $insname = @$insdata->name;
 
         $program_name = @$businessdata->program_name;
-        $company_name = @$companydata->company_name;
+        $company_name = @$companydata->dba_business_name;
         $provider_name = @$companydata->first_name.' '.@$companydata->last_name;
         $businessimg = @$companydata->logo;
 

@@ -437,7 +437,7 @@ input,select {
           </div>
 
           <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nw-user-detail">
-            <h1 class="nw-user-nm">@if($UserProfileDetail['company_name']!='') {{ $UserProfileDetail['company_name'] }} @else - @endif
+            <h1 class="nw-user-nm">@if($UserProfileDetail['dba_business_name']!='') {{ $UserProfileDetail['dba_business_name'] }} @else - @endif
                      <a href="/reviews" class="button">Write a review</a>
 
             @if(in_array(Auth::user()->status, array("draft", "rejected")))
@@ -464,7 +464,7 @@ input,select {
               @if($UserProfileDetail['role'] == "business")
                 <!--<div class="nw-dtl-edit">-->
                 <!--  <span class="nw-label">Company Name:</span>-->
-                <!--  <span id="display_user_company">{{ $UserProfileDetail['company_name'] }}</span>-->
+                <!--  <span id="display_user_company">{{ $UserProfileDetail['dba_business_name'] }}</span>-->
                 <!--</div>-->
                 <div class="nw-dtl-edit">
                   <span class="nw-label">Name</span>
@@ -740,7 +740,7 @@ input,select {
 
                     <tr>
 
-                      <td><a href="{{url('/company/'.$value->company_name.'/1')}}">{{$value->company_name}}</a></td>
+                      <td><a href="{{url('/company/'.$value->dba_business_name.'/1')}}">{{$value->dba_business_name}}</a></td>
 
                       <td>{{$value->address}}</td>
 

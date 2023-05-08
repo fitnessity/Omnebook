@@ -35,4 +35,12 @@ class DesignController extends Controller {
     public function createNewBusinessProfile(Request $request){
         return view('design.createNewBusinessProfile');
     }
+
+    public function createNewBusinessProfileone(Request $request){
+        return view('design.createNewBusinessProfileone');
+    }
+
+    public function createNewBusinessProfiletwo(Request $request){
+        return view('design.createNewBusinessProfiletwo');
+    }
 }

@@ -63,7 +63,7 @@ input:disabled{
 		$profilePicact = url('/uploads/profile_pic/thumb/'.$staffdata->logo);
 	}
 
-	$companyname = $comp_data->company_name;
+	$companyname = $comp_data->dba_business_name;
 	$companyid = $comp_data->id;
 	$Phonenumber = $comp_data->contact_number;
 	$companylon = $comp_data->longitude;
@@ -845,7 +845,7 @@ input:disabled{
 			                        if (isset($companyData)) {
 
 	                                    $companyid = $companyData['id'];
-	                                    $companyname = $companyData['company_name'];
+	                                    $companyname = $companyData['dba_business_name'];
 										$companycity = $companyData['city'];
 										$companycountry = $companyData['country'];
 			                                

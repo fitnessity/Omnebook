@@ -40,7 +40,7 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png );">
-                                            <h2>{{ $bs->company_name}}</h2>
+                                            <h2>{{ $bs->dba_business_name}}</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
                                                 <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
@@ -365,7 +365,7 @@
                                         <div class="row contentPop"> 
                                             <div class="col-lg-12">
                                                 <div class="modal-access-autho">
-                                                    <p>You are about to remove your sync with {{$customer->company_information->company_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+                                                    <p>You are about to remove your sync with {{$customer->company_information->dba_business_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
                                                 </div>
                                             </div>
                                             

@@ -319,7 +319,7 @@
 											</div>
 											<div class="col-md-6 col-xs-6">	
 												<div class="info-display info-align">
-													<span>{{@$act->company_information->company_name}}</span>
+													<span>{{@$act->company_information->dba_business_name}}</span>
 												</div>
 											</div>
 										</div>

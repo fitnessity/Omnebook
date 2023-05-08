@@ -1250,7 +1250,7 @@ class LessonController extends Controller {
                    /* ->orWhere('program_name', 'LIKE',  '%'.$select_label . '%')*/;
             });
             $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
-            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
+            $searchDatabusiness = CompanyInformation::where('dba_business_name','LIKE', '%'.$select_label.'%')->first();
         }
 
         if ($select_zipcode != null && $select_zipcode != 'undefined') {
@@ -1525,9 +1525,9 @@ class LessonController extends Controller {
                 if ($found != 0) {
                     $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
                     $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-                    $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                    $a = [$value['dba_business_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
                 }else {
-                    $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                    $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
                 }
                 array_push($locations, $a);
             }
@@ -1561,7 +1561,7 @@ class LessonController extends Controller {
         if($searchDatauserProfile != ''){
             return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
         }else if($searchDatabusiness !=''){
-            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
+            return Redirect::to('businessprofile/'.$searchDatabusiness->dba_business_name.'/'.$searchDatabusiness->id);
         }else{
             return view('jobpost.instanthire', [
                 'cart' => $cart,
@@ -1746,7 +1746,7 @@ class LessonController extends Controller {
             // }
 
             $data["profile_" . $profile->id] = array();
-            $data["profile_" . $profile->id]['company_names'] = $profile->company_name;
+            $data["profile_" . $profile->id]['company_names'] = $profile->dba_business_name;
             
             $data["profile_" . $profile->id]['explevel'] = '-';
             $getExpLavel = '';
@@ -3711,7 +3711,7 @@ class LessonController extends Controller {
                 $companyData = CompanyInformation::where('id',$act['cid'])->first();
                 if (isset($companyData)) {
                   $companyid = $companyData['id'];
-                  $companyname = $companyData['company_name'];
+                  $companyname = $companyData['dba_business_name'];
                   $companycity = $companyData['city'];
                   $companycountry = $companyData['country'];     
                 }
@@ -4157,7 +4157,7 @@ class LessonController extends Controller {
                 $companyData = CompanyInformation::where('id',$act['cid'])->first();
                 if (isset($companyData)) {
                     $companyid = $companyData['id'];
-                    $companyname = $companyData['company_name'];
+                    $companyname = $companyData['dba_business_name'];
                     $companycity = $companyData['city'];
                     $companycountry = $companyData['country'];    
                 }
@@ -4422,7 +4422,7 @@ class LessonController extends Controller {
 
           $company = CompanyInformation::where('id',$act['cid'])->first();
           $companyid = $company->id;
-          $companyname = $company->company_name;
+          $companyname = $company->dba_business_name;
           $companycity = $company->city;
           $companycountry = $company->country;
           $companylogo = $company->logo;

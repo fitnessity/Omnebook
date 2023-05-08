@@ -82,7 +82,7 @@ use App\StaffMembers;
 	    $bring_wear = $str_arr = explode (",", @$BookingDetail1['businessservices']['bring_wear']);
 	    $meetup_location = @$BookingDetail1['businessservices']['meetup_location'];
 
-	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $company_name = @$BookingDetail1['businessuser']['dba_business_name'];
 	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
 	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];
 	    $program_name = @$BookingDetail1['businessservices']['program_name'];

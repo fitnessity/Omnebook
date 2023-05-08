@@ -7,7 +7,7 @@
         $img1 = $url.'public/img/img-1_email.png';
         $img2 = $url.'public/img/img-2_email.png';
         $img3 = $url.'public/img/img-3_email.png';
-        $viewprofile = $url.'businessprofile/'.strtolower(str_replace(' ', '', @$AllDetail["company_data"]["company_name"])).'/'.@$AllDetail["company_data"]["id"];
+        $viewprofile = $url.'businessprofile/'.strtolower(str_replace(' ', '', @$AllDetail["company_data"]["dba_business_name"])).'/'.@$AllDetail["company_data"]["id"];
 ?>
 <body width="100%" style="margin: 0; padding: 0 !important; background-color:#ede9e6; margin:0 auto!important; padding:0!important; height:100%!important; width:100%!important; font-family:Poppins,Arial,sans-serif">
 

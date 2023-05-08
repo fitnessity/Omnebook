@@ -473,7 +473,7 @@
                                 if(!empty($company)) {
                                     $companyid = $company['id'];
                                     $companylogo = $company['logo'];
-                                    $companyname = $company['company_name'];
+                                    $companyname = $company['dba_business_name'];
                                     $companyaddress = $company['address'];
                                     $latitude = $company['latitude'];
                                     $longitude = $company['longitude'];

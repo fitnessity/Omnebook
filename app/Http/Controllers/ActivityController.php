@@ -319,7 +319,7 @@ class ActivityController extends Controller {
 	                $query->where('sport_activity', 'LIKE', '%'. $select_label . '%');   
 	            });
 	            $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
-	            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
+	            $searchDatabusiness = CompanyInformation::where('dba_business_name','LIKE', '%'.$select_label.'%')->first();
 	            $searchDataacivity = BusinessServices::where('program_name','LIKE', '%'.$select_label.'%')->first();
 
 			}
@@ -1179,7 +1179,7 @@ class ActivityController extends Controller {
 			if($searchDatauserProfile != ''){
 	            return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
 	        }else if($searchDatabusiness !=''){
-	            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
+	            return Redirect::to('businessprofile/'.$searchDatabusiness->dba_business_name.'/'.$searchDatabusiness->id);
 	        }else if($searchDataacivity !=''){
 	            return Redirect::to('/activity-details/'.$searchDataacivity->id);
 	        }else{
@@ -1249,7 +1249,7 @@ class ActivityController extends Controller {
             $servicePrice = BusinessPriceDetails::where('serviceid', $profile->id)->limit(1)->get()->toArray();
             $data["profile_" . $profile->id] = array();
             $data["profile_" . $profile->id]['business'] = BusinessServices::find($profile->id);
-            $data["profile_" . $profile->id]['company_names'] = $profile->company_name;
+            $data["profile_" . $profile->id]['company_names'] = $profile->dba_business_name;
             //$data["profile_" . $profile->id]['price'] = (isset($profile->service[0])?$profile->service[0]->price:'');
             $data["profile_" . $profile->id]['price'] = (isset($servicePrice[0]['pay_price'])?$servicePrice[0]['pay_price']:'');
             $data["profile_" . $profile->id]['description'] = (isset($profile->program_desc)?$profile->program_desc:'');
@@ -1263,7 +1263,7 @@ class ActivityController extends Controller {
             
             $arrComp = CompanyInformation::find($data["profile_" . $profile->id]['business']->cid);
             
-            $data["profile_" . $profile->id]['business_name'] = (isset($arrComp->company_name)?@$arrComp->company_name:'');
+            $data["profile_" . $profile->id]['business_name'] = (isset($arrComp->dba_business_name)?@$arrComp->dba_business_name:'');
             
             if (isset($profile->ProfessionalDetail->experience_level) &&  $profile->ProfessionalDetail->experience_level!== "") { 
                 if($this->isJson($profile->ProfessionalDetail->experience_level)){
@@ -1458,7 +1458,7 @@ class ActivityController extends Controller {
                 $companyData = CompanyInformation::where('id',$act['cid'])->first();
                 if (isset($companyData)) {
                     $companyid = $companyData['id'];
-                    $companyname = $companyData['company_name'];
+                    $companyname = $companyData['dba_business_name'];
                     $companycity = $companyData['city'];
                     $companycountry = $companyData['country'];    
                 }

@@ -3,9 +3,9 @@
 
 <?php  
     
-        $businessname=$businessdata->company_name;
+        $businessname=$businessdata->dba_business_name;
         $custmername = @$user->fname.' '.@$user->lname;
-        $company_name = $businessdata->company_name;
+        $company_name = $businessdata->dba_business_name;
         $provider_name =$businessdata->first_name.' '.$businessdata->last_name;
         $businessimg = $businessdata->logo;
         $businessimg = $businessdata->logo;
@@ -18,7 +18,7 @@
         $img2 = $url.'public/img/book_email.png';
         $img3 = $url.'public/img/img-3_email.png';
         $bookactivity = $url.'activities';
-        $COM_NAME = strtolower(str_replace(' ', '-', $businessdata->company_name)).'/'.$businessdata->id;
+        $COM_NAME = strtolower(str_replace(' ', '-', $businessdata->dba_business_name)).'/'.$businessdata->id;
         $providerurl = $url.'/businessprofile/'.$COM_NAME;
        
 ?>

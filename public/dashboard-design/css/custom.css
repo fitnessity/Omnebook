@@ -204,3 +204,93 @@ header{ position: fixed !important; }
 .mb-15{
 	margin-bottom: 15px;
 }
+.steps-title h3{
+	font-size: 20px;
+	font-weight: 600;
+	color: #000;
+}
+.form-control:focus{
+	border-color: #f91942;
+}
+.form-select:focus{
+	border-color: #f91942;
+}
+.btn-red{
+	background-color: #ea1515;
+	border: none;
+}
+.btn-red:hover{
+	background-color: #000;
+	border: none;
+}
+.steps-title a{
+	background: none;
+	border: none;
+	color: #0060df;
+	text-decoration: underline !important;
+	margin-bottom: 10px;
+}
+.add-photos h3{
+	font-size: 20px;
+	font-weight: 600;
+	color: #000;
+}
+.add-photos ul{
+	list-style: disc;
+	padding-left: 12px;
+}
+
+#dropBox {
+  min-width: 400px;
+  max-width: 100%;
+  min-height: 300px;
+  border: 1px dashed black;
+  text-align: center;
+  background: #fdfdfd;
+  padding: 10px;
+  margin-top: 15px;
+}
+.buttonimg {
+  display: inline-block;
+  padding: .5em 1em;
+  background: #f91942;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #fff;
+  transition: .4s;
+}
+#gallery {
+  text-align: center;
+  margin-top: 1.5em;
+}
+#gallery div {
+  display: inline-block;
+}
+#gallery img {
+  min-height: 150px;
+  max-width: 158px;
+  height: 155px;
+  width: 155px;
+}
+#imgUpload {
+  display: none;
+}
+.btn-red-primary{
+	display: block;
+	text-align: center;
+	padding: 7px 21px;
+	color: #fff;
+	border-radius: 4px;
+	background: #ed1b24;
+	font-size: 14px;
+}
+.float-right{
+	float: right;
+}
+.float-left{
+	float: left;
+}
+.custom-switch.form-check-input:checked {
+  background-color: #f91942 !important;
+  border-color: #f91942 !important;
+}

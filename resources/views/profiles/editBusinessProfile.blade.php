@@ -288,7 +288,7 @@ z-index: 9999999;
             <div class="step-block1 tab">
               <div class="row">
                 <div class="signup-block">
-                  <h3>Name : {{$mydetails['firstname']}} {{$mydetails['lastname']}}  {{@$ProfessionalDetail->id}} </h3>
+                  <h3>Name : {{$mydetails['full_name']}}  {{@$ProfessionalDetail->id}} </h3>
                   <br>
                   <h3>Conmpany : {{$mydetails['company_name']}}</h3>
                   <br>
