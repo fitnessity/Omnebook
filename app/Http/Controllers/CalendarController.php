@@ -98,7 +98,7 @@ class CalendarController extends Controller
                 }
                 $html .='<div class="calendar-body">
                         <h3>'.$ser_data->program_name.'</h3>
-                        <p>'.$ser_data->company_information->company_name.'</p>
+                        <p>'.$ser_data->company_information->dba_business_name.'</p>
                         <p class="calendar-address">'.$ser_data->company_information->company_address().'</p>
                        <div class="calendar-time">
                             <label>Time: </label> <span>'.$time.'</span>

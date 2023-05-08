@@ -168,8 +168,8 @@ class HomeController extends Controller
 
 	public function searchaction(Request $request)
 	{
-		 if($request->get('query'))
-		 {
+		if($request->get('query'))
+		{
 			$array_data=array();
 			$query = $request->get('query');
 			//$query = $request->get('query');
@@ -178,16 +178,23 @@ class HomeController extends Controller
 			{
 				$array_data[]=$city->sport_name;
 			}
-			$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+			$comd = CompanyInformation::where('dba_business_name' ,'=' , null)->get();
+			if(!empty($comd){
+				foreach($comd as $det){
+					CompanyInformation::where('id', $det->id)->update(["dba_business_name" => $det->company_name]);
+				}
+			}
+
+			$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
-				$array_data[]=$state->company_name."~~business_profile"."~~".str_replace(" ","-",$state->company_name)."/".$state->id;
+				$array_data[]=$state->dba_business_name."~~business_profile"."~~".str_replace(" ","-",$state->dba_business_name)."/".$state->id;
 			}
 			
 			$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
 			foreach($data_user as $user_data)
 			{
-				$array_data[]=$user_data->firstname." ".$user_data->lastname."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
+				$array_data[]=$user_data->full_name."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
 			}
 
 			$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
@@ -212,14 +219,12 @@ class HomeController extends Controller
 						$url= "/activities/activity_type=".$row;
 					$output .= '<li class="searchclick" onClick="selectSearch(\''.$url.'\');" data-num="'.trim($exp[0]).'">'.$exp[0].'</li>';
 				}
-			}
-			else
-			{
+			}else{
 				$output .= '<li> Result not found </li>';
 			}
 			$output .= '</ul>';
 		  	echo $output;
-		 }
+		}
 	}
 	public function searchactioncity(Request $request)
 	{
@@ -233,10 +238,10 @@ class HomeController extends Controller
 			{
 				$array_data[]=$city->city_name;
 			}
-			$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+			$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
-				$array_data[]=$state->company_name;
+				$array_data[]=$state->dba_business_name;
 			}
 			sort($array_data);
 			$output = '<ul id="country-list">';
@@ -262,10 +267,10 @@ class HomeController extends Controller
 				{
 					$array_data[]=$city->sport_name;
 				}
-				$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+				$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 				foreach($data_state as $state)
 				{
-					$array_data[]=$state->company_name;
+					$array_data[]=$state->dba_business_name;
 				}
 				$user_name = User::where('username', 'LIKE', '%'.$query.'%')->get();
 				foreach($user_name as $name)
@@ -327,7 +332,7 @@ class HomeController extends Controller
             $query = $request->get('query');
             //$query = $request->get('query');
           
-            $data_bus = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
            /* $data_bus1 =BusinessClaim::where('business_name', 'LIKE', "%{$query}%")->where('is_verified',0)->get();*/
             foreach($data_bus as $buss)
             {	
@@ -349,7 +354,7 @@ class HomeController extends Controller
             	}
 
                 $array_data [] = array(
-	                "cname"=>$buss->company_name, 
+	                "cname"=>$buss->dba_business_name, 
 	                "cid"=>$buss->id,
 	                "claim_business_status"=> $buss->is_verified,
 	                "image" => $buss->logo,
@@ -458,8 +463,8 @@ class HomeController extends Controller
     	}else{
     		$data = array(
     			"email"=> @$user->email,
-    			"cName"=>$user->firstname.' '.$user->lastname ,
-    			"pName"=>$company->company_name,
+    			"cName"=>$user->full_name ,
+    			"pName"=>$company->dba_business_name,
     			"url"=> env('APP_URL').'/grant_access/'.Crypt::encryptString($user->id).'/'.Crypt::encryptString($request->business_id)
     		);
     		$status = SGMailService::requestAccessMail($data);

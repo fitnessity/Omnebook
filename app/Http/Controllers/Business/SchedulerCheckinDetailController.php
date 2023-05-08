@@ -142,7 +142,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                 "CustomerName" => $customer->full_name, 
                 "ReNewUrl" => env('APP_URL').'/activity-details/'.$userbookingdetail->sport, 
                 "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
-                "ProviderName"=> $company->company_name,
+                "ProviderName"=> $company->dba_business_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
                 "CompleteDate"=> date('m-d-Y'),
@@ -154,7 +154,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             $email_detail_provider = array(
                 "email" => $company->business_email, 
                 "CustomerName" => $customer->full_name, 
-                "ProviderName"=> $company->company_name,
+                "ProviderName"=> $company->dba_business_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title );
 

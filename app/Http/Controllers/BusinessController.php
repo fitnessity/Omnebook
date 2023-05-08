@@ -1170,7 +1170,7 @@ class BusinessController extends Controller
     public function add_business_customer(Request $request)
     {   
        /* print_r($request->all());exit;*/
-        $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
+        $comdata = CompanyInformation::where('dba_business_name' , $request->Companyname)->first();
 
         if($request->add_status == 'yes'){
             $comdata =  '';
@@ -1202,7 +1202,7 @@ class BusinessController extends Controller
             if($comdata->zip_code != ''){
                 $address .= $comdata->zip_code;
             }
-            $redlink = str_replace(" ","-",$comdata->company_name)."/".$comdata->id;
+            $redlink = str_replace(" ","-",$comdata->dba_business_name)."/".$comdata->id;
            /* $var = "matched";*/
             $var = '<div class="row">
                             <div class="col-md-4">
@@ -1212,7 +1212,7 @@ class BusinessController extends Controller
                             </div>
                             <div class="col-md-6 txt-space">
                                 <div class="modal-img-title">
-                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'">'.$comdata->company_name.'</a>
+                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'">'.$comdata->dba_business_name.'</a>
                                     <p>'.$address.'</p>
                                 </div>
                             </div>
@@ -1257,6 +1257,7 @@ class BusinessController extends Controller
                 "contact_number" => '',
                 "logo" =>'',
                 "company_name" => $request->Companyname,
+                "dba_business_name" => $request->Companyname,
                 "address" => $request->Address,
                 "state" => $request->State,
                 "country" => $request->Country,

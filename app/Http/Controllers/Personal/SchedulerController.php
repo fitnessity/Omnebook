@@ -22,7 +22,7 @@ class SchedulerController extends Controller
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
         if($orderData->business_services()->exists()){
             $programName = $orderData->business_services->program_name;
-            $companyName = $orderData->business_services->company_information->company_name;
+            $companyName = $orderData->business_services->company_information->dba_business_name;
         }
 
         $businessId = $orderData->business_id;

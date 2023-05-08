@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 <head>
@@ -29,14 +29,12 @@
 	<!-- icon -->
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
 
-
 </head>
+	
 @section('content')
-
 
     <!-- Begin page -->
     <div id="layout-wrapper">
-
         <div id="page-topbar">
 			<div class="layout-width">
 				<div class="navbar-header">
@@ -138,7 +136,6 @@
 					</div>
 
 					<div class="d-flex align-items-center">
-
 						<div class="dropdown d-md-none topbar-head-dropdown header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="bx bx-search fs-22"></i>
@@ -726,172 +723,35 @@
 			</div>
 		</div>
 
-<!-- removeNotificationModal -->
-<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mt-2 text-center">
-                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
-                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                        <h4>Are you sure ?</h4>
-                        <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
-                    </div>
-                </div>
-                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
-                </div>
-            </div>
+		<!-- removeNotificationModal -->
+		<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+		    <div class="modal-dialog modal-dialog-centered">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="mt-2 text-center">
+		                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+		                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+		                        <h4>Are you sure ?</h4>
+		                        <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
+		                    </div>
+		                </div>
+		                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+		                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+		                    <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
+		                </div>
+		            </div>
 
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
         <!-- ========== App Menu ========== -->
-        <div class="app-menu navbar-menu">
-            <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <!-- Dark Logo-->
-                <a href="#" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="" alt="" height="17">
-                    </span>
-                </a>
-                <!-- Light Logo-->
-                <a href="#" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="" alt="" height="17">
-                    </span>
-                </a>
-                <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
-                    <i class="ri-record-circle-line"></i>
-                </button>
-            </div>
-
-            <div id="scrollbar">
-                <div class="container-fluid">
-                    <div id="two-column-menu">
-                    </div>
-                    <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
-                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarDashboards" aria-controls="sidebarDashboards">
-                                <img src="{{asset('/public/img/home.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboards</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                                <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarApps">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="apps-calendar.html" class="nav-link" data-key="t-calendar"> Company Details </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="apps-chat.html" class="nav-link" data-key="t-chat"> Your Experience </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarEmail" class="nav-link" data-key="t-email">Company Specifics </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarEcommerce" class="nav-link" data-key="t-ecommerce"> Set Your Terms
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarProjects" class="nav-link" data-key="t-projects">Get Verified </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarLayouts" aria-controls="sidebarLayouts">
-                                <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Services & Prices </span> 
-                            </a>
-                        </li> 
-						
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                                <img src="{{asset('/public/img/manage-company.png')}}" alt="Fitnessity"> <span data-key="t-authentication">Manage </span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarAuth">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="#sidebarSignIn" class="nav-link" data-key="t-signin"> Manage Bookings
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarSignUp" class="nav-link" data-key="t-signup"> Manage Service
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarResetPass" class="nav-link" data-key="t-password-reset">Add/Manage Product
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarchangePass" class="nav-link" data-key="t-password-create">
-                                            Add/Manage Staff
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" aria-controls="sidebarPages">
-                                <img src="{{asset('/public/img/clients.png')}}" alt="Fitnessity"> <span data-key="t-pages"> Clients </span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarLanding" aria-controls="sidebarLanding">
-                                <img src="{{asset('/public/img/email1.png')}}" alt="Fitnessity"> <span data-key="t-landing">Inbox </span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" aria-controls="sidebarUI">
-                                <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarAdvanceUI" aria-controls="sidebarAdvanceUI">
-                                <img src="{{asset('/public/img/financial-dash.png')}}" alt="Fitnessity"> <span data-key="t-advance-ui">Financial Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="widgets.html">
-                                <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Checkout Register </span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarForms" aria-controls="sidebarForms">
-                                <img src="{{asset('/public/img/salesreports.png')}}" alt="Fitnessity"> <span data-key="t-forms">Sales Reports</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Sidebar -->
-            </div>
-
-            <div class="sidebar-background"></div>
-        </div>
+        @include('layouts.business.businesssidebar')
         <!-- Left Sidebar End -->
+
         <!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>
 
@@ -899,13 +759,10 @@
         <!-- Start right Content here -->
         <!-- ============================================================== -->
         <div class="main-content">
-
             <div class="page-content">
                 <div class="container-fluid">
-
                     <div class="row">
                         <div class="col">
-
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
                                     <div class="col-12">
@@ -1096,11 +953,11 @@
                                                     <!--end col-->
 													
                                                     <div class="col-6 col-sm-3">
-                                                        <div class="p-3 border border-dashed border-start-0">
-															<!--<div class="flex-shrink-0">
+                                                        <div class="p-3 border border-dashed border-start-0" style="padding: 0.4rem!important">
+															<div class="flex-shrink-0">
 																<div id="total_jobs" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
-															</div>-->
-                                                            <h5 class="mb-1">$<span class="counter-value" data-target="30000">0</span></h5>
+															</div>
+                                                            <!-- <h5 class="mb-1">$<span class="counter-value" data-target="30000">0</span></h5> -->
                                                             <p class="text-muted mb-0 revenue">% of Revenue Acheived</p>
                                                         </div>
                                                     </div>
@@ -1457,9 +1314,7 @@
                                         </div> 
                                     </div> 
                                 </div> -->
-
                             </div> <!-- end .h-100-->
-
                         </div> <!-- end col -->
 
                         <div class="col-auto layout-rightside-col d-none">
@@ -1887,21 +1742,16 @@
                                     </div>
                                 </div> <!-- end card-->
                             </div> <!-- end .rightbar-->
-
                         </div> <!-- end col -->
                     </div>
-
                 </div>
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-
         </div>
         <!-- end main content-->
-
     </div>
     <!-- END layout-wrapper -->
-
 
     <!--preloader-->
     <div id="preloader">
@@ -1911,7 +1761,8 @@
             </div>
         </div>
     </div>
-@include('layouts.footer')
+
+	@include('layouts.business.footer')
 
     <!-- JAVASCRIPT -->
     <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
@@ -1978,7 +1829,7 @@
 	        }
         },(chart = new ApexCharts(document.querySelector("#updating_donut_chart"), options)).render()),
 
-         chartDonut2 = ( options = {
+        chartDonut2 = ( options = {
           	series: [44, 55],
           	labels: ['In-Person', 'Online'],
           	chart: {
@@ -2002,7 +1853,44 @@
 	            itemHeight: 8,
 	            itemWidth: 8
 	        }
-        },(chart = new ApexCharts(document.querySelector("#revenue_donut_chart"), options)).render());
+        },(chart = new ApexCharts(document.querySelector("#revenue_donut_chart"), options)).render()),
+
+        radialBar = ( options = {
+	        series: [80],
+	        chart: {
+		      	width: 70,
+		        type: 'radialBar',
+		        sparkline: {
+		            enabled: !0
+		        }
+        	},
+        	dataLabels: {
+		       enabled: !1
+		    },
+		    plotOptions: {
+		        radialBar: {
+		            hollow: {
+		                margin: 0,
+		                size: "60%"
+		            },
+		            track: {
+		                margin: 1
+		            },
+		            dataLabels: {
+		                show: !0,
+		                name: {
+		                    show: !1
+		                },
+		                value: {
+		                    show: !0,
+		                    fontSize: "10px",
+		                    fontWeight: 800,
+		                    offsetY: 5
+		                }
+		            }
+		        }
+   		 	},
+        },(chart = new ApexCharts(document.querySelector("#total_jobs"), options)).render())
 
 	</script>
 @endsection

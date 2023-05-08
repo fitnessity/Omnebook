@@ -150,7 +150,7 @@
                      <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$company['logo']; ?>" class="img-fluid">
                   </div>
                   <div class="col-md-6">
-                     <h3>{{$company->company_name}}</h3>
+                     <h3>{{$company->dba_business_name}}</h3>
                      <p>{{$company->short_description}}</p>
                      <div class="banner_add">
                         <a href="#"><i class="fa fa-phone" aria-hidden="true"></i> {{$company->contact_number}}</a>

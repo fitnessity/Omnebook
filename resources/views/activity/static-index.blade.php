@@ -108,7 +108,7 @@
 		                        $company = CompanyInformation::where('id',$service['cid'])->first();
 		                        if ($company!= '') {
 	                                $companyid = $company->id;
-	                                $companyname = $company->company_name;
+	                                $companyname = $company->dba_business_name;
 									$companycity = $company->city;
 									$companycountry = $company->country;
 		                        }

@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
             ->groupBy('user_booking_details.id')
             ->havingRaw('(user_booking_details.pay_session - checkin_count) between 0 and 2')
             ->whereDate('user_booking_details.expired_at', '>=', date('Y-m-d'))->get();
-
+           /* print_r($userBookingDetails);exit;*/
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
             }

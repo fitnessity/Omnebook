@@ -99,7 +99,7 @@
                                                     <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$comp->logo}}" alt="Avatar" class="avatar" onerror="this.onerror=null;this.src='https://www.fitnessity.co/public/images/default-avatar.png';">
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <p class="texttr">{{$comp->company_name}}</p>
+                                                    <p class="texttr">{{$comp->dba_business_name}}</p>
                                                     <p class="texttr">{{$comp->first_name}} {{$comp->last_name}}</p>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2">
@@ -205,7 +205,7 @@ receiving bookings from customers looking for the activities and services you of
                                                     <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$comp->logo}}" alt="Avatar" class="avatar" onerror="this.onerror=null;this.src='https://www.fitnessity.co/public/images/default-avatar.png';">
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <p class="texttr">{{$comp->company_name}}</p>
+                                                    <p class="texttr">{{$comp->dba_business_name}}</p>
                                                     <p class="texttr">{{$comp->first_name}} {{$comp->last_name}}</p>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2">

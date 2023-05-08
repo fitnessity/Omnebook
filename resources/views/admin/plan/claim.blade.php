@@ -77,7 +77,7 @@
                 @foreach ($claims as $value)
                   <tr id="item-{!! $value->id !!}">
                     <td><input type="checkbox" name="planIds[]" value="{{$value->id}}"></td>
-                    <td>{{ $value->company_name}}</td>
+                    <td>{{ $value->dba_business_name}}</td>
                     <td>{{ $value->email}}</td>
                     <td>{{ $value->company_user_name}}</td>
                     <td>{{ $value->website}}</td>

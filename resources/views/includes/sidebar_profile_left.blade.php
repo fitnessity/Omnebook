@@ -71,7 +71,7 @@ a#mycompanyimage{
                 <!--<a href="javascript:void(0);" class="edit-pic" data-toggle="modal" data-target="#editProfilePic" title="Click here to change picture"><i class="fa fa-camera"></i></a>-->
       </div>
       @endcan
-       <h2 class="cmpny-name"><?php echo $loggedinUser['company_name']?></h2>
+       <h2 class="cmpny-name"><?php echo $loggedinUser['dba_business_name']?></h2>
          @if($loggedinUser['role'] != "business")
       <h2 class="prfl-nme"><span><?php echo $loggedinUser['firstname'];?></span> <span> <?php echo  $loggedinUser['lastname'];?> </span></h2>
       @endif

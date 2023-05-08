@@ -492,7 +492,7 @@ class OrderController extends BusinessBaseController
                 "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
                 "CustomerName" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->full_name, 
                 "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
-                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
+                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->dba_business_name,
                 "BookedPerson"=> $checkoutRegisterCartService->getbookedPerson($request->user_id),
                 "ParticipantsName"=> $participateName,
                 "date"=> "N/A",

@@ -554,8 +554,8 @@ z-index: 9999999;
               <div class="row">
                 <div class="col-sm-12">
                 <div class="signup-block">
-                  <h3>Name : {{$mydetails['first_name']}} {{$mydetails['last_name']}} </h3>
-                  <h3>Company : {{$mydetails['company_name']}}</h3>
+                  <h3>Name : {{$mydetails['full_name']}} </h3>
+                  <h3>Company : {{$mydetails['dba_business_name']}}</h3>
                   <h3>EIN : {{$mydetails['ein_number']}}</h3>
                   <div class="sgnup-rates mrgn-md-top">
                      <h1 class="step2-title">Company Representative First Name</h1>
@@ -568,14 +568,14 @@ z-index: 9999999;
                     <p>&nbsp;</p> 
                     <h1 class="step2-title">Email</h1>
                      <input type="email" name="emailb" id="b_email" class="myemail form-control" autocomplete="off" size="30" placeholder="Email Address" value="{{$mydetails['email']}}" size="30" maxlength="80">
-                        <span class="error b_eml" id="b_eml" style="display:none"></span
+                        <span class="error b_eml" id="b_eml" style="display:none"></span>
                     <p>&nbsp;</p> 
                     <h1 class="step2-title">Contact Number</h1>
                      <input type="number" name="phone_number" id="b_contact" size="30" placeholder="Contact No" class="form-control" value="{{$mydetails['contact_number']}}" size="30" maxlength="10"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         <span class="error" id="b_cot"></span>
                     <p>&nbsp;</p> 
                     <h1 class="step2-title">Company Name</h1>
-                    <input type="text" class="form-control" name="Companyname" id="b_companyname" size="30" maxlength="80" value="{{$mydetails['company_name']}}" placeholder="Company Name">
+                    <input type="text" class="form-control" name="Companyname" id="b_companyname" size="30" maxlength="80" value="{{$mydetails['dba_business_name']}}" placeholder="Company Name">
                     <p>&nbsp;</p> 
                     <h1 class="step2-title">EIN NUmber</h1>
                     <input type="text" class="form-control" name="b_EINnumber" maxlength="10" id="b_EINnumber" maxlength="10"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" value="{{$mydetails['ein_number']}}" placeholder="EIN Number">

@@ -512,7 +512,7 @@ class CustomerController extends Controller {
         $data = array(
             "email"=> @$customer->email,
             "cName"=> @$customer->fname.' '.@$customer->lname,
-            "pName"=>$business->company_name,
+            "pName"=>$business->dba_business_name,
             "url"=> env('APP_URL').'/registration/'.Crypt::encryptString($customer->id)
         );
         $status = SGMailService::requestAccessMail($data);

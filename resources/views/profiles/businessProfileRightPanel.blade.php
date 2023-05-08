@@ -126,7 +126,7 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
                             if($company->latitude != '' || $company->longitude  != ''){
                                 $lat = $company->latitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
                         		$long = $company->longitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-                        		$a = [$company->company_name, $lat, $long, $company->id, $company->logo];
+                        		$a = [$company->dba_business_name, $lat, $long, $company->id, $company->logo];
                                 array_push($locations, $a);
 							}
                             ?>

@@ -145,8 +145,8 @@
 															</div>
 
 															<div class="activity-information">
-																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
-																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->dba_business_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 																<div class="dollar-person">
 																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
@@ -217,8 +217,8 @@
 											</div>
 										</div>
 										<div class="activity-information ">
-											<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
-											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+											<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->dba_business_name}}</a></span>
+											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 										</div>
@@ -297,7 +297,7 @@
                                  if($company != '') {
                                     $companyid = $company->id;
                                     $companyaddress = $company->address;
-                                    $companyname = $company->company_name;
+                                    $companyname = $company->dba_business_name;
 												$companycity = $company->city;
 												$companycountry = $company->country;
 												$companylogo = $company->logo;
@@ -586,7 +586,7 @@
 		                               if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -869,7 +869,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1147,7 +1147,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1425,7 +1425,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1704,7 +1704,7 @@
 		                               if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1984,7 +1984,7 @@
 	                                 if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
