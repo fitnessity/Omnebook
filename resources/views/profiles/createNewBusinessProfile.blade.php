@@ -8921,6 +8921,8 @@
         var recurring_fee = '{{$recurring_fee}}';
         var cnt=$('#recurring_count').val();
         cnt++;
+        var number = "'number'";
+        var dropdown = "'dropdown'";
         $('#recurring_count').val(cnt);
         var service_price = "";
         service_price += '';
