@@ -17,9 +17,7 @@ use App\Http\Controllers\Customers_Auth\HomeController;
 
 
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
-
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
-
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
@@ -99,20 +97,15 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 
 Route::group(['middleware' => ['auth']], function(){
-   // Route::get('activities/{business_id}/schedulers', 'BusinessController@activities')->name('business_activities_schedulers');
-    //Route::get('business_activity_schedulers/{business_id}/', 'BusinessController@activities')->name('business_activities_schedulers');
+    Route::get('/dashboard', 'BusinessController@dashboard')->name('business_dashboard');
+    
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
-        //Route::get('/customers/{id}/activity_visits','CustomerController@activity_visits')->name('business_customer_activity_visits');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
-
-        /*Route::get('/customers/{id}/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');*/
-        // Services
-        //Route::get('/services', 'UserProfileController@manageService')->name('manageService');
 
         // BookingPostorders
         Route::post('/booking_postorders','BookingPostorderController@create')->name('business_booking_postorders_create');

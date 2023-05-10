@@ -29,21 +29,27 @@ class BusinessController extends Controller
     {
 		$this->users = $users;
     }
-    /*public function testTwilio(Request $request)
-    {
-        require asset('/twilio/sdk/Services/Twilio.php');
-		// require asset('/css/material-charts.css');die;
-        // Create an authenticated client for the Twilio API
-        $client = new Services_Twilio($_ENV['TWILIO_ACCOUNT_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
-		// Use the Twilio REST API client to send a text message
-        $m = $client->account->messages->sendMessage(
-			$_ENV['TWILIO_NUMBER'], // the text will be sent from your Twilio number
-			$number, // the phone number the text will be sent to
-			$message // the body of the text message
-		);
-		// Return the message object to the browser as JSON
-		return $m;
-	}*/
+
+    public function dashboard(Request $request){
+        $business = Auth::user()->current_company;
+        $bookingCount = 0;
+        $today = date('Y-m-d');
+        $customerCount = $business->customers()->whereDate('created_at','=' , $today)->count();
+        $booking = $business->UserBookingDetails();
+        if(!empty($booking->get())){
+            foreach($booking as $b){
+                $bookingCount += $b->BookingCheckinDetails()->whereDate('checkin_date','=' , $today)->count();
+            }
+        }
+
+        $enddate = date('Y-m-d',strtotime($today . ' + 1 month'));
+        $expiringMembership = $booking->whereDate('expired_at', '>=', $today)->whereDate('expired_at', '<=', $enddate)->get();
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$today)->limit(3)->get();
+        $customers = Auth::user()->customers()->where('business_id',$business->id)->first();
+        $in_person = @$customers->Transaction->where('user_type' ,'customer')->count();
+        $online = Auth::user()->Transaction->where('user_type' ,'user')->count();
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule'));
+    }
 	
 	public function pagePost(Request $request) {
 		$images=array();
@@ -156,6 +162,7 @@ class BusinessController extends Controller
 
         return response()->json(array("success"=>'success','html'=>$html));
     }
+
 	public function pageshowcomments($id,Request $request) { 
         $commentdisplay = $request->commentdisplay; 
         
@@ -188,6 +195,7 @@ class BusinessController extends Controller
         }        
         return response()->json(array("success"=>'success','html'=>$html));
     }
+
 	public function commentLike($id,Request $request) {
 		$like = PagePostCommentsLike::where('user_id',Auth::user()->id)->where('comment_id',$id)->first();
 		$status='';
@@ -221,6 +229,7 @@ class BusinessController extends Controller
             BusinessPostViews::create($data);
         }
     }
+
 	public function likepost($id,Request $request) {
       $like = PagePostLikes::where('user_id',Auth::user()->id)->where('post_id',$id)->first();
       
@@ -268,6 +277,7 @@ class BusinessController extends Controller
 			return response()->json(array("success"=>'success'));
 		} 
     }
+
 	public function DelPost(Request $request)
     {
 		PagePostSave::where('post_id', $request->postid )->delete();
@@ -277,6 +287,7 @@ class BusinessController extends Controller
 		PagePost::find( $request->postid )->delete();
         return response()->json(array("success"=>'success'));
 	}
+
 	public function viewGalleryList($page_id) {
         $galleryPic = [];
         $gallery = DB::select('select id, attachment_name, cover_photo from users_add_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
@@ -293,7 +304,6 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
-
 
     public function savegallarypics(Request $request)
     {   
@@ -320,7 +330,6 @@ class BusinessController extends Controller
         } 
     }
 
-	
 	public function savepagecoverphoto(Request $request) {
        /* print_r($request->all());exit();*/
         if (!Gate::allows('profile_view_access')) {
@@ -603,6 +612,7 @@ class BusinessController extends Controller
        $html .= '';  
        return response()->json(array("success"=>'success','html'=>$html,'data_textarea'=>$data->post_text));
 	}
+
 	public function pagePostupdate(Request $request) { 
 		$id = $request->postId;        
 		$data = PagePost::find($id);
@@ -784,6 +794,7 @@ class BusinessController extends Controller
 		//$view = 'profiles.viewBusinessProfile';
 		//return view($view);
 	}
+
 	public function viewbprofiletimelineofOther($user_name,$id)
 	{
 		$page_id = $id;
@@ -913,6 +924,7 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
+
 	public function viewPageGalleryList($page_id) {
         $galleryPic = [];
         $gallery = DB::select('select id, attachment_name, cover_photo,user_id from page_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
@@ -930,6 +942,7 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
+
 	public function followPage(Request $request) {
 		$userid = $request->userid;
 		$pageid = $request->pageid;
@@ -968,6 +981,7 @@ class BusinessController extends Controller
 			$followingarr[]=$farr->follower_id;
 		}
 	}
+
 	public function Businessact_detail_filter(Request $request){
 		$actoffer = $request->actoffer;
 		$actloc = $request->actloc;
@@ -1100,8 +1114,7 @@ class BusinessController extends Controller
 			}//for
 		}//if
 		echo $actbox;
-		exit;
-		
+		exit;	
 	}
 	
 	public function save_business_reviews(Request $request)

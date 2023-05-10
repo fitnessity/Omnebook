@@ -121,78 +121,80 @@ class UserBookingDetail extends Model
     }
 
     public function transfer_to_provider(){
-        $company_information = $this->business_services->company_information;
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($this->business_services != ''){
+            $company_information = $this->business_services->company_information;
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        if($this->booking->order_type == 'checkout_register'){
-            $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
-            $transfer_amount = 0;
+            if($this->booking->order_type == 'checkout_register'){
+                $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
+                $transfer_amount = 0;
 
-            $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
-            $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
-        
-            foreach($transactions as $transaction){
+                $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
+                $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
+            
+                foreach($transactions as $transaction){
+                    $payment_intent = $stripe->paymentIntents->retrieve(
+                        $transaction->transaction_id,
+                        []
+                    );
+                    try {
+                        if($transaction->amount > $total_fitnessity_fee){
+                            $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
+                        }else{
+                            $transfer_amount = round($transaction->amount/1.039, 2);
+                        }
+                
+                        $transfer = $stripe->transfers->create([
+                            'amount' => $transfer_amount * 100,
+                            'currency' => 'usd',
+                            'source_transaction' => $payment_intent->charges->data[0]->id,
+                            'destination' => $company_information->stripe_connect_id,
+                        ]);
+
+                        if($transfer->id){
+                          $transfer_amount += $transaction->amount;
+                        }
+                    } catch(\Exception $e) {
+
+                        $this->update(['transfer_provider_status'=>'paid', 
+                               'provider_amount' => 0]);
+                        return;
+                    }    
+                }
+
+                if(@$transfer->id){
+                    $this->update(['transfer_provider_status'=>'paid', 
+                                   'provider_amount' => $transfer_amount]);
+                }
+
+                return;
+            }
+            
+            try {
+                $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
+                $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
+
                 $payment_intent = $stripe->paymentIntents->retrieve(
                     $transaction->transaction_id,
                     []
                 );
-                try {
-                    if($transaction->amount > $total_fitnessity_fee){
-                        $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
-                    }else{
-                        $transfer_amount = round($transaction->amount/1.039, 2);
-                    }
-            
-                    $transfer = $stripe->transfers->create([
-                        'amount' => $transfer_amount * 100,
-                        'currency' => 'usd',
-                        'source_transaction' => $payment_intent->charges->data[0]->id,
-                        'destination' => $company_information->stripe_connect_id,
-                    ]);
 
-                    if($transfer->id){
-                      $transfer_amount += $transaction->amount;
-                    }
-                } catch(\Exception $e) {
+                $transfer = $stripe->transfers->create([
+                    'amount' => $transfer_amount * 100,
+                    'currency' => 'usd',
+                    'source_transaction' => $payment_intent->charges->data[0]->id,
+                    'destination' => $company_information->stripe_connect_id,
+                ]);
 
+                if($transfer->id){
                     $this->update(['transfer_provider_status'=>'paid', 
-                           'provider_amount' => 0]);
-                    return;
-                }    
-            }
-
-            if(@$transfer->id){
-                $this->update(['transfer_provider_status'=>'paid', 
-                               'provider_amount' => $transfer_amount]);
-            }
-
-            return;
-        }
-        
-        try {
-            $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
-            $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
-
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $transaction->transaction_id,
-                []
-            );
-
-            $transfer = $stripe->transfers->create([
-                'amount' => $transfer_amount * 100,
-                'currency' => 'usd',
-                'source_transaction' => $payment_intent->charges->data[0]->id,
-                'destination' => $company_information->stripe_connect_id,
-            ]);
-
-            if($transfer->id){
-                $this->update(['transfer_provider_status'=>'paid', 
-                               'provider_amount' => $transfer_amount ,
-                               'provider_transaction_id' => $transfer->id]);
-            }
-        } catch(\Exception $e) {
-            var_dump($e);
-        }    
+                                   'provider_amount' => $transfer_amount ,
+                                   'provider_transaction_id' => $transfer->id]);
+                }
+            } catch(\Exception $e) {
+                var_dump($e);
+            } 
+        }   
     }
 
     public function getparticipate(){

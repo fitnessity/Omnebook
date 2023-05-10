@@ -768,8 +768,8 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 class="fs-16 mb-1">Good Morning, {Staff Name}</h4>
-                                                <p class="text-muted mb-0">Here's a snap shot of what's happening with {Company Name} today.</p>
+                                                <h4 class="fs-16 mb-1">Good Morning, {{Auth::user()->full_name}}</h4>
+                                                <p class="text-muted mb-0">Here's a snap shot of what's happening with {{Auth::user()->current_company->dba_business_name}} today.</p>
                                             </div>
                                             <div class="mt-3 mt-lg-0">
                                                 <form action="javascript:void(0);">
@@ -849,7 +849,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$bookingCount}}">{{$bookingCount}}</span></h4>
                                                         <a href="" class="text-decoration-underline">View Bookings</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
@@ -879,8 +879,8 @@
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="183.35">0</span>M </h4>
-                                                        <a href="" class="text-decoration-underline">View Customers</a>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$customerCount}}">{{$customerCount}}</span></h4>
+                                                        <a href="{{route('business_customer_index')}}" class="text-decoration-underline">View Customers</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-warning rounded fs-3">
@@ -928,7 +928,7 @@
                                         <div class="card">
                                             <div class="card-header border-0 align-items-center d-flex flip-view">
                                                 <h4 class="card-title mb-0 flex-grow-1">Revenue Goal Tracker </h4>
-												 <h4 class="card-title mb-0 flex-grow-1">Current Month: {Month} of {Year} </h4>
+												 <h4 class="card-title mb-0 flex-grow-1">Current Month: {{date('M')}} of {{date('Y')}} </h4>
                                                 <div>
 													 <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
                                                         1M
@@ -992,7 +992,7 @@
 													<div class="col-lg-4 col-md-6">
 														<div class="border-0 align-items-center text-center mb-15">
 															<h4 class="payment-tracker flex-grow-1">Recurring Payments Tracker</h4>
-															<h4 class="payment-tracker">{Month, Year}</h4>
+															<h4 class="payment-tracker">{{date('M')}}, {{date('Y')}}</h4>
 															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="36500">0</span></h4>
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
@@ -1091,91 +1091,50 @@
 											</div><!-- end cardheader -->
 											<div class="card-body pt-0">
 												<div class="upcoming-scheduled mb-55">
-													<input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true">
+													<input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
 												</div>
 												<div class="dropdown-activity mt-4 mb-3">
 													  <a class="alinkdrop dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 														Show All Activites
 													  </a>
-													  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-														<li><a class="dropdown-item" href="#">Option-1</a></li>
-														<li><a class="dropdown-item" href="#">Option-2</a></li>
-														<li><a class="dropdown-item" href="#">Option-3</a></li>
+													  <ul class="dropdown-menu activityschedule" aria-labelledby="dropdownMenuButton1">
+														<li><a class="dropdown-item">Show All Activites</a></li>
+														<li><a class="dropdown-item">Personal Training</a></li>
+														<li><a class="dropdown-item">Classes</a></li>
+														<li><a class="dropdown-item">Events</a></li>
+														<li><a class="dropdown-item">Experience</a></li>
 													  </ul>
 												</div>
 												
-											<!--<h6 class="fw-semibold mt-4 mb-3 text-muted activity-show">Show All Activites <i class="fas fa-caret-down"></i></h6>-->
-												<div class="mini-stats-wid d-flex align-items-center mt-3">
-													<div class="flex-shrink-0 avatar-sm">
-														<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
-															1/1
-															<label>Spots left</label>
-														</span>
-													</div>
-													<div class="flex-grow-1 ms-3 activity-info">
-														<h6 class="mb-1">Personal Training Sessions</h6>
-														<p class="text-muted mb-0">Private Lessons 45 Min. (1 Person)</p>
-														<p class="text-muted mb-0">45 Min | Private Lesson | w/ Odin Lin</p>
-													</div>
-													<div class="flex-shrink-0 ms-3">
-														<p class="text-muted mb-0 color-black">9:00 <span class="text-uppercase">am</span></p>
-														<p class="text-muted mb-0 color-black">9:45 <span class="text-uppercase">am</span></p>
-													</div>
-												</div><!-- end -->
-												<div class="mini-stats-wid d-flex align-items-center mt-3">
-													<div class="flex-shrink-0 avatar-sm">
-														<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
-															1/1
-															<label>Spots left</label>
-														</span>
-													</div>
-													<div class="flex-grow-1 ms-3 activity-info">
-														<h6 class="mb-1">Personal Training Sessions</h6>
-														<p class="text-muted mb-0">Private Lessons 45 Min. (1 Person)</p>
-														<p class="text-muted mb-0">45 Min | Private Lesson | w/ Darryl Phipps</p>
-													</div>
-													<div class="flex-shrink-0">
-														<p class="text-muted mb-0 color-black">10:00 <span class="text-uppercase">am</span></p>
-														<p class="text-muted mb-0 color-black">10:45 <span class="text-uppercase">am</span></p>
-													</div>
-												</div><!-- end -->
-												<div class="mini-stats-wid d-flex align-items-center mt-3">
-													<div class="flex-shrink-0 avatar-sm">
-														<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
-															10/10
-															<label>Spots left</label>
-														</span>
-													</div>
-													<div class="flex-grow-1 ms-3 activity-info">
-														<h6 class="mb-1">Adult Kickboxing Class</h6>
-														<p class="text-muted mb-0">Adult Kickboxing</p>
-														<p class="text-muted mb-0">45 Min | Group Class</p>
-													</div>
-													<div class="flex-shrink-0">
-														<p class="text-muted mb-0 color-black">11:00 <span class="text-uppercase">am</span></p>
-														<p class="text-muted mb-0 color-black">11:45 <span class="text-uppercase">am</span></p>
-													</div>
-												</div><!-- end -->
-												<div class="mini-stats-wid d-flex align-items-center mt-3">
-													<div class="flex-shrink-0 avatar-sm">
-														<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
-															10/10
-															<label>Spots left</label>
-														</span>
-													</div>
-													<div class="flex-grow-1 ms-3 activity-info">
-														<h6 class="mb-1">Kids Martial Arts Programs</h6>
-														<p class="text-muted mb-0">Mini Ninjas (3 to 4 years)</p>
-														<p class="text-muted mb-0">30 Min | Group Class</p>
-													</div>
-													<div class="flex-shrink-0">
-														<p class="text-muted mb-0 color-black">3:00 <span class="text-uppercase">am</span></p>
-														<p class="text-muted mb-0 color-black">3:30 <span class="text-uppercase">am</span></p>
-													</div>
-												</div><!-- end -->
-
+												@if(!empty($activitySchedule) && count($activitySchedule)>0)
+													@foreach($activitySchedule as $as)
+														@php 
+															$SpotsLeftdis = 0;
+															$bs = new  \App\Repositories\BookingRepository;
+															$bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
+															$SpotsLeftdis = $as->spots_available - $bookedspot; 
+														@endphp
+													<div class="mini-stats-wid d-flex align-items-center mt-3">
+														<div class="flex-shrink-0 avatar-sm">
+															<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
+																{{$SpotsLeftdis}}/{{$as->spots_available}} 
+																<label>Spots left</label>
+															</span>
+														</div>
+														<div class="flex-grow-1 ms-3 activity-info">
+															<h6 class="mb-1">{{@$as->business_service->program_name}}</h6>
+															<p class="text-muted mb-0">{{@$as->businessPriceDetailsAges->category_title}}</p>
+															<p class="text-muted mb-0">{{@$as->business_service->price_details()->first()->price_title}}</p>
+														</div>
+														<div class="flex-shrink-0 ms-3">
+															<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_start))}}</p>
+															<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_end))}}</p>
+														</div>
+													</div><!-- end -->
+													@endforeach
+												@endif	
 												<div class="mt-3 text-center">
-													<a href="javascript:void(0);" class="text-muted text-decoration-underline">View Full Schedule</a>
+													<a href="{{route('business_activity_schedulers',['business_id'=> Auth::user()->current_company->id])}}" class="text-muted text-decoration-underline">View Full Schedule</a>
 												</div>
 
 											</div><!-- end cardbody -->
@@ -1187,8 +1146,16 @@
 								<div class="row">
 									<div class="col-lg-3 col-md-6">
 										<div class="card">
-											<div class="card-header">
-												<h4 class="card-title mb-0">Bookings & Revenue By Category</h4>
+											<div class="card-header align-items-center d-flex">
+												<h4 class="card-title mb-0 flex-grow-1">Bookings & Revenue By Category</h4>
+												<div class="flex-shrink-0">
+                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+                                                        1 M
+                                                    </button>
+													<button type="button" class="btn btn-soft-primary btn-sm shadow-none">
+                                                        All
+                                                    </button>
+                                                </div>
 											</div><!-- end card header -->
 											<div class="card-body">
 												<div>
@@ -1205,7 +1172,7 @@
                                                     <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
                                                         1 M
                                                     </button>
-													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+													<button type="button" class="btn btn-soft-primary btn-sm shadow-none">
                                                         All
                                                     </button>
                                                 </div>
@@ -1215,7 +1182,7 @@
 													<div id="revenue_donut_chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div>
 												</div>
 												<div class="col-md-12 text-center">
-													<a href="" >View Bookings</a>
+													<a href="{{route('personal.orders.index',['business_id'=>Auth::user()->current_company->id])}}" >View Bookings</a>
 												</div>
 											</div><!-- end card-body -->
 										</div>
@@ -1237,9 +1204,9 @@
                                                 </div>
                                             </div><!-- end card header -->
 											<div class="month-year align-items-center d-flex flip-view">
-                                                <h4 class="card-title mb-0 flex-grow-1">Current Month, {Current Year}</h4>
+                                                <h4 class="card-title mb-0 flex-grow-1">{{date('M')}}, {{date('Y')}}</h4>
                                                 <div class="flex-shrink-0">
-                                                    <h4 class="card-title mb-0 flex-grow-1">Expiring in the next 30 days - 26 </h4>
+                                                    <h4 class="card-title mb-0 flex-grow-1">Expiring in the next 30 days</h4>
                                                 </div>
                                             </div>
 
@@ -1248,6 +1215,7 @@
                                                     <table class="table table-hover table-centered align-middle table-nowrap mb-0 memberships-pack">
 														<thead>
 															<tr>
+																<td>No</td>
 																<td>Name</td>
 																<td>Membership Type</td>
 																<td>Started on</td>
@@ -1256,74 +1224,44 @@
 															</tr>
 														</thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{Customer Name} </h5>
-                                                                </td>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{Membershiptype} </h5>
-                                                                </td>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{startingdate} </h5>  
-                                                                </td>
-                                                                <td>
-                                                                    <h5 class="fs-14 my-1 fw-normal">{enddate} </h5>
-                                                                </td>
-                                                                <td>
-                                                                     <a href="#"> View </a>
-                                                                </td>
-                                                            </tr>
-															<tr>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{Customer Name} </h5>
-                                                                </td>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{Membershiptype} </h5>
-                                                                </td>
-                                                                <td>
-                                                                   <h5 class="fs-14 my-1 fw-normal">{startingdate} </h5>  
-                                                                </td>
-                                                                <td>
-                                                                    <h5 class="fs-14 my-1 fw-normal">{enddate} </h5>
-                                                                </td>
-                                                                <td>
-                                                                     <a href="#"> View </a>
-                                                                </td>
-                                                            </tr>
+                                                        	@if(!empty($expiringMembership) && count($expiringMembership) >0)
+	                                                        	@foreach($expiringMembership as $key=>$emp )
+	                                                            <tr>
+	                                                                <td>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">{{ $key+1}}</h5>
+	                                                                </td> 
+
+	                                                                <td>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->Customer->full_name}} </h5>
+	                                                                </td>
+	                                                                <td>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->business_price_detail->price_title}} </h5>
+	                                                                </td>
+	                                                                <td>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->contract_date}} </h5>  
+	                                                                </td>
+	                                                                <td>
+	                                                                    <h5 class="fs-14 my-1 fw-normal">{{$emp->expired_at}} </h5>
+	                                                                </td>
+	                                                                <td>
+	                                                                     <a href="{{route('personal.orders.index',['business_id'=>$emp->business_id])}}"> View </a>
+	                                                                </td>
+	                                                            </tr>
+	                                                            @endforeach
+	                                                        @else
+	                                                         	<tr>
+	                                                                <td>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">No Membership expires this month</h5>
+	                                                                </td>
+	                                                            </tr>
+															@endif
                                                         </tbody>
                                                     </table>
                                                 </div>
-
                                             </div>
                                         </div>
 									</div>
 								</div>
-
-                               <!-- <div class="row">
-                                    <div class="col-xl-4">
-                                        <div class="card card-height-100">
-                                            <div class="card-header align-items-center d-flex">
-                                                <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
-                                                <div class="flex-shrink-0">
-                                                    <div class="dropdown card-header-dropdown">
-                                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="#">Download Report</a>
-                                                            <a class="dropdown-item" href="#">Export</a>
-                                                            <a class="dropdown-item" href="#">Import</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="card-body">
-                                                <div id="store-visits-source" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div>
-                                            </div>
-                                        </div> 
-                                    </div> 
-                                </div> -->
                             </div> <!-- end .h-100-->
                         </div> <!-- end col -->
 
@@ -1813,6 +1751,13 @@
 	</script>
 	<script type="text/javascript">
 
+		$(".activityschedule li a").click(function(){
+		  var selText = $(this).text();
+		  $(this).parents('.dropdown-activity').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+		});
+
+		var online = '{{$online}}';
+		var in_person = '{{$in_person}}';
 		var chartDonut1 = ( options = {
           	series: [44, 55, 13, 33, 22],
           	labels: ['Personal Training', 'Classes','Experiences','Events','Products'],
@@ -1840,14 +1785,17 @@
         },(chart = new ApexCharts(document.querySelector("#updating_donut_chart"), options)).render()),
 
         chartDonut2 = ( options = {
-          	series: [44, 55],
+          	series: [in_person , online],
           	labels: ['In-Person', 'Online'],
           	chart: {
           		height: 300,
           		type: 'donut',
        	 	},
 	        dataLabels: {
-	          enabled: false
+	          	enabled: false,
+	          	formatter: function (val) {
+		        	return val + "%"
+		      	},
 	        },
 	        responsive: [{
 	          	breakpoint: 480,

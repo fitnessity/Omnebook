@@ -32,14 +32,7 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> 
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
-		
-		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile') 
-			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
-
-       		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-			
-			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
-       	@endif
+	
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
 		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/header-footer.css">
         
@@ -354,16 +347,13 @@ $total_quantity = 0;
 									    foreach($cart["cart_item"] as $item){
 									    	if($item['chk'] == ''){
 									    		$newcart['cart_item'] [] = $item;
-									    		//$total_quantity = count($cart["cart_item"]);
 									    	}
-									        /*$total_quantity += (int)$item["quantity"];*/
 									    }
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
 								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>
-                                <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
 							</div>
 							
@@ -407,16 +397,10 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
                                                         <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
                                                     </li>
-                                                   <?php /*?> <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-user"></i></span>
-                                                      	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
-                                                    </li><?php */?>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
                                                     </li>
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-                                                    </li> -->
+
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
                                                     </li>
@@ -429,9 +413,6 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
                                                     </li>
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
-                                                    </li> -->
 													
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Business Center </span></li>
@@ -442,6 +423,7 @@ $total_quantity = 0;
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
                                                     	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
+
                                                     	<a href="{{route('business_dashboard')}}" style="color: white;">Manage My Business</a>
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
@@ -454,10 +436,6 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fas fa-question-circle"></i></span>
                                                         <a href="{{route('help')}}" style="color: white;">Help Desk</a>
                                                     </li>
-                                                    <!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-user-plus"></i></span>
-                                                        <a href="#" style="color: white;">Invite Friends</a>
-                                                    </li> -->
                                                     <li><div class="border-sidebar"></div></li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-right-from-bracket"></i></span>
@@ -478,12 +456,8 @@ $total_quantity = 0;
 									<img class="sign-in-header" src="{{ asset('/public/images/login-header.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
-									<!--<img src="{{ asset('/public/images/user-icon.png') }}" alt="">-->
 								</div>
                            		<div class="dropdown_login">
-                                	<!--<svg focusable="false" class="icon--nav-triangle-borderless" viewBox="0 0 20 9" role="presentation">
-                                		<path d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z" fill="#ffffff"></path>
-                                	</svg>-->
                                     <ul>
                                         @if(Auth::user())
                                             <li><a href="#">Welcome {{ Auth::user()->firstname }}</a></li>
@@ -492,42 +466,12 @@ $total_quantity = 0;
                                             <li><a href="{{route('business-welcome')}}">Create Business</a></li>
                                             <li><a href="{{route('manageCompany')}}">Manage Business</a></li>
                                             <li><a href="{{ Config::get('constants.SITE_URL') }}/userlogout">Logout</a></li>
-                                        @else
-                                            <!--<li><a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Login</a></li>
-                                            <li><a href="{{ Config::get('constants.SITE_URL') }}/registration">Register</a></li>-->
                                         @endif
                                     </ul>
                             	</div>
                         	</div>
-
                         	@endif
-                            
-							<script>
-                                //$("#cart-item").html('<?=$total_quantity?>');
-                            </script>
                     	</div>
-					
-                        <!--<div class="user-img">
-                            <h5>Jack Carter</h5>
-                            <img src="/images/newimage/nearly1.jpg" alt="">
-                            <span class="status f-online"></span>
-                            <!--<div class="user-setting">
-                                <span class="seting-title">Chat setting <a href="#" title="">see all</a></span>
-                                <ul class="chat-setting">
-                                    <li><a href="#" title=""><span class="status f-online"></span>online</a></li>
-                                    <li><a href="#" title=""><span class="status f-away"></span>away</a></li>
-                                    <li><a href="#" title=""><span class="status f-off"></span>offline</a></li>
-                                </ul>
-                                <span class="seting-title">User setting <a href="#" title="">see all</a></span>
-                                <ul class="log-out">
-                                    <li><a href="profile.html" title=""><i class="ti-user"></i> view profile</a></li>
-                                    <li><a href="settings.html" title=""><i class="ti-pencil-alt"></i>edit profile</a></li>
-                                    <li><a href="#" title=""><i class="ti-target"></i>activity log</a></li>
-                                    <li><a href="settings.html" title=""><i class="ti-settings"></i>account setting</a></li>
-                                    <li><a href="index.html" title=""><i class="ti-power-off"></i>log out</a></li>
-                                </ul>
-                                </div>
-                            </div>-->
 					</div>
 				</div>
 					</div>
@@ -564,19 +508,8 @@ $(document).ready(function () {
 	});
 	
 	var BASE_URL='{{ url("/") }}/';		
-    //$(document).on('change','.myfilter', function () {
     $('.myfilter2').click(function () {
-        //$('.myfilter').trigger('change');
 		var values = {};
-		//$.each($("form#frmsearchCategory").serializeArray(), function (i, field) {
-		//	values[field.name] = field.value;
-		//});
-		//console.log(values);
-		//var selectedValues = $('#providerservices').val();
-		//console.log(selectedValues);
-		
-		//text_array = selected_buttons.selected('text')
-		//value_array = selected_buttons.selected()
 		var GetData = {};
 		var serviceType = new SlimSelect({
             select: '#providerservices'
@@ -592,12 +525,7 @@ $(document).ready(function () {
             select: '#programservices'
         });
 		GetData['program_type'] = programType.selected();
-		
-		/*var professionalType = new SlimSelect({
-            select: '#professional_type'
-        });
-		GetData['professional_type'] = professionalType.selected();*/
-		
+	
 		var activityLocation = new SlimSelect({
 			select: '#activity_location'
         });
@@ -634,17 +562,7 @@ $(document).ready(function () {
             select: '#difficultylevel'
         });
 		GetData['difficulty_level'] = difficultylevel.selected();
-		
-		/*var genderpreference = new SlimSelect({
-            select: '#genderpreference'
-        });
-		GetData['gender'] = genderpreference.selected();*/
-		
-		/*var getLanguage = new SlimSelect({
-            select: '#categ'
-        });
-		GetData['language'] = getLanguage.selected();*/
-		
+	
 		var activityExp = new SlimSelect({
             select: '#activity_exp'
         });
@@ -714,12 +632,10 @@ $(document).ready(function () {
 			success: function(data){
 				console.log(data);
 	            $('#search-business').html('');
-	            if(data == 'No'){
-					//$('#label').val('').css("background","#FFF").attr("placeholder", "No results found");			
+	            if(data == 'No'){	
 				}else{
 					var items = [];
 					$.each(data, function(i, item) {
-						//console.log(item);
 						let itemProgram = item;
 						items.push("<li class='setLabelSearch' get-data='" +JSON.stringify(item).replace(/[\/\(\)\']/g, "&apos;")+"'>" + itemProgram + " - " +i+ "</li>");
 					});
@@ -741,8 +657,6 @@ function openLoginModal(modalname) {
         $("#register_modal").modal('hide');
         $("#password_modal").modal('hide');
     } else if (modalname == 'register') {
-        // $("#learnmore_modal").modal('hide');
-        // $("#communitylearnmore_modal").modal("hide");
         $("#login_modal").modal('hide');
         $("#password_modal").modal('hide');
     } else if (modalname == 'password') {
@@ -770,8 +684,6 @@ function closeNav() {
 </script>
 
 <link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
-<!-- <link href=
-'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
 <script type="text/javascript">
 $(document).ready(function () { 
