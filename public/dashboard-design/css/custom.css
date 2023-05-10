@@ -294,3 +294,14 @@ header{ position: fixed !important; }
   background-color: #f91942 !important;
   border-color: #f91942 !important;
 }
+.participant-req p{
+	margin-top: 8px;
+}
+.alinkdrop{
+	color: #000;
+	font-size: 13px;
+	font-weight: 500;
+}
+.alinkdrop:hover{
+	color: #000;
+}
