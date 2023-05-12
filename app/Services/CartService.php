@@ -116,9 +116,10 @@ class CartService
                 $result['qty'][$role] = 0;
             }
             $priceDetail = $this->getPriceDetail($item['priceid']);
+            $dis = 100;
             if(array_key_exists("price",$item[$role])){
                 $result['price'][$role] = $item[$role]['price']; 
-                $dis = 100;
+
                 if($role == 'adult'){
                     $dis = $priceDetail->adult_discount;
                 }
