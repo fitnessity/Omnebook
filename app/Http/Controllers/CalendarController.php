@@ -34,7 +34,10 @@ class CalendarController extends Controller
         foreach($data as $dt){
             $full_name = "N/A";
             if(@$dt->user_id != ''){
-                $full_name = Customer::where('id',$dt->user_id)->first()->full_name;
+                $customerdata = Customer::where('id',$dt->user_id)->first();
+                if($customerdata != ''){
+                    $full_name = $customerdata->full_name;
+                }
                 $full_name = ucwords($full_name);
             }
             if(@$dt->set_duration != ''){
@@ -95,7 +98,7 @@ class CalendarController extends Controller
                 }
                 $html .='<div class="calendar-body">
                         <h3>'.$ser_data->program_name.'</h3>
-                        <p>'.$ser_data->company_information->company_name.'</p>
+                        <p>'.$ser_data->company_information->dba_business_name.'</p>
                         <p class="calendar-address">'.$ser_data->company_information->company_address().'</p>
                        <div class="calendar-time">
                             <label>Time: </label> <span>'.$time.'</span>
@@ -135,7 +138,11 @@ class CalendarController extends Controller
         foreach($data as $dt){
             $full_name = "N/A";
             if(@$dt->user_id != ''){
-                $full_name = Customer::where('id',$dt->user_id)->first()->full_name;
+                $customerdata = Customer::where('id',$dt->user_id)->first();
+                if($customerdata != ''){
+                    $full_name = $customerdata->full_name;
+                }
+                
                 $full_name = ucwords($full_name);
             }
             if(@$dt->set_duration != ''){

@@ -13,61 +13,6 @@
 ?>
 
 @if (!$companyId)
-	<!-- <div class="navbar1">
-	  <div class="row businessprofile-navigationlink">
-			<div class="sidebar-menu-custom">
-				<ul>
-					<li>
-						<span><img src="/public/img/home.png" alt="Fitnessity"></span>
-						<a href="{{route('business-welcome')}}">Welcome</a>
-					</li>
-					<li>
-						<span><img src="/public/img/manage-company.png" alt="Fitnessity"></span>
-						<a href="{{route('manageCompany')}}">MANAGE COMPANYS</a>
-					</li>
-					<li>
-						<span><img src="/public/img/company-set-up.png" alt="Fitnessity"></span>
-						<a>COMPANY SET UP</a>
-						<a href="{{route('createNewBusinessProfile')}}" class="businesslink @if(Route::current()->getName()=='createNewBusinessProfile') active @endif"><div class="navlink1" id="tab2">Company Details</div></a>
-						<a href="{{route('createNewBusinessProfile')}}"><div class="navlink1" id="tab3">Your Experience</div></a>
-						<a href="{{route('createNewBusinessProfile')}}"><div class="navlink1" id="tab4">Company Specifics</div></a>
-						<a href="{{route('createNewBusinessProfile')}}"><div class="navlink1" id="tab5">Set Your Terms</div></a>
-						<a href="{{route('createNewBusinessProfile')}}"><div class="navlink1" id="tab6">Get Verified</div></a>
-					</li>
-					<li>
-						<span><img src="/public/img/service-price.png" alt="Fitnessity"></span>
-						<a href="#"><div class="navlink1 service-price" id="tab7">SERVICES & PRICES</div></a>
-					</li>
-					<li>
-						<span><img src="/public/img/manage-company.png" alt="Fitnessity"></span>
-						<a href="#">MANAGE</a>
-					</li>
-
-					<li>
-						<span><img src="/public/img/email1.png" alt="Fitnessity"></span>
-						<a href="#">INBOX</a>
-					</li>
-					<li>
-						<span><img src="/public/img/calender.png" alt="Fitnessity"></span>
-						<a href="#">CALENDAR</a>
-					</li>
-					<li>
-						<span><img src="/public/img/financial-dash.png" alt="Fitnessity"></span>
-						<a href="#" target="_blank"><div class="navlink1 service-price" id="tab1">FINANCIAL DASHBOARD</div></a> 
-					</li>
-					<li>
-						<span><img src="/public/img/checkout-register.png" alt="Fitnessity"></span>
-						<a href="#"><div class="navlink1 service-price " id="tab1">CHECKOUT REGISTER</div></a>
-					</li>
-					<li>
-						<span><img src="/public/img/salesreports.png" alt="Fitnessity"></span>
-						<a href="#">SALES REPORTS</a>
-					</li>
-				</ul>
-			</div>
-	  </div>
-		
-	 </div> -->
 	<div class="navbar1">
 	  <div class="row businessprofile-navigationlink">
 	  	<div class="sidebar-title">
@@ -123,7 +68,7 @@
 					</li>
 					<li>
 						<span><img src="/public/img/checkout-register.png" alt="Fitnessity"></span>
-						<a @if($companyId) href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}"   @endif class="@if(Route::current()->getName()=='business.orders.create') tab-active @endif"><div class="navlink1 service-price " id="tab1"  >CHECKOUT REGISTER</div></a>
+						<a @if($companyId) href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}"   @endif class="@if(Route::current()->getName()=='business.orders.create') tab-active @endif"><div class="navlink1 service-price " id="tab1" >CHECKOUT REGISTER</div></a>
 					</li>
 					<li>
 						<span><img src="/public/img/salesreports.png" alt="Fitnessity"></span>
@@ -137,7 +82,7 @@
 <div class="navbar1">
   <div class="row businessprofile-navigationlink">
   	<div class="sidebar-title">
-  		{{Auth::user()->current_company->company_name}} <a style="float:inherit" href="{{route('manageCompany')}}">(switch)</a>
+  		{{Auth::user()->current_company->dba_business_name}} <a style="float:inherit" href="{{route('manageCompany')}}">(switch)</a>
   	</div>
 		<div class="sidebar-menu-custom">
 			<ul>

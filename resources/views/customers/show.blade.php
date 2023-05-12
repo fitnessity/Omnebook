@@ -760,7 +760,7 @@
 								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Birthdate </label>
-										<input class="form-control" type="text" data-behavior="datepicker" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" >
+										<input class="form-control" type="text" data-behavior="datepickerforbirtdate" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" >
 									</div>
 								</div>
 								<div class="col-md-6 col-xs-12">

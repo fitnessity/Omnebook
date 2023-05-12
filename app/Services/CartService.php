@@ -108,6 +108,7 @@ class CartService
     public function getDiscountTotal($item)
     {
         $discount = 0.00;
+        $dis = 0.00;
         $result = [];
         foreach(['adult', 'child', 'infant'] as $role){
             if(array_key_exists("quantity",$item[$role])){

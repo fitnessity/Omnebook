@@ -147,7 +147,7 @@ h6.heading {
     <div class="banner">
     <div class="container">
       <div class="banner-content">
-        <h1>{{$company->company_name}}</h1>
+        <h1>{{$company->dba_business_name}}</h1>
         <div class="star_btn">
           <button class="btn write_a_review_btn"><i class="fa fa-star"></i></button>
           <button class="btn write_a_review_btn"><i class="fa fa-star"></i></button>
@@ -157,7 +157,7 @@ h6.heading {
           <h5>5 reviews <span class="label">Details</span></h5>
         </div>
         <div class="banner_btm_content">
-          <h5 class="Unclaimed">Claimed . {{$company->company_name}} <span class="label">Edit</span></h5>
+          <h5 class="Unclaimed">Claimed . {{$company->dba_business_name}} <span class="label">Edit</span></h5>
           <h5 class="open_time"><span>Open</span> 11:00AM - 1:30PM</h5>
         </div>
       </div>

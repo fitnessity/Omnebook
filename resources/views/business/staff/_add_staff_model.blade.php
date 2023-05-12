@@ -94,7 +94,7 @@
 				<div class="form-group col-md-5 col-sm-6 col-xs-12">
 					<label for="email">Birthday <!-- <span id="star">*</span> --></label>
 					<div class="special-date">
-						<input  type="text" class="form-control completionyear" id="completionyear" name="frm_passingdate[]" placeholder="Completion Date" autocomplete="off" value="" data-behavior="datepicker">
+						<input  type="text" class="form-control completionyear" id="completionyear" name="frm_passingdate[]" placeholder="Completion Date" autocomplete="off" value="" data-behavior="datepickerforbirtdate">
 						<span class="error" id="b_certificateyear"></span>
 					</div>
 				</div>

@@ -20,7 +20,7 @@
 	<div class="col-md-7">
 		<div class="auto-details-location">
 			<label>Location:</label>
-			<span>{{$booking_detail->company_information->company_name}}</span>
+			<span>{{$booking_detail->company_information->dba_business_name}}</span>
 			
 			<label> Autopay Remaining</label>
 			<span>{{$remaining}}/{{$autopaylistcnt}} </span>

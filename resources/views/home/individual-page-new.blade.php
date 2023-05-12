@@ -385,7 +385,7 @@ use App\Review;
 
             <div class="col-lg-6">
                 <div class="bnr-information">
-                    <h2>{{$company->company_name}}<span class="pr-climed">Claimed</span></h2>
+                    <h2>{{$company->dba_business_name}}<span class="pr-climed">Claimed</span></h2>
                     <h6>{{$company->short_description}}</h6>
                     <p><b>Company: </b>{{$company->first_name}} {{$company->last_name}}</p>
                     <p><b>Username: </b><?php echo '@'; ?>{{$company->business_user_tag}}</p>
@@ -674,7 +674,7 @@ use App\Review;
                                                     if (!empty($company)) {
                                                         $companyid = $company['id'];
                                                         $companylogo = $company['logo'];
-                                                        $companyname = $company['company_name'];
+                                                        $companyname = $company['dba_business_name'];
                                                         $companyaddress = $company['address'];
                                                     }
                                                 }
@@ -1232,7 +1232,7 @@ use App\Review;
                                     if (!empty($company)) {
                                         $companyid = $company['id'];
                                         $companylogo = $company['logo'];
-                                        $companyname = $company['company_name'];
+                                        $companyname = $company['dba_business_name'];
                                         $companyaddress = $company['address'];
                                     }
                                     $price = $servicePrice[$service['cid']];

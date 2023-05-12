@@ -104,7 +104,7 @@
                                                                             <tr>
                                                                                 <td style="text-align: center; padding: 0px 28px 30px;" align="center">
 																					<p style="font-weight: 500; font-size: 20px; color: #000000;">Greetings {{$cus_name}} </p>
-																					<p style="font-weight: 400; font-size: 15px; color: #000000; margin-bottom: 0px; margin-top: 0px;">This is to notify you that your scheduled booking with {{$company->company_name}} has been confirmed.  View the company's information and booking details below.   </p>
+																					<p style="font-weight: 400; font-size: 15px; color: #000000; margin-bottom: 0px; margin-top: 0px;">This is to notify you that your scheduled booking with {{$company->dba_business_name}} has been confirmed.  View the company's information and booking details below.   </p>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
@@ -391,12 +391,12 @@
 												</tr>
 												<tr>
 													<td>
-														<p style="padding: 0px 60px; font-size: 15px; font-weight: normal; margin-bottom: 0px; margin-top: 0px;">Company Name: {{$company->company_name}} </p>
+														<p style="padding: 0px 60px; font-size: 15px; font-weight: normal; margin-bottom: 0px; margin-top: 0px;">Company Name: {{$company->dba_business_name}} </p>
 													</td>
 												</tr>
 												<tr>
 													<td>
-														<p style="padding: 0px 60px; font-size: 15px; font-weight: normal; margin-bottom: 0px; margin-top: 0px;">Company Rep: {{$company->first_name}} {{$company->last_name}}</p>
+														<p style="padding: 0px 60px; font-size: 15px; font-weight: normal; margin-bottom: 0px; margin-top: 0px;">Company Rep: {{$company->full_name}}</p>
 													</td>
 												</tr>
 												<tr>

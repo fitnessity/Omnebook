@@ -2207,13 +2207,13 @@ class UserProfileController extends Controller {
         $company = array();
         if ($myloc != null && $myloc != 'undefined') {
             if ($select_zipcode != null && $select_zipcode != 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
             } else {
                 $company = CompanyInformation::where('city', 'LIKE', $myloc . '%')->get();
             }
         } else {
             if($select_label!=null && $select_label!= 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->get();
             }
         }
         //dd($data_user); exit;
@@ -2277,7 +2277,7 @@ class UserProfileController extends Controller {
     
                 $user_logo = User::where('id', $value['user_id'])->first();
                 $user_logo1 = $user_logo['profile_pic'];
-                $value['business_name'] = $value['company_name'];
+                $value['business_name'] = $value['dba_business_name'];
                 $value['activity'] = "";
                 $value['website'] = "";
                 $value['location'] = $value['city'];
@@ -2357,9 +2357,9 @@ class UserProfileController extends Controller {
                     if ($found != 0) {
                         $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
                         $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-                        $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $lat, $long, $value['id'], $value['logo']];
                     } else {
-                        $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                     }
                     array_push($locations, $a);
                 }
@@ -2575,7 +2575,7 @@ class UserProfileController extends Controller {
                 $pro_pic_l  = $user_logo->profile_pic;
             }
             $user_logo1 = $pro_pic_l;
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
             $value['activity'] = "";
             $value['website'] = "";
             $value['location'] = $value['city'];
@@ -2613,7 +2613,7 @@ class UserProfileController extends Controller {
 
         foreach ($resultnew as $value) {
             if ($value['type'] == 'claimed') {
-                $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                 array_push($locations, $a);
             }
         }
@@ -2850,7 +2850,7 @@ class UserProfileController extends Controller {
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -2872,13 +2872,13 @@ class UserProfileController extends Controller {
 
         $data = BusinessClaim::where('business_name', 'LIKE', $request->business_name . '%')->where('location', $request->location)->where('is_verified', 0)->get();
 
-        $company = CompanyInformation::where('city', $request->location)->where('company_name', 'LIKE', $request->business_name . '%')->get();
+        $company = CompanyInformation::where('city', $request->location)->where('dba_business_name', 'LIKE', $request->business_name . '%')->get();
 
 
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -4615,19 +4615,6 @@ class UserProfileController extends Controller {
             }
         }
 
-       /* $family = new UserFamilyDetail();
-        $family->user_id = Auth::user()->id;
-        $family->first_name = $request->first_name;
-        $family->last_name = $request->last_name;
-        $family->email = $request->email;
-        $family->mobile = $request->mobile_number;
-        $family->gender = $request->gender;
-        $family->relationship = $request->relationship;
-        $family->emergency_contact = $request->emergency_phone;
-        //$dateee = \DateTime::createFromFormat("m-d-Y" , $request->birthday);
-        $family->birthday = $request->birthday;
-        $family->save();*/
-
         Auth::loginUsingId(Input::get('user_id'), true);
 
         $url = '/';
@@ -4639,7 +4626,7 @@ class UserProfileController extends Controller {
             $claim_cid = session()->get('claim_cid');
             $data = CompanyInformation::where('id',$claim_cid)->first();
             if($data != ''){
-                $claim_cname = $data->company_name;
+                $claim_cname = $data->dba_business_name;
             }
         }
         if($claim  == 'set'){
@@ -4668,7 +4655,7 @@ class UserProfileController extends Controller {
             $claim_cid = session()->get('claim_cid');
             $data = CompanyInformation::where('id',$claim_cid)->first();
             if($data != ''){
-                $claim_cname = $data->company_name;
+                $claim_cname = $data->dba_business_name;
             }
         }
         if($claim  == 'set'){
@@ -7089,7 +7076,7 @@ class UserProfileController extends Controller {
         $co->contact_number = $request->phone_number;
 
         $co->company_name = $request->Companyname;
-
+        $co->dba_business_name = $request->Companyname;
         $co->ein_number = $request->b_EINnumber;
 
         $co->establishment_year = $request->b_Establishmentyear;

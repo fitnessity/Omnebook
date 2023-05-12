@@ -65,7 +65,7 @@
                 Let's get started! By continuing, you agree to Fitnessity's <a href="#"> Terms of Service</a> and Fitnessity's <a href="#">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
             </p>
 
-            <h5>How Would You Would Like to Verify Ownership of {{$data->company_name}}</h5>
+            <h5>How Would You Would Like to Verify Ownership of {{$data->dba_business_name}}</h5>
 
             <div id="error-email" style="display: none">
                     <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>

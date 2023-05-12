@@ -38,14 +38,14 @@
                                 @foreach($business as $bs)
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
-                                        <div class="cards-content" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/add-family.png );">
-                                            <h2>{{ $bs->company_name}}</h2>
+                                        <div class="cards-content" style="color:#ffffff;  background-image: url(/public/img/add-family.png);">
+                                            <h2>{{ $bs->dba_business_name}}</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
-                                                <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
-                                                <span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id()}} </span>
-                                                <span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id()}} </span>
-                                                <span> Number of visits: {{$bs->visits_count_by_user_id()}} </span>
+                                                <span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customer->id)}}</span>
+                                                <span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customer->id)}} </span>
+                                                <span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customer->id)}} </span>
+                                                <span> Number of visits: {{$bs->visits_count_by_user_id(@$customer->id)}} </span>
                                             </div>
                                             
                                             <div class="booking-activity-view">
@@ -77,8 +77,6 @@
                                         <li> <a href="{{route('personal.family_members.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
                                         <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=>'events']))}}"  @if(request()->serviceType == 'events') class="active" @endif> Events </a> </li>
                                         <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}"  @if(request()->serviceType == 'experience') class="active" @endif> Experiences </a> </li>
-                                        
-                                      <!--   <li> <a href="#"> Products </a> </li> -->
                                     </ul>
                                 </div>
                                 <div class="col-lg-5 col-md-6 col-sm-12">
@@ -92,8 +90,6 @@
                                             <a class="nav-item nav-link" id="nav-upcoming-tab" data-toggle="tab" href="#nav-upcoming" role="tab" aria-controls="nav-upcoming" aria-selected="false"  onclick="changecolor(this.id)">Upcoming</a>
                                             
                                             <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" href="#nav-past" role="tab" aria-controls="nav-past" aria-selected="false"  onclick="changecolor(this.id)">Past</a>
-                                           
-                                            <!-- <a class="nav-item nav-link" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false"  onclick="changecolor(this.id)">Pending</a> -->
                                         </div>
                                     </nav>
                                     </div>
@@ -110,18 +106,6 @@
                                                 <div class="col-md-2 col-sm-6 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -129,92 +113,18 @@
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                               
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-3 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
-                                            <!-- Modal Start -->
-                                            <!-- <div class="modal fade compare-model" id="accessreq">
-                                                <div class="modal-dialog modal-lg business">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header" style="text-align: right;"> 
-                                                            <div class="closebtn">
-                                                                <button type="button" class="close close-btn-design btn-grant" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <div class="row contentPop"> 
-                                                                <div class="col-lg-12">
-                                                                    <div class="modal-access-autho">
-                                                                        <h4 class="modal-title">Access Authorization</h4>
-                                                                        <span>to {provider Name}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-12">
-                                                                    <div class="autho-inner-txt">
-                                                                        <p>Your in control of what information is shared. Allow the provider the abilility to seamlessly sync to your Fitnessity account, and take what’s needed to complete your sign up process so you don’t have to do extra work.</p>
-                                                                        <label>Note: <p class="sync-req">You must approve all current & future account sync request</p></label>
-                                                                    </div>
-                                                                    <div class="granting-access">
-                                                                        <p>Take a look at what your granting access to. First time account syncs requires all information in order to complete bookings. Any future snyc request, you have control over what is shared.</p>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Name </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Age </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Phone number  </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Address </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Email </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Booking & purchase history with requesting provider </label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck"> Added family & family booking & purchase history</label> 
-                                                                        </div>
-                                                                        <div class="check-access">
-                                                                            <input type="checkbox" id="myCheck">
-                                                                            <label for="myCheck">Credit Card Information (for faster payment process)</label> 
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-12 btns-modal">
-                                                                    <button class="addbusiness-btn-modal acc-btn-grant">Grant Access</button>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                            <!-- Modal End -->
                                         </div>
                                     
                                         <div class="row"  id="searchbydate_current">
@@ -228,19 +138,7 @@
                                             <div class='row'>
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
-                                                </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
+                                                </div>                                                
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -248,19 +146,16 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_today" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('today');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -280,18 +175,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -299,19 +182,16 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_upcoming" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('upcoming');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -331,18 +211,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -350,19 +218,16 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_past" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('past');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
@@ -381,18 +246,6 @@
                                                 <div class="col-md-3 col-sm-12">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                                 </div>
-                                               <!--  <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -408,6 +261,34 @@
                                         </div>  
                                         <div class="row" id="searchbydate_pending">
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade compare-model" id="removeaccess">
+                            <div class="modal-dialog modal-lg business">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="text-align: right;"> 
+                                        <div class="closebtn">
+                                            <button type="button" class="close close-btn-design btn-grant" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row contentPop"> 
+                                            <div class="col-lg-12">
+                                                <div class="modal-access-autho">
+                                                    <p>You are about to remove your sync with {{$customer->company_information->dba_business_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-12 btns-modal">
+                                                <a class="addbusiness-btn-modal acc-btn-grant" href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Deny Access</a>
+                                            </div>
+                                         </div>
                                     </div>
                                 </div>
                             </div>
