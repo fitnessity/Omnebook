@@ -2659,91 +2659,164 @@ function viewActreview(aid)
 </script> -->
 
 <script>
-jQuery(document).ready(function(){
+var windowwidth = $(window).width();
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#carousel-slider").owlCarousel({
+		  autoplay: true,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+	
+			600: {
+			  items: 3
+			},
+	
+			1024: {
+			  items: 3
+			},
+			
+			1200: {
+			  items: 5
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else
+{
 	jQuery("#carousel-slider").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: true,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#popular-activities").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else {
 	jQuery("#popular-activities").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+	
+			600: {
+			  items: 3
+			},
+	
+			1024: {
+			  items: 3
+			},
+			
+			1200: {
+			  items: 5
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
 	});
- });
-</script>
-<script>
+}
 jQuery(document).ready(function(){
 	jQuery("#inarea-activities").owlCarousel({
 	  autoplay: false,
@@ -2765,195 +2838,319 @@ jQuery(document).ready(function(){
 		  autoWidth: true,
 		  loop: false
 	    },
-
 	    600: {
 	      items: 3
 	    },
-
 	    1024: {
 	      items: 3
 	    },
-		
 		1200: {
 	      items: 5
 	    },
-		
 	    1366: {
 	      items: 5
 	    },
 	  },
 	});
 });
-</script>
-<script>
-jQuery(document).ready(function(){
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#find-trainers").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else {
 	jQuery("#find-trainers").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#ways-to-workout").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	 });
+}else{
 	jQuery("#ways-to-workout").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
- });
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#all-activities").owlCarousel({
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else
+{
 	jQuery("#all-activities").owlCarousel({
-	  autoplay: false,
-	  rewind: true,
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#trainers-coaches").owlCarousel({
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	}); 
+}
+else
+{
 	jQuery("#trainers-coaches").owlCarousel({
-	  autoplay: false,
-	  rewind: true,
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
+}
+
 $(document).ready(function() {
  
   $("#owl-demo-owl").owlCarousel({
@@ -2965,8 +3162,6 @@ $(document).ready(function() {
   });
  
 });
-</script>
-<script>
 $(".mobile-slider").owlCarousel({
 	loop: false,
 	autoWidth: true,
@@ -2995,10 +3190,8 @@ $(".mobile-slider").owlCarousel({
 			  items: 5
 			},
 		  },
-		});
+});
 	
-</script>
-<script>
 $(".find-activity-owl").owlCarousel({
 	loop: false,
 	autoWidth: true,
@@ -3029,6 +3222,7 @@ $(".find-activity-owl").owlCarousel({
 			},
 		  },
 		
- });
+});
 </script>
+
 @endsection

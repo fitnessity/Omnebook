@@ -132,7 +132,8 @@
 								</div>
 							</div>
 						</form>
-						<a href="#" class="add-client mobile-none">Add New Client</a>
+					
+						<a href="#" class="add-client mobile-none" data-toggle="modal" data-target="#newclient" >Add New Client</a>
 					</div>
 
 					<div class="d-flex align-items-center">
@@ -723,6 +724,7 @@
 			</div>
 		</div>
 
+		 @include('customers._add_new_client_modal', ['business_id' => $business_id])
 		<!-- removeNotificationModal -->
 		<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
 		    <div class="modal-dialog modal-dialog-centered">
@@ -769,7 +771,7 @@
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
                                                 <h4 class="fs-16 mb-1">Good Morning, {{Auth::user()->full_name}}</h4>
-                                                <p class="text-muted mb-0">Here's a snap shot of what's happening with {{Auth::user()->current_company->dba_business_name}} today.</p>
+                                                <p class="text-muted mb-0">Here's a snap shot of what's happening with <b>{{ucwords(Auth::user()->current_company->dba_business_name)}}</b> today.</p>
                                             </div>
                                             <div class="mt-3 mt-lg-0">
                                                 <form action="javascript:void(0);">
@@ -819,7 +821,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="559.25">0</span>k </h4>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="{{$totalSales}}">{{$totalSales}}</span></h4>
                                                         <a href="" class="text-decoration-underline">View Sales Report</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
@@ -909,7 +911,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="26.34">0</span>k </h4>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="0">0</span></h4>
                                                         <a href="" class="text-decoration-underline">View Sales Report</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
@@ -993,7 +995,7 @@
 														<div class="border-0 align-items-center text-center mb-15">
 															<h4 class="payment-tracker flex-grow-1">Recurring Payments Tracker</h4>
 															<h4 class="payment-tracker">{{date('M')}}, {{date('Y')}}</h4>
-															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="36500">0</span></h4>
+															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="{{$totalRecurringPmt}}">{{$totalRecurringPmt}}</span></h4>
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
 													</div>
@@ -1014,7 +1016,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="35000">0</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$compltedpmtcnt}}">{{$compltedpmtcnt}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Paid So Far </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -1042,7 +1044,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="15000">0</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$remainigpmtcnt}}">{{$remainigpmtcnt}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Owed </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -1056,30 +1058,6 @@
 												</div>
 											</div>
 											
-											<!--<div class="card card-animate overflow-hidden">
-                                                <div class="position-absolute start-0" style="z-index: 0;">
-                                                    <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                                                        <style>
-                                                            .s0 {
-                                                                opacity: .05;
-                                                                fill: var(--vz-info)
-                                                            }
-                                                        </style>
-                                                        <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="card-body" style="z-index:1 ;">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-grow-1 overflow-hidden">
-                                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Total Jobs</p>
-                                                            <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="36894">0</span></h4>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <div id="total_jobs" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>-->
 										</div>
                                     </div><!-- end col -->
 
@@ -1091,7 +1069,8 @@
 											</div><!-- end cardheader -->
 											<div class="card-body pt-0">
 												<div class="upcoming-scheduled mb-55">
-													<input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
+													<input type="text" class="form-control"  data-provider="flatpickr"data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
+													<!-- <input type="text" class="form-control"  id="flatpickr"> -->
 												</div>
 												<div class="dropdown-activity mt-4 mb-3">
 													  <a class="alinkdrop dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -1105,36 +1084,37 @@
 														<li><a class="dropdown-item">Experience</a></li>
 													  </ul>
 												</div>
-												
-												@if(!empty($activitySchedule) && count($activitySchedule)>0)
-													@foreach($activitySchedule as $as)
-														@php 
-															$SpotsLeftdis = 0;
-															$bs = new  \App\Repositories\BookingRepository;
-															$bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
-															$SpotsLeftdis = $as->spots_available - $bookedspot; 
-														@endphp
-													<div class="mini-stats-wid d-flex align-items-center mt-3">
-														<div class="flex-shrink-0 avatar-sm">
-															<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
-																{{$SpotsLeftdis}}/{{$as->spots_available}} 
-																<label>Spots left</label>
-															</span>
-														</div>
-														<div class="flex-grow-1 ms-3 activity-info">
-															<h6 class="mb-1">{{@$as->business_service->program_name}}</h6>
-															<p class="text-muted mb-0">{{@$as->businessPriceDetailsAges->category_title}}</p>
-															<p class="text-muted mb-0">{{@$as->business_service->price_details()->first()->price_title}}</p>
-														</div>
-														<div class="flex-shrink-0 ms-3">
-															<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_start))}}</p>
-															<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_end))}}</p>
-														</div>
-													</div><!-- end -->
-													@endforeach
-												@endif	
+												<div class="scheduledata">
+													@if(!empty($activitySchedule) && count($activitySchedule)>0)
+														@foreach($activitySchedule as $as)
+															@php 
+																$SpotsLeftdis = 0;
+																$bs = new  \App\Repositories\BookingRepository;
+																$bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
+																$SpotsLeftdis = $as->spots_available - $bookedspot; 
+															@endphp
+														<div class="mini-stats-wid d-flex align-items-center mt-3">
+															<div class="flex-shrink-0 avatar-sm">
+																<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
+																	{{$SpotsLeftdis}}/{{$as->spots_available}} 
+																	<label>Spots left</label>
+																</span>
+															</div>
+															<div class="flex-grow-1 ms-3 activity-info">
+																<h6 class="mb-1">{{@$as->business_service->program_name}}</h6>
+																<p class="text-muted mb-0">{{@$as->businessPriceDetailsAges->category_title}}</p>
+																<p class="text-muted mb-0">{{@$as->business_service->price_details()->first()->price_title}}</p>
+															</div>
+															<div class="flex-shrink-0 ms-3">
+																<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_start))}}</p>
+																<p class="text-muted mb-0 color-black">{{date('h:i A', strtotime($as->shift_end))}}</p>
+															</div>
+														</div><!-- end -->
+														@endforeach
+													@endif	
+												</div>
 												<div class="mt-3 text-center">
-													<a href="{{route('business_activity_schedulers',['business_id'=> Auth::user()->current_company->id])}}" class="text-muted text-decoration-underline">View Full Schedule</a>
+													<a href="{{route('business_activity_schedulers',['business_id'=> $business_id])}}" class="text-muted text-decoration-underline">View Full Schedule</a>
 												</div>
 
 											</div><!-- end cardbody -->
@@ -1149,16 +1129,16 @@
 											<div class="card-header align-items-center d-flex">
 												<h4 class="card-title mb-0 flex-grow-1">Bookings & Revenue By Category</h4>
 												<div class="flex-shrink-0">
-                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none" onclick="makeDonutChart('1','category')">
                                                         1 M
                                                     </button>
-													<button type="button" class="btn btn-soft-primary btn-sm shadow-none">
+													<button type="button" class="btn btn-soft-primary btn-sm shadow-none" onclick="makeDonutChart('all','category')">
                                                         All
                                                     </button>
                                                 </div>
 											</div><!-- end card header -->
 											<div class="card-body">
-												<div>
+												<div id="cat_d_crt">
 													<div id="updating_donut_chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div> 
 												</div>
 											</div><!-- end card-body -->
@@ -1169,20 +1149,20 @@
 										<div class="card-header align-items-center d-flex">
                                                 <h4 class="card-title mb-0 flex-grow-1">Bookings & Revenue Source</h4>
                                                 <div class="flex-shrink-0">
-                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none" onclick="makeDonutChart('1','revenue')">
                                                         1 M
                                                     </button>
-													<button type="button" class="btn btn-soft-primary btn-sm shadow-none">
+													<button type="button" class="btn btn-soft-primary btn-sm shadow-none"  onclick="makeDonutChart('all' ,'revenue')">
                                                         All
                                                     </button>
                                                 </div>
                                             </div><!-- end card header -->
 											<div class="card-body">
-												<div>
+												<div id="rev_d_crt">
 													<div id="revenue_donut_chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div>
 												</div>
 												<div class="col-md-12 text-center">
-													<a href="{{route('personal.orders.index',['business_id'=>Auth::user()->current_company->id])}}" >View Bookings</a>
+													<a href="{{route('personal.orders.index',['business_id'=>$business_id])}}" >View Bookings</a>
 												</div>
 											</div><!-- end card-body -->
 										</div>
@@ -1192,10 +1172,10 @@
                                             <div class="card-header align-items-center d-flex flip-view">
                                                 <h4 class="card-title mb-0 flex-grow-1">Expiring Memberships & Packages</h4>
                                                 <div class="flex-shrink-0">
-                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+                                                    <button type="button" class="btn btn-soft-primary btn-sm shadow-none" onclick="getExpiringMembership('30')">
                                                         30D
                                                     </button>
-													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none" onclick="getExpiringMembership('90')">
                                                         90D
                                                     </button>
 													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
@@ -1206,7 +1186,7 @@
 											<div class="month-year align-items-center d-flex flip-view">
                                                 <h4 class="card-title mb-0 flex-grow-1">{{date('M')}}, {{date('Y')}}</h4>
                                                 <div class="flex-shrink-0">
-                                                    <h4 class="card-title mb-0 flex-grow-1">Expiring in the next 30 days</h4>
+                                                    <h4 class="card-title mb-0 flex-grow-1 expiring-text">Expiring in the next 30 days</h4>
                                                 </div>
                                             </div>
 
@@ -1223,7 +1203,7 @@
 																<td></td>
 															</tr>
 														</thead>
-                                                        <tbody>
+                                                        <tbody id="ExpiringMembership">
                                                         	@if(!empty($expiringMembership) && count($expiringMembership) >0)
 	                                                        	@foreach($expiringMembership as $key=>$emp )
 	                                                            <tr>
@@ -1709,6 +1689,7 @@
             </div>
         </div>
     </div>
+   
 
 	@include('layouts.business.footer')
 
@@ -1751,69 +1732,146 @@
 	</script>
 	<script type="text/javascript">
 
-		$(".activityschedule li a").click(function(){
-		  var selText = $(this).text();
-		  $(this).parents('.dropdown-activity').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+		$( document ).ready(function() {
+		    draw_chart_donut_revenue({{$in_person}}, {{$online}},'');
+		    draw_chart_donut_category({{$ptdata}},{{$clsdata}},{{$expdata}},{{$evdata}},{{$prdata}},'');
 		});
 
-		var online = '{{$online}}';
-		var in_person = '{{$in_person}}';
-		var chartDonut1 = ( options = {
-          	series: [44, 55, 13, 33, 22],
-          	labels: ['Personal Training', 'Classes','Experiences','Events','Products'],
-          	chart: {
-          		 height: 300,
-          		type: 'donut',
-       	 	},
-	        dataLabels: {
-	          enabled: false
-	        },
-	        responsive: [{
-	          	breakpoint: 480,
-	          	options: {
-		            legend: {
-		              show: false
-		            }
-	          	}
-        	}],
-	        legend: {
-	        	position: 'bottom',
-	            bottom: 'center', 
-	            itemHeight: 8,
-	            itemWidth: 8
-	        }
-        },(chart = new ApexCharts(document.querySelector("#updating_donut_chart"), options)).render()),
+		//$("#flatpickr").flatpickr();
+		function getExpiringMembership(days){
+			$('.expiring-text').html('Expiring in the next '+days+' days');
+			$.ajax({
+		  		type: "post",
+	            url: "{{route('getExpiringMembership')}}",
+	            data: {
+	            	days: days,
+	            	_token: $('meta[name="csrf-token"]').attr('content')
+	            },
+	            success: function(data){
+	            	$('#ExpiringMembership').html(data);
+	            }
+		  	});
+		}
 
-        chartDonut2 = ( options = {
-          	series: [in_person , online],
-          	labels: ['In-Person', 'Online'],
-          	chart: {
-          		height: 300,
-          		type: 'donut',
-       	 	},
-	        dataLabels: {
-	          	enabled: false,
-	          	formatter: function (val) {
-		        	return val + "%"
-		      	},
-	        },
-	        responsive: [{
-	          	breakpoint: 480,
-	          	options: {
-		            legend: {
-		              show: false
-		            }
-	          	}
-        	}],
-	        legend: {
-	        	position: 'bottom',
-	            bottom: 'center', 
-	            itemHeight: 8,
-	            itemWidth: 8
-	        }
-        },(chart = new ApexCharts(document.querySelector("#revenue_donut_chart"), options)).render()),
 
-        radialBar = ( options = {
+		function makeDonutChart(val,type)
+		{
+			$.ajax({
+				url:"{{route('bookingchart')}}",
+				method:"GET",
+				data:{
+					val: val,
+					type: type
+				},
+				success:function(data)
+				{
+					if(type == 'revenue'){
+						var in_person =  JSON.parse(data).in_person;
+						var online =JSON.parse(data).online;
+						draw_chart_donut_revenue(in_person,online,'ajax');
+					}else{
+						var ptdata =  JSON.parse(data).ptdata;
+						var clsdata =JSON.parse(data).clsdata;
+						var expdata =JSON.parse(data).expdata;
+						var evdata =JSON.parse(data).evdata;
+						var prdata =JSON.parse(data).prdata;
+						draw_chart_donut_category(ptdata,clsdata,expdata,evdata,prdata,'ajax');
+					}
+				}
+			});
+		}
+
+
+		function draw_chart_donut_revenue(in_person,online, type) {
+			var options = {
+	          	series: [in_person, online],
+	          	labels: ['In-Person', 'Online'],
+	          	chart: {
+	          		height: 300,
+	          		type: 'donut',
+	       	 	},
+		        dataLabels: {
+		          	enabled: false,
+		        },
+		        responsive: [{
+		          	breakpoint: 480,
+		          	options: {
+			            legend: {
+			              show: false
+			            }
+		          	}
+	        	}],
+		        legend: {
+		        	position: 'bottom',
+		            bottom: 'center', 
+		            itemHeight: 8,
+		            itemWidth: 8
+		        }
+	        };
+	        if(type == 'ajax'){
+	        	$("#revenue_donut_chart").remove();
+	        	$("#rev_d_crt").append('<div id="revenue_donut_chart" class="apex-charts" dir="ltr"></div>');
+	        }
+	        (chart = new ApexCharts(document.querySelector("#revenue_donut_chart"), options)).render();
+	        
+		}
+		
+		function draw_chart_donut_category(ptdata,clsdata,expdata,evdata,prdata,type) {
+			var options = {
+	          	series: [ptdata,clsdata,expdata,evdata,prdata],
+	          	labels: ['Personal Training', 'Classes','Experiences','Events','Products'],
+	          	chart: {
+	          		height: 300,
+	          		type: 'donut',
+	       	 	},
+		        dataLabels: {
+		          enabled: false
+		        },
+		        responsive: [{
+		          	breakpoint: 480,
+		          	options: {
+			            legend: {
+			              show: false
+			            }
+		          	}
+	        	}],
+		        legend: {
+		        	position: 'bottom',
+		            bottom: 'center', 
+		            itemHeight: 8,
+		            itemWidth: 8
+		        }
+	        };
+
+	        if(type == 'ajax'){
+	        	$("#updating_donut_chart").remove();
+	        	$("#cat_d_crt").append('<div id="updating_donut_chart" class="apex-charts" dir="ltr"></div>');
+	        }
+	        (chart = new ApexCharts(document.querySelector("#updating_donut_chart"), options)).render();
+		}
+
+		$(".activityschedule li a").click(function(){
+		  	var selText = $(this).text();
+		  	$(this).parents('.dropdown-activity').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+		  	type = selText;
+		  	if(selText == 'Personal Training'){
+		  		type = 'individual';
+		  	}
+
+		  	$.ajax({
+		  		type: "post",
+	            url: "{{route('getscheduleactivity')}}",
+	            data: {
+	            	type: type,
+	            	_token: $('meta[name="csrf-token"]').attr('content')
+	            },
+	            success: function(data){
+	            	$('.scheduledata').html(data);
+	            }
+		  	});
+		});
+
+        var radialBar = ( options = {
 	        series: [80],
 	        chart: {
 		      	width: 70,
@@ -1849,6 +1907,5 @@
 		        }
    		 	},
         },(chart = new ApexCharts(document.querySelector("#total_jobs"), options)).render())
-
 	</script>
 @endsection

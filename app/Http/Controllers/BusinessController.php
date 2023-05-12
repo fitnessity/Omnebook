@@ -31,26 +31,169 @@ class BusinessController extends Controller
     }
 
     public function dashboard(Request $request){
+
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales= $totalRecurringPmt =  $in_person =$online = 0 ;
+
         $business = Auth::user()->current_company;
-        $bookingCount = 0;
-        $today = date('Y-m-d');
-        $customerCount = $business->customers()->whereDate('created_at','=' , $today)->count();
+        $business_id =  $business->id;
+        $recurringdata = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->get(); 
+        $totalRecurringPmt = $recurringdata[0]['total_sales'];
+        $remainigpmt = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
+        $compltedpmt = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
+        $compltedpmtcnt = $remainigpmt[0]['total_sales'];
+        $remainigpmtcnt = $compltedpmt[0]['total_sales'];
+
+        $totalRecurringPmt = number_format($totalRecurringPmt,2,'.','');
+
+        $ptdata1= [];
+        $customerCount = $business->customers()->whereDate('created_at','=' ,  date('Y-m-d'))->count();
         $booking = $business->UserBookingDetails();
         if(!empty($booking->get())){
-            foreach($booking as $b){
-                $bookingCount += $b->BookingCheckinDetails()->whereDate('checkin_date','=' , $today)->count();
+            foreach($booking->get() as $b){
+                $bookingCount += $b->BookingCheckinDetails()->whereDate('checkin_date','=' ,  date('Y-m-d'))->count();
+                if(!empty($b->BookingCheckinDetails()->get())){
+                    foreach( $b->BookingCheckinDetails()->get() as $chkindata){
+                        $ptdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'individual')->count(); 
+                        $evdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'events')->count(); 
+                        $clsdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'classes')->count(); 
+                        $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'experience')->count();
+                    }
+                }
+                
+                $totalSales += $b->userBookingStatus->Transaction()->sum('amount');
+                $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
+                $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
             }
         }
+        $totalSales = number_format($totalSales,2,'.','');
+        $enddate = date('Y-m-d',strtotime('+30 days'));
+        $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=', date('Y-m-d'))->limit(3)->get();
+       
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt'));
+    }
 
-        $enddate = date('Y-m-d',strtotime($today . ' + 1 month'));
-        $expiringMembership = $booking->whereDate('expired_at', '>=', $today)->whereDate('expired_at', '<=', $enddate)->get();
-        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$today)->limit(3)->get();
-        $customers = Auth::user()->customers()->where('business_id',$business->id)->first();
-        $in_person = @$customers->Transaction->where('user_type' ,'customer')->count();
-        $online = Auth::user()->Transaction->where('user_type' ,'user')->count();
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule'));
+    public function bookingchart(Request $request){
+        $business = Auth::user()->current_company;
+        $ptdata=  $evdata = $clsdata = $expdata = $prdata = $in_person_cnt= $online_cnt=0;
+        $booking = $business->UserBookingDetails();
+        $currentMonth = date('m');
+        foreach($booking->get() as $b){
+            $chkdetail = $b->BookingCheckinDetails();
+            $in_person = $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer']);
+            $online =  $b->userBookingStatus->Transaction()->where(['user_type' =>'user']);
+
+            if($request->val == '1'){
+                $chkdetail =  $chkdetail->whereMonth('checkin_date', $currentMonth);
+                $in_person = $in_person->whereMonth('created_at', $currentMonth);
+                $online = $online->whereMonth('created_at', $currentMonth);
+            }
+            $chkdetail =  $chkdetail->get();
+            foreach($chkdetail as $chkindata){
+                $ptdata += $chkindata->UserBookingDetail->business_services()->where('service_type','individual')->count(); 
+                $evdata += $chkindata->UserBookingDetail->business_services()->where('service_type','events')->count(); 
+                $clsdata += $chkindata->UserBookingDetail->business_services()->where('service_type','classes')->count(); 
+                $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type','experience')->count();
+            }
+
+            $in_person_cnt += count($in_person->get());
+            $online_cnt += count($online->get());
+        }
+    
+        if($request->type == 'revenue'){
+            $data = array(
+                'in_person' =>  $in_person_cnt,
+                'online'   =>  $online_cnt,
+            );
+        }else{
+            $data = array(
+                'ptdata' => $ptdata,
+                'clsdata' => $clsdata,
+                'expdata' => $expdata,
+                'evdata' => $evdata,
+                'prdata' => $prdata,
+            );
+        }
+        return json_encode($data);
+    }
+
+    public function getExpiringMembership(Request $request){
+        $business = Auth::user()->current_company;
+        $booking = $business->UserBookingDetails();
+        $enddate = date('Y-m-d', strtotime("+".$request->days." days"));
+        $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
+        $html = '';
+        foreach($expiringMembership as $key=>$emp ){
+            $Customer = $emp->Customer;
+            $key = $key+1;
+            $html .= '<tr>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'. $key.'</h5>
+                </td> 
+
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.@$Customer->full_name.'</h5>
+                </td>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.$emp->business_price_detail->price_title.'</h5>
+                </td>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.$emp->contract_date.'</h5>  
+                </td>
+                <td>
+                    <h5 class="fs-14 my-1 fw-normal">'.$emp->expired_at.'</h5>
+                </td>
+                <td>
+                     <a href="'.route('personal.orders.index',['business_id'=>$emp->business_id]).'"> View </a>
+                </td>
+            </tr>';
+        }
+        return  $html;
     }
 	
+    public function getscheduleactivity(Request $request){
+        $business = Auth::user()->current_company;
+        $today = date('Y-m-d');
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$today)->get();
+        $html = '';
+        $inc = 0;
+        if(!empty($activitySchedule) && count($activitySchedule)>0){
+            foreach($activitySchedule as $as){
+                $chk  =  0;
+                if($as->business_service->service_type == strtolower($request->type)){
+                    $chk = 1;
+                }else if($request->type == 'Show All Activites'){
+                    $chk = 1;
+                }
+                if($chk == 1 && $inc < 3){
+                    $SpotsLeftdis = 0;
+                    $bs = new  \App\Repositories\BookingRepository;
+                    $bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
+                    $SpotsLeftdis = $as->spots_available - $bookedspot; 
+                    $html .= '<div class="mini-stats-wid d-flex align-items-center mt-3">
+                        <div class="flex-shrink-0 avatar-sm">
+                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
+                                '.$SpotsLeftdis.'/'.$as->spots_available.' 
+                                <label>Spots left</label>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1 ms-3 activity-info">
+                            <h6 class="mb-1">'.@$as->business_service->program_name.'</h6>
+                            <p class="text-muted mb-0">'.@$as->businessPriceDetailsAges->category_title.'</p>
+                            <p class="text-muted mb-0">'.@$as->business_service->price_details()->first()->price_title.'</p>
+                        </div>
+                        <div class="flex-shrink-0 ms-3">
+                            <p class="text-muted mb-0 color-black">'.date('h:i A', strtotime($as->shift_start)).'</p>
+                            <p class="text-muted mb-0 color-black">'.date('h:i A', strtotime($as->shift_end)).'</p>
+                        </div>
+                    </div>';
+                    $inc++;
+                }
+            }
+        }
+        return $html;
+    }
+
 	public function pagePost(Request $request) {
 		$images=array();
         $loggedinUser = Auth::user(); 

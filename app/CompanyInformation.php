@@ -88,6 +88,10 @@ class CompanyInformation extends Model {
 
     public function certification() {
         return $this->hasMany(UserCertification::class, 'company_id');
+    } 
+
+    public function Recurring() {
+        return $this->hasMany(Recurring::class, 'business_id');
     }
 
     /*public function service() {

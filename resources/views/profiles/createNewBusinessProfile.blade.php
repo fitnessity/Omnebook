@@ -7357,11 +7357,11 @@
                             <div class="modal-body">
                                 <span class="error" id="addinserro"> </span>
                                 <div class="rev-post-box">
-                                    <form method="post" enctype="multipart/form-data" name="addinsform" id="addinsform" >
-                                    @csrf
-                                        <input type="hidden" name="fromservice" value="fromservice">
-                                        <input type="hidden" name="position" value="Instructure">
-                                        <input type="hidden" name="phone" value="(000) 000-000">
+                                    <form method="post" enctype="multipart/form-data insform" name="addinsform" id="addinsform" >
+                                        @csrf
+                                        <input type="hidden" name="fromservice" id="fromservice" value="fromservice">
+                                        <input type="hidden" name="position" id="position" value="Instructure">
+                                        <input type="hidden" name="phone" id="phone" value="(000) 000-000">
                                         <input type="text" name="first_name" id="insfirstname" class="inputs" placeholder="Instructor First Name"/>
                                         <input type="text" name="last_name" id="inslastname" placeholder="Instructor Last Name" class="inputs" /> 
                                         <input type="text" name="email" id="insemail" placeholder="Instructor Email" class="inputs" />
@@ -11204,7 +11204,8 @@ $("#frm_servicetitle_two1").on("change", function() {
 
     function submit_staffmember() {
         $('.error').hide();
-        var insname=$('#insname').val();
+        var insfirstname =$('#insfirstname').val();
+        var inslastname =$('#inslastname').val();
         var insimg=$('#insimg').val();
         var insemail=$('#insemail').val();
         if (IsEmail(insemail) == false) {
@@ -11213,27 +11214,48 @@ $("#frm_servicetitle_two1").on("change", function() {
             return false;
         }
         var bio=$('#bio').val();
-        var _token = $("input[name='_token']").val();
 
-        if(insname !='' && bio !='')
+        if(inslastname !='' && insfirstname !='' && bio !='')
         { 
-            var formData = new FormData($("#addinsform")[0]);
+            //var formData = new FormData($("#addinsform")[0]);
+            var formData = new FormData();
+            formData.append('first_name', insfirstname);
+            formData.append('last_name', inslastname);
+            formData.append('email',insemail);
+            formData.append('bio', bio);
+            formData.append("insimg", insimg);
+            formData.append("position", $("#position").val());
+            formData.append("phone", $("#phone").val());
+            formData.append("fromservice", $("#fromservice").val());
+            formData.append("_token",$('meta[name="csrf-token"]').attr('content'));
             $.ajax({
                 url: "{{route('business.staff.store')}}",
                 type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
                 enctype: 'multipart/form-data',
                 cache: false,
                 contentType: false,
                 processData: false,
                 data: formData,
                 success: function (response) {
+                    alert(response)
                     if(response)
-                    {   
-                        $("#addinsform")[0].reset();
+                    {  
+                        //$('#addinsform').reset();
+                       //document.addinsform.reset()
+                        //$('form[name=addinsform]').get(0).reset();
+                        //$('form.insform input[type="text"],texatrea, img').val('');
+                        //$("#addinsform")[0].reset();
+                        //document.getElementById("addinsform").reset();
+                        //  $("#addinsform").trigger("reset");
+                        $('.rev-post-box').load(' .rev-post-box > *');
                         $('.selectinstructor').load(' .selectinstructor > *')
                         $('#addinserro').show(); 
                         $('#addinserro').html('Instructure Added Successfully..'); 
                         $("#submit_member").prop('disabled', true);
+                        
                     }                    
                 }
             });

@@ -8,6 +8,12 @@
         //temporary add here, wait for controller refactored
         URL::defaults(['business_id' => $companyId]);
     }
+    $companyList = Auth::user()->company()->select('logo','company_name')->get();
+    $company = Auth::user()->current_company;
+    $dba_business_name = '';
+    if($company != ''){
+        $dba_business_name = $company->dba_business_name;
+    }
 ?>
 
 <div class="app-menu navbar-menu" >
@@ -41,6 +47,11 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
+				<li class="menu-title border-bottom">
+					<span class="font-white switch-business" data-key="t-menu">{{$dba_business_name}}
+						<a href="" data-bs-toggle="modal" data-bs-target=".switch-business-modal">(switch)</a>
+					</span>
+				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="#sidebarDashboards" aria-controls="sidebarDashboards">
@@ -151,6 +162,44 @@
 
     <div class="sidebar-background"></div>
 </div>
+<div class="modal fade switch-business-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Select Business</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+                @foreach($companyList as $list)
+				<a href="#" class="business-click">
+    				<div class="row y-middle">
+    					<div class="col-md-2">
+    						<div class="select-business mb-15">
+    							<img src="{{url('/public/uploads/profile_pic/thumb/'.$list->logo)}}" alt="Fitness pvt company, llc" >
+    						</div>
+    					</div>		
+    					<div class="col-md-5">
+    						<label class="business-name">{{$list->company_name}}</label>
+    					</div>
+    				</div>
+				</a>
+                @endforeach
+				<!-- <a href="#" class="business-click">
+    				<div class="row y-middle">
+    					<div class="col-md-2">
+    						<div class="select-business mb-15">
+    							<img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1683350278-discover.jpg" alt="arya pvt lmt" class="avatar">
+    						</div>
+    					</div>		
+    					<div class="col-md-5">
+    						<label class="business-name">arya pvt lmt</label>
+    					</div>
+    				</div>
+				</a> -->
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
     function linkJump(bstep) {
         var cid = '{{$companyId}}';
