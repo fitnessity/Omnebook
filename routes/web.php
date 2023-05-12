@@ -98,6 +98,9 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
+    Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
+    Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');

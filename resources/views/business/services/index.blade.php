@@ -245,23 +245,26 @@ input,select {
 <script>
 
     $(document).on('click', '#btndelete', function(event) {
-        var sid = $(this).attr('data-id');
-        var companyid = '{{$companyid}}';
-        $.ajax({ 
-            //url:"{{route('business.services.destroy',['business_id' =>"+companyid +", 'service' =>"+sid+"])}}",
+        let text = "Are you sure to delete this activity?";
+        if (confirm(text) == true) {
+            var sid = $(this).attr('data-id');
+            var companyid = '{{$companyid}}';
+            $.ajax({ 
+                //url:"{{route('business.services.destroy',['business_id' =>"+companyid +", 'service' =>"+sid+"])}}",
 
-            url:"/business/"+companyid+"/services/"+sid,
-            xhrFields: {
-                withCredentials: true
-            },
-            type:"delete",
-            data: { 
-                _token: '{{csrf_token()}}', 
-            },
-            success: function(html){
-                location.reload();
-            }
-        });
+                url:"/business/"+companyid+"/services/"+sid,
+                xhrFields: {
+                    withCredentials: true
+                },
+                type:"delete",
+                data: { 
+                    _token: '{{csrf_token()}}', 
+                },
+                success: function(html){
+                    location.reload();
+                }
+            });
+        }
     }); 
 
     function getbookingmodel(sid,chk){  

@@ -40,6 +40,7 @@ class StaffController extends Controller
      */
     public function store(Request $request, $business_id)
     {   
+       // print_r($request->all());exit;
         $image = '';
         if ($request->hasFile('insimg')) 
         {   
