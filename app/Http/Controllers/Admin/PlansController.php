@@ -1,21 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Repositories\PlanRepository;
-use App\Repositories\SportsRepository;
-use App\Plan;
-use App\BusinessClaim;
-use App\CompanyInformation;
-use App\UserService;
-use App\BusinessService;
-use App\Sports;
-use App\User;
+use App\Repositories\{PlanRepository,SportsRepository};
 use Auth;
 use Redirect;
 use Response;
@@ -25,23 +14,7 @@ use Image;
 use Excel;
 use App\Imports\ClaimImport;
 use Maatwebsite\Excel\HeadingRowImport;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessActivityScheduler;
-use App\PagePost;
-use App\PagePostSave;
-use App\PageLike;
-use App\BusinessReview;
-use App\Miscellaneous;
-use App\BusinessPriceDetailsAges;
-
-use App\MailService;
+use App\{BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessActivityScheduler,PagePost,PagePostSave,PageLike,BusinessReview,Miscellaneous,BusinessPriceDetailsAges,MailService,Plan,BusinessClaim,CompanyInformation,UserService,BusinessService,Sports,User};
 
 class PlansController extends Controller
 {   
@@ -134,51 +107,14 @@ class PlansController extends Controller
             Excel::import(new ClaimImport, $request->file('import_file'));
             $repeat_data=\Session::get('user') != null ? \Session::get('user') : [];
             $not_repeat_data=\Session::get('notuser') != null ? \Session::get('notuser') : [];
-
-            //Excel::load($request->file('import_file')->getRealPath(), function ($reader) {
-                //$excel_data    =   $reader->toArray();
-                //if(!empty($excel_data)){
-                    //foreach($excel_data as $key => $row) {
-                        //$firstrow = $row;	
-                        //if( !array_key_exists('business_name', $firstrow) || 
-                        //!array_key_exists('activity', $firstrow) ||
-                        //!array_key_exists('location', $firstrow)|| 
-                        //!array_key_exists('website', $firstrow)|| 
-                        //!array_key_exists('phone', $firstrow)|| 
-                        //!array_key_exists('address', $firstrow)
-                        //) {
-                                //$this->error = 'Problem in header.';
-                                //break;
-                        //}
-                        //else{
-                            //if($row['business_name'] == '' ){
-                                //$this->error = 'Error in data inserted';
-                                //break;
-                            //}
-                            //$business_claim = new BusinessClaim();
-                            //$business_claim->business_name = ucfirst($row['business_name']);
-                            //$business_claim->activity = ($row['activity']);
-                            //$business_claim->location = ($row['location']);
-                            //$business_claim->website = ($row['website']);
-                            //$business_claim->phone = ($row['phone']);
-                            //$business_claim->address = ($row['address']);
-                            //$business_claim->save();
-                        //}
-                    //}
-                //}
-            //});
         }
 
         if($this->error != '')
         {
-        // 	Session::flash('error',$this->error);
-        // 	return redirect()->back();
         	return response()->json(['status'=>500,'message'=>$this->error]);
         }
         else{
             return response()->json(['status'=>200,'message'=>'File imported Successfully','repeat_data'=>$repeat_data,'not_repeat_data'=>$not_repeat_data]);
-        // 	Session::flash('success','File imported Successfully');
-        // 	return redirect()->back();
         }
     }
     
@@ -422,14 +358,6 @@ class PlansController extends Controller
         }
 
         if( $address != ''){
-           /* $gaddress = $address.', '.@$request->state;
-            $gaddress = str_replace(' ', '+', $gaddress);
-            $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
-            $geocode = file_get_contents($url);
-            $json = json_decode($geocode);
-            $data['lat'] = $json->results[0]->geometry->location->lat;
-            $data['lng'] = $json->results[0]->geometry->location->lng;*/
             $data['lat'] = $request->lat; 
             $data['lng'] = $request->lon;
         }
@@ -485,14 +413,6 @@ class PlansController extends Controller
         }
          
         if($address != ''){
-            /*$gaddress = $address.', '.@$request->state;
-            $gaddress = str_replace(' ', '+', $gaddress);
-            $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
-            $geocode = file_get_contents($url);
-            $json = json_decode($geocode);
-            $data['lat'] = $json->results[0]->geometry->location->lat;
-            $data['lng'] = $json->results[0]->geometry->location->lng;*/
             $data['lat'] = $request->lat; 
             $data['lng'] = $request->lon;
         }
@@ -511,9 +431,6 @@ class PlansController extends Controller
         $bc->latitude = $data['lat'];
         $bc->longitude = $data['lng'];
         $bc->is_verified= 0;
-        /* $bc->location=@$request->location;
-          $bc->business_type=@$request->buss_type;
-          $bc->activity= @$request->frm_servicesport;*/
         $bc->save();
 
         $bcd = new BusinessCompanyDetail;
@@ -607,11 +524,7 @@ class PlansController extends Controller
     public function list_activity($id){
 		//DB::enableQueryLog();
         $companyInfo = CompanyInformation::where('id', $id)->orderBy('id', 'DESC')->get();
-       // $companyservice = BusinessServices::where('userid', $companyInfo[0]['id'])->where('cid', $id)->orderBy('id', 'DESC')->get();
 	   $companyservice = BusinessServices::where('cid', $id)->orderBy('id', 'DESC')->get();
-		//echo $companyInfo[0]['id'];
-		//print_r($companyInfo); exit;
-		//dd(\DB::getQueryLog());
         return view('admin.plan.list_service', [            
             'pageTitle' => '',
             'companyInfo' => $companyInfo,
@@ -654,9 +567,6 @@ class PlansController extends Controller
                     $no++;
                 }
             }
-            
-            /* using the insertion time only */
-            // $request->servicepic = $profile_picture;
         } else {
             if ($request->hasFile('servicepic')) {
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -668,9 +578,6 @@ class PlansController extends Controller
             } else {
                 $profile_picture = $request->oldservicepic;
             }
-
-            /* using the insertion time only */
-            /*$request->servicepic = $profile_picture;*/
         }
 
         // experience feild
@@ -775,8 +682,6 @@ class PlansController extends Controller
                 if($age_cnt >= 0){
                     for($y=0; $y <= $age_cnt; $y++) {
                         if($request->input('is_recurring_adult_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $adultrecurring_price = $request->input('recurring_price_adult_'.$i.$y);
                             $adultrecurring_run_auto_pay = $request->input('run_auto_pay_adult_'.$i.$y);
                             $adultrecurring_cust_be_charge = $request->input('cust_be_charge_adult_'.$i.$y);
@@ -789,8 +694,6 @@ class PlansController extends Controller
                             $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
                             $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
                         }else{
-                            /*$recurring_every = NULL;
-                            $recurring_duration = NULL;*/
                             $adultrecurring_price = NULL;
                             $adultrecurring_run_auto_pay  = NULL;
                             $adultrecurring_cust_be_charge = NULL;
@@ -819,8 +722,6 @@ class PlansController extends Controller
                             $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
                             $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
                         }else{
-                            /*$childrecurring_every = NULL;
-                            $childrecurring_duration = NULL;*/
                             $childrecurring_price = NULL;
                             $childrecurring_run_auto_pay  = NULL;
                             $childrecurring_cust_be_charge = NULL;
@@ -835,8 +736,6 @@ class PlansController extends Controller
                         }
 
                         if($request->input('is_recurring_infant_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $infantrecurring_price = $request->input('recurring_price_infant_'.$i.$y);
                             $infantrecurring_run_auto_pay = $request->input('run_auto_pay_infant_'.$i.$y);
                             $infantrecurring_cust_be_charge = $request->input('cust_be_charge_infant_'.$i.$y);
@@ -877,11 +776,6 @@ class PlansController extends Controller
                             "serviceid" => $request->sid,
                            
                             "pay_chk" => isset($request->pay_chk[$i]) ? $request->pay_chk[$i] : '',
-                            /* "pay_price" => isset($request->pay_price[$i]) ? $request->pay_price[$i] : '',
-                            "pay_discountcat" => isset($request->pay_discountcat[$i]) ? $request->pay_discountcat[$i] : '',
-                            "pay_discounttype" => isset($request->pay_discounttype[$i]) ? $request->pay_discounttype[$i] : '',
-                            "pay_discount" => isset($request->pay_discount[$i]) ? $request->pay_discount[$i] : '',
-                            "pay_estearn" => isset($request->pay_estearn[$i]) ? $request->pay_estearn[$i] : '',*/
                              "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
                             "recurring_price_adult"=>$adultrecurring_price,
                             "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,
@@ -1230,12 +1124,6 @@ class PlansController extends Controller
                             "serviceid" =>  $bs->id,
                            
                             "pay_chk" => isset($request->pay_chk[$i]) ? $request->pay_chk[$i] : '',
-                            /* "pay_price" => isset($request->pay_price[$i]) ? $request->pay_price[$i] : '',
-                            "pay_discountcat" => isset($request->pay_discountcat[$i]) ? $request->pay_discountcat[$i] : '',
-                            "pay_discounttype" => isset($request->pay_discounttype[$i]) ? $request->pay_discounttype[$i] : '',
-                            "pay_discount" => isset($request->pay_discount[$i]) ? $request->pay_discount[$i] : '',
-                            "pay_estearn" => isset($request->pay_estearn[$i]) ? $request->pay_estearn[$i] : '',*/
-
                             "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
                             "recurring_price_adult"=>$adultrecurring_price,
                             "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,

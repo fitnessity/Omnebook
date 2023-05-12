@@ -136,7 +136,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                             if (isset($companyData)) {
 
                                 $companyid = $companyData['id'];
-                                $companyname = $companyData['company_name'];
+                                $companyname = $companyData['dba_business_name'];
                                 $companycity = $companyData['city'];
                                 $companycountry = $companyData['country'];
                                     

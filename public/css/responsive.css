@@ -2476,7 +2476,7 @@
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
 	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
 	.main-slider .slide{padding-top: 200px; min-height: 575px;}
-	.top-search{width: 100% !important; margin-top: 21px !important;}
+	.top-search{width: 100% !important; margin-top: 10px !important;}
 	.personal-find-activity{height: 245px;}
 	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}
@@ -2547,9 +2547,8 @@
 	.central-meta{padding: 20px 0px;}
 	.postcomment{padding: 5px 23px;}
 	.post-meta{margin-top: 0px;}
-	.post-meta .removepost {  margin-bottom: 20px; margin-left: 15px; margin-top: 15px;}
+	.post-meta .removepost {  margin-bottom: 20px; margin-left: 20px; margin-top: 15px;}
 	.profile-section{display: inline-block !important;}
-	.we-video-info{margin-left: 15px;}
 	.video-box{padding: 15px 0;}
 	.video-tab-iframe iframe{height: 225px !important;}
 	.price-section {  float: right;  width: 100%;}
@@ -2557,9 +2556,17 @@
 	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
 	.highlight-fonts{font-weight: bold;}
 	.central-box{padding-right: 10px; padding-left: 10px;}
-	.we-video-info{border-top: none !important;}
+	.img-title.com-info{margin-bottom: 20px;}
+	.info-display span { font-size: 14px; margin-bottom: 6px; line-height: 18px;}
+	.info-display label { font-size: 14px; margin-bottom: 6px; line-height: 18px;}
+	.comparePan .w3-col.m4 { width: 50%;}
+	.cmprBtn.addtcmpr-btn{width: 100%;}
+	.comparePanle{bottom: 60px !important;}
+	.user-img-sp .user-pic{margin-left: 10px;}
+	.friend-name{padding-left: 15px; padding-right: 7px;}
+	.post-meta.social-img input{padding-left: 15px;}
+	.mobile-none{display:none;}
 }
-
 
 @media(max-width: 575px) {
 

@@ -105,7 +105,7 @@ if(!empty($cart["cart_item"])) {
 						</div>
 						<div class="col-md-10 col-xs-9">
 							<div class="img-title">
-								<span>{{@$companyData->company_name}}</span>
+								<span>{{@$companyData->dba_business_name}}</span>
 								<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 							</div>
 						</div>
@@ -134,7 +134,7 @@ if(!empty($cart["cart_item"])) {
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
 								<div class="img-title com-info">
-									<h4>{{@$companyData->company_name}}</h4>
+									<h4>{{@$companyData->dba_business_name}}</h4>
 									<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 								</div>
 							</div>
@@ -378,7 +378,7 @@ if(!empty($cart["cart_item"])) {
 										</div>
 										<div class="col-md-6 col-xs-6">	
 											<div class="info-display info-align">
-												<span>{{$act->company_information->company_name}}</span>
+												<span>{{$act->company_information->dba_business_name}}</span>
 											</div>
 										</div>
 									</div>
@@ -420,7 +420,7 @@ if(!empty($cart["cart_item"])) {
 		<section class="ptb-65 plr-60 float-left w-100 discover_activities" id="counter">
 			<div class="container-fluid">
 				<div class="cart-sub-title">
-					<span>View Other Activities Provided by {{@$companyData->company_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
+					<span>View Other Activities Provided by {{@$companyData->dba_business_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
 				</div>
 				<?php if (isset($discovermore) && count($discovermore)>0) { ?>
 					<div class="owl-slider kickboxing-slider cart-slider">
@@ -438,7 +438,7 @@ if(!empty($cart["cart_item"])) {
 
 										$companyid = $companyData->id;
 										$companyaddress = $companyData->address;
-										$companyname = $companyData->company_name;
+										$companyname = $companyData->dba_business_name;
 										$companycity = $companyData->city;
 										$companycountry = $companyData->country;
 										$companylogo = $companyData->logo;
@@ -737,7 +737,7 @@ if(!empty($cart["cart_item"])) {
 									<h3>Tell Us About You</h3>
 								</div>
 								<br>
-								<h4>To make sure you are 18, please complete these steps</h4>
+								<h4 class="text-center">To make sure you are 18, please complete these steps</h4>
 								<div id='systemMessage' class="alert-msgs"></div>
                     			<input type="hidden" name="_token" value="{{csrf_token()}}">
 								<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
@@ -745,7 +745,7 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" data-behavior="datepicker">
+								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" data-behavior="datepickerforbirtdate">
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">
@@ -756,7 +756,6 @@ if(!empty($cart["cart_item"])) {
 										</div>
                     					<div id='termserror'></div><br>
 										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
-										<!-- <button type="button" style="margin-bottom: 10px; display: none;" class="signup-new" id="continue_cart" onclick="gotocart();">Continue</button> -->
 									</div>
 								</div>
 							</form>
@@ -770,6 +769,93 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 @include('layouts.footer')
+<script type="text/javascript">
+    
+    jQuery(function ($) {
+    	$('#frmregister').validate({
+	        rules: {
+	            firstname: "required",
+	            lastname: "required",
+	            username: "required",
+	            email: {
+	                required: true,
+	                email: true
+	            },
+	            dob: {
+	                required: true,
+	            },
+	            password: {
+	                required: true,
+	                minlength: 8
+	            },
+	            confirm_password: {
+	                required: true,
+	                minlength: 8,
+	                equalTo: "#password"
+	            },
+	        },
+	        messages: {
+	            firstname: "Enter your Firstname",
+	            lastname: "Enter your Lastname",
+	            username: "Enter your Username",
+	            email: {
+	                required: "Please enter a valid email address",
+	                minlength: "Please enter a valid email address",
+	                remote: jQuery.validator.format("{0} is already in use")
+	            },
+	            dob: {
+	                required: "Please provide your date of birth",
+	            },
+	            password: {
+	                required: "Provide a password",
+	                minlength: jQuery.validator.format("Enter at least {0} characters")
+	            },
+	            confirm_password: {
+	                required: "Repeat your password",
+	                minlength: jQuery.validator.format("Enter at least {0} characters"),
+	                equalTo: "Enter the same password as above"
+	            },
+	        },
+	        submitHandler:  function(form){
+	        	if (!jQuery("#b_trm1").is(":checked")) {
+		           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+		            return false;
+		        }
+		        var valchk = getAge();
+		        if(valchk == 1){
+		            $('#register_submit').prop('disabled', true);
+	                var formData = $("#frmregister").serialize();
+	                var posturl = '/auth/postRegistration_as_guest';
+	                $.ajax({
+	                    url: posturl,
+	                    type: 'POST',
+	                    dataType: 'json',
+	                    data: formData,
+	                    beforeSend: function () {
+	                        $('#register_submit').prop('disabled', true).css('background','#999999');
+	                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+	                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+	                    },
+	                    complete: function () {
+	                        $('#register_submit').prop('disabled', true).css('background','#999999');
+	                    },
+	                    success: function (response) {
+	                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+	                        showSystemMessages('#systemMessage', response.type, response.msg);
+	                        if (response.type === 'success') {
+	                            window.location.href = '{{route("carts_index")}}';
+	                        } else {
+	                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+	                        }
+	                    }
+	                });
+		        }else{
+		            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+		        }
+	        }
+	    });
+    });
+</script>
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -779,64 +865,6 @@ if(!empty($cart["cart_item"])) {
 			$(this).html(txt);
 			event.preventDefault();
 		});
-
-		/*$(".dobdate").keyup(function(){
-            if ($(this).val().length == 2){
-                $(this).val($(this).val() + "/");
-            }else if ($(this).val().length == 5){
-                $(this).val($(this).val() + "/");
-            }
-        });*/
-
-		$("#frmregister").submit(function (e) {
-            e.preventDefault();
-            $('#frmregister').validate({
-                rules: {
-                    firstname: "required",
-                    lastname: "required",
-                    username: "required",
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password"
-                    },
-                },
-                messages: {
-                    firstname: "Enter your Firstname",
-                    lastname: "Enter your Lastname",
-                    username: "Enter your Username",
-                    email: {
-                        required: "Please enter a valid email address",
-                        minlength: "Please enter a valid email address",
-                        remote: jQuery.validator.format("{0} is already in use")
-                    },
-                    dob: {
-                        required: "Please provide your date of birth",
-                    },
-                    password: {
-                        required: "Provide a password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters")
-                    },
-                    confirm_password: {
-                        required: "Repeat your password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters"),
-                        equalTo: "Enter the same password as above"
-                    },
-                },
-                submitHandler: registerUser
-            });
-        });
 
         $('#email').on('blur', function() {
 	        var posturl = '{{route("emailvalidation")}}';
@@ -855,37 +883,29 @@ if(!empty($cart["cart_item"])) {
             });
 	    });
 
-	    
-
 	  	$(document).on('click', '.serv_fav1', function(){
-        var ser_id = $(this).attr('ser_id');
-        // var _token = $("input[name='_token']").val();
-        var _token = $('meta[name="csrf-token"]'). attr('content');
-        $.ajax({
-            type: 'POST',
-            url: '{{route("service_fav")}}',
-            data: {
-                _token: _token,
-                ser_id: ser_id
-            },
-            success: function (data) {
-                if(data.status=='like')
-				{
-					$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
-				}
-				else
-				{
-					$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
-				}
-            }
-        });
-    });
+	        var ser_id = $(this).attr('ser_id');
+	        var _token = $('meta[name="csrf-token"]'). attr('content');
+	        $.ajax({
+	            type: 'POST',
+	            url: '{{route("service_fav")}}',
+	            data: {
+	                _token: _token,
+	                ser_id: ser_id
+	            },
+	            success: function (data) {
+	                if(data.status=='like')
+					{
+						$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+					}
+					else
+					{
+						$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+					}
+	            }
+	        });
+    	});
   	});
-
-
-	function gotocart(){
-		window.location = '{{route("payments_card")}}'
-	}
 
 	function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -899,53 +919,6 @@ if(!empty($cart["cart_item"])) {
            var agechk = '1';
         }
         return agechk;
-    }
-
-    function registerUser() {
-
-        var valchk = getAge();
-        var validForm = $('#frmregister').valid();
-        var posturl = '/auth/postRegistration_as_guest';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if(valchk == 1){
-            $('#register_submit').prop('disabled', true);
-            if (validForm) {
-
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                    },
-                    success: function (response) {
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                        	//$('#continue_cart').css('display','block');
-                            window.location.href = '{{route("carts_index")}}';
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
-                    }
-                });
-            }
-        
-        }else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }
     }
 
     function changeformate() {

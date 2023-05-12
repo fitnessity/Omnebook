@@ -131,7 +131,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         @else
                             <?php
                             echo '<div class="company-profile-text">';
-                            $pf=substr($company->company_name, 0, 1);
+                            $pf=substr($company->dba_business_name, 0, 1);
                             echo '<p>'.$pf.'</p></div>';
                             ?>
                         @endif
@@ -239,7 +239,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             <div class="col-lg-6 col-sm-6">
                 <div class="bnr-information">
                     <div class="viewdisplay">
-                        <h2 style="text-transform: capitalize;">@if($company->dba_business_name != '') {{$company->dba_business_name}} @else {{$company->company_name}} @endif <!-- <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i>-->
+                        <h2 style="text-transform: capitalize;">{{$company->dba_business_name}}  <!-- <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i>-->
                     <?php /*?><span>Claimed</span><?php */?>
 					<!--<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" width="45" height="20">-->
 					   </h2></div>
@@ -250,8 +250,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 					<div class="url-copy">	
 						<div> 
 							<p>
-								<a class="colorgrey" href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->company_name)).'/'.$company->id; ?> ">
-							<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->company_name)).'/'.$company->id; ?> </a> </p>
+								<a class="colorgrey" href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->dba_business_name)).'/'.$company->id; ?> ">
+							<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->dba_business_name)).'/'.$company->id; ?> </a> </p>
 							<!-- <button onclick="myFunction()" style="background: white;border: none; margin-left: 10px;">Copy URL</button>-->
 					   </div>
 					  		
@@ -852,7 +852,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     		<div class="" id="timeline">
             	<div class="desc-text" id="mydesc">
 					<span class="create-post">Timeline
-                        <a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
+                        <a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
                     </span>
                     @if($page_posts->count() == 0 ) 
                         <div class="central-meta item">
@@ -863,7 +863,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                             @else
                                                 <?php
                                                 echo '<div class="company-img-text">';
-                                                $pf=substr($compinfo->company_name, 0, 1);
+                                                $pf=substr($compinfo->dba_business_name, 0, 1);
                                                 echo '<p>'.$pf.'</p></div>';
                                                 ?>
                                             @endif</figure>
@@ -908,7 +908,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                             @else
                                                 <?php
                                                 echo '<div class="company-img-text">';
-                                                $pf=substr($company->company_name, 0, 1);
+                                                $pf=substr($company->dba_business_name, 0, 1);
                                                 echo '<p>'.$pf.'</p></div>';
                                                 ?>
                                             @endif
@@ -931,7 +931,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 													</ul>
 												</div>
 											</div>
-											<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
+											<ins><a href="#" title="">{{ucfirst($PageData->dba_business_name)}} </a> Post Album</ins>
 											<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
 										</div>
 										<div class="post-meta">
@@ -1302,7 +1302,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @else
                                                     <?php
                                                     echo '<div class="company-img-text">';
-                                                    $pf=substr($company->company_name, 0, 1);
+                                                    $pf=substr($company->dba_business_name, 0, 1);
                                                     echo '<p>'.$pf.'</p></div>';
                                                     ?>
                                                 @endif

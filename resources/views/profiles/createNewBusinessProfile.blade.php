@@ -3634,7 +3634,7 @@
                                         <p>Which staff member(s) will lead this program?</p>
                                         <div class="selectstaff">
                                             <select name="instructor_id" id="instructor_id" class="form-control">
-                                                <option value="">Select Your Instructor </option>
+                                                <option value="">{{Auth::user()->current_company->full_name}}(Provider)</option>
                                                 @if(!empty($staffdata))
                                                     @foreach($staffdata as $data)
                                                         <option value="{{$data->id}}" @if($instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
@@ -5068,19 +5068,22 @@
                                                 foreach($business_price_details as $price){ 
                                                     $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_duration =  $recurring_every  = $recurring_price = $membership_type = $category_title = $dues_tax = $sales_tax = $price_title = $recurring_run_auto_pay_adult  = 
 
-                                                    $is_recurring_adult = $recurring_cust_be_charge_adult = $recurring_every_time_num_adult = $recurring_every_time_adult = $recurring_customer_chage_by_adult =$recurring_nuberofautopays_adult = $recurring_happens_aftr_12_pmt_adult = $recurring_client_be_charge_on_adult = "";
+                                                    $is_recurring_adult = $recurring_cust_be_charge_adult = $recurring_every_time_num_adult = $recurring_every_time_adult = $recurring_customer_chage_by_adult =$recurring_happens_aftr_12_pmt_adult = $recurring_client_be_charge_on_adult = "";
 
                                                     $recurring_first_pmt_adult = $recurring_recurring_pmt_adult = $recurring_total_contract_revenue_adult =$recurring_price_adult= 0 ;
 
                                                       $is_recurring_infant = 
-                                                    $recurring_run_auto_pay_infant  = $recurring_cust_be_charge_infant = $recurring_every_time_num_infant = $recurring_every_time_infant = $recurring_customer_chage_by_infant = $recurring_nuberofautopays_infant = $recurring_happens_aftr_12_pmt_infant = $recurring_client_be_charge_on_infant = "";
+                                                    $recurring_run_auto_pay_infant  = $recurring_cust_be_charge_infant = $recurring_every_time_num_infant = $recurring_every_time_infant = $recurring_customer_chage_by_infant =  $recurring_happens_aftr_12_pmt_infant = $recurring_client_be_charge_on_infant = "";
 
                                                        $recurring_first_pmt_infant = $recurring_recurring_pmt_infant = $recurring_total_contract_revenue_infant = $recurring_price_infant= 0 ;
 
-                                                      $is_recurring_child = $recurring_run_auto_pay_child  = $recurring_cust_be_charge_child = $recurring_every_time_num_child = $recurring_every_time_child = $recurring_customer_chage_by_child =$recurring_nuberofautopays_child = $recurring_happens_aftr_12_pmt_child = $recurring_client_be_charge_on_child = ""; 
+                                                      $is_recurring_child = $recurring_run_auto_pay_child  = $recurring_cust_be_charge_child = $recurring_every_time_num_child = $recurring_every_time_child = $recurring_customer_chage_by_child = $recurring_happens_aftr_12_pmt_child = $recurring_client_be_charge_on_child = ""; 
+                                                    $recurring_nuberofautopays_child = $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = $recurring_price_child=  0 ;
 
-                                                    $recurring_first_pmt_child = $recurring_recurring_pmt_child = $recurring_total_contract_revenue_child = $recurring_price_child=  0 ;
-                                                $editmodeltextadult = $editmodeltextchild =  $editmodeltextinfant ="";
+                                                $editmodeltextadult = $editmodeltextchild =  $editmodeltextinfant = "" ;
+
+                                                $customer_charged_num_child = $customer_charged_num_adult = $customer_charged_num_infant = $recurring_nuberofautopays_adult = $recurring_nuberofautopays_infant =0;
+
                                                    /* print_r($price);*/
 
                                                     if(isset($price['pay_chk']) && !empty($price['pay_chk'])) {
@@ -5174,8 +5177,10 @@
 
                                                     if(isset($price['recurring_nuberofautopays_child']) && !empty($price['recurring_nuberofautopays_child'])) {
                                                         $recurring_nuberofautopays_child = $price['recurring_nuberofautopays_child'];
-                                                        $editmodeltextchild  .= 
-                                                        '( '.($recurring_nuberofautopays_child*$customer_charged_num_child).' '.@$customer_charged_time_child.' contract ';
+                                                        if($customer_charged_num_child == ''){
+                                                            $customer_charged_num_child = 0;
+                                                        }
+                                                        $editmodeltextchild  .= '( '.($recurring_nuberofautopays_child * $customer_charged_num_child).' '.@$customer_charged_time_child.' contract ';
                                                     }
 
                                                     if(isset($price['recurring_happens_aftr_12_pmt_child']) && !empty($price['recurring_happens_aftr_12_pmt_child'])) {
@@ -5240,6 +5245,9 @@
                                                         $recurring_customer_chage_by_infant = $price['recurring_customer_chage_by_infant'];
                                                         if($recurring_customer_chage_by_infant != ''){
                                                             $recurring_str = explode(" ",$recurring_customer_chage_by_infant);
+                                                            if($customer_charged_num_infant == ''){
+                                                                $customer_charged_num_infant = 0;
+                                                            }
                                                             $customer_charged_num_infant = $recurring_str[0];
                                                             $customer_charged_time_infant = $recurring_str[1];
                                                         }
@@ -5309,6 +5317,9 @@
                                                         $recurring_customer_chage_by_adult = $price['recurring_customer_chage_by_adult'];
                                                         if($recurring_customer_chage_by_adult != ''){
                                                             $recurring_str = explode(" ",$recurring_customer_chage_by_adult);
+                                                            if($customer_charged_num_adult == ''){
+                                                                $customer_charged_num_adult = 0;
+                                                            }
                                                             $customer_charged_num_adult = $recurring_str[0];
                                                             $customer_charged_time_adult = $recurring_str[1];
                                                         }
@@ -5456,17 +5467,18 @@
                                                                 <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" @if($price['dispaly_section'] == 'freeprice' ) checked @endif>
                                                                 <label class="recurring-pmt">Free</label>
                                                                 
-                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" @if($price['dispaly_section'] == 'weekdayprice' ) checked @endif>
+                                                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" @if($price['dispaly_section'] == 'weekdayprice'|| $price['adult_weekend_price_diff'] =='' ||  $price['child_weekend_price_diff'] =='' || $price['infant_weekend_price_diff'] =='' ) checked @endif>
                                                                 <label class="recurring-pmt">Everyday Price</label>
                                                                 
-                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice" @if($price['dispaly_section'] == 'weekendprice' ) checked @endif>
+                                                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice" @if($price['dispaly_section'] == 'weekendprice'  || $price['adult_weekend_price_diff'] !='' ||  $price['child_weekend_price_diff'] !='' || $price['infant_weekend_price_diff'] !=''  ) checked @endif>
                                                                 <label class="recurring-pmt">Weekend Price</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="displaysectiondiv{{$i}}{{$j}}" @if($price['dispaly_section'] == 'freeprice' ) style="display: none;"  @endif >
+                                            <div id="displaysectiondiv{{$i}}{{$j}}" 
+                                             @if($price['dispaly_section'] == 'freeprice' ) style="display: none;"  @endif >
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="setprice sp-select">
@@ -5543,7 +5555,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
+                                                    <div class="estimated-earn Weekend{{$i}}{{$j}}" 
+                                                    @if($price['dispaly_section'] == 'weekdayprice' ) style="display: none;"  @endif >
                                                         <div class="cus-week-price earn sp-select">
                                                             <label>Weekend Estimated Earnings </label>
                                                             <input type="text" name="weekend_adult_estearn_{{$i}}{{$j}}" id="weekend_adult_estearn{{$i}}{{$j}}" placeholder="$" value="{{$price['weekend_adult_estearn']}}">
@@ -7344,11 +7357,11 @@
                             <div class="modal-body">
                                 <span class="error" id="addinserro"> </span>
                                 <div class="rev-post-box">
-                                    <form method="post" enctype="multipart/form-data" name="addinsform" id="addinsform" >
-                                    @csrf
-                                        <input type="hidden" name="fromservice" value="fromservice">
-                                        <input type="hidden" name="position" value="Instructure">
-                                        <input type="hidden" name="phone" value="(000) 000-000">
+                                    <form method="post" enctype="multipart/form-data insform" name="addinsform" id="addinsform" >
+                                        @csrf
+                                        <input type="hidden" name="fromservice" id="fromservice" value="fromservice">
+                                        <input type="hidden" name="position" id="position" value="Instructure">
+                                        <input type="hidden" name="phone" id="phone" value="(000) 000-000">
                                         <input type="text" name="first_name" id="insfirstname" class="inputs" placeholder="Instructor First Name"/>
                                         <input type="text" name="last_name" id="inslastname" placeholder="Instructor Last Name" class="inputs" /> 
                                         <input type="text" name="email" id="insemail" placeholder="Instructor Email" class="inputs" />
@@ -8908,6 +8921,8 @@
         var recurring_fee = '{{$recurring_fee}}';
         var cnt=$('#recurring_count').val();
         cnt++;
+        var number = "'number'";
+        var dropdown = "'dropdown'";
         $('#recurring_count').val(cnt);
         var service_price = "";
         service_price += '';
@@ -11189,7 +11204,8 @@ $("#frm_servicetitle_two1").on("change", function() {
 
     function submit_staffmember() {
         $('.error').hide();
-        var insname=$('#insname').val();
+        var insfirstname =$('#insfirstname').val();
+        var inslastname =$('#inslastname').val();
         var insimg=$('#insimg').val();
         var insemail=$('#insemail').val();
         if (IsEmail(insemail) == false) {
@@ -11198,27 +11214,48 @@ $("#frm_servicetitle_two1").on("change", function() {
             return false;
         }
         var bio=$('#bio').val();
-        var _token = $("input[name='_token']").val();
 
-        if(insname !='' && bio !='')
+        if(inslastname !='' && insfirstname !='' && bio !='')
         { 
-            var formData = new FormData($("#addinsform")[0]);
+            //var formData = new FormData($("#addinsform")[0]);
+            var formData = new FormData();
+            formData.append('first_name', insfirstname);
+            formData.append('last_name', inslastname);
+            formData.append('email',insemail);
+            formData.append('bio', bio);
+            formData.append("insimg", insimg);
+            formData.append("position", $("#position").val());
+            formData.append("phone", $("#phone").val());
+            formData.append("fromservice", $("#fromservice").val());
+            formData.append("_token",$('meta[name="csrf-token"]').attr('content'));
             $.ajax({
                 url: "{{route('business.staff.store')}}",
                 type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
                 enctype: 'multipart/form-data',
                 cache: false,
                 contentType: false,
                 processData: false,
                 data: formData,
                 success: function (response) {
+                    alert(response)
                     if(response)
-                    {   
-                        $("#addinsform")[0].reset();
+                    {  
+                        //$('#addinsform').reset();
+                       //document.addinsform.reset()
+                        //$('form[name=addinsform]').get(0).reset();
+                        //$('form.insform input[type="text"],texatrea, img').val('');
+                        //$("#addinsform")[0].reset();
+                        //document.getElementById("addinsform").reset();
+                        //  $("#addinsform").trigger("reset");
+                        $('.rev-post-box').load(' .rev-post-box > *');
                         $('.selectinstructor').load(' .selectinstructor > *')
                         $('#addinserro').show(); 
                         $('#addinserro').html('Instructure Added Successfully..'); 
                         $("#submit_member").prop('disabled', true);
+                        
                     }                    
                 }
             });

@@ -71,11 +71,11 @@ class SGMailService{
         }
 
 		$substitutions = [
-			"providerName" => $businessdata->company_name,  
+			"providerName" => $businessdata->dba_business_name,  
 			"Customer_Name" => @$customer->fname.' '.@$customer->lname,  
 			"Customer_Email" => $customer->email,  
 			"temppassword" => $password,  
-			"Company_Name" => $businessdata->company_name,  
+			"Company_Name" => $businessdata->dba_business_name,  
 		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
 		    "address" => $businessdata->company_address(),   
 		    "PhoneNumber" => $businessdata->business_phone,   

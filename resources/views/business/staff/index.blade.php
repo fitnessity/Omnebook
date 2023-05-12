@@ -51,7 +51,7 @@
 							<td>0</td>
 							<td>
 								<div class="table-icons-staff">
-									<a href="{{route('staff-scheduled-activities')}}" title="Staff Scheduled Activities"><i class="fa fa-table"></i></a>
+									<a href="{{route('business.staff.show',['business_id'=>$cf->business_id ,'staff' =>$cf->id])}}" title="Staff Scheduled Activities"><i class="fa fa-table"></i></a>
 									<a title="Edit" ><i class="fa fa-pencil-square-o"></i></a>
 									<i class="fa fa-trash" aria-hidden="true" title="Delete"></i>	
 								</div>

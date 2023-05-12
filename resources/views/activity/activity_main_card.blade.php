@@ -4,7 +4,7 @@
 	}
 </style>
 <div class="col-md-4 col-sm-4 col-map-show limitload">
-	<div class="selectProduct" data-id="{{ $activity->id }}" data-title="{{ $activity->program_name }}" data-name="{{ $activity->program_name }}" data-companyname="{{ $activity->company_information->company_name }}" data-email="" data-address="{{ $activity->company_information->company_name }}" data-img="{{ $activity->first_profile_pic() }}" data-token="{{ csrf_token() }}"> 
+	<div class="selectProduct" data-id="{{ $activity->id }}" data-title="{{ $activity->program_name }}" data-name="{{ $activity->program_name }}" data-companyname="{{ $activity->company_information->dba_business_name }}" data-email="" data-address="{{ $activity->company_information->dba_business_name }}" data-img="{{ $activity->first_profile_pic() }}" data-token="{{ csrf_token() }}"> 
 		<div class="kickboxing-block">
 			<div class="kickboxing-topimg-content" ser_id="{{$activity->id}}" >
 				<div class="inner-owl-slider-hire">
@@ -68,7 +68,7 @@
 					</div>
 				</div>
 				<div class="activity-information activites-height">
-					<span><a href="{{route('show_businessprofile', ['user_name' => $activity->company_information->company_name, 'id' => $activity->company_information->id])}}" target="_blank">{{$activity->program_name}}</a>
+					<span><a href="{{route('show_businessprofile', ['user_name' => $activity->company_information->dba_business_name, 'id' => $activity->company_information->id])}}" target="_blank">{{$activity->program_name}}</a>
 					</span>
 					<p>{{ $activity->formal_service_types() }}  | {{$activity->sport_activity}}</p>
 				</div>

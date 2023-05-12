@@ -234,11 +234,9 @@ class Customer extends Authenticatable
         $now = Carbon::now();
         //$result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
 
-        $results = UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->where('user_booking_details.business_id', $company->id)
+        $results = UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)
             ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])
-            ->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')
             ->groupBy('user_booking_details.id')
-            ->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
             ->whereDate('user_booking_details.expired_at', '>', $now);
         return $results; 
     }

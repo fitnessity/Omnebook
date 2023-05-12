@@ -230,7 +230,7 @@ class BookingController extends Controller {
 
                                     $html.='</div>
                                     <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                     </div>
                                     <div class="viewmore_links">
                                         <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>
@@ -271,11 +271,15 @@ class BookingController extends Controller {
         if($customerID){
             if($request->type == 'current'){
                 if($serviceType== null || $serviceType == 'all'){
-                    $booking_details = UserBookingDetail::where('user_id',$customerID)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
+                    $booking_details = UserBookingDetail::where('user_id',$customerID);
                 }else{
-                    $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+                    $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ]);
                 }
-
+                
+                $booking_details = $booking_details->select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->groupBy('user_booking_details.id')
+                ->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
+                ->whereDate('user_booking_details.expired_at', '>', $now)->get();
+                
                 if(!empty($booking_details)){
                     foreach($booking_details  as $details){
                         $BookingDetail [] = $details;
@@ -421,7 +425,7 @@ class BookingController extends Controller {
 
                                         $html.='</div>
                                         <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                            <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                            <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                         </div>
                                         <div class="viewmore_links">
                                             <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>
@@ -629,7 +633,7 @@ class BookingController extends Controller {
 
                                     $html.='</div>
                                     <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                     </div>
                                     <div class="viewmore_links">
                                         <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>

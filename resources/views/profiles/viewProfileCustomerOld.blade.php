@@ -781,7 +781,7 @@ input,select {
 
                   <span class="nw-label">Company Name:</span>
 
-                  <span id="display_user_company">{{ $UserProfileDetail['company_name'] }}</span>
+                  <span id="display_user_company">{{ $UserProfileDetail['dba_business_name'] }}</span>
 
                 </div>
 
