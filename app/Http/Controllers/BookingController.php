@@ -40,8 +40,9 @@ class BookingController extends Controller {
     }
 
     public function getreceiptmodel(Request $request) {
+        $book_details = UserBookingDetail::withTrashed()->find($request->orderdetailid);
         $odt = $this->bookings->getorderdetailsfromodid($request->orderid,$request->orderdetailid);
-        return view('personal.orders._receipt_model',['odt'=> $odt]);
+        return view('personal.orders._receipt_model',['odt'=> $odt ,'book_details'=>$book_details]);
     }
 
     public function sendemailofreceipt(Request $request){
