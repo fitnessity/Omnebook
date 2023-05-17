@@ -64,7 +64,13 @@
 													</div>
 												</div>
 												<div class="activity-information float-left">
-													<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+													@php 
+														$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+														if($bookscheduler->company_information->dba_business_name == ''){
+															$bookschedulercom_name = $bookscheduler->company_information->company_name;
+														}
+													@endphp
+													<span><a href="{{route('show_businessprofile', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 													<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 													
 												</div>
@@ -136,7 +142,13 @@
 										</div>
 									</div>
 									<div class="activity-information ">
-										<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+										@php 
+											$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+											if($bookscheduler->company_information->dba_business_name == ''){
+												$bookschedulercom_name = $bookscheduler->company_information->company_name;
+											}
+										@endphp
+										<span><a href="{{route('show_businessprofile', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 										<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 										<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 									</div>
