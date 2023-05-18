@@ -248,18 +248,14 @@ class CustomerController extends Controller {
     } 
 
     public function addcustomerfamily ($id){
-        $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
-        $companyservice  =[];
-        $UserFamilyDetails  =[];
-        if(!empty($companyId)) {
-            $business_details = BusinessCompanyDetail::where('cid', $companyId)->get();
-            $business_details = isset($business_details[0]) ? $business_details[0] : [];
-            $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
-        }
-        $UserFamilyDetails  = Customer::where('parent_cus_id',$id)->get();
+        $UserFamilyDetails  = [];
+        $customer = Customer::find($id);
+        $UserFamilyDetails  = $customer->get_families();
+        $companyId = $customer->business_id;
+            
+      
+        
         return view('customers.add_family', [
-            'business_details' => $business_details,
-            'companyservice' => $companyservice,
             'UserFamilyDetails' => $UserFamilyDetails,
             'companyId' => $companyId,
             'parent_cus_id' => $id,
@@ -516,7 +512,7 @@ class CustomerController extends Controller {
         $data = array(
             "email"=> @$customer->email,
             "cName"=> @$customer->fname.' '.@$customer->lname,
-            "pName"=>$business->company_name,
+            "pName"=>$business->dba_business_name,
             "url"=> env('APP_URL').'/registration/'.Crypt::encryptString($customer->id)
         );
         $status = SGMailService::requestAccessMail($data);
@@ -542,26 +538,13 @@ class CustomerController extends Controller {
         return Redirect()->route('personal.orders.index');
     }
 
-    public function remove_grant_access($id,$customerId,$type = null){
-        /*if($customerId  == ''){
-            $customers = Customer::where('business_id',$id)->get();
-            if( !empty($customers)){
-                foreach($customers as $cus) { 
-                    Customer::where('id',$cus)->update(['user_id'=>'']);
-                }
-            }
-            return Redirect()->route('personal.orders.index',['business_id'=>$id]);
-        }else{*/
-            $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
-
-            if($type){
-                return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
-            }else{
-                return Redirect()->route('personal.family_members.index',['customerId'=>$customerId]);
-            }
-           
-        //}
-
+    public function remove_grant_access(Request $request, $id,$customerId,$type = null){
+        $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
+        if($request->type){
+            return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
+        }else{
+            return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
+        }
     }
 
 

@@ -65,16 +65,16 @@ input,select {
                           <div class="row">
                             <div class="col-lg-1 col-md-1 col-sm-2 col-xs-12 text-center">
                               @if(File::exists(public_path("/uploads/profile_pic/thumb/".$comp->logo)) && !empty($comp->logo) )
-                                <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$comp->logo}}" alt="{{$comp->company_name}}" class="avatar">
+                                <img src="{{url('/').'/public/uploads/profile_pic/thumb/'.$comp->logo}}" alt="{{$comp->dba_business_name}}" class="avatar">
                               @else <?php
                                 echo '<div class="company-list-text">';
-          									    $pf=substr($comp->company_name, 0, 1);
+          									    $pf=substr($comp->dba_business_name, 0, 1);
           									    echo '<p>'.$pf.'</p></div>';
                               ?>
                               @endif
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
-                              <p class="texttr">{{$comp->company_name}}</p>
+                              <p class="texttr">{{$comp->dba_business_name}}</p>
                               <p class="texttr">{{$comp->first_name}} {{$comp->last_name}}</p>
                             </div>
                             <?php 

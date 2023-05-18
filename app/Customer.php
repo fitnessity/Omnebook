@@ -232,8 +232,13 @@ class Customer extends Authenticatable
     public function active_memberships(){
         $company = $this->company_information;
         $now = Carbon::now();
-        $result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
-        return $result; 
+        //$result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
+
+        $results = UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)
+            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])
+            ->groupBy('user_booking_details.id')
+            ->whereDate('user_booking_details.expired_at', '>', $now);
+        return $results; 
     }
 
     public function expired_soon(){
@@ -331,7 +336,7 @@ class Customer extends Authenticatable
     }
 
     public function recurring($booking_detail_id ,$type){
-        return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer','status' => $type]);
+       return  Recurring::where(['booking_detail_id' => $booking_detail_id , 'user_id' => $this->id,'user_type' =>'customer','status' => $type]);
     }
 
     public function getFullUserBookingStatus($business_id){

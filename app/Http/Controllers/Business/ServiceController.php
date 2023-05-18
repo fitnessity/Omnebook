@@ -21,7 +21,7 @@ class ServiceController extends BusinessBaseController
         $companyInfo = CompanyInformation::where('id', $business_id)->orderBy('id', 'DESC')->first();
         $companyservice = @$companyInfo->service->sortByDesc('created_at');;
         $companyid = @$companyInfo->id;
-        $companyname = @$companyInfo->name;
+        $companyname = @$companyInfo->dba_business_name;
         return view('business.services.index', compact('cart', 'companyname','companyid', 'companyservice'));
     }
     /**

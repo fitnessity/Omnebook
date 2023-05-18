@@ -29,22 +29,187 @@ class BusinessController extends Controller
     {
 		$this->users = $users;
     }
-    /*public function testTwilio(Request $request)
-    {
-        require asset('/twilio/sdk/Services/Twilio.php');
-		// require asset('/css/material-charts.css');die;
-        // Create an authenticated client for the Twilio API
-        $client = new Services_Twilio($_ENV['TWILIO_ACCOUNT_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
-		// Use the Twilio REST API client to send a text message
-        $m = $client->account->messages->sendMessage(
-			$_ENV['TWILIO_NUMBER'], // the text will be sent from your Twilio number
-			$number, // the phone number the text will be sent to
-			$message // the body of the text message
-		);
-		// Return the message object to the browser as JSON
-		return $m;
-	}*/
+
+    public function dashboard(Request $request, $id= null){
+
+        if($id != ''){
+            User::where('id',Auth::user()->id)->update(['cid'=> $id]);
+            return redirect(route('business_dashboard'));
+        }
+
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales= $totalRecurringPmt =  $in_person =$online = 0 ;
+
+        $business = Auth::user()->current_company;
+        $business_id =  $business->id;
+        $dba_business_name =  $business->dba_business_name != '' ? $business->dba_business_name : $business->company_name;
+        $recurringdata = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->get(); 
+        $totalRecurringPmt = $recurringdata[0]['total_sales'];
+        $remainigpmt = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
+        $compltedpmt = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
+        $compltedpmtcnt = $compltedpmt[0]['total_sales'];
+        $remainigpmtcnt = $remainigpmt[0]['total_sales'];
+        $completedtdata  =   ( $compltedpmtcnt / $totalRecurringPmt)*100  ;
+        $remainingdata = ( $remainigpmtcnt / $totalRecurringPmt) *100   ;
+
+        $completedtdata = number_format($completedtdata,2,'.','');
+        $remainingdata = number_format($remainingdata,2,'.','');
+
+       
+        $totalRecurringPmt = number_format($totalRecurringPmt,2,'.','');
+
+        $ptdata1= [];
+        $customerCount = $business->customers()->whereDate('created_at','=' ,  date('Y-m-d'))->count();
+        $booking = $business->UserBookingDetails();
+        if(!empty($booking->get())){
+            foreach($booking->get() as $b){
+                $bookingCount += $b->BookingCheckinDetails()->whereDate('checkin_date','=' ,  date('Y-m-d'))->count();
+                if(!empty($b->BookingCheckinDetails()->get())){
+                    foreach( $b->BookingCheckinDetails()->get() as $chkindata){
+                        $ptdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'individual')->count(); 
+                        $evdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'events')->count(); 
+                        $clsdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'classes')->count(); 
+                        $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'experience')->count();
+                    }
+                }
+                
+                $totalSales += $b->userBookingStatus->Transaction()->whereDate('created_at','=',date('Y-m-d'))->sum('amount');
+                $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
+                $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
+            }
+        }
+        $totalSales = number_format($totalSales,2,'.','');
+        $enddate = date('Y-m-d',strtotime('+30 days'));
+        $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=', date('Y-m-d'))->limit(3)->get();
+       
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata'));
+    }
+
+    public function bookingchart(Request $request){
+        $business = Auth::user()->current_company;
+        $ptdata=  $evdata = $clsdata = $expdata = $prdata = $in_person_cnt= $online_cnt=0;
+        $booking = $business->UserBookingDetails();
+        $currentMonth = date('m');
+        foreach($booking->get() as $b){
+            $chkdetail = $b->BookingCheckinDetails();
+            $in_person = $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer']);
+            $online =  $b->userBookingStatus->Transaction()->where(['user_type' =>'user']);
+
+            if($request->val == '1'){
+                $chkdetail =  $chkdetail->whereMonth('checkin_date', $currentMonth);
+                $in_person = $in_person->whereMonth('created_at', $currentMonth);
+                $online = $online->whereMonth('created_at', $currentMonth);
+            }
+            $chkdetail =  $chkdetail->get();
+            foreach($chkdetail as $chkindata){
+                $ptdata += $chkindata->UserBookingDetail->business_services()->where('service_type','individual')->count(); 
+                $evdata += $chkindata->UserBookingDetail->business_services()->where('service_type','events')->count(); 
+                $clsdata += $chkindata->UserBookingDetail->business_services()->where('service_type','classes')->count(); 
+                $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type','experience')->count();
+            }
+
+            $in_person_cnt += count($in_person->get());
+            $online_cnt += count($online->get());
+        }
+    
+        if($request->type == 'revenue'){
+            $data = array(
+                'in_person' =>  $in_person_cnt,
+                'online'   =>  $online_cnt,
+            );
+        }else{
+            $data = array(
+                'ptdata' => $ptdata,
+                'clsdata' => $clsdata,
+                'expdata' => $expdata,
+                'evdata' => $evdata,
+                'prdata' => $prdata,
+            );
+        }
+        return json_encode($data);
+    }
+
+    public function getExpiringMembership(Request $request){
+        $business = Auth::user()->current_company;
+        $booking = $business->UserBookingDetails();
+        $enddate = date('Y-m-d', strtotime("+".$request->days." days"));
+        $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
+        $html = '';
+        foreach($expiringMembership as $key=>$emp ){
+            $Customer = $emp->Customer;
+            $key = $key+1;
+            $html .= '<tr>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'. $key.'</h5>
+                </td> 
+
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.@$Customer->full_name.'</h5>
+                </td>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.$emp->business_price_detail->price_title.'</h5>
+                </td>
+                <td>
+                   <h5 class="fs-14 my-1 fw-normal">'.$emp->contract_date.'</h5>  
+                </td>
+                <td>
+                    <h5 class="fs-14 my-1 fw-normal">'.$emp->expired_at.'</h5>
+                </td>
+                <td>
+                     <a href="'.route('personal.orders.index',['business_id'=>$emp->business_id]).'"> View </a>
+                </td>
+            </tr>';
+        }
+        return  $html;
+    }
 	
+    public function getscheduleactivity(Request $request){
+        $business = Auth::user()->current_company;
+        if($request->date == ''){
+            $date = date('Y-m-d');
+        }else{
+            $date =  date('Y-m-d' ,strtotime($request->date));
+        }
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$date)->get();
+        $html = '';
+        $inc = 0;
+        if(!empty($activitySchedule) && count($activitySchedule)>0){
+            foreach($activitySchedule as $as){
+                $chk  =  0;
+                if($as->business_service->service_type == strtolower($request->type)){
+                    $chk = 1;
+                }else if($request->type == 'Show All Activites'){
+                    $chk = 1;
+                }
+                if($chk == 1 && $inc < 3){
+                    $SpotsLeftdis = 0;
+                    $bs = new  \App\Repositories\BookingRepository;
+                    $bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
+                    $SpotsLeftdis = $as->spots_available - $bookedspot; 
+                    $html .= '<div class="mini-stats-wid d-flex align-items-center mt-3">
+                        <div class="flex-shrink-0 avatar-sm">
+                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
+                                '.$SpotsLeftdis.'/'.$as->spots_available.' 
+                                <label>Spots left</label>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1 ms-3 activity-info">
+                            <h6 class="mb-1">'.@$as->business_service->program_name.'</h6>
+                            <p class="text-muted mb-0">'.@$as->businessPriceDetailsAges->category_title.'</p>
+                            <p class="text-muted mb-0">'.@$as->business_service->price_details()->first()->price_title.'</p>
+                        </div>
+                        <div class="flex-shrink-0 ms-3">
+                            <p class="text-muted mb-0 color-black">'.date('h:i A', strtotime($as->shift_start)).'</p>
+                            <p class="text-muted mb-0 color-black">'.date('h:i A', strtotime($as->shift_end)).'</p>
+                        </div>
+                    </div>';
+                    $inc++;
+                }
+            }
+        }
+        return $html;
+    }
+
 	public function pagePost(Request $request) {
 		$images=array();
         $loggedinUser = Auth::user(); 
@@ -156,6 +321,7 @@ class BusinessController extends Controller
 
         return response()->json(array("success"=>'success','html'=>$html));
     }
+
 	public function pageshowcomments($id,Request $request) { 
         $commentdisplay = $request->commentdisplay; 
         
@@ -188,6 +354,7 @@ class BusinessController extends Controller
         }        
         return response()->json(array("success"=>'success','html'=>$html));
     }
+
 	public function commentLike($id,Request $request) {
 		$like = PagePostCommentsLike::where('user_id',Auth::user()->id)->where('comment_id',$id)->first();
 		$status='';
@@ -221,6 +388,7 @@ class BusinessController extends Controller
             BusinessPostViews::create($data);
         }
     }
+
 	public function likepost($id,Request $request) {
       $like = PagePostLikes::where('user_id',Auth::user()->id)->where('post_id',$id)->first();
       
@@ -268,6 +436,7 @@ class BusinessController extends Controller
 			return response()->json(array("success"=>'success'));
 		} 
     }
+
 	public function DelPost(Request $request)
     {
 		PagePostSave::where('post_id', $request->postid )->delete();
@@ -277,6 +446,7 @@ class BusinessController extends Controller
 		PagePost::find( $request->postid )->delete();
         return response()->json(array("success"=>'success'));
 	}
+
 	public function viewGalleryList($page_id) {
         $galleryPic = [];
         $gallery = DB::select('select id, attachment_name, cover_photo from users_add_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
@@ -293,7 +463,6 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
-
 
     public function savegallarypics(Request $request)
     {   
@@ -320,7 +489,6 @@ class BusinessController extends Controller
         } 
     }
 
-	
 	public function savepagecoverphoto(Request $request) {
        /* print_r($request->all());exit();*/
         if (!Gate::allows('profile_view_access')) {
@@ -603,6 +771,7 @@ class BusinessController extends Controller
        $html .= '';  
        return response()->json(array("success"=>'success','html'=>$html,'data_textarea'=>$data->post_text));
 	}
+
 	public function pagePostupdate(Request $request) { 
 		$id = $request->postId;        
 		$data = PagePost::find($id);
@@ -784,6 +953,7 @@ class BusinessController extends Controller
 		//$view = 'profiles.viewBusinessProfile';
 		//return view($view);
 	}
+
 	public function viewbprofiletimelineofOther($user_name,$id)
 	{
 		$page_id = $id;
@@ -913,6 +1083,7 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
+
 	public function viewPageGalleryList($page_id) {
         $galleryPic = [];
         $gallery = DB::select('select id, attachment_name, cover_photo,user_id from page_attachment where page_id = ? and cover_photo = 1 order by cover_order ASC', [$page_id]);
@@ -930,6 +1101,7 @@ class BusinessController extends Controller
         //return Response::json($galleryPic);
         return $galleryPic;
     }
+
 	public function followPage(Request $request) {
 		$userid = $request->userid;
 		$pageid = $request->pageid;
@@ -968,6 +1140,7 @@ class BusinessController extends Controller
 			$followingarr[]=$farr->follower_id;
 		}
 	}
+
 	public function Businessact_detail_filter(Request $request){
 		$actoffer = $request->actoffer;
 		$actloc = $request->actloc;
@@ -1100,8 +1273,7 @@ class BusinessController extends Controller
 			}//for
 		}//if
 		echo $actbox;
-		exit;
-		
+		exit;	
 	}
 	
 	public function save_business_reviews(Request $request)
@@ -1170,7 +1342,7 @@ class BusinessController extends Controller
     public function add_business_customer(Request $request)
     {   
        /* print_r($request->all());exit;*/
-        $comdata = CompanyInformation::where('company_name' , $request->Companyname)->first();
+        $comdata = CompanyInformation::where('dba_business_name' , $request->Companyname)->first();
 
         if($request->add_status == 'yes'){
             $comdata =  '';
@@ -1202,7 +1374,7 @@ class BusinessController extends Controller
             if($comdata->zip_code != ''){
                 $address .= $comdata->zip_code;
             }
-            $redlink = str_replace(" ","-",$comdata->company_name)."/".$comdata->id;
+            $redlink = str_replace(" ","-",$comdata->dba_business_name)."/".$comdata->id;
            /* $var = "matched";*/
             $var = '<div class="row">
                             <div class="col-md-4">
@@ -1212,7 +1384,7 @@ class BusinessController extends Controller
                             </div>
                             <div class="col-md-6 txt-space">
                                 <div class="modal-img-title">
-                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'">'.$comdata->company_name.'</a>
+                                    <a href="'.Config::get('constants.SITE_URL') .'/businessprofile/'.$redlink.'">'.$comdata->dba_business_name.'</a>
                                     <p>'.$address.'</p>
                                 </div>
                             </div>
@@ -1257,6 +1429,7 @@ class BusinessController extends Controller
                 "contact_number" => '',
                 "logo" =>'',
                 "company_name" => $request->Companyname,
+                "dba_business_name" => $request->Companyname,
                 "address" => $request->Address,
                 "state" => $request->State,
                 "country" => $request->Country,

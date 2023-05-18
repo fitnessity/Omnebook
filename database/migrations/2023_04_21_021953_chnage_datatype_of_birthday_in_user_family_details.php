@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterColumnToStaffMembers extends Migration
+class ChnageDatatypeOfBirthdayInUserFamilyDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterColumnToStaffMembers extends Migration
      */
     public function up()
     {
-        Schema::table('staff_members', function (Blueprint $table) {
-            $table->longText('description')->change();
+        Schema::table('user_family_details', function (Blueprint $table) {
+            $table->date('birthday')->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AlterColumnToStaffMembers extends Migration
      */
     public function down()
     {
-        Schema::table('staff_members', function (Blueprint $table) {
-            $table->string('description')->change();
+        Schema::table('user_family_details', function (Blueprint $table) {
+            //
         });
     }
 }

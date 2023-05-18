@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
-                            != '') FOR {{strtoupper(@$customer->full_name)}} @endif </h4>
+                            != '') - {{strtoupper(@$customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -40,7 +40,7 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png );">
-                                            <h2>{{ $bs->company_name}}</h2>
+                                            <h2>@if($bs->dba_business_name == '') {{ $bs->company_name}} @else {{$bs->dba_business_name}} @endif</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
                                                 <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
@@ -108,21 +108,9 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-2 col-sm-6 nopadding">
+                                                <div class="col-md-2 col-sm-6 nopadding mb-7">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -130,19 +118,15 @@
                                                         <i class="far fa-calendar-alt" ></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
-                                                    <label for="">Search:</label>
-                                                    <input type="search" id="search_current" placeholder="See by Businesses Booked" class="form-control w-85 search-wid" onkeyup="getsearchdata('current');">
-                                                </div>
-												<div class="col-md-2 col-sm-12 nopadding">
+												<div class="col-md-2 col-sm-3 col-xs-6 nopadding mb-7">
 													<a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-3" style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-3 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
 											<!-- Modal Start -->
@@ -230,18 +214,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -249,19 +221,19 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
+                                                <!-- <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_today" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('today');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                </div> -->
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,18 +253,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -300,19 +260,19 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
+                                                <!-- <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_upcoming" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('upcoming');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                </div> -->
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -332,18 +292,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
                                                 <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
@@ -351,19 +299,19 @@
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
                                                 </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
-                                                <div class="col-md-3 col-sm-12">
+                                                <!-- <div class="col-md-3 col-sm-12">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_past" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('past');">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 nopadding">
+                                                </div> -->
+                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 " style="padding-top: 7px;">
-                                                    <a href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Remove Access</a>
+                                                <div class="col-md-2 col-sm-12 col-xs-6 text-center" style="padding-top: 7px;">
+                                                    <a href="#removeaccess" data-target="#removeaccess" data-toggle="modal">Remove Access</a>
                                                 </div>
                                             </div>
                                         </div>  
@@ -382,26 +330,14 @@
                                                 <div class="col-md-3 col-sm-12">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                                 </div>
-                                               <!--  <div class="col-md-2 col-sm-6">
-                                                    <div class="show_block">
-                                                        <label for="">Show</label>
-                                                        <select name="" id="" class="form-control w-38">
-                                                            <option value="">10</option>
-                                                            <option value="">25</option>
-                                                            <option value="">50</option>
-                                                            <option value="">All</option>
-                                                        </select>
-                                                        <label for="">Entries</label>
-                                                    </div>
-                                                </div> -->
-                                                <div class="col-md-3 col-sm-6">
+                                                <!-- <div class="col-md-3 col-sm-6">
                                                     <div class="date_block">
                                                         <label for="">Date:</label>
                                                         <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80" onchange="serchDateData('pending')">
                                                         <i class="far fa-calendar-alt"></i>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                </div> -->
+                                                <div class="col-md-4 col-sm-12 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_pending" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('pending');">
                                                 </div>
@@ -409,6 +345,34 @@
                                         </div>  
                                         <div class="row" id="searchbydate_pending">
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade compare-model" id="removeaccess">
+                            <div class="modal-dialog modal-lg business">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="text-align: right;"> 
+                                        <div class="closebtn">
+                                            <button type="button" class="close close-btn-design btn-grant" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row contentPop"> 
+                                            <div class="col-lg-12">
+                                                <div class="modal-access-autho">
+                                                    <p>You are about to remove your sync with {{$customer->company_information->dba_business_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-12 btns-modal">
+                                                <a class="addbusiness-btn-modal acc-btn-grant" href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Deny Access</a>
+                                            </div>
+                                         </div>
                                     </div>
                                 </div>
                             </div>

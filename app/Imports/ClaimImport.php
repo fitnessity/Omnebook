@@ -119,6 +119,7 @@ class ClaimImport implements ToModel, WithStartRow
 
                 $createdata = new CompanyInformation;
                 $createdata->company_name = $row[0];
+                $createdata->dba_business_name = $row[0];
                 $createdata->business_phone = $row[4];
                 $createdata->address = $address;
                 $createdata->city = $city;

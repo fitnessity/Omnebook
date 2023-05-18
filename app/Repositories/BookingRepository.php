@@ -123,9 +123,8 @@ class BookingRepository
         if($customer){
             if($serviceType== null || $serviceType == 'all'){
                 $bookingDetail = @$customer->active_memberships()->get();
-                /*$bookingDetail = UserBookingDetail::where('user_id',@$customer->id)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();*/
             }else{
-                $bookingDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+                $bookingDetail = @$customer->active_memberships()->join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->get();
             }
         }
         //print_r($bookingDetail);exit;
@@ -143,14 +142,17 @@ class BookingRepository
         foreach($checkInDetail as $chkInDetail) { 
             if($serviceType== null || $serviceType == 'all'){
                 $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
-                if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
-                }
             }else{
                 $userBookinDetail = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
-                if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) or user_booking_details.expired_at < now())');
-                }
+            }
+
+            if($chkVal == 'past'){
+                $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) or user_booking_details.expired_at < now())');
+            }
+            if($chkVal == 'current'){
+                $userBookinDetail = $userBookinDetail->select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->groupBy('user_booking_details.id')
+                ->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
+                ->whereDate('user_booking_details.expired_at', '>', $now);
             }
 
             $userBookinDetail = $userBookinDetail->first();
@@ -166,6 +168,7 @@ class BookingRepository
     public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
         $full_ary = $bookingDetail= [];
         $now = Carbon::now();
+       
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
@@ -182,16 +185,17 @@ class BookingRepository
                 $full_ary[] =  $chkD;
             }
         }
+
         foreach($full_ary as $chkInDetail) { 
             if($serviceType== null || $serviceType == 'all'){
                 $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((pay_session <= 0 or pay_session is null) and expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
                 }
             }else{
                 $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('((user_booking_details.pay_session <= 0 or user_booking_details.pay_session is null) and user_booking_details.expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
                 }
             }
             
@@ -282,7 +286,7 @@ class BookingRepository
                     "participate_name" => $book_details['user_booking_detail']['participate'],
                     "membership_type" => @$BusinessPriceDetails['membership_type'],
                     "b_type" => $b_type,
-                    "company_name" =>  $book_details['businessuser']['company_name'] ,
+                    "company_name" =>  $book_details['businessuser']['dba_business_name'] ,
                     "company_id" =>  $book_details['businessuser']['id'] ,
                     "businessservices" =>  $book_details['businessservices'],
                     "acc_url" =>  $acc_url,
@@ -298,10 +302,10 @@ class BookingRepository
 
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
-        $business_services = $booking_details->business_services;
-        $businessuser= $booking_details->business_services->company_information;
-        $BusinessPriceDetails = $booking_details->business_price_detail;
-        $categoty_name = $BusinessPriceDetails->business_price_details_ages->category_title;
+        $business_services = $booking_details->business_services_with_trashed;
+        $businessuser= $booking_details->business_services_with_trashed->company_information;
+        $BusinessPriceDetails = $booking_details->business_price_detail_with_trashed;
+        $categoty_name = $BusinessPriceDetails->business_price_details_ages_with_trashed->category_title;
         $schedulerdata = $booking_details->business_activity_scheduler;
         $remaining = $booking_details->getremainingsession();
         if(@$businessuser->logo != "") {
@@ -375,7 +379,7 @@ class BookingRepository
         }
 
         if(@$schedulerdata->spots_available != ''){
-            $to_rem = $remaining.' / '.@$schedulerdata->spots_available;
+            $to_rem = $remaining.' / '.@$booking_details->pay_session;
         }
         
         if(@$business_services->program_name != ''){
@@ -452,7 +456,7 @@ class BookingRepository
             "to_rem" => @$to_rem ,
             "totprice_for_this" => $totprice_for_this,
             "nameofbookedby" => $nameofbookedby,
-            "company_name" =>  @$businessuser->company_name,
+            "company_name" =>  @$businessuser->dba_business_name,
             "amount" =>   $booking_status->amount,
             "discount" =>  $discount ,
             "tip" =>  $tip,
@@ -523,7 +527,7 @@ class BookingRepository
 
         $one_array =[];
         $one_array = array (
-            "provider_Name" => $businessuser->company_name,  
+            "provider_Name" => $businessuser->dba_business_name,  
             "booking_ID" => $booking_status->order_id,  
             "program_Name" => $business_services->program_name,   
             "category" => $BusinessPriceDetails->business_price_details_ages->category_title,   

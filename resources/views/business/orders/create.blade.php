@@ -604,14 +604,14 @@
 									</div>
 								</div>
 								@php  	
-								$merchant_fee = 0;
+
 									if($subtotal != $discount){
 										$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
-										$merchant_fee = round(($subtotal + $tip - $discount + $taxes) * 0.039, 2);
-								 		$grand_total = ($subtotal + $tip + $taxes) - $discount + $merchant_fee;
+
+								 		$grand_total = ($subtotal + $tip + $taxes) - $discount;
 								 		$grand_total = number_format($grand_total, 2, '.', '');
 								 	}else{
-								 		$grand_total  = $merchant_fee = $subtotal  = $tax_ser_fees = 0 ;
+								 		$grand_total = $subtotal  = $tax_ser_fees = 0 ;
 								 	}
 							 		//echo $tax_ser_fees;
 								@endphp
@@ -647,12 +647,6 @@
 													<span>${{$taxes}}</span>
 												</div>
 												
-												<div class="col-md-6 col-sm-6 col-xs-6">
-													<label>Merchant Fee(3.9%): </label>
-												</div>
-												<div class="col-md-6 col-sm-6 col-xs-6">
-													<span> ${{$merchant_fee}}</span>
-												</div>
 												<div class="col-md-12 col-sm-12 col-xs-12">
 													<div class="checkout-sapre-tor">
 													</div>

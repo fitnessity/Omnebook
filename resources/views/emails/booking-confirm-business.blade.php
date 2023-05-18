@@ -68,7 +68,7 @@ use App\StaffMembers;
 	        $SpotsLeftdis = @$servicedata->spots_available  - $SpotsLeft;
 	    }
 
-	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $company_name = @$BookingDetail1['businessuser']['dba_business_name'];
 	    $company_id = @$BookingDetail1['businessuser']['id'];
 	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
 	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];

@@ -40,8 +40,9 @@ class BookingController extends Controller {
     }
 
     public function getreceiptmodel(Request $request) {
+        $book_details = UserBookingDetail::withTrashed()->find($request->orderdetailid);
         $odt = $this->bookings->getorderdetailsfromodid($request->orderid,$request->orderdetailid);
-        return view('personal.orders._receipt_model',['odt'=> $odt]);
+        return view('personal.orders._receipt_model',['odt'=> $odt ,'book_details'=>$book_details]);
     }
 
     public function sendemailofreceipt(Request $request){
@@ -230,7 +231,7 @@ class BookingController extends Controller {
 
                                     $html.='</div>
                                     <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                     </div>
                                     <div class="viewmore_links">
                                         <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>
@@ -271,11 +272,15 @@ class BookingController extends Controller {
         if($customerID){
             if($request->type == 'current'){
                 if($serviceType== null || $serviceType == 'all'){
-                    $booking_details = UserBookingDetail::where('user_id',$customerID)->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
+                    $booking_details = UserBookingDetail::where('user_id',$customerID);
                 }else{
-                    $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+                    $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where(['business_services.service_type'=>$serviceType ,'user_booking_details.user_id'=>$customerID ]);
                 }
-
+                
+                $booking_details = $booking_details->select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->groupBy('user_booking_details.id')
+                ->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
+                ->whereDate('user_booking_details.expired_at', '>', $now)->get();
+                
                 if(!empty($booking_details)){
                     foreach($booking_details  as $details){
                         $BookingDetail [] = $details;
@@ -421,7 +426,7 @@ class BookingController extends Controller {
 
                                         $html.='</div>
                                         <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                            <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                            <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                         </div>
                                         <div class="viewmore_links">
                                             <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>
@@ -453,7 +458,12 @@ class BookingController extends Controller {
 
     public function searchfilterdata(Request $request){
         $serviceType = $request->serviceType;
-        $customer= Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
+        if(!$request->customerId){
+            $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
+            $customerID = @$customer->id;
+        }else{
+            $customerID = $request->customerId;
+        }
         if(!$request->text){
             $bookingstatus = UserBookingStatus::where(['user_id' => Auth::user()->id])->get();
         }else{
@@ -466,9 +476,9 @@ class BookingController extends Controller {
             if(!empty($bookingstatus)){
                 foreach($bookingstatus as $Bstatus){
                     if($serviceType== null || $serviceType == 'all'){
-                        $booking_details = UserBookingDetail::where(['booking_id'=>$Bstatus->id,'user_id'=>@$customer->id ])->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
+                        $booking_details = UserBookingDetail::where(['booking_id'=>$Bstatus->id,'user_id'=>$customerID ])->whereDate('expired_at', '>', $now)->whereRaw('pay_session > 0')->get();
                     }else{
-                        $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.booking_id',$Bstatus->id)->where('user_booking_details.user_id',@$customer->id)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
+                        $booking_details = UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.booking_id',$Bstatus->id)->where('user_booking_details.user_id',$customerID)->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0')->get();
                     }
 
                     if(!empty($booking_details)){
@@ -482,9 +492,9 @@ class BookingController extends Controller {
             $checkIndetail = []; $booking_details = [];
             if(!empty($bookingstatus)){
                 foreach($bookingstatus as $Bstatus){
-                    $booking_details  = UserBookingDetail::where(['booking_id'=>$Bstatus->id ,'user_id'=>@$customer->id])->get();
+                    $booking_details  = UserBookingDetail::where(['booking_id'=>$Bstatus->id ,'user_id'=>$customerID])->get();
                     foreach($booking_details  as $details){
-                        $Booking_checked_indetail = BookingCheckinDetails::where(['booking_detail_id'=>$details->id,'user_id'=>@$customer->id])->get();
+                        $Booking_checked_indetail = BookingCheckinDetails::where(['booking_detail_id'=>$details->id,'user_id'=>$customerID])->get();
                         if(!empty($Booking_checked_indetail )){
                             foreach($Booking_checked_indetail  as $chkDetail){
                                 $checkIndetail []= $chkDetail;
@@ -624,7 +634,7 @@ class BookingController extends Controller {
 
                                     $html.='</div>
                                     <div class="threebtn_fboxes" id="anothertwobtn'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:none;">
-                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->company_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
+                                        <a href="'.config('app.url').'/businessprofile/'.strtolower(str_replace(' ', '', $book_details->company_information->dba_business_name)).'/'.$book_details->company_information->id.' target="_blank">View Provider</a>
                                     </div>
                                     <div class="viewmore_links">
                                         <a id="viewmore_'.$request->type.'_'.$keyvalue.'_'.$book_details->business_services()->withTrashed()->first()->id.'" style="display:block">View More <img src="'. url('public/img/arrow-down.png') .'" alt=""></a>

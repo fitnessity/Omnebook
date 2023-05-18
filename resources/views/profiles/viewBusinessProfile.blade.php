@@ -160,7 +160,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                     @else
                     	<?php
                     	echo '<div class="company-profile-text">';
-						$pf=substr($compinfo->company_name, 0, 1);
+						$pf=substr($compinfo->dba_business_name, 0, 1);
 						echo '<p>'.$pf.'</p></div>';
 						?>
                     @endif
@@ -212,7 +212,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <div class="bnr-information">
                     <div class="viewdisplay">
                     
-                        <h2 style="text-transform: capitalize;">@if($compinfo->dba_business_name == '') {{$compinfo->company_name}} @else {{$compinfo->dba_business_name}} @endif <?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
+                        <h2 style="text-transform: capitalize;">{{$compinfo->dba_business_name}}<?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
                     <?php /*?><span>Claimed</span><?php */?>
 					<!--<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" width="45" height="20">-->
 					</h2></div>
@@ -223,8 +223,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 					<div class="url-copy">	
 						<div> 
 							<p>
-								<a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id;; ?>">
-									<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id;; ?> </a> </p>
+								<a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id;; ?>">
+									<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id;; ?> </a> </p>
 							<!-- <button onclick="myFunction()" style="background: white;border: none; margin-left: 10px;">Copy URL</button>-->
 					   </div>
 					</div>
@@ -545,7 +545,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 								<div class="desc-text" id="mydesc">
 									<span class="create-post">Timeline
 										
-										<a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
+										<a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
 									 
 									</span>
 									 @if($page_posts->count() == 0 ) 
@@ -558,7 +558,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 													@else
 													<?php
 														echo '<div class="company-img-text">';
-														$pf=substr($compinfo->company_name, 0, 1);
+														$pf=substr($compinfo->dba_business_name, 0, 1);
 														echo '<p>'.$pf.'</p></div>';
 													?>
 													@endif
@@ -606,7 +606,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 														@else
 															<?php
 															echo '<div class="company-img-text">';
-															$pf=substr($compinfo->company_name, 0, 1);
+															$pf=substr($compinfo->dba_business_name, 0, 1);
 															echo '<p>'.$pf.'</p></div>';
 															?>
 														@endif
@@ -628,7 +628,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																</ul>
 															</div>
 														</div><?php */?>
-														<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
+														<ins><a href="#" title="">{{ucfirst($PageData->dba_business_name)}} </a> Post Album</ins>
 														<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
 													</div>
 													<div class="post-meta">

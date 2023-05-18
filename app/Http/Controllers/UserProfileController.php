@@ -13,6 +13,7 @@ use View;
 use Mail;
 use Session;
 use DB;
+use Str;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,7 +22,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
-use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService};
 use App\Repositories\SportsRepository;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
@@ -1873,32 +1874,6 @@ class UserProfileController extends Controller {
         }
     }
 
-    public function addFamily(Request $request) {
-        $loggedinUser = Auth::user();
-        $customer = $loggedinUser->customers;
-        $UserFamilyDetails = [];
-
-        foreach($customer as $cs){
-            foreach ($cs->get_families() as $fm){
-                $UserFamilyDetails [] = $fm;
-            }  
-        }
-        //print_r($UserFamilyDetails);exit;
-        $userfamily = $loggedinUser->user_family_details;
-        foreach($userfamily as $uf){
-            $UserFamilyDetails [] = $uf;
-        }
-        //print_r( $UserFamilyDetails);exit;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.add-family', [
-            'cart' => $cart,       
-            'UserFamilyDetails' => $UserFamilyDetails,
-        ]);
-    }
 
     public function makeCall(Request $request, TwilioService $twilioService) {
         $sid = getenv("TWILIO_SID");
@@ -2232,13 +2207,13 @@ class UserProfileController extends Controller {
         $company = array();
         if ($myloc != null && $myloc != 'undefined') {
             if ($select_zipcode != null && $select_zipcode != 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
             } else {
                 $company = CompanyInformation::where('city', 'LIKE', $myloc . '%')->get();
             }
         } else {
             if($select_label!=null && $select_label!= 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->get();
             }
         }
         //dd($data_user); exit;
@@ -2302,7 +2277,7 @@ class UserProfileController extends Controller {
     
                 $user_logo = User::where('id', $value['user_id'])->first();
                 $user_logo1 = $user_logo['profile_pic'];
-                $value['business_name'] = $value['company_name'];
+                $value['business_name'] = $value['dba_business_name'];
                 $value['activity'] = "";
                 $value['website'] = "";
                 $value['location'] = $value['city'];
@@ -2382,9 +2357,9 @@ class UserProfileController extends Controller {
                     if ($found != 0) {
                         $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
                         $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-                        $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $lat, $long, $value['id'], $value['logo']];
                     } else {
-                        $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                     }
                     array_push($locations, $a);
                 }
@@ -2600,7 +2575,7 @@ class UserProfileController extends Controller {
                 $pro_pic_l  = $user_logo->profile_pic;
             }
             $user_logo1 = $pro_pic_l;
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
             $value['activity'] = "";
             $value['website'] = "";
             $value['location'] = $value['city'];
@@ -2638,7 +2613,7 @@ class UserProfileController extends Controller {
 
         foreach ($resultnew as $value) {
             if ($value['type'] == 'claimed') {
-                $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                 array_push($locations, $a);
             }
         }
@@ -2875,7 +2850,7 @@ class UserProfileController extends Controller {
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -2897,13 +2872,13 @@ class UserProfileController extends Controller {
 
         $data = BusinessClaim::where('business_name', 'LIKE', $request->business_name . '%')->where('location', $request->location)->where('is_verified', 0)->get();
 
-        $company = CompanyInformation::where('city', $request->location)->where('company_name', 'LIKE', $request->business_name . '%')->get();
+        $company = CompanyInformation::where('city', $request->location)->where('dba_business_name', 'LIKE', $request->business_name . '%')->get();
 
 
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -4640,19 +4615,6 @@ class UserProfileController extends Controller {
             }
         }
 
-       /* $family = new UserFamilyDetail();
-        $family->user_id = Auth::user()->id;
-        $family->first_name = $request->first_name;
-        $family->last_name = $request->last_name;
-        $family->email = $request->email;
-        $family->mobile = $request->mobile_number;
-        $family->gender = $request->gender;
-        $family->relationship = $request->relationship;
-        $family->emergency_contact = $request->emergency_phone;
-        //$dateee = \DateTime::createFromFormat("m-d-Y" , $request->birthday);
-        $family->birthday = $request->birthday;
-        $family->save();*/
-
         Auth::loginUsingId(Input::get('user_id'), true);
 
         $url = '/';
@@ -4664,7 +4626,7 @@ class UserProfileController extends Controller {
             $claim_cid = session()->get('claim_cid');
             $data = CompanyInformation::where('id',$claim_cid)->first();
             if($data != ''){
-                $claim_cname = $data->company_name;
+                $claim_cname = $data->dba_business_name;
             }
         }
         if($claim  == 'set'){
@@ -4693,7 +4655,7 @@ class UserProfileController extends Controller {
             $claim_cid = session()->get('claim_cid');
             $data = CompanyInformation::where('id',$claim_cid)->first();
             if($data != ''){
-                $claim_cname = $data->company_name;
+                $claim_cname = $data->dba_business_name;
             }
         }
         if($claim  == 'set'){
@@ -7114,7 +7076,7 @@ class UserProfileController extends Controller {
         $co->contact_number = $request->phone_number;
 
         $co->company_name = $request->Companyname;
-
+        $co->dba_business_name = $request->Companyname;
         $co->ein_number = $request->b_EINnumber;
 
         $co->establishment_year = $request->b_Establishmentyear;
@@ -8338,7 +8300,7 @@ class UserProfileController extends Controller {
         $customer_ids = implode(',',$customers);
         $cardInfo = StripePaymentMethod::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at','desc')->get(); 
         
-        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->get(); 
+        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at' ,'DESC')->get(); 
 
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -8793,101 +8755,17 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('error', 'Problem in password change.');
     }
 
-    /*public function addFamilyMember(Request $request) {
-        //dd($request->all());
-        //dd(date('Y-m-d',strtotime($request['birthdate'][0])));
-        // $request->validate([
-
-        //   'fname' => 'required',
-        //   'lname' => 'required|min:8',
-        //   'email' => 'required|email|unique:users',
-        //   'mobile' => 'required',
-        //   'emergency_contact' => 'required',
-        //   'relationship' => 'required',
-        //   'gender' => 'required',
-        //   'birthdate' => 'required',
-        //   'emergency_name' => 'required'
-        //   ]); 
-        if (!Gate::allows('profile_view_access')) {
-            $request->session()->flash('alert-danger', 'Access Restricted');
-            return redirect('/');
-        }
-        $prev = $request['previous_family_count'];       
-        $request['family_count'] . "---" . '----' . $prev;
-        $request['family_count'] - $prev;
-
-        $loggedinUser = Auth::user();
-        $user = User::where('id', Auth::user()->id)->first();
-        $data = '';
-
-        if ($prev == $request['family_count'] && $request['family_count'] == 0) {
-            if ($request['removed_family'][0] != 'delete') {
-                $data = UserFamilyDetail::create([
-                            'user_id' => Auth::user()->id,
-                            'first_name' => $request['fname'][0],
-                            'last_name' => $request['lname'][0],
-                            'email' => $request['email'][0],
-                            'mobile' => $request['mobile'][0],
-                            'emergency_contact' => $request['emergency_contact'][0],
-                            'relationship' => $request['relationship'][0],
-                            'gender' => $request['gender'][0],
-                            'birthday' => $request['birthdate'][0],
-                            'emergency_contact_name' => $request['emergency_name'][0],
-                ]);
-            }           
-        } else {          
-            for ($i = 0; $i < $prev; $i++) {
-                if ($request['removed_family'][$i] != 'delete') {
-                    $cat = UserFamilyDetail::find($request['fid'][$i]);
-                    $cat->first_name = $request['fname'][$i];
-                    $cat->last_name = $request['lname'][$i];
-                    $cat->email = $request['email'][$i];
-                    $cat->mobile = $request['mobile'][$i];
-                    $cat->emergency_contact = $request['emergency_contact'][$i];
-                    $cat->relationship = $request['relationship'][$i];
-                    $cat->gender = $request['gender'][$i];
-                    $cat->birthday = $request['birthdate'][$i];
-                    $cat->emergency_contact_name = $request['emergency_name'][$i];
-                    $data = $cat->update();
-                } else {
-                    $data = UserFamilyDetail::where('id', $request['fid'][$i])->delete();
-                }
-            }            
-            for ($j = $prev; $j < $request['family_count']; $j++) {
-                if ($request['removed_family'][$j] != 'delete') {
-                    $data = UserFamilyDetail::create([
-                                'user_id' => Auth::user()->id,
-                                'first_name' => $request['fname'][$j],
-                                'last_name' => $request['lname'][$j],
-                                'email' => $request['email'][$j],
-                                'mobile' => $request['mobile'][$j],
-                                'emergency_contact' => $request['emergency_contact'][$j],
-                                'relationship' => $request['relationship'][$j],
-                                'gender' => $request['gender'][$j],
-                                'birthday' => $request['birthdate'][$j],
-                                'emergency_contact_name' => $request['emergency_name'][$j],
-                    ]);
-                }
-            }
-        }
-        if ($data)
-            return Redirect::back()->with('success', 'Family details has been updated successfully.');
-        else
-            return Redirect::back()->with('error', 'Problem in updating family details.');
-    }*/
-
-
     public function addFamilyMember(Request $request) {
+        $user = Auth::user();
         if($request->id != ''){
             if($request->type == 'user'){
-                $user = Auth::user();
                 $familyData = $user->user_family_details()->findOrFail($request->id);
                 $familyData->first_name = $request->fname;
                 $familyData->last_name = $request->lname;
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthday = $request->birthdate;
+                $familyData->birthday = date('Y-m-d',strtotime($request->birthdate));
                 $familyData->mobile = $request->mobile;
                 $familyData->emergency_contact_name = $request->emergency_name;
                 $familyData->emergency_contact = $request->emergency_contact;
@@ -8899,7 +8777,7 @@ class UserProfileController extends Controller {
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthdate = $request->birthdate;
+                $familyData->birthdate =  date('Y-m-d',strtotime($request->birthdate));
                 $familyData->phone_number = $request->mobile;
                 $familyData->emergency_contact = $request->emergency_contact;
                 $familyData->update();
@@ -8914,14 +8792,81 @@ class UserProfileController extends Controller {
                 'emergency_contact' => $request->emergency_contact,
                 'relationship' => $request->relationship,
                 'gender' => $request->gender,
-                'birthday' => $request->birthdate,
+                'birthday' =>  date('Y-m-d',strtotime($request->birthdate)),
                 'emergency_contact_name' => $request->emergency_name,
             ]);
+
+            $company = $user->company;
+            foreach($company as $key=>$c){
+                if($key == 0){
+                    $random_password = Str::random(8);
+                    $Password = Hash::make($random_password);
+                }
+                $Customer = Customer::create([
+                    'business_id' => $c->id,
+                    'password' => $Password ,
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'email' => $request->email,
+                    'phone_number' => $request->mobile,
+                    'emergency_contact' => $request->emergency_contact,
+                    'relationship' => $request->relationship,
+                    'gender' => $request->gender,
+                    'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
+                ]);
+
+                if($key == 0){
+                    $User = User::create([
+                        'role' => 'customer',
+                        'password' => $Password,
+                        'firstname' => $request->fname,
+                        'lastname' => $request->lname,
+                        'username' => $request->fname.' '.$request->lname,
+                        'email' => $request->email,
+                        'phone_number' => $request->mobile,
+                        'emergency_contact' => $request->emergency_contact,
+                        'relationship' => $request->relationship,
+                        'gender' => $request->gender,
+                        'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
+                        'stripe_customer_id' => $Customer->stripe_customer_id
+                    ]);
+
+                    $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
+                }
+                $Customer->update(['user_id'=>$User->id]);            
+            }   
         }   
 
         return redirect()->route('addFamily');
     }
-    
+
+    public function addFamily(Request $request) {
+        $loggedinUser = Auth::user();
+        $customer = $loggedinUser->customers;
+        $UserFamilyDetails = [];
+
+        foreach($customer as $cs){
+            foreach ($cs->get_families() as $fm){
+                $UserFamilyDetails [] = $fm;
+            }  
+        }
+        //print_r($UserFamilyDetails);exit;
+        $userfamily = $loggedinUser->user_family_details;
+        foreach($userfamily as $uf){
+            $UserFamilyDetails [] = $uf;
+        }
+        //print_r( $UserFamilyDetails);exit;
+        $cart = [];
+        if ($request->session()->has('cart_item')) {
+            $cart = $request->session()->get('cart_item');
+        }
+        
+        return view('personal-profile.add-family', [
+            'cart' => $cart,       
+            'UserFamilyDetails' => $UserFamilyDetails,
+        ]);
+    }
+
     public function showFamilyMember(Request $request) {
         $familyData = '';
         $type = $request->type;

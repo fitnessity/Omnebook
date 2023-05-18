@@ -146,7 +146,7 @@
 
               <span class="color-red">*</span>
 
-              <input class="width form-control" type="text" name="bname" id="bname" value="{{$data->company_name}}" required>
+              <input class="width form-control" type="text" name="bname" id="bname" value="{{$data->dba_business_name}}" required>
 
             </div> 
 

@@ -76,8 +76,8 @@
                                                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                             <tr>
                                                                                 <td style="padding: 10px 28px 14px 28px;" align="center">
-                                                                                    <p style="font-weight: 600; font-size: 23px; color: #000000; margin: 10px 0px 10px 0px">Greetings {{@$AllDetail['company_data']['company_name']}}  </p>
-                                                                                    <p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px; text-align: left;">This is to notify you that {{@$AllDetail['company_data']['company_name']}} is officially live on Fitnessity.  </p>
+                                                                                    <p style="font-weight: 600; font-size: 23px; color: #000000; margin: 10px 0px 10px 0px">Greetings {{@$AllDetail['company_data']['dba_business_name']}}  </p>
+                                                                                    <p style="font-weight: 400; font-size: 13px; color: #000000; margin-bottom: 0px; margin-top: 0px; text-align: left;">This is to notify you that {{@$AllDetail['company_data']['dba_business_name']}} is officially live on Fitnessity.  </p>
                                                                                     <h3 style="font-weight: 600; font-size: 15px; color: #000000; text-align: left;">How did I get listed? </h3>
                                                                                     <p style="font-weight: 400; font-size: 13px; color: #000000;margin-bottom: 0px; margin-top: 0px; text-align: left;">A current, former customer or someone familiar with your business contributed your business information to Fitnessity so others around the world can learn about what you do, book your services and leave reviews.</p>
                                                                                 </td>
@@ -112,10 +112,10 @@
                                                 <tr>
                                                     <td style=" padding:0px 10px 23px; text-align: center" align="center">
                                                         <h6 style="font-size: 15px; font-weight: 550; color: #000;margin-bottom: 0px; margin-top: 0px;">Is the business information that was provided correct?</h6>
-                                                        <p style="text-align: left;font-size: 13px;">{{@$AllDetail['company_data']['company_name']}}, here’s what people are seeing on Fitnessity for your business. Is your information correct?</p>
+                                                        <p style="text-align: left;font-size: 13px;">{{@$AllDetail['company_data']['dba_business_name']}}, here’s what people are seeing on Fitnessity for your business. Is your information correct?</p>
                                                         <h3 style="font-size: 13px; font-weight: 450; color: #000;margin-bottom: 0px; text-align: left;">Business Summary</h3>
                                                         <ul style="text-align: left; font-size: 13px; padding-left: 11px;">
-                                                            <li>Business Name: {{@$AllDetail['company_data']['company_name']}}</li>
+                                                            <li>Business Name: {{@$AllDetail['company_data']['dba_business_name']}}</li>
                                                             <li>Business Address: {{@$AllDetail['company_data']['address']}}, {{@$AllDetail['company_data']['city']}}, {{@$AllDetail['company_data']['state']}}, {{@$AllDetail['company_data']['country']}}</li>
                                                             <li>Business Number: {{@$AllDetail['company_data']['business_phone']}}</li>
                                                             <li>Business Email: {{@$AllDetail['company_data']['business_email']}}</li>

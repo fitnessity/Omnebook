@@ -4,7 +4,7 @@ namespace App;
 
 
 
-use App\User;
+use App\{User,SGMailService};
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,6 +45,10 @@ class UserBookingDetail extends Model
 
     public function BookingCheckinDetails(){
         return $this->hasMany(BookingCheckinDetails::class,'booking_detail_id');
+    }
+
+    public function Customer(){
+        return $this->belongsTo(Customer::class,'user_id');
     }
 
     public function Recurring(){
@@ -117,78 +121,80 @@ class UserBookingDetail extends Model
     }
 
     public function transfer_to_provider(){
-        $company_information = $this->business_services->company_information;
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($this->business_services != ''){
+            $company_information = $this->business_services->company_information;
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        if($this->booking->order_type == 'checkout_register'){
-            $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
-            $transfer_amount = 0;
+            if($this->booking->order_type == 'checkout_register'){
+                $transactions = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->get();
+                $transfer_amount = 0;
 
-            $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
-            $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
-        
-            foreach($transactions as $transaction){
+                $total_fitnessity_fee = UserBookingDetail::where('booking_id', $this->booking->id)->sum('fitnessity_fee');
+                $tax = UserBookingDetail::where('booking_id', $this->booking->id)->sum('tax');
+            
+                foreach($transactions as $transaction){
+                    $payment_intent = $stripe->paymentIntents->retrieve(
+                        $transaction->transaction_id,
+                        []
+                    );
+                    try {
+                        if($transaction->amount > $total_fitnessity_fee){
+                            $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
+                        }else{
+                            $transfer_amount = round($transaction->amount/1.039, 2);
+                        }
+                
+                        $transfer = $stripe->transfers->create([
+                            'amount' => $transfer_amount * 100,
+                            'currency' => 'usd',
+                            'source_transaction' => $payment_intent->charges->data[0]->id,
+                            'destination' => $company_information->stripe_connect_id,
+                        ]);
+
+                        if($transfer->id){
+                          $transfer_amount += $transaction->amount;
+                        }
+                    } catch(\Exception $e) {
+
+                        $this->update(['transfer_provider_status'=>'paid', 
+                               'provider_amount' => 0]);
+                        return;
+                    }    
+                }
+
+                if(@$transfer->id){
+                    $this->update(['transfer_provider_status'=>'paid', 
+                                   'provider_amount' => $transfer_amount]);
+                }
+
+                return;
+            }
+            
+            try {
+                $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
+                $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
+
                 $payment_intent = $stripe->paymentIntents->retrieve(
                     $transaction->transaction_id,
                     []
                 );
-                try {
-                    if($transaction->amount > $total_fitnessity_fee){
-                        $transfer_amount = round($transaction->amount/1.039, 2) - $total_fitnessity_fee - $tax;
-                    }else{
-                        $transfer_amount = round($transaction->amount/1.039, 2);
-                    }
-            
-                    $transfer = $stripe->transfers->create([
-                        'amount' => $transfer_amount * 100,
-                        'currency' => 'usd',
-                        'source_transaction' => $payment_intent->charges->data[0]->id,
-                        'destination' => $company_information->stripe_connect_id,
-                    ]);
 
-                    if($transfer->id){
-                      $transfer_amount += $transaction->amount;
-                    }
-                } catch(\Exception $e) {
+                $transfer = $stripe->transfers->create([
+                    'amount' => $transfer_amount * 100,
+                    'currency' => 'usd',
+                    'source_transaction' => $payment_intent->charges->data[0]->id,
+                    'destination' => $company_information->stripe_connect_id,
+                ]);
 
+                if($transfer->id){
                     $this->update(['transfer_provider_status'=>'paid', 
-                           'provider_amount' => 0]);
-                    return;
-                }    
-            }
-
-            if(@$transfer->id){
-                $this->update(['transfer_provider_status'=>'paid', 
-                               'provider_amount' => $transfer_amount]);
-            }
-
-            return;
-        }
-        
-        try {
-            $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
-            $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
-
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $transaction->transaction_id,
-                []
-            );
-
-            $transfer = $stripe->transfers->create([
-                'amount' => $transfer_amount * 100,
-                'currency' => 'usd',
-                'source_transaction' => $payment_intent->charges->data[0]->id,
-                'destination' => $company_information->stripe_connect_id,
-            ]);
-
-            if($transfer->id){
-                $this->update(['transfer_provider_status'=>'paid', 
-                               'provider_amount' => $transfer_amount ,
-                               'provider_transaction_id' => $transfer->id]);
-            }
-        } catch(\Exception $e) {
-            var_dump($e);
-        }    
+                                   'provider_amount' => $transfer_amount ,
+                                   'provider_transaction_id' => $transfer->id]);
+                }
+            } catch(\Exception $e) {
+                var_dump($e);
+            } 
+        }   
     }
 
     public function getparticipate(){
@@ -358,5 +364,79 @@ class UserBookingDetail extends Model
     public function can_schedule(){
         
     }
+
+    public function membershipOrSessionAboutToExpireAlert($type){
+        $customer =  $this->Customer;
+        if($customer){
+            $company = $this->company_information;
+            $business_price_detail =  $this->business_price_detail;
+            $business_price_details_ages =  @$business_price_detail->business_price_details_ages_with_trashed;
+            $business_services = $this->business_services;
+            $email_detail = array(
+                "email" =>$customer->email, 
+                "CustomerName" => $customer->full_name, 
+                "ReNewUrl" => env('APP_URL').'/activity-details/'.$this->sport, 
+                "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                "ProviderName"=> $company->dba_business_name,
+                "ProgramName"=> @$business_services->program_name,
+                "CategoryName"=> @$business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ProviderPhoneNumber"=> $company->business_phone,
+                "ProviderEmail"=> $company->business_email,
+                "ProviderAddress"=> $company->company_address(),
+                "for" =>$type
+            );
+            if($type == 'membership'){
+                $date = Carbon::parse($this->expired_at)->subWeek()->format('Y-m-d');
+                $today = Carbon::now()->format('Y-m-d');
+                if( $date  == $today){
+                    SGMailService::sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail);
+                }
+            }else{
+                SGMailService::sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail);
+            } 
+        }
+    }
+
+
+    public function membershipExpiredAlert($type){
+        $customer =  $this->Customer;
+        if($customer){
+            $company = $this->company_information;
+            $business_price_detail =  $this->business_price_detail;
+            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $email_detail_provider = array(
+                "email" =>$company->business_email, 
+                "CustomerName" => $customer->full_name, 
+                "ProviderName"=> $company->dba_business_name,
+                "ProgramName"=> $this->business_services->program_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+            );
+
+            $email_detail_customer = array(
+                "email" =>$customer->email, 
+                "CustomerName" => $customer->full_name, 
+                "ReNewUrl" => env('APP_URL').'/activity-details/'.$this->sport, 
+                "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                "ProviderName"=> $company->dba_business_name,
+                "ProgramName"=> $this->business_services->program_name,
+                "CategoryName"=> $business_price_details_ages->category_title,
+                "PriceOptionName"=> @$business_price_detail->price_title,
+                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ProviderPhoneNumber"=> $company->business_phone,
+                "ProviderEmail"=> $company->business_email,
+                "ProviderAddress"=> $company->company_address(),
+            );
+            
+
+            SGMailService::sendReminderOfMembershipExpireToProvider($email_detail_provider);
+            SGMailService::sendReminderOfMembershipExpireToCustomer($email_detail_customer);
+            
+        }
+    }
+
 }
 

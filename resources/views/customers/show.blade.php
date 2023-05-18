@@ -200,7 +200,7 @@
 												<label>Active Memberships</label>
 											</div>
 											<div class="col-md-6 col-xs-6">
-												<span class="green-fonts">{{$customerdata->active_memberships()->count()}}</span>
+												<span class="green-fonts">{{$customerdata->active_memberships()->get()->count()}}</span>
 											</div>
 										</div>
 										<div class="row">
@@ -513,7 +513,7 @@
 																				<!-- <a class="edit-booking-customer" data-toggle="modal" data-target="#bookingcustomer_{{$booking_detail->id}}"> Edit Booking </a> -->
 																			</div>
 																			<div class="col-md-4 col-xs-4">
-																				@if($booking_detail->Recurring()->count() > 0)
+																				@if($booking_detail->Recurring()->where('status', 'Scheduled')->count() > 0)
 																					<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details</a>
 																				@endif
 																			</div>
@@ -649,7 +649,7 @@
 																					</div>
 																				</div>
 																				<div class="col-md-4 col-xs-4">
-																					@if($booking_detail->Recurring()->count() > 0)
+																					@if($booking_detail->Recurring()->where('status', 'Scheduled')->count() > 0)
 																						<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="1050px"> Auto Pay Details</a>
 																					@endif
 																				</div>
@@ -760,7 +760,7 @@
 								<div class="col-md-6 col-xs-12">
 									<div class="modal-from-txt">
 										<label>	Birthdate </label>
-										<input class="form-control" type="text" data-behavior="datepicker" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" >
+										<input class="form-control" type="text" data-behavior="datepickerforbirtdate" name="birthdate" placeholder="Birthdate" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}" >
 									</div>
 								</div>
 								<div class="col-md-6 col-xs-12">

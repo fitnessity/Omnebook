@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Business;
-
+use Illuminate\Support\Facades\Hash;
 use App\BusinessStaff;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\{CompanyInformation};
+use Str;
 
 class StaffController extends Controller
 {
@@ -39,6 +40,7 @@ class StaffController extends Controller
      */
     public function store(Request $request, $business_id)
     {   
+       // print_r($request->all());exit;
         $image = '';
         if ($request->hasFile('insimg')) 
         {   
@@ -50,8 +52,9 @@ class StaffController extends Controller
             }
         }
 
+        $random_password = Str::random(8);
         $company = $request->current_company;
-        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio]);
+        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio ,'password'=>Hash::make($random_password)]);
         if($request->has('fromservice')){
             if($create){
                 return "success";
@@ -69,9 +72,9 @@ class StaffController extends Controller
      * @param  \App\BusinessStaff  $businessStaff
      * @return \Illuminate\Http\Response
      */
-    public function show(BusinessStaff $businessStaff)
+    public function show(Request $request, $business_id)
     {
-        //
+        return view('business.staff.show');
     }
 
     /**

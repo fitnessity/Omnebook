@@ -34,7 +34,7 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepicker" >
+                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepickerforbirtdate" >
 
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                     <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
@@ -296,7 +296,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="birthday_date-position">
-                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepicker" />
+                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepickerforbirtdate" />
                                                                 <span class="error" id="err_birthday_date"></span>
                                                             </div>
                                                         </div>
@@ -1015,37 +1015,36 @@
                 var valchk = getAge();
                 if(valchk == 1){
                     $('#register_submit').prop('disabled', true);
-                    if (validForm) {
+                    var formData = $("#frmregister").serialize();
+                    var posturl = '/auth/registration';
 
-                        var formData = $("#frmregister").serialize();
-                        $.ajax({
-                            url: posturl,
-                            type: 'POST',
-                            dataType: 'json',
-                            data: formData,
-                            beforeSend: function () {
-                                
-                                $('#register_submit').prop('disabled', true).css('background','#999999');
-                                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                                $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                            },
-                            complete: function () {
+                    $.ajax({
+                        url: posturl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        beforeSend: function () {
                             
+                            $('#register_submit').prop('disabled', true).css('background','#999999');
+                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                            $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                        },
+                        complete: function () {
+                        
+                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                        },
+                        success: function (response) {
+                            //alert(response.msg);
+                            
+                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                            showSystemMessages('#systemMessage', response.type, response.msg);
+                            if (response.type === 'success') {
+                                window.location.href = response.redirecturl;
+                            } else {
                                 $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                            },
-                            success: function (response) {
-                                //alert(response.msg);
-                                
-                                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                                showSystemMessages('#systemMessage', response.type, response.msg);
-                                if (response.type === 'success') {
-                                    window.location.href = response.redirecturl;
-                                } else {
-                                    $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                                }
                             }
-                        });
-                    }
+                        }
+                    });  
                 }else{
                     $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
                 }

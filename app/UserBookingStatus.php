@@ -58,6 +58,11 @@ class UserBookingStatus extends Model
         return $this->belongsTo(Customer::class,'customer_id');
     }
 
+    public function Transaction()
+    {
+        return $this->hasMany(Transaction::class,'item_id')->where('item_type','UserBookingStatus');
+    }
+
     public function businessuser()
     {
         return $this->belongsTo(User::class, 'business_id');

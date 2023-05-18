@@ -21,11 +21,10 @@ class RecurringController extends Controller
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $booking_detail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $customer->recurring($request->booking_detail_id , 'Scheduled')->orderby('payment_date')->get();
+        $autopayListScheduled = $booking_detail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
         $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
         $autopaylistcnt =  count($autopayListScheduled) + count($autopayListHistory);
         $remaining = Recurring::autoPayRemaining($autopaylistcnt,$request->booking_detail_id);
-        //print_r($autopaylist );exit;
         
         return view('business.recurring.index', ['autopayListScheduled' => $autopayListScheduled, 'autopayListHistory' => $autopayListHistory, 'customer' => $customer,'booking_detail'=>$booking_detail,'remaining'=>$remaining ,'i'=>1 ,'business_id'=>$business_id ,'autopaylistcnt' =>$autopaylistcnt]);
     }
@@ -109,7 +108,6 @@ class RecurringController extends Controller
         foreach($ids as $id){
             $recurring_detail = Recurring::findOrFail($id);
             $amount += $recurring_detail->amount + $recurring_detail->tax;
-            //$payment_intent = Transaction::where('item_type', 'UserBookingStatus')->where('item_id', $recurring_detail->UserBookingDetail->booking->id)->first()->transaction_id;
             $stripe_customer_id = $recurring_detail->Customer->stripe_customer_id;
             $card_id = StripePaymentMethod::where('user_id',$recurring_detail->user_id)->first()->payment_id;
         }
@@ -134,7 +132,7 @@ class RecurringController extends Controller
                 $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed']);
 
                 $transactiondata = array( 
-                    'user_type' => $update_recurring_detail->user_type ,
+                    'user_type' => ucfirst($update_recurring_detail->user_type),
                     'user_id' => $update_recurring_detail->user_id,
                     'item_type' =>'Recurring',
                     'item_id' => $update_recurring_detail->id,

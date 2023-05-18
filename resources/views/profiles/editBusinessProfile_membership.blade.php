@@ -123,7 +123,7 @@
 		      			echo '<img src="'.Config::get('constants.FRONT_IMAGE').'user.png" alt="" width="143" height="143"/>';
 		      		} ?>              	
               </span>
-              <p class="sgn-pro-name mrgn-btn">{{$users->firstname}} {{$users->lastname}}</p>
+              <p class="sgn-pro-name mrgn-btn">{{$users->full_name}}</p>
               <p class="text-center mrgn-btn">{{$users->company_name}}</p>
               <a href="/profile/viewProfile">Preview Profile</a>
               <div class="clearfix"></div>

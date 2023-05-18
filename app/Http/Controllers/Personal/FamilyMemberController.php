@@ -30,24 +30,32 @@ class FamilyMemberController extends Controller
     {
         $user = Auth::user();
         $customer = Customer::where(['id'=>$request->customerId])->first();
-        $username = $customer->username;
-        if($username == ''){
-            $username = $customer->fname.' '.$customer->lname;
-        }
-        $bookingDetail = [];
-        $bookingDetail =  $this->booking_repo->otherTab($request->serviceType, $customer->business_id,$customer);
-        //print_r($bookingDetail);exit;
-        $currentbookingstatus =[];
-        $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$customer->business_id,$customer);
-        //print_r($currentbookingstatus );exit;
-        $tabval = $request->tab; 
+        if($request->business_id){
+            $bookingDetail = [];
+            $bookingDetail =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,$customer);
+            //print_r($bookingDetail);exit;
+            $currentbookingstatus =[];
+            $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,$customer);
+            //print_r($currentbookingstatus );exit;
+            $tabval = $request->tab; 
 
-        return view('personal.family_member.index', [
-            'bookingDetail' => $bookingDetail ,
-            'currentbookingstatus'=>$currentbookingstatus, 
-            'tabval'=>$tabval, 
-            'customer'=>$customer, 
-            'business'=>[]]);
+            return view('personal.family_member.index', [
+                'bookingDetails' => $bookingDetail ,
+                'currentbookingstatus'=>$currentbookingstatus, 
+                'tabval'=>$tabval, 
+                'customer'=>$customer, 
+                'business'=>[]]);
+        }else{
+            $company_information = [];
+            $company_information [] = $customer->company_information;
+        
+            $business = array_unique($company_information, SORT_REGULAR);
+            return view('personal.family_member.index',[ 
+                'business'=>$business, 
+                'tabval'=>'', 
+                'bookingDetail' => [],
+                'customer' => $customer]);
+        } 
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus,BusinessActivityScheduler};
+use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus,BusinessActivityScheduler,Customer};
 use Auth;
 use DateTime;
 
@@ -22,7 +22,7 @@ class SchedulerController extends Controller
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
         if($orderData->business_services()->exists()){
             $programName = $orderData->business_services->program_name;
-            $companyName = $orderData->business_services->company_information->company_name;
+            $companyName = $orderData->business_services->company_information->dba_business_name;
         }
 
         $businessId = $orderData->business_id;
@@ -79,12 +79,19 @@ class SchedulerController extends Controller
     public function store(Request $request)
     {   
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
-        $customer = Customer::where(['id'=>$request->customerID,'business_id',$request->businessId])->first();
+        $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
         $UserBookingDetails = '';
         $today = date('Y-m-d');
-        $UserBookingDetails = $customer->bookingDetail()->where(['bookedtime' => NULL,'priceid'=>$request->priceId])->orderby('created_at','desc')->first();
-        //echo $UserBookingDetails;exit();
+        //$UserBookingDetails = $customer->bookingDetail()->where(['priceid'=>$request->priceId,'bookedtime'=> null])->orderby('created_at','desc')->first();
+        $UserBookingDetails = $customer->bookingDetail()->where('sport',$request->serviceID);
+
+        if($request->priceId != ''){
+            $UserBookingDetails = $UserBookingDetails->orWhere(['priceid'=>$request->priceId]);
+        }
+
+        $UserBookingDetails = $UserBookingDetails->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
+            $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$request->date)->where(['checked_at' =>null])->first();
             if($request->date == $today){
                 $start = new DateTime($activitySchedulerData->shift_start);
                 $start_time = $start->format("H:i");
@@ -94,22 +101,21 @@ class SchedulerController extends Controller
                     return "You can't book this activity for today";
                 }
             }
-            $UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
-
-            if($UserBookingDetails->booking->order_type == 'checkout_register'){
+            if($checkIndetail != ''){
+                $checkIndetail->update(["business_activity_scheduler_id"=>$request->timeid,
+                        "checkin_date"=>$request->date]);
+            }else{
+                $UserBookingDetails->update(["act_schedule_id"=>$request->timeid]);
                 BookingCheckinDetails::create([
                     "business_activity_scheduler_id"=>$request->timeid, 
                     "customer_id" => $customer->id,
-                    'booking_detail_id'=> $UserBookingDetails->id ,
-                    "checkin_date"=>$request->date ,
-                    "use_session_amount" => 1,
+                    'booking_detail_id'=> $UserBookingDetails->id,
+                    "checkin_date"=>$request->date,
+                    "use_session_amount" => 0,
                     "source_type" => 'online_scheduler'
                 ]);
-            }else{
-                $BookingCheckinDetails = new BookingCheckinDetails;
-                $BookingCheckinDetails->update(["business_activity_scheduler_id"=>$request->timeid,
-                    "checkin_date"=>$request->date]);
             }
+            //$UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
             return "success";
         }else{
             return "fail";
@@ -160,9 +166,10 @@ class SchedulerController extends Controller
     {
         $checkinDetail = BookingCheckinDetails::findOrFail($id);
         $user_booking_detail = $checkinDetail->UserBookingDetail;
-        $array = json_decode($user_booking_detail->booking_detail,true);
+       /* $array = json_decode($user_booking_detail->booking_detail,true);
         $array['sessiondate'] = '';
-        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);
+        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);*/
+        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'']);
         $checkinDetail->delete();
     }
 

@@ -107,7 +107,7 @@
                     ?>
                       <tr id="item-{!! $value->id !!}">
                         <td><input type="checkbox" name="planIds[]" value="{{$value->id}}"></td>
-                        <td>{{ $value->company_name}}</td>
+                        <td>{{ $value->dba_business_name}}</td>
                         <td>{{ $value->location}}</td>
                         <td>{{ $value->business_email}}</td>
                         <td>{{ $value->website}}</td>

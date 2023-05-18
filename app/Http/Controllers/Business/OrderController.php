@@ -218,7 +218,6 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
-
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -404,25 +403,16 @@ class OrderController extends BusinessBaseController
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
 
-            $tax_person = 0;
-            if($qty_c['adult'] != 0){
-                $tax_person++;
-            }if($qty_c['child']!= 0){
-                $tax_person++;
-            }if($qty_c['infant'] != 0){
-                $tax_person++;
-            }
-
-            $per_person_tax = $item['tax'] / $tax_person; 
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;
                 $date = new Carbon;
-                $stripe_id = $stripe_charged_amount = $payment_method= '';
+                $stripeId = $stripeChargedAmount = $paymentMethod= '';
 
                 if($key == 'adult'){
                     if($qty != '' && $qty != 0){
                         $amount = $qty * $price_detail->recurring_first_pmt_adult;
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }
                 }
 
@@ -430,6 +420,7 @@ class OrderController extends BusinessBaseController
                     if($qty != '' && $qty != 0){
                         $amount = $qty * $price_detail->recurring_first_pmt_child;
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }
                 }
 
@@ -437,21 +428,43 @@ class OrderController extends BusinessBaseController
                     if($qty != '' && $qty != 0){
                         $amount =  $qty * $price_detail->recurring_first_pmt_infant;
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
+                        $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
+                }
+                $categoryData = $checkoutRegisterCartService->getCategory($item['priceid']);
+                $duesTax = $categoryData->dues_tax;
+                $salesTax = $categoryData->sales_tax;
+                if($duesTax == '' || $duesTax == null){
+                    $duesTax = 0;
+                }
+
+                if($salesTax == '' || $salesTax == null){
+                    $salesTax = 0;
                 }
 
                 if($qty != '' && $qty != 0){
+                    $tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2);
+                    $paymentMethod = $tran_data['stripe_payment_method_id'];
                     if($re_i != '' && $re_i != 0 && $amount != ''){
                         for ($num = $re_i; $num >0 ; $num--) { 
                             if($num==1){
-                                $stripe_id =  $tran_data['transaction_id'];
-                                $stripe_charged_amount = $tran_data['amount'];
-                                $payment_method = $tran_data['stripe_payment_method_id'];
-                                $payment_date = $date->format('Y-m-d');
+                                $stripeId =  $tran_data['transaction_id'];
+                                $stripeChargedAmount = number_format($tran_data['amount'],2);
+                                $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
                             }else{
-                                $month = $num - 1;
-                                $payment_date = (Carbon::now()->addMonth($month))->format('Y-m-d');
+                                $Chk = explode(" ",$reCharge);
+                                $timeChk = @$Chk[1];
+                                $afterHowmanytime = @$Chk[0];
+                                $addTime  = $afterHowmanytime * ($num - 1);
+
+                                if($timeChk == 'Month'){
+                                    $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Week'){
+                                    $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Year'){
+                                    $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                }
                                 $status = 'Scheduled';
                             } 
 
@@ -460,12 +473,12 @@ class OrderController extends BusinessBaseController
                                 "user_id" => $customer->id,
                                 "user_type" => 'customer',
                                 "business_id" => $booking_detail->business_id ,
-                                "payment_date" => $payment_date,
+                                "payment_date" => $paymentDate,
                                 "amount" => $amount,
-                                'charged_amount'=> $stripe_charged_amount,
-                                'payment_method'=> $payment_method,
-                                'stripe_payment_id'=> $stripe_id,
-                                "tax" => $per_person_tax,
+                                'charged_amount'=> $stripeChargedAmount,
+                                'payment_method'=> $paymentMethod,
+                                'stripe_payment_id'=> $stripeId,
+                                "tax" => $tax_recurring,
                                 "status" => $status,
                             );
                             Recurring::create($recurring);
@@ -479,7 +492,7 @@ class OrderController extends BusinessBaseController
                 "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
                 "CustomerName" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->full_name, 
                 "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
-                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->company_name,
+                "BusinessName"=> @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->dba_business_name,
                 "BookedPerson"=> $checkoutRegisterCartService->getbookedPerson($request->user_id),
                 "ParticipantsName"=> $participateName,
                 "date"=> "N/A",
@@ -487,7 +500,7 @@ class OrderController extends BusinessBaseController
                 "duration"=>  "N/A",
                 "ActivitiyType"=> $businessService->service_type,
                 "ProgramName"=> $businessService->program_name,
-                "CategoryName"=> $checkoutRegisterCartService->getCategory($item['priceid']));
+                "CategoryName"=> @$categoryData->category_title);
 
             SGMailService::confirmationMail($email_detail);
         }

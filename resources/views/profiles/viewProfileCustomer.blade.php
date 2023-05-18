@@ -835,7 +835,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         <div class="col-sm-12 col-md-8 col-lg-8">
 							<div class="tab-content">
 								<div class="tab-pane active" id="tabs-1" role="tabpanel">
-									<div class="central-meta postbox">
+									<div class="central-meta postbox central-box">
 										<form method="post" action="{{route('profilePost')}}" enctype="multipart/form-data" id="profilepostfrm">
                                         	@csrf
                                             <span class="create-post">Post Your Experiences</span>
@@ -952,12 +952,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 											<?php $userData = User::where('id',$profile_post->user_id)->first(); ?>
 											<div class="central-meta item">
 												<div class="user-post">
-													<div class="friend-info">
+													<div class="friend-info user-img-sp">
                                                     <?php
                                                     	if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userData->profile_pic )) && @$userData->profile_pic != '')
 														{ ?>
 														<figure>
-                                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="pic">
+                                                        	<img class="user-pic" src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="pic">
                                                         </figure>
 													<?php } else { 
 														$pf=substr(@$userData->firstname, 0, 1).substr(@$userData->lastname, 0, 1);
@@ -1004,7 +1004,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($profile_post->created_at))}}</span>
 													</div><!-- friend-info -->
 													<div class="post-meta social-img">
-														<input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$profile_post->post_text}}" disabled="">
+														<input type="text" name="abc" data-emojiable="true" data-emoji-input="image" class="removepost" value="{{$profile_post->post_text}}" disabled="" @if($profile_post->post_text == '') style="display:none" @endif>
 														<?php 
 															$userid = $profile_post->user_id;
 															$count = count(explode("|",$profile_post->images));
@@ -1241,7 +1241,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																	</ul>
 																</figure>   
 
-                                                                <div class="we-video-info">
+                                                                <div class="we-video-info central-box">
 																	
                                                                     <ul class ="postinfoul{{@$profile_post->id}}">
                                                                         @if(isset($profile_post->video))
@@ -1365,7 +1365,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                     </div>
                                                                 </div>
 																
-                                                                <div class="coment-area" style="display: block;">
+                                                                <div class="coment-area central-box" style="display: block;">
                                                                     <ul class="we-comet">
                                                                         <?php 
                                                                         $comments = PostComment::where('post_id',@$profile_post->id)->limit(2)->get();
@@ -1998,7 +1998,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			if( !empty($postsaved) ){ $savedpost='activesavedpost'; }
                                                                         ?>
                                                                         
-                                                                        <ul class="like-dislike" id="ulike-dislike<?php echo @$profile_post->id; ?>">
+                                                                        <ul class="like-dislike" id="savedulike-dislike<?php echo @$profile_post->id; ?>">
                                                                         <?php $loginuser_like = PostLike::where('post_id',$profile_post['id'])->where('is_like',1)->where('user_id',@$loggedinUser->id)->first(); ?>
                                                                         	@if(!empty($loginuser_like))
                                                                          	<?php $activethumblike='activethumblike'; ?>
@@ -2043,7 +2043,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                                 </span> 
                                                                             </li><?php */?>
                                                                         </ul>
-                                                                        <div class="users-thumb-list" id="users-thumb-list<?php echo @$profile_post->id; ?>">
+                                                                        <div class="users-thumb-list" id="saved-users-thumb-list<?php echo @$profile_post->id; ?>">
                                                                         <?php
                                                                     	$profile_posts_like = PostLike::where('post_id',@$profile_post->id)->where('is_like',1)->count(); ?>
                                                                         	@if($profile_posts_like>0)
@@ -2870,7 +2870,9 @@ $(document).on('click', '.thumblike', function(){
 		success: function (data) {
 			if(data.success=='success'){
 				$("#users-thumb-list"+postId).load(" #users-thumb-list"+postId+" > *");
+                $("#saved-users-thumb-list"+postId).load(" #saved-users-thumb-list"+postId+" > *");
 				$("#ulike-dislike"+postId).load(" #ulike-dislike"+postId+" > *");
+                $("#savedulike-dislike"+postId).load(" #savedulike-dislike"+postId+" > *");
 				$('#likecount'+postId).html(data.count);
 			}
 		}

@@ -144,9 +144,15 @@
 																</div>
 															</div>
 
-															<div class="activity-information float-left">
-																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
-																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+															<div class="activity-information">
+																@php 
+																	$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+																	if($bookscheduler->company_information->dba_business_name == ''){
+																		$bookschedulercom_name = $bookscheduler->company_information->company_name;
+																	}
+																@endphp
+																<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 																<div class="dollar-person">
 																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
@@ -155,7 +161,7 @@
 															</div>
 
 															<div class="row">
-																<div class="col-xs-12">
+																<div class="col-xs-12 text-center">
 																	<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 																</div>
 																<div class="col-xs-12">
@@ -217,8 +223,14 @@
 											</div>
 										</div>
 										<div class="activity-information ">
-											<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookscheduler->company_information->company_name}}</a></span>
-											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+											@php 
+												$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+												if($bookscheduler->company_information->dba_business_name == ''){
+													$bookschedulercom_name = $bookscheduler->company_information->company_name;
+												}
+											@endphp
+											<span><a  @if (Auth::check())  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" @else  href="{{ route('userlogin') }}"  @endif target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 										</div>
@@ -297,7 +309,10 @@
                                  if($company != '') {
                                     $companyid = $company->id;
                                     $companyaddress = $company->address;
-                                    $companyname = $company->company_name;
+                                    $companyname = $company->dba_business_name;
+                                    if($companyname == ''){
+                                    	$companyname = $company->company_name;
+                                    }
 												$companycity = $company->city;
 												$companycountry = $company->country;
 												$companylogo = $company->logo;
@@ -586,7 +601,7 @@
 		                               if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -793,7 +808,7 @@
 														$service_type='';
 														if($service['service_type']!=''){
 															if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-															else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
+															else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
 															else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
 															else if( $service['service_type']=='events' ) $service_type = 'Events';
 														}
@@ -869,7 +884,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1147,7 +1162,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1425,7 +1440,7 @@
 		                              if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1704,7 +1719,7 @@
 		                               if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -1984,7 +1999,7 @@
 	                                 if($company != '') {
 	                                    $companyid = $company->id;
 	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->company_name;
+	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 													$companycountry = $company->country;
 													$companylogo = $company->logo;
@@ -2659,91 +2674,164 @@ function viewActreview(aid)
 </script> -->
 
 <script>
-jQuery(document).ready(function(){
+var windowwidth = $(window).width();
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#carousel-slider").owlCarousel({
+		  autoplay: true,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+	
+			600: {
+			  items: 3
+			},
+	
+			1024: {
+			  items: 3
+			},
+			
+			1200: {
+			  items: 5
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else
+{
 	jQuery("#carousel-slider").owlCarousel({
-	  autoplay: true,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: true,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#popular-activities").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else {
 	jQuery("#popular-activities").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+	
+			600: {
+			  items: 3
+			},
+	
+			1024: {
+			  items: 3
+			},
+			
+			1200: {
+			  items: 5
+			},
+			
+			1366: {
+			  items: 5
+			},
+		  },
 	});
- });
-</script>
-<script>
+}
 jQuery(document).ready(function(){
 	jQuery("#inarea-activities").owlCarousel({
 	  autoplay: false,
@@ -2765,195 +2853,319 @@ jQuery(document).ready(function(){
 		  autoWidth: true,
 		  loop: false
 	    },
-
 	    600: {
 	      items: 3
 	    },
-
 	    1024: {
 	      items: 3
 	    },
-		
 		1200: {
 	      items: 5
 	    },
-		
 	    1366: {
 	      items: 5
 	    },
 	  },
 	});
 });
-</script>
-<script>
-jQuery(document).ready(function(){
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#find-trainers").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else {
 	jQuery("#find-trainers").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#ways-to-workout").owlCarousel({
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	 });
+}else{
 	jQuery("#ways-to-workout").owlCarousel({
-	  autoplay: false,
-	  rewind: true, /* use rewind if you don't want loop */
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true, /* use rewind if you don't want loop */
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
- });
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#all-activities").owlCarousel({
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	});
+}
+else
+{
 	jQuery("#all-activities").owlCarousel({
-	  autoplay: false,
-	  rewind: true,
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
-jQuery(document).ready(function(){
+}
+if( windowwidth < 600 ){
+	jQuery(document).ready(function(){
+		jQuery("#trainers-coaches").owlCarousel({
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
+		});
+	}); 
+}
+else
+{
 	jQuery("#trainers-coaches").owlCarousel({
-	  autoplay: false,
-	  rewind: true,
-	  margin: 20,
-	   /*
-	  animateOut: 'fadeOut',
-	  animateIn: 'fadeIn',
-	  */
-	  responsiveClass: true,
-	  autoHeight: true,
-	  autoplayTimeout: 7000,
-	  smartSpeed: 800,
-	  nav: true,
-	  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-	  responsive: {
-	    0: {
-	      items: 1,
-		  autoWidth: true,
-		  loop: false
-	    },
-
-	    600: {
-	      items: 3
-	    },
-
-	    1024: {
-	      items: 3
-	    },
-		
-		1200: {
-	      items: 5
-	    },
-		
-	    1366: {
-	      items: 5
-	    },
-	  },
+		  autoplay: false,
+		  rewind: true,
+		  margin: 20,
+		   /*
+		  animateOut: 'fadeOut',
+		  animateIn: 'fadeIn',
+		  */
+		  responsiveClass: true,
+		  autoHeight: true,
+		  autoplayTimeout: 7000,
+		  smartSpeed: 800,
+		  nav: true,
+		  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+		  responsive: {
+			0: {
+			  items: 1,
+			  autoWidth: true,
+			  loop: false
+			},
+			600: {
+			  items: 3
+			},
+			1024: {
+			  items: 3
+			},
+			1200: {
+			  items: 5
+			},
+			1366: {
+			  items: 5
+			},
+		  },
 	});
-});
-</script>
-<script>
+}
+
 $(document).ready(function() {
  
   $("#owl-demo-owl").owlCarousel({
@@ -2965,8 +3177,6 @@ $(document).ready(function() {
   });
  
 });
-</script>
-<script>
 $(".mobile-slider").owlCarousel({
 	loop: false,
 	autoWidth: true,
@@ -2995,10 +3205,8 @@ $(".mobile-slider").owlCarousel({
 			  items: 5
 			},
 		  },
-		});
+});
 	
-</script>
-<script>
 $(".find-activity-owl").owlCarousel({
 	loop: false,
 	autoWidth: true,
@@ -3029,6 +3237,7 @@ $(".find-activity-owl").owlCarousel({
 			},
 		  },
 		
- });
+});
 </script>
+
 @endsection
