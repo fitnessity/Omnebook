@@ -30,19 +30,31 @@ class BusinessController extends Controller
 		$this->users = $users;
     }
 
-    public function dashboard(Request $request){
+    public function dashboard(Request $request, $id= null){
+
+        if($id != ''){
+            User::where('id',Auth::user()->id)->update(['cid'=> $id]);
+            return redirect(route('business_dashboard'));
+        }
 
         $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales= $totalRecurringPmt =  $in_person =$online = 0 ;
 
         $business = Auth::user()->current_company;
         $business_id =  $business->id;
-        $recurringdata = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->get(); 
+        $dba_business_name =  $business->dba_business_name != '' ? $business->dba_business_name : $business->company_name;
+        $recurringdata = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->get(); 
         $totalRecurringPmt = $recurringdata[0]['total_sales'];
-        $remainigpmt = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
-        $compltedpmt = $business->Recurring()->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
-        $compltedpmtcnt = $remainigpmt[0]['total_sales'];
-        $remainigpmtcnt = $compltedpmt[0]['total_sales'];
+        $remainigpmt = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
+        $compltedpmt = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
+        $compltedpmtcnt = $compltedpmt[0]['total_sales'];
+        $remainigpmtcnt = $remainigpmt[0]['total_sales'];
+        $completedtdata  =   ( $compltedpmtcnt / $totalRecurringPmt)*100  ;
+        $remainingdata = ( $remainigpmtcnt / $totalRecurringPmt) *100   ;
 
+        $completedtdata = number_format($completedtdata,2,'.','');
+        $remainingdata = number_format($remainingdata,2,'.','');
+
+       
         $totalRecurringPmt = number_format($totalRecurringPmt,2,'.','');
 
         $ptdata1= [];
@@ -60,7 +72,7 @@ class BusinessController extends Controller
                     }
                 }
                 
-                $totalSales += $b->userBookingStatus->Transaction()->sum('amount');
+                $totalSales += $b->userBookingStatus->Transaction()->whereDate('created_at','=',date('Y-m-d'))->sum('amount');
                 $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
                 $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
             }
@@ -70,7 +82,7 @@ class BusinessController extends Controller
         $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
         $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=', date('Y-m-d'))->limit(3)->get();
        
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt'));
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata'));
     }
 
     public function bookingchart(Request $request){
@@ -153,8 +165,12 @@ class BusinessController extends Controller
 	
     public function getscheduleactivity(Request $request){
         $business = Auth::user()->current_company;
-        $today = date('Y-m-d');
-        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$today)->get();
+        if($request->date == ''){
+            $date = date('Y-m-d');
+        }else{
+            $date =  date('Y-m-d' ,strtotime($request->date));
+        }
+        $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$date)->get();
         $html = '';
         $inc = 0;
         if(!empty($activitySchedule) && count($activitySchedule)>0){
