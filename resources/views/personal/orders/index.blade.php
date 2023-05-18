@@ -40,7 +40,7 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png );">
-                                            <h2>{{ $bs->dba_business_name}}</h2>
+                                            <h2>@if($bs->dba_business_name == '') {{ $bs->company_name}} @else {{$bs->dba_business_name}} @endif</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
                                                 <span> Active Memberships: {{$bs->active_memberships_count_by_user_id()}}</span>
