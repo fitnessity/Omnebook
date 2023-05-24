@@ -97,7 +97,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 											@foreach($categoryList as $cList)
 												@php  $sche_ary = [];
 												foreach($cList->BusinessActivityScheduler as $sc){
-													if($sc->end_activity_date > $filter_date->format('Y-m-d')){
+													if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 														if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
 															$sche_ary [] = $sc;
 														}
@@ -322,7 +322,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		 	buttonText: "Select date",
 		 	changeMonth: true,
 		 	changeYear: true,
-		 	yearRange: "-10:+10"
+		 	minDate: 'today',
+		 	yearRange: "0:+20"
 		}); 
 	});
 
