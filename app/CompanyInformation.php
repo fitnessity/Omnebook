@@ -180,7 +180,7 @@ class CompanyInformation extends Model {
     }
 
     public static function use_user_details(){
-        return UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->groupBy('user_booking_details.id');
+        return UserBookingDetail::select('user_booking_details.*', DB::raw('SUM(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->groupBy('user_booking_details.id');
     }
 
     public function active_memberships_count_by_user_id($customerId = null){
