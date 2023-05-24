@@ -256,7 +256,6 @@ class UserBookingDetail extends Model
     public function getReserveData($feildName)
     {
         $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->select('checkin_date')->orderBy('checkin_date','desc')->first();
-        
         $reserve_date = $reserve_time = $check_in_time ="—";
         if($reserve_data != ''){
             $start = date('h:ia', strtotime(@$reserve_data->scheduler->shift_start));
@@ -268,6 +267,7 @@ class UserBookingDetail extends Model
 
             $reserve_time = $start .' to '.$end;
         }
+
         if($feildName == 'reserve_date'){
             return $reserve_date;
         }

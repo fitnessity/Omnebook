@@ -127,7 +127,7 @@ class BookingRepository
                 $bookingDetail = @$customer->active_memberships()->join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->get();
             }
         }
-        //print_r($bookingDetail);exit;
+        //sprint_r($bookingDetail);exit;
         return $bookingDetail;
     } 
 
@@ -166,12 +166,16 @@ class BookingRepository
     }
 
     public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
+
         $full_ary = $bookingDetail= [];
         $now = Carbon::now();
        
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
+
+            /*echo $chk;
+            echo $chkD->checkin_date;*/
             if(date('Y-m-d',strtotime($chkD->checkin_date)) == $date && $chk == 'today'){
                 $datechk = 1;
             }
@@ -180,12 +184,12 @@ class BookingRepository
             }if(date('Y-m-d',strtotime($chkD->checkin_date)) < $date && $chk == 'past'){
                 $datechk = 1;
             }
-
+            /*echo $datechk;*/
             if($datechk == 1){
                 $full_ary[] =  $chkD;
             }
         }
-
+        //print_r($full_ary);
         foreach($full_ary as $chkInDetail) { 
             if($serviceType== null || $serviceType == 'all'){
                 $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
@@ -193,7 +197,7 @@ class BookingRepository
                     $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id);
+                $userBookinDetail =  UserBookingDetail::join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
                 if($chkVal == 'past'){
                     $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
                 }
@@ -206,7 +210,6 @@ class BookingRepository
         }
 
         $bookingDetail = array_unique($bookingDetail);
-        //print_r($bookingDetail);exit;
         return $bookingDetail;
     }
 
