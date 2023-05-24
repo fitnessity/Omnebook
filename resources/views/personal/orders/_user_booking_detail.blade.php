@@ -59,7 +59,7 @@
                     </p>
                     <p>
                         <span class="text-left">RESERVED DATE:</span>
-                        <span class="text-rihgt">{{@$book_details->getReserveData('reserve_date')}}</span>
+                        <span class="text-rihgt">{{$book_details->getReserveData('reserve_date')}}</span>
                     </p>
                 
                     <p>
@@ -69,11 +69,11 @@
 
                     <p>
                         <span class="text-left">CHECK IN DATE:</span>
-                        <span class="text-rihgt">{{@$book_details->getReserveData('reserve_date')}}</span>
+                        <span class="text-rihgt">{{$book_details->getReserveData('reserve_date')}}</span>
                     </p> 
                     <p>
                         <span class="text-left">CHECK IN TIME:</span>
-                        <span class="text-rihgt">{{@$book_details->getReserveData('check_in_time')}}</span>
+                        <span class="text-rihgt">{{$book_details->getReserveData('check_in_time')}}</span>
                     </p>
 
                     <p>
