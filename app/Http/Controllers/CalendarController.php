@@ -8,7 +8,7 @@ use App\AddrCities;
 use App\AddrStates;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
-use App\{BusinessServices,Customer};
+use App\{BusinessServices,Customer,BookingCheckinDetails};
 use Auth;
 use DB;
 use DateTime;
@@ -19,11 +19,11 @@ class CalendarController extends Controller
     public function calendar(Request $request) {
          
         $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
-       
-        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start,bdetails.user_id')
-                ->leftjoin("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
+
+        $data = UserBookingStatus::selectRaw('chkdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,chkdetails.checkin_date as start,bdetails.user_id')
+                ->join("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
+                ->join("booking_checkin_details as chkdetails", DB::raw('chkdetails.booking_detail_id'), '=', 'bdetails.id')
                 ->join("business_services as ser", DB::raw('ser.id'), '=', 'bdetails.sport')
                 ->join("business_activity_scheduler as ser_sche", DB::raw('ser_sche.id'), '=', 'bdetails.act_schedule_id')
                 ->where('user_booking_status.user_id', Auth::user()->id)
@@ -80,18 +80,19 @@ class CalendarController extends Controller
         /*$date = explode('T',$request->start);
         echo $date[0];*/
         $html = ''; 
-        $booking_detail = UserBookingDetail::where('id',$request->id)->first();
-        if( $booking_detail != ''){
-            $ser_data = BusinessServices::select('service_type','program_name','cid','id')->where('id', $booking_detail->sport)->first();
+        $chkdetail = BookingCheckinDetails::find($request->id);
+        if( $chkdetail != ''){
+            $booking_detail = $chkdetail->UserBookingDetail;
+            $ser_data = $booking_detail->business_services;
             $time = "N/A";
             if( $booking_detail->act_schedule_id != ''){
                 $time = $booking_detail->business_activity_scheduler->activity_time().' ('. $booking_detail->business_activity_scheduler->get_clean_duration().')';
             }
             $participate = $booking_detail->decodeparticipate();
             if($ser_data != ''){
-                if(date('Y-m-d') > date('Y-m-d',strtotime($booking_detail->bookedtime) ) ){
+                if(date('Y-m-d') > date('Y-m-d',strtotime($chkdetail->checkin_date) ) ){
                     $tabval = "past";
-                }else if(date('Y-m-d') == date('Y-m-d',strtotime($booking_detail->bookedtime) ) ){
+                }else if(date('Y-m-d') == date('Y-m-d',strtotime($chkdetail->checkin_date) ) ){
                     $tabval = "today";
                 }else{
                     $tabval = "upcoming";
@@ -127,12 +128,14 @@ class CalendarController extends Controller
 
     public function provider_calendar(Request $request) {
         
-        $data = UserBookingStatus::selectRaw('bdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,bdetails.bookedtime as start,bdetails.user_id')
-                ->leftjoin("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
+         $data = UserBookingStatus::selectRaw('chkdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,chkdetails.checkin_date as start,bdetails.user_id')
+                ->join("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
+                ->join("booking_checkin_details as chkdetails", DB::raw('chkdetails.booking_detail_id'), '=', 'bdetails.id')
                 ->join("business_services as ser", DB::raw('ser.id'), '=', 'bdetails.sport')
                 ->join("business_activity_scheduler as ser_sche", DB::raw('ser_sche.id'), '=', 'bdetails.act_schedule_id')
                 ->where('ser.cid', Auth::user()->cid)
                 ->get();
+       
         /*echo "<pre>";print_r($data);exit;*/
         $fullary= [];
         foreach($data as $dt){

@@ -96,8 +96,8 @@ class CustomerController extends Controller {
         $terms = $company->business_terms->first();
 
         $customerdata = $company->customers->find($id);
-        $visits = $customerdata->visits()->get();
-        $active_memberships = $customerdata->active_memberships()->get();
+        $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
         $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
