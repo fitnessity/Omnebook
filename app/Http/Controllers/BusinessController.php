@@ -48,13 +48,12 @@ class BusinessController extends Controller
         $compltedpmt = $business->Recurring()->whereMonth('payment_date', date('m'))->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
         $compltedpmtcnt = $compltedpmt[0]['total_sales'];
         $remainigpmtcnt = $remainigpmt[0]['total_sales'];
-        $completedtdata  =   ( $compltedpmtcnt / $totalRecurringPmt)*100  ;
-        $remainingdata = ( $remainigpmtcnt / $totalRecurringPmt) *100   ;
+        $completedtdata  =   $totalRecurringPmt != 0 ? ( $compltedpmtcnt / $totalRecurringPmt)*100 : 0 ;
+        $remainingdata = $totalRecurringPmt != 0 ? ( $remainigpmtcnt / $totalRecurringPmt) *100 : 0   ;
 
         $completedtdata = number_format($completedtdata,2,'.','');
         $remainingdata = number_format($remainingdata,2,'.','');
 
-       
         $totalRecurringPmt = number_format($totalRecurringPmt,2,'.','');
 
         $ptdata1= [];
