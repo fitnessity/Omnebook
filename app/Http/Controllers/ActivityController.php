@@ -1249,7 +1249,7 @@ class ActivityController extends Controller {
             $servicePrice = BusinessPriceDetails::where('serviceid', $profile->id)->limit(1)->get()->toArray();
             $data["profile_" . $profile->id] = array();
             $data["profile_" . $profile->id]['business'] = BusinessServices::find($profile->id);
-            $data["profile_" . $profile->id]['company_names'] = $profile->dba_business_name;
+            $data["profile_" . $profile->id]['company_names'] =  (isset($profile->dba_business_name)?@$profile->dba_business_name:'');
             //$data["profile_" . $profile->id]['price'] = (isset($profile->service[0])?$profile->service[0]->price:'');
             $data["profile_" . $profile->id]['price'] = (isset($servicePrice[0]['pay_price'])?$servicePrice[0]['pay_price']:'');
             $data["profile_" . $profile->id]['description'] = (isset($profile->program_desc)?$profile->program_desc:'');
@@ -1337,9 +1337,7 @@ class ActivityController extends Controller {
                 $data["profile_" . $profile->id]['availability'] = $checkAvailability;
             }
             
-            $data["profile_" . $profile->id]['professional_type'] = (isset($profile->
-            ProfessionalDetail->professional_type) &&  $profile->
-            ProfessionalDetail->professional_type!= "") ? ucfirst($profile->ProfessionalDetail->professional_type) : "-";
+            $data["profile_" . $profile->id]['professional_type'] = (isset($profile->ProfessionalDetail->professional_type) &&  $profile->ProfessionalDetail->professional_type!= "") ? ucfirst($profile->ProfessionalDetail->professional_type) : "-";
             $data["profile_" . $profile->id]['willing_to_travel'] = (isset($profile->ProfessionalDetail->willing_to_travel) &&  $profile->ProfessionalDetail->willing_to_travel!= "") ? str_replace(",", ", ", ucfirst($profile->ProfessionalDetail->willing_to_travel)) : "-";
             $data["profile_" . $profile->id]['travel_miles'] = (isset($profile->ProfessionalDetail->travel_miles) &&  $profile->ProfessionalDetail->travel_miles != "") ? str_replace(",", ", ", $profile->ProfessionalDetail->travel_miles) : "-";
 
