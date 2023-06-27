@@ -47,6 +47,10 @@ $total_quantity = 0;
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
+
+		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
+		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+
         <style>/*
             .btn-style-one {
                 position: relative;

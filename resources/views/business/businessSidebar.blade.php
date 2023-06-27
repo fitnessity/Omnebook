@@ -22,7 +22,7 @@
 				<ul>
 					<li>
 						<span><img src="/public/img/home.png" alt="Fitnessity"></span>
-						<a href="#">DASHBOARD</a>
+						<a href="{{route('business_dashboard')}}">DASHBOARD</a>
 					</li>
 					<li>
 						<span><img src="/public/img/company-set-up.png" alt="Fitnessity"></span>
@@ -88,7 +88,7 @@
 			<ul>
 				<li>
 					<span><img src="{{url('/public/img/home.png')}}" alt="Fitnessity"></span>
-					<a href="#">DASHBOARD</a>
+					<a href="{{route('business_dashboard')}}">DASHBOARD</a>
 				</li>
 				<li>
 					<span><img src="{{url('/public/img/company-set-up.png')}}" alt="Fitnessity"></span>

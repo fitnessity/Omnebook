@@ -319,7 +319,6 @@
                                          @php  $i = 1;
                                             $br = new \App\Repositories\BookingRepository;
                                             $BookingDetail = $br->tabFilterData($bookingDetails,'past',request()->serviceType,date('Y-m-d'));
-                                           
                                         @endphp
                                         @include('personal.orders._user_booking_detail', ['bookingDetail' => @$BookingDetail, 'tabname' => 'past','customer'=>$customer]) 
                                         </div>

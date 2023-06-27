@@ -127,12 +127,11 @@ class BookingRepository
                 $bookingDetail = @$customer->active_memberships()->join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->get();
             }
         }
-        //sprint_r($bookingDetail);exit;
         return $bookingDetail;
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->orWhere('booked_by_customer_id',@$customer->id)->get();
         return $checkInDetail;
     }
 
@@ -1119,7 +1118,16 @@ class BookingRepository
     
     public function getbusinessbookingsdata($sid,$date){
         // disable date filter for temporary used;
-        return UserBookingDetail::where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
+        $userBookingDetail = [];
+        $checkInDetail = BookingCheckinDetails::where(['checkin_date' => $date])->join('user_booking_details as bd','booking_checkin_details.booking_detail_id' ,'=' , 'bd.id')->where('bd.sport',$sid)->orderBy('checkin_date', 'desc')->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->get();
+        foreach($checkInDetail as $detail){
+            if($detail->UserBookingDetail != ''){
+               $userBookingDetail [] = $detail->UserBookingDetail;
+            }
+        }
+
+        return $userBookingDetail;
+        //return UserBookingDetail::where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
        // return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
     }
 
@@ -1134,18 +1142,17 @@ class BookingRepository
         return  $book_cnt;
     }
 
-    public function lastbookingbyUserid($userid){
+    public function lastbookingbyUserid($userid,$customer_id){
         $data = '';
         $purchasefor = '';
         $price_title = '';
-        //$status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
-        $status = UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$userid, $userid])->orderby('created_at','Desc')->first();
+        $status = UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$userid, $customer_id])->orderby('created_at','Desc')->first();
         if($status != ''){
             $price  =  $status->amount;
             $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','desc')->first();
             if($book_data != ''){
-                $programname = $book_data->business_services->program_name;
-                $price_title = $book_data->business_price_detail->price_title;
+                $programname = @$book_data->business_services->program_name;
+                $price_title = @$book_data->business_price_detail->price_title;
                 $purchasefor =  $programname.' $'.$price;
             }
         }
@@ -1153,7 +1160,7 @@ class BookingRepository
     }
 
     public function gettotalbooking($sid,$date){
-        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$sid)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($date)))->get();
+        /*$SpotsLeft = UserBookingDetail::where('act_schedule_id',$sid)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($date)))->get();
         $totalquantity = 0;
         if(!empty($SpotsLeft) && count($SpotsLeft)>0){
             foreach($SpotsLeft as $data){
@@ -1165,8 +1172,9 @@ class BookingRepository
                 if($item['infant'] != '')
                     $totalquantity += $item['infant'];
             }
-        }
-        return $totalquantity;
+        }*/
+        $SpotsLeft = BookingCheckinDetails::where('business_activity_scheduler_id',$sid)->whereDate('checkin_date', '=', date('Y-m-d',strtotime($date)))->count();
+        return $SpotsLeft;
     }
 
 

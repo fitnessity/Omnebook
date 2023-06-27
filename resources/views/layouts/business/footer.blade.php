@@ -1,4 +1,3 @@
-<?php use App\Cms; ?>
 <style>
 .f-btn-news{
   background: #f53b49;
@@ -35,20 +34,18 @@
   .social-footer{margin-top:0px;}
 }
 </style>
-<div class="modal fade compare-model" id="ajax_html_modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="text-align: right;"> 
-                <div class="closebtn">
-                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body body-tbm"></div>
-        </div>
-    </div>
+
+<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="ajax_html_modal">
+	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body"></div>
+		</div>
+	</div>
 </div>
+
 <footer id="footer">
 	@if(session()->has('alert-success'))
     	<div class="alert alert-success">
@@ -62,7 +59,7 @@
     <div class="cat-container">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <?php $footer_fitnessity = Cms::where('status', '1')
+            <?php $footer_fitnessity = App\Cms::where('status', '1')
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
                 <div class="footer-logo">
@@ -284,9 +281,72 @@
 	@endif
   </div>
 </div>
-<!-- Sticky Footer  -->
+<!-- Sticky Footer new design -->
+   <!-- JAVASCRIPT -->
+   
+    <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/simplebar.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/waves.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/feather.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/lord-icon-2.1.0.js')}}"></script>
 
-<script src="https://js.stripe.com/v3/"></script>
+    <!-- apexcharts -->
+    <script src="{{asset('/public/dashboard-design/js/apexcharts.min.js')}}"></script>
+
+    <!-- Vector map
+    <script src="assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
+    <script src="assets/libs/jsvectormap/maps/world-merc.js"></script>-->
+
+    <!--Swiper slider js -->
+    <script src="{{asset('/public/dashboard-design/js/swiper-bundle.min.js')}}"></script>
+
+	<script src="{{asset('/public/dashboard-design/js/feather.min.js')}}"></script>
+    <!-- Dashboard init -->
+    <script src="{{asset('/public/dashboard-design/js/dashboard-ecommerce.init.js')}}"></script>
+	<!--<script src="{{asset('/public/dashboard-design/js/dashboard-projects.init.js')}}"></script>-->
+	
+	<!-- Pie chart -->
+	<script src="{{asset('/public/dashboard-design/js/apexcharts-pie.init.js')}}"></script>
+	<!-- circle
+	<script src="{{asset('/public/dashboard-design/js/dashboard-job.init.js')}}"></script> -->
+	
+    <!-- App js -->
+    <script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+    <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
+	
+	
+	<!-- list.js min js -->
+	<script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/list.pagination.min.js')}}"></script>
+	
+	
+	<!-- profile-setting init js -->
+	<script src="{{asset('/public/dashboard-design/js/profile-setting.init.js')}}"></script>
+	<script src="https://js.stripe.com/v3/"></script>
+	
+	<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
+	<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/additional-methods.min.js"></script>
+	<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-input-mask-phone-number.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+	
+	<!-- add product init js -->
+	<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5-build-classic/build/ckeditor.js')}}"></script>
+	
+	<!-- dropzone js -->
+    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
+	
+	<!-- Calendar -->
+	<script src="{{ url('public/js/fullcalendar/fullcalendar.min.js') }}"></script>
+	
+	<!-- ecommerce-customer init js -->
+    <script src="{{asset('/public/dashboard-design/js/ecommerce-customer-list.init.js')}}"></script>
+  
+ <!-- new design end -->
+
+<?php /*
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
@@ -302,7 +362,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-input-mask-phone-number.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>*/ ?>
 <script>
 function openMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "300px";
@@ -315,25 +375,21 @@ function closeMobileNav() {
 
 </script>
 
-<script>
-	$(document).on('focus', '[data-behavior~=text-phone]', function(e){
-        //jQuery.noConflict();
-		$('[data-behavior~=text-phone]').usPhoneFormat({
-        	format: '(xxx) xxx-xxxx',
-		});
-	});
-		
+<script type="text/javascript">
+	
 	$(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
+		$("#modal-dialog").removeClass();
+		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
         var width = $(this).data('modal-width');
         if(width == undefined){
-            width = '600px';
+            width = 'modal-50';
         }            
         e.preventDefault()
         $.ajax({
             url: $(this).data('url'),
             success: function(html){
                 $('#ajax_html_modal .modal-body').html(html)
-                $('#ajax_html_modal .modal-dialog').css({width:width});
+                $('#ajax_html_modal .modal-dialog').addClass(width);
                 $('#ajax_html_modal').modal('show')
             }
         })
@@ -345,13 +401,13 @@ function closeMobileNav() {
         if(item_type == 'no' || item_type == 'Membership'){
             var width = $(this).data('modal-width');
             if(width == undefined){
-                width = '600px';
+                width = 'modal-50';
             }  
             $.ajax({
                 url: $(this).data('url'),
                 success: function(html){
                     $('#ajax_html_modal .modal-body').html(html)
-                    $('#ajax_html_modal .modal-dialog').css({width:width});
+                    $('#ajax_html_modal .modal-dialog').addClass(width);
                     $('#ajax_html_modal').modal('show')
                 }
             });
@@ -360,12 +416,28 @@ function closeMobileNav() {
         }
     });
 
+	$(document).on('focus', '[data-behavior~=text-phone]', function(e){
+        //jQuery.noConflict();
+		$('[data-behavior~=text-phone]').usPhoneFormat({
+        	format: '(xxx) xxx-xxxx',
+		});
+	});
+		
     function valid(email)
     {
         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test(email); //this will either return true or false based on validation
     }
 
+    function IsEmail(email) {
+        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!regex.test(email)) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+    
     $(document).on('focus', '[data-behavior~=datepicker]', function(e){
         //jQuery.noConflict();
         $("[data-behavior~=datepicker]").datepicker( { 
@@ -398,4 +470,11 @@ function closeMobileNav() {
             });
         });
     });
+</script>
+<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
 </script>

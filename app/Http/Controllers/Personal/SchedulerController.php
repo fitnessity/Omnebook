@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus,BusinessActivityScheduler,Customer};
+use App\{UserBookingDetail,BookingCheckinDetails,UserBookingStatus,BusinessActivityScheduler,Customer,SGMailService};
+use App\Repositories\{BookingRepository};
 use Auth;
 use DateTime;
 
@@ -15,6 +16,13 @@ class SchedulerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $booking_repo;
+    public function __construct(BookingRepository $booking_repo)
+    {     
+        $this->booking_repo = $booking_repo;
+    }
+
     public function index(Request $request)
     {   
         $serviceType='classes';
@@ -77,12 +85,12 @@ class SchedulerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {  // print_r($request->all());exit;
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
         $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
         $UserBookingDetails = '';
         $today = date('Y-m-d');
-        //$UserBookingDetails = $customer->bookingDetail()->where(['priceid'=>$request->priceId,'bookedtime'=> null])->orderby('created_at','desc')->first();
+    
         $UserBookingDetails = $customer->bookingDetail()->where('sport',$request->serviceID);
 
         if($request->priceId != ''){
@@ -91,12 +99,11 @@ class SchedulerController extends Controller
 
         $UserBookingDetails = $UserBookingDetails->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
+            $sendmail = 0;
             $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$request->date)->where(['checked_at' =>null])->first();
             if($request->date == $today){
-                $start = new DateTime($activitySchedulerData->shift_start);
-                $start_time = $start->format("H:i");
-                $current = new DateTime();
-                $current_time =  $current->format("H:i");
+                $start_time = (new DateTime($activitySchedulerData->shift_start))->format("H:i");
+                $current_time = (new DateTime())->format("H:i");
                 if($current_time > $start_time){
                     return "You can't book this activity for today";
                 }
@@ -104,16 +111,37 @@ class SchedulerController extends Controller
             if($checkIndetail != ''){
                 $checkIndetail->update(["business_activity_scheduler_id"=>$request->timeid,
                         "checkin_date"=>$request->date]);
+                $sendmail = 1;
             }else{
-                $UserBookingDetails->update(["act_schedule_id"=>$request->timeid]);
-                BookingCheckinDetails::create([
-                    "business_activity_scheduler_id"=>$request->timeid, 
-                    "customer_id" => $customer->id,
-                    'booking_detail_id'=> $UserBookingDetails->id,
-                    "checkin_date"=>$request->date,
-                    "use_session_amount" => 0,
-                    "source_type" => 'online_scheduler'
-                ]);
+                $chkData = $UserBookingDetails->BookingCheckinDetails()->whereDate('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
+                if($chkData != ''){
+                    $chkData->update(["business_activity_scheduler_id"=>$request->timeid,
+                        "checkin_date"=>$request->date]);
+                    $sendmail = 1;
+                }else{
+                    if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
+                        $UserBookingDetails->update(["act_schedule_id"=>$request->timeid]);
+                        BookingCheckinDetails::create([
+                            "business_activity_scheduler_id"=>$request->timeid, 
+                            "customer_id" => $customer->id,
+                            'booking_detail_id'=> $UserBookingDetails->id,
+                            "checkin_date"=>$request->date,
+                            "use_session_amount" => 0,
+                            "source_type" => 'online_scheduler'
+                        ]);
+                        $sendmail = 1;
+                    }else{
+                        return "fail";
+                    }
+                }
+            }
+
+            if($sendmail == 1){
+                $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($UserBookingDetails->booking_id, $UserBookingDetails->id);
+                $email_detail = array(
+                     'getreceipemailtbody' => $getreceipemailtbody,
+                     'email' => $customer->email);
+                $status  = SGMailService::sendBookingReceipt($email_detail);
             }
             //$UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
             return "success";
