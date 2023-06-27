@@ -25,8 +25,7 @@ input:disabled{
     $activity = $service;
 	$sid = $serviceid = $activity->id;
 
-    $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
-    $email = $companylat = $companylon  = $companylogo = '';
+    $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = $email = $companylat = $companylon  = $companylogo = '';
 
     $houserules = $activity['know_before_you_go'];
 
@@ -99,13 +98,8 @@ input:disabled{
     	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
 	}
 	
-	$chk_found = '';
-	if( strpos(@$bus_service->special_days_off,date('m/d/Y')) !== false){
-       	$chk_found = "Found";
-    }else{
-        $chk_found = "Not";
-    }
-
+	$chk_found =  strpos(@$bus_service->special_days_off,date('m/d/Y')) !== false ? "Found" : "Not";
+ 
     $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
     $i=0;
     if(!empty(@$bus_schedule)){
@@ -141,17 +135,9 @@ input:disabled{
 		                    $timedata .= ' - '.$end;
 		                } 
 
-		                if(@$data['set_duration']!=''){
-		                    $tm=explode(' ',$data['set_duration']);
-		                    $hr=''; $min=''; $sec='';
-		                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-		                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-		                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-		                    if($hr!='' || $min!='' || $sec!='')
-		                    { 
-		                    	$time = $hr.$min.$sec; 
-		                        $timedata .= ' / '.$time;
-		                    } 
+		                $time = $data->get_duration();
+		                if($time != ''){
+		                	$timedata .= ' / '.$time;
 		                }
 		                $i++;
 		            }
@@ -177,7 +163,7 @@ input:disabled{
 	$adult_cnt =$child_cnt =$infant_cnt =0;
 	$adult_price = $child_price = $infant_price =0;
 	if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'] + @$servicePrfirst['child_weekend_price_diff'] + @$servicePrfirst['infant_weekend_price_diff'] ;
+        $total_price_val =  is_int(@$servicePrfirst['adult_weekend_price_diff']) + is_int(@$servicePrfirst['child_weekend_price_diff']) + is_int(@$servicePrfirst['infant_weekend_price_diff']) ;
         if(@$servicePrfirst['adult_weekend_price_diff'] != ''){
         	$adult_price = @$servicePrfirst['adult_weekend_price_diff'];
         	$adult_cnt = 1;
@@ -207,10 +193,10 @@ input:disabled{
         }
     }else{
 		/*print_r($servicePr); exit;*/
-		if(!empty(@$servicePr))
+		if(!empty(@$servicePr) && count(@$servicePr)>0)
 		{
 
-			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'] + @$servicePrfirst['child_cus_weekly_price'] + @$servicePrfirst['infant_cus_weekly_price'];
+			$total_price_val =  is_int(@$servicePrfirst['adult_cus_weekly_price']) + is_int(@$servicePrfirst['child_cus_weekly_price']) + is_int(@$servicePrfirst['infant_cus_weekly_price']);
 			if(@$servicePrfirst['adult_cus_weekly_price'] != ''){
 				$adult_price = @$servicePrfirst['adult_cus_weekly_price'];
 	        	$adult_cnt = 1;
@@ -272,16 +258,16 @@ input:disabled{
 					@php $i=0; $newary= []; @endphp
 					@if(is_array(@$pro_pic1))
 	                    @if(!empty(@$pro_pic1))
-	                    	@foreach(@$pro_pic1 as $img)
-	                    		@if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+	                    	@foreach(@$pro_pic1 as $img) 
+	                    		@if(!empty($img) && Storage::disk('s3')->exists($img))
 	                    	 		@php $newary [] = $img; @endphp
 	                    	 	@endif
 	                    	@endforeach
 	                        @foreach(@$pro_pic1 as $img)
-	                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
+	                            @if(!empty($img) &&  Storage::disk('s3')->exists($img))
 		                            <div @if(count(@$newary) == 1) class="single-banner" @elseif(count(@$newary) == 2) class="dual-banner" @elseif(count(@$newary) == 3) class="three-banner"  @else class="bannar-size" @endif @if($i>3) style="display:none" @endif>
-				                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-										<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
+				                    	<a href="{{Storage::URL($img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+										<img src="{{Storage::URL($img)}}">
 										@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
 				                        </a>
 									</div>	                            
@@ -290,18 +276,12 @@ input:disabled{
 	                        @endforeach
 	                    @endif
 	                @else
-	                	@if(!empty($pro_pic1) && File::exists(public_path("/uploads/profile_pic/".$pro_pic1)))
+	                	@if(!empty($pro_pic1) &&  Storage::disk('s3')->exists($pro_pic1))
 	                	<div class="single-banner">
-							<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-								<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
+							<a href="{{Storage::URL($pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+								<img src="{{Storage::URL($pro_pic1)}}">
 				            </a>
 						</div>
-						<!-- <div class="bannar-size">
-	                    	<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-							<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
-							<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> 
-	                        </a>
-						</div> -->
                         @endif
                     @endif
               
@@ -309,7 +289,6 @@ input:disabled{
 			</div>
 
 			<div class="col-lg-6 col-xs-12">
-				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
 				<h3 class="details-titles">{{@$service['program_name']}}</h3>
 				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
 				</p>
@@ -335,10 +314,6 @@ input:disabled{
 				<div class="row">
 					<div class="col-md-5 col-sm-5 col-xs-12">
 						<div class="prdetails">
-							<!-- <div>
-								<label>Duration: </label>
-								<span> </span>
-							</div> -->
 							<div class="mb-10">
 								<label>Service Type: </label>
 								<span> {{@$service['select_service_type']}}  </span>
@@ -359,10 +334,6 @@ input:disabled{
 					</div>
 					<div class="col-md-7 col-sm-7 col-xs-12">
 						<div class="prdetails">
-							<!-- <div>
-								<label>Spots Left:</label>
-								<span> </span>
-							</div> -->
 							<div class="mb-10">
 								<label>Activity: </label>
 								<span>{{@$service['sport_activity']}}</span>
@@ -382,31 +353,18 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				
-				
 
 				<h3 class="subtitle details-sp font-32 mt-20">Things To Know </h3>
 				
 				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
-				@if($houserules != '')
-					<p class="mb-20"><?php echo nl2br($houserules);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
-				
+				<p class="mb-20">@if($houserules != '') <?php echo nl2br($houserules);?> @else No Details Found @endif</p>
+
 				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
-				@if($cancelation != '')
-					<p class="mb-20"><?php echo nl2br($cancelation);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
-				
+				<p class="mb-20">@if($cancelation != '') <?php echo nl2br($cancelation);?> @else No Details Found @endif</p>
+
 				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
-				@if($cleaning != '')
-					<p class="mb-20"><?php echo nl2br($cleaning);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
+				<p class="mb-20">@if($cleaning != '') <?php echo nl2br($cleaning);?> @else No Details Found @endif</p>
+				
 				
 				<div class="row">
 					<div class="col-md-9">
@@ -453,8 +411,8 @@ input:disabled{
 					</div>
 				</div>
 				
-				@if(@$staffdata != '') 
-				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
+				
+				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details @if(@$staffdata != '')  d-none @endif ">
 					<div class="row">
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="instructor-img">
@@ -472,7 +430,7 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				@endif 
+				
 				
 				<div class="row" id="user_ratings_div{{$serviceid}}">
 					<div class="col-md-12 col-xs-12">
@@ -496,10 +454,10 @@ input:disabled{
 									$business_reviews_count = BusinessReview::where('page_id', $companyid)->count();
 									$business_reviews_sum = BusinessReview::where('page_id', $companyid)->sum('rating');
 
-									$business_reviews_avg=0;
-									$business_reviews_per=0;
+									$business_reviews_avg = $business_reviews_per= $reviews_avg = $reviews_per=0;
 									if($business_reviews_count>0)
-									{ $business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
+									{ 
+										$business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
 										$business_sum_of_rating = $business_reviews_count*5;
 										$business_totalRating = $business_reviews_avg * $business_reviews_count;
 										$business_reviews_per = ($business_totalRating/$business_sum_of_rating)*100;
@@ -508,8 +466,6 @@ input:disabled{
 									$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
 									$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
 									
-									$reviews_avg=0;
-									$reviews_per=0;
 									if($reviews_count>0)
 									{ $reviews_avg = round($reviews_sum/$reviews_count,2); 
 										$sum_of_rating = $reviews_count*5;
@@ -1016,7 +972,7 @@ input:disabled{
 				</div>  
 	            <div class="modal-body conuter-body" id="Countermodalbody">
 	            </div>            
-	            <div class="modal-footer conuter-body">
+	            <div class="modal-footer conuter-body countermodal-footer">
 	                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
 	            </div>
 	    	</div>                                                                       
@@ -1076,6 +1032,7 @@ input:disabled{
 			</div>                                                                       
 		</div>                                          
 	</div>
+
 	<div class="modal fade " id="ActivtityFail">
 	    <div class="modal-dialog counter-modal-size">
 	        <div class="modal-content">
@@ -1418,35 +1375,43 @@ $(document).ready(function () {
 		}
 	}
 
-	function addhiddentime(id,sid) {
-		var actscheduleid = $('#actscheduleid'+sid).val(id);
-		var pricetitleid = $('#selprice'+sid).val();
-		var sesdate = $('#sesdate'+sid).val();
-		/*alert(pricetitleid);*/
-		var _token = $("input[name='_token']").val();
-		$.ajax({
-			url: "{{route('getmodelbody')}}",
-			type: 'POST',
-			data:{
-				_token: _token,
+	function addhiddentime(id,sid,chk) {
+		if(chk == 0){
+			var actscheduleid = $('#actscheduleid'+sid).val(id);
+			var pricetitleid = $('#selprice'+sid).val();
+			var sesdate = $('#sesdate'+sid).val();
+			/*alert(pricetitleid);*/
+			var _token = $("input[name='_token']").val();
+			$.ajax({
+				url: "{{route('getmodelbody')}}",
 				type: 'POST',
-				pricetitleid:pricetitleid,
-				serviceid:sid,
-				actscheduleid:id,
-				dateval:sesdate
-			},
-			success: function (response) {
-				if(response != ''){
-					var data = response.split('~~');
-					var data1 = data[1].split('^^');
-					$('#Countermodalbody').html(data[0]);
-					$('#book'+sid+sid).html(data1[0]);
-					$('#cartadd').html('<div id="addcartdiv"></div>');
-					$('#timechk').val(data1[1]);
+				data:{
+					_token: _token,
+					type: 'POST',
+					pricetitleid:pricetitleid,
+					serviceid:sid,
+					actscheduleid:id,
+					dateval:sesdate
+				},
+				success: function (response) {
+					if(response != ''){
+						var data = response.split('~~');
+						var data1 = data[1].split('^^');
+						$('#Countermodalbody').html(data[0]);
+						$('#book'+sid+sid).html(data1[0]);
+						$('#cartadd').html('<div id="addcartdiv"></div>');
+						$('#timechk').val(data1[1]);
+					}
 				}
-			}
-		});
-		$('#priceid'+sid).val(pricetitleid);
+			});
+			$('#priceid'+sid).val(pricetitleid);
+		
+		}
+		else{
+			$('.countermodal-footer').addClass('hide');
+			$('#Countermodalbody').html('<div class="row "> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
+		}
+		
 		$('#Countermodal').modal('show');
 	}
 

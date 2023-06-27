@@ -37,14 +37,14 @@ class OrderController extends PersonalBaseController
             /*echo $customer;exit;*/
             $bookingDetails = [];
             $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
-            //print_r($bookingDetail);exit;
+            //print_r($bookingDetails);exit;
             $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
             //print_r($currentbookingstatus );exit;
             $tabval = $request->tab; 
 
             return view('personal.orders.index', [
-                'bookingDetails' => $bookingDetails ,
+                'bookingDetails' => $bookingDetails,
                 'currentbookingstatus'=>$currentbookingstatus, 
                 'tabval'=>$tabval, 
                 'customer'=>$customer, 

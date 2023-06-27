@@ -23,9 +23,6 @@ class UserBookingStatus extends Model
 		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
     ];
 
-
-    
-
     public static function boot(){
         parent::boot();
 
@@ -126,7 +123,11 @@ class UserBookingStatus extends Model
         }
 
         if($this->user_type == 'customer'){
-            return $this->customer->fname;
+            $fname = '';
+            if( $this->customer ){
+                $fname = $this->customer->fname;
+            }
+            return $fname;
         }
     }
 
@@ -136,7 +137,11 @@ class UserBookingStatus extends Model
         }
 
         if($this->user_type == 'customer'){
-            return $this->customer->lname;
+            $lname = '';
+            if( $this->customer ){
+                $lname = $this->customer->lname;
+            }
+            return $lname;
         }
     }
 }

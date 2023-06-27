@@ -29,7 +29,7 @@ $total_quantity = 0;
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
-        <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> 
+      <!--   <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css">  -->
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
 	
@@ -254,6 +254,8 @@ $total_quantity = 0;
 			*/
 	</style>
 	
+	
+
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-KQRG55N3Q1"></script>
 	<script>
@@ -263,6 +265,7 @@ $total_quantity = 0;
 	
 	  gtag('config', 'G-KQRG55N3Q1');
 	</script>
+
     </head>
 
     <body>
@@ -280,68 +283,20 @@ $total_quantity = 0;
 						</div>
 					
 						<div class="top-area">
-                    <?php /*if( !request()->is('/') ) {*/ ?>
-                        <div class="top-search">
-                            <!-- <form method="get" action="/instant-hire"> -->
-                            <form method="get" action="/activities/">
-                                <input type="text" name="label" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off" value="">
-                                <div id="suggesstion-box"></div>
-                                <button id="serchbtn" ><i class="fa fa-search"></i></button>
-                            </form>
-						</div>
-					<?php /*}*/ ?>
-                        <?php /*?>
-						<ul class="setting-area">
-                            <li><a href="{{ url('') }}" title="Home" data-ripple=""><i class="fa fa-home"></i></a></li>
-                            <li>
-                                <a href="" title="Friend Requests" data-ripple="">
-                                    <i class="fa fa-user"></i><em class="bg-red">5</em>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Notification" data-ripple="">
-                                    <i class="fa fa-bell"></i><em class="bg-purple">7</em>
-                                </a>					
-                            </li>
-                            <li>
-                                <a href="#" title="Messages" data-ripple="">
-                                <i class="commentdots fas fa-comment"></i><em class="bg-blue">9</em></a>
-                            </li><?php */?>
-                            <!--<li><a href="#" title="Languages" data-ripple=""><i class="fa fa-globe"></i><em>EN</em></a></li>-->
-                            <?php /*?><li><a href="{{route('help')}}" title="Help" data-ripple=""><i class="fa fa-question-circle"></i></a></li>
-                        </ul> <?php */?>
-             		       <?php /*?><nav id='cssmenu'>
-                        <form id="searchform" method="" action="{{url('/instant-hire')}}">
-                           <div class="row" style="position: relative;">
-
-									<input autocomplete="off" type="text" name="label" id="label" class="form-control" placeholder="Search by activity or bussiness name or profile"  style="width:300px; float:left; border-radius: 0; margin:0; background-color:#555; color:#fff; border:0">
-									<input type="submit" value="Search" class="btn-style-one" style="padding:12px!important">
-									<div id="search-business"></div>
-								
-                           </div>
-                        </form>
-                    </nav><?php */?>
+                   
 					
 						<div class="header-right">
-                        	<ul class="setting-area">
-                            @if(Auth::check())
-                            	<?php $user = User::where('id', Auth::user()->id)->first(); ?>
-                                <li><!--<a href="<?php echo config('app.url'); ?>/userprofile/{{@$user['username']}}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-                            @else
-                            	<li><!--<a href="{{ Config::get('constants.SITE_URL') }}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-							@endif
-                            </ul>
-
+                        	
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
 							<div  class="cartitmclass mobile-none">
 								<?php 
+									$cart = [];
+							        if ($request->session()->has('cart_item')) {
+							            $cart = $request->session()->get('cart_item');
+							        }
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
 									    foreach($cart["cart_item"] as $item){
@@ -496,7 +451,6 @@ $total_quantity = 0;
         
     </body>
 </html>
-
 <script>
 	
 $(document).ready(function () {

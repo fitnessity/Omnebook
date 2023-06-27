@@ -4,7 +4,7 @@ namespace App;
 
 
 
-use App\User;
+use App\{User,Customer};
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,9 +22,23 @@ class BookingCheckinDetails extends Model
                 $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
                 $model->before_use_session_amount = $userBookingDetail->getremainingsession();
                 $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+                if($userBookingDetail != ''){
+                    $statusData = $userBookingDetail->userBookingStatus;
+                    if($statusData != ''){
+                        if($statusData->user_type == 'customer'){
+                            $customer = Customer::where(['business_id'=>$userBookingDetail->business_id, 'user_id'=>$statusData->user_id])->first();
+                            $id = @$customer->id;
+                        }else{
+                            $id= $userBookingDetail->user_id;
+                        }
+                    }
+                }
+                $id = @$id != '' ? @$id : 0;
+                $model->booked_by_customer_id = $id;
             }else{
                 $model->before_use_session_amount = 0;
                 $model->after_use_session_amount = 0;
+                $model->booked_by_customer_id =0;
             }
         });
 
@@ -59,7 +73,7 @@ class BookingCheckinDetails extends Model
     public $timestamps = false;
     protected $table = 'booking_checkin_details';
 	protected $fillable = [
-        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type',
+        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type','booked_by_customer_id',
     ];
 
 

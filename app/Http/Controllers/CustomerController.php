@@ -3,27 +3,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Excel;
 use App\Exports\ExportCustomer;
 use App\Imports\CustomerImport;
 use Maatwebsite\Excel\HeadingRowImport;
-use Session;
-use Redirect;
-use DB;
-use Input;
-use Response;
-use Auth;
-use Hash;
-use Validator;
-use View;
-use Mail;
-use Config;
+use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,Excel;
 use Carbon\Carbon;
-
 use Illuminate\Support\Facades\Crypt;
-
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-
 use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus};
 
 use Request as resAll;
@@ -61,7 +47,7 @@ class CustomerController extends Controller {
             $customers = $customers->where('id',$request->customer_id);
         }
 
-        $customer_count = $customers->count();
+        $customerCount = $customers->count();
         $customers = $customers->get();
         $url = '';
         $grouped_customers= array();
@@ -76,7 +62,7 @@ class CustomerController extends Controller {
         return view('customers.index', [
             'company' => $company,
             'grouped_customers' => $grouped_customers,
-            'customer_count' => $customer_count,
+            'customerCount' => $customerCount,
         ]); 
     }
 
@@ -88,20 +74,15 @@ class CustomerController extends Controller {
     }
 
     public function show(Request $request, $business_id, $id){
-
-
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
-
         $terms = $company->business_terms->first();
-
         $customerdata = $company->customers->find($id);
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
         $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
        
         $complete_booking_details = $customerdata->complete_booking_details()->get();
-
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
@@ -125,8 +106,43 @@ class CustomerController extends Controller {
         ]);
     }
 
-    public function searchcustomersaction(Request $request) {
+    public function customerpage(Request $request, $business_id, $id){
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
 
+        $terms = $company->business_terms->first();
+
+        $customerdata = $company->customers->find($id);
+        $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
+        $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
+       
+        $complete_booking_details = $customerdata->complete_booking_details()->get();
+          //print_r($complete_booking_details);exit();
+        $strpecarderror = '';
+        if (session()->has('strpecarderror')) {
+            $strpecarderror = Session::get('strpecarderror');
+        }
+
+        $auto_pay_payment_msg = '';
+        if($request->session()->has('recurringPayment')){
+            $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
+            $request->session()->forget('recurringPayment');
+        }
+
+        return view('customers.=show', [
+            'customerdata'=>$customerdata,
+            'strpecarderror'=>$strpecarderror,
+            'terms'=> $terms,
+            'visits' => $visits,
+            'purchase_history' => $purchase_history,
+            'active_memberships' => $active_memberships,
+            'complete_booking_details' => $complete_booking_details,
+            'auto_pay_payment_msg' =>$auto_pay_payment_msg
+        ]);
+    }
+
+    public function searchcustomersaction(Request $request) {
         if($request->get('query'))
         {
             $array_data=array();
@@ -194,7 +210,14 @@ class CustomerController extends Controller {
     }
 
     public function sendemailtocutomer(Request $request){
-        $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid);
+        $customer = Customer::findOrFail($request->cid);
+        if(@$customer->password != ''){
+            $password = '';
+        }else{
+            $password = Str::random(8);
+            $customer->update(['password' => Hash::make($password)]);
+        }
+        $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
        return  $status;
     }
 
@@ -243,9 +266,32 @@ class CustomerController extends Controller {
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($id);
         $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
-        
         return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
-    } 
+    }
+
+    public function visit_membership_modal(Request $request, $business_id ){
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customer = $company->customers->find($request->id);
+        $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
+        return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
+    }
+
+    public function void_or_refund_modal(Request $request, $business_id ){
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customer = $company->customers->find($request->id);
+        $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
+        return view('customers.edit_refund_or_void_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
+    }
+
+    public function terminate_or_suspend_modal(Request $request, $business_id ){
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customer = $company->customers->find($request->id);
+        $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
+        return view('customers.edit_terminate_or_suspend_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
+    }
 
     public function addcustomerfamily ($id){
         $UserFamilyDetails  = [];
@@ -253,8 +299,20 @@ class CustomerController extends Controller {
         $UserFamilyDetails  = $customer->get_families();
         $companyId = $customer->business_id;
             
-      
-        
+        return view('customers.==add_family', [
+            'UserFamilyDetails' => $UserFamilyDetails,
+            'companyId' => $companyId,
+            'parent_cus_id' => $id,
+        ]);
+        //return view('profiles.viewcustomer');
+    }
+
+    public function add_family ($id){
+        $UserFamilyDetails  = [];
+        $customer = Customer::find($id);
+        $UserFamilyDetails  = $customer->get_families();
+        $companyId = $customer->business_id;
+            
         return view('customers.add_family', [
             'UserFamilyDetails' => $UserFamilyDetails,
             'companyId' => $companyId,
@@ -264,101 +322,34 @@ class CustomerController extends Controller {
     }
 
     public function addFamilyMemberCustomer(Request $request) {
-        //print_r($request->all());
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $prev = $request['previous_family_count'];       
-        $request['family_count'] . "---" . '----' . $prev;
-        $request['family_count'] - $prev;
+        for ($i=0; $i <= $request->family_count ; $i++) { 
+            $update = [];
+            $update = [
+                'business_id' => $request['business_id'],
+                'fname' => $request['fname'][$i],
+                'lname' => $request['lname'][$i],
+                'email' => $request['email'][$i],
+                'phone_number' => $request['mobile'][$i],
+                'emergency_contact' => $request['emergency_contact'][$i],
+                'relationship' => $request['relationship'][$i],
+                'gender' => $request['gender'][$i],
+                'birthdate' => $request['birthdate'][$i] != '' ? date('Y-m-d',strtotime($request['birthdate'][$i])) : null,
+                'parent_cus_id' => $request['parent_cus_id'],
+            ];
 
-        $loggedinUser = Auth::user();
-        $user = User::where('id', Auth::user()->id)->first();
-        $data = '';
-
-        if ($prev == $request['family_count'] && $request['family_count'] == 0) {
-            if ($request['removed_family'][0] != 'delete') {
-                $last_name = ($request['fname'][0]) ? $request['lname'][0] : '';
-                $cus_name = $request['fname'][0].' '.$last_name;
-                $customer = \Stripe\Customer::create(
-                    [
-                        'name' => $cus_name,
-                        'email'=> $request['email'][0],
-                    ]);
-                $stripe_customer_id = $customer->id;  
-                $data = Customer::create([
-                            'business_id' => $request['business_id'],
-                            'fname' => $request['fname'][0],
-                            'lname' => $request['lname'][0],
-                            'email' => $request['email'][0],
-                            'phone_number' => $request['mobile'][0],
-                            'emergency_contact' => $request['emergency_contact'][0],
-                            'relationship' => $request['relationship'][0],
-                            'gender' => $request['gender'][0],
-                            'birthdate' => date('Y-m-d',strtotime($request['birthdate'][0])),
-                            'parent_cus_id' => $request['parent_cus_id'],
-                            'stripe_customer_id' => $stripe_customer_id,
-                        ]);
-            }           
-        } else {          
-            for ($i = 0; $i < $prev; $i++) {
-                if ($request['removed_family'][$i] != 'delete') {
-                    $last_name = ($request['fname'][$i]) ? $request['lname'][$i] : '';
-                    $cus_name = $request['fname'][$i].' '.$last_name;
-                    $customer = \Stripe\Customer::create(
-                        [
-                            'name' => $cus_name,
-                            'email'=> $request['email'][$i],
-                        ]);
-                    $stripe_customer_id = $customer->id; 
-                    $cat = Customer::find($request['cus_id'][$i]);
-                    $cat->business_id = $request['business_id'];
-                    $cat->fname = $request['fname'][$i];
-                    $cat->lname = $request['lname'][$i];
-                    $cat->email = $request['email'][$i];
-                    $cat->phone_number = $request['mobile'][$i];
-                    $cat->emergency_contact = $request['emergency_contact'][$i];
-                    $cat->relationship = $request['relationship'][$i];
-                    $cat->gender = $request['gender'][$i];
-                    $cat->birthdate = date('Y-m-d',strtotime($request['birthdate'][$i]));
-                    $cat->stripe_customer_id  = $stripe_customer_id ;
-                    $data = $cat->update();
-                } else {
-                    $data = Customer::where('id', $request['cus_id'][$i])->delete();
-                }
-            }            
-            for ($j = $prev; $j < $request['family_count']; $j++) {
-                if ($request['removed_family'][$j] != 'delete') {
-                    $last_name = ($request['fname'][$j]) ? $request['lname'][$j] : '';
-                    $cus_name = $request['fname'][$j].' '.$last_name;
-                    $customer = \Stripe\Customer::create(
-                        [
-                            'name' => $cus_name,
-                            'email'=> $request['email'][$j],
-                        ]);
-                    $stripe_customer_id = $customer->id;
-                    $data = Customer::create([
-                            'business_id' => $request['business_id'],
-                            'fname' => $request['fname'][$j],
-                            'lname' => $request['lname'][$j],
-                            'email' => $request['email'][$j],
-                            'phone_number' => $request['mobile'][$j],
-                            'emergency_contact' => $request['emergency_contact'][$j],
-                            'relationship' => $request['relationship'][$j],
-                            'gender' => $request['gender'][$j],
-                            'birthdate' =>  date('Y-m-d',strtotime($request['birthdate'][$j])),
-                            'parent_cus_id' => $request['parent_cus_id'],
-                            'stripe_customer_id' => $stripe_customer_id,
-                        ]);
-                }
+            if($request->cus_id[$i] != ''){
+                $cat = Customer::find($request['cus_id'][$i]);
+                $data = $cat->update($update);
+            }else{
+                $data = Customer::create($update);
             }
         }
-        if ($data)
-            return Redirect::back()->with('success', 'Family details has been updated successfully.');
-        else
-            return Redirect::back()->with('error', 'Problem in updating family details.');
+
+        return Redirect::back();
     }
 
     public function removefamilyCustomer(Request $request) {
-        DB::delete('DELETE FROM customers WHERE id = "' . $request->rm . '"');
+        DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
         return Redirect::back()->with('success', 'Family Member Delete.');
     }
 

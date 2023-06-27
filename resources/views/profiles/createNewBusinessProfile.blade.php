@@ -8553,9 +8553,9 @@
 
     function getpricetitle(i,j){
         var x = document.getElementById("price_title"+i+j).value;
-        document.getElementById("ModelRecurringTitle_adult"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ( '+x +' for "Adults"';
-        document.getElementById("ModelRecurringTitle_child"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Children"';
-        document.getElementById("ModelRecurringTitle_infant"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Infant"';
+        document.getElementById("ModelRecurringTitle_adult"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ( '+x +' for "Adults")';
+        document.getElementById("ModelRecurringTitle_child"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Children")';
+        document.getElementById("ModelRecurringTitle_infant"+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ('+x+' for "Infant")';
         $("#p_price_title_adult"+i+j).html(x);
         $("#p_price_title_child"+i+j).html(x);
         $("#p_price_title_infant"+i+j).html(x);
@@ -11452,8 +11452,8 @@ $("#frm_servicetitle_two1").on("change", function() {
     function loadMaponclick(){
         $('#cus_map_error').hide();
         var locations = $('#address_p').val();
-        var cus_lat = $('#cus_lat').val();
-        var cus_lng = $('#cus_lng').val();
+        var cus_lat = $('#lat').val();
+        var cus_lng = $('#lng').val();
         var map1 = ''
         var infowindow1 = ''
         var marker1 = ''

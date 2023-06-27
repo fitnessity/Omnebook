@@ -179,7 +179,7 @@ class HomeController extends Controller
 				$array_data[]=$city->sport_name;
 			}
 			$comd = CompanyInformation::where('dba_business_name' ,'=' , null)->get();
-			if(!empty($comd){
+			if(!empty($comd)){
 				foreach($comd as $det){
 					CompanyInformation::where('id', $det->id)->update(["dba_business_name" => $det->company_name]);
 				}

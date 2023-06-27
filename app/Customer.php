@@ -10,6 +10,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
+use Auth;
 use App\StripePaymentMethod;
 
 class Customer extends Authenticatable
@@ -55,7 +56,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact'
     ];
 
     /**
@@ -221,23 +222,25 @@ class Customer extends Authenticatable
     public function memberships(){
         $customer = $this;
         $company = $this->company_information;
-        $result = UserBookingDetail::where('business_id', $company->id)->whereIn('booking_id', function($query) use ($customer){
+        $result = UserBookingDetail::where('business_id', $company->id)/*->whereIn('booking_id', function($query) use ($customer){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->where(['user_type'=>'customer','user_id'=> $customer->id]);
-        });
+                  */->where(['user_type'=>'customer','user_id'=> $customer->id]);
+       /* });*/
         return $result->count();
     }
 
     public function active_memberships(){
         $company = $this->company_information;
         $now = Carbon::now();
-        //$result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
+        $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
 
-        $results = UserBookingDetail::select('user_booking_details.*', DB::raw('SUM(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)
-            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])
-            ->groupBy('user_booking_details.id')
-            ->whereDate('user_booking_details.expired_at', '>', $now);
+        if($this->user_id == Auth::user()->id){
+            $results = $results->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+        }
+
+        $results = $results->select('user_booking_details.*', DB::raw('SUM(booking_checkin_details.use_session_amount) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+           
             //print_r($results->get());exit;
         return $results; 
     }
@@ -295,7 +298,6 @@ class Customer extends Authenticatable
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
         });
-
 
         return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
     }

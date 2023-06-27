@@ -98,30 +98,16 @@ class CustomerController extends Controller
         //
     }
 
-
-    public function visit_membership_modal(Request $request, $business_id ){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customer = $company->customers->find($request->id);
-         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-       // $booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
-        //$booking_detail = $booking_status->UserBookingDetail()->findOrFail($request->booking_detail_id);
-        return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
-    }
-
     public function card_editing_form(Request $request, $business_id){
         $company = $request->current_company;
-
         $customer = $company->customers()->findOrFail($request->customer_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
         $intent = $stripe->setupIntents->create(
           [
             'customer' => $customer->stripe_customer_id,
             'payment_method_types' => ['card'],
           ]
         );
-
         return view('business.customers.card_editing_form', compact('intent'));
     }
 

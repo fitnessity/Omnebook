@@ -20,13 +20,18 @@ class RecurringController extends Controller
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
-        $booking_detail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $booking_detail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
+        $bookingDetail = $company->UserBookingDetails->find($request->booking_detail_id);
+        $autopayListScheduled = $bookingDetail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
         $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
-        $autopaylistcnt =  count($autopayListScheduled) + count($autopayListHistory);
-        $remaining = Recurring::autoPayRemaining($autopaylistcnt,$request->booking_detail_id);
-        
-        return view('business.recurring.index', ['autopayListScheduled' => $autopayListScheduled, 'autopayListHistory' => $autopayListHistory, 'customer' => $customer,'booking_detail'=>$booking_detail,'remaining'=>$remaining ,'i'=>1 ,'business_id'=>$business_id ,'autopaylistcnt' =>$autopaylistcnt]);
+        $autopayListCnt =  count($autopayListScheduled) + count($autopayListHistory);
+        $remaining = Recurring::autoPayRemaining($autopayListCnt,$request->booking_detail_id);
+            
+        if($request->type == 'history'){
+            $pageName = 'Autopay History';
+        }else{
+            $pageName = 'Autopay Schedule';
+        }
+        return view('business.recurring.index', ['autopayListScheduled' => $autopayListScheduled, 'autopayListHistory' => $autopayListHistory, 'customer' => $customer,'bookingDetail'=>$bookingDetail,'remaining'=>$remaining ,'i'=>1 ,'business_id'=>$business_id ,'autopayListCnt' =>$autopayListCnt,'type'=>$request->type,'pageName'=>$pageName ]);
     }
 
     /**

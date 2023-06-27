@@ -34,7 +34,7 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="datepickerforbirtdate" >
+                    <input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="flatpicker_birthdate" >
 
                     <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                     <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
@@ -296,7 +296,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="birthday_date-position">
-                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="datepickerforbirtdate" />
+                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday required" placeholder="mm/dd/yyyy" data-behavior="flatpicker_birthdate" />
                                                                 <span class="error" id="err_birthday_date"></span>
                                                             </div>
                                                         </div>
@@ -340,70 +340,6 @@
 												</div>
 											</div>
 										</div>
-                                     <!--   <div class="panel-group wrap" id="accordion" role="tablist" aria-multiselectable="true">
-                                             <div class="panel">
-                                                <div class="panel-heading" role="tab" id="heading0">
-                                                  <h4 class="panel-title">
-                                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="true" aria-controls="collapse0">
-                                                        Family Member #1
-                                                        </a>
-                                                    </h4>
-                                                </div>
-                                                <div id="collapse0" class="panel-collapse collapse show in" role="tabpanel" aria-labelledby="heading0">
-                                                    <div class="panel-body">
-                                                        <div class="form-group">
-                                                            <input type="text" name="fname[]" id="fname" class="form-control first_name" placeholder="First Name">
-                                                            <span class="error" id="err_fname" required></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="text" name="lname[]" id="lname" class="form-control last_name" placeholder="Last Name" required>
-                                                            <span class="error" id="err_lname"></span>
-                                                        </div>
-                                                        <div>
-                                                            <div class="birthday_date-position">
-                                                                <input type="text" name="birthday_date[]" id="birthday_date0" class="form-control birthday" placeholder="mm/dd/yyyy" data-behavior="datepicker" required/>
-                                                                <span class="error" id="err_birthday_date"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select name="relationship[]" id="relationship" class="form-control relationship" required>
-                                                                <option value="">Select Relationship</option>
-                                                                <option value="Brother">Brother</option>
-                                                                <option value="Sister">Sister</option>
-                                                                <option value="Father">Father</option>
-                                                                <option value="Mother">Mother</option>
-                                                                <option value="Wife">Wife</option>
-                                                                <option value="Husband">Husband</option>
-                                                                <option value="Son">Son</option>
-                                                                <option value="Daughter">Daughter</option>
-                                                            </select>
-                                                            <span class="error" id="err_relationship"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                                            <span class="error" id="err_mphone"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                                            <span class="error" id="err_emergency_phone" ></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select name="gender[]" id="gender" class="form-control gender" required>
-                                                                <option value="">Select Gender</option>
-                                                                <option value="male">Male</option>
-                                                                <option value="female">Female</option>
-                                                                <option value="other">Specify other</option>
-                                                            </select>
-                                                            <span class="error" id="err_gender"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email" required>
-                                                            <span class="error" id="err_emailid"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -537,32 +473,6 @@
         $('#err_city_sign').html('');
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
-        
-        /*if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }*/
 
         var posturl = '/auth/saveaddress';
         var formdata = new FormData();
@@ -601,13 +511,9 @@
 
     /* Step 4 new */
     $(document).on('click', '#step44_next', function () {
-        
-
         var posturl = '/auth/savephoto';
-        //var formdata = new FormData();
-         var getData = new FormData($("#myformprofile")[0]);
-        getData.append('_token', '{{csrf_token()}}')       
-        //formdata.append('show_step', 6)
+        var getData = new FormData($("#myformprofile")[0]);
+        getData.append('_token', '{{csrf_token()}}') 
         $.ajax({
             url: posturl,
             type: 'POST',
@@ -616,16 +522,6 @@
             cache: true,
             processData: false,
             contentType: false,
-            /*headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },*/
-            /*beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },*/
             success: function (response) {
                 window.location.href = "{{url('/registration/?showstep=1')}}"
             }
@@ -650,32 +546,6 @@
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
         
-        /*if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }*/
-
         var posturl = '/auth/saveaddress';
         var formdata = new FormData();
         formdata.append('_token', '{{csrf_token()}}')
@@ -817,60 +687,6 @@
                 $(this).val($(this).val() + "/");
             }
         });
-
-      /*  $("#register_submit").click(function (e) {
-            e.preventDefault();
-            $('#frmregister').submit();
-        });*/
-       
-        /*$("#frmregister").submit(function (e) {
-            e.preventDefault();
-            $('#frmregister').validate({
-                rules: {
-                    firstname: "required",
-                    lastname: "required",
-                    username: "required",
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password"
-                    },                },
-                messages: {
-                    firstname: "Enter your Firstname",
-                    lastname: "Enter your Lastname",
-                    username: "Enter your Username",
-                    email: {
-                        required: "Please enter a valid email address",
-                        minlength: "Please enter a valid email address",
-                        remote: jQuery.validator.format("{0} is already in use")
-                    },
-                    dob: {
-                        required: "Please provide your date of birth",
-                    },
-                    password: {
-                        required: "Provide a password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters")
-                    },
-                    confirm_password: {
-                        required: "Repeat your password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters"),
-                        equalTo: "Enter the same password as above"
-                    },
-                },
-                submitHandler: registerUser
-            });
-        });*/
     });
 
     $('#email').on('blur', function() {
@@ -892,7 +708,6 @@
 
     function getAge() {
         var dateString = document.getElementById("dob").value;
-        /*    alert(dateString);*/
         var today = new Date();
         var birthDate = new Date(dateString);
         var age = today.getFullYear() - birthDate.getFullYear();
@@ -904,54 +719,6 @@
         }
         return agechk;
     }
-
-    /*function registerUser() {
-        var valchk = getAge();
-        //alert(valchk);
-        var validForm = $('#frmregister').valid();
-        var posturl = '/auth/registration';
-
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if(valchk == 1){
-            $('#register_submit').prop('disabled', true);
-            if (validForm) {
-
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
-                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                    },
-                    success: function (response) {
-                        //alert(response.msg);
-                        
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                            window.location.href = response.redirecturl;
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
-                    }
-                });
-            }
-        }else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }
-    }*/
 
 </script>
 <script type="text/javascript">
