@@ -176,7 +176,8 @@
 		<div class="shortcut-sticky">
 			<a href="{{route('personal.orders.index')}}" class="short-links">
 				<i class="fas fa-info"></i>
-				<label>Bookings</label>
+				<!-- <label>Bookings</label> -->
+				<label>Account</label>
 			</a>
 		</div>
 	</div>
@@ -227,14 +228,14 @@
 										   <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
 									 </li> -->
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Family</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;"> Manage Accounts</a>
 									</li>
-									<li class="pc-link">
+									<!-- <li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
-									</li>
-									<li class="pc-link">
+									</li> -->
+									<!-- <li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon2.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info" style="color: white;">Payment Info</a>
-									</li>
+									</li> -->
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
 									</li>
@@ -266,7 +267,7 @@
 										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
+										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}" style="color: white;">Manage My Business</a>
 									</li>
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>
@@ -392,6 +393,15 @@ function closeMobileNav() {
         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test(email); //this will either return true or false based on validation
     }
+
+    $(document).on('focus', '[data-behavior~=flatpicker_birthdate]', function(e){
+        flatpickr("[data-behavior~=flatpicker_birthdate]", {
+			dateFormat: 'm/d/Y',
+            maxDate: '01/01/2050',
+		});
+    });
+
+      
 
     $(document).on('focus', '[data-behavior~=datepicker]', function(e){ 
         //jQuery.noConflict();

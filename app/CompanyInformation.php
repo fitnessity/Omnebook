@@ -57,7 +57,7 @@ class CompanyInformation extends Model {
         "is_verified",
     ];
 
-    protected $appends = ['full_name', 'first_letter'];
+    protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter'];
 
     public function getFullNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
@@ -67,7 +67,15 @@ class CompanyInformation extends Model {
         if($this->first_name && $this->last_name){
             return $this->first_name[0] . ' ' . $this->last_name[0];    
         }
-        
+    }
+
+    public function getPublicCompanyNameAttribute(){
+        return  $company_name = $this->dba_business_name  != '' ? $this->dba_business_name :$this->company_name;
+    }
+
+    public function getCnameFirstLetterAttribute(){
+        $company_name = $this->dba_business_name  != '' ? $this->dba_business_name :$this->company_name;
+        return $cp = substr($company_name, 0, 1);
     }
     
     public function employmenthistory() {
@@ -196,10 +204,7 @@ class CompanyInformation extends Model {
             ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])
             ->groupBy('user_booking_details.id')
             ->whereDate('user_booking_details.expired_at', '>', $now)->get();
-
-       /* $result = UserBookingDetail::where(['business_id'=>$this->id,'user_type'=>'customer','user_id'=>$customerId])->whereDate('expired_at', '>=',  $now)->where('pay_session', ">" ,0);*/
-        //return $result->count(); 
-       return  count($result);
+        return  count($result);
     }
 
     public function completed_memberships_count_by_user_id($customerId = null){

@@ -42,7 +42,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">Add Family or Friends</h4>
+                        <h4 class="page-title">Manage Accounts</h4>
                     </div>
                     <div class="payment_info_section padding-2 white-bg border-radius1">
                         <div class="row">
@@ -64,25 +64,20 @@
                         </div>
 
                         @foreach($UserFamilyDetails as $family)
-                            @php if($family->parent_cus_id != ''){
-                                   $type = 'customer'; 
-                                }else{
-                                    $type= 'user';
-                                }
-                            @endphp
+                            @php $type =  $family->parent_cus_id != '' ? 'customer' : 'user'; @endphp
                             <div class="add-family-frnd" style="cursor: pointer">
                                 <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png);">
                                     <h2>{{$family->full_name}}</h2>
                                     <p>({{$family->relationship}} {{$family->age}} yrs old)</p>
                                     <div class="familyfrnd-info">
                                         @if( $type == 'customer')
-                                            <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> View Booking </a>
+                                            <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> <!-- View Booking --> Booking Info</a> 
                                         @endif
                                         <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px"> Edit </a>
                                         @if( $type == 'user')
-                                            <a class="delete-family" href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
+                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
                                         @else
-                                            <a class="delete-family" href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> Delete </a>
+                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> Delete </a>
                                         @endif 
                                     </div>
                                 </div>
@@ -113,4 +108,21 @@
     </div>
 </div>
 @include('layouts.footer')
+
+<script>
+    $('.delete-family').on('click',function(e){
+        let text = "Are You sure to delete this member?";
+        if (confirm(text) == true) {
+            $.ajax({
+                url: $(this).data('href'),
+                type: 'get',
+                success:function(data){
+                    alert('Deleted successfully');
+                    location.reload();
+                }
+            });
+        }
+    });
+</script>
+
 @endsection

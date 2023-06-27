@@ -110,4 +110,9 @@ class BusinessPriceDetails extends Model
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')->withTrashed();
     }
 
+    public function UserBookingDetail()
+    {
+        return $this->hasMany(UserBookingDetail::class, 'priceid');
+    }
+
 }

@@ -37,16 +37,14 @@ class CartService
         return $cart['cart_item'];
     }
 
-
     public function items(){
         $cart['cart_item'] = [];
         foreach($this->_cart['cart_item'] as $key=>$c)
         {   
-            if($c['chk'] != 'activity_purchase') {
+            if($c['chk'] == '') {
                 $cart['cart_item'][] = $c;
             }
         }
-
         return $cart['cart_item'];
     }
 

@@ -8,11 +8,11 @@
         //temporary add here, wait for controller refactored
         URL::defaults(['business_id' => $companyId]);
     }
-    $companyList = Auth::user()->company()->select('logo','company_name')->get();
+    $companyList = Auth::user()->company()->select('id','logo','company_name')->get();
     $company = Auth::user()->current_company;
     $dba_business_name = '';
     if($company != ''){
-        $dba_business_name = $company->dba_business_name;
+        $dba_business_name =  $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
     }
 ?>
 
@@ -54,15 +54,15 @@
 				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="#sidebarDashboards" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
                         <img src="{{asset('/public/img/home.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                    <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
                         <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
+                    <!-- <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="/businessjumps/2/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-calendar"> Company Details </a>
@@ -81,11 +81,11 @@
                                 <a href="/businessjumps/6/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-projects">Get Verified </a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link"  @if($companyId!='') onclick="linkJump(7);" @else href="{{route('createNewBusinessProfile')}}" @endif aria-controls="sidebarLayouts">
+                    <a class="nav-link menu-link"  @if($companyId!='') href="{{route('business.service.select',['business_id'=>$companyId])}}" @endif aria-controls="sidebarLayouts">
                         <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Services & Prices </span> 
                     </a>
                 </li> 
@@ -97,9 +97,15 @@
                     <div class="collapse menu-dropdown" id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
+                                <a href="{{route('personal.company.index')}}" class="nav-link @if(Route::current()->getName() == 'personal.company.index') tab-active @endif" data-key="t-signup"> Manage Company
+                                </a>
+                            </li> 
+                            
+                            <li class="nav-item">
                                 <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') tab-active @endif" data-key="t-signin"> Manage Bookings
                                 </a>
                             </li>
+                            
                             <li class="nav-item">
                                 <a href="{{route('business.services.index')}}" class="nav-link @if(Route::current()->getName() == 'business.services.index') tab-active @endif" data-key="t-signup"> Manage Service
                                 </a>
@@ -171,31 +177,23 @@
 			</div>
 			<div class="modal-body">
                 @foreach($companyList as $list)
-				<a href="#" class="business-click">
-    				<div class="row y-middle">
-    					<div class="col-md-2">
-    						<div class="select-business mb-15">
-    							<img src="{{url('/public/uploads/profile_pic/thumb/'.$list->logo)}}" alt="Fitness pvt company, llc" >
+				<a class="business-click" onclick="changeCompany({{$list->id}})">
+    				<div class="row y-middle divider">
+    					<div class="col-md-2 col-2">
+    						<div class="select-business">
+                                @if( Storage::disk('s3')->exists($list->logo))
+    							    <img src="{{Storage::URL($list->logo)}}" alt="Fitness pvt company, llc" >
+                                @else
+                                    <div class="company-list-text mb-10"><p class="character">{{$list->cname_first_letter}}</p></div>
+                                @endif
     						</div>
     					</div>		
-    					<div class="col-md-5">
+    					<div class="col-md-5 col-8">
     						<label class="business-name">{{$list->company_name}}</label>
     					</div>
     				</div>
 				</a>
                 @endforeach
-				<!-- <a href="#" class="business-click">
-    				<div class="row y-middle">
-    					<div class="col-md-2">
-    						<div class="select-business mb-15">
-    							<img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1683350278-discover.jpg" alt="arya pvt lmt" class="avatar">
-    						</div>
-    					</div>		
-    					<div class="col-md-5">
-    						<label class="business-name">arya pvt lmt</label>
-    					</div>
-    				</div>
-				</a> -->
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -205,4 +203,8 @@
         var cid = '{{$companyId}}';
         location.href = '/businessjumps/'+bstep+'/'+cid;
     } 
+
+    function changeCompany(id) {
+        location.href = '/dashboard/dates=/'+id;
+    }
 </script>
