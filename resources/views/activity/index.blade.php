@@ -327,7 +327,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -368,7 +368,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -510,7 +510,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -551,7 +551,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -699,7 +699,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -740,7 +740,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 																	</div>
@@ -884,7 +884,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -925,7 +925,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1070,7 +1070,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1112,7 +1112,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1245,13 +1245,14 @@
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_event{{$service['id']}}" class="owl-carousel owl-theme">
 																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)											<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
-																			</div>
+																	@foreach($pic_image as $img)											
+																		<div class="item-inner">
+																			<img src="{{Storage::URL($img)}}" class="productImg">
+																		</div>
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1292,7 +1293,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1436,7 +1437,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
@@ -1478,7 +1479,7 @@
 																	@endforeach
 																@else
 																	<div class="item-inner">
-																		<img src="{{Storage::URL($img)}}">
+																		<img src="{{Storage::URL($pic_image)}}">
 																	</div>
 																@endif
 															</div>
