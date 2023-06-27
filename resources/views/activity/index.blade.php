@@ -319,17 +319,7 @@
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -360,17 +350,7 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -502,17 +482,7 @@
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -543,17 +513,6 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -691,17 +650,7 @@
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
                              					<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_per{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -732,17 +681,7 @@
 		                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 																<div class="inner-owl-slider-hire">
 																	<div id="owl-demo-learn_per{{$service['id']}}" class="owl-carousel owl-theme">
-																		@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																		
 																	</div>
 																</div>
 																<script type="text/javascript">
@@ -876,17 +815,7 @@
 	                                		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 	                                			<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -917,17 +846,7 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -1062,17 +981,7 @@
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
                              					<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_exp{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 
@@ -1104,17 +1013,7 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_exp{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 
@@ -1244,17 +1143,6 @@
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_event{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)											
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -1285,17 +1173,7 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_event{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -1429,17 +1307,7 @@
 	                                		<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 	                                			<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
@@ -1471,17 +1339,7 @@
                                 			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($img)}}" class="productImg">
-																		</div>
-																	@endforeach
-																@else
-																	<div class="item-inner">
-																		<img src="{{Storage::URL($pic_image)}}">
-																	</div>
-																@endif
+																
 															</div>
 														</div>
 														<script type="text/javascript">
