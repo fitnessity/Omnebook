@@ -84,6 +84,14 @@ class RegistrationController extends Controller
                     'msg' => 'Email already exists. Please select different Email',
                 );
                 return Response::json($response);
+            }; 
+
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'phone_number',$postArr['contact'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Phone Number already exists. Please Enter different Phone Number',
+                );
+                return Response::json($response);
             };
             
             if (count($postArr) > 0) {
@@ -225,8 +233,8 @@ class RegistrationController extends Controller
         for($i=0;$i<=$request->familycnt;$i++){
             if($request->fname[$i] != ''){
                 $date = NULL;
-                if($request->birthday_date[$i] != ''){
-                    $date = date('Y-m-d',strtotime($request->birthday_date[$i]));
+                if($request->birthdate[$i] != ''){
+                    $date = date('Y-m-d',strtotime($request->birthdate[$i]));
                 }
                 $customerObj = New Customer();
                 $customerObj->parent_cus_id = $request->cust_id;
@@ -243,7 +251,7 @@ class RegistrationController extends Controller
                 $customerObj->gender =  $request->gender[$i];
                 $customerObj->save();
                 if ($customerObj) {      
-                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],'');
                 }
             }
         }

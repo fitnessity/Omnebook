@@ -24138,3 +24138,9 @@ padding-left: 0px;
 .timechk-text{
 	float: left !important;
 }
+
+.post-btn-gray.activity-scheduler {
+    width: 100%;
+    background: #777;
+    border-radius: 0px;
+}

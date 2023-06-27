@@ -667,117 +667,88 @@ class BookingController extends Controller {
 
     public function getbookingmodeldata(Request $request){
         $p_name = $this->businessservice->findById($request->sid)->program_name;
-        $data = $this->bookings->getbusinessbookingsdata($request->sid,$request->date);
-        $html = '' ;$link ='#';
+        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)));
+        $html = '' ;$href ='';
         $ajax = "'ajax'";
-        $html.= '<div class="col-lg-12">
-                    <div class="schedule-modal-title modal-mb">
-                        <h4 class="modal-title">View Your bookings for '.$p_name.'</h4>
-                    </div>
+        $html.= '<div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">View Your bookings for '.$p_name.'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="col-lg-12 col-sm-12">
-                    <div class="modal-inner-txt">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-4">
-                                <div class="date-activity-scheduler">
-                                    <label for="">Date:</label>
-                                    <div class="activityselect3 special-date">
-                                        <div class="activityselect3 special-date">
-                                            <input type="text" name="actfildate" id="managecalendarservice" placeholder="Date" class="form-control" onchange="getbookingmodel('.$request->sid.','.$ajax.');" autocomplete="off" value="'.date('m/d/Y',strtotime($request->date)).'">
-                                        </div>
+                <div class="modal-body">
+                    <div class="mt-3 mt-lg-0">
+                        <div class="row g-3 mb-0 align-items-center">
+                            <div class="col-sm-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr" name="actfildate" id="managecalendarservice" class="form-control" onchange="getbookingmodel('.$request->sid.','.$ajax.');" autocomplete="off" value="'.date('m/d/Y',strtotime($request->date)).'">
+                                    <div class="input-group-text bg-primary border-primary text-white">
+                                        <i class="ri-calendar-2-line"></i>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="col-sm-auto">
                                 <div class="date-info">
                                     <label>Today Date:</label><span> '.date('m/d/Y',strtotime($request->date)).'</span>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="col-sm-auto">
                                 <div class="date-info">
-                                    <label>Total Bookings:</label><span>'.count($data).'</span>
+                                    <label>Total Bookings:</label> <span>'.count($data).'</span>
                                 </div>
                             </div>
-                        </div>  
-                    </div>
-                    <div class="modal-inner-txt modal-custom-header">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label> Name </label>
-                            </div>
-                            <div class="col-md-2">
-                                <label> Date Booked </label>
-                            </div>
-                            <div class="col-md-3">
-                                <label>  Whos Participating  </label>
-                            </div>
-                            <div class="col-md-2"> 
-                                <label> Category Name  </label>
-                            </div>
-                            <div class="col-md-3"> 
-                                <label>   Price Option  </label>
+                        </div>
+                        <div class="view-booking-table">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Date Booked</th>
+                                            <th>Who\'s Participating</th>
+                                            <th>Category Name</th>
+                                            <th>Price Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+                                        if(!empty($data) && count($data)>0){
+                                            foreach($data as $i=>$dt){
+                                                if($dt->booking->user_type == 'user'){
+                                                    $name = $dt->booking->user->full_name;
+                                                }else{
+                                                    $name = $dt->booking->customer->full_name;
+                                                    $link = Config::get('constants.SITE_URL')."/business/".$dt->booking->customer->business_id."/customers/".$dt->booking->customer->id;
+                                                    $href = 'href="'.$link.'"';
+                                                }
+                                            
+                                                $html .='<tr>
+                                                            <td>'.($i+1).'. <a target="_blank"'.$href.'>'.$name.'</a></td>
+                                                            <td>'.$request->date.'</td>
+                                                            <td>'. nl2br($dt->decodeparticipate()).'</td>
+                                                            <td> '.$dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title.'</td>
+                                                            <td>'.$dt->business_price_detail_with_trashed->price_title .'</td>
+                                                        </tr>';
+                                            }
+                                        }else{
+                                            $html .='<br><p class="fonts-red">There Are No Bookings For This Activity Today</p>';
+                                        }
+                                    $html .='</tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="main-component">';
-        if(!empty($data) && count($data)>0){
-            $count = 1;
-            foreach($data as $dt){
-                $participate =  $dt->decodeparticipate();
-                $price_title = $dt->business_price_detail->price_title;
-                $catename = $dt->business_price_detail->business_price_details_ages->category_title;
-
-                if($dt->booking->user_type == 'user'){
-                    $name = $dt->booking->user->firstname.' '.$dt->booking->user->lastname;
-                }else{
-                    $name = $dt->booking->customer->fname.' '.$dt->booking->customer->lname;
-                    $link = Config::get('constants.SITE_URL')."/business/".$dt->booking->customer->business_id."/customers/".$dt->booking->customer->id;
-                }
-
-                $html .='<div class="modal-inner-txt modal-table-data'; 
-                    if(count($data) == $count){ 
-                        $html.= ' nthchildlast';
-                    }
-                    $dateval = 'N/A';
-                    if($dt->bookedtime != ''){
-                        $dateval = date('m/d/Y',strtotime($dt->bookedtime));
-                    }
-                    $html.= '">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label class="manage-service-display">Name: </label><span> '.$count.'. <a href="'.$link.'">'.$name.'</a> </span>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="manage-service-display">Date Booked: </label><span> '.$dateval.'</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="manage-service-display">Whos Participating: </label><span> '. nl2br($participate).'</span>
-                                </div>
-                                <div class="col-md-2"> 
-                                    <label class="manage-service-display">Category Name: </label><span> '.$catename.'  </span>
-                                </div>
-                                <div class="col-md-3"> 
-                                    <label class="manage-service-display">Price Option: </label><span> '.$price_title .'  </span>
-                                </div>
-                            </div>
-                        </div>';
-                $count++;
-            }
-        }else{
-            $html .='<p class="no-bookings">There Are No Bookings For This Activity Today</p>';
-        }
-
-        $html .= '</div>
+                </div>
                 <script>
-                    $( function() {
-                        $( "#managecalendarservice" ).datepicker( { 
-                            minDate: 0,
-                            changeMonth: true,
-                            changeYear: true   
-                        } );
-                    } );
-                </script></div>';
+                    flatpickr(".flatpickr", {
+                        dateFormat: "m/d/Y",
+                        maxDate: "01/01/2050",
+                        enable: [
+                            { from: "today", to: "01/01/2050" },
+                        ]
+                     });
+                </script>';
         return $html;
+    }
+
+    public function getRescheduleModel(Request $request){
+         return view('personal.orders._reschedule_modal',['business_id'=> $request->business_id,'reservedDate'=> $request->reservedDate ,'reserveTime'=>$request->reserveTime,'business_service_id'=> $request->business_service_id ,'stype'=> $request->stype ,'priceid'=> $request->priceid ,'customer_id'=> $request->customer_id]);
     }
 }

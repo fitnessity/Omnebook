@@ -20,7 +20,7 @@ Route::get('/invitation/accept','HomeController@invitation_accept')->name('invit
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
-    Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
+    Route::resource('schedulers', 'SchedulerController')->only(['index', 'create','store','update','destroy']);
 
     // Scheduler Checkin Details
     Route::get('schedulers/{scheduler_id}/checkin_details/{id}/latecancel_modal', 'SchedulerCheckinDetailController@latecancel_modal')->name('scheduler_checkin_details.latecencel_modal');
@@ -29,10 +29,14 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
 
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
-    Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');
-
+    Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');    
+    
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+
+    Route::get('services/select', 'ServiceController@select')->name('service.select');
+    Route::post('services/destroyimage', 'ServiceController@destroyimage')->name('service.destroyimage');
+
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
     Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
     Route::post('refund', 'UserBookingDetailController@refund')->name('refund');
@@ -41,21 +45,23 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
     Route::get('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
     
-    Route::resource('customers', 'CustomerController')->only(['index', 'update', 'destroy', 'store']);
-    Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
-
+    Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
+   
     Route::resource('staff', 'StaffController')->only(['index','create','show','edit','store','update', 'destroy']);
+    Route::get('position_modal','StaffController@position_modal')->name('staff.position_modal');
+    Route::post('position_modal/store','StaffController@position_store')->name('staff.position_modal.store');
+    Route::post('position_modal/delete/{id}','StaffController@position_delete')->name('staff.position_modal.delete');
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
   
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
-
     Route::resource('orders', 'OrderController')->only(['index','show']);
     Route::resource('family_members', 'FamilyMemberController')->only(['index','show']);
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
+    Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 });
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
@@ -67,6 +73,21 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/createNewBusinessProfile','DesignController@createNewBusinessProfile')->name('createNewBusinessProfile');
     Route::get('/createNewBusinessProfileone','DesignController@createNewBusinessProfileone')->name('createNewBusinessProfileone');
     Route::get('/createNewBusinessProfiletwo','DesignController@createNewBusinessProfiletwo')->name('createNewBusinessProfiletwo');
+    Route::get('/manage_activity','DesignController@manage_activity')->name('manage_activity');
+    Route::get('/manage_booking','DesignController@manage_booking')->name('manage_booking');
+    Route::get('/manage_company','DesignController@manage_company')->name('manage_company');
+    Route::get('/schedule_create','DesignController@schedule_create')->name('schedule_create');
+    Route::get('/company_setup','DesignController@company_setup')->name('company_setup');
+    Route::get('/checkin_details','DesignController@checkin_details')->name('checkin_details');
+    Route::get('/clients','DesignController@clients')->name('clients');
+    Route::get('/calendar','DesignController@calendar')->name('calendar');
+	Route::get('/clientsview','DesignController@clientsview')->name('clientsview');
+	Route::get('/addfamily','DesignController@addfamily')->name('addfamily');
+    Route::get('/manage_staff','DesignController@manage_staff')->name('manage_staff');
+	Route::get('/view_staff','DesignController@view_staff')->name('view_staff');
+	Route::get('/manage_product','DesignController@manage_product')->name('manage_product');
+	Route::get('/add_product','DesignController@add_product')->name('add_product');
+    Route::get('/sales_report','DesignController@sales_report')->name('sales_report');
 });
 
 //Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
@@ -97,17 +118,23 @@ Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::get('/dashboard', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
-        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+        Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
+        Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
+        Route::get('/void_or_refund_modal','CustomerController@void_or_refund_modal')->name('void_or_refund_modal');
+        Route::get('/terminate_or_suspend_modal','CustomerController@terminate_or_suspend_modal')->name('terminate_or_suspend_modal');
+
+        Route::get('/customers/another/{id}/','CustomerController@customerpage')->name('customerpage');
+
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
 
         // BookingPostorders
@@ -175,7 +202,6 @@ Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
 Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('modelboxsuccess');
-Route::post('delimageactivity', 'UserProfileController@delimageactivity')->name('delimageactivity');
 Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
 Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
 
@@ -947,6 +973,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
+    Route::get('/getRescheduleModel', 'BookingController@getRescheduleModel')->name('getRescheduleModel');
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
     Route::post('/searchfilteractivty', 'BookingController@searchfilteractivty')->name('searchfilteractivty');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
@@ -954,9 +981,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
 
 });
-
-
-
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
@@ -1038,7 +1062,6 @@ Route::namespace('Customers_Auth')->group(function(){
 
 Route::group(['middleware' => ['auth']], function()
 {
-    
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
     Route::get('/remove_grant_access/{id?}/{customerId?}','CustomerController@remove_grant_access')->name('remove_grant_access');
     Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
@@ -1047,6 +1070,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
+    Route::get('customer/add-family/{id}','CustomerController@add_family')->name('customer.add_family');
     Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
     Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
     Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
@@ -1070,7 +1094,11 @@ Route::group(['middleware' => ['auth']], function()
 {
     Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
-    Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
+    Route::prefix('/business/{business_id}')->group(function () {
+        Route::get('/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
+        Route::get('/paymentModal/{customerID}', 'CalendarController@paymentModal')->name('paymentModal');
+    });
+    Route::post('/calendar/order/store', 'CalendarController@store')->name('calendar.order.store');
 });
 
 

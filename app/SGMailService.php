@@ -3,6 +3,7 @@ namespace App;
 
 use SendGrid\Mail\Mail;
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 
 class SGMailService{
 
@@ -67,12 +68,12 @@ class SGMailService{
 		if( $businessimg == ''){
            	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
         }else{
-        	$ImageUrl = env('APP_URL').'/uploads/profile_pic/thumb/'.$businessimg;
+        	$ImageUrl = Storage::URL($businessimg);
         }
 
 		$substitutions = [
 			"providerName" => $businessdata->dba_business_name,  
-			"Customer_Name" => @$customer->fname.' '.@$customer->lname,  
+			"Customer_Name" => @$customer->full_name,  
 			"Customer_Email" => $customer->email,  
 			"temppassword" => $password,  
 			"Company_Name" => $businessdata->dba_business_name,  
@@ -81,7 +82,7 @@ class SGMailService{
 		    "PhoneNumber" => $businessdata->business_phone,   
 		    "Email" => $businessdata->business_email,  
 		    "website" => $businessdata->business_website,
-		    "ProviderBusinessLogo" => $ImageUrl,
+		    "Company_Image" => $ImageUrl,
 		    "url" => $businessdata->users->username
 		];
 		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');

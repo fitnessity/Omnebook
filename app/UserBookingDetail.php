@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
 	protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id'
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days'
     ];
 
 
@@ -101,6 +101,16 @@ class UserBookingDetail extends Model
 
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
+    }
+
+    public function userBookingDetailQty(){
+        $item = json_decode($this->qty,true);
+        $totalquantity = 0;
+        foreach(['adult', 'child', 'infant'] as $key){
+            $totalquantity +=  @$item[$key];
+        }
+    
+        return $totalquantity;
     }
 
     public function total(){
@@ -255,16 +265,15 @@ class UserBookingDetail extends Model
 
     public function getReserveData($feildName)
     {
-        $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->select('checkin_date')->orderBy('checkin_date','desc')->first();
+        $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->orderBy('checkin_date','desc')->first();
         $reserve_date = $reserve_time = $check_in_time ="—";
         if($reserve_data != ''){
-            $start = date('h:ia', strtotime(@$reserve_data->scheduler->shift_start));
-            $end = date('h:ia', strtotime(@$reserve_data->scheduler->shift_end));
+            $start = date('h:i A', strtotime(@$reserve_data->scheduler->shift_start));
+            $end = date('h:i A', strtotime(@$reserve_data->scheduler->shift_end));
             if($reserve_data->checkin_date != '')
                 $reserve_date = date('m-d-Y',strtotime($reserve_data->checkin_date));
             if($reserve_data->checked_at != '')
                 $check_in_time = date('m-d-Y',strtotime($reserve_data->checked_at));
-
             $reserve_time = $start .' to '.$end;
         }
 

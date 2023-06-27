@@ -183,6 +183,16 @@ class User extends Authenticatable
         return $this->hasMany(Customer::class,'user_id');
     }
 
+    public function BusinessPriceDetailsAges()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class,'userid');
+    }
+
+    public function BusinessPriceDetails()
+    {
+        return $this->hasMany(BusinessPriceDetails::class,'userid');
+    }
+
     public function employmenthistory()
     {
         return $this->hasMany(UserEmploymentHistory::class)->orderBy('is_present', 'desc')->orderBy('service_start', 'desc');

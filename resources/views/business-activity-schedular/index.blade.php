@@ -143,17 +143,22 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 														$current  = date('Y-m-d H:i:s');
 														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
 														$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
+														$grayBtnChk = 0;$class = '';
+														if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
+															$grayBtnChk = 1;
+															$class = 'post-btn-gray';
+														}
+														if($SpotsLeftdis == 0){
+															$grayBtnChk = 2;
+															$class = 'post-btn-gray';
+														}
 													@endphp
 													<div class="col-md-4 col-sm-5 col-xs-12">
 														<div class="classes-time">
-															<button class="post-btn activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}' , '{{$timeOfActivity}}');" >{{$timeOfActivity}} <br>{{$duration}}</button>
-
-															<!-- @if(@$checkindetail != '' && $difference >= 24)
-																<a onclick="ReScheduleOrder({{@$checkindetail->id}});">Reschedule</a>
-															@endif -->
+															<button class="post-btn {{$class}} activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}});" >{{$timeOfActivity}} <br>{{$duration}}</button>
 															
-															<!-- <a onclick="">Reschedule</a> -->
-															<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
+															<label>{{ $SpotsLeftdis == 0 ? 
+																"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
 														</div>
 													</div>
 												@endforeach
@@ -227,10 +232,19 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	});
 
 
-	function timeBookingPopUP(scheduleId,sid,activityName,time) {
-		$('#ajax_html_modal').modal('show');
-
-		$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>');
+	function timeBookingPopUP(scheduleId,sid,activityName,time,chk) {
+		
+		var html = '';
+ 		if(chk == 0){
+ 			html = '<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>';
+ 		}else if(chk ==1){
+ 			html = '<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>';
+ 		}
+ 		if(html != ''){
+ 			$('#ajax_html_modal').modal('show');
+ 			$('#booking-time-model').html(html);
+ 		}
+		
 	}
 
 	function addtimedate(scheduleId,sid,activityName,time){

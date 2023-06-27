@@ -147,14 +147,14 @@
     cursor: pointer;
 }
 
-.menu-title {
+/*.menu-title {
     padding: 15px 10px !important;
     font-size: 16px;
     font-weight: 600;
     color: #ffffff;
     border-bottom: 2px solid #ea1515;
     margin-bottom: 15px;
-}
+}*/
 
 #sidebar-menu > ul,
 .submenu {
@@ -1060,16 +1060,27 @@
 }
 
 .boxes_arts .headboxes .imgboxes {
-    width: 50px;
-	height: 50px;
+    width: 60px;
+	height: 60px;
     float: left;
+}
+.set-file-icon{
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 
 .boxes_arts .headboxes h4 {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 900;
-    padding-left: 55px;
     margin-top: 25px;
+	text-align: center;
+}
+.date-timebooking{
+	text-align: center;
+	margin-top: 3px;
+	font-weight: 500;
+	font-size: 12px;
 }
 
 .boxes_arts .headboxes .highlighted_box {
@@ -1085,8 +1096,9 @@
 }
 .boxes_arts .middleboxes,
 .boxes_arts .middleboxes1 {
-    height: 172px;
+    height: 0px;
     overflow: hidden;
+    border-bottom: none;
 }
 .boxes_arts .middleboxes.intro,
 .boxes_arts .middleboxes1.intro1,
@@ -1110,19 +1122,23 @@
 }
 
 .boxes_arts .foterboxes {
-    border-top: 1px solid #2d2d2d;
+    border-top: none;
     padding-top: 10px;
 }
 
 .boxes_arts .foterboxes .threebtn_fboxes {
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
+	text-align: center;
 }
-
+.btn-booking-red{
+	background: #ea1515 !important;
+    color: #fff !important;
+}
 .boxes_arts .foterboxes .threebtn_fboxes a {
-    background: #dbd9d9;
+    background: #dfdfdf;
     color: #000;
     font-size: 14px;
     font-weight: 700;
@@ -1202,7 +1218,7 @@
 
 #calendar .fc-basic-view .fc-body .fc-row {
     min-height: 5.6em;
-    height: 100% !important;
+    /*height: 100% !important;*/
 }
 
 #calendar .fc-basic-view .fc-day-number,
@@ -1761,6 +1777,7 @@ a {
   text-align: center;
   font-size: 20px;
   margin-top: 10px;
+  color: #fff;
 }
 .booking-info-history .cards-content p {
 	color: #fff;

@@ -22,29 +22,15 @@ class CartController extends Controller {
     	$cardInfo = [];
 
 	    $user = Auth::user();
-
 	    $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
-	    /*$savedEvents = $stripe->customers->allSources(
-	        $user->stripe_customer_id,
-	        ['object' => 'card' ,'limit' => 30]
-	    );*/
-
 	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
-
-	    /*print_r($savedEvents);
-	    exit;*/
-	   /* $cardInfo  = json_decode( json_encode( $savedEvents),true);
-
-	    
-	    $cardInfo = $savedEvents['data'];*/
 	    $cart = [];
-	    //session()->forget('cart_item');
+
 	    $cartdata  =  $request->session()->get('cart_item', []);
 	 
 	    if(!empty($cartdata ) && count($cartdata) >0 ) {
 		    foreach($cartdata['cart_item'] as $key=>$dt){
-		    	if($dt['chk'] != 'activity_purchase'){
+		    	if($dt['chk'] == '' ){
 		    		$cart['cart_item'] [$key]= $dt;
 		    	}
 		    }
@@ -119,11 +105,6 @@ class CartController extends Controller {
         } 
 
     	return redirect('/carts');
-    	/*if($data){
-    		return "success";
-    	}else{
-    		return "fail";
-    	}*/
     }
 
     public function addactivitygift(Request $request){

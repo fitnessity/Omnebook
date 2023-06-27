@@ -77,6 +77,12 @@ class PaymentController extends Controller {
             $lastid = $status->id; 
 
             foreach($cartService->items() as $item){
+                $paySessionQty = 0;
+                foreach(['adult', 'child', 'infant'] as $role){
+                    if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
+                        $paySessionQty +=  $cartService->getQtyPriceByItem($item)['qty'][$role];    
+                    }
+                }
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->users;
@@ -111,7 +117,7 @@ class PaymentController extends Controller {
                     'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
                     'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
                     'priceid' => $item['priceid'],
-                    'pay_session' => $price_detail->pay_session,
+                    'pay_session' =>  $paySessionQty *  $price_detail->pay_session,
                     'act_schedule_id' => $activityScheduler->id,
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
@@ -204,16 +210,17 @@ class PaymentController extends Controller {
                     }
                 }
 
-                BookingCheckinDetails::create([
-                    'business_activity_scheduler_id' => $activityScheduler->id,
-                    'customer_id' => $customer->id,
-                    'booking_detail_id' => $booking_detail->id,
-                    'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
-                    'use_session_amount' => 0,
-                    'source_type' => 'marketplace',
-                ]);
-
-
+                for($i=0; $i<$paySessionQty;$i++){
+                    BookingCheckinDetails::create([
+                        'business_activity_scheduler_id' => $activityScheduler->id,
+                        'customer_id' => $customer->id,
+                        'booking_detail_id' => $booking_detail->id,
+                        'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                        'use_session_amount' => 0,
+                        'source_type' => 'marketplace',
+                    ]);
+                }
+                
                 $company_email =  $businessServices->company_information->business_email;
                 $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                 $email_detail = array(
@@ -363,9 +370,14 @@ class PaymentController extends Controller {
 
             $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
             $tax = $bspdata->site_tax;
-
             foreach($cartService->items() as $item){
-              
+                $paySessionQty = 0;
+                foreach(['adult', 'child', 'infant'] as $role){
+                    if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
+                        $paySessionQty +=  $cartService->getQtyPriceByItem($item)['qty'][$role];    
+                    }
+                }
+
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->user;
@@ -395,12 +407,12 @@ class PaymentController extends Controller {
                     'user_id'=> $customer->id,
                     'user_type'=> 'customer',
                     'sport' => $item['code'],
-                    'bookedtime' => Carbon::now()->format('Y-m-d'),
+                    'bookedtime' => $item['sesdate'],
                     'business_id'=> $businessServices->cid,
                     'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
                     'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
                     'priceid' => $item['priceid'],
-                    'pay_session' => $price_detail->pay_session,
+                    'pay_session' => $paySessionQty * $price_detail->pay_session,
                     'act_schedule_id' => $activityScheduler->id,
                     'expired_at' => $activityScheduler->end_activity_date,
                     'contract_date' => Carbon::now()->format('Y-m-d'),
@@ -493,15 +505,17 @@ class PaymentController extends Controller {
                     }
                 }
 
-                BookingCheckinDetails::create([
-                    'business_activity_scheduler_id' => $activityScheduler->id,
-                    'customer_id' => $customer->id,
-                    'booking_detail_id' => $booking_detail->id,
-                    'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
-                    'use_session_amount' => 0,
-                    'source_type' => 'marketplace',
-                ]);
-
+                for($i=0; $i<$paySessionQty;$i++){
+                    BookingCheckinDetails::create([
+                        'business_activity_scheduler_id' => $activityScheduler->id,
+                        'customer_id' => $customer->id,
+                        'booking_detail_id' => $booking_detail->id,
+                        'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                        'use_session_amount' => 0,
+                        'source_type' => 'marketplace',
+                    ]);
+                }
+                
                 $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                 $email_detail = array(
                     'getreceipemailtbody' => $getreceipemailtbody,
