@@ -32,12 +32,12 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">  
-                                                            @if($profilePic != '')
+                                                            @if(Storage::disk('s3')->exists($profilePic) && $profilePic != '')
                                                                 <img src="{{Storage::URL($profilePic) }}" alt="Avatar" class="avatar">
                                                             @else 
                                                                 @php $sF=substr($service->program_name, 0, 1); @endphp
-                                                                <div class="youpage-img-text">
-                                                                   <p>{{$sF}}</p>
+                                                                <div class="company-list-text">
+                                                                   <p class="character">{{$sF}}</p>
                                                                 </div>
                                                             @endif
                                                         </div>
