@@ -3037,9 +3037,9 @@ class LessonController extends Controller {
             $chk = $request->chk;
             if($chk == 'calendar_activity_purchase'){
                 if(!empty($cart_item)){
-                    foreach($cart_item["cart_item"] as $pid=>$ci){
+                    foreach($cart_item["cart_item"] as $proId=>$ci){
                         if( $ci['chk'] == 'calendar_activity_purchase'){
-                            unset($cart_item["cart_item"][$pid]);
+                            unset($cart_item["cart_item"][$proId]);
                         }
                     }
                 }

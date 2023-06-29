@@ -120,7 +120,6 @@ class SchedulerController extends Controller
                     $sendmail = 1;
                 }else{
                     if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
-                        $UserBookingDetails->update(["act_schedule_id"=>$request->timeid]);
                         BookingCheckinDetails::create([
                             "business_activity_scheduler_id"=>$request->timeid, 
                             "customer_id" => $customer->id,
@@ -137,6 +136,8 @@ class SchedulerController extends Controller
             }
 
             if($sendmail == 1){
+                $UserBookingDetails->update(["act_schedule_id"=>$request->timeid,'bookedtime'=>$request->date]);
+
                 $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($UserBookingDetails->booking_id, $UserBookingDetails->id);
                 $email_detail = array(
                      'getreceipemailtbody' => $getreceipemailtbody,

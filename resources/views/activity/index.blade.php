@@ -299,8 +299,10 @@
                                     
 												$companycity = $company->city;
 			                        }
-					                      
-					                  $profilePic =  $service->first_profile_pic(); 
+					                  
+
+					                  $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg'); 
+
 					                  $pic_image = explode(',',$service['profile_pic']);
 											$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
 											$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
@@ -325,6 +327,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -332,6 +336,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -370,6 +376,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -377,6 +385,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -492,7 +502,7 @@
 													$companycity = $company->city;
 	                                 }
 			                            
-	                                 $profilePic =  $service->first_profile_pic(); 
+	                                 $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
@@ -516,6 +526,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -523,6 +535,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -561,6 +575,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -568,6 +584,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -689,7 +707,7 @@
 													$companycity = $company->city;
 				                        }
 						                            
-				                        $profilePic =  $service->first_profile_pic(); 
+				                        $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
@@ -713,6 +731,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -720,6 +740,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -881,7 +903,7 @@
 													$companycity = $company->city;
 	                                 }
 			                            
-	                                 $profilePic =  $service->first_profile_pic(); 
+	                                 $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler= '';
@@ -906,6 +928,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -913,6 +937,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -951,6 +977,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -958,6 +986,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1074,7 +1104,7 @@
 													$companycity = $company->city;
 				                        }
 						                            
-				                        $profilePic =  $service->first_profile_pic(); 
+				                        $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler= '';
@@ -1100,6 +1130,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1107,6 +1139,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1146,6 +1180,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1153,6 +1189,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1265,7 +1303,7 @@
 													$companycity = $company->city;
 	                                 }
 			                            
-	                                 $profilePic =  $service->first_profile_pic(); 
+	                                 $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler= '';
@@ -1290,6 +1328,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1297,6 +1337,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1335,6 +1377,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1342,6 +1386,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1459,7 +1505,7 @@
 													$companycity = $company->city;
 			                           }
 					                            
-			                           $profilePic =  $service->first_profile_pic(); 
+			                           $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 					                  	$pic_image = explode(',',$service['profile_pic']);
 
 												$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
@@ -1483,6 +1529,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1490,6 +1538,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
@@ -1529,6 +1579,8 @@
 																			<div class="item-inner">
 																				<img src="{{Storage::URL($img)}}" class="productImg">
 																			</div>
+																		@else
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																		@endif
 																	@endforeach
 																@else
@@ -1536,6 +1588,8 @@
 																		<div class="item-inner">
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
+																	@else
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
 																	@endif
 																@endif
 															</div>
