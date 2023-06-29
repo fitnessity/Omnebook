@@ -1096,7 +1096,7 @@ input:disabled{
 	  	$.fancybox.close();
 	});
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
 <script>
 
 $(document).ready(function () {
