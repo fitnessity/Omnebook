@@ -1722,7 +1722,6 @@
     }
 	.modal-dialog.modal-lg.business{width: 35% !important;}
 	.modal-dialog.manage-customer.mobile-1920{  width: 60%;}
-	.manage-customer-modal-title h3 { left: 503px !important;}
 }
 
 @media screen and (min-width:1920px) and (max-width:2500px){
@@ -1767,12 +1766,10 @@
 	.modal-dialog.familyorfrnd{width: 60% !important;}
 	.add-family-frnd .cards-content .familyfrnd-info .edit-family{left: 156px !important;}
 	.modal-dialog.manage-customer.mobile-1920{width: 60% !important;}
-	.manage-customer-modal-title h3{left: 532px !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
-	.manage-customer-modal-title h3{left: 555px !important; top: 7px !important;}
 }
 
 @media screen and (min-width:1200px){
