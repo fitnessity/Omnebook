@@ -27,6 +27,10 @@ class BookingCheckinDetails extends Model
                     if($statusData != ''){
                         if($statusData->user_type == 'customer'){
                             $customer = Customer::where(['business_id'=>$userBookingDetail->business_id, 'user_id'=>$statusData->user_id])->first();
+                            if($customer == ''){
+                                $user = User::where('id', $statusData->user_id)->first();
+                                $customer = Customer::create(['business_id'=>$userBookingDetail->business_id, 'user_id'=>$statusData->user_id ,'fname'=>$user->firstname,'lname'=>$user->lastname, 'username'=>$user->username ,'email'=>$user->email]);
+                            }
                             $id = @$customer->id;
                         }else{
                             $id= $userBookingDetail->user_id;

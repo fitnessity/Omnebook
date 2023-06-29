@@ -139,7 +139,7 @@
 									<div class="mb-10">
 										<label> End Date: </label>
 										<div class="input-group">
-											<input type="text" class="form-control border-0 flatpiker-with-border flatpickr-input active" value="10/12/2000" readonly="readonly" id="repeat_endDate1" >
+											<input type="text" class="form-control border-0 flatpickr-range flatpickr-input active" value="" readonly="readonly" id="repeat_endDate1" >
 										</div>
 									</div>
 								</div>

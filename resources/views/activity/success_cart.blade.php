@@ -38,14 +38,8 @@ if(!empty($cart["cart_item"])) {
 
     $pid = $cart['cart_item'][$priceid]['code'];
     $totalprice = $cart['cart_item'][$priceid]['totalprice'];
-    $profilePicact = url('/public/images/service-nofound.jpg');
-    if ($cart['cart_item'][$priceid]['image']!="") {
-    	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$priceid]['image']))) {
-    			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$priceid]['image']);
-    	} else {
-    			$profilePicact = url('/public/images/service-nofound.jpg');
-    	}
-    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
+    
+    $profilePicact  =  Storage::disk('s3')->exists($cart['cart_item'][$priceid]['image']) ? Storage::URL($cart['cart_item'][$priceid]['image']) : url('/images/service-nofound.jpg');  
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
     $act = BusinessServices::where('id', $cartdata["code"])->first();
@@ -426,7 +420,7 @@ if(!empty($cart["cart_item"])) {
 					<div class="owl-slider kickboxing-slider cart-slider">
 						<div id="carousel-slider" class="owl-carousel">
 							<?php
-								$companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= $profilePic ="";
+								$companyid = $companyname  = $latitude = $longitude = $serviceid =$profilePic ="";
 								$companycity = $companycountry = $pay_price  = "";
 									$servicetype = [];
 									foreach ($discovermore as $loop => $service) {
@@ -437,57 +431,17 @@ if(!empty($cart["cart_item"])) {
 										$area = !empty($service['area']) ? $service['area'] : 'Location';
 
 										$companyid = $companyData->id;
-										$companyaddress = $companyData->address;
 										$companyname = $companyData->dba_business_name;
 										$companycity = $companyData->city;
-										$companycountry = $companyData->country;
-										$companylogo = $companyData->logo;
-										$companylat = $companyData->latitude;
-										$companylon = $companyData->longitude;
 													
-										if ($service['profile_pic']!="") {
-											if(str_contains($service['profile_pic'], ',')){
-									    	$pic_image = explode(',', $service['profile_pic']);
-										    if( $pic_image[0] == ''){
-										       $p_image  = $pic_image[1];
-										    }else{
-										       $p_image  = $pic_image[0];
-										    }
-										  }else{
-										  	$pic_image = $service['profile_pic'];
-										   	$p_image = $service['profile_pic'];
-											}
+										$profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
+					                  	$pic_image = explode(',',$service['profile_pic']);
 
-											if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-										   	$profilePic = url('/public/uploads/profile_pic/' . $p_image);
-											}else {
-										   	$profilePic = url('/public/images/service-nofound.jpg');
-											}
-										}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-										$bookscheduler='';
-										$time='';
-										$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-										if(@$bookscheduler[0]['set_duration']!=''){
-											$tm=explode(' ',$bookscheduler[0]['set_duration']);
-											$hr=''; $min=''; $sec='';
-											if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-											if($tm[2]!=0){ $min=$tm[2].'min. '; }
-											if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-											if($hr!='' || $min!='' || $sec!='')
-											{ $time =  $hr.$min.$sec; } 
-										}
-										$pricearr = [];
-										$price_all = '';
-										$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-										if(!empty($price_allarray)){
-											foreach ($price_allarray as $key => $value) {
-												$pricearr[] = $value->pay_price;
-											}
-										}
-										if(!empty($pricearr)){
-											$price_all = min($pricearr);
-										}        
+										$bookscheduler= '';
+										$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
+										$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
+										
+										$price_all = $service->min_price();       
 							?>
 								<div class="item">
 								<div class="kickboxing-block">
@@ -499,33 +453,25 @@ if(!empty($cart["cart_item"])) {
 										<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -550,40 +496,32 @@ if(!empty($cart["cart_item"])) {
 											 <?php } ?></a>
 											</div>
 											@if($price_all != '')
-												<span>From ${{$price_all}}/Person</span>
+												<span>From  {!! $price_all !!}/Person</span>
 											@endif
 										</div>
 									@else
 										<div class="kickboxing-topimg-content">
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . @$pic_image) &&  @$pic_image != '' ) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -606,11 +544,7 @@ if(!empty($cart["cart_item"])) {
 									<?php
 										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-										$reviews_avg=0;
-										if($reviews_count>0)
-										{	
-											$reviews_avg= round($reviews_sum/$reviews_count,2); 
-										}
+										$reviews_avg=  $reviews_count>0 ? round($reviews_sum/$reviews_count,2):0;
 									?>
 									<div class="bottom-content">
 										<div class="class-info">
@@ -627,11 +561,7 @@ if(!empty($cart["cart_item"])) {
 													@endif
 
 													<div class="claimed">
-														<span>@if($companyData->is_verified == 1)
-																		CLAIMED
-																	@else
-																		UNCLAIMED
-																	@endif</span>
+														<span>{{ $companyData->is_verified == 1 ? "CLAIMED" : "UNCLAIMED"}}</span>
 													</div>
 											</div>
 												<div class="col-md-5 country-instant">
@@ -643,12 +573,6 @@ if(!empty($cart["cart_item"])) {
 										</div>
 											<?php
 												$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-												$service_type='';
-												if($service['service_type']!=''){
-													if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-													else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-													else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-												}
 											?>
 											<div class="activity-information">
 												<span><a 
@@ -659,7 +583,7 @@ if(!empty($cart["cart_item"])) {
 													  <?php }?>
 														  target="_blank">{{ $service['program_name'] }}</a>
 												</span>
-												<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+												<p>{{ $service->formal_service_types() }} | {{ $service['sport_activity'] }}</p>
 											</div>
 											<hr>
 											<div class="all-details">
@@ -745,7 +669,7 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" data-behavior="datepickerforbirtdate">
+								<input type="text" id="dob" name="dob" class="  flatpicker_registration" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10">
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">
@@ -770,7 +694,12 @@ if(!empty($cart["cart_item"])) {
 
 @include('layouts.footer')
 <script type="text/javascript">
-    
+
+	flatpickr(".flatpicker_registration", {
+		dateFormat: 'm/d/Y',
+	    maxDate: '01/01/2050',
+	});
+ 
     jQuery(function ($) {
     	$('#frmregister').validate({
 	        rules: {
