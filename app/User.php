@@ -73,7 +73,13 @@ class User extends Authenticatable
     }
 
     public function getFirstLetterAttribute(){
-        return $this->firstname[0] . '' . $this->firstname[0];
+        if($this->firstname != '' && $this->lastname != '' ){
+            return $this->firstname[0] . '' . $this->lastname[0];
+        }else if($this->firstname != ''){
+           return $this->firstname[0];
+        }else{
+            return 'F';
+        }
     }
 
     public function getaddress(){
