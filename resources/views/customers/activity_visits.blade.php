@@ -20,7 +20,7 @@
                     @foreach($visits as $visit)
                         <tr>
                             <td><p class="mb-0">{{date('m/d/Y',strtotime($visit->checkin_date))}}</p></td>
-                            <td><p class="mb-0">{{date('h:i A', strtotime($visit->order_detail->business_activity_scheduler->shift_start))}}</p></td>
+                            <td><p class="mb-0">{{date('h:i A', strtotime(@$visit->order_detail->business_activity_scheduler->shift_start))}}</p></td>
                             <td><p class="mb-0">{{$visit->order_detail->business_services->program_name}}</p></td>
                             <td><p class="mb-0">{{$visit->order_detail->business_price_detail->price_title}}</p></td>
                             <td><p class="mb-0">{{$visit->status_term()}}</p></td>

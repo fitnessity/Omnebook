@@ -88,6 +88,7 @@ class BusinessController extends Controller
                     if($b->business_price_detail != ''){
                         $topBookedPriceId[] = $b->business_price_detail->id;
                     }
+                    
                     $totalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->sum('amount');
                     $previousTotalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at','=',Carbon::now()->subMonth()->format('m'))->sum('amount');
 
