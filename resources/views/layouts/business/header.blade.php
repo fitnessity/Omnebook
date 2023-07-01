@@ -346,17 +346,17 @@ $total_quantity = 0;
                                                     </li>
 
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
+                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Accounts</a>
                                                     </li>
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
                                                     </li>
 
-                                                    <li class="pc-link">
+                                                    <!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                                    </li>
+                                                    </li> -->
 													
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Business Center </span></li>
