@@ -16,6 +16,7 @@
 			</thead>
 			<tbody>
 				@foreach ($purchase_history as $history)
+					@if($history->item_description()['itemDescription'] != '')
 					<tr>
 						<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
 						<td>{!!$history->item_description()['itemDescription']!!}</td>
@@ -27,6 +28,7 @@
 						<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 						</td>
 					</tr>
+					@endif
 				@endforeach
 			</tbody>
 		</table>
