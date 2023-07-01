@@ -44,64 +44,98 @@
                     <div class="page-title-box">
                         <h4 class="page-title">Manage Accounts</h4>
                     </div>
-                    <div class="payment_info_section padding-2 white-bg border-radius1">
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-bottom:10px">
-                                @if(session()->has('success'))
-                                <div class="alert alert-success fade in alert-dismissible show">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
-                                        <span aria-hidden="true" style="font-size:20px">×</span>
-                                    </button> {{ session()->get('success') }}
-                                </div>
-                                @elseif(session()->has('error'))
-                                <div class="alert alert-danger fade in alert-dismissible show">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="line-height:23px">
-                                        <span aria-hidden="true" style="font-size:20px">×</span>
-                                    </button> {{ session()->get('error') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
+                   
+                    <div class="row">
+						<div class="col-md-12">
+							<div class="main-box-white">
+			                    <h4 class="page-title">Select Account To Manage</h4>
+			                   
+								<div class="main-box-body">
 
-                        @foreach($UserFamilyDetails as $family)
-                            @php $type =  $family->parent_cus_id != '' ? 'customer' : 'user'; @endphp
-                            <div class="add-family-frnd" style="cursor: pointer">
-                                <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png);">
-                                    <h2>{{$family->full_name}}</h2>
-                                    <p>({{$family->relationship}} {{$family->age}} yrs old)</p>
-                                    <div class="familyfrnd-info">
-                                        @if( $type == 'customer')
-                                            <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> <!-- View Booking --> Booking Info</a> 
-                                        @endif
-                                        <a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px"> Edit </a>
-                                        @if( $type == 'user')
-                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> Delete </a>
-                                        @else
-                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> Delete </a>
-                                        @endif 
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+									<div class="user0imgs">
+										<div class="dot-settings p-relative">
+											<div class="settings-options">
+												<div class="more-settings-optns">
+													<i class="fas fa-ellipsis-h"></i>
+													<ul>
+														<li>
+															<a class="edit-family" href="{{route('user-profile')}}"><i class="fas fa-edit"></i> Edit</a>
+														</li>
+														
+														<li>
+					                                        <a class="view-booikng" href="{{route('personal.orders.index')}}"> <i class="fas fa-info"></i> Booking Info</a>
+														</li>
+													
+														<li>
+															<a data-behavior="ajax_html_modal" data-url="{{route('payment_history' ,['id'=> Auth::user()->id,'type'=>'user'])}}" data-modal-width="1200px">
+															<i class="fas fa-money-check"></i> Payment History</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+											<img src="{{Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/service-nofound.jpg')}}">
+											<span>{{Auth::user()->full_name}}</span>
+										</div>								
+									</div>
 
-                        <a class="add-fm-a" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">
-                            <div class="add-family-frnd" style="cursor: pointer">
-                                <div class="cards-content" style="color:#ffffff; background-image: url('/public/img/add-family.png');">
-                                    <h2>( + )</h2>
-                                    <p>Add Family Member or Friend</p>
-                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    
-                    <!-- <div class="row">
-                        <div class="col-md-12">
-                            <div class="text-right btn-txt-pro">
-                                <button type="submit" class="btn-nxt-profile">PREV </button>
-                                <button type="submit" class="btn-nxt-profile">NEXT </button>
-                            </div>
-                        </div>
-                    </div> -->
+									@foreach($UserFamilyDetails as $family)
+										@php $type =  $family->parent_cus_id != '' ? 'customer' : 'user';  @endphp
+										<div class="user0imgs @if(!Storage::disk('s3')->exists(@$family->profile_pic)) set-text @endif">
+											<div class="dot-settings p-relative">
+												<div class="d-grid">
+													@if(Storage::disk('s3')->exists(@$family->profile_pic))
+														<img src="{{ Storage::URL(@$family->profile_pic)}}">
+													@else
+														<div class="no-img-text">
+															<p class="character">{{$family->first_letter}}</p>
+														</div>
+													@endif
+													<span>{{$family->full_name}}</span>
+												</div>
+												<div class="settings-options">
+													<div class="more-settings-optns">
+														<i class="fas fa-ellipsis-h"></i>
+														<ul>
+															<li>
+																<a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
+																<i class="fas fa-edit"></i> Edit</a>
+															</li>
+															@if( $type == 'customer')
+																<li>
+							                                        <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> <i class="fas fa-info"></i> Booking Info</a>
+																</li>
+															@endif
+															<!-- <li>
+																<a data-behavior="ajax_html_modal" data-url="{{route('payment_history' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
+																<i class="fas fa-money-check"></i> Payment History</a>
+															</li> -->
+															<li>
+																@if( $type == 'user')
+						                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> <i class="fas fa-trash-alt"></i> Delete</a>
+						                                        @else
+						                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> <i class="fas fa-trash-alt"></i> Delete</a>
+						                                        @endif
+															</li>
+														</ul>
+													</div>
+												</div>
+												
+											</div>								
+										</div>
+									@endforeach
+									
+									<a data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">
+										<div class="user0imgs plus-set">
+											<div class="plus-add-family">
+												<i class="fas fa-plus"></i>
+											</div>
+											<span>Add Family</span>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
                 </div>
             </div>
         </div>

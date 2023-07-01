@@ -315,13 +315,7 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                
-                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}"
-                                     alt="Fitnessity" >
-                                @else
-                                	<img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity">
-                                @endif
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" >
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -330,12 +324,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-                                                    @else
-                                                        <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-                                                    @endif
-														
+														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">

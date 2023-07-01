@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['about_me','network_count','about_business', 'full_name','age'];
+    protected $appends = ['about_me','network_count','about_business', 'full_name','age','first_letter'];
 
     public $timestamps = false;
     
@@ -70,6 +70,10 @@ class User extends Authenticatable
     
     public function getFullNameAttribute(){
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->first_name[0] . '' . $this->last_name[0];
     }
 
     public function getaddress(){

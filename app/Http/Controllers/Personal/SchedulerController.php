@@ -143,6 +143,22 @@ class SchedulerController extends Controller
                      'getreceipemailtbody' => $getreceipemailtbody,
                      'email' => $customer->email);
                 $status  = SGMailService::sendBookingReceipt($email_detail);
+
+                $email_detail_provider = array(
+                    "email" => @$UserBookingDetails->company_information->business_email, 
+                    "CustomerName" => @$UserBookingDetails->Customer->full_name, 
+                    "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
+                    "BusinessName"=> @$UserBookingDetails->company_information->dba_business_name,
+                    "BookedPerson"=> @$UserBookingDetails->Customer->full_name,
+                    "ParticipantsName"=> @$UserBookingDetails->Customer->full_name,
+                    "date"=> date('m/d/Y',strtotime($request->date)),
+                    "time"=>  @$UserBookingDetails->business_activity_scheduler->activity_time(),
+                    "duration"=> @$UserBookingDetails->business_activity_scheduler->get_clean_duration(),
+                    "ActivitiyType"=>  @$UserBookingDetails->business_services->service_type,
+                    "ProgramName"=> @$UserBookingDetails->business_services->program_name,
+                    "CategoryName"=> @$UserBookingDetails->business_price_detail->business_price_details_ages_with_trashed->category_title);
+
+                SGMailService::confirmationMail($email_detail_provider);
             }
             //$UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
             return "success";

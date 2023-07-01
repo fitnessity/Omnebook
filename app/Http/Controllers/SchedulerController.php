@@ -240,45 +240,26 @@ class SchedulerController extends Controller
                foreach($pricelist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
-               $dues_tax = $sales_tax = 0;
-               if($catedata->dues_tax != ''){
-                    $dues_tax = $catedata->dues_tax;
-               }
 
-               if($catedata->sales_tax != ''){
-                    $sales_tax = $catedata->sales_tax;
-               }
-
+               $dues_tax = $catedata->dues_tax != '' ?  $catedata->dues_tax : 0;
+               $sales_tax = $catedata->sales_tax != '' ?  $catedata->sales_tax : 0;
+               
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
           }else if($request->chk == 'priceopt'){
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->first();
+
                $output = $membershiplist->membership_type;
-               $total_price_val_adult =  @$membershiplist['adult_cus_weekly_price'];
-               $total_price_val_child =  @$membershiplist['child_cus_weekly_price'];
-               $total_price_val_infant =  @$membershiplist['infant_cus_weekly_price']; 
 
-               if($total_price_val_adult == 0 &&  $total_price_val_adult == '' ){
-                    $total_price_val_adult =  @$membershiplist['adult_weekend_price_diff'];
-               }
+               $total_price_val_adult = @$membershiplist['adult_cus_weekly_price'] == 0 &&  @$membershiplist['adult_cus_weekly_price'] == '' ? @$membershiplist['adult_weekend_price_diff'] : @$membershiplist['adult_cus_weekly_price'];
 
-               if($total_price_val_child == 0 &&  $total_price_val_child == '' ){
-                    $total_price_val_child =  @$membershiplist['child_weekend_price_diff'];
-               }
+               $total_price_val_child = @$membershiplist['child_cus_weekly_price'] == 0 &&  @$membershiplist['child_cus_weekly_price'] == '' ? @$membershiplist['child_weekend_price_diff'] : @$membershiplist['child_cus_weekly_price'];
 
-               if($total_price_val_infant == 0 &&  $total_price_val_infant == '' ){
-                    $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
-               }
-               $aduid = "adultprice";
-               $childtid = "childprice";
-               $infantid = "infantprice";
-               $session_val = "session_val";
-               if($request->type == 'ajax'){
-                    $aduid = "adultpriceajax";
-                    $childtid = "childpriceajax";
-                    $infantid = "infantpriceajax";
-                    $session_val = "session_valajax";
-               }
-
+               $total_price_val_infant = @$membershiplist['infant_cus_weekly_price'] == 0 &&  @$membershiplist['infant_cus_weekly_price'] == '' ? @$membershiplist['infant_weekend_price_diff'] : @$membershiplist['infant_cus_weekly_price'];
+             
+               $aduid = $request->type == 'ajax' ? "adultpriceajax" : "adultprice";
+               $childtid = $request->type == 'ajax' ? "childpriceajax" : "childprice";
+               $infantid = $request->type == 'ajax' ? "infantpriceajax" : "infantprice";
+               $session_val = $request->type == 'ajax' ? "session_valajax" : "session_val";
 
                if($total_price_val_adult != 0 &&  $total_price_val_adult != '' ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
@@ -367,18 +348,11 @@ class SchedulerController extends Controller
                     $date = $user->birthdate;
                }
                $age = Carbon::parse($date)->age;
-               if($age < 18){
-                    $output .= $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')';
-               }else{
-                    $output .= $username .' ('.$age .' yrs)';
-               }    
+               $output .=  $age < 18 ? $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')': $username .' ('.$age .' yrs)';   
           }    
-          
-          if($html != ''){
-               return $output.'~~'.$html;
-          }else{
-               return $output;
-          }   
+       
+          return ($html != '' ? $output.'~~'.$html : $output);
+         
      }
 
      public function booking_activity_cancel(Request $request){

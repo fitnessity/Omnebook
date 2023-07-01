@@ -72,25 +72,11 @@
                                     <label for="mediaFile">Profile Image</label>
                                     <div class="piccrop_block" id="file">
                                         @php
-                                        if(@$UserProfileDetail['profile_pic']!="")
-                                        $path='public/uploads/profile_pic/'.$UserProfileDetail['profile_pic'];
-                                        else
-                                        $path="public/img/upload.png"
+                                            $path = Storage::disk('s3')->exists(@$UserProfileDetail['profile_pic']) ? Storage::URL(@$UserProfileDetail['profile_pic']) : url('/img/upload.png');
                                         @endphp
-                                        <label>Drop files to upload <br> or <br> <img id="thumb-2" src="/{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
+                                        <label>Drop files to upload <br> or <br> <img id="thumb-2" src="{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
                                         <input type="file" id="mediaFile" name="frm_profile_pic" onchange="readURL(this);" accept="image/*" />
-                                       
-                                       <!-- <img class="result" id="result" name="frm_profile_pic1" >-->
                                     </div>
-
-                                    <!--<div class="profile-block">
-                                        <div id="profile">
-                                            <div class="dashes"></div>
-                                           
-                                            <label>Drop files to upload <br> or <br> <img src="/{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
-                                        </div>
-                                        <input type="file" id="mediaFile" name="frm_profile_pic" onchange="readURL(this);" accept="image/*" />
-                                    </div>-->
                                 </div>
 
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -265,75 +251,7 @@
                         </form>
                     </div>
                     
-                    {{--
-                    <div class="edit_profile_section padding-1 white-bg border-radius1 mt-4">
-
-                        <div class="title-sub">Change Cover Photo</div>
-
-                        <div class="row">
-
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-
-                                <div class="cover-tagbox">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Your Cover Photo will be used to customize the header of your profile.</span>
-                                </div>
-
-                                <div class="file-upload">
-                                    <form name="frm_cover" id="frm_cover" action="{{Route('savemycoverphoto')}}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="image-upload-wrap piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: none;" @endif>
-                                            <input class="file-upload-input" name="coverphoto" id="coverphoto" type='file' onchange="readURL(this);" accept="image/*" />
-
-                                            <div class="drag-text">
-                                                <h3>Drop your image here</h3>
-                                                <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Select Your File</button>
-                                            </div>
-                                            <img class="result" id="result1">
-                                        </div>
-                                        @if ($errors->has('coverphoto'))
-                                        <span class="help-block" style="color:red">
-                                            <strong>Upload your photo</strong>
-                                        </span>
-                                        @endif
-                                        <div class="file-upload-content piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: block;" @endif>
-                                            @php
-                                            if(@$UserProfileDetail['cover_photo']!="")
-                                            $path='public/uploads/cover-photo/'.$UserProfileDetail['cover_photo'];
-                                            else
-                                            $path="#"
-
-                                            @endphp
-                                            <img class="file-upload-image" src="/{{$path}}" alt="your image" />
-                                            
-                                        </div>
-                                        
-                                        <div>
-                                        </div>
-                                        <div class="highlighted-txt-yellow">
-                                            For best result, upload and image that is 1950px by 450px or larger.
-                                        </div>
-
-                                        <p>If you'd like to delete your current cover photo, use the delete Cover Photo button.</p>
-
-                                        <div class="image-title-wrap">
-                                            <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-                                            <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
-                                            &nbsp;&nbsp;
-                                            <button type="button" style="background:#000" onclick="removeUpload_coverphoto()" class="remove-image">Delete My Cover Photo</button>
-
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    
-                    --}}
-                    
+        
                     <div class="edit_profile_section changepass-section padding-1 white-bg border-radius1 mt-4">
 
                         <div class="title-sub">Change Password</div>

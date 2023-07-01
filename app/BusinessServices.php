@@ -305,7 +305,7 @@ class BusinessServices extends Model
         $chkDetailCnt = 0;
         $userbookingDetail =  UserBookingDetail::where('sport',$this->id)->get();
         foreach($userbookingDetail as $usd){
-            $chkDetailCnt += BookingCheckinDetails::where('booking_detail_id', $usd->id)->where('checkin_date',">=", date('Y-m-d', strtotime("this week")))->count();
+            $chkDetailCnt += BookingCheckinDetails::where('booking_detail_id', $usd->id)->where('checkin_date',">=", date('Y-m-d', strtotime("this week")))->where('checkin_date',"<=", date('Y-m-d', strtotime("saturday 0 week")))->count();
         }
         return  $chkDetailCnt;
     }
