@@ -199,12 +199,12 @@
 									<li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Family</a>
 									</li>
-									<li class="pc-link">
+									<!-- <li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
-									</li>
-									<li class="pc-link">
+									</li> -->
+									<!-- <li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon2.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info" style="color: white;">Payment Info</a>
-									</li>
+									</li> -->
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
 									</li>
