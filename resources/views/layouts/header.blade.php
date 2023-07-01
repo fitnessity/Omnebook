@@ -358,9 +358,7 @@ $total_quantity = 0;
 									    foreach($cart["cart_item"] as $item){
 									    	if($item['chk'] == ''){
 									    		$newcart['cart_item'] [] = $item;
-									    		//$total_quantity = count($cart["cart_item"]);
 									    	}
-									        /*$total_quantity += (int)$item["quantity"];*/
 									    }
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
@@ -374,13 +372,8 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                
-                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}"
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png')  }}"
                                      alt="Fitnessity" >
-                                @else
-                                	<img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity">
-                                @endif
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -389,12 +382,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-                                                    @else
-                                                        <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-                                                    @endif
-														
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('public/images/user-icon.png') }}" class="sidemenupic">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -422,17 +410,17 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
                                                     </li> -->
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
+                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Accounts</a>
                                                     </li>
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
                                                     </li>
 
-                                                    <li class="pc-link">
+                                                   <!--  <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                                    </li>
+                                                    </li> -->
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
                                                     </li> -->

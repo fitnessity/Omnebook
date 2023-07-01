@@ -358,6 +358,7 @@ class OrderController extends BusinessBaseController
                 'user_id'=> $cUid,
                 'transfer_provider_status' =>'unpaid',
                 'payment_number' => '{}',
+                'order_from' => "Checkout Register"
             ]);
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;

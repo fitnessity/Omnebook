@@ -1,12 +1,8 @@
-<form method="post" action="{{route('addFamilyMember')}}">
+<form method="post" action="{{route('addFamilyMember')}}" enctype="multipart/form-data">
 	@csrf
 
 	@php 
-		if(@$familyData != '' ){ 
-			$title = "Edit";
-		}else{
-			$title = "Add";
-		}
+		$title = @$familyData != '' ? "Edit" : "Add";
 
 		if($type == 'user'){
 			$first_name = @$familyData->first_name;
@@ -20,6 +16,8 @@
 			$birthday = @$familyData->birthdate;
 		}
 
+		$profile_pic = Storage::disk('s3')->exists(@$familyData->profile_pic) ? Storage::URL(@$familyData->profile_pic) : url('/images/service-nofound.jpg');
+
 	@endphp
 
 	<div class="row contentPop"> 
@@ -31,6 +29,13 @@
 	<input type="hidden" name="type" value="{{@$type}}">
 	<div class="editfamily_frnds">
 		<div class="row">	
+			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+				<div class="photo-select product-edit user-dash-img">
+						<input type="hidden" name="old_pic" value="{{@$familyData->profile_pic}}">
+						<img src="{{$profile_pic}}" class="pro_card_img blah" id="showimg">
+						<input type="file" id="profile_pic" name="profile_pic" class="text-center">
+					</div>
+			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
 					<input type="text" name="fname" placeholder="First Name" class="form-control" required="required" value="{{$first_name}}">
@@ -74,7 +79,7 @@
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group dob">
 					<label>mm/dd/yyyy</label>
-					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{@$birthday}}" required="required" data-behavior="datepickerforbirtdate">
+					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="" required="required" >
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
@@ -100,3 +105,17 @@
 		</div>
 	</div>
 </form>
+
+<script type="text/javascript">
+	
+	flatpickr('#birthdate',{
+		dateFormat: "m-d-Y",
+		maxDate:"today",
+		minDate:"01-01-1970",
+		defaultDate : '',
+		onChange: function(selectedDates, dateStr, instance) {
+            let date = moment(dateStr).format("YYYY-MM-DD");
+            $("#birthdate").val(date);
+        }
+	});
+</script>
