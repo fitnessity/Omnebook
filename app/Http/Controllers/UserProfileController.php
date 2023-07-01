@@ -8703,12 +8703,13 @@ class UserProfileController extends Controller {
 
     public function addFamilyMember(Request $request) {
         $user = Auth::user();
-
         if($request->hasFile('profile_pic')){
             $profile_pic = $request->file('profile_pic')->store('customer');
         }else{
             $profile_pic = $request->old_pic;
         }
+
+        $birthdate = $request->birthdatehidden;
         if($request->id != ''){
             if($request->type == 'user'){
                 $familyData = $user->user_family_details()->findOrFail($request->id);
@@ -8717,7 +8718,7 @@ class UserProfileController extends Controller {
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthday = date('Y-m-d',strtotime($request->birthdate));
+                $familyData->birthday =  $birthdate;
                 $familyData->mobile = $request->mobile;
                 $familyData->emergency_contact_name = $request->emergency_name;
                 $familyData->emergency_contact = $request->emergency_contact;
@@ -8730,7 +8731,7 @@ class UserProfileController extends Controller {
                 $familyData->gender = $request->gender;
                 $familyData->email = $request->email;
                 $familyData->relationship = $request->relationship;
-                $familyData->birthdate =  date('Y-m-d',strtotime($request->birthdate));
+                $familyData->birthdate =   $birthdate;
                 $familyData->phone_number = $request->mobile;
                 $familyData->emergency_contact = $request->emergency_contact;
                 $familyData->profile_pic = $profile_pic;
@@ -8747,7 +8748,7 @@ class UserProfileController extends Controller {
                 'relationship' => $request->relationship,
                 'gender' => $request->gender,
                 'profile_pic' => $profile_pic,
-                'birthday' =>  date('Y-m-d',strtotime($request->birthdate)),
+                'birthday' =>   $birthdate,
                 'emergency_contact_name' => $request->emergency_name,
             ]);
 
@@ -8768,7 +8769,7 @@ class UserProfileController extends Controller {
                     'relationship' => $request->relationship,
                     'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
-                    'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
+                    'birthdate' =>  $birthdate,
                 ]);
 
                 if($key == 0){
@@ -8784,7 +8785,7 @@ class UserProfileController extends Controller {
                         'relationship' => $request->relationship,
                         'profile_pic' => $profile_pic,
                         'gender' => $request->gender,
-                        'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
+                        'birthdate' =>  $birthdate,
                         'stripe_customer_id' => $Customer->stripe_customer_id
                     ]);
 
