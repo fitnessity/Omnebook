@@ -8,7 +8,7 @@ use App\AddrCities;
 use App\AddrStates;
 use App\UserBookingStatus;
 use App\UserBookingDetail;
-use App\{BusinessServices,Customer,BookingCheckinDetails,CompanyInformation,Transaction,Recurring,SGMailService};
+use App\{BusinessServices,Customer,BookingCheckinDetails,CompanyInformation,Transaction,Recurring,SGMailService,BusinessStaff};
 use App\Services\CheckoutCalendarCartService;
 use Auth;
 use DB;
@@ -79,7 +79,6 @@ class CalendarController extends Controller
 
         //print_r($fullary);exit;
 
-    
         return view('calendar.index', ['UserProfileDetail' => $UserProfileDetail,'fullary'=>$fullary ] );
     }
 
@@ -182,7 +181,8 @@ class CalendarController extends Controller
         }
 
         $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>Auth::user()->cid])->get();
-
+        $staffData = BusinessStaff::where('business_id',Auth::user()->cid)->get();
+       
         $modelchk = 0;
         $modeldata = '';
         $ordermodelary = array();
@@ -194,8 +194,12 @@ class CalendarController extends Controller
             session()->forget('ordermodelary');
         }
 
+        $companyId = $business_id;
+        return view('calendar.provider_calender', compact('fullary','program_list','companyId','modeldata','modelchk','staffData') );
+    }
+
+    public function chkStaffAssignedOrder(Request $request){
         
-        return view('calendar.provider_calender', ['fullary'=>$fullary,'program_list'=>$program_list,'companyId'=>$business_id,'intent'=>'','modeldata' => $modeldata,'modelchk' => $modelchk,] );
     }
 
     public function paymentModal(Request $request, $business_id, $customerID){
@@ -417,7 +421,8 @@ class CalendarController extends Controller
                 'everyWeeks'=>@$item['everyWeeks'],
                 'monthDays'=>@$item['monthDays'],
                 'enddate'=>@$item['enddate'],
-                'activity_days'=>@$item['activity_days']
+                'activity_days'=>@$item['activity_days'],
+                'order_from' => "Calendar Order"
             ]);
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;

@@ -19,10 +19,10 @@ class UserFamilyDetail extends Model
      * Get the user that owns the task.
      */
 	 protected $fillable = [
-       'user_id', 'first_name', 'last_name','email', 'mobile','emergency_contact','emergency_contact_name','relationship','gender','birthday',
+       'user_id', 'first_name', 'last_name','email', 'mobile','emergency_contact','emergency_contact_name','relationship','gender','birthday','profile_pic'
     ];
 
-    protected $appends = ['full_name','age'];
+    protected $appends = ['full_name','age', 'first_letter'];
 
     public function getAgeAttribute()
     {
@@ -35,6 +35,10 @@ class UserFamilyDetail extends Model
     
     public function getFullNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->first_name[0] . '' . $this->last_name[0];
     }
 
     public function user()

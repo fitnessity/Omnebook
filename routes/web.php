@@ -735,6 +735,7 @@ Route::post('/unfollower_company', 'UserProfileController@Punfollower')->name('u
 Route::post('/company-image-upload', 'UserProfileController@companyImageUpload');
 Route::post('/user-multi-image-upload', 'UserProfileController@userImageUpload');
 Route::get('personal-profile/add-family', 'UserProfileController@addFamily')->name('addFamily');
+Route::get('payment_history', 'UserProfileController@payment_history')->name('payment_history');
 Route::post('/gallery-upload', 'UserProfileController@galleryUpload')->name('file-upload');
 Route::get('gallery-picture/{user_id}', 'UserProfileController@galleryList')->name('file-list');
 Route::post('profile/editProfilePicture', 'UserProfileController@editProfilePicture');
@@ -1099,6 +1100,7 @@ Route::group(['middleware' => ['auth']], function()
         Route::get('/paymentModal/{customerID}', 'CalendarController@paymentModal')->name('paymentModal');
     });
     Route::post('/calendar/order/store', 'CalendarController@store')->name('calendar.order.store');
+    Route::get('/chkStaffAssignedOrder', 'CalendarController@chkStaffAssignedOrder')->name('calendar.chkStaffAssignedOrder');
 });
 
 

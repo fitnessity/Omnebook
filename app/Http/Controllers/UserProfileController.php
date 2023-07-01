@@ -8411,28 +8411,9 @@ class UserProfileController extends Controller {
         if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
             $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
         }
-        $sports_names = $this->sports->getAllSportsNames();
-        $approve = Evidents::where('user_id', $loggedinUser['id'])->get();
-        $serviceType = Miscellaneous::businessType();
-        $programType = Miscellaneous::programType();
-        $programFor = Miscellaneous::programFor();
-        $numberOfPeople = Miscellaneous::numberOfPeople();
-        $ageRange = Miscellaneous::ageRange();
-        $expLevel = Miscellaneous::expLevel();
-        $serviceLocation = Miscellaneous::serviceLocation();
-        $pFocuses = Miscellaneous::pFocuses();
-        $duration = Miscellaneous::duration();
-        $servicePriceOption = Miscellaneous::servicePriceOption();
-        $specialDeals = Miscellaneous::specialDeals();
-        /* if($loggedinUser['role']=='business' || $loggedinUser['role']=='professional' || $loggedinUser['role']=='admin'){
-          $view='personal-profile.user-profile';
-          }
-          elseif($loggedinUser['role']=='customer'){
-          $view='profiles.viewProfileCustomer';
-          } */ ///nnnn
+    
         $view = 'personal-profile.user-profile';
-        $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
-        $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
+
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -8462,9 +8443,7 @@ class UserProfileController extends Controller {
             $UserProfileDetail['state'] = $state->state_name;
         }
         $UserProfileDetail['country'] = $user->country;
-        $firstCompany = CompanyInformation::where('user_id', Auth::user()->id)->first();
-        $companies = CompanyInformation::where('user_id', Auth::user()->id)->get();
-        
+       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
@@ -8473,28 +8452,7 @@ class UserProfileController extends Controller {
         return view($view, [
             'cart' => $cart,
             'UserProfileDetail' => $UserProfileDetail,
-            'firstCompany' => $firstCompany,
-            'countries' => $this->users->getCountriesList(),
-            'states' => $this->users->getStateList($UserProfileDetail['country']),
-            'cities' => $this->users->getCityList($UserProfileDetail['state']),
-            'phonecode' => Miscellaneous::getPhoneCode(),
-            'sports_names' => $sports_names,
-            'serviceType' => $serviceType,
-            'programType' => $programType,
-            'programFor' => $programFor,
-            'numberOfPeople' => $numberOfPeople,
-            'ageRange' => $ageRange,
-            'expLevel' => $expLevel,
-            'serviceLocation' => $serviceLocation,
-            'pFocuses' => $pFocuses,
-            'duration' => $duration,
-            'specialDeals' => $specialDeals,
-            'servicePriceOption' => $servicePriceOption,
-            'pageTitle' => "PROFILE",
-            'approve' => $approve,
-            'family' => $family,
-            'business_details' => $business_details,
-            'companies' => $companies
+            'pageTitle' => "PROFILE"
         ]);
         //return view('personal-profile.user-profile');
     }
@@ -8515,25 +8473,13 @@ class UserProfileController extends Controller {
             'address' => 'required',
         ]);
 
-        /* $imageName=''; 
-          if ($request->hasFile('profilephoto')) {
-          $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
-          $thumb_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR;
-          $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('profilephoto'),$file_upload_path,1,$thumb_upload_path,'247','266');
-          $imageName = $image_upload['filename'];
-          } */
+
         $imageName = '';
-
-        if ($request->hasFile('frm_profile_pic')) {
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR;
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-            $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('frm_profile_pic'), $file_upload_path, 1, $thumb_upload_path, '247', '266');
-            $imageName = $image_upload['filename'];
-            //exit;
-        } else {
-            $image_name = $request->old_profile_pic;
+        if($request->hasFile('frm_profile_pic')){
+            $imageName = $request->file('frm_profile_pic')->store('customer');
+        }else{
+            $imageName = $request->old_profile_pic;
         }
-
 
         $cat = User::find($loggedinUser['id']);
         $cat->firstname = $request->firstname;
@@ -8757,6 +8703,12 @@ class UserProfileController extends Controller {
 
     public function addFamilyMember(Request $request) {
         $user = Auth::user();
+
+        if($request->hasFile('profile_pic')){
+            $profile_pic = $request->file('profile_pic')->store('customer');
+        }else{
+            $profile_pic = $request->old_pic;
+        }
         if($request->id != ''){
             if($request->type == 'user'){
                 $familyData = $user->user_family_details()->findOrFail($request->id);
@@ -8769,6 +8721,7 @@ class UserProfileController extends Controller {
                 $familyData->mobile = $request->mobile;
                 $familyData->emergency_contact_name = $request->emergency_name;
                 $familyData->emergency_contact = $request->emergency_contact;
+                $familyData->profile_pic = $profile_pic;
                 $familyData->update();
             }else{
                 $familyData = Customer::where('id',$request->id)->first();
@@ -8780,6 +8733,7 @@ class UserProfileController extends Controller {
                 $familyData->birthdate =  date('Y-m-d',strtotime($request->birthdate));
                 $familyData->phone_number = $request->mobile;
                 $familyData->emergency_contact = $request->emergency_contact;
+                $familyData->profile_pic = $profile_pic;
                 $familyData->update();
             }
         }else{
@@ -8792,6 +8746,7 @@ class UserProfileController extends Controller {
                 'emergency_contact' => $request->emergency_contact,
                 'relationship' => $request->relationship,
                 'gender' => $request->gender,
+                'profile_pic' => $profile_pic,
                 'birthday' =>  date('Y-m-d',strtotime($request->birthdate)),
                 'emergency_contact_name' => $request->emergency_name,
             ]);
@@ -8811,6 +8766,7 @@ class UserProfileController extends Controller {
                     'phone_number' => $request->mobile,
                     'emergency_contact' => $request->emergency_contact,
                     'relationship' => $request->relationship,
+                    'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
                     'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
                 ]);
@@ -8826,6 +8782,7 @@ class UserProfileController extends Controller {
                         'phone_number' => $request->mobile,
                         'emergency_contact' => $request->emergency_contact,
                         'relationship' => $request->relationship,
+                        'profile_pic' => $profile_pic,
                         'gender' => $request->gender,
                         'birthdate' => date('Y-m-d',strtotime($request->birthdate)),
                         'stripe_customer_id' => $Customer->stripe_customer_id
@@ -8865,6 +8822,17 @@ class UserProfileController extends Controller {
             'cart' => $cart,       
             'UserFamilyDetails' => $UserFamilyDetails,
         ]);
+    }
+
+    public function payment_history(Request $request){
+        if($request->type == 'user'){
+            $purchase_history = Auth::user()->Transaction()->orderby('id', 'desc')->get();
+        }else{
+            $customer = Customer::find($request->id);
+            $purchase_history = @$customer != '' ?  @$customer->Transaction()->orderby('id', 'desc')->get() : [];
+        }
+        //print_r($purchase_history);exit;
+        return view('personal-profile.payment-history-modal',['purchase_history'=>$purchase_history ,'id'=>$request->id]);
     }
 
     public function showFamilyMember(Request $request) {

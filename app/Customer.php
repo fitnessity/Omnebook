@@ -100,6 +100,15 @@ class Customer extends Authenticatable
         }
     }
 
+    public function getFullNameAttribute(){
+        return $this->fname . ' ' . $this->lname;
+    }
+
+    public function getFirstLetterAttribute(){
+        return $this->fname[0] . '' . $this->lname[0];
+    }
+
+
     public function company_information()
     {
         return $this->belongsTo(CompanyInformation::class, 'business_id');
@@ -168,14 +177,6 @@ class Customer extends Authenticatable
         $paymentMethods = $stripe->paymentMethods->all(['customer' => $this->stripe_customer_id, 'type' => 'card']);
         return $paymentMethods;
 
-    }
-
-    public function getFullNameAttribute(){
-        return $this->fname . ' ' . $this->lname;
-    }
-
-    public function getFirstLetterAttribute(){
-        return $this->fname[0] . ' ' . $this->lname[0];
     }
 
     public function full_address(){

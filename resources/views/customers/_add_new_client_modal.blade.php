@@ -17,7 +17,10 @@
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-6 space-remover ">
 						<div class="manage-customer-modal-title">
-							<h4>Add A New Client Manually</h4> <h3>- Or -</h3>
+							<h4>Add A New Client Manually</h4> 
+							<div class="p-relative">
+								<h3>- Or -</h3>
+							</div>
 						</div>
 						<div class="manage-customer-from">
 							<div id="divstep1" style="display: block;">
