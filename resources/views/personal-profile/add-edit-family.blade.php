@@ -8,12 +8,14 @@
 			$first_name = @$familyData->first_name;
 			$last_name = @$familyData->last_name;
 			$phone_number = @$familyData->mobile;
-			$birthday = @$familyData->birthday;
+			$birthday = date('m-d-Y' , strtotime(@$familyData->birthday));
+			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthday));
 		}else{
 			$first_name = @$familyData->fname;
 			$last_name = @$familyData->lname;
 			$phone_number = @$familyData->phone_number;
-			$birthday = @$familyData->birthdate;
+			$birthday = date('m-d-Y' , strtotime(@$familyData->birthdate));
+			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthdate));
 		}
 
 		$profile_pic = Storage::disk('s3')->exists(@$familyData->profile_pic) ? Storage::URL(@$familyData->profile_pic) : url('/images/service-nofound.jpg');
@@ -78,8 +80,10 @@
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group dob">
-					<label>mm/dd/yyyy</label>
-					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="" required="required" >
+					<label>mm-dd-yyyy</label>
+					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{$birthday}}" required="required" >
+
+					<input type="hidden" name="birthdatehidden" id="birthdatehidden" value="{{$birthdayhiden}}">
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
@@ -115,7 +119,7 @@
 		defaultDate : '',
 		onChange: function(selectedDates, dateStr, instance) {
             let date = moment(dateStr).format("YYYY-MM-DD");
-            $("#birthdate").val(date);
+            $("#birthdatehidden").val(date);
         }
 	});
 </script>
