@@ -52,7 +52,7 @@
                 @endphp
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>BOOKING#</label>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>PROVIDER COMPANY NAME:</label>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>PROGRAM NAME:</label>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>CATEGORY:</label>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>PRICE OPTION:</label>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>NUMBER OF SESSIONS:</label>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP OPTION:</label>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>PARTICIPANT QUANTITY:</label>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>WHO IS PRATICIPATING?</label>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>ACTIVITY TYPE:</label>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>SERVICE TYPE:</label>
                         </div>
                     </div>
@@ -173,18 +173,18 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP DURATION:</label>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$order_detail->expired_duration}}</span>
+                            <span>{{$order_detail->expired_duration != '' ? $order_detail->expired_duration : "—"}}</span>
                         </div>
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>PURCHASE DATE:</label>
                         </div>
                     </div>
@@ -195,7 +195,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP ACTIVATION DATE:</label>
                         </div>
                     </div>
@@ -206,7 +206,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP EXPIRATION:</label>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label class="highlight-fonts">PRICE:</label>
                         </div>
                     </div>
@@ -228,7 +228,7 @@
                     </div>
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="text-left">
+                        <div class="text-left space-bottom">
                             <label class="highlight-fonts">TOTAL:</label>
                         </div>
                     </div>
