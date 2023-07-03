@@ -711,14 +711,10 @@ class BookingController extends Controller {
                                     <tbody>';
                                         if(!empty($data) && count($data)>0){
                                             foreach($data as $i=>$dt){
-                                                if($dt->booking->user_type == 'user'){
-                                                    $name = $dt->booking->user->full_name;
-                                                }else{
-                                                    $name = $dt->booking->customer->full_name;
-                                                    $link = Config::get('constants.SITE_URL')."/business/".$dt->booking->customer->business_id."/customers/".$dt->booking->customer->id;
-                                                    $href = 'href="'.$link.'"';
-                                                }
-                                            
+                                                $name = $dt->booking->customer->full_name;
+                                                $link = Config::get('constants.SITE_URL')."/business/".$dt->booking->customer->business_id."/customers/".$dt->booking->customer->id;
+                                                $href = 'href="'.$link.'"';
+                                               
                                                 $html .='<tr>
                                                             <td>'.($i+1).'. <a target="_blank"'.$href.'>'.$name.'</a></td>
                                                             <td>'.$request->date.'</td>
