@@ -121,7 +121,7 @@ class CalendarController extends Controller
                             </div>
                             <div class="col-md-6 col-6">
                                 <div class="calendar-btns">
-                                    <a class="btn btn-red float-end" href="'.route("personal.orders.index", ['business_id' => $ser_data->cid, 'serviceType'=>$ser_data->service_type, 'tab' => $tabval]).'" target="_blank">View Booking</a> 
+                                    <a class="btn btn-red float-end" href="'.route("business_customer_show", ['business_id' => $ser_data->cid,'id'=>$booking_detail->user_id]).'" target="_blank">View Booking</a> 
                                 </div>
                             </div>
                         </div>
