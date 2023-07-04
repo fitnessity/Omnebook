@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                             
-                            <div class="row">
+                            <div class="row d-none">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
@@ -179,7 +179,7 @@
                                 </div><!--end col-->
                             </div>
 
-                            <div class="row">
+                            <div class="row d-none">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
@@ -816,10 +816,9 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row ">
                                 <div class="col-md-12">
                                     <div class="card">
-                                        
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 3: Set the price for this program</h4>
                                         </div>
@@ -1744,23 +1743,21 @@
         window.open("/business/"+cid+"/schedulers/create?categoryId="+id,"_blank")
     }
 
-    function add_another_price_duplicate_session(i){
+    function add_another_price_duplicate_session(i,j){
         var cnt = $('#priceCount'+i).val();
-        var cnt_old = cnt;
         cnt++;
         var data = '';
         data += '<div id="priceoption'+i+cnt+'" class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3">';
-        data += $('#priceoption'+i+cnt_old).html();
+        data += $('#priceoption'+i+j).html();
         data += '</div>';
     
-        var re = data.replaceAll(i+","+cnt_old,i+","+cnt);
-        re = re.replaceAll("_"+i+cnt_old,"_"+i+cnt);
+        var re = data.replaceAll(i+","+j,i+","+cnt);
+        re = re.replaceAll("_"+i+j,"_"+i+cnt);
         if(i==0){
-            re = re.replaceAll("0"+cnt_old,"0"+cnt);
+            re = re.replaceAll("0"+j,"0"+cnt);
         }else{
-            re = re.replaceAll(i+''+cnt_old,i+''+cnt);
+            re = re.replaceAll(i+''+j,i+''+cnt);
         }
-       
         $('#priceOptionDiv'+i).append(re);
         $('#ul'+i+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>')
         $('#priceCount'+i).val(cnt);

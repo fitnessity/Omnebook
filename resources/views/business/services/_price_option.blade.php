@@ -2,7 +2,7 @@
     $adultTxt = $childTxt = $infantTxt = '';
     if(@$price->is_recurring_adult == '1'){
         $recurringStrAdult = explode(" ",@$price->recurring_customer_chage_by_adult);
-        if(!empty($recurringStrAdult) && @$price->recurring_nuberofautopays_adult != ''){
+        if(!empty($recurringStrAdult) && is_numeric(@$price->recurring_nuberofautopays_adult) && is_numeric($recurringStrAdult[0])){
             $adultTxt  .='( '.$price->recurring_nuberofautopays_adult * $recurringStrAdult[0].' '.@$recurringStrAdult[1].' contract ';
             $adultTxt  .= '| $'.@$price->recurring_first_pmt_adult.' per '.@$recurringStrAdult[0].' '.@$recurringStrAdult[1];
             $adultTxt  .= ' | Totalling $'.@$price->recurring_total_contract_revenue_adult;
@@ -11,7 +11,7 @@
 
     if(@$price->is_recurring_child == '1'){
         $recurringStrChild = explode(" ",@$price->recurring_customer_chage_by_child);
-        if(!empty($recurringStrChild) && @$price->recurring_nuberofautopays_child != ''){
+        if(!empty($recurringStrChild) && is_numeric(@$price->recurring_nuberofautopays_child) && is_numeric($recurringStrChild[0])){
             $childTxt  .='( '.$price->recurring_nuberofautopays_child * $recurringStrChild[0].' '.@$recurringStrChild[1].' contract ';
             $childTxt  .= '| $'.@$price->recurring_first_pmt_child.' per '.@$recurringStrChild[0].' '.@$recurringStrChild[1];
             $childTxt  .= '| Totalling $'.@$price->recurring_total_contract_revenue_child;
@@ -20,7 +20,7 @@
 
     if(@$price->is_recurring_infant == '1'){
         $recurringStrInfant = explode(" ",@$price->recurring_customer_chage_by_infant);
-        if(!empty($recurringStrInfant) && @$price->recurring_nuberofautopays_infant != ''){
+        if(!empty($recurringStrInfant) && is_numeric(@$price->recurring_nuberofautopays_infant) && is_numeric($recurringStrInfant[0])){
             $infantTxt  .='( '.$price->recurring_nuberofautopays_infant * $recurringStrInfant[0].' contract ';
             $infantTxt  .= '| $'.@$price->recurring_first_pmt_infant.' per '.@$recurringStrInfant[0].' '.@$recurringStrInfant[1];
             $infantTxt  .= '| Totalling $'.@$price->recurring_total_contract_revenue_infant;
@@ -43,7 +43,7 @@
                                 <div class="setting-icon">
                                     <i class="ri-more-fill"></i>
                                     <ul id="ul{{$i}}{{$j}}">
-                                        <li><a onclick=" return add_another_price_duplicate_session({{$i}});"><i class="fas fa-plus text-muted"></i>Duplicate This Price Option Only</a></li>
+                                        <li><a onclick=" return add_another_price_duplicate_session({{$i}},{{$j}});"><i class="fas fa-plus text-muted"></i>Duplicate This Price Option Only</a></li>
                                         @if($j!= 0)
                                         <li class="dropdown-divider"></li>
                                         <li><a href="" onclick="deletePriceOption({{$i}},{{$j}})"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
@@ -412,6 +412,7 @@
                             <label>The Duration</label>
                             <select name="pay_setduration_{{$i}}{{$j}}" id="pay_setduration{{$i}}{{$j}}" class="form-control valid">
                                 <option {{@$price->pay_setduration =='Days' ?'selected':'' }}>Days</option>
+                                <option {{@$price->pay_setduration =='Weeks' ?'selected':'' }}>Weeks</option>
                                 <option {{@$price->pay_setduration =='Months' ?'selected':'' }}>Months</option>
                                 <option {{@$price->pay_setduration =='Years' ?'selected':'' }}>Years</option>
                             </select>
