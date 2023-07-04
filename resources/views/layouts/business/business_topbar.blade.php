@@ -700,7 +700,7 @@
                  return false;
             },
             select: function( event, ui ) {
-                window.location.href = "business/"+business_id+"/customers/"+ui.item.id;
+                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
                  return false;
             }
         	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
@@ -727,7 +727,7 @@
                  return false;
             },
             select: function( event, ui ) {
-                window.location.href = "business/"+business_id+"/customers/"+ui.item.id;
+                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
                  return false;
             }
         	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
