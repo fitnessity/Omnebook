@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                             
-                            <div class="row d-none">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
@@ -179,7 +179,7 @@
                                 </div><!--end col-->
                             </div>
 
-                            <div class="row d-none">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
