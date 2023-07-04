@@ -234,8 +234,8 @@ class BusinessServices extends Model
                     }
                 }
 
-                $discountPriceArr[] = $price - ($price * $discount/100); 
                 $pricearr[] = $price != '' ? $price : 0;
+                $discountPriceArr[] = ($price != '' &&  $discount != '') ? $price - ($price * $discount/100) : 0 ; 
             }
         }
         $priceAll = !empty($pricearr) ? min($pricearr) : '';
