@@ -230,7 +230,6 @@ class ServiceController extends BusinessBaseController
                             $adultrecurring_recurring_pmt = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('recurring_pmt_adult_'.$i.$y) : NULL;
                             $adultrecurring_total_contract_revenue = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('total_contract_revenue_adult_'.$i.$y) : NULL;
                             $recurring_customer_chage_by_adult = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('customer_charged_num_adult_'.$i.$y).' '.$request->input('customer_charged_time_adult_'.$i.$y) : NULL;
-
                             
                             $childrecurring_price = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('recurring_price_child_'.$i.$y) : NULL;
                             $childrecurring_run_auto_pay = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('run_auto_pay_child_'.$i.$y) : NULL;
@@ -261,9 +260,20 @@ class ServiceController extends BusinessBaseController
                             
                             $cat_new_id = $db_status == 'update' ? $request->cat_id_db[$i] : $create->id ;
 
-                            if($request->input('sectiondisplay'.$i.$y) == 'freeprice'){
+                            $displaySection = $request->input('sectiondisplay'.$i.$y);
+
+                            if($displaySection == 'freeprice'){
                                 $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0;
                             }else{
+
+                                if($displaySection == ''){
+                                    if( $request->input('adult_weekend_price_diff_'.$i.$y) != '' || $request->input('child_weekend_price_diff_'.$i.$y) || $request->input('infant_weekend_price_diff_'.$i.$y) ){
+                                        $displaySection = 'weekendprice';
+                                    }else{
+                                        $displaySection = 'weekdayprice';
+                                    }
+                                }
+
                                 $adult_cus_weekly_price = $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_cus_weekly_price_'.$i.$y) : '';
                                 $adult_weekend_price_diff =  $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_weekend_price_diff_'.$i.$y) : '';
                                 $adult_discount = $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_discount_'.$i.$y) : '';

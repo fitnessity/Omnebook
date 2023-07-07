@@ -56,7 +56,7 @@
                 </div>
             </button>
         </h2>
-        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse collapse show" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
+        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
             <div class="accordion-body">
                 <input type="hidden" name="price_id_db_{{$i}}{{$j}}" id="price_id_db{{$i}}{{$j}}" value="{{@$price->id}}" />
                 <div class="row">
