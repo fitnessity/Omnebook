@@ -30,11 +30,11 @@
                                                 <div class="accordion" id="stepone">
                                                     <div class="accordion-item shadow">
                                                         <h2 class="accordion-header" id="stepheadingOne">
-                                                            <button class="accordion-custom-btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                            <button class="accordion-custom-btn accordion-button {{$serviceId != '' ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                                 Explain to your customer what this program is.
                                                             </button>
                                                         </h2>
-                                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="stepheadingOne" data-bs-parent="#stepone">
+                                                        <div id="collapseOne" class="accordion-collapse collapse {{$serviceId == '' ? 'show' : '' }}" aria-labelledby="stepheadingOne" data-bs-parent="#stepone">
                                                             <form action="{{route('business.services.store')}}" method="POST" enctype="multipart/form-data">
                                                                 @csrf
                                                                 <input type="hidden" name="step" id="step1" value="1">
@@ -1767,47 +1767,39 @@
 
     function add_another_price_duplicate_category(i){
         var cnt = $('#categoryCount').val();
-        var agecnt = $('#priceCount'+cnt).val();
+        var agecnt = $('#priceCount'+i).val();
         cnt++;
         $('#categoryCount').val(cnt);
-        var data = '';
+        $('#category'+i).children().first();
+        var  data = '';
         data += '<div class="accordion custom-accordionwithicon accordion-border-box mt-3" id="category'+cnt+'">';
         data += $('#category'+i).html();
         data += '</div>';
 
-        var re = data.replaceAll(i+"0",cnt+"0");
-
-        if(agecnt == 1){
-            re = re.replaceAll(i+"1",cnt+"1");
+        var re = data.replaceAll("accor_nestingcategory"+i,"accor_nestingcategory"+cnt);
+       
+        for(var z=0; z<=agecnt ;z++){  
+            if(i== 0){ 
+                re = re.replace(new RegExp("0"+""+z, "g"),cnt+""+z);
+            }else{
+                re = re.replace(new RegExp(i+""+z, "g"), cnt+""+z);
+            }
         }
-        if(agecnt == 2){
-            const mapObj = {
-                "01": cnt+"1",
-                "02": cnt+"2",
-            };
-            re = re.replace(/\b(?:01|02)\b/gi, matched => mapObj[matched]);
-        }
-        if(agecnt == 3){
-            const mapObj = {
-                "01": cnt+"1",
-                "02": cnt+"2",
-                "03": cnt+"3",
-            };
-            re = re.replace(/\b(?:01|02|03)\b/gi, matched => mapObj[matched]);
-        }
-
-        re = re.replaceAll("accor_nestingcategory"+i,"accor_nestingcategory"+cnt);
+       
         re = re.replaceAll("accordionnestingcat"+i,"accordionnestingcat"+cnt);
-        re = re.replaceAll(i+"0",cnt+"0");
         re = re.replaceAll("priceCount"+i,"priceCount"+cnt);
+        re = re.replaceAll("#category"+i,"#category"+cnt);
+        re = re.replaceAll("#visibilitytext"+i,"#visibilitytext"+cnt);
+        re = re.replaceAll("#visibility"+i,"#visibility"+cnt);
+        re = re.replaceAll("priceOptionDiv"+i,"priceOptionDiv"+cnt);
         re = re.replaceAll("catUl"+i,"catUl"+cnt);
         re = re.replaceAll("("+i+")","("+cnt+")");
         re = re.replaceAll("("+i+",","("+cnt+",");
-        
     
         $('#categoryMainDiv').append(re);
+        
         for(var z=0; z<=agecnt ;z++){
-            $('#category'+cnt).find("input[name='price_id_db_"+cnt+z+"']").val('');
+            $('#category'+cnt).find("input[name='price_id_db_"+cnt+""+z+"']").val('');
         }
 
         if(i==0){
@@ -1815,8 +1807,20 @@
         }
 
         $('#category'+cnt).find("input[name='cat_id_db[]']").val('');
+        var firstClass = $('#category'+i).find('.accordion-button').first();
+        firstClass.addClass('collapsed');
+        $('#accor_nestingcategory'+i).removeClass();
+        //$('#accor_nestingcategory'+i).addClass("accordion-collapse collapse");
+
+        /*var accordionHeader = document.querySelector('#accordionnestingcat'+cnt);
+        accordionHeader.addEventListener('click', setAccordionHeight(cnt));*/
     }
 
+    /*function setAccordionHeight(cnt) {
+        var accordionContent = document.querySelector('#accordionnestingcat'+cnt);
+        var accordionHeight = accordionContent.scrollHeight + 'px';
+        accordionContent.style.height = accordionHeight;
+    }*/
 </script>
 
 <script type="text/javascript">
