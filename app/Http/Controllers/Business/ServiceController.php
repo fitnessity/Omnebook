@@ -66,7 +66,7 @@ class ServiceController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //print_r($request->all()); exit();
+       // print_r($request->all()); 
         $profilePicture = $dayImage = $safe_varification ="";
 
         $user = Auth::user();
@@ -364,7 +364,6 @@ class ServiceController extends BusinessBaseController
                                 "infant_estearn" =>  $infant_estearn,  
                                 "weekend_infant_estearn" =>  $weekend_infant_estearn,  
                             ];
-
                             if($request->input('price_id_db_'.$i.$y) != ''){
                                 BusinessPriceDetails::where('id',$request->input('price_id_db_'.$i.$y))->update($businessPayment);
                             }else{
@@ -373,7 +372,7 @@ class ServiceController extends BusinessBaseController
                         }
                     }
                 }
-
+               
                 $differenceArray_cat1 = array_diff($idary_cat, $idary_cat1);
                 foreach($differenceArray_cat1 as $deletdata){
                     BusinessPriceDetailsAges::where('id',$deletdata)->delete();
