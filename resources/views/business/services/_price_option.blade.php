@@ -43,7 +43,7 @@
                                 <div class="setting-icon">
                                     <i class="ri-more-fill"></i>
                                     <ul id="ul{{$i}}{{$j}}">
-                                        <li><a onclick=" return add_another_price_duplicate_session({{$i}},{{$j}});"><i class="fas fa-plus text-muted"></i>Duplicate This Price Option Only</a></li>
+                                        <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target><a onclick=" return add_another_price_duplicate_session({{$i}},{{$j}});"><i class="fas fa-plus text-muted"></i>Duplicate This Price Option Only</a></li>
                                         @if($j!= 0)
                                         <li class="dropdown-divider"></li>
                                         <li><a href="" onclick="deletePriceOption({{$i}},{{$j}})"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
@@ -63,13 +63,13 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="set-price mb-0">
                             <label>Price Title</label>
-                            <input name="price_title_{{$i}}{{$j}}" id="price_title{{$i}}{{$j}}" value ="{{@$price->price_title}}" oninput="getpricetitle({{$i}},{{$j}})" class="form-control" type="text" placeholder="Ex: 6 month Membership" required>
+                            <input name="price_title_{{$i}}{{$j}}" id="price_title{{$i}}{{$j}}" value ="{{@$price->price_title}}" oninput="getpricetitle({{$i}},{{$j}})" class="form-control" type="text" placeholder="Ex: 6 month Membership" >
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="set-price mb-0">
                             <label>Session Type</label>
-                            <select name="pay_session_type_{{$i}}{{$j}}" id="pay_session_type{{$i}}{{$j}}" onchange="pay_session_select({{$i}},{{$j}},this.value);" class="form-select"  data-choices="" data-choices-search-false="" required>
+                            <select name="pay_session_type_{{$i}}{{$j}}" id="pay_session_type{{$i}}{{$j}}" onchange="pay_session_select({{$i}},{{$j}},this.value);" class="form-select"  data-choices="" data-choices-search-false="" >
                                 <option value="Single" {{(@$price->pay_session_type=='Single')?'selected':'' }} >Single</option>
                                 <option value="Multiple" {{(@$price->pay_session_type=='Multiple')?'selected':'' }}>Multiple</option>
                                 <option value="Unlimited" {{(@$price->pay_session_type=='Unlimited')?'selected':'' }}>Unlimited</option>
@@ -79,13 +79,13 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="set-price mb-0">
                             <label>Number of Sessions</label>
-                            <input name="pay_session_{{$i}}{{$j}}" id="pay_session{{$i}}{{$j}}" value="{{(@$price->pay_session != '') ? @$price->pay_session :  1 }}" {{(@$price->pay_session_type != 'Multiple') ? "readonly" :  ''}} class="form-control pay_session" type="text" placeholder="1" required onkeypress="return event.charCode >= 46 && event.charCode <= 57">
+                            <input name="pay_session_{{$i}}{{$j}}" id="pay_session{{$i}}{{$j}}" value="{{(@$price->pay_session != '') ? @$price->pay_session :  1 }}" {{(@$price->pay_session_type != 'Multiple') ? "readonly" :  ''}} class="form-control pay_session" type="text" placeholder="1"  onkeypress="return event.charCode >= 46 && event.charCode <= 57">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="set-price mb-0">
                             <label>Membership Type</label>
-                            <select name="membership_type_{{$i}}{{$j}}" id="membership_type{{$i}}{{$j}}" class="form-select membership_type" data-choices="" data-choices-search-false="" required>
+                            <select name="membership_type_{{$i}}{{$j}}" id="membership_type{{$i}}{{$j}}" class="form-select membership_type" data-choices="" data-choices-search-false="" >
                                 <option value="Drop In"  {{(@$price->membership_type=='Drop In')?'selected':'' }}>Drop In</option>
                                 <option value="Semester" {{(@$price->membership_type=='Semester')?'selected':'' }}>Semester (Long Term)</option>
                             </select>
@@ -404,7 +404,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                         <div class="set-num">
                             <label>Set The Number</label>
-                            <input type="text" name="pay_setnum_{{$i}}{{$j}}" id="pay_setnum{{$i}}{{$j}}" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="{{@$price->pay_setnum != '' ? @$price->pay_setnum : 1}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" required>
+                            <input type="text" name="pay_setnum_{{$i}}{{$j}}" id="pay_setnum{{$i}}{{$j}}" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="{{@$price->pay_setnum != '' ? @$price->pay_setnum : 1}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" >
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
