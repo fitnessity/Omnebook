@@ -706,7 +706,7 @@ body{
 }
 .navbar-menu{
     width:250px;
-    z-index:7;
+    /*z-index:7;*/
     background: #151529;
     border-right:1px solid #151529;
     bottom:0;
