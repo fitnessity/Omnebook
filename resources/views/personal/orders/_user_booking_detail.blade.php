@@ -3,7 +3,11 @@
         <div class="col-md-4 col-sm-6 ">
             <div class="boxes_arts">
                 <div class="headboxes">
-                    <img src="{{Storage::URL($book_details->business_services()->withTrashed()->first()->first_profile_pic())}}" class="imgboxes" alt="">
+                    @if( Storage::disk('s3')->exists( $book_details->business_services()->withTrashed()->first()->first_profile_pic() ) )
+                        <img src="{{Storage::URL($book_details->business_services()->withTrashed()->first()->first_profile_pic())}}" class="imgboxes" alt="">
+                    @else
+                        <img src="{{url('/images/service-nofound.jpg')}}" class="imgboxes" alt="">
+                    @endif
                     <h4 class="fontsize">{{$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
 					<div class="text-center">
 						<span class="date-timebooking"> @if($book_details->getReserveData('reserve_date') != '—') {{$book_details->getReserveData('reserve_date')}}  | {{$book_details->getReserveData('reserve_time')}} @endif</span>
