@@ -46,7 +46,7 @@ class PageController extends Controller
             $cart = $request->session()->get('cart_item');
         }
         return view('pages.about', [
-            'pageContent' => $pageContent->content,
+            'pageContent' => @$pageContent->content,
             'pageTitle' => "ABOUT US",
             'cart' => $cart
         ]);
