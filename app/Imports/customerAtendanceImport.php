@@ -51,11 +51,7 @@ class customerAtendanceImport implements ToCollection
                     $checkinDate = explode('/',$row[0]);
                     $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1]; 
                     $chkDate = @$checkinDate[2].'-'.@$checkinDate[0].'-'.@$checkinDate[1]; 
-                    echo @$expired_at.'<br>';
-                    echo @$customerData->id.'<br>';
-                    echo @$priceDetail->id.'<br>';
                     $bookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$expired_at)->first();
-                    echo $bookingDetail.'<br>';
                     if($bookingDetail != ''){
                         $scheduleInfo = '';
                         $schedules = $priceDetail->business_price_details_ages->BusinessActivityScheduler;
@@ -65,9 +61,7 @@ class customerAtendanceImport implements ToCollection
                                 $scheduleInfo = $schedule;
                             }
                         }
-                        echo $scheduleInfo;
                         $chkInDetail = BookingCheckinDetails::where(['customer_id'=> $customerData->id,'booking_detail_id'=>$bookingDetail->id])->whereDate('checked_at','=',$chkDate)->first();
-                        echo $chkInDetail;
                         $ary = array(
                             'business_activity_scheduler_id' => @$scheduleInfo->id,
                             'customer_id' => $customerData->id,
@@ -82,11 +76,11 @@ class customerAtendanceImport implements ToCollection
                             $bookingDetail->update(['bookedtime'=>$chkDate ,'act_schedule_id'=>@$scheduleInfo->id]);
                         }
                         
-                        /*if($chkInDetail == ''){
+                        if($chkInDetail == ''){
                             BookingCheckinDetails::create($ary);
                         }else {
                             BookingCheckinDetails::where('id',$chkInDetail->id)->update($ary);
-                        }*/
+                        }
                     }
                 }
             }
