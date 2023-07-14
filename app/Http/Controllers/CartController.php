@@ -167,19 +167,19 @@ class CartController extends Controller {
 				<div class="col-lg-6">
 					<div class="gift-comments">
 						<label class="">Leave a comment for them</label>
-						<textarea class="form-control" rows="4" name="comment" id="comment" maxlength="150">'.@$getdata->comment.'</textarea>
+						<textarea class="form-control" rows="4" name="comment" id="comment" maxlength="150" required>'.@$getdata->comment.'</textarea>
 						<label>From:</label>
-						<input type="name" class="form-control myemail" name="gift_from" id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="'.@$getdata->gift_from.'">
+						<input type="name" class="form-control myemail" name="gift_from" id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="'.@$getdata->gift_from.'" required>
 					</div>
 				</div>
 				<div class="col-lg-6">
 					<div class="gift-comments email multiple-email" id="emaildiv">';
 						if(!empty($email_array)){
 							foreach($email_array as $email){
-								$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="'.$email.'">';
+								$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="'.$email.'" required>';
 							}
 						}else{
-							$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="">';
+							$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="" required>';
 						}
 
 					$html .='</div>
