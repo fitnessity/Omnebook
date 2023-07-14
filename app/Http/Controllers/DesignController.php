@@ -111,4 +111,8 @@ class DesignController extends Controller {
 	public function book_multi_times(Request $request){
         return view('design.book_multi_times');
     }
+	
+	public function instant_activity_details(Request $request){
+        return view('design.instant_activity_details');
+    }
 }
