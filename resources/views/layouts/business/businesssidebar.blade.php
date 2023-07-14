@@ -156,11 +156,21 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link"  aria-controls="sidebarForms">
-                        <img src="{{asset('/public/img/salesreports.png')}}" alt="Fitnessity"> <span data-key="t-forms">Sales Reports</span>
-                    </a>
-                </li>
+				<li class="nav-item">
+					<a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+						<img src="{{asset('/public/img/salesreports.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span>
+					</a>
+					<div class="collapse menu-dropdown" id="sidebarForms">
+						<ul class="nav nav-sm flex-column">
+							<li class="nav-item">
+								<a href="#" class="nav-link" data-key="t-basic-elements">Sales Reports</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link" data-key="t-form-select">Membership Expirations</a>
+							</li>
+						</ul>
+					</div>
+				</li>
             </ul>
         </div>
         <!-- Sidebar -->

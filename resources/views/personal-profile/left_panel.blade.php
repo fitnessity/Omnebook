@@ -45,12 +45,12 @@
                             </li> -->
                             
                             
-                            <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
+                            <!-- <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
                                 <a href="{{ route('personal.orders.index')}}">
                                     <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">
                                     <span>Booking Info</span>
                                 </a>
-                            </li>
+                            </li> -->
 
                             <li class=" {{ (request()->is('personal-profile/favorite*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite">

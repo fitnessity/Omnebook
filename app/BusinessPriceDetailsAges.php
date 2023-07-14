@@ -31,6 +31,9 @@ class BusinessPriceDetailsAges extends Model
         'serviceid',
         'dues_tax',
         'sales_tax',
+        'service_name',
+        'service_price',
+        'service_description',
     ];
     
     public function BusinessActivityScheduler()

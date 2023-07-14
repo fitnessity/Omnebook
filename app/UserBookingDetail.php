@@ -28,8 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
 	protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days'
-    ];
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time'];
 
 
     /**
@@ -229,7 +228,7 @@ class UserBookingDetail extends Model
                     $name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
                     $all_pr .= $name.' </br> ';
                 }else if($pr['from'] == "customer"){
-                    $name = str_replace('(me)','',$pr['pc_name']);
+                    $name = str_replace('(me)','',@$pr['pc_name']);
                     $all_pr .= $name.' </br> ';
                 }else{
                      
