@@ -1,16 +1,24 @@
 <?php
+
 namespace App\Http\Controllers;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+/*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Exports\ExportCustomer;
-use App\Imports\CustomerImport;
+use App\Imports\{CustomerImport,ImportMembership,customerAtendanceImport};
 use Maatwebsite\Excel\HeadingRowImport;
-use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,Excel;
+use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,Excel,SplFileInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
 use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus};
+
+use Illuminate\Support\Facades\Storage;
 
 use Request as resAll;
 
@@ -221,6 +229,94 @@ class CustomerController extends Controller {
        return  $status;
     }
 
+    public function importmembership(Request $request){
+        if($request->hasFile('import_file')){
+            $ext = $request->file('import_file')->getClientOriginalExtension();
+            if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
+            {
+                return response()->json(['status'=>500,'message'=>'File format is not supported.']);
+            }
+            ini_set('max_execution_time', 10000); 
+            $headings = (new HeadingRowImport(2))->toArray($request->file('import_file'));
+
+            if(!empty($headings)){
+                foreach($headings as $key => $row) {
+                    $firstrow = $row[0];
+                    if($firstrow[0] != 'name' || $firstrow[1] != 'membership_type' ||  $firstrow[2] != 'status'|| $firstrow[3] != 'member_from'|| $firstrow[4] != 'member_to') 
+                    {
+                        $this->error = 'Problem in header.';
+                        break;
+                    }
+                }
+            }
+
+            $name = Str::random(8).'.csv';
+            Storage::disk('uploadExcel')->put($name,'');
+            $target = '../public/ExcelUpload/'.$name;
+
+            $reader = new Xlsx();
+            $spreadsheet = $reader->load($request->file('import_file'));
+            $writer = new Csv($spreadsheet);
+            $writer->save($target);
+           
+            Excel::import(new ImportMembership($request->business_id),  $target);
+            unlink('../public/ExcelUpload/'.$name);
+        }
+
+
+        if($this->error != '')
+        {
+            return response()->json(['status'=>500,'message'=>$this->error]);
+        }
+        else{
+            return response()->json(['status'=>200,'message'=>'File imported Successfully']);
+        }
+    }
+
+    public function importattendance(Request $request){
+        if($request->hasFile('import_file')){
+            $ext = $request->file('import_file')->getClientOriginalExtension();
+            if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
+            {
+                return response()->json(['status'=>500,'message'=>'File format is not supported.']);
+            }
+            ini_set('max_execution_time', 10000); 
+            $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
+            /*print_r($headings);*/
+            if(!empty($headings)){
+                foreach($headings as $key => $row) {
+                    $firstrow = $row[0];
+                    /*print_r($firstrow);exit;*/
+                    if( $firstrow[0] != 'you_mean_the' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[3] != 'client' ||$firstrow[4] != 'visit_service_category'|| $firstrow[5] != 'visit_type'|| $firstrow[6] != 'type' || $firstrow[7] != 'pricing_option'|| $firstrow[8] != 'exp_date'|| $firstrow[9] != 'visits_rem' || $firstrow[10] != 'staff' || $firstrow[11] != 'visit_location' || $firstrow[12] != 'sale_location' || $firstrow[13] != 'payment_service_category' ) 
+                    {
+                        $this->error = 'Problem in header.';
+                        break;
+                    }
+                }
+            }
+
+            $name = Str::random(8).'.csv';
+            Storage::disk('uploadExcel')->put($name,'');
+            $target = '../public/ExcelUpload/'.$name;
+
+            $reader = new Xlsx();
+            $spreadsheet = $reader->load($request->file('import_file'));
+            $writer = new Csv($spreadsheet);
+            $writer->save($target);
+           
+            Excel::import(new customerAtendanceImport($request->business_id),  $target);
+            unlink('../public/ExcelUpload/'.$name);
+        }
+
+        if($this->error != '')
+        {
+            return response()->json(['status'=>500,'message'=>$this->error]);
+        }
+        else{
+            return response()->json(['status'=>200,'message'=>'File imported Successfully']);
+        }
+    }
+
     public function importcustomer(Request $request)
     {
         if($request->hasFile('import_file')){
@@ -237,7 +333,7 @@ class CustomerController extends Controller {
                     $firstrow = $row[0];
                     /*print_r($firstrow);exit;*/
                     if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' 
-                        ||  $firstrow[2] != 'address'|| $firstrow[3] != 'city'|| $firstrow[4] != 'state' || $firstrow[5] != 'postal_code' || $firstrow[6] != 'country'|| $firstrow[7] != 'mobile_phone'|| $firstrow[8] != 'email') 
+                        ||  $firstrow[2] != 'address'|| $firstrow[3] != 'city'|| $firstrow[4] != 'state' || $firstrow[5] != 'postal_code' || $firstrow[6] != 'country'|| $firstrow[7] != 'phone_number'|| $firstrow[8] != 'email') 
                     {
                         $this->error = 'Problem in header.';
                         break;
