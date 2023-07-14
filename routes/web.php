@@ -88,6 +88,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/manage_product','DesignController@manage_product')->name('manage_product');
 	Route::get('/add_product','DesignController@add_product')->name('add_product');
     Route::get('/sales_report','DesignController@sales_report')->name('sales_report');
+	Route::get('/shopping_cart','DesignController@shopping_cart')->name('shopping_cart');
+    Route::get('/book_multi_times','DesignController@book_multi_times')->name('book_multi_times');
 });
 
 //Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
@@ -866,9 +868,11 @@ Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 /*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
+Route::get('/indexCart', 'CartController@indexCart')->name('indexCart');
 Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
 Route::post('/addactivitygift', 'CartController@addactivitygift')->name('addactivitygift');
 Route::post('/activity_gift_model', 'CartController@activity_gift_model')->name('activity_gift_model');
+Route::get('/getTerms', 'CartController@getTerms')->name('getTerms');
 
 
 
@@ -1069,6 +1073,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
+    Route::post('/import-membership','CustomerController@importmembership')->name('importmembership');
+    Route::post('/import-attendance','CustomerController@importattendance')->name('importattendance');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
     Route::get('customer/add-family/{id}','CustomerController@add_family')->name('customer.add_family');
