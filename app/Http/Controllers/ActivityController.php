@@ -1705,14 +1705,14 @@ class ActivityController extends Controller {
             }
         }else{
            	
-           	$adult_price =   $servicePrfirst['adult_cus_weekly_price'] != '' ? $servicePrfirst['adult_cus_weekly_price'] : 0;
-           	$adult_cnt =   $servicePrfirst['adult_cus_weekly_price'] != '' ? 1 : 0;
+           	$adult_price =   @$servicePrfirst['adult_cus_weekly_price'] != '' ? @$servicePrfirst['adult_cus_weekly_price'] : 0;
+           	$adult_cnt =   @$servicePrfirst['adult_cus_weekly_price'] != '' ? 1 : 0;
 
-        	$child_price =   $servicePrfirst['child_cus_weekly_price'] != '' ? $servicePrfirst['child_cus_weekly_price'] : 0;
-        	$child_cnt =   $servicePrfirst['child_cus_weekly_price'] != '' ? 1 : 0;
+        	$child_price =   @$servicePrfirst['child_cus_weekly_price'] != '' ? @$servicePrfirst['child_cus_weekly_price'] : 0;
+        	$child_cnt =   @$servicePrfirst['child_cus_weekly_price'] != '' ? 1 : 0;
 
-        	$infant_price =   $servicePrfirst['infant_cus_weekly_price'] != '' ? $servicePrfirst['infant_cus_weekly_price'] : 0;
-        	$child_cnt =   $servicePrfirst['infant_cus_weekly_price'] != '' ? 1 : 0;
+        	$infant_price =  @$servicePrfirst['infant_cus_weekly_price'] != '' ? @$servicePrfirst['infant_cus_weekly_price'] : 0;
+        	$child_cnt =   @$servicePrfirst['infant_cus_weekly_price'] != '' ? 1 : 0;
         
             $i=1;
             if(!empty(@$servicePr))

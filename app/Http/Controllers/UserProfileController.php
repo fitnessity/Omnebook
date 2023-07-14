@@ -2049,7 +2049,7 @@ class UserProfileController extends Controller {
     public function viewuserpersonalprofile($user_name){
         $ip = \Request::getClientIp(true);
         $UserProfileDetail = User::where('username',$user_name)->first();
-        $user_id=$UserProfileDetail->id;
+        $user_id= @$UserProfileDetail->id;
     
         $gallery = $this->galleryList($user_id);
         /*echo "<pre>";print_r($gallery);

@@ -889,7 +889,7 @@ class BusinessController extends Controller
         $company['company_images'] = [];
 		
 		if(!empty($company)) {
-            $userId = $company->user_id;
+            $userId = @$company->user_id;
         	
             $business_details = BusinessCompanyDetail::where('cid', $page_id)->get();
             $business_details = isset($business_details[0]) ? $business_details[0] : [];
