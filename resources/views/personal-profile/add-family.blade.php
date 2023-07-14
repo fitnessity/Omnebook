@@ -49,10 +49,8 @@
 						<div class="col-md-12">
 							<div class="main-box-white">
 			                    <h4 class="page-title">Select Account To Manage</h4>
-			                   
 								<div class="main-box-body">
-
-									<div class="user0imgs">
+									<div class="user0imgs @if(!Storage::disk('s3')->exists(Auth::user()->profile_pic)) set-text @endif">
 										<div class="dot-settings p-relative">
 											<div class="settings-options">
 												<div class="more-settings-optns">
