@@ -6,6 +6,7 @@
 	.fix-box {  height: 340px;}
 	.bsw-35{max-width: 35%;}
 	.layout-rightside-col .layout-rightside{margin-right: 0px;}
+	.manage-customer-modal-title h3{}
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -74,6 +75,7 @@
 	.cash-tend {  margin-left: 0px;}
 	#calendar .fc-basic-view .fc-body .fc-row {  min-height: 10.6em !important;}
 	.desktop-add-client-none{display: block;}
+	.btn-grp button{padding: 13px 15px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -159,6 +161,9 @@
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right {align-items: center;  margin-top: 0px;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{display: block !important;}
 	.fc .fc-toolbar .fc-center, .fc .fc-toolbar .fc-left {display: grid;}
+	div#pricediv{order: 3;}
+	div#imgdiv{order: 1;}
+	div#bookdiv{order: 2 !important;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -251,10 +256,16 @@
 	.side-border-right-red {border-bottom: 1px solid red; margin-bottom: 15px; border-right: none;}
 	.nav-tabs-custom.card-header-tabs .nav-link { padding: 16px 8px;}
 	.desktop-add-client-none{display: block;}
+	.manage-customer-modal-title h3{display: none;}
+	.btn-grp button{padding: 12px 15px;}
+	div#pricediv{order: 2; text-align: right;}
+	div#imgdiv{order: 1;}
+	div#bookdiv{order: 3;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
+	.btn-grp button {padding: 15px 11px;}
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){
