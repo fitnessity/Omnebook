@@ -29,7 +29,7 @@ class customerAtendanceImport implements ToCollection
             $name = explode(',',$content);
            
             $customerData = Customer::where(['fname'=> @$name[1] , 'lname'=> @$name[0], 'business_id' => $this->business_id])->first();
-            echo $customerData;
+            //echo $customerData;
             if($customerData != ''){
                 $priceDetail = '';
                 $priceDetailsData = BusinessPriceDetails::where('cid',$this->business_id)->get();
@@ -40,19 +40,22 @@ class customerAtendanceImport implements ToCollection
                 foreach($priceDetailsData as $pd){
                     $price_title = str_replace(" ", "", $price_title);
                     $price_titleDb = str_replace(" ", "", $pd->price_title);
-                    echo  $price_title.'~~'.$price_titleDb;
+                    //echo  $price_title.'~~'.$price_titleDb;
                     if($price_titleDb == $price_title){
                         $priceDetail = $pd;
                     }
                 }
-                echo $priceDetail;
+                //echo $priceDetail;
                 if($priceDetail != ''){
                     $exDate = explode('/',$row[8]);
                     $checkinDate = explode('/',$row[0]);
                     $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1]; 
                     $chkDate = @$checkinDate[2].'-'.@$checkinDate[0].'-'.@$checkinDate[1]; 
+                    echo @$expired_at.'<br>';
+                    echo @$customerData->id.'<br>';
+                    echo @$priceDetail->id.'<br>';
                     $bookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$expired_at)->first();
-                    echo $bookingDetail;
+                    echo $bookingDetail.'<br>';
                     if($bookingDetail != ''){
                         $scheduleInfo = '';
                         $schedules = $priceDetail->business_price_details_ages->BusinessActivityScheduler;
