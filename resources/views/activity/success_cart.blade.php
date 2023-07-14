@@ -121,7 +121,7 @@ if(!empty($cart["cart_item"])) {
 				<div class="row">
 					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
-							<img src="{{$profilePicact}}">
+							<img src="{{@$profilePicact}}">
 							<h4>You Just Booked With </h4>
 						</div>
 

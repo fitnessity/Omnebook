@@ -35,7 +35,21 @@
                                             <div class=""> 
                                                 <div class="">
                                                     <div class="edit_profile_section padding-1 white-bg border-radius1">
-                                                        <div id='calendar'></div>
+														<div class="row">
+															<div class="col-lg-3 col-md-5 col-sm-5">
+																<div class="form-group mb-10">
+																	<select class="form-select" name="position" required="">
+																		<option value="none" selected=""> Select</option>
+																		<option value="sub instructor">All</option>
+																		<option value="Trainer">Appointments</option>
+																		<option value="Sub director">Personal Training</option>
+																		<option value="sub Trianer">Group Bookings</option>
+																		<option value="sub Trianer">Events</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div id='calendar'></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -401,7 +415,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var daydate = '';
+    
         var calendar = $('#calendar').fullCalendar({
             editable: true,
             events:[
@@ -454,8 +468,12 @@
                     maxDate: "01/01/2050",
                     defaultDate: dDate,
                 });
-                $("#sesdate").val(date.format('YYYY-MM-DD'));
-                $("#calenderevent").modal('show');
+
+                var today = moment().format('YYYY-MM-DD');; 
+                if(date.format('YYYY-MM-DD') >= today){
+                    $("#sesdate").val(date.format('YYYY-MM-DD'));
+                    $("#calenderevent").modal('show');
+                }
             }
         });
     });

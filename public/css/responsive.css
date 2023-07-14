@@ -2566,7 +2566,7 @@
 	.mobile-none{display:none;}
 	.main-box-body {  padding: 0 0px !important;}
 	.main-box-body{margin-top: 55px !important;}
-	
+	.multiple-modal-size {  width: 95%;}
 }
 
 @media(max-width: 575px) {
