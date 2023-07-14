@@ -65,6 +65,26 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'uploadExcel' => [
+            'driver' => 'local',
+            'root' =>  public_path() . '/ExcelUpload',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+            'permissions' =>[
+                'file' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+
+                'dir' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+            ],
+        ],
+
     ],
 
 ];
