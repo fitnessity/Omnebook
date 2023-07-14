@@ -39,8 +39,6 @@ class BusinessPriceDetails extends Model
         'pay_setnum',
         'pay_setduration',
         'pay_after',
-		/*'recurring_every',
-		'recurring_duration',*/
 		'fitnessity_fee',
 		'membership_type',
         'category_id',
@@ -113,6 +111,10 @@ class BusinessPriceDetails extends Model
     public function UserBookingDetail()
     {
         return $this->hasMany(UserBookingDetail::class, 'priceid');
+    }
+
+    public function BusinessServices(){
+        return $this->belongsTo(BusinessServices::class, 'serviceid'); 
     }
 
 }
