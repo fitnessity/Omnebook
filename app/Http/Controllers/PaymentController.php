@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Libraries\Stripes\StripePay;
 use App\Http\Controllers\Controller;
-use App\Repositories\{UserRepository,PlanRepository,ProfessionalRepository,BookingRepository,SportsRepository};
+use App\Repositories\{BookingRepository};
 use Illuminate\Support\Facades\Log;
 use Auth;
 use Session;
@@ -15,8 +15,7 @@ use View;
 use DB;
 use Response;
 use Validator;
-use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Customer,Payment,Miscellaneous,Jobpostquestions,UserFamilyDetail,MailService,Zip_code,BookingCheckinDetails,UserFavourite,BusinessServicesFavorite,Quote,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,BusinessPriceDetailsAges,SGMailService,Recurring,StripePaymentMethod};
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\{UserBookingStatus,User,BusinessServices,BusinessService,UserBookingDetail,Customer,BookingCheckinDetails,BusinessActivityScheduler,BusinessSubscriptionPlan,Transaction,SGMailService,Recurring,StripePaymentMethod};
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
@@ -24,22 +23,17 @@ use DateTimeZone;
 use App\Services\CartService;
 
 class PaymentController extends Controller {
-	protected $sports;
 
-    public function __construct(UserRepository $users, PlanRepository $planRepository, ProfessionalRepository $professionals, SportsRepository $sports, BookingRepository $bookings) {
+    public function __construct(BookingRepository $bookings) {
         
         $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail']]);
 
         $this->bookings = $bookings;
-        $this->planRepository = $planRepository;
-        $this->users = $users;
-        $this->professionals = $professionals;
-        $this->sports = $sports;
         $this->arr = [];        
     }
 
     public function createCheckoutSession(Request $request) {
-        //print_r($request->all());exit;
+        // /print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $customer='';
 
@@ -74,7 +68,7 @@ class PaymentController extends Controller {
             );
 
             $transactionstatus = Transaction::create($transactiondata);
-            $lastid = $status->id; 
+            $lastid = $userBookingStatus->id; 
 
             foreach($cartService->items() as $item){
                 $paySessionQty = 0;

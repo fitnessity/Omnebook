@@ -44,7 +44,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {   
-        print_r($request->all());//exit;
+        /*print_r($request->all()); exit;*/
 
         $companyId = $request->cid != '' ? $request->cid: '';
         if($request->step == 1){

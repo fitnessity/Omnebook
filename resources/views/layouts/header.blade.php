@@ -51,6 +51,14 @@ $total_quantity = 0;
 		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
 		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
 
+		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/custom.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/responsive.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}">
+			<script src="{{asset('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+		@endif
+		
+
         <style>/*
             .btn-style-one {
                 position: relative;

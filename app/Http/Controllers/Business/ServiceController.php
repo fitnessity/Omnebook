@@ -203,6 +203,9 @@ class ServiceController extends BusinessBaseController
                         "dues_tax" => $request->dues_tax[$i] != '' ? $request->dues_tax[$i] : '',
                         "sales_tax" => $request->sales_tax[$i] != '' ? $request->sales_tax[$i] : '',
                         "visibility_to_public" => @$request->visibility_to_public[$i] != '' ? $request->visibility_to_public[$i] : 0,
+                        "service_name" => $request->service_name[$i] != '' ? $request->service_name[$i] : '',
+                        "service_price" => $request->service_price[$i] != '' ? $request->service_price[$i] : 0,
+                        "service_description" => $request->service_description[$i] != '' ? $request->service_description[$i] : '',
                     ];
                     if($request->cat_id_db[$i] != ''){
                         $db_status = 'update';

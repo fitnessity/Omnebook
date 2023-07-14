@@ -73,7 +73,14 @@
 													</ul>
 												</div>
 											</div>
-											<img src="{{Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/service-nofound.jpg')}}">
+
+											@if(Storage::disk('s3')->exists(Auth::user()->profile_pic))
+												<img src="{{Storage::URL(Auth::user()->profile_pic)}}">
+											@else
+												<div class="no-img-text">
+													<p class="character">{{Auth::user()->first_letter}}</p>
+												</div>
+											@endif
 											<span>{{Auth::user()->full_name}}</span>
 										</div>								
 									</div>
@@ -111,9 +118,9 @@
 															</li> -->
 															<li>
 																@if( $type == 'user')
-						                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}"> <i class="fas fa-trash-alt"></i> Delete</a>
+						                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}" data-method="get"> <i class="fas fa-trash-alt"></i> Delete</a>
 						                                        @else
-						                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}"> <i class="fas fa-trash-alt"></i> Delete</a>
+						                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}" data-method="delete"> <i class="fas fa-trash-alt"></i> Delete</a>
 						                                        @endif
 															</li>
 														</ul>
@@ -149,7 +156,10 @@
         if (confirm(text) == true) {
             $.ajax({
                 url: $(this).data('href'),
-                type: 'get',
+                type: $(this).data('method'),
+                data:{
+                	_token: '{{csrf_token()}}',
+                },
                 success:function(data){
                     alert('Deleted successfully');
                     location.reload();

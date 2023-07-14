@@ -815,7 +815,9 @@
                                     </div><!-- end card -->
                                 </div>
                             </div>
-
+                            @php $categoryData = [];
+                                $categoryData = @$service->BusinessPriceDetailsAges; 
+                            @endphp
                             <div class="row ">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -825,18 +827,26 @@
                                         <div class="p-3 bg-light rounded">
                                             <div class="row g-2">
                                                 <div class="col-lg-auto">
-                                                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="choices-select-status">
+                                                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="categoryList" onchange="serchCategory(this.value,'category');">
                                                         <option value="">Search by Category Name</option>
-                                                        <option value="Completed">Categories 1</option>
-                                                        <option value="Inprogress">Categories 2</option>
-                                                        <option value="Pending">Categories 3</option>
+                                                        @foreach($categoryData as $i=>$category)
+                                                            <option value="{{$i}}">{{$category->category_title}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-lg">
-                                                    <div class="search-box search-width">
+                                                <div class="col-lg-auto">
+                                                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="priceList" onchange="serchCategory(this.value,'price');">
+                                                        <option value="">Search by Price Option</option>
+                                                        @foreach($categoryData as $i=>$category)
+                                                            @foreach($category->BusinessPriceDetails as $j=>$priceDetail)
+                                                            <option value="{{$i}}">{{$priceDetail->price_title}}</option>
+                                                            @endforeach
+                                                        @endforeach
+                                                    </select>
+                                                    <!-- <div class="search-box search-width">
                                                         <input type="text" id="searchTaskList" class="form-control search" placeholder="Search by Price Option">
                                                         <i class="ri-search-line search-icon"></i>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -847,10 +857,6 @@
                                                 <input type="hidden" name="serviceId" id="serviceId" value="{{$serviceId}}">
                                                 <input type="hidden" name="serviceType" id="serviceType" value="{{$serviceType}}">
                                                 <div class="live-preview" id="categoryMainDiv">
-                                                    @php $categoryData = [];
-                                                        $categoryData = @$service->BusinessPriceDetailsAges; 
-                                                    @endphp
-
                                                     @if(!empty($categoryData) && count($categoryData) > 0)
                                                         <input type="hidden"  name="categoryCount" id="categoryCount" value="{{count($categoryData) - 1}}" />
                                                         @foreach($categoryData as $i=>$category)
@@ -872,6 +878,7 @@
                                                                                                         <i class="fas fa-plus text-muted"></i>Taxes</a></li>
                                                                                                     <li><a onclick="scheduleLink('{{@$category->cid}}','{{@$category->id}}');"><i class="fas fa-plus text-muted"></i>Schedule</a></li>
                                                                                                     <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target><a onclick=" return add_another_price_duplicate_category({{$i}});" ><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
+                                                                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service{{$i}}"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>
                                                                                                     @if($i!=0)
                                                                                                     <li class="dropdown-divider"></li>
                                                                                                     <li><a href="" onclick="removeCategoryDiv({{$i}});"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
@@ -949,6 +956,39 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="modal fade add-on-service{{$i}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-dialog-centered modal-50">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="myModalLabel">Create Add On Service</h5>
+                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="row justify-content-md-center">
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="mb-3">
+                                                                                            <label class="form-label" >Name</label>
+                                                                                            <input type="text" class="form-control" id="service_name" name="service_name[]" value="{{$category->service_name}}" placeholder="Enter name" >
+                                                                                        </div>
+                                                                                        <div class="mb-3">
+                                                                                            <label class="form-label" for="product-title-input">Price</label>
+                                                                                            <input type="text" class="form-control" id="service_price" name="service_price[]" value="{{$category->service_price}}" placeholder="Enter price" >
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="mb-3">
+                                                                                            <label class="form-label" for="product-title-input">Description</label>
+                                                                                            <textarea class="form-control" id="service_description" name="service_description[]"  placeholder="Enter description" rows="3">{{$category->service_description}}</textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>                  
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" data-bs-dismiss="modal"  class="btn btn-primary btn-red">Submit</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     @else
@@ -970,6 +1010,7 @@
                                                                                                 <li><a href="" data-bs-toggle="modal" data-bs-target=".tax0">
                                                                                                     <i class="fas fa-plus text-muted"></i>Taxes</a></li>
                                                                                                 <li><a onclick=" return add_another_price_duplicate_category(0);"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
+                                                                                                <li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service0"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>
                                                                                             </ul>
                                                                                         </div>
                                                                                     </div>
@@ -1033,6 +1074,39 @@
                                                                             <div class="mb-3">
                                                                                 <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="" placeholder="Dues Tax"> 
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal fade add-on-service0" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered modal-50">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="myModalLabel">Create Add On Service</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="row justify-content-md-center">
+                                                                                <div class="col-md-6">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label" >Name</label>
+                                                                                        <input type="text" class="form-control" id="service_name" name="service_name[]" placeholder="Enter name" >
+                                                                                    </div>
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label" for="product-title-input">Price</label>
+                                                                                        <input type="text" class="form-control" id="service_price" name="service_price[]" placeholder="Enter price" >
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label" for="product-title-input">Description</label>
+                                                                                        <textarea class="form-control" id="service_description" name="service_description[]"placeholder="Enter description" rows="3"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>                  
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
@@ -1831,15 +1905,31 @@ yourButton.addEventListener('mouseleave', (e) => {
         $('#category'+cnt).find("input[name='cat_id_db[]']").val('');
         var firstClass = $('#category'+cnt).find('.accordion-button').first();
         firstClass.removeClass('collapsed');
-        // $('#accor_nestingcategory'+i).removeClass();
-        // $('#accor_nestingcategory'+i).addClass("accordion-collapse collapse");
 		$('#accor_nestingcategory'+i).removeClass("show");
 		$('#accor_nestingcategory'+cnt).addClass("collapse show");
 		var subacnt=$('#category'+i).children().length;
 		for(var s=0; s<=subacnt; s++)
 		{
+            var priceClass = $('#acc_nesting'+cnt+s).find('.accordion-button').first();
+            priceClass.removeClass('collapsed');
 			$('#accor_nestingprice'+cnt+s).addClass("collapse show");
 		}
+    }
+
+    function serchCategory(value,type){
+        if(type == 'category'){
+            $('#priceList').val('');
+        }else{
+            $('#categoryList').val('');
+        }
+        var cnt = $('#categoryCount').val();
+        for(var s=0; s<=cnt; s++)
+        {
+            $('#category'+s).css('display','block');
+            if(s != value){
+                $('#category'+s).css('display','none');
+            }
+        }
     }
 </script>
 
