@@ -1331,60 +1331,79 @@
 																				<label for="terms_1" class="col-md-12 terms-check1">
 																					<input type="checkbox" value="1" class="chkdy" id="termcondfaq" name="termcondfaq" autocomplete="off" {{ (@$terms->termcondfaq==1) ? 'checked' : '' }}> Terms, Conditions, FAQ
 																				</label>
-																				<div class="textsam" id="termcondfaqdiv" style="display:{{ (@$terms->termcondfaq==1) ? 'block' : 'none' }}">
+																				<div id="termcondfaqdiv" style="display:{{ (@$terms->termcondfaq==1) ? 'block' : 'none' }}">
+																					<textarea name="termcondfaqtext" id="ckeditor-classic" >{{@$terms->termcondfaqtext}}</textarea>
+																				</div>
+
+																				<!-- <div class="textsam" id="termcondfaqdiv"style="display:{{ (@$terms->termcondfaq==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Terms, Conditions, FAQ" id="termcondfaqtext" name="termcondfaqtext" rows="5">{{@$terms->termcondfaqtext}}</textarea>
 																					<div class="text-right word-counter">
 																						<span id="termcondfaqtext_left">1000</span> Characters Left
 																					</div>
-																				</div>
+																				</div> -->
 																			</div>
 																			
 																			<div class="mb-15">
 																				<label for="terms_2" class="terms-check2">
 																					<input type="checkbox" value="1" class="chkdy" id="contractterm" name="contractterms" autocomplete="off" {{ (@$terms->contractterms==1) ? 'checked' : '' }}> Contract Terms ?
 																				</label>
-																				<div class="col-md-12 textsam" id="contracttermdiv" style="display:{{ (@$terms->contractterms==1) ? 'block' : 'none' }}">
+																				<div id="contracttermdiv" style="display:{{ (@$terms->contractterms==1) ? 'block' : 'none' }}">
+																					<textarea name="contracttermstext" id="ckeditor-classic2">{{@$terms->contracttermstext}}</textarea>
+																				</div>
+																				<!-- <div class="col-md-12 textsam" id="contracttermdiv" style="display:{{ (@$terms->contractterms==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Contract Terms" id="contracttermtext" name="contracttermstext" rows="8" maxlength="2000">{{@$terms->contracttermstext}}</textarea>
 																					<div class="text-right word-counter">
 																						<span id="contracttermtext_left">2000</span> Characters Left
 																					</div>
-																				</div>
+																				</div> -->
 																			</div>
 																			
 																			<div class="mb-15">
 																				<label for="terms_3" class="col-md-12 terms-check3">
 																					<input type="checkbox" value="1" class="chkdy" id="liabilitys" name="liability" autocomplete="off" {{ (@$terms->liability==1) ? 'checked' : '' }}> Liability Waiver
 																				</label>
-																				<div class="col-md-12 textsam" id="liabilitysdiv" style="display:{{ (@$terms->liability==1) ? 'block' : 'none' }}">
+																				<div id="liabilitysdiv" style="display:{{ (@$terms->liability==1) ? 'block' : 'none' }}">
+																					<textarea name="liabilitytext" id="ckeditor-classic3" >{{@$terms->liabilitytext}}</textarea>
+																				</div>
+																				<!-- <div class="col-md-12 textsam" id="liabilitysdiv" style="display:{{ (@$terms->liability==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Liability Waiver" id="liabilitystext" name="liabilitytext" rows="5">{{@$terms->liabilitytext}}</textarea>
 																					<div class="text-right word-counter">
 																						<span id="liabilitystext_left">1000</span> Characters Left
 																					</div>
-																				</div>
+																				</div> -->
 																			</div>
 																			
 																			<div class="mb-15">
 																				<label for="terms_4" class="col-md-12 terms-check4">
 																					<input type="checkbox" value="1" class="chkdy" id="covids" name="covid" autocomplete="off" {{ (@$terms->covid==1) ? 'checked' : '' }}> Covid – 19 Protocols
 																				</label>
-																				<div class="col-md-12 textsam" id="covidsdiv" style="display:{{ (@$terms->covid==1) ? 'block' : 'none' }}">
+
+																				<div id="covidsdiv" style="display:{{ (@$terms->covid==1) ? 'block' : 'none' }}">
+																					<textarea name="covidtext" id="ckeditor-classic4">{{@$terms->covidtext}}</textarea>
+																				</div>
+
+																				<!-- <div class="col-md-12 textsam" id="covidsdiv" style="display:{{ (@$terms->covid==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Covid – 19 Protocols" id="covidstext" name="covidtext" rows="5">{{@$terms->covidtext}}</textarea>
 																					<div class="text-right word-counter">
 																						<span id="covidstext_left">1000</span> Characters Left
 																					</div>
-																				</div>
+																				</div> -->
 																			</div>
 																			
 																			<div class="mb-15">
 																				<label for="terms_5" class="col-md-12 terms-check5">
 																					<input type="checkbox" value="1" class="chkdy" id="refundpolicy" name="refundpolicy" autocomplete="off" {{ (@$terms->refundpolicy==1) ? 'checked' : '' }}> Refund Policy
 																				</label>
-																				<div class="col-md-12 textsam" id="refundpolicydiv" style="display:{{ (@$terms->refundpolicy==1) ? 'block' : 'none' }}">
+
+																				<div id="refundpolicydiv"  style="display:{{ (@$terms->refundpolicy==1) ? 'block' : 'none' }}">
+																					<textarea name="contracttermtext" id="ckeditor-classic5">{{@$terms->refundpolicytext}}</textarea>
+																				</div>
+																				<!-- <div class="col-md-12 textsam" id="refundpolicydiv" style="display:{{ (@$terms->refundpolicy==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Refund Policy" id="refundpolicytext" name="refundpolicytext" rows="5">{{@$terms->refundpolicytext}}</textarea>
 																					<div class="text-right word-counter">
 																						<span id="refundpolicy_left">1000</span> Characters Left
 																					</div>
-																				</div>
+																				</div> -->
 																			</div>
 																		</div>
 
@@ -1418,11 +1437,11 @@
        	$('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
         	$('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
         	$('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
-        	$('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
+        /*	$('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
         	$('#contracttermtext_left').text(2000-parseInt($("#contracttermtext").val().length));
         	$('#refundpolicy_left').text(1000-parseInt($("#refundpolicytext").val().length));
         	$('#liabilitystext_left').text(1000-parseInt($("#liabilitystext").val().length));
-        	$('#covidstext_left').text(1000-parseInt($("#covidstext").val().length));
+        	$('#covidstext_left').text(1000-parseInt($("#covidstext").val().length));*/
         	$('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
 
 
@@ -1450,7 +1469,7 @@
         	$("#termcondfaqtext").on('input', function() {
             $('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
         	}); 
-        	$("#contracttermtext").on('input', function() {
+        /*	$("#contracttermtext").on('input', function() {
             $('#contracttermtext_left').text(2000-parseInt(this.value.length));
         	});
         	$("#liabilitystext").on('input', function() {
@@ -1464,7 +1483,7 @@
         	});
         	$("#covidstext").on('input', function() {
             $('#covidstext_left').text(1000-parseInt(this.value.length));
-        	});
+        	});*/
 
 
 	      var special_dates = '{{ @$service->special_days_off }}';  
@@ -1693,7 +1712,7 @@
       });    
 	</script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script> -->
 	
 	<script type="text/javascript">
     	function initMap() {
@@ -1790,6 +1809,34 @@
             $('#lon').val(place.geometry.location.lng());
          });
       }
+ 	</script>
+
+ 	<script>
+ 		$(document).ready(function(){
+ 			ClassicEditor.create(document.querySelector("#ckeditor-classic2")).then(function(e) {
+				e.ui.view.editable.element.style.height = "200px"
+			}).catch(function(e) {
+				console.error(e)
+			});
+
+			ClassicEditor.create(document.querySelector("#ckeditor-classic3")).then(function(e) {
+				e.ui.view.editable.element.style.height = "200px"
+			}).catch(function(e) {
+				console.error(e)
+			});
+
+			ClassicEditor.create(document.querySelector("#ckeditor-classic4")).then(function(e) {
+				e.ui.view.editable.element.style.height = "200px"
+			}).catch(function(e) {
+				console.error(e)
+			});
+
+			ClassicEditor.create(document.querySelector("#ckeditor-classic5")).then(function(e) {
+				e.ui.view.editable.element.style.height = "200px"
+			}).catch(function(e) {
+				console.error(e)
+			});
+		});
  	</script>
 
 @endsection

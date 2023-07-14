@@ -103,4 +103,12 @@ class DesignController extends Controller {
 	public function sales_report(Request $request){
         return view('design.sales_report');
     }
+	
+	public function shopping_cart(Request $request){
+        return view('design.shopping_cart');
+    }
+	
+	public function book_multi_times(Request $request){
+        return view('design.book_multi_times');
+    }
 }

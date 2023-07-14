@@ -1276,7 +1276,7 @@
    /* display: flex;
     align-items: flex-start; */
     position: relative;
-    padding-top: 40px;
+    padding-top: 10px;
 }
 
 #calendar .fc-toolbar.fc-header-toolbar .fc-right {

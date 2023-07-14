@@ -186,6 +186,12 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 			</div>
 		</div>
 	</div>
+	
+	<div class="">
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+			Pop-Up
+		</button>
+	</div>
 
 	<div class="modal" id="success-reservation" role="dialog">
 	    <div class="modal-dialog modal-lg booking-receipt">
@@ -219,13 +225,122 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	    </div>
 	</div>
 
+	<div class="modal fade in modal-middle" id="exampleModal" role="dialog">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header" style="text-align: right;"> 
+	                <div class="closebtn">
+	                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">×</span>
+	                    </button>
+	                </div>
+	            </div>
+	            <div class="modal-body" id='booking-time-model'>
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="scheduler-time-txt text-center">
+								<p>How would you like to reserve a booking?</p>
+							</div>
+						</div>
+						<div class="col-md-12 col-sm-12 col-xs-12 btns-modal">	
+							<button type="button" class="addbusiness-btn-modal">Book Single Time</button>
+							<button type="button" class="addbusiness-btn-black" data-toggle="modal" data-target="#multipletime">Book Multiple Times</button>
+						</div>
+					</div>	
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="modal fade in" id="multipletime" role="dialog">
+	    <div class="modal-dialog multiple-modal-size">
+	        <div class="modal-content">
+	            <div class="modal-header" style="text-align: right;"> 
+	                <div class="closebtn">
+	                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">×</span>
+	                    </button>
+	                </div>
+	            </div>
+	            <div class="modal-body" id='booking-time-model'>
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="classes-info mb-25">
+								<div class="row">
+									<div class="col-md-12 col-xs-12">
+										<h2>Beach Vollyball</h2>
+										<label>Program Name: </label> <span> Summer Aerobics</span>
+									</div>
+									<div class="col-md-12 col-xs-12">
+										<label>Category Name: </label> <span>Solo Private Lessons</span>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="row">
+								<div class="col-md-4 col-sm-5 col-xs-12">
+									<div class="classes-time">
+										<button class="post-btn post-btn-gray activity-scheduler" onclick="timeBookingPopUP(1128 , 20 ,'Summer Aerobics','03:15 am',1);">03:15 am <br>30 Min</button>
+										<label>1/1  Spots Left</label>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-5 col-xs-12">
+									<div class="classes-time">
+										<button class="post-btn  activity-scheduler" onclick="timeBookingPopUP(1148 , 20 ,'Summer Aerobics','09:45 am',0);">09:45 am <br>1 hr 45 Min</button>
+										<label>1/1  Spots Left</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group mb-15">
+								<label><strong>Book Multiple Times</strong> </label>
+								<div class="special-date">     
+									<div class="input-group w-100">
+										<input type="text" class="form-control flatpiker-with-border border-0 dash-filter-picker shadow flatpickr-range flatpickr-input active" data-range-date="false" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022" readonly="readonly">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="grey-box-multiple-date">
+								<div class="text-center">
+									<span class="select-date-off">Book Multiple Times</span><br>
+									<label></label>
+								</div>
+								<div class="manual-remove"></div>
+							</div>
+						</div>
+						<div class="col-md-12 btns-modal">	
+							<button type="button" class="addbusiness-btn-modal">Confirm Bookings</button>
+						</div>
+					</div>	
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	
 </div>
 
 
 @include('layouts.footer')
 
-
 <script>
+		flatpickr(".flatpickr-range", {
+	        dateFormat: "m/d/Y",
+	        maxDate: "01/01/2050",
+			defaultDate: [new Date()],
+	     });
+	</script>
+	
+<script>
+
 	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {
 		$( '.activity-schedule-tabs .nav-tabs' ).find( 'li.active' ).removeClass( 'active' );
 		$( this ).parent( 'li' ).addClass( 'active' );

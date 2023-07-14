@@ -1,5 +1,30 @@
+<?php 
+    function timeSlotOption($lbl, $val) {
+        $start = "00:00"; //you can write here 00:00:00 but not need to it
+        $end = "23:30";
+
+        $tStart = strtotime($start);
+        $tEnd = strtotime($end);
+        $tNow = $tStart;
+  
+        $startpm = "00:00"; //you can write here 00:00:00 but not need to it
+        $endpm = "11:30";
+        echo '<select name="'.$lbl.'" id="'.$lbl.'" class="'.$lbl.' form-control" required="required"  onchange="chkAllocatedTime(this.value);">';
+        echo '<option value="">Select Time</option>';
+        while($tNow <= $tEnd){
+            if($val == date("H:i",$tNow)) {
+                echo '<option selected value="'.date("H:i",$tNow).'">'.date("h:i A",$tNow).'</option>';    
+            } else {
+                echo '<option value="'.date("H:i",$tNow).'">'.date("h:i A",$tNow).'</option>';
+            }
+            $tNow = strtotime('+15 minutes',$tNow);
+        }
+        echo '</select>';
+    }
+?>
+
 <div class="modal fade compare-model" id="bookclienttraining" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog book-client-training modal-dialog-centered modal-70">
+    <div class="modal-dialog book-client-training modal-dialog-centered modal-70  modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
 				<h5 class="modal-title" id="myModalLabel">Schedule A Client</h5>
@@ -20,19 +45,275 @@
                                 <label>Search for customer</label>
                                 <div class="search-customer mb-10">
                                     <input type="text" id="serchclient" name="fname" class=""   placeholder="Search for client who is making a purchase?" autocomplete="off" >
-
                                     <button id="serchbtn"><i class="fa fa-search"></i></button>
-                                   
                                 </div>
                             </div>
-							 <div class="col-lg-12">
+
+                            <div class="col-lg-12 mb-10">
+                                <label>Staff Member</label>
+                                <select name="staff_list" id="staff_list" class="form-select valid" onchange="loaddropdown('staff',this,this.value);">
+                                    <option value="">Select Member</option>
+                                    @if(!empty(@$staffData))
+                                        <option value="Provider-~-{{Auth::user()->id}}" > {{Auth::user()->full_name}} </option>
+                                        @foreach($staffData as $sd)
+                                            <option value="Staff Member-~-{{$sd->id}}" > {{$sd->full_name}} </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+
+							<div class="col-lg-12">
                                 <label class="form-label">Notes</label>
-                                <textarea class="form-control" id="booking-notes" placeholder="Enter your note" rows="3"></textarea>
-                             </div>
+                                <textarea class="form-control mb-15" id="booking-notes" placeholder="Enter your note" rows="3"></textarea>
+                            </div>
+							<div class="col-lg-12">
+								<input type="radio" id="single" name="product" value="single" checked="">
+								<label class="mr-15" for="single">Book Single Time</label>
+														
+								<input type="radio" id="multi" name="product" value="multi">
+								<label class="mr-15" for="multi">Book Multiple Times</label>
+							</div>
                         </div>
                     </div>
+					
+					<div class="col-lg-6 col-md-6 mmb-10">
+                        <div class="">
+                            <div class="calendar-title-modal"><label class="font-red">Step: </label> <label> Plan Your Session</label> </div>
+                            <div class="program-selection mb-10">
+                                <label>Select Program</label>
+                                <select name="program_list" id="program_list" class="form-select valid" onchange="loaddropdown('program',this,this.value);">
+                                    <option value="">Select Program</option>
+                                    @if(!empty(@$program_list))
+                                        @foreach($program_list as $pl)
+                                            <option value="{{$pl->id}}">{{$pl->program_name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                                
+                            <div class="program-selection mb-10">
+                                <label>Select Catagory </label>
+                                <select name="category_list" id="category_list" class="form-select valid" onchange="loaddropdown('category',this,this.value);">
+                                    <option value="">Select Catagory</option>
+                                </select>
+                            </div>
+                            
+                            <div class="program-selection mb-10">
+                                <label>Select Price Option </label>
+                                <select name="priceopt_list" id="priceopt_list" class="form-select" onchange="loaddropdown('priceopt',this,this.value);">
+                                    <option value="">Select Price</option>
+                                </select>
+                            </div>
+							
+							<div class="row mb-10 display-single">
+                                <div class="col-md-6 col-6">
+                                    <label>From</label>
+                                    {{timeSlotOption('from','')}}
+                                </div>
 
-                    <div class="col-lg-6 col-md-6 mmb-10">
+                                <div class="col-md-6 col-6">
+                                    <label>To</label>
+                                    {{timeSlotOption('to','')}}
+                                </div>
+                            </div>
+
+                            <div class="row mb-10  display-multi d-none">
+								<div class="col-md-12">
+                                    <div class="program-selection mb-10">
+                                        <label>Date</label>
+                                        <div class="input-group">
+											<input type="text" class="form-control border-0 flatpiker-with-border flatpickr-input active sessionDate" id="managecalendarservice">
+										</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6">
+                                    <label>From</label>
+                                    {{timeSlotOption('from','')}}
+                                </div>
+
+                                <div class="col-md-6 col-6">
+                                    <label>To</label>
+                                    {{timeSlotOption('to','')}}
+                                </div>
+								
+								<div class="col-md-12">
+									<div class="add-more-date">
+										<a href="#"> + Add More </a>
+									</div>
+								</div>
+                            </div>
+
+                            <div class="program-selection mb-10 d-inline-grid">
+                                <label>Select Participants</label>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#addpartcipate" class="btn btn-red search-add-client"> Select </button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-6">
+                                    <div class="program-selection mb-10">
+                                        <label>Price</label>
+                                        <input type="text" class="form-control valid" name="price" id="price" placeholder="$" title="" >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-6">
+                                    <div class="program-selection mb-10">
+                                        <label>Session</label>
+                                        <input type="text" class="form-control valid" name="p_session" id="p_session" placeholder="$" title="" >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-6">
+                                    <div class="program-selection mb-10">
+                                        <label>Memberhsip Option</label>
+                                        <input type="text" class="form-control valid" id="mp_name" readonly>
+                                    </div>
+                                </div>
+								 <div class="col-md-6 col-6 display-single">
+                                    <div class="program-selection mb-10">
+                                        <label>Date</label>
+                                        <div class="input-group">
+											<input type="text" class="form-control border-0 flatpiker-with-border flatpickr-input active sessionDate" id="managecalendarservice">
+										</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="program-selection mb-10">
+                                        <label>Duration</label>
+                                        <div class="duration-min">
+                                            <input type="text" class="form-control valid mr-10" name="duration_int" id="duration_int" placeholder="1" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+                                            <select name="duration_dropdown" id="duration_dropdown" class="form-select valid" onchange="loaddropdown('duration',this,this.value);">
+                                                <option value="Days">Day(s) </option>
+                                                <option value="Weeks">Week(s)</option>
+                                                <option value="Months">Month(s) </option>
+                                                <option value="Years">Year(s) </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							
+							<div class="row">
+								<div class="col-lg-12">
+									<label>Repeat</label>
+									<div class="repeat mb-10">
+										<group>
+											<div class="input-container">
+                                                <input type="radio" name="booking-repeateTimeType" checked value="off"><label>Off</label>      
+											</div>
+											<div class="input-container">
+                                                <input type="radio" name="booking-repeateTimeType" value="daily"><label>Daily</label>      
+											</div>
+											<div class="input-container">
+                                                <input type="radio" name="booking-repeateTimeType" value="week"><label>Weekly</label>
+											</div>
+											<div class="input-container">
+                                                <input type="radio" name="booking-repeateTimeType" value="month"><label>Monthly</label>     
+											</div>
+											<div class="input-container">
+                                                <input type="radio" name="booking-repeateTimeType" value="year"><label>Yearly</label>  
+											</div>											
+										</group>
+									</div>
+								</div>
+
+								<div class="col-lg-12 daily d-none hideall">
+									<div class="mb-10">
+										<label> End Date: </label>
+										<div class="input-group">
+											<input type="text" class="form-control border-0 flatpickr-range flatpickr-input active" value="" readonly="readonly" id="repeat_endDate1" >
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12 weeks d-none hideall">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="mb-10">
+												<label> Every Weeks: </label>
+												<div class="number">
+													<span class="minus">-</span>
+													<input type="text" value="1" id="booking-everyWeeks"/>
+													<span class="plus">+</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="mb-10">
+												<label> End Date: </label>
+												<div class="input-group">
+													<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border flatpickr-input active" value="" readonly="readonly" id="repeat_endDate2">
+												</div>
+											</div>
+										</div>
+									</div>
+                                    
+									<div class="mb-10 weekDays">
+                                        
+										<label> Days: </label>
+										<span class="btn-grp" id="divButtonGroup" data-bgval="2">
+										  <button type="button" value="Sunday" id="Sunday" class="add-day">SU</button>
+										  <button type="button" value="Monday" id="Monday" class="add-day">MO</button>
+										  <button type="button" value="Tusesday" id="Tusesday" class="add-day">TU</button>
+										  <button type="button" value="Wednesday" id="Wednesday" class="add-day">WE</button>
+										  <button type="button" value="Thrusday" id="Thrusday" class="add-day">TH</button>
+										  <button type="button" value="Friday" id="Friday" class="add-day">FR</button>
+										  <button type="button" value="Saturday" id="Saturday" class="add-day">SA</button>
+										</span>
+									</div>
+								</div>
+
+								<div class="col-lg-12 month d-none hideall">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="mb-10">
+												<label> Days: </label>
+												<div class="number">
+													<span class="minus">-</span>
+													<input type="text" value="1" id="booking-monthDays" />
+													<span class="plus">+</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="mb-10">
+												<label> End Date: </label>
+												<div class="input-group">
+													<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border flatpickr-input active" value="" readonly="readonly" id="repeat_endDate3">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                            
+                            <!-- <div class="program-selection mb-10 select-favorite">
+                                <label class="width-100">How Often Will this happen? </label>
+                                <input type="radio" id="onedaybooking" name="to_book_type" value="oneday" checked>
+                                <label class="onedaybooking" for="html">One Day Booking</label>
+                                <input type="radio" id="onedaybooking" name="to_book_type" value="repeat">
+                                <label class="onedaybooking" for="css">Repeat This Booking</label>
+                            </div> -->
+
+                            <div class="row mt-10">
+                                <div class="col-md-6"> 
+                                    <div class="tax-check">
+                                        <label>Tax </label>
+                                        <input type="checkbox" id="tax" name="tax" value="1" onclick="tax();">
+                                        <label for="tax"> No Tax</label><br>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                      <span id="taxvalspan">$0</span>
+                                </div>
+                                <input type="hidden" name="duestax" id="duestax" value="">
+                                <input type="hidden" name="salestax" id="salestax" value="">
+                            </div>
+                        </div>
+                    </div>
+					
+                    <div class="col-lg-6 col-md-6 mmb-10 d-none">
                         <div class="">
                             <div class="calendar-title-modal"><label class="font-red">Step 2: </label> <label> Plan Your Session</label> </div>
                             <div class="program-selection mb-10">
@@ -60,6 +341,8 @@
                                     <option value="">Select Price</option>
                                 </select>
                             </div>
+
+                            
 
                             <div class="program-selection mb-10 d-inline-grid">
                                 <label>Select Participants</label>
@@ -267,13 +550,15 @@
                     <input type="hidden" name="repeateTimeType" id="repeateTimeType" value="">
                     <input type="hidden" name="everyWeeks" id="everyWeeks" value="">
                     <input type="hidden" name="monthDays" id="monthDays" value="">
+                    <input type="hidden" name="booking_from_id" id="booking_from_id" value="{{Auth::user()->id}}">
+                    <input type="hidden" name="booking_from" id="booking_from" value="Provider">
+                    <input type="hidden" name="calendar_booking_time" id="calendar_booking_time" value="">
                     <button type="button" class="btn btn-black mb-00 pay-btn" id="doPayment" disabled="" onclick="addToCart();">Payment</button>
                 </form>
 			</div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" role="dialog" id="addpartcipate" tabindex="-1" >
     <div class="modal-dialog counter-modal-size">
@@ -299,6 +584,17 @@
 
 <button  id="paymentModal" class="d-none" data-behavior="ajax_html_modal" data-url="" data-modal-width="modal-70"></button>
 
+<script>
+	$('input[type=radio][name=product]').change(function() {
+		if (this.value == "multi") {
+		   $('.display-multi').removeClass('d-none');
+		   $('.display-single').addClass('d-none');
+		}else if (this.value == "single") {
+			$('.display-multi').addClass('d-none');
+			$('.display-single').removeClass('d-none');
+		}
+	});
+</script>
 <script>
     $(document).ready(function () {
         var business_id = '{{$companyId}}';
@@ -533,6 +829,12 @@
             $('#duration').html($('#duration_int').val() +' '+ selectedText);
             $('#actscheduleid').val($('#duration_int').val() +' '+ id);
         }
+
+        if(chk == 'staff'){
+            var sdata = id.split('-~-');
+            $('#booking_from_id').val(sdata[1]);
+            $('#booking_from').val(sdata[0]);
+        }
         
         $.ajax({
             url: '{{route("getdropdowndata")}}',
@@ -576,6 +878,22 @@
                     $('#infantcnt').val(0);
                     $('#price').val(0);
                 }
+            }
+        });
+    }
+
+    function chkAllocatedTime(val){
+        alert(val);
+         $.ajax({
+            url: '{{route("calendar.chkStaffAssignedOrder")}}',
+            type: 'get',
+            data:  {
+                'time':val,
+                'calendar_booking_time':calendar_booking_time,
+                'booking_from':booking_from,
+            },
+            success:function(data){
+
             }
         });
     }

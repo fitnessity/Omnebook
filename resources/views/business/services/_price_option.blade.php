@@ -36,7 +36,7 @@
                 <div class="container-fluid nopadding">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-8">
-                            Price Option   {{@$price->price_title != '' ? " : ".@$price->price_title :'' }}
+                            Price Option {{@$price->price_title != '' ? " : ".@$price->price_title :'' }}
                         </div>
                         <div class="col-lg-6 col-md-6 col-4">
                             <div class="priceoptionsettings">
