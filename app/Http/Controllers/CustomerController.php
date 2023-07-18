@@ -274,13 +274,19 @@ class CustomerController extends Controller {
     }
 
     public function importattendance(Request $request){
+        ini_set('max_execution_time', 8000000); 
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 4800);
         if($request->hasFile('import_file')){
             $ext = $request->file('import_file')->getClientOriginalExtension();
             if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
             {
                 return response()->json(['status'=>500,'message'=>'File format is not supported.']);
             }
-            ini_set('max_execution_time', 10000); 
+            /*ini_set('max_execution_time', 8000000); 
+            ini_set('memory_limit', '-1');
+
+            ini_set('max_execution_time', 4800);*/
             $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
             /*print_r($headings);*/
             if(!empty($headings)){
@@ -332,8 +338,7 @@ class CustomerController extends Controller {
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
                     /*print_r($firstrow);exit;*/
-                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' 
-                        ||  $firstrow[2] != 'address'|| $firstrow[3] != 'city'|| $firstrow[4] != 'state' || $firstrow[5] != 'postal_code' || $firstrow[6] != 'country'|| $firstrow[7] != 'phone_number'|| $firstrow[8] != 'email') 
+                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[2] != 'nickname' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
                     {
                         $this->error = 'Problem in header.';
                         break;
