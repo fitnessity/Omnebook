@@ -274,25 +274,20 @@ class CustomerController extends Controller {
     }
 
     public function importattendance(Request $request){
-        ini_set('max_execution_time', 8000000); 
+        set_time_limit(8000000); 
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 4800);
+        ini_set('max_execution_time', 10000);
         if($request->hasFile('import_file')){
             $ext = $request->file('import_file')->getClientOriginalExtension();
             if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
             {
                 return response()->json(['status'=>500,'message'=>'File format is not supported.']);
             }
-            /*ini_set('max_execution_time', 8000000); 
-            ini_set('memory_limit', '-1');
-
-            ini_set('max_execution_time', 4800);*/
             $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
             /*print_r($headings);*/
             if(!empty($headings)){
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
-                    /*print_r($firstrow);exit;*/
                     if( $firstrow[0] != 'you_mean_the' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[3] != 'client' ||$firstrow[4] != 'visit_service_category'|| $firstrow[5] != 'visit_type'|| $firstrow[6] != 'type' || $firstrow[7] != 'pricing_option'|| $firstrow[8] != 'exp_date'|| $firstrow[9] != 'visits_rem' || $firstrow[10] != 'staff' || $firstrow[11] != 'visit_location' || $firstrow[12] != 'sale_location' || $firstrow[13] != 'payment_service_category' ) 
                     {
                         $this->error = 'Problem in header.';
