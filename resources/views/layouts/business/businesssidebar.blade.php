@@ -58,32 +58,17 @@
                         <img src="{{asset('/public/img/home.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li>
+                
                 <li class="nav-item">
-                    <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
-                        <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
-                    </a>
-                    <!-- <div class="collapse menu-dropdown" id="sidebarApps">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="/businessjumps/2/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-calendar"> Company Details </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/businessjumps/3/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-chat"> Your Experience </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/businessjumps/4/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-email">Company Specifics </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/businessjumps/5/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-ecommerce"> Set Your Terms
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/businessjumps/6/{{$companyId}}" class="nav-link @if(Route::current()->getName()=='createNewBusinessProfile') active @endif" data-key="t-projects">Get Verified </a>
-                            </li>
-                        </ul>
-                    </div> -->
+                    @if(!Session('StaffLogin'))
+                        <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
+                                <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
+                        </a>
+                    @else
+                        <a class="nav-link menu-link @if(Route::current()->getName()=='business.staff.show') active @endif" href="{{route('business.staff.show',['company' => $companyId,'staff'=>Session('StaffLogin')])}}" >
+                                <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Staff Personal Detail</span></a>
+                    @endif
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link menu-link"  @if($companyId!='') href="{{route('business.service.select',['business_id'=>$companyId])}}" @endif aria-controls="sidebarLayouts">
                         <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Services & Prices </span> 
@@ -96,11 +81,12 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{route('personal.company.index')}}" class="nav-link @if(Route::current()->getName() == 'personal.company.index') tab-active @endif" data-key="t-signup"> Manage Company
-                                </a>
-                            </li> 
-                            
+                            @if(!Session('StaffLogin'))
+                                <li class="nav-item">
+                                    <a href="{{route('personal.company.index')}}" class="nav-link @if(Route::current()->getName() == 'personal.company.index') tab-active @endif" data-key="t-signup"> Manage Company
+                                    </a>
+                                </li> 
+                            @endif
                             <li class="nav-item">
                                 <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') tab-active @endif" data-key="t-signin"> Manage Bookings
                                 </a>
@@ -115,12 +101,13 @@
                                 <a href="{{route('business.products.index')}}" class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Add/Manage Product
                                 </a>
                             </li>
-
-                            <li class="nav-item">
-                                <a href="{{route('business.staff.index')}}" class="nav-link @if(Route::current()->getName() == 'business.staff.index') tab-active @endif" data-key="t-password-create">
-                                    Add/Manage Staff
-                                </a>
-                            </li>
+                            @if(!Session('StaffLogin'))
+                                <li class="nav-item">
+                                    <a href="{{route('business.staff.index')}}" class="nav-link @if(Route::current()->getName() == 'business.staff.index') tab-active @endif" data-key="t-password-create">
+                                        Add/Manage Staff
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
@@ -143,13 +130,13 @@
                         <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI" target="_blank">
-                        <img src="{{asset('/public/img/financial-dash.png')}}" alt="Fitnessity"> <span data-key="t-advance-ui">Financial Dashboard</span>
-                    </a>
-                </li>
-
+                @if(!Session('StaffLogin'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI" target="_blank">
+                            <img src="{{asset('/public/img/financial-dash.png')}}" alt="Fitnessity"> <span data-key="t-advance-ui">Financial Dashboard</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business.orders.create') tab-active @endif" @if($companyId) href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}"   @endif>
                         <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Checkout Register </span>
@@ -209,11 +196,6 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
-    function linkJump(bstep) {
-        var cid = '{{$companyId}}';
-        location.href = '/businessjumps/'+bstep+'/'+cid;
-    } 
-
     function changeCompany(id) {
         location.href = '/dashboard/dates=/'+id;
     }

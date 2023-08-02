@@ -92,6 +92,7 @@
                 <div class="footer-link">
                     <a href="#">BUSINESS</a><br/>
                     <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim your Business</a>
+					<a href="{{route('staff_login')}}">Staff Login</a>
                 </div> 
                 <div class="footer-bottom-left social-footer">
                     <ul>
@@ -191,7 +192,7 @@
 										  <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
 									 </li><?php */?>
 									 <li class="pc-link">
-										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Edit Personal Profile</a>
+										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Manage Personal Profile</a>
 									  </li>
 									<!-- <li class="pc-link">
 										   <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
@@ -340,6 +341,16 @@
 	
 	<!-- ecommerce-customer init js -->
     <script src="{{asset('/public/dashboard-design/js/ecommerce-customer-list.init.js')}}"></script>
+	
+	<!-- glightbox js -->
+	<script src="{{asset('/public/dashboard-design/js/glightbox.min.js')}}"></script>
+	 
+	 <!-- fgEmojiPicker js -->
+	 <script src="{{asset('/public/dashboard-design/js/fgEmojiPicker.js')}}"></script>
+	
+	<!-- chat init js -->
+	<script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
   
  <!-- new design end -->
 

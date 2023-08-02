@@ -54,7 +54,15 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 class="fs-16 mb-1">Good Morning, {{Auth::user()->full_name}}</h4>
+                                                @php 
+                                                    if(session('StaffLogin') != '') {
+                                                        $staff = App\BusinessStaff::find(session('StaffLogin'));
+                                                        $name = ucwords(@$staff->full_name);
+                                                    }else {
+                                                        $name = ucwords(Auth::user()->full_name);
+                                                    }
+                                                @endphp
+                                                <h4 class="fs-16 mb-1">Good Morning, {{$name}} </h4>
                                                 <p class="text-muted mb-0">Here's a snap shot of what's happening with <b>{{ ucwords($dba_business_name)}}</b> today.</p>
                                             </div>
                                             <div class="mt-3 mt-lg-0">
@@ -504,7 +512,7 @@
 	                                                                   <h5 class="fs-14 my-1 fw-normal">{{@$emp->Customer->full_name}} </h5>
 	                                                                </td>
 	                                                                <td>
-	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->business_price_detail->price_title}} </h5>
+	                                                                   <h5 class="fs-14 my-1 fw-normal">@if(@$emp->business_price_detail()->exists()) {{ @$emp->business_price_detail->price_title}} @endif</h5>
 	                                                                </td>
 	                                                                <td>
 	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->contract_date}} </h5>  
@@ -541,11 +549,10 @@
                             <div class="layout-rightside">
                                 <div class="card h-100 rounded-0">
                                     <div class="card-body p-0">
-                                        @if(count($todayBooking) > 0)
+                                       
                                         <div class="p-3">
                                             <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
                                         </div>
-                                        @endif
                                         <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
                                             <div class="acitivity-timeline acitivity-main">
                                                 @foreach($todayBooking as $tb)
@@ -563,6 +570,7 @@
                                                     </div>
                                                 </div>
                                                 @endforeach
+
                                                 <!-- <div class="acitivity-item py-3 d-flex">
                                                     <div class="flex-shrink-0 avatar-xs acitivity-avatar">
                                                         <div class="avatar-title bg-soft-danger text-danger rounded-circle shadow">
@@ -585,7 +593,7 @@
                                                         </div>
                                                         <p class="mb-0 text-muted"><small>9:47 PM Yesterday</small></p>
                                                     </div>
-                                                </div>
+                                                </div> 
                                                 <div class="acitivity-item py-3 d-flex">
                                                     <div class="flex-shrink-0">
                                                         <img src="http://dev.fitnessity.co//public/uploads/discover/thumb/1649668850-massage.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow">
@@ -623,17 +631,25 @@
                                                         <p class="text-muted mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                                                         <small class="mb-0 text-muted">25 Nov, 2021</small>
                                                     </div>
-                                                </div>
-                                                <div class="acitivity-item d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <img src="http://dev.fitnessity.co/public/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                                </div>-->
+                                                @foreach($notificationAry as $nd)
+                                                    <div class="acitivity-item d-flex">
+                                                        <div class="flex-shrink-0">
+                                                            @if( $nd['image'] != '')
+                                                                <img src="" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                                            @else
+                                                                <div class="avatar-xsmall">
+                                                                   <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3 mb-10">
+                                                            <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
+                                                            <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {{$nd['text']}} @endif</p>
+                                                            <small class="mb-0 text-muted">{{$nd['date']}}</small>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">Lorem Ipsum is simply dummy</h6>
-                                                        <p class="text-muted mb-2 fst-italic">"text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"</p>
-                                                        <small class="mb-0 text-muted">26 Aug, 2021</small>
-                                                    </div>
-                                                </div> -->
+                                                @endforeach
                                             </div>
                                         </div>
 

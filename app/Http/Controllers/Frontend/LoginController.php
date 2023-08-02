@@ -131,8 +131,11 @@ class LoginController extends Controller {
     }
     
     public function logout(Request $request) {
-      Auth::logout();
-      return redirect('/');
+        Auth::logout();
+        if(Session('StaffLogin')){
+            session()->forget('StaffLogin');
+        }
+        return redirect('/');
     }
        
 }
