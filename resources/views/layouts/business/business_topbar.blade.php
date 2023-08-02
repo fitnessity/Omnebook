@@ -36,6 +36,12 @@
 
 	<!-- dropzone css -->
 	<link href="{{asset('/public/dashboard-design/css/dropzone.css')}}" rel="stylesheet" type="text/css" />
+	
+	<!-- glightbox css -->
+	<link href="{{asset('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
+	
+	<!-- app css 
+	<link href="{{asset('/public/dashboard-design/css/app.min.css')}}" rel="stylesheet" type="text/css" />-->
 </head>
 
  <!-- Begin page -->
@@ -58,8 +64,9 @@
 								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar"  name="fname" value="{{Request::get('fname')}}">
 							</div>
 						</form>
-
-						<a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a>
+						<div class="app-search">
+							<a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a>
+						</div>
 					</div>
 
 					<div class="d-flex align-items-center">

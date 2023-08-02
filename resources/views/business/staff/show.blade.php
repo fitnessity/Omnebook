@@ -105,9 +105,9 @@
 																<input type="text" class="form-control" name="postcode" id="postcode" value="{{$staffMember->postcode}}">
 															</div>
 															<div class="form-group mb-10">
-																<label for="email">Birthday <!-- <span id="star">*</span> --></label>
+																<label for="email">Birthday</label>
 																<div class="input-group">
-																	<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" name="birthdate" id="birthdate" value="{{$staffMember->birthdate}}">
+																	<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" name="birthdate" id="birthdate" value="{{$staffMember->birthdate != '' ? date('m-d-Y',strtotime($staffMember->birthdate)): ''}}">
 																</div>
 															</div>
 															<div class="form-group mb-10">
@@ -116,7 +116,7 @@
 															</div>
 															<div class="form-group mb-10">
 																<label class="position-gander">Set Password</label>
-																<input type="text" class="form-control" id="password" name="password" value="" placeholder="*****" /> 
+																<input type="text" class="form-control" id="password" name="password" value="{{$staffMember->buddy_key}}" placeholder="*****" /> 
 															</div>
 															<div class="form-group mb-10 float-end">
 																<button type="submit" class="btn btn-red" id="add-btn">Update</button>
@@ -246,8 +246,8 @@
 																		<label> Birthday: </label>
 																	</div>
 																	<div class="col-lg-8 col-sm-8 col-8">
-																		<span>{{$staffMember->birthday != '' ? date('m/d/Y',strtotime($staffMember->birthday)) : "N/A"}}</span>
-																	</div>													
+																		<span>{{$staffMember->birthdate != '' ? date('m/d/Y',strtotime($staffMember->birthdate)) : "N/A"}}</span>
+																	</div>	
 																</div>
 															</div>
 															<div class="mb-10">
