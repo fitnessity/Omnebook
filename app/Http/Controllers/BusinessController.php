@@ -7,7 +7,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
-use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config;
+use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config,Storage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{Gate,Log};
 
@@ -40,19 +40,21 @@ class BusinessController extends Controller
         $startDateMonth = Carbon::parse($startDate)->format('m'); 
         $endDateMonth =  Carbon::parse($endDate)->format('m');
 
-        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales= $totalRecurringPmt =  $in_person =$online = $customerCount= $compltedpmtcnt= $remainigpmtcnt= $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = 0;
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = 0;
         $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services =[];
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
-        $dba_business_name =  @$business->dba_business_name != '' ? @$business->dba_business_name : @$business->company_name;
+        $dba_business_name =  @$business->dba_business_name ?? @$business->company_name;
         if(@$business != ''){
             $services = $business->service()->orderby('created_at')->take(5)->get();
 
             $recurringdata = @$business->Recurring()->whereMonth('payment_date', date('m',strtotime($startDate)))->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
         
-            $totalRecurringPmt = $recurringdata[0]['total_sales'];
+            $totalRecurringPmt = $recurringdata[0]['total_sales'] ?? 0;
+
             $remainigpmt = @$business->Recurring()->whereMonth('payment_date', '>=', $startDateMonth)->whereMonth('payment_date', '<=', $endDateMonth)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
+
             $compltedpmt = @$business->Recurring()->whereMonth('payment_date', '>=', $startDateMonth)->whereMonth('payment_date', '<=', $endDateMonth)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
 
             $customerCount = @$business->customers()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
@@ -62,8 +64,8 @@ class BusinessController extends Controller
             $todayBooking = @$business->UserBookingDetails()->whereMonth('created_at', '>=', $startDate)->whereMonth('created_at', '<=', $endDate)->get();
 
 
-            $compltedpmtcnt = $compltedpmt[0]['total_sales'];
-            $remainigpmtcnt = $remainigpmt[0]['total_sales'];
+            $compltedpmtcnt = $compltedpmt[0]['total_sales'] ?? 0;
+            $remainigpmtcnt = $remainigpmt[0]['total_sales'] ?? 0;
             $completedtdata = $totalRecurringPmt != 0 ? ( $compltedpmtcnt / $totalRecurringPmt)*100 : 0 ;
             $remainingdata = $totalRecurringPmt != 0 ? ( $remainigpmtcnt / $totalRecurringPmt) *100 : 0   ;
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
@@ -107,24 +109,79 @@ class BusinessController extends Controller
         
         $topBookedCategories = [];
         $topBookedPriceId = array_values(array_unique($topBookedPriceId));
-        foreach($topBookedPriceId as $priceId){
-            $sum = 0;  $topBooked = [];
-            $priceDetail = BusinessPriceDetails::where('id', $priceId)->first();
+        $priceDetails = BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
+        foreach ($priceDetails as $priceDetail) {
+            $sum = 0;
             $UserBookingDetails = $priceDetail->UserBookingDetail;
-            foreach($UserBookingDetails as $ubd){
-                $sum+= $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
+            foreach ($UserBookingDetails as $ubd) {
+                $sum += $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
             }
-            if($sum != 0){
-                $topBooked['booked'] = count($priceDetail->UserBookingDetail);
+
+            if ($sum != 0) {
+                $topBooked['booked'] = count($UserBookingDetails);
                 $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
                 $topBooked['paid'] = $sum;
-                 $topBookedCategories [] = $topBooked;
+                $topBookedCategories[] = $topBooked;
             }
         }
+
         $key_values = array_column($topBookedCategories, 'paid'); 
         array_multisort($key_values, SORT_DESC, $topBookedCategories);
+       
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
 
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories'));
+        $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');
+
+        $comments = PagePostComments::whereIn('post_id',$pagepostIds)
+                    ->where('user_id','!=',Auth::user()->id)
+                    ->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+        $postlikes = PagePostLikes::whereIn('post_id',$pagepostIds)
+                    ->where('user_id','!=',Auth::user()->id)
+                    ->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+        $commentslikes = PagePostCommentsLike::whereIn('post_id',$pagepostIds)
+                    ->where('user_id','!=',Auth::user()->id)
+                    ->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+        $notificationAry = [];
+
+        $formatNotification = function ($userData, $action, $type, $text) {
+            $image = Storage::disk('s3')->exists($userData->profile_pic) ? Storage::url($userData->profile_pic) : '';
+            $date = new DateTime($action->created_at);
+
+            return [
+                "title" => @$userData->full_name . $text,
+                "image" => $image,
+                "type"  => $type,
+                "text"  => $type === 'comment' ? $action->comment : '',
+                "date"  => $date->format('d M, Y'),
+                "fl"    => @$userData->first_letter,
+            ];
+        };
+
+        foreach ($comments as $com) {
+            $notificationAry[] = $formatNotification($com->user, $com, 'comment',' commented on your post.');
+        }
+
+        foreach ($postlikes as $pl) {
+            $notificationAry[] = $formatNotification($pl->user, $pl, 'like',' liked your post.');
+        }
+
+        foreach ($commentslikes as $cl) {
+            $notificationAry[] = $formatNotification($cl->user, $cl, 'like',' liked your post comment.');
+        }
+
+        /*print_r($notificationAry);*/
+
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry'));
     }
 
     public function bookingchart(Request $request){

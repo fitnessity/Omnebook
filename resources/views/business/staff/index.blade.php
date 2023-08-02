@@ -11,13 +11,20 @@
                     <div class="col">
                       	<div class="h-100">
 	                        <div class="row mb-3">
-								<div class="col-12">
+								<div class="col-6">
 									<div class="page-heading">
 										<label>Manage Staff</label>
 									</div>
 								</div>
+								<div class="col-6">
+									<div class="import-export float-end mt-10">
+										<button href="#" data-bs-toggle="modal" data-bs-target=".uploadfile" class="btn btn-red">Upload</button>
+									</div>
+								</div>
 							</div>
-						
+							<div class="">
+								<label id="systemMessage1" class="font-16"></label>
+							</div>
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="card" id="customerList">
@@ -40,20 +47,11 @@
 																	<button data-behavior="ajax_html_modal" data-url="{{route('business.staff.create',['business_id'=>$request->business_id])}}"  data-modal-width="modal-80"  type="button" class="btn btn-red w-100">Add Staff</button>
 																</div>
 															</div>
-															<!-- <div class="col-lg-8 col-md-7 col-sm-8">
-																<div class="search-box">
-																	<input type="text" class="form-control search" placeholder="Search Staff Name">
-																	<i class="ri-search-line search-icon"></i>
-																</div>
-															</div> -->
 														</div>
 													</div>
 													<div class="col-xl-6 col-sm-4 col-md-4 col-12">
 														<div class="row g-3">
 															<div class="col-lg-4 col-sm-9 col-md-9 col-6">
-																<!-- <div>
-																	<button type="button" class="btn btn-red w-100" onclick="SearchData();">Search</button>
-																</div> -->
 															</div>
 															<div class="col-lg-8 col-sm-3 col-md-3 col-6">
 																<a data-behavior="ajax_html_modal" data-url="{{route('business.staff.position_modal',['business_id'=>$request->business_id])}}" data-modal-width=" " class="float-end"><i class="ri-more-fill"></i></a>
@@ -71,11 +69,6 @@
 													<table class="table align-middle" id="customerTable">
 														<thead class="table-light text-muted">
 															<tr>
-																<!-- <th scope="col" style="width: 50px;">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" id="checkAll" value="option">
-																	</div>
-																</th> -->
 																<th class="sort" data-sort="customer_name">Profile Image</th>
 																<th class="sort" data-sort="email">Full Name</th>
 																<th class="sort" data-sort="phone">Position</th>
@@ -83,16 +76,11 @@
 																<th class="sort" data-sort="action">Action</th>
 															</tr>
 														</thead>
-														<tbody class="list form-check-all">
+														<tbody class="form-check-all">
 															@foreach($companyStaff as $cf)
 															<tr>
-																<!-- <th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th> -->
 																<td class="">
-																	@if($cf->profile_pic != '')
+																	@if(Storage::disk('s3')->exists($cf->profile_pic))
 																		<img src="{{Storage::Url($cf->profile_pic)}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
 																	@else
 																		<div class="avatar-xsmall">
@@ -104,7 +92,6 @@
 																<td class="">{{$cf->position}}</td>
 																<td class="status">
 																	<span class="badge badge-soft-success text-uppercase">Active</span>
-																	<!-- <span class="badge badge-soft-danger text-uppercase">Inactive</span> -->
 																</td>
 																<td>
 																	<ul class="list-inline hstack gap-2 mb-0">
@@ -156,22 +143,112 @@
     </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 
-    @include('layouts.business.footer')
-    <script type="text/javascript">
-    	$('.remove-item-btn').click(function(e){
-    		$.ajax({
-    			url:'/business/'+$(this).attr('data-cid')+'/staff/'+$(this).attr('data-id'),
-    			type:'DELETE',
-    			data:{_token:$('meta[name="csrf-token"]').attr('content')},
-    			success:function(response){
-    				if(response == 'success'){
-    					alert('Staff member successfully deletd.');
-    					window.location.reload();
-    				}else{
-    					alert("You can't delete this staff member as it has already been assigned.");
-    				}
-    			}
-    		});
+<div class="modal fade uploadfile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Upload file for customer</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group mt-10">
+					<label for="img">Choose File: </label>
+					<input type="file" class="form-control" name="file" id="file" onchange="readURL(this)">
+					 <p class="err" style="color:red;padding-top:10px;"></p>
+				</div>					
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="upload-csv" class="btn btn-primary btn-red">Upload File</button>
+			</div>
+		</div>
+	</div>
+</div>
+@include('layouts.business.footer')
+<script>
+	var profile_pic_var = '';
+	var ext = '';
+	function readURL(input) {
+	   if (input.files && input.files[0]) {
+	      const name = input.files[0].name;
+	  		const lastDot = name.lastIndexOf('.');
+	  		const fileName = name.substring(0, lastDot);
+	   	ext = name.substring(lastDot + 1);
+	   	var reader = new FileReader();
+         reader.onload = function (e) {
+             
+         };
+         profile_pic_var = input.files[0];
+         reader.readAsDataURL(input.files[0]);
+     }
+	}
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+      	$('#upload-csv').click(function(){
+        	if(profile_pic_var == ''){
+        		$('.err').html('Select file to upload.');
+        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
+            	$('.err').html('File format is not supported.')
+        	}else{
+        		business_id = '{{$request->business_id}}';
+	        	var formdata = new FormData();
+	        	formdata.append('import_file',profile_pic_var);
+	        	formdata.append('business_id',business_id);
+	         formdata.append('_token','{{csrf_token()}}')
+	         $.ajax({
+               url:'/import-staff',
+               type:'post',
+               dataType: 'json',
+               enctype: 'multipart/form-data',
+               data:formdata,
+               processData: false,
+               contentType: false,
+               headers: {'X-CSRF-TOKEN': $("#_token").val()},
+               beforeSend: function () {
+                  $('.loader').show();
+               },
+              	complete: function () {
+                 	$('.loader').hide();
+              	},
+              	success: function (response) { 
+              		$('#systemMessage1').removeClass();
+                 	if(response.status == 200){
+                   	$('.uploadfile').modal('hide');
+                    	$('#systemMessage1').addClass('font-green font-16');
+                   	 $('#systemMessage1').html("Upload Successful..");
+                   	 setTimeout(function(){
+                       window.location.reload();
+                    	},2500)
+                 	}
+                 	else{
+               		$('.uploadfile').modal('hide');
+               		$('#systemMessage1').addClass('font-red font-16');
+               		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                 	}
+                 	$('#file').val('')
+              	}
+	        	});
+        	}
     	});
-    </script>
+   });
+
+</script>
+<script type="text/javascript">
+	$('.remove-item-btn').click(function(e){
+		$.ajax({
+			url:'/business/'+$(this).attr('data-cid')+'/staff/'+$(this).attr('data-id'),
+			type:'DELETE',
+			data:{_token:$('meta[name="csrf-token"]').attr('content')},
+			success:function(response){
+				if(response == 'success'){
+					alert('Staff member successfully deletd.');
+					window.location.reload();
+				}else{
+					alert("You can't delete this staff member as it has already been assigned.");
+				}
+			}
+		});
+	});
+</script>
 @endsection

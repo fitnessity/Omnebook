@@ -17,7 +17,6 @@ use Date;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-
 use Illuminate\Support\Str;
 
 class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow

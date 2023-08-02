@@ -94,7 +94,8 @@
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                 <div class="footer-link">
                     <a href="#">BUSINESS</a><br/>
-                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim your Business</a>
+                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim Your Business</a>
+					<a href="{{route('staff_login')}}">Staff Login</a>
                 </div> 
                 <div class="footer-bottom-left social-footer">
                     <ul>
@@ -218,7 +219,7 @@
 										  <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
 									 </li><?php */?>
 									 <li class="pc-link">
-										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Edit Personal Profile</a>
+										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Manage Personal Profile</a>
 									  </li>
 									
 									<li class="pc-link">
