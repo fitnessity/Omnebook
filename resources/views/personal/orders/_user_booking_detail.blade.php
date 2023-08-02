@@ -111,11 +111,7 @@
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
                         @if($tabname != 'past' )
-                            @if($book_details->getReserveData('reserve_date') != '—' )
-                                <a class="btn-booking-red" data-behavior="ajax_html_modal" data-url="{{route('getRescheduleModel',['reservedDate'=>$book_details->getReserveData('reserve_date'), 'reserveTime'=>@$book_details->getReserveData('reserve_time'),'business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>$book_details->user_id])}}" data-modal-width="700px">Scheduled</a>
-                            @else
-                                <a class="btn-booking-red"  href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>@$customer->id ] )}}" target="_blank">Schedule</a>
-                            @endif
+                            <a class="btn-booking-red"  href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>@$customer->id ] )}}" target="_blank">Schedule</a>
                         @endif
                         @if($tabname == 'past')
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
