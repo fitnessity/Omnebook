@@ -52,6 +52,7 @@
                                             <div class="booking-activity-view">
                                                 <a class="view-booking" href="{{route('personal.orders.index',['business_id'=>$bs->id])}}"> View Bookings</a>
                                                 <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
+                                                <!-- <a class="view-schedule" onclick="openPopUp('{{$bs->id}}');"> View Schedule</a> -->
                                             </div>
                                          </div>
                                      </div>
@@ -387,7 +388,31 @@
         </div>
     </div>
 </div>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<div class="modal fade compare-model modal-middle in selectbooking">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" > 
+                <div class="closebtn">
+                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body" id="booking-time-model">
+                <div class="row contentPop text-center">
+                    <div class="col-lg-12 btns-modal">
+                       <h4 class="mb-20">Choose How You Would Like To Book</h4>
+                        <button type="button" class="addbusiness-btn-modal" onclick="redirection()" id="singletime" data-id="">Book 1 Time Slot</button>
+                        <button type="button" class="addbusiness-btn-modal">Book Multiple Time Slots At Once</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 @include('layouts.footer')
 <script>
 
@@ -435,6 +460,15 @@
         }
     });
 
+    function openPopUp(id){
+        $('.selectbooking').modal('show');
+        $('#singletime').attr('data-id',id);
+    }
+
+    function redirection() {
+        var id = $('#singletime').attr('data-id'); 
+        window.open('/business_activity_schedulers/'+id, "_blank");
+    }
     function getsearchdata(type){
         var text = $('#search_'+type).val();
         $.ajax({
