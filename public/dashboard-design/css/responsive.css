@@ -10,9 +10,10 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
-	#page-topbar{top: 110px;}
+	#page-topbar{top: 65px;} 
+	:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .navbar-menu{padding-top: 0px;}
 	.mobile-none{display:none;}
-	.page-content { padding: calc(150px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.page-content { padding: calc(60px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
 	.mb-15{ margin-bottom: 15px;}
 	.mb-55{margin-bottom: 55px;}
 	.dropBoximg{ min-width: 100% !important;}
@@ -76,6 +77,9 @@
 	#calendar .fc-basic-view .fc-body .fc-row {  min-height: 10.6em !important;}
 	.desktop-add-client-none{display: block;}
 	.btn-grp button{padding: 13px 15px;}
+	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(70vh - 275px) !important;}
+	.width-100per{width: 100%;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -144,6 +148,9 @@
 	.mmb-10{margin-bottom: 10px;}
 	.ticket-summery h4{padding: 15px 0;}
 	.cash-tend {  margin-left: 0px;}
+	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(70vh - 275px) !important;}
+	
 }
 
 @media screen and (min-width: 560px) and (max-width: 699px){ 
@@ -164,6 +171,7 @@
 	div#pricediv{order: 3;}
 	div#imgdiv{order: 1;}
 	div#bookdiv{order: 2 !important;}
+	.width-100per{width: 100%;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -261,11 +269,15 @@
 	div#pricediv{order: 2; text-align: right;}
 	div#imgdiv{order: 1;}
 	div#bookdiv{order: 3;}
+	.chat-leftsidebar {  height: calc(100vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(100vh - 275px) !important;}
+	.width-100per{width: 100%;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
 	.btn-grp button {padding: 15px 11px;}
+	header .header-right .header-bottom-sp{margin-bottom: 6px;}
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){
