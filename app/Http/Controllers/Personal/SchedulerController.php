@@ -26,7 +26,7 @@ class SchedulerController extends Controller
     public function index(Request $request)
     {   
         $serviceType='classes';
-        $programName =  $companyName= '';
+        $programName = $companyName = '';
         $orderData = UserBookingDetail::where(['id'=>$request->user_booking_detail_id])->first();
         if($orderData->business_services()->exists()){
             $programName = $orderData->business_services->program_name;
