@@ -342,20 +342,12 @@ $total_quantity = 0;
                     </nav><?php */?>
 					
 						<div class="header-right">
-                        	<ul class="setting-area">
-                            @if(Auth::check())
-                            	<?php $user = User::where('id', Auth::user()->id)->first(); ?>
-                                <li><!--<a href="<?php echo config('app.url'); ?>/userprofile/{{@$user['username']}}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-                            @else
-                            	<li><!--<a href="{{ Config::get('constants.SITE_URL') }}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
+                            @if(Session('StaffLogin'))
+                            	<a href="{{ Config::get('constants.SITE_URL') }}/userlogout" class="btn btn-list-business mr-15 header-bottom-sp"  style="color: white;">Logout </a>
+							@elseif(Auth::check() == '0')
+								<a  class="btn btn-list-business mr-15 header-bottom-sp" href="{{route('staff_login')}}">Staff Login</a>
 							@endif
-                            </ul>
-
-							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
+							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
@@ -412,7 +404,7 @@ $total_quantity = 0;
                                                       	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
                                                     </li><?php */?>
                                                     <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
+                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Manage Personal Profile</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>

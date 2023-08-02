@@ -240,7 +240,7 @@ class Customer extends Authenticatable
             $results = $results->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
         }
 
-        $results = $results->select('user_booking_details.*', DB::raw('SUM(booking_checkin_details.use_session_amount) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+        $results = $results->select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
            
             //print_r($results->get());exit;
         return $results; 

@@ -307,9 +307,9 @@ class CustomerController extends Controller {
             $writer = new Csv($spreadsheet);
             $writer->save($target);
             
-            //ProcessAttendanceExcelData::dispatch($request->business_id,$target);
+            ProcessAttendanceExcelData::dispatch($request->business_id,$target);
 
-            Excel::import(new customerAtendanceImport($request->business_id),  $target);
+            //Excel::import(new customerAtendanceImport($request->business_id),  $target);
             unlink('../public/ExcelUpload/'.$name);
         }
 

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use App\{CompanyInformation,BusinessStaff,BusinessPositions};
 use Str,Auth;
 
+use App\Imports\staffImport;
+
 class StaffController extends Controller
 {
     /**
@@ -18,7 +20,9 @@ class StaffController extends Controller
     public function index(Request $request, $business_id )
     {
         $companyInfo = CompanyInformation::where('id', $business_id)->orderBy('id', 'DESC')->first();
-        $companyStaff = @$companyInfo->business_staff->sortByDesc('created_at');
+        $companyStaff = @$companyInfo->business_staff->sortByDesc('id');
+       /* print_r($companyStaff);
+        exit;*/
         return view('business.staff.index', compact('companyStaff'));
     }
 
@@ -49,7 +53,7 @@ class StaffController extends Controller
         echo
         $random_password = Str::random(8);
         $company = $request->current_company;
-        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'gender' => $request->gender,'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio,'address'=>$request->address,'city'=> $request->city,'state'=> $request->state,'postcode'=>$request->postcode,'birthdate'=>date('Y-m-d',strtotime($request->birthdate)) ,'password'=>Hash::make($random_password)]);
+        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'gender' => $request->gender,'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio,'address'=>$request->address,'city'=> $request->city,'state'=> $request->state,'postcode'=>$request->postcode,'birthdate'=>date('Y-m-d',strtotime($request->birthdate)) ,'password'=>Hash::make($random_password),'buddy_key'=>$random_password]);
         if($request->has('fromservice')){
             if($create){
                 return "success";
@@ -94,7 +98,7 @@ class StaffController extends Controller
      */
     public function update(Request $request ,$business_id, $id)
     {
-        //print_r($request->all());exit;
+        //print_r($request->all());
         if($request->has('image')){
             $image = $request->file('image')->store('staff');
             Storage::delete($request->oldImage);
@@ -103,11 +107,14 @@ class StaffController extends Controller
         }
 
         $staff = BusinessStaff::where('id',$id)->first();
-        if($request->has('password')){
+        if($request->password != ''){
             $password = Hash::make($request->password);
+            $buddy_key = $request->password;
         }else{
             $password = $staff->password;
+            $buddy_key = $staff->buddy_key;
         }
+
         $update = [
             'first_name' => $request->fname,
             'last_name' => $request->lname,
@@ -121,6 +128,7 @@ class StaffController extends Controller
             'city'=> $request->city,
             'state'=> $request->state,
             'password'=>$password,
+            'buddy_key'=>$buddy_key,
             'postcode'=>$request->postcode,
             'birthdate'=>date('Y-m-d',strtotime($request->birthdate))
         ];   
