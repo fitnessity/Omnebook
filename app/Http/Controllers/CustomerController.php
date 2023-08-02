@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 /*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use App\Jobs\ProcessAttendanceExcelData;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -43,7 +44,8 @@ class CustomerController extends Controller {
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
 
-        $customers = $company->customers()->orderBy('fname');
+        // $customers = $company->customers()->limit(10)->orderBy('fname');
+	    $customers = $company->customers()->orderBy('fname');
         /*if($request->fname){
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
         }*/
@@ -56,12 +58,12 @@ class CustomerController extends Controller {
         }
 
         $customerCount = $customers->count();
-        $customers = $customers->get();
+        $customers = $customers->limit(1000)->get();
         $url = '';
         $grouped_customers= array();
 
 		foreach ($customers as $customer) {
-		    $grouped_customers[strtoupper($customer['fname'][0])][] = $customer;
+		    $grouped_customers[strtoupper(@$customer['fname'][0])][] = $customer;
 		}
 
         if ($request->ajax()) {
@@ -69,7 +71,7 @@ class CustomerController extends Controller {
         }
         return view('customers.index', [
             'company' => $company,
-            'grouped_customers' => $grouped_customers,
+            // 'grouped_customers' => $grouped_customers,
             'customerCount' => $customerCount,
         ]); 
     }
@@ -304,7 +306,9 @@ class CustomerController extends Controller {
             $spreadsheet = $reader->load($request->file('import_file'));
             $writer = new Csv($spreadsheet);
             $writer->save($target);
-           
+            
+            //ProcessAttendanceExcelData::dispatch($request->business_id,$target);
+
             Excel::import(new customerAtendanceImport($request->business_id),  $target);
             unlink('../public/ExcelUpload/'.$name);
         }
@@ -333,7 +337,7 @@ class CustomerController extends Controller {
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
                     /*print_r($firstrow);exit;*/
-                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[2] != 'nickname' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
+                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
                     {
                         $this->error = 'Problem in header.';
                         break;
@@ -634,10 +638,32 @@ class CustomerController extends Controller {
         }
     }
 
-
     public function receiptmodel($orderId,$customer){
         $customerData = Customer::where('id',$customer)->first();
         $bookingArray = UserBookingDetail::where('booking_id',$orderId)->pluck('id')->toArray();
         return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $orderId ]);
+    }
+
+    public function loadView(Request $request)
+    {
+        $char = $request->input('char');
+        $cid = Auth::user()->cid;
+        $company = CompanyInformation::find($cid);
+        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->limit(20)->get();
+        // You can use the $dataVariable in your code if needed
+        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
+    }
+
+    public function getMoreRecords(Request $request)
+    {
+        $char = $request->char;
+        $offset = $request->get('offset', 0); // Offset for pagination, passed from the frontend
+        $limit = 20; // Number of records to load per request
+        
+        $cid = Auth::user()->cid;
+        $company = CompanyInformation::find($cid);
+        // Fetch the next set of records using your query logic
+        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->skip($offset)->take($limit)->orderBy('fname')->get();
+        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
     }
 }

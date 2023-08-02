@@ -287,7 +287,7 @@ body{
 }
 #page-topbar{
     position: absolute;
-	top: 74px;
+	top: 65px;
     right:0;
     left:0;
     z-index: 7;
@@ -13109,8 +13109,8 @@ span.flatpickr-weekday{
 }
 @media (min-width:992px){
     .chat-leftsidebar{
-        min-width:300px;
-        max-width:300px;
+        /* min-width:300px;
+        max-width:300px; */
         height:calc(100vh - 70px - 60px - 8px)
     }
 }

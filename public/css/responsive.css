@@ -705,7 +705,7 @@
     }
 
     .header-right {
-        width: 88%;
+        width: 39%;
     }
 
     .slider-block input {
@@ -1382,6 +1382,8 @@
 	.activity-width {  width: 100% !important; }
 	.choose-sport-hire { display: block !important;}
 	.main-box-body {  padding: 0 0px !important;}
+	.custom-multiple-book .owl-prev{left: 13px !important;}
+	.custom-multiple-book .owl-next{right: 0px !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1956,10 +1958,6 @@
         text-align: center;
     }
 
-    header .header-right .btn {
-        font-size: 13px;
-        padding: 6px 10px;
-    }
 
     .without_signin {
         position: relative;
@@ -2567,6 +2565,10 @@
 	.main-box-body {  padding: 0 0px !important;}
 	.main-box-body{margin-top: 55px !important;}
 	.multiple-modal-size {  width: 95%;}
+	.calendar-separator-line{border-left: none !important;}
+	.custom-multiple-book .owl-prev{left: 0px;}
+	.custom-multiple-book .owl-next{right: -5px;}
+	.book0total-price {  text-align: left;}
 }
 
 @media(max-width: 575px) {
@@ -2780,11 +2782,11 @@
 	.emoji-picker-icon {  right: 48%;  top: 64%;}
 	.btn-cart{padding: 5px 7px 0px 25px !important;}
 	.btn-cart > span{top: 2px;}
-	header .header-right .btn{font-size: 14px;}
+	header .header-right .btn{font-size: 12px;}
 	.btn-style-one{font-size: 14px;}
 	.modal-dialog.counter-modal-size {  width: 354px;}
 	.showall-btn{padding: 5px 18px;}
-	.home-black-section label{font-size: 20px;}
+	.home-black-section label{font-size: 12px;}
 	.home-black-section i{display: none;}
 	#dropBox { min-width: 330px;}
 	.form-control.rs-birthdate {  width: 272px;}
@@ -2841,6 +2843,7 @@
 	.modal-banner .bannar-size img { height: 140px !important;}
 	.booking-active {  left: 95px;}
 	.profile-section .nav > li > a { padding: 10px 6px;}
+	header .header-right .header-bottom-sp{margin-bottom: 6px;}
 }
 
 @media(max-width: 360px){
