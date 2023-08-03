@@ -19,13 +19,11 @@
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="import-export float-end mt-10">
 										<button href="#" data-bs-toggle="modal" data-bs-target=".uploadfileall" class="btn btn-red">Upload</button>
-										<!-- <button href="#" data-bs-toggle="modal" data-bs-target=".uploadfile" class="btn btn-red">Import List</button> -->
 										<form method="get" action="/exportcustomer">
 											<input type="hidden" name="chk" id="chk" value="empty">
 											<input type="hidden" name="id" id="id" value="{{$company->id}}">
 											<button type="submit" class="btn btn-black">Export List</button> 
 										</form>
-										<!-- <button href="#" data-bs-toggle="modal" data-bs-target=".uploadmembership" class="btn btn-red">Import Membership Details</button> -->
 									</div>
 								</div>
 							</div>
@@ -45,96 +43,18 @@
 												<i class="fas fa-user-circle"></i>
 												<label>You Have {{$customerCount}} Clients</label>
 											</div>
+											<input type="hidden" name="char" id="char" value="">
 										   <div class="live-preview">
 												<div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
-
-													@foreach ($grouped_customers as $sectionLetter => $customers)
-													<div class="accordion-item shadow">
-														<h2 class="accordion-header" id="accordionnestingExample{{$sectionLetter}}">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse{{$sectionLetter}}" aria-expanded="false" aria-controls="accor_nestingExamplecollapse{{$sectionLetter}}">{{$sectionLetter}}</button></h2>
-														<div id="accor_nestingExamplecollapse{{$sectionLetter}}" class="accordion-collapse collapse" aria-labelledby="accordionnestingExample{{$sectionLetter}}" data-bs-parent="#accordionnesting">
-															<div class="accordion-body">
-																@foreach ($customers as $customer) 
-															   <div class="mini-stats-wid d-flex align-items-center mt-3 scheduler-box">
-																	<div class="flex-shrink-0 avatar-sm">
-																		@if($customer->profile_pic)
-                                             				<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($customer->profile_pic)}}" width=60 height=60 alt="">
-                                          				@else
-                                                			<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">{{$sectionLetter}}</span>
-                                          				@endif
-																	</div>
-																	<div class="col-lg-2 col-md-3 col-sm-3 ms-3">
-																		<h6 class="mb-1">{{$customer->full_name}}</h6>
-																		<p class="text-muted mb-0">Last Attended:  {{$customer->get_last_seen()}}</p>
-																	</div>
-																	<div class="col-lg-3 col-md-4 col-sm-4 ms-3">
-																		<div class="client-age">
-																			<h6 class="mb-1">Age</h6>
-																			<span>{{ $customer->age != '' ? $customer->age : "-"}}</span>
-																		</div>
-																	</div>
-													
-																	<div class="flex-grow-1 ms-3">
-																		<a class="float-end" href="#" data-bs-toggle="modal" data-bs-target=".customer-info{{$customer->id}}"><i class="ri-more-fill"></i></a>
-																	</div>
-																</div>
-
-																<div class="modal fade customer-info{{$customer->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-																	<div class="modal-dialog modal-dialog-centered customer-modal-width">
-																		<div class="modal-content">
-																			<div class="modal-header">
-																				<h5 class="modal-title" id="myModalLabel">Manage Customers</h5>
-																				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-																			</div>
-																			<div class="modal-body">
-																				<div class="scheduler-table">
-																					<div class="table-responsive">
-																						<table class="table mb-0">
-																							<thead>
-																								<tr>
-																									<th>Status</th>
-																									<th>Active Memberships</th>
-																									<th>Expiring Soon</th>
-																									<th></th>
-																									<th></th>
-																								</tr>
-																							</thead>
-																							<tbody>
-																								<tr>
-																									<td><p class="mb-0 {{ $customer->is_active() == 0 ? 'font-red' : 'font-green'}}">{{ $customer->is_active() == 0 ? "InActive" : "Active"}}</p>
-																									</td>
-																									<td>
-																										<p class="mb-0">{{$customer->active_memberships()->get()->count()}}</p>
-																									</td>
-																									<td>
-																										<p class="mb-0">{{$customer->expired_soon()}}</p>
-																									</td>
-																									<td>
-																										<div class="scheduled-btns">
-																											<button type="submit" class="btn btn-red mb-10" onclick="sendmail({{$customer->id}},{{$company->id}});">Send Welcome Email</button>
-																											<a type="button" class="btn btn-black mb-10" href="{{ route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]) }}" target="_blank">View Account</a>
-																										</div>
-																									</td>
-																									<td>
-																										<div class="scheduled-btns">
-																											<a data-business_id = "{{$company->id}}" data-id="{{$customer->id}}" class="btn btn-red delcustomer">Delete
-																											</a>
-																										</div>
-																									</td>
-																								</tr>
-																							</tbody>
-																						</table>
-																					</div>
-																				</div>
-																			</div>
-																		</div><!-- /.modal-content -->
-																	</div><!-- /.modal-dialog -->
-																</div>
-															 	@endforeach
+													@for($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++)
+														<div class="accordion-item shadow">
+															<h2 class="accordion-header" id="accordionnestingExample{{chr($asciiValue)}}">
+																<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse{{chr($asciiValue)}}" aria-expanded="false" aria-controls="accor_nestingExamplecollapse{{chr($asciiValue)}}" onclick="getData('{{chr($asciiValue)}}')">{{chr($asciiValue)}}</button></h2>
+															<div id="accor_nestingExamplecollapse{{chr($asciiValue)}}" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample{{chr($asciiValue)}}" data-bs-parent="#accordionnesting">
+																<div class="accordion-body" id="targetDiv{{chr($asciiValue)}}"></div>
 															</div>
 														</div>
-													</div>
-													@endforeach
+													@endfor
 												</div>
 											</div>
 										</div><!-- end card-body -->
@@ -148,6 +68,7 @@
          </div>
       </div>
    </div>
+   
 </div>
 <div class="modal fade uploadfile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
@@ -190,8 +111,6 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
 
 <div class="modal fade uploadfileall" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-50">
@@ -252,107 +171,67 @@
 	}
 </script>
 
-	<script type="text/javascript">
-		$(document).ready(function () {
+<script type="text/javascript">
+	$(document).ready(function () {
 
-	      $('#upload-csv').click(function(){
-	        	if(profile_pic_var == ''){
-	        		$('.err').html('Select file to upload.');
-	        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
-	            	$('.err').html('File format is not supported.')
-	        	}else{
-            	var formdata = new FormData();
-            	formdata.append('import_file',profile_pic_var);
-            	formdata.append('business_id','{{$company->id}}');
-             	formdata.append('_token','{{csrf_token()}}')
-             	$.ajax({
-                  url:'/import-customer',
-                  type:'post',
-                  dataType: 'json',
-                  enctype: 'multipart/form-data',
-                  data:formdata,
-                  processData: false,
-                  contentType: false,
-                  headers: {'X-CSRF-TOKEN': $("#_token").val()},
-                  beforeSend: function () {
-                     $('.loader').show();
-                  },
-                  complete: function () {
-                     $('.loader').hide();
-                  },
-                  success: function (response) { 
-                  	$('#systemMessage1').removeClass();
-                     if(response.status == 200){
-                        $('.uploadfile').modal('hide');
-                        $('#systemMessage1').addClass('font-green font-16');
-                        $('#systemMessage1').html("Upload Successful..");
-                       /* setTimeout(function(){
-                           window.location.reload();
-                        },2000)*/
-                     }
-                     else{
-                   		$('.uploadfile').modal('hide');
-                   		$('#systemMessage1').addClass('font-red font-16');
-                   		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
-                     }
-                     $('#file').val('')
+      $('#upload-csv').click(function(){
+        	if(profile_pic_var == ''){
+        		$('.err').html('Select file to upload.');
+        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
+            	$('.err').html('File format is not supported.')
+        	}else{
+         	var formdata = new FormData();
+         	formdata.append('import_file',profile_pic_var);
+         	formdata.append('business_id','{{$company->id}}');
+          	formdata.append('_token','{{csrf_token()}}')
+          	$.ajax({
+               url:'/import-customer',
+               type:'post',
+               dataType: 'json',
+               enctype: 'multipart/form-data',
+               data:formdata,
+               processData: false,
+               contentType: false,
+               headers: {'X-CSRF-TOKEN': $("#_token").val()},
+               beforeSend: function () {
+                  $('.loader').show();
+               },
+               complete: function () {
+                  $('.loader').hide();
+               },
+               success: function (response) { 
+               	$('#systemMessage1').removeClass();
+                  if(response.status == 200){
+                     $('.uploadfile').modal('hide');
+                     $('#systemMessage1').addClass('font-green font-16');
+                     $('#systemMessage1').html("Upload Successful..");
+                    /* setTimeout(function(){
+                        window.location.reload();
+                     },2000)*/
                   }
-            	});
-	        	}
-	    	});
+                  else{
+                		$('.uploadfile').modal('hide');
+                		$('#systemMessage1').addClass('font-red font-16');
+                		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                  }
+                  $('#file').val('')
+               }
+         	});
+        	}
+    	});
 
-	    	$('#upload-membership').click(function(){
-	        	if(profile_pic_var == ''){
-	        		$('.err').html('Select file to upload.');
-	        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
-	            	$('.err').html('File format is not supported.')
-	        	}else{
-	            	var formdata = new FormData();
-	            	formdata.append('import_file',profile_pic_var);
-	            	formdata.append('business_id','{{$company->id}}');
-	             	formdata.append('_token','{{csrf_token()}}')
-	             	$.ajax({
-	                  url:'/import-membership',
-	                  type:'post',
-	                  dataType: 'json',
-	                  enctype: 'multipart/form-data',
-	                  data:formdata,
-	                  processData: false,
-	                  contentType: false,
-	                  headers: {'X-CSRF-TOKEN': $("#_token").val()},
-	                  success: function (response) { 
-	                  	$('#systemMessage1').removeClass();
-	                     if(response.status == 200){
-	                        $('.uploadmembership').modal('hide');
-	                        $('#systemMessage1').addClass('font-green font-16');
-	                        $('#systemMessage1').html("Upload Successful..");
-	                        /*setTimeout(function(){
-	                           window.location.reload();
-	                        },2000)*/
-	                     }
-	                     else{
-	                   		$('.uploadmembership').modal('hide');
-	                   		$('#systemMessage1').addClass('font-red font-16');
-	                   		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
-	                     }
-								$('#file').val('')
-	                  }
-	            	});
-	        	}
-	    	})
-
-	    	*$('#upload-attendance').click(function(){
-	        	if(profile_pic_var == ''){
-	        		$('.err').html('Select file to upload.');
-	        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
-	            	$('.err').html('File format is not supported.')
-	        	}else{
+    	$('#upload-membership').click(function(){
+        	if(profile_pic_var == ''){
+        		$('.err').html('Select file to upload.');
+        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
+            	$('.err').html('File format is not supported.')
+        	}else{
             	var formdata = new FormData();
             	formdata.append('import_file',profile_pic_var);
             	formdata.append('business_id','{{$company->id}}');
              	formdata.append('_token','{{csrf_token()}}')
              	$.ajax({
-                  url:'/import-attendance',
+                  url:'/import-membership',
                   type:'post',
                   dataType: 'json',
                   enctype: 'multipart/form-data',
@@ -363,7 +242,7 @@
                   success: function (response) { 
                   	$('#systemMessage1').removeClass();
                      if(response.status == 200){
-                        $('.uploadAttendance').modal('hide');
+                        $('.uploadmembership').modal('hide');
                         $('#systemMessage1').addClass('font-green font-16');
                         $('#systemMessage1').html("Upload Successful..");
                         /*setTimeout(function(){
@@ -371,57 +250,164 @@
                         },2000)*/
                      }
                      else{
-                   		$('.uploadAttendance').modal('hide');
+                   		$('.uploadmembership').modal('hide');
                    		$('#systemMessage1').addClass('font-red font-16');
                    		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
                      }
 							$('#file').val('')
                   }
             	});
-	        	}
-	    	})
-	    	
+        	}
+    	})
 
-	    	$(document).on('click', '.delcustomer', function(e){
-				e.preventDefault();
-				let text = "Are you sure to delete this customer?";
-				if (confirm(text) == true) {
-					var token = $("meta[name='csrf-token']").attr("content");
-				   $.ajax({
-				      url: '/business/'+$(this).attr('data-business_id')+'/customers/delete/'+$(this).attr('data-id'),
-				      type: 'DELETE',
-				      data: {
-				          "_token": token,
-				      },
-				      success: function (){
-				      	location.reload();
-				      }
-				   });
-				}
-			});
+    	$('#upload-attendance').click(function(){
+        	if(profile_pic_var == ''){
+        		$('.err').html('Select file to upload.');
+        	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
+            	$('.err').html('File format is not supported.')
+        	}else{
+         	var formdata = new FormData();
+         	formdata.append('import_file',profile_pic_var);
+         	formdata.append('business_id','{{$company->id}}');
+          	formdata.append('_token','{{csrf_token()}}')
+          	$.ajax({
+               url:'/import-attendance',
+               type:'post',
+               dataType: 'json',
+               enctype: 'multipart/form-data',
+               data:formdata,
+               processData: false,
+               contentType: false,
+               headers: {'X-CSRF-TOKEN': $("#_token").val()},
+               success: function (response) { 
+               	$('#systemMessage1').removeClass();
+                  if(response.status == 200){
+                     $('.uploadAttendance').modal('hide');
+                     $('#systemMessage1').addClass('font-green font-16');
+                     $('#systemMessage1').html("Upload Successful..");
+                     /*setTimeout(function(){
+                        window.location.reload();
+                     },2000)*/
+                  }
+                  else{
+                		$('.uploadAttendance').modal('hide');
+                		$('#systemMessage1').addClass('font-red font-16');
+                		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                  }
+						$('#file').val('')
+               }
+         	});
+        	}
+    	})
+    	
+    	$(document).on('click', '.delcustomer', function(e){
+			e.preventDefault();
+			let text = "Are you sure to delete this customer?";
+			if (confirm(text) == true) {
+				var token = $("meta[name='csrf-token']").attr("content");
+			   $.ajax({
+			      url: '/business/'+$(this).attr('data-business_id')+'/customers/delete/'+$(this).attr('data-id'),
+			      type: 'DELETE',
+			      data: {
+			          "_token": token,
+			      },
+			      success: function (){
+			      	location.reload();
+			      }
+			   });
+			}
 		});
+	});
 
-		function  sendmail(cid,bid) {
-			$.ajax({
-				url:'{{route("sendemailtocutomer")}}',
-				type:"GET",
-				xhrFields: {
-	            withCredentials: true
-	         },
-				data:{
-					cid:cid,
-					bid:bid,
-				},
-				success:function(response){
-					if(response == 'success'){
-	                    //$('.reviewerro').html('Email Successfully Sent..');
-	                  alert('Email Successfully Sent..');
-	                }else{
-	                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-	                  alert("Can't Mail on this Address. Plese Check Email..");
-	                }
-				}
-			});
-		}
-	</script>
+	function  sendmail(cid,bid) {
+		$.ajax({
+			url:'{{route("sendemailtocutomer")}}',
+			type:"GET",
+			xhrFields: {
+            withCredentials: true
+         },
+			data:{
+				cid:cid,
+				bid:bid,
+			},
+			success:function(response){
+				if(response == 'success'){
+                    //$('.reviewerro').html('Email Successfully Sent..');
+                  alert('Email Successfully Sent..');
+                }else{
+                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
+                  alert("Can't Mail on this Address. Plese Check Email..");
+                }
+			}
+		});
+	}
+</script>
+
+<script type="text/javascript">
+
+	let offset  = 20;
+ 	var isLoading = false;
+
+ 	function getData(char){
+		$('#char').val(char);
+		offset = 20;
+		isLoading = false;
+		$.ajax({
+         url: '{{ route("load.view") }}',
+         type: 'GET',
+         data: {
+            char: char // Pass the variable here
+         },
+         success: function(response) {
+             // On success, set the HTML of the target div with the loaded view
+             $('#targetDiv'+char).html(response);
+         },
+         error: function(xhr) {
+             // Handle the error if the AJAX request fails
+             console.log(xhr.responseText);
+         }
+     });
+	}
+
+	$(document).ready(function () {
+      $(window).scroll(function () {
+   		var char = $('#char').val();
+   		if(char != ''){
+            if ($(window).scrollTop() + $(window).height() > $("#accor_nestingExamplecollapse"+char).height()) {
+               // Check if not already loading more records and not all records are loaded
+               if (!isLoading && offset !== -1) {
+                  loadMoreRecords(char);
+               }
+            }
+         }
+      });
+   });
+
+   function loadMoreRecords(char) {
+     isLoading = true;
+     $.ajax({
+         url: '/get-more-records',
+         method: 'GET',
+         data: { 
+         	offset: offset,
+         	char: char,
+         },
+         success: function (response) {
+            if (response != '') {
+               $('#targetDiv'+char).append(response);
+               offset = offset + 20;
+               isLoading = false;
+            }else {
+               // All records have been loaded
+               offset = -1;
+            }
+         },
+         error: function (xhr, status, error) {
+             console.error(error);
+             isLoading = false;
+         }
+     });
+   }
+
+</script>
 @endsection
