@@ -30,40 +30,24 @@ class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, Wi
     {
 
         $rows = $rows->toArray();
+        $count = count($rows);
         foreach ($rows as $key=>$row) {
-            if(@$row['email'] != null){
-                if((Customer::where('email',@$row['email'])->count()) == 0){
-                    $coun = @$row['country'] == 'US' ? 'United Status' : $row['country'];
-
-                    $createdata = new Customer;
-                    $createdata->business_id =  $this->business_id;
-                    $createdata->lname = @$row['last_name'];
-                    $createdata->fname = @$row['first_name'];
-                    $createdata->address =  @$row['address'];
-                    $createdata->city = @$row['city'];
-                    $createdata->state =  @$row['state'];
-                    $createdata->zipcode = @$row['postal_code'];
-                    $createdata->country = $coun;
-                    $createdata->phone_number = @$row['mobile_phone'];
-                    $createdata->email = @$row['email'];
-                    $createdata->status = 0;
-                    $createdata->save(); 
-					/*if(@$row['email'] != '-' && @$row['email'] != 'N/A' && @$row['email'] != 'n/a'){
-						$createdata = new Customer;
-						$createdata->business_id =  $this->business_id;
-						$createdata->fname = @$row['first_name'];
-						$createdata->lname = @$row['last_name'];
-						$createdata->email = @$row['email'];
-						$createdata->city = @$row['city'];
-						$createdata->state =  @$row['state'];
-						$createdata->zipcode = @$row['postal_code']; 
-						$createdata->address =  @$row['address'];
-						$createdata->country = $coun;
-                    	$createdata->phone_number = @$row['mobile_phone'];
-						$createdata->status = 0;
-						$createdata->save();
-					}*/
-                }
+           
+            if( $key != ($count-1) && (Customer::where(['email'=>@$row['email']])->first()) == ''){
+                $coun = @$row['country'] == 'US' ? 'United Status' : $row['country'];
+                $createdata = new Customer;
+                $createdata->business_id =  $this->business_id;
+                $createdata->lname = @$row['last_name'];
+                $createdata->fname = @$row['first_name'];
+                $createdata->address =  @$row['address'];
+                $createdata->city = @$row['city'];
+                $createdata->state =  @$row['state'];
+                $createdata->zipcode = @$row['postal_code'];
+                $createdata->country = $coun;
+                $createdata->phone_number = @$row['mobile_phone'];
+                $createdata->email = @$row['email'];
+                $createdata->status = 0;
+                $createdata->save(); 
             }
         }
 
