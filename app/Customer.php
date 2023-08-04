@@ -13,6 +13,8 @@ use DB;
 use Auth;
 use App\StripePaymentMethod;
 
+use Illuminate\Support\Str;
+
 class Customer extends Authenticatable
 {
 
@@ -105,9 +107,10 @@ class Customer extends Authenticatable
     }
 
     public function getFirstLetterAttribute(){
-        return $this->fname[0] . '' . $this->lname[0];
+        $fname = $this->fname != '' ? $this->fname[0] : '';
+        $lname = $this->lname != '' ? $this->lname[0] : '';
+        return $fname . '' . $lname;
     }
-
 
     public function company_information()
     {
@@ -258,15 +261,16 @@ class Customer extends Authenticatable
     }
 
     function create_stripe_customer_id(){
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $customer = \Stripe\Customer::create([
-            'name' => $this->fname . ' '. $this->lname,
-            'email'=> $this->email,
-        ]);
-        $this->stripe_customer_id = $customer->id;
-        $this->save();
-
-        return $customer->id;
+        /*$name  =  @$this->fname . ' '. @$this->lname;
+        if($name != ''){
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $customer = \Stripe\Customer::create([
+                'name' => $name,
+            ]);
+            $this->stripe_customer_id = @$customer->id;
+            $this->save();
+            return $customer->id;
+       }*/
     }
 
     public function total_spend(){
