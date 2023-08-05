@@ -35,39 +35,35 @@ class customerAtendanceImport implements ToCollection, WithChunkReading, WithHea
             $customerData = Customer::where(['fname'=> @$name[1] , 'lname'=> @$name[0], 'business_id' => $this->business_id])->first();
             //echo $customerData;
             if($customerData != ''){
-                $priceDetail = '';
-                $priceDetailsData = BusinessPriceDetails::where('cid',$this->business_id)->get();
-                $title = htmlentities($row['pricing_option'], null, 'utf-8');
-                $price_title = str_replace("&nbsp;", "", $title);
-                $price_title = html_entity_decode($price_title);
 
-                foreach($priceDetailsData as $pd){
-                    $price_title = str_replace(" ", "", $price_title);
-                    $price_titleDb = str_replace(" ", "", $pd->price_title);
-                    //echo  $price_title.'~~'.$price_titleDb;
-                    if($price_titleDb == $price_title){
-                        $priceDetail = $pd;
-                    }
-                }
+                $priceDetailsData = BusinessPriceDetails::where('cid', $this->business_id)->get();
+                $title = str_replace("&nbsp;", "", htmlentities($row['pricing_option'], null, 'utf-8'));
+                $title = html_entity_decode($title);
+                $priceDetail = $priceDetailsData->first(function ($pd) use ($title) {
+                    return str_replace(" ", "", $pd->price_title) === str_replace(" ", "", $title);
+                });
+
                 //echo $priceDetail;
                 if($priceDetail != ''){
                     $exDate = explode('/',$row['exp_date']);
-                    $checkinDate = explode('/',$row['you_mean_the']);
+                    $checkinDate = explode('/',$row['date']);
                     $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1]; 
                     $chkDate = @$checkinDate[2].'-'.@$checkinDate[0].'-'.@$checkinDate[1]; 
-                    $bookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$expired_at)->first();
+                    $bookingDetail = UserBookingDetail::where([
+                            'user_id' => $customerData->id ,
+                            'priceid' => $priceDetail->id,
+                        ])->whereDate('expired_at','=',$expired_at)->first();
+
                     if($bookingDetail != ''){
-                        $scheduleInfo = '';
-                        $schedules = $priceDetail->business_price_details_ages->BusinessActivityScheduler;
-                        foreach($schedules as $schedule){
-                            $time = date('g:i a', strtotime($row['time']));
-                            if(str_replace(" ", "", $time) == str_replace(" ", "", $row['time'])){
-                                $scheduleInfo = $schedule;
-                            }
-                        }
+                        $exceltime = date('H:i', strtotime($row['time']));
+                        $scheduleInfo = $priceDetail->business_price_details_ages->BusinessActivityScheduler->first(function ($schedule) use ($exceltime){
+                            return $exceltime == $schedule['shift_start'];
+                        });
+
                         $chkInDetail = BookingCheckinDetails::where(['customer_id'=> $customerData->id,'booking_detail_id'=>$bookingDetail->id])->whereDate('checked_at','=',$chkDate)->first();
+                        $schedule_id  = @$scheduleInfo->id ?? 0;
                         $ary = array(
-                            'business_activity_scheduler_id' => @$scheduleInfo->id,
+                            'business_activity_scheduler_id' =>$schedule_id,
                             'customer_id' => $customerData->id,
                             'booking_detail_id' => $bookingDetail->id,
                             'checkin_date' => $chkDate,
@@ -80,11 +76,7 @@ class customerAtendanceImport implements ToCollection, WithChunkReading, WithHea
                             $bookingDetail->update(['bookedtime'=>$chkDate ,'act_schedule_id'=>@$scheduleInfo->id]);
                         }
                         
-                        if($chkInDetail == ''){
-                            BookingCheckinDetails::create($ary);
-                        }else {
-                            BookingCheckinDetails::where('id',$chkInDetail->id)->update($ary);
-                        }
+                        BookingCheckinDetails::updateOrCreate(['id' => @$chkInDetail->id], $ary);
                     }
                 }
             }
