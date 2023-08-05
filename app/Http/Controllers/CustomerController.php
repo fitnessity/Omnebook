@@ -290,7 +290,7 @@ class CustomerController extends Controller {
             if(!empty($headings)){
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
-                    if( $firstrow[0] != 'you_mean_the' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[3] != 'client' ||$firstrow[4] != 'visit_service_category'|| $firstrow[5] != 'visit_type'|| $firstrow[6] != 'type' || $firstrow[7] != 'pricing_option'|| $firstrow[8] != 'exp_date'|| $firstrow[9] != 'visits_rem' || $firstrow[10] != 'staff' || $firstrow[11] != 'visit_location' || $firstrow[12] != 'sale_location' || $firstrow[13] != 'payment_service_category' ) 
+                    if( $firstrow[0] != 'date' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[4] != 'client'  || $firstrow[8] != 'pricing_option' || $firstrow[9] != 'exp_date'|| $firstrow[10] != 'visits_rem' ) 
                     {
                         $this->error = 'Problem in header.';
                         break;

@@ -62,19 +62,14 @@ class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow
             $nameary = explode(',',$content);
             $customerData = Customer::where(['fname'=> @$nameary[1] , 'lname'=> @$nameary[0], 'business_id' => $this->business_id])->first();
             if($customerData != ''){
-                $priceDetail = '';
-                $priceDetailsData = BusinessPriceDetails::where('cid',$this->business_id)->get();
-                $title = htmlentities($row[1], null, 'utf-8');
-                $price_title = str_replace("&nbsp;", "", $title);
-                $price_title = html_entity_decode($price_title);
 
-                foreach($priceDetailsData as $pd){
-                    $price_title = str_replace(" ", "", $price_title);
-                    $price_titleDb = str_replace(" ", "", $pd->price_title);
-                    if($price_titleDb == $price_title){
-                        $priceDetail = $pd;
-                    }
-                }
+                $priceDetailsData = BusinessPriceDetails::where('cid', $this->business_id)->get();
+                $title = str_replace("&nbsp;", "", htmlentities($row[1], null, 'utf-8'));
+                $title = html_entity_decode($title);
+                $priceDetail = $priceDetailsData->first(function ($pd) use ($title) {
+                    return str_replace(" ", "", $pd->price_title) === str_replace(" ", "", $title);
+                });
+
                 if($priceDetail != ''){ 
                     $exDate = explode('/',$row[4]);
                     $conDate = explode('/',$row[3]);
