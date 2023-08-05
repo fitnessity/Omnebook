@@ -34,7 +34,8 @@ class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, Wi
         foreach ($rows as $key=>$row) {
            
             if( $key != ($count-1) && (Customer::where(['email'=>@$row['email']])->first()) == ''){
-                $coun = @$row['country'] == 'US' ? 'United Status' : $row['country'];
+			/*if( $key != ($count-1)) {*/
+                $coun = (@$row['country'] == 'US' ? 'United Status' : $row['country']);
                 $createdata = new Customer;
                 $createdata->business_id =  $this->business_id;
                 $createdata->lname = @$row['last_name'];
@@ -48,6 +49,9 @@ class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, Wi
                 $createdata->email = @$row['email'];
                 $createdata->status = 0;
                 $createdata->save(); 
+				
+				//echo 'email---'.$row['email'].'<br>';
+				//exit;
             }
         }
 
