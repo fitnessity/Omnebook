@@ -271,6 +271,18 @@ class Customer extends Authenticatable
             $this->save();
             return $customer->id;
        }*/
+	   /*if( !empty($this->email) ){
+		   \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+			$customer = \Stripe\Customer::create([
+				'name' => $this->fname . ' '. $this->lname,
+				'email'=> $this->email,
+			]);
+			$this->stripe_customer_id = $customer->id;
+			$this->save();
+	
+			return $customer->id;
+	   }*/
+	   
     }
 
     public function total_spend(){

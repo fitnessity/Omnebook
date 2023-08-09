@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 /*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
-use App\Jobs\ProcessAttendanceExcelData;
+use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -252,6 +252,7 @@ class CustomerController extends Controller {
                 }
             }
 
+
             $name = Str::random(8).'.csv';
             Storage::disk('uploadExcel')->put($name,'');
             $target = '../public/ExcelUpload/'.$name;
@@ -260,8 +261,12 @@ class CustomerController extends Controller {
             $spreadsheet = $reader->load($request->file('import_file'));
             $writer = new Csv($spreadsheet);
             $writer->save($target);
-           
-            Excel::import(new ImportMembership($request->business_id),  $target);
+            $excel = Excel::toArray(new ImportMembership,$target);
+            $excel = isset($excel[0])?$excel[0]:array();
+            ProcessMembershipExcelData::dispatch($request->business_id,$excel);
+            
+            //Excel::import(new ImportMembership($request->business_id),  $target);
+
             unlink('../public/ExcelUpload/'.$name);
         }
 
@@ -307,7 +312,9 @@ class CustomerController extends Controller {
             $writer = new Csv($spreadsheet);
             $writer->save($target);
             
-            ProcessAttendanceExcelData::dispatch($request->business_id,$target);
+            $excel = Excel::toArray(new customerAtendanceImport,$target);
+            $excel = isset($excel[0])?$excel[0]:array();
+            ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
 
             //Excel::import(new customerAtendanceImport($request->business_id),  $target);
             unlink('../public/ExcelUpload/'.$name);
@@ -349,7 +356,22 @@ class CustomerController extends Controller {
                 return response()->json(['status'=>500,'message'=>$this->error]);
             }
 
-            Excel::import(new CustomerImport($request->business_id), $request->file('import_file'));
+           
+            $name = Str::random(8).'.csv';
+            Storage::disk('uploadExcel')->put($name,'');
+            $target = '../public/ExcelUpload/'.$name;
+
+            $reader = new Xlsx();
+            $spreadsheet = $reader->load($request->file('import_file'));
+            $writer = new Csv($spreadsheet);
+            $writer->save($target);
+
+            $excel = Excel::toArray(new CustomerImport,$target);
+            $excel = isset($excel[0])?$excel[0]:array();
+
+            ProcessCustomerExcelData::dispatch($request->business_id,$excel);
+            unlink('../public/ExcelUpload/'.$name);
+            //Excel::import(new CustomerImport($request->business_id), $request->file('import_file'));
         }
 
         if($this->error != '')
@@ -506,7 +528,7 @@ class CustomerController extends Controller {
                         'name' =>  $request->owner,
                     ],
                 ]);
-                print_r($carddetails);
+                //print_r($carddetails);
                 $customer_source = $stripe->customers->createSource(
                     $stripe_customer_id,
                     [ 'source' =>$carddetails->id]

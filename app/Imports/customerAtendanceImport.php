@@ -4,25 +4,26 @@ namespace App\Imports;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\{Customer,BusinessPriceDetails,BusinessPriceDetailsAges,UserBookingStatus,Transaction,UserBookingDetail,BookingCheckinDetails,ChkAttendance};
 
-class customerAtendanceImport implements ToCollection, WithChunkReading, WithHeadingRow
+class customerAtendanceImport implements ToModel,ToCollection, WithChunkReading, WithHeadingRow
 {
     /**
     * @param Collection $collection
     */
 
-    public function  __construct($business_id)
+    /*public function  __construct($business_id)
     {
         $this->business_id= $business_id;
-    }
+    }*/
 
 
     public function collection(Collection $rows)
     {
-        $rows = $rows->toArray();
+        /*$rows = $rows->toArray();
         foreach ($rows as $key=>$row) {
 
             $customerData = $string = $content = $content1 = '';$nameary = [];
@@ -80,8 +81,19 @@ class customerAtendanceImport implements ToCollection, WithChunkReading, WithHea
                     }
                 }
             }
-        }
+        }*/
         return;
+    }
+
+    public function model(array $row){
+        return [
+            'date' => $row[0],
+            'time' => $row[2],
+            'client' => $row[4],
+            'pricing_option' => $row[8],
+            'exp_date' => $row[9],
+            'visits_rem' => $row[10],
+        ];
     }
 
     public function chunkSize(): int
