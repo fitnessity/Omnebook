@@ -35,7 +35,11 @@ class ProcessMembershipExcelData implements ShouldQueue
     public function handle()
     {
         for ($i=1; $i < count($this->data); $i++){
-            if($this->data[$i][0] != ''){
+            if($this->data[$i][0] != ''  && is_numeric($this->data[$i][3])){
+                $member_from = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][3]));
+
+                $member_to = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][4]));
+
                 $customerData = $string = $content = $content1 = '';$nameary = [];
                 $string = htmlentities($this->data[$i][0], null, 'utf-8');
                 $content1 = str_replace("&nbsp;", "", $string);
@@ -53,11 +57,11 @@ class ProcessMembershipExcelData implements ShouldQueue
                     });
 
                     if($priceDetail != ''){ 
-                        $exDate = explode('/',$this->data[$i][4]);
-                        $conDate = explode('/',$this->data[$i][3]);
+                        /*$exDate = explode('/',$member_from);
+                        $conDate = explode('/',$);
                         $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1];
-                        $contract_date = @$conDate[2].'-'.@$conDate[0].'-'.@$conDate[1];
-                        $BookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$expired_at)->whereDate('contract_date','=',$contract_date)->first();
+                        $contract_date = @$conDate[2].'-'.@$conDate[0].'-'.@$conDate[1];*/
+                        $BookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$member_to)->whereDate('contract_date','=',$member_from)->first();
                        
                         if($BookingDetail == ''){
                             $adultPrice = $priceDetail->adult_cus_weekly_price;
@@ -127,8 +131,8 @@ class ProcessMembershipExcelData implements ShouldQueue
                                 'qty' => json_encode($qtyarray),
                                 'priceid' => $priceDetail->id,
                                 'pay_session' => $priceDetail->pay_session,
-                                'expired_at' => $expired_at,
-                                'contract_date' =>$contract_date,
+                                'expired_at' => $member_to,
+                                'contract_date' =>$member_from,
                                 'subtotal' => $price,
                                 'fitnessity_fee' => 0,
                                 'tax' => 0,
