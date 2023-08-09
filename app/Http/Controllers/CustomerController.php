@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 /*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use Aws\S3\S3Client;
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
 
 use App\Http\Requests;
@@ -253,21 +254,31 @@ class CustomerController extends Controller {
             }
 
 
-            $name = Str::random(8).'.csv';
-            Storage::disk('uploadExcel')->put($name,'');
-            $target = '../public/ExcelUpload/'.$name;
+            // $name = Str::random(8).'.csv';
+            // Storage::disk('uploadExcel')->put($name,'');
+            // $target = '../public/ExcelUpload/'.$name;
 
-            $reader = new Xlsx();
-            $spreadsheet = $reader->load($request->file('import_file'));
-            $writer = new Csv($spreadsheet);
-            $writer->save($target);
-            $excel = Excel::toArray(new ImportMembership,$target);
-            $excel = isset($excel[0])?$excel[0]:array();
-            ProcessMembershipExcelData::dispatch($request->business_id,$excel);
+            // $reader = new Xlsx();
+            // $spreadsheet = $reader->load($request->file('import_file'));
+            // $writer = new Csv($spreadsheet);
+            // $writer->save($target);
+            // $excel = Excel::toArray(new ImportMembership,$target);
+            // $excel = isset($excel[0])?$excel[0]:array();
+            // ProcessMembershipExcelData::dispatch($request->business_id,$excel);
             
             //Excel::import(new ImportMembership($request->business_id),  $target);
 
-            unlink('../public/ExcelUpload/'.$name);
+            // unlink('../public/ExcelUpload/'.$name);
+
+            $file = $request->file('import_file');
+            $timestamp = now()->timestamp;
+            $uid =Auth::user()->id;
+            $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
+            $path = $file->storeAs('ExcelFiles', $newFileName);
+            Storage::disk('s3')->put($path, file_get_contents($file));
+            $excel = Excel::toArray(new ImportMembership,$path);
+            $excel = isset($excel[0])?$excel[0]:array();
+            ProcessMembershipExcelData::dispatch($request->business_id,$excel);
         }
 
 
@@ -303,21 +314,31 @@ class CustomerController extends Controller {
                 }
             }
 
-            $name = Str::random(8).'.csv';
-            Storage::disk('uploadExcel')->put($name,'');
-            $target = '../public/ExcelUpload/'.$name;
+            // $name = Str::random(8).'.csv';
+            // Storage::disk('uploadExcel')->put($name,'');
+            // $target = '../public/ExcelUpload/'.$name;
 
-            $reader = new Xlsx();
-            $spreadsheet = $reader->load($request->file('import_file'));
-            $writer = new Csv($spreadsheet);
-            $writer->save($target);
+            // $reader = new Xlsx();
+            // $spreadsheet = $reader->load($request->file('import_file'));
+            // $writer = new Csv($spreadsheet);
+            // $writer->save($target);
             
-            $excel = Excel::toArray(new customerAtendanceImport,$target);
-            $excel = isset($excel[0])?$excel[0]:array();
-            ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
+            // $excel = Excel::toArray(new customerAtendanceImport,$target);
+            // $excel = isset($excel[0])?$excel[0]:array();
+            // ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
 
             //Excel::import(new customerAtendanceImport($request->business_id),  $target);
-            unlink('../public/ExcelUpload/'.$name);
+            //unlink('../public/ExcelUpload/'.$name);
+
+            $file = $request->file('import_file');
+            $timestamp = now()->timestamp;
+            $uid =Auth::user()->id;
+            $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
+            $path = $file->storeAs('ExcelFiles', $newFileName);
+            Storage::disk('s3')->put($path, file_get_contents($file));
+            $excel = Excel::toArray(new customerAtendanceImport,$path);
+            $excel = isset($excel[0])?$excel[0]:array();
+            ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
         }
 
         if($this->error != '')
@@ -331,55 +352,73 @@ class CustomerController extends Controller {
 
     public function importcustomer(Request $request)
     {
-        if($request->hasFile('import_file')){
-            $ext = $request->file('import_file')->getClientOriginalExtension();
-            if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
-            {
-                return response()->json(['status'=>500,'message'=>'File format is not supported.']);
-            }
-            ini_set('max_execution_time', 10000); 
-            $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
-            /*print_r($headings);*/
-            if(!empty($headings)){
-                foreach($headings as $key => $row) {
-                    $firstrow = $row[0];
-                    /*print_r($firstrow);exit;*/
-                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
-                    {
-                        $this->error = 'Problem in header.';
-                        break;
+        $user = Auth::user();
+        $current_company =  $user->current_company;
+        if($current_company->id == $request->business_id){
+            if($request->hasFile('import_file')){
+                $ext = $request->file('import_file')->getClientOriginalExtension();
+                if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
+                {
+                    return response()->json(['status'=>500,'message'=>'File format is not supported.']);
+                }
+                ini_set('max_execution_time', 10000); 
+                $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
+                /*print_r($headings);*/
+                if(!empty($headings)){
+                    foreach($headings as $key => $row) {
+                        $firstrow = $row[0];
+                        /*print_r($firstrow);exit;*/
+                        if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
+                        {
+                            $this->error = 'Problem in header.';
+                            break;
+                        }
                     }
                 }
+                if($this->error != '')
+                {
+                    return response()->json(['status'=>500,'message'=>$this->error]);
+                }
+
+               
+                /*$name = Str::random(8).'.csv';
+                Storage::disk('s3')->put($name,'');
+                $target = '../public/ExcelUpload/'.$name;
+
+                $reader = new Xlsx();
+                $spreadsheet = $reader->load($request->file('import_file'));
+                $writer = new Csv($spreadsheet);
+                $writer->save($target);
+
+                $excel = Excel::toArray(new CustomerImport,$target);
+                $excel = isset($excel[0])?$excel[0]:array();
+
+                ProcessCustomerExcelData::dispatch($request->business_id,$excel);
+                unlink('../public/ExcelUpload/'.$name);*/
+                //Excel::import(new CustomerImport($request->business_id), $request->file('import_file'));
+                
+                $file = $request->file('import_file');
+                $timestamp = now()->timestamp;
+                $uid =Auth::user()->id;
+                $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
+                $path = $file->storeAs('ExcelFiles', $newFileName);
+                Storage::disk('s3')->put($path, file_get_contents($file));
+
+                $excel = Excel::toArray(new CustomerImport,$path);
+                $excel = isset($excel[0])?$excel[0]:array();
+                ProcessCustomerExcelData::dispatch($request->business_id,$excel);
+
             }
+
             if($this->error != '')
             {
                 return response()->json(['status'=>500,'message'=>$this->error]);
             }
-
-           
-            $name = Str::random(8).'.csv';
-            Storage::disk('uploadExcel')->put($name,'');
-            $target = '../public/ExcelUpload/'.$name;
-
-            $reader = new Xlsx();
-            $spreadsheet = $reader->load($request->file('import_file'));
-            $writer = new Csv($spreadsheet);
-            $writer->save($target);
-
-            $excel = Excel::toArray(new CustomerImport,$target);
-            $excel = isset($excel[0])?$excel[0]:array();
-
-            ProcessCustomerExcelData::dispatch($request->business_id,$excel);
-            unlink('../public/ExcelUpload/'.$name);
-            //Excel::import(new CustomerImport($request->business_id), $request->file('import_file'));
-        }
-
-        if($this->error != '')
-        {
-            return response()->json(['status'=>500,'message'=>$this->error]);
-        }
-        else{
-            return response()->json(['status'=>200,'message'=>'File imported Successfully']);
+            else{
+                return response()->json(['status'=>200,'message'=>'File imported Successfully']);
+            }
+        }else{
+             return response()->json(['status'=>500,'message'=>'You Don\'t have a permission to upload files in this business']);
         }
     }
 

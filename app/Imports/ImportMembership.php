@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
 
+
 class ImportMembership implements ToModel,ToCollection, WithStartRow, WithChunkReading, WithHeadingRow
 {
     /**
@@ -179,11 +180,12 @@ class ImportMembership implements ToModel,ToCollection, WithStartRow, WithChunkR
     }
 
     public function model(array $row){
+       
         return [
             'name' => $row[0],
             'membership_type' => $row[1],
-            'member_from' => $row[3],
-            'member_to' => $row[4],
+            'member_from' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d'),
+            'member_to' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])->format('Y-m-d'),
         ];
     }
 
