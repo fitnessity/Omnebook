@@ -87,11 +87,11 @@ class customerAtendanceImport implements ToModel,ToCollection, WithChunkReading,
 
     public function model(array $row){
         return [
-            'date' => $row[0],
+            'date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[0])->format('Y-m-d'),
             'time' => $row[2],
             'client' => $row[4],
             'pricing_option' => $row[8],
-            'exp_date' => $row[9],
+            'exp_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[9])->format('Y-m-d'),
             'visits_rem' => $row[10],
         ];
     }
