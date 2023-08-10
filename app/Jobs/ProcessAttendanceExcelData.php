@@ -12,6 +12,8 @@ use Illuminate\Queue\SerializesModels;
 use App\Imports\customerAtendanceImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\{Customer,BusinessPriceDetails,BusinessPriceDetailsAges,UserBookingStatus,Transaction,UserBookingDetail,BookingCheckinDetails};
+use Carbon\Carbon;
+
 class ProcessAttendanceExcelData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -36,7 +38,7 @@ class ProcessAttendanceExcelData implements ShouldQueue
      */
     public function handle()
     {
-        // /print_r($this->data);exit;
+        //print_r($this->data);exit;
         for ($i=1; $i < count($this->data); $i++){
             $customerData = $string = $content = $content1 = '';$nameary = [];
             $string = htmlentities($this->data[$i]['client'], null, 'utf-8');
@@ -58,10 +60,15 @@ class ProcessAttendanceExcelData implements ShouldQueue
 
                 //echo $priceDetail;
                 if($priceDetail != ''){
-                    $exDate = explode('/',$this->data[$i]['exp_date']);
+
+                    $expired_at = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i]['exp_date']));
+
+                    $chkDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i]['date']));
+
+                    /*$exDate = explode('/',$this->data[$i]['exp_date']);
                     $checkinDate = explode('/',$this->data[$i]['date']);
                     $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1]; 
-                    $chkDate = @$checkinDate[2].'-'.@$checkinDate[0].'-'.@$checkinDate[1]; 
+                    $chkDate = @$checkinDate[2].'-'.@$checkinDate[0].'-'.@$checkinDate[1]; */
                     $bookingDetail = UserBookingDetail::where([
                             'user_id' => $customerData->id ,
                             'priceid' => $priceDetail->id,
