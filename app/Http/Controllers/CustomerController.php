@@ -18,7 +18,7 @@ use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -276,9 +276,17 @@ class CustomerController extends Controller {
             $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
             $path = $file->storeAs('ExcelFiles', $newFileName);
             Storage::disk('s3')->put($path, file_get_contents($file));
+            $exltracker = new ExcelUploadTracker;
+            $exltracker->user_id = $uid;
+            $exltracker->business_id = $request->business_id;
+            $exltracker->excel_file_name = $newFileName;
+            $exltracker->status= 0;
+            $exltracker->save();
             $excel = Excel::toArray(new ImportMembership,$path);
             $excel = isset($excel[0])?$excel[0]:array();
             ProcessMembershipExcelData::dispatch($request->business_id,$excel);
+            $exltracker->status= 1;
+            $exltracker->update();
         }
 
 
@@ -332,13 +340,23 @@ class CustomerController extends Controller {
 
             $file = $request->file('import_file');
             $timestamp = now()->timestamp;
-            $uid =Auth::user()->id;
+            $uid = Auth::user()->id;
             $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
             $path = $file->storeAs('ExcelFiles', $newFileName);
             Storage::disk('s3')->put($path, file_get_contents($file));
+
+            $exltracker = new ExcelUploadTracker;
+            $exltracker->user_id = $uid;
+            $exltracker->business_id = $request->business_id;
+            $exltracker->excel_file_name = $newFileName;
+            $exltracker->status= 0;
+            $exltracker->save();
+
             $excel = Excel::toArray(new customerAtendanceImport,$path);
             $excel = isset($excel[0])?$excel[0]:array();
             ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
+            $exltracker->status= 1;
+            $exltracker->update();
         }
 
         if($this->error != '')
@@ -401,13 +419,22 @@ class CustomerController extends Controller {
                 $timestamp = now()->timestamp;
                 $uid =Auth::user()->id;
                 $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
+
                 $path = $file->storeAs('ExcelFiles', $newFileName);
                 Storage::disk('s3')->put($path, file_get_contents($file));
+
+                $exltracker = new ExcelUploadTracker;
+                $exltracker->user_id = $uid;
+                $exltracker->business_id = $request->business_id;
+                $exltracker->excel_file_name = $newFileName;
+                $exltracker->status= 0;
+                $exltracker->save();
 
                 $excel = Excel::toArray(new CustomerImport,$path);
                 $excel = isset($excel[0])?$excel[0]:array();
                 ProcessCustomerExcelData::dispatch($request->business_id,$excel);
-
+                $exltracker->status= 1;
+                $exltracker->update();
             }
 
             if($this->error != '')
