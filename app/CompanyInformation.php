@@ -55,6 +55,9 @@ class CompanyInformation extends Model {
         "charges_enabled",
         "business_added_by_cust_name",
         "is_verified",
+        "attendance_uploading",
+        "customer_uploading",
+        "membership_uploading",
     ];
 
     protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter'];

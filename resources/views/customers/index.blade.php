@@ -81,7 +81,14 @@
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
 					<input type="file" class="form-control" name="file" id="file" onchange="readURL(this)">
-					 <p class='err' style="color:red;padding-top:10px;"></p>
+					<p class='err mt-10 font-red'></p>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="loading-container text-center loading-width d-none">
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							</div>
+						</div>
+					</div>
 				</div>					
 			</div>
 			<div class="modal-footer">
@@ -102,7 +109,14 @@
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
 					<input type="file" class="form-control" name="membershipFile" id="file" onchange="readURL(this)">
-					 <p class='err' style="color:red;padding-top:10px;"></p>
+					<p class='err mt-10 font-red'></p>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="loading-container text-center loading-width d-none">
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							</div>
+						</div>
+					</div>
 				</div>					
 			</div>
 			<div class="modal-footer">
@@ -141,7 +155,14 @@
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
 					<input type="file" class="form-control" name="attendanceFile" id="file" onchange="readURL(this)">
-					 <p class='err' style="color:red;padding-top:10px;"></p>
+					<p class='err mt-10 font-red'></p>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="loading-container text-center loading-width d-none">
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							</div>
+						</div>
+					</div>
 				</div>					
 			</div>
 			<div class="modal-footer">
@@ -180,6 +201,7 @@
         	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
             	$('.err').html('File format is not supported.')
         	}else{
+        		$('.loading-container').removeClass('d-none');
          	var formdata = new FormData();
          	formdata.append('import_file',profile_pic_var);
          	formdata.append('business_id','{{$company->id}}');
@@ -193,18 +215,13 @@
                processData: false,
                contentType: false,
                headers: {'X-CSRF-TOKEN': $("#_token").val()},
-               beforeSend: function () {
-                  $('.loader').show();
-               },
-               complete: function () {
-                  $('.loader').hide();
-               },
                success: function (response) { 
+                  $('.loading-container').addClass('d-none');
                	$('#systemMessage1').removeClass();
                   if(response.status == 200){
                      $('.uploadfile').modal('hide');
                      $('#systemMessage1').addClass('font-green font-16');
-                     $('#systemMessage1').html("Upload Successful..");
+                     $('#systemMessage1').html(response.message);
                     /* setTimeout(function(){
                         window.location.reload();
                      },2000)*/
@@ -212,7 +229,7 @@
                   else{
                 		$('.uploadfile').modal('hide');
                 		$('#systemMessage1').addClass('font-red font-16');
-                		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                		$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
                   }
                   $('#file').val('')
                }
@@ -226,6 +243,7 @@
         	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
             	$('.err').html('File format is not supported.')
         	}else{
+        			$('.loading-container').removeClass('d-none');
             	var formdata = new FormData();
             	formdata.append('import_file',profile_pic_var);
             	formdata.append('business_id','{{$company->id}}');
@@ -240,11 +258,12 @@
                   contentType: false,
                   headers: {'X-CSRF-TOKEN': $("#_token").val()},
                   success: function (response) { 
+                  	$('.loading-container').addClass('d-none');
                   	$('#systemMessage1').removeClass();
                      if(response.status == 200){
                         $('.uploadmembership').modal('hide');
                         $('#systemMessage1').addClass('font-green font-16');
-                        $('#systemMessage1').html("Upload Successful..");
+                        $('#systemMessage1').html(response.message);
                         /*setTimeout(function(){
                            window.location.reload();
                         },2000)*/
@@ -252,7 +271,7 @@
                      else{
                    		$('.uploadmembership').modal('hide');
                    		$('#systemMessage1').addClass('font-red font-16');
-                   		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                   		$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
                      }
 							$('#file').val('')
                   }
@@ -266,6 +285,7 @@
         	}else if(ext != 'csv' && ext != 'csvx' && ext != 'xls' && ext != 'xlsx'){
             	$('.err').html('File format is not supported.')
         	}else{
+        		$('.loading-container').removeClass('d-none');
          	var formdata = new FormData();
          	formdata.append('import_file',profile_pic_var);
          	formdata.append('business_id','{{$company->id}}');
@@ -280,11 +300,12 @@
                contentType: false,
                headers: {'X-CSRF-TOKEN': $("#_token").val()},
                success: function (response) { 
+               	$('.loading-container').addClass('d-none');
                	$('#systemMessage1').removeClass();
                   if(response.status == 200){
                      $('.uploadAttendance').modal('hide');
                      $('#systemMessage1').addClass('font-green font-16');
-                     $('#systemMessage1').html("Upload Successful..");
+                     $('#systemMessage1').html(response.message);
                      /*setTimeout(function(){
                         window.location.reload();
                      },2000)*/
@@ -292,7 +313,7 @@
                   else{
                 		$('.uploadAttendance').modal('hide');
                 		$('#systemMessage1').addClass('font-red font-16');
-                		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
+                		$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
                   }
 						$('#file').val('')
                }
