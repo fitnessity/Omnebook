@@ -30,7 +30,7 @@ class Customer extends Authenticatable
 
         self::created(function($model){
             if(!$model->stripe_customer_id){
-                $model->create_stripe_customer_id();
+                //$model->create_stripe_customer_id();
             }
         });
 
@@ -47,6 +47,12 @@ class Customer extends Authenticatable
                 $model->user_id = $fitnessity_user->id;
             }
         });
+      /*  self::retrieved(function($model){
+            if(!$model->stripe_customer_id){
+                $model->create_stripe_customer_id();
+            }
+        });*/
+        
     }
 
 	use  Notifiable;
@@ -261,27 +267,22 @@ class Customer extends Authenticatable
     }
 
     function create_stripe_customer_id(){
-        /*$name  =  @$this->fname . ' '. @$this->lname;
-        if($name != ''){
-            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-            $customer = \Stripe\Customer::create([
-                'name' => $name,
-            ]);
-            $this->stripe_customer_id = @$customer->id;
-            $this->save();
-            return $customer->id;
-       }*/
-	   /*if( !empty($this->email) ){
-		   \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-			$customer = \Stripe\Customer::create([
-				'name' => $this->fname . ' '. $this->lname,
-				'email'=> $this->email,
-			]);
-			$this->stripe_customer_id = $customer->id;
-			$this->save();
-	
-			return $customer->id;
-	   }*/
+	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-'){
+            try {
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $customer = \Stripe\Customer::create([
+                    'name' => $this->fname . ' '. $this->lname,
+                    'email'=> $this->email,
+                ]);
+                $this->stripe_customer_id = $customer->id;
+                $this->save();
+        
+                return $customer->id;
+                
+            } catch (Exception $e) {
+                return '';
+            }
+	   }
 	   
     }
 

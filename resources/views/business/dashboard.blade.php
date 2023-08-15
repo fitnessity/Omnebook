@@ -76,9 +76,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-auto">
+                                                        <!-- <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-success shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
                                                         </div>
@@ -367,9 +367,13 @@
                                     <div class="col-xl-4">
 										<div class="card">
 											<div class="card-header border-0">
-												<h4 class="card-title mb-0 calendar-title">Todays Schedule</h4>
-												<div class="card-body pt-0">
-													<div class="upcoming-scheduled mb-55">
+												<div class="row">
+													<div class="col-6">
+														<h4 class="card-title mb-15 calendar-title">Todays Schedule</h4>
+													</div>
+												</div>
+												<div class=" pt-0">
+													<div class="upcoming-scheduled mb-55 position-relative">
 														<input type="text" class="form-control flatpickr-schedule"   data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
 													</div>
 													<div class="dropdown-activity mt-4 mb-3">
@@ -496,13 +500,13 @@
 																<td>Membership Type</td>
 																<td>Started on</td>
 																<td>End on</td>
-																<td></td>
+																<td>Action</td>
 															</tr>
 														</thead>
                                                         <tbody id="ExpiringMembership">
                                                         	@if(!empty($expiringMembership) && count($expiringMembership) >0)
 	                                                        	@foreach($expiringMembership as $key=>$emp )
-                                                                @if($emp->Customer != '')
+                                                                @if($emp->Customer != '' && $emp->business_price_detail != '')
 	                                                            <tr>
 	                                                                <td>
 	                                                                   <h5 class="fs-14 my-1 fw-normal">{{ $key+1}}</h5>
@@ -515,10 +519,10 @@
 	                                                                   <h5 class="fs-14 my-1 fw-normal">@if(@$emp->business_price_detail()->exists()) {{ @$emp->business_price_detail->price_title}} @endif</h5>
 	                                                                </td>
 	                                                                <td>
-	                                                                   <h5 class="fs-14 my-1 fw-normal">{{$emp->contract_date}} </h5>  
+	                                                                   <h5 class="fs-14 my-1 fw-normal">{{date('m-d-Y', strtotime($emp->contract_date))}} </h5>  
 	                                                                </td>
 	                                                                <td>
-	                                                                    <h5 class="fs-14 my-1 fw-normal">{{$emp->expired_at}} </h5>
+	                                                                    <h5 class="fs-14 my-1 fw-normal">{{date('m-d-Y', strtotime($emp->expired_at))}}  </h5>
 	                                                                </td>
 	                                                                <td>
 	                                                                   <a href="{{route('business_customer_show',['business_id'=>$emp->business_id,'id'=>@$emp->Customer->id])}}"> View </a>
@@ -550,109 +554,49 @@
                                 <div class="card h-100 rounded-0">
                                     <div class="card-body p-0">
                                        
-                                        <div class="p-3">
-                                            <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
-                                        </div>
-                                        <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
-                                            <div class="acitivity-timeline acitivity-main">
-                                                @foreach($todayBooking as $tb)
-                                                <div class="acitivity-item d-flex">
-                                                    <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                                                        <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
-                                                            <i class="ri-shopping-cart-2-line"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">{{$tb->booking->order_id}}</h6>
-                                                        <p class="text-muted mb-1"><b>Activity : </b>{{$tb->business_services->program_name}} </p>
-                                                        <p class="text-muted mb-1"><b>Price : </b> ${{$tb->subtotal + $tb->getperoderprice() }}</p>
-                                                        <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-
-                                                <!-- <div class="acitivity-item py-3 d-flex">
-                                                    <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                                                        <div class="avatar-title bg-soft-danger text-danger rounded-circle shadow">
-                                                            <i class="ri-stack-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">Lorem Ipsum</h6>
-                                                        <p class="text-muted mb-1">Lorem Ipsum is simply dummy text </p>
-                                                        <div class="d-inline-flex gap-2 border border-dashed p-2 mb-2">
-                                                            <a href="#" class="bg-light rounded p-1 activity-imgs">
-                                                                <img src="http://dev.fitnessity.co//public/uploads/discover/thumb/1649668850-massage.jpg" alt="" class="img-fluid d-block" />
-                                                            </a>
-                                                            <a href="#" class="bg-light rounded p-1 activity-imgs">
-                                                                <img src="http://dev.fitnessity.co//public/uploads/discover/thumb/1649648221-snow ski.jpg" alt="" class="img-fluid d-block" />
-                                                            </a>
-                                                            <a href="#" class="bg-light rounded p-1 activity-imgs">
-                                                                <img src="http://dev.fitnessity.co//public/uploads/discover/thumb/1649648161-soccer coaches.jpg" alt="" class="img-fluid d-block" />
-                                                            </a>
-                                                        </div>
-                                                        <p class="mb-0 text-muted"><small>9:47 PM Yesterday</small></p>
-                                                    </div>
-                                                </div> 
-                                                <div class="acitivity-item py-3 d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <img src="http://dev.fitnessity.co//public/uploads/discover/thumb/1649668850-massage.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow">
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">Lorem Ipsum is simply dummy text</h6>
-                                                        <p class="text-muted mb-1"> of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
-                                                        <small class="mb-0 text-muted">25 Dec, 2021</small>
-                                                    </div>
-                                                </div>
-                                                <div class="acitivity-item py-3 d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar-xs acitivity-avatar">
-                                                            <div class="avatar-title rounded-circle bg-secondary shadow">
-                                                                <i class="mdi mdi-sale fs-14"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">Lorem Ipsum is simply <a href="#" class="link-secondary">dummy text of the printing</a></h6>
-                                                        <p class="text-muted mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                                        <small class="mb-0 text-muted">12 Dec, 2021</small>
-                                                    </div>
-                                                </div>
-                                                <div class="acitivity-item py-3 d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar-xs acitivity-avatar">
-                                                            <div class="avatar-title rounded-circle bg-soft-danger text-danger shadow">
-                                                                <i class="ri-bookmark-fill"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-1 lh-base">Lorem Ipsum</h6>
-                                                        <p class="text-muted mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                                        <small class="mb-0 text-muted">25 Nov, 2021</small>
-                                                    </div>
-                                                </div>-->
-                                                @foreach($notificationAry as $nd)
-                                                    <div class="acitivity-item d-flex">
-                                                        <div class="flex-shrink-0">
-                                                            @if( $nd['image'] != '')
-                                                                <img src="" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
-                                                            @else
-                                                                <div class="avatar-xsmall">
-                                                                   <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                        <div class="flex-grow-1 ms-3 mb-10">
-                                                            <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
-                                                            <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {{$nd['text']}} @endif</p>
-                                                            <small class="mb-0 text-muted">{{$nd['date']}}</small>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
+                                        @if(count($notificationAry) > 0 || count($todayBooking)>0)
+                                            <div class="p-3">
+                                                <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
                                             </div>
-                                        </div>
+                                            <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
+                                                <div class="acitivity-timeline acitivity-main">
+                                                    @foreach($todayBooking as $tb)
+                                                    <div class="acitivity-item d-flex">
+                                                        <div class="flex-shrink-0 avatar-xs acitivity-avatar">
+                                                            <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
+                                                                <i class="ri-shopping-cart-2-line"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h6 class="mb-1 lh-base">{{$tb->booking->order_id}}</h6>
+                                                            <p class="text-muted mb-1"><b>Activity : </b>{{$tb->business_services->program_name}} </p>
+                                                            <p class="text-muted mb-1"><b>Price : </b> ${{$tb->subtotal + $tb->getperoderprice() }}</p>
+                                                            <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
 
+                                                    @foreach($notificationAry as $nd)
+                                                        <div class="acitivity-item d-flex">
+                                                            <div class="flex-shrink-0">
+                                                                @if( $nd['image'] != '')
+                                                                    <img src="" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                                                @else
+                                                                    <div class="avatar-xsmall">
+                                                                       <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-3 mb-10">
+                                                                <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
+                                                                <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {{$nd['text']}} @endif</p>
+                                                                <small class="mb-0 text-muted">{{$nd['date']}}</small>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
                                         <div class="p-3 mt-2">
                                             <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top Booked Memberships
                                             </h6>
@@ -1096,14 +1040,15 @@
 		       	activityschedule(type,dateStr);
 		    },
 	     });
-        date1 = '{{$startDate}}';
-        date2 = '{{$endDate}}';
+        date1 = '{{$startDateCalendar}}';
+        date2 = '{{$endDateCalendar}}';
 		flatpickr(".flatpickr-range", {
 	        mode:  "range",
-	        dateFormat: "Y-m-d",
-	        maxDate: "2050-01-01",
+	        dateFormat: "m-d-Y",
+	        maxDate: "01-01-2050",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
+                alert(dateStr);
                 window.location.href= '/dashboard/'+dateStr;
             },
 	     });
