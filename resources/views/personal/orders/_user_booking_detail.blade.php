@@ -107,6 +107,10 @@
                         <span class="text-left">WHO IS PARTICIPATING?</span>
                         <span class="text-rihgt">{!!$book_details->decodeparticipate()!!}</span>
                     </p>
+                    <p>
+                        <span class="text-left">ADD ON SERVICES:</span>
+                        <span class="text-rihgt">{!! getAddonService($book_details->addOnservice_ids,$book_details->addOnservice_qty) !!} </span>
+                    </p>
                 </div>
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">

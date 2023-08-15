@@ -5,22 +5,23 @@ namespace App\Imports;
 use App\{Customer,cISessions};
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 
-class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, WithHeadingRow
+class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkReading, WithHeadingRow
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function  __construct($business_id)
+    /*public function  __construct($business_id)
     {
         $this->business_id= $business_id;
-    }
+    }*/
     
     public function startRow(): int
     {
@@ -29,12 +30,11 @@ class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, Wi
     public function collection(Collection $rows)
     {
 
-        $rows = $rows->toArray();
+        /*$rows = $rows->toArray();
         $count = count($rows);
         foreach ($rows as $key=>$row) {
            
             if( $key != ($count-1) && (Customer::where(['email'=>@$row['email']])->first()) == ''){
-			/*if( $key != ($count-1)) {*/
                 $coun = (@$row['country'] == 'US' ? 'United Status' : $row['country']);
                 $createdata = new Customer;
                 $createdata->business_id =  $this->business_id;
@@ -53,9 +53,23 @@ class CustomerImport implements ToCollection, WithStartRow, WithChunkReading, Wi
 				//echo 'email---'.$row['email'].'<br>';
 				//exit;
             }
-        }
+        }*/
 
         return;
+    }
+
+    public function model(array $row){
+        return new Customer([
+            'lname' => $row[0],
+            'fname' => $row[1],
+            'address' => $row[4],
+            'city' => $row[5],
+            'state' => $row[6],
+            'zipcode' => $row[7],
+            'country' => $row[8],
+            'email' => $row[12],
+            'phone_number' => $row[9],
+        ]);
     }
 
     public function chunkSize(): int
