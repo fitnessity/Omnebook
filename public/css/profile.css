@@ -2206,3 +2206,6 @@ a {
 .space-bottom label{
     margin-bottom: 0px;
 }
+.fc-event .fc-content {
+  color: #000;
+}

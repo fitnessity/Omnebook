@@ -80,6 +80,7 @@
 	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
 	.chat-conversation { height: calc(70vh - 275px) !important;}
 	.width-100per{width: 100%;}
+	.free-trial-img img {  margin-bottom: -45px;  margin-top: -40px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -172,6 +173,11 @@
 	div#imgdiv{order: 1;}
 	div#bookdiv{order: 2 !important;}
 	.width-100per{width: 100%;}
+	.check-cancel label{font-size: 12px;}
+	.width-105{width: 105px;}
+	.width-185{width: 185px;}
+	.select-staff-member{ margin-top: 15px;}
+	.free-trial-img img { margin-bottom: 0; margin-top: -85px !important;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -272,6 +278,13 @@
 	.chat-leftsidebar {  height: calc(100vh - 70px - 60px - 8px) !important;}
 	.chat-conversation { height: calc(100vh - 275px) !important;}
 	.width-100per{width: 100%;}
+	.width-105{width: 105px;}
+	.width-185{width: 185px;}
+	.width-120{width: 120px;}
+	.multi-oops .setting-icon > ul{width: 150px !important;}
+	.free-trial-img img {  margin-bottom: 0;  margin-top: 45px;}
+	.free-trial-img{text-align: center;}
+	.free-trial-text{text-align: center;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

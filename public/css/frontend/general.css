@@ -18675,6 +18675,7 @@ input#zipcode {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .register_wrap {
@@ -24624,6 +24625,7 @@ padding-left: 0px;
 }
 .summery-recodes span{
 	margin-bottom: 5px;
+	text-align: end;
 }
 .booking-d-grid{
 	display: grid;
@@ -24634,6 +24636,7 @@ padding-left: 0px;
 }
 .book0total-price{
 	text-align: right;
+	font-size: 14px;
 }
 .book0total-price label{
 	margin-bottom: 0px;
@@ -24854,4 +24857,36 @@ padding-left: 0px;
     border: 1px solid #eaeaea;
     border-collapse: collapse;
     text-align: center;
+}
+.booking-summery{
+	font-size: 14px;
+}
+ .register_wrap{
+	max-height: 920px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.register_wrap .sign-step_5 {
+    padding: 00px 00px !important;
+}
+.sign-step_5 .form-group {
+	width: 100% !important;
 }
