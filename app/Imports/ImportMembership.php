@@ -5,6 +5,8 @@ use App\{Customer,BusinessPriceDetails,UserBookingStatus,Transaction,UserBooking
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -19,7 +21,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
 
-class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow
+
+class ImportMembership implements ToModel,ToCollection, WithStartRow, WithChunkReading, WithHeadingRow
 {
     /**
     * @param array $row
@@ -34,10 +37,10 @@ class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow
     
 
 
-    public function  __construct($business_id)
+    /*public function  __construct($business_id)
     {
         $this->business_id= $business_id;
-    }
+    }*/
 
     public function headingRow(): int
     {
@@ -52,7 +55,7 @@ class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow
     public function collection(Collection $rows)
     {   
   
-        $rows = $rows->toArray(); 
+        /*$rows = $rows->toArray(); 
         foreach ($rows as $key=>$row) {
             $customerData = $string = $content = $content1 = '';$nameary = [];
             $string = htmlentities($row[0], null, 'utf-8');
@@ -173,6 +176,21 @@ class ImportMembership implements ToCollection, WithHeadingRow, WithStartRow
             }
         }
     
-        return;
+        return;*/
+    }
+
+    public function model(array $row){
+       
+        return [
+            'name' => $row[0],
+            'membership_type' => $row[1],
+            'member_from' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d'),
+            'member_to' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])->format('Y-m-d'),
+        ];
+    }
+
+     public function chunkSize(): int
+    {
+        return 1000; // Set an appropriate chunk size based on your requirements
     }
 }
