@@ -24,15 +24,15 @@ if(!empty($cart["cart_item"])) {
 
         if(!empty($item['adult'])){
             $totalquantity += $item['adult']['quantity'];
-            $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
+            $discount += ($item['adult']['price'] * is_int($serprice['adult_discount']))/100; 
         }
         if(!empty($item['child'])){
             $totalquantity += $item['child']['quantity'];
-            $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
+            $discount += ($item['child']['price'] * is_int($serprice['child_discount']))/100;
         }
         if(!empty($item['infant'])){
             $totalquantity += $item['infant']['quantity'];
-            $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
+            $discount += ($item['infant']['price'] * is_int($serprice['infant_discount']))/100;
         }
     }
 
@@ -147,35 +147,41 @@ if(!empty($cart["cart_item"])) {
 									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											@if($cart['cart_item'][$priceid]['adult'])
-											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
-											  @endif
+											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Adult
+											  	@if($serprice['adult_discount'])
+												    @php
+												      	$adult_discount_price = $cart['cart_item'][$priceid]['adult']['quantity'] * ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['adult_discount'])/100)
+												    @endphp
+												    ${{$adult_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
+												@else
+													${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}/person
+												@endif
 											  <br/>
 											@endif
 
 											@if($cart['cart_item'][$priceid]['child'])
 											  x{{$cart['cart_item'][$priceid]['child']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['price']}}</strike>/person
-											  @endif
+											  	@if($serprice['child_discount'])
+												    @php
+												      $child_discount_price = $cart['cart_item'][$priceid]['child']['quantity'] * ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
+												    @endphp
+											    	${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['quantity'] *  $cart['cart_item'][$priceid]['child']['price']}}</strike>/person
+											    @else
+													${{$cart['cart_item'][$priceid]['child']['quantity'] * $cart['cart_item'][$priceid]['child']['price']}}/person
+											  	@endif
 											  <br/>
 											@endif
 
 											@if($cart['cart_item'][$priceid]['infant'])
-											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
-											  @endif
+											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Infant
+											  	@if($serprice['infant_discount'])
+												    @php
+													    $infant_discount_price = $cart['cart_item'][$priceid]['infant']['quantity'] * ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['infant_discount'])/100)
+												    @endphp
+												    ${{$infant_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
+											  	@else
+													${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price'] }}/person
+											  	@endif
 											  <br/>
 											@endif
 										</div>
@@ -282,6 +288,19 @@ if(!empty($cart["cart_item"])) {
 												<span>@if(!empty($cartdata['adult'])) @if($cartdata['adult']['quantity']  != 0) Adult x {{$cartdata['adult']['quantity']}} @endif @endif</span> 
 												<span>@if(!empty($cartdata['child']))  @if($cartdata['child']['quantity']  != 0) Children x {{$cartdata['child']['quantity']}} @endif @endif</span>
 												<span>@if(!empty($cartdata['infant'])) @if($cartdata['infant']['quantity'] != 0) Infant x {{$cartdata['infant']['quantity'] }} @endif @endif</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display">
+												<label>Add On Service: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display info-align">
+												<span>{!! getAddonService($cartdata['addOnServicesId'],$cartdata['addOnServicesQty']) !!} </span>
 											</div>
 										</div>
 									</div>

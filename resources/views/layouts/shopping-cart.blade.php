@@ -69,15 +69,15 @@
 					                        
 					                        if(!empty($item['adult'])){
 					                            $totalquantity += $item['adult']['quantity'];
-					                            $discount += $item['adult']['quantity'] * ($item['adult']['price'] *@$serprice['adult_discount'])/100; 
+					                            $discount += $item['adult']['quantity'] * ($item['adult']['price'] * is_int(@$serprice['adult_discount']))/100; 
 					                        }
 					                        if(!empty($item['child'])){
 					                            $totalquantity += $item['child']['quantity'];
-					                            $discount += $item['child']['quantity'] *  ($item['child']['price'] *@$serprice['child_discount'])/100;
+					                            $discount += $item['child']['quantity'] *  ($item['child']['price'] * is_int(@$serprice['child_discount']))/100;
 					                        }
 					                        if(!empty($item['infant'])){
 					                            $totalquantity += $item['infant']['quantity'];
-					                            $discount += $item['infant']['quantity'] *  ($item['infant']['price'] *@$serprice['infant_discount'])/100;
+					                            $discount += $item['infant']['quantity'] *  ($item['infant']['price'] *  is_int(@$serprice['infant_discount']))/100;
 					                        }
 					                        $tot_cart_qty = ($db_totalquantity + $totalquantity);
 					                        $item_price = $item_price + $item["totalprice"];
@@ -386,6 +386,18 @@
 																		<span>@if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult x {{$item['adult']['quantity']}} @endif @endif</span> 
 																		<span>@if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children x {{$item['child']['quantity']}} @endif @endif</span>
 																		<span>@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant x {{$item['infant']['quantity'] }} @endif @endif</span>
+																	</div>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-md-6 col-xs-6 col-6">
+																	<div class="info-display">
+																		<label>Add On Service: </label>
+																	</div>
+																</div>
+																<div class="col-md-6 col-xs-6 col-6">
+																	<div class="info-display info-align">
+																		<span>{!! getAddonService(@$item['addOnServicesId'],@$item['addOnServicesQty']) !!} </span>
 																	</div>
 																</div>
 															</div>

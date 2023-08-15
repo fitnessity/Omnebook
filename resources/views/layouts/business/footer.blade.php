@@ -209,9 +209,9 @@
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
 									</li>
-									<li class="pc-link">
+									<!-- <li class="pc-link">
 										 <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;"> Inbox</a>
-									</li>
+									</li> -->
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite" style="color: white;">Favorite</a>
 									</li>
