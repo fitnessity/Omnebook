@@ -50,33 +50,15 @@
 										<div class="row g-3 mb-25">
 											<div class="col-xl-6 col-sm-12 col-md-8 col-12">
 												<div class="row g-3">
-													<!-- <div class="col-lg-4 col-md-5 col-sm-5">
-														<div>
-															<button type="button" class="btn btn-red w-100 manage-cus-btn search-add-client text-center search-checkout" data-toggle="modal" data-target="#newclient">Add New Client</button>
-														</div>
-													</div> -->
+												
 													<div class="col-lg-8 col-md-7 col-sm-7">
 														<div class="search-box">
 															<input type="text" id="serchclient" name="fname" class="form-control search" placeholder="Search for client who is making a purchase?" autocomplete="off" value="{{$username}}" data-id="{{$pageid}}">
-															<!-- <div id="option-box1" style="display:none;">
-																<ul class="customer-list">
-																</ul>
-															</div> -->
 															<i class="ri-search-line search-icon"></i>
 														</div>
 													</div>
 												</div>
 											</div>
-											<!--<div class="col-xl-6 col-sm-4 col-md-4 col-12">
-												<div class="row g-3">
-													<div class="col-lg-4 col-sm-9 col-md-9 col-6">
-														<div>
-															<button type="button" class="btn btn-red manage-search search-add-client quick-none"> Quick Sale </button>
-															<button type="button" class="btn btn-red w-100" onclick="SearchData();">Search</button>
-														</div>
-													</div>
-												</div>
-											</div>-->
 										</div>
 										
 										<div class="row">
@@ -119,7 +101,7 @@
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 														<div class="check-out-steps">
 															<label>
-																<h2 class="color-red">Step 1: </h2> Select Service
+																<h2 class="color-red">Step 1: </h2> Select Participant & Service
 															</label>
 														</div>
 														<div class="check-client-info-box">
@@ -202,7 +184,7 @@
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 														<div class="check-out-steps">
 															<label>	
-																<h2 class="color-red">Step 2: </h2> Check Details 
+																<h2 class="color-red">Step 2: </h2> Check The Price & Details
 															</label>
 														</div>
 														<div class="check-client-info-box">
@@ -295,7 +277,7 @@
 																</div>
 																<div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
 																	<div class="select0service mb-10">
-																		<label>Date This Activaties?</label>
+																		<label>The Date This Starts</label>
 																		<div class="input-group">
 																			<input type="text" id="managecalendarservice" class="form-control border-0 flatpickr-range flatpiker-with-border flatpickr-input active" readonly="readonly" value="{{date('m/d/Y')}}" onchange="changedate('simple');" autocomplete="off">
 																		</div>
@@ -631,11 +613,11 @@
 																				</div>
 																			</div>
 																		@else
-																		 	<p>Add an Order</p>
+																		 	<h5 class="text-center m-100 h-390 y-middle order-middle">Add an Order</h5>
 																		@endif
 																		@endforeach
 																	@else
-																		<h5 class="text-center m-100">Add an Order</h5>
+																		<h5 class="text-center m-100 h-390 y-middle order-middle">Add an Order</h5>
 																	@endif
 																</div>
 															</div>
@@ -1125,7 +1107,7 @@
 	            window.location.href = '/business/'+business_id+'/orders/create?cus_id='+ui.item.id;
 	        }
     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-    		let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname + '</p></div></div> ';
+    		let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0) + '</p></div></div> ';
 
             if(item.profile_pic_url){
                 profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
