@@ -11,7 +11,6 @@
 */
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
-use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Customers_Auth\HomeController;
 
 
@@ -94,7 +93,16 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/member_expirations','DesignController@member_expirations')->name('member_expirations');
 	Route::get('/chat_inbox','DesignController@chat_inbox')->name('chat_inbox');
 	Route::get('/edit_profile','DesignController@edit_profile')->name('edit_profile');
-	
+	Route::get('/personal_profile','DesignController@personal_profile')->name('personal_profile');
+	Route::get('/provider_profile_calendar','DesignController@provider_profile_calendar')->name('provider_profile_calendar');
+	Route::get('/add_family_provider','DesignController@add_family_provider')->name('add_family_provider');
+	Route::get('/followers','DesignController@followers')->name('followers');
+	Route::get('/following','DesignController@following')->name('following');
+	Route::get('/favorite','DesignController@favorite')->name('favorite');
+	Route::get('/booking_info','DesignController@booking_info')->name('booking_info');
+	Route::get('/price_plan','DesignController@price_plan')->name('price_plan');
+	Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
+	Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -132,6 +140,7 @@ Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name(
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
 Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
+Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
 
 
 Route::group(['middleware' => ['auth']], function(){
