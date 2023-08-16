@@ -166,7 +166,7 @@ class BusinessActivitySchedulerController extends Controller
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid,'priceid' => $request->priceId])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->first();
             $remaining= @$bookingDetail->getremainingsession();
             if($remaining != 0 ){
-                $html .= '<option value="'.$priceDetail->id.'">'.$priceDetail->price_title.'</option>';
+                $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
         }else{
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->get();
