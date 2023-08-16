@@ -157,7 +157,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																		@endphp
 																		<div class="col-md-4 col-sm-5 col-xs-12">
 																			<div class="classes-time">
-																				<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}});"  {{ $SpotsLeftdis == 0 ? "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
+																				<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
 																				
 																				<label>{{ $SpotsLeftdis == 0 ? 
 																					"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
@@ -270,11 +270,11 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		}
 	}
 
-	function openPopUp(scheduleId,sid,activityName,time,chk){
+	function openPopUp(scheduleId,sid,activityName,time,chk,catId){
 		if(chk == 1){
  			$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
 		}else{
-			$('#select-booking-type').html('<div class="row contentPop text-center"><div class="col-lg-12 btns-modal"><h4 class="mb-20">Choose How You Would Like To Book</h4><button type="button" class="addbusiness-btn-modal" onclick="timeBookingPopUP('+scheduleId+','+sid+',\''+activityName+'\',\''+time+'\','+chk+')" id="singletime" data-id="">Book 1 Time Slot</button>  <button type="button" class="addbusiness-btn-modal" onclick="goToMultibookingPage('+sid+');">Book Multiple Time Slots At Once</button></div></div>');
+			$('#select-booking-type').html('<div class="row contentPop text-center"><div class="col-lg-12 btns-modal"><h4 class="mb-20">Choose How You Would Like To Book</h4><button type="button" class="addbusiness-btn-modal" onclick="timeBookingPopUP('+scheduleId+','+sid+',\''+activityName+'\',\''+time+'\','+chk+','+catId+')" id="singletime" data-id="">Book 1 Time Slot</button>  <button type="button" class="addbusiness-btn-modal" onclick="goToMultibookingPage('+sid+');">Book Multiple Time Slots At Once</button></div></div>');
 		}
 		
 		$('.selectbooking').modal('show');
@@ -286,7 +286,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		window.open('/schedule/multibooking/'+'{{$businessId}}'+'?customer_id='+'{{@$customer->id}}'+'&date='+date, '_blank');
 	}
 
-	function timeBookingPopUP(scheduleId,sid,activityName,time,chk) {
+	function timeBookingPopUP(scheduleId,sid,activityName,time,chk,catId) {
 		var date = '{{$filter_date->format("m/d/Y")}}';
 		$('.selectbooking').modal('hide');
 		var membershipHtml = '';
@@ -297,13 +297,14 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 				_token: '{{csrf_token()}}',
 				sid : sid,
 				cid : '{{@$customer->id}}',
-				priceId : '{{$priceid}}'
+				priceId : '{{$priceid}}',
+				catId : catId,
 			},
 			success:function(data){
 				if(data == ''){
 					html = '<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You don\'t have a membership for this activity.  </p> <p> Please buy a membership in order to book. </p></div> <a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">Buy Membership Now </a> </div> </div> ';
 				}else{
-					html = '<div class="row contentPop"> <h4 class="mb-10 lh-25 text-center"> You are booking 1 time slot for '+activityName+' </h4> <h4 class="mb-30 lh-25 text-center"> on '+date+' at '+time+' </h4> <div class="col-lg-7 col-sm-12 col-md-7 col-xs-12 text-center mb-20"> <div class="modal-inner-txt"> <p> Select Your Membership To Pay For This </p> </div> </div> <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 btns-modal mb-20"  id="bookingDetails" >'+data+'</div> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>';
+					html = '<div class="row contentPop"> <div class="col-md-12"> <h4 class="mb-10 lh-25 text-center"> You are booking 1 time slot for '+activityName+' </h4> </div> <div class="col-md-12"> <h4 class="mb-30 lh-25 text-center"> on '+date+' at '+time+' </h4> </div> <div class="col-lg-7 col-sm-12 col-md-7 col-xs-12 text-center mb-20"> <div class="modal-inner-txt"> <p> Select Your Membership To Pay For This </p> </div> </div> <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 btns-modal mb-20"  id="bookingDetails" >'+data+'</div> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>';
 				}
 				$('#ajax_html_modal').modal('show');
  				$('#booking-time-model').html(html);
