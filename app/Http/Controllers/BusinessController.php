@@ -31,21 +31,25 @@ class BusinessController extends Controller
         $startDate = Carbon::now()->firstOfMonth()->format('Y-m-d');
         $endDate = Carbon::now()->lastOfMonth()->format('Y-m-d');
 
-        if($dates != ''){
-            $date = explode(' to ', $dates);
-            $startDate = $date[0] != '' ? $date[0]: $startDate;
-            $endDate = array_key_exists(1,$date) ? $date[1]: $endDate;
-        }
-  
+        
+        $date = explode(' to ', @$dates);
+        $startDate = @$date[0] != '' ? date('Y-m-d',strtotime($date[0])): $startDate;
+        $endDate = array_key_exists(1,$date) ? date('Y-m-d',strtotime($date[1])): $endDate;
+
+        $startDateCalendar =  @$date[0] != '' ?  $date[0]: Carbon::now()->firstOfMonth()->format('m-d-Y');
+        $endDateCalendar = array_key_exists(1,$date) ? $date[1] : Carbon::now()->lastOfMonth()->format('m-d-Y');
+        
         $startDateMonth = Carbon::parse($startDate)->format('m'); 
         $endDateMonth =  Carbon::parse($endDate)->format('m');
 
-        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = 0;
-        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services =[];
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt = 0;
+
+        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = [];
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
         $dba_business_name =  @$business->dba_business_name ?? @$business->company_name;
+
         if(@$business != ''){
             $services = $business->service()->orderby('created_at')->take(5)->get();
 
@@ -107,7 +111,6 @@ class BusinessController extends Controller
             $activitySchedule = @$business->business_activity_schedulers()->whereDate('end_activity_date','>=', $startDate)->whereDate('end_activity_date','<=', $endDate)->limit(3)->get();
         }
         
-        $topBookedCategories = [];
         $topBookedPriceId = array_values(array_unique($topBookedPriceId));
         $priceDetails = BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
         foreach ($priceDetails as $priceDetail) {
@@ -151,8 +154,6 @@ class BusinessController extends Controller
                     ->whereDate('created_at', '<=', $endOfWeek)
                     ->get();
 
-        $notificationAry = [];
-
         $formatNotification = function ($userData, $action, $type, $text) {
             $image = Storage::disk('s3')->exists($userData->profile_pic) ? Storage::url($userData->profile_pic) : '';
             $date = new DateTime($action->created_at);
@@ -181,7 +182,7 @@ class BusinessController extends Controller
 
         /*print_r($notificationAry);*/
 
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry'));
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingdata','completedtdata','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar'));
     }
 
     public function bookingchart(Request $request){
@@ -237,29 +238,31 @@ class BusinessController extends Controller
         $expiringMembership = $booking->whereDate('expired_at', '>=', date('Y-m-d'))->whereDate('expired_at', '<=', $enddate)->get();
         $html = '';
         foreach($expiringMembership as $key=>$emp ){
-            $Customer = $emp->Customer;
-            $key = $key+1;
-            $html .= '<tr>
-                <td>
-                   <h5 class="fs-14 my-1 fw-normal">'. $key.'</h5>
-                </td> 
+            if($emp->Customer != '' && $emp->business_price_detail != ''){
+                $Customer = $emp->Customer;
+                $key = $key+1;
+                $html .= '<tr>
+                    <td>
+                       <h5 class="fs-14 my-1 fw-normal">'. $key.'</h5>
+                    </td> 
 
-                <td>
-                   <h5 class="fs-14 my-1 fw-normal">'.@$Customer->full_name.'</h5>
-                </td>
-                <td>
-                   <h5 class="fs-14 my-1 fw-normal">'.$emp->business_price_detail->price_title.'</h5>
-                </td>
-                <td>
-                   <h5 class="fs-14 my-1 fw-normal">'.$emp->contract_date.'</h5>  
-                </td>
-                <td>
-                    <h5 class="fs-14 my-1 fw-normal">'.$emp->expired_at.'</h5>
-                </td>
-                <td>
-                     <a href="'.route('personal.orders.index',['business_id'=>$emp->business_id]).'"> View </a>
-                </td>
-            </tr>';
+                    <td>
+                       <h5 class="fs-14 my-1 fw-normal">'.@$Customer->full_name.'</h5>
+                    </td>
+                    <td>
+                       <h5 class="fs-14 my-1 fw-normal">'.@$emp->business_price_detail->price_title.'</h5>
+                    </td>
+                    <td>
+                       <h5 class="fs-14 my-1 fw-normal">'.date('m-d-Y', strtotime($emp->contract_date)).'</h5>  
+                    </td>
+                    <td>
+                        <h5 class="fs-14 my-1 fw-normal">'.date('m-d-Y', strtotime($emp->expired_at)).'</h5>
+                    </td>
+                    <td>
+                         <a href="'.route('personal.orders.index',['business_id'=>$emp->business_id]).'"> View </a>
+                    </td>
+                </tr>';
+            }
         }
         return  $html;
     }

@@ -234,10 +234,10 @@
 									<li class="lp-per-pro"> <span>Business Center </span></li>
 									<li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
+										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
+										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Staff Login</a>
 									</li>
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>

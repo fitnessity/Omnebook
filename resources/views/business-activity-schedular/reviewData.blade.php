@@ -35,7 +35,6 @@
 					<td>  
 						<?php 
 							$html = $data = '';$remaining = 0;$firstDataProcessed = false; 
-
 							$bookingDetail = App\UserBookingDetail::where(['sport'=> $sesAry['serviceID'] ,'user_id'=>$sesAry['cid']])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
 				            if(!empty($bookingDetail)){
 				                foreach($bookingDetail as $detail){
@@ -60,7 +59,7 @@
 				        ?>
 				        {!! $data != '' ? $data : "No MemberShip Available" !!}
 				    </td>
-					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}});"> Delete </button></td>
+					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0);"> Delete </button></td>
 				  </tr>
 				@endforeach
 			</table>
@@ -92,27 +91,6 @@
 					}
 				});
 			}			
-		}
-	}
-
-	function confirmdelete(serviceID ,date ,timeId) {
-		if (confirm('Are you want to remove this selected slot ?')) {
-			$.ajax({
-		   		url: "{{route('deleteFromSession')}}",
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-		    	},
-		    	data:{
-					_token: '{{csrf_token()}}',
-					date: date,
-					serviceID:serviceID,
-					timeId:timeId,
-				},
-				success: function (response) { 
-					window.location.reload();
-				}
-			});
 		}
 	}
 </script>
