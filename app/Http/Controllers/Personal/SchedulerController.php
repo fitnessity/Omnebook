@@ -89,14 +89,16 @@ class SchedulerController extends Controller
         $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
         $UserBookingDetails = '';
         $today = date('Y-m-d');
-    
-        $UserBookingDetails = $customer->bookingDetail()->where('sport',$request->serviceID);
-
-        if($request->priceId != ''){
-            $UserBookingDetails = $UserBookingDetails->orWhere(['priceid'=>$request->priceId]);
-        }
-
-        $UserBookingDetails = $UserBookingDetails->orderby('created_at','desc')->first();
+        
+        $UserBookingDetails = $customer->bookingDetail()
+            ->where('sport',$request->serviceID)
+            ->when($request->oid, function($query) use($request){
+                $query->where('id', $request->oid);
+            })
+            ->when($request->priceId, function ($query) use ($request) {
+                $query->where('priceid', $request->priceId);
+            })
+            ->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
             $sendmail = 0;
             $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$request->date)->where(['checked_at' =>null])->first();
@@ -118,6 +120,10 @@ class SchedulerController extends Controller
                         "checkin_date"=>$request->date]);
                     $sendmail = 1;
                 }else{
+                    echo $UserBookingDetails.'<br>';
+                    print_r($UserBookingDetails->BookingCheckinDetails()->get());
+                    echo '<br>';
+                    echo $UserBookingDetails->BookingCheckinDetails()->count();
                     if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
                         BookingCheckinDetails::create([
                             "business_activity_scheduler_id"=>$request->timeid, 
