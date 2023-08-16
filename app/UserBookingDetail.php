@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
 	protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time'];
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty'];
 
 
     /**
@@ -165,7 +165,7 @@ class UserBookingDetail extends Model
                         }
                     } catch(\Exception $e) {
 
-                        $this->update(['transfer_provider_status'=>'paid', 
+                        $this->update(['transfer_provider_status'=>'unpaid', 
                                'provider_amount' => 0]);
                         return;
                     }    
@@ -257,7 +257,8 @@ class UserBookingDetail extends Model
     public function getremainingsession(){
         $pay_session = $this->pay_session;
         //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->sum('use_session_amount');
+        //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->count('use_session_amount');
+        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->count();
         $remaining = $pay_session - $checkindetailscnt;
         return $remaining;
     }
@@ -322,6 +323,9 @@ class UserBookingDetail extends Model
         }
         if($this->fitnessity_fee != 0){
             $fees +=  $this->fitnessity_fee ;
+        }
+        if($this->addOnservice_total != 0){
+            $fees +=  $this->addOnservice_total ;
         }
 
         return $fees;
