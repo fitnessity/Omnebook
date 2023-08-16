@@ -120,10 +120,10 @@ class SchedulerController extends Controller
                         "checkin_date"=>$request->date]);
                     $sendmail = 1;
                 }else{
-                    echo $UserBookingDetails.'<br>';
-                    print_r($UserBookingDetails->BookingCheckinDetails()->get());
-                    echo '<br>';
-                    echo $UserBookingDetails->BookingCheckinDetails()->count();
+                    // echo $UserBookingDetails.'<br>';
+                    // print_r($UserBookingDetails->BookingCheckinDetails()->get());
+                    // echo '<br>';
+                    //echo $UserBookingDetails->BookingCheckinDetails()->count();
                     if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
                         BookingCheckinDetails::create([
                             "business_activity_scheduler_id"=>$request->timeid, 
