@@ -3885,5 +3885,44 @@ label {
   border: 1px solid #ededed;
   border-collapse: collapse;
 }
-
-
+.nav-custom-grey{
+	background-color: #484848;
+}
+.access-remove{
+	display: inline-block;
+}
+.booking-activity-details span{
+	float: right;
+	margin-bottom: 3px;
+	margin-top: 0px;
+}
+.booking-activity-details label{
+	margin-bottom: 3px;
+	margin-top: 0px;
+}
+.modal-booking-info label{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.pay-space-remove label{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.pay-space-remove span{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.h-390{
+	height: 390px;
+}
+.order-middle{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: center;
+	flex-direction: column-reverse;
+	justify-content: space-around;
+}
+.mr-5{
+	margin-right: 5px;
+}

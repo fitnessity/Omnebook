@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler,Customer,BusinessPriceDetails,BookingCheckinDetails,SGMailService};
-use App\Repositories\{BookingRepository};
+use App\Repositories\BookingRepository;
 use DateTime;
 use Auth;
 use Session;
@@ -174,7 +174,6 @@ class BusinessActivitySchedulerController extends Controller
                 foreach($bookingDetail as $i=>$detail){
                     $remainingSession = $detail->getremainingsession();
                     $priceDetail = $detail->business_price_detail;
-                
                     if($remainingSession != 0 &&  $priceDetail->category_id == $request->catId){
                         if (!$firstDataProcessed) {
                             $remaining = $remainingSession; 
@@ -369,8 +368,7 @@ class BusinessActivitySchedulerController extends Controller
             return $ary['cid'] == $request->customerID;
         })->count();
 
-        $html ='<span>'.$j.'</span>-Time Slot Added';
-        return $html;
+        return $j;
     }
 
     public function getReviewData($cid,$business_id){
@@ -391,7 +389,13 @@ class BusinessActivitySchedulerController extends Controller
             return $ary['serviceID'] == $request->serviceID && $ary['date'] == $request->date && $ary['timeId'] == $request->timeId; 
         })->all();
 
+        $cid = $request->cid;
+        $finalSessionAry = collect($sessionAry)->filter(function($ary) use ($cid) {
+            return $ary['cid'] == $cid;
+        })->count();
+
         session::put('multibooking', $sessionAry);
+        return  $finalSessionAry;
     }
 
     public function save(Request $request){

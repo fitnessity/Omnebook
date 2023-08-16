@@ -68,6 +68,7 @@ class OrderController extends BusinessBaseController
 
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
+            $customer->create_stripe_customer_id();
             if($customer->parent_cus_id){
                 return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
             }
@@ -76,7 +77,8 @@ class OrderController extends BusinessBaseController
             if($request->participate_id != ''){
                 $cusData = $request->current_company->customers->find($request->participate_id);
                 $age = Carbon::parse($cusData->birthdate)->age;
-                $participateName  =  @$cusData->fname.' '. @$cusData->lname  .' ('.$age .' yrs) '.$cusData->relationship .' (Paid For by '.$username.')';;
+                $participateName  =  @$cusData->fname.' '. @$cusData->lname  .' ('.$age .' yrs) '.$cusData->relationship .' (Paid For by '.$username.')';
+                $cusData->create_stripe_customer_id();;
             }
 
             $book_data = @$customerdata->getlastbooking();
@@ -128,7 +130,7 @@ class OrderController extends BusinessBaseController
             $modeldata = $this->getmultipleodermodel($ordermodelary);
             session()->forget('ordermodelary');
         }
-        
+
         return view('business.orders.create', [
            'companyId' => $companyId,
            'book_id' => $request->book_id,

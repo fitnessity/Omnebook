@@ -102,9 +102,10 @@ class CustomerController extends Controller
         $company = $request->current_company;
         $customer = $company->customers()->findOrFail($request->customer_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $customer->create_stripe_customer_id();
         $intent = $stripe->setupIntents->create(
           [
-            'customer' => $customer->stripe_customer_id,
+            'customer' => @$customer->stripe_customer_id,
             'payment_method_types' => ['card'],
           ]
         );
@@ -122,8 +123,10 @@ class CustomerController extends Controller
         foreach($payment_methods as $payment_method){
             $fingerprint = $payment_method['card']['fingerprint'];
             if (in_array($fingerprint, $fingerprints, true)) {
-                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->firstOrFail();
-                $deletePaymentMethod->delete();
+                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
+                if($deletePaymentMethod != ''){
+                    $deletePaymentMethod->delete();
+                }
             } else {
                 $fingerprints[] = $fingerprint;
                 $stripePaymentMethod = StripePaymentMethod::firstOrNew([
