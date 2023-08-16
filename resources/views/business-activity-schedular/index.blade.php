@@ -315,6 +315,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	function addtimedate(scheduleId,sid,activityName,time){
 	
 		var priceId = $('#priceId').val();
+		var selectedOption = $('#priceId').find("option:selected");
+		var oid = selectedOption.attr("data-did");
 		let date ='{{$filter_date->format("m-d-Y")}}';
 	   	$.ajax({
 	   		url: "{{route('personal.schedulers.store')}}",
@@ -330,6 +332,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 				serviceID:sid,
 				customerID:'{{@$customer->id}}',
 				priceId:priceId,
+				oid:oid,
 			},
 			success: function (response) { //alert(response);
 				if(response == 'success'){
