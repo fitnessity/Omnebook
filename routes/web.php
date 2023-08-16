@@ -13,8 +13,6 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
 use App\Http\Controllers\Customers_Auth\HomeController;
 
-
-
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
@@ -141,6 +139,7 @@ Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
 Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
 Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
+Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnData');
 
 
 Route::group(['middleware' => ['auth']], function(){
