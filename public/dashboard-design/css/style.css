@@ -11356,13 +11356,13 @@ span.flatpickr-weekday{
         top:35px!important
     }
 }
-.upcoming-scheduled .flatpickr-months{
-    position:absolute!important;
-    top:-45px!important;
-    left:auto!important;
-    right:0!important;
-    width:200px;
-    background-color:transparent
+/* .upcoming-scheduled.position-relative .flatpickr-months{
+    position: absolute!important;
+    top: -43px!important;
+    left: 140px !important;
+    right: 0!important;
+    width: 100%;
+    background-color: transparent; */
 }
 .upcoming-scheduled .flatpickr-months .flatpickr-month{
     color:#878a99!important;
@@ -11413,6 +11413,12 @@ span.flatpickr-weekday{
 }
 .upcoming-scheduled .flatpickr-days{
     border:none!important
+}
+.upcoming-scheduled .flatpickr-months .flatpickr-month{
+	height: 37px;
+}
+.upcoming-scheduled .flatpickr-months{
+	background-color: #ea1515;
 }
 .crm-widget .col{
     border-right:1px solid var(--vz-border-color)

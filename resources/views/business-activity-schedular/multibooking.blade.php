@@ -2,7 +2,6 @@
 @extends('layouts.header')
 @section('content')
 
-
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
 		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
@@ -157,7 +156,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="calendar-footer mt-10">
-							<label id="timeSlotCnt"><span>{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
+							<label><span id="timeSlotCnt">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
 							<!-- <a href="#" class="showall-btn" data-toggle="modal" data-target="#review_selections" >Review Selections</a> -->
 							<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-modal-width="1000px" >Review Selections</a>
 						</div>
@@ -216,7 +215,13 @@
     	var scid = $(this).data('scid');
     	var catId = $(this).data('catid');
     	var checkboxId = $(this).attr('id');
-       	openPopUp(scid,sid,pname,toa,chk,catId,checkboxId);
+
+    	if ($(this).prop("checked")) {
+    		openPopUp(scid,sid,pname,toa,chk,catId,checkboxId);
+    	} else {
+    		confirmdelete(sid,'{{$filter_date->format("Y-m-d")}}',scid , 1);
+    	}
+       	
     });
 
     function openPopUp(scheduleId,sid,activityName,time,chk,catId,checkboxId){
@@ -285,6 +290,32 @@
 				type: 'GET',
 				success:function(data){
 					$('#remainingSession'+i).html(data+' Session Remaining.')
+				}
+			});
+		}
+	}
+
+	function confirmdelete(serviceID ,date ,timeId ,chk) {
+		if (confirm('Are you want to remove this selected slot ?')) {
+			$.ajax({
+		   		url: "{{route('deleteFromSession')}}",
+				type: 'POST',
+				xhrFields: {
+					withCredentials: true
+		    	},
+		    	data:{
+					_token: '{{csrf_token()}}',
+					date: date,
+					serviceID:serviceID,
+					timeId:timeId,
+					cid:'{{$customer->id}}',
+				},
+				success: function (response) { 
+					if(chk ==0){
+						window.location.reload();
+					}else{
+						$('#timeSlotCnt').html(response);
+					}
 				}
 			});
 		}
