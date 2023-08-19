@@ -71,28 +71,52 @@
 																	<label>Client Quick Stats</label>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Client Name: </label><span> @if($username !='') {{$username}} ({{$age}} yrs Old) @endif</span>
+																	<div class="cmb-5">
+																		<label>Client Name: </label>
+																		<span> @if($username !='') {{$username}} ({{$age}} yrs Old) @endif</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Location: </label><span> {{$address}}</span>
+																	<div class="cmb-5">
+																		<label>Location: </label>
+																		<span> {{$address}}</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Visits: </label><span>  {{$visits}}</span>
+																	<div class="cmb-5">
+																		<label>Visits: </label> 
+																		<span>  {{$visits}}</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Activities Bookings: </label><span>  {{$book_cnt}}</span>
+																	<div class="cmb-5">
+																		<label>Activities Bookings: </label> 
+																		<span>  {{$book_cnt}}</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Last Membership: </label><span> {{ $last_membership}}</span>
+																	<div class="cmb-5">
+																		<label>Last Membership: </label>
+																		<span> {{ $last_membership}}</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Status: </label><span> {{$status}} </span>
+																	<div class="cmb-5">
+																		<label>Status: </label>
+																		<span> {{$status}} </span>
+																	</div>
+																</div>
+																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">	
+																	<div class="cmb-5">
+																		<label>Current Membership: </label>
+																		<span>{{$current_membership}}</span>
+																	</div>
 																</div>
 																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Current Membership: </label><span>{{$current_membership}}</span>
-																</div>
-																<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-																	<label>Last Purchase: </label><span> {{ $purchasefor}}</span>
+																	<div class="cmb-5">
+																		<label>Last Purchase: </label>
+																		<span> {{ $purchasefor}}</span>
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -165,11 +189,65 @@
 																		</select>
 																	</div>
 																</div>
-																<div class="col-md-4 col-sm-4 col-xs-12">
+																<div class="col-md-6 col-sm-4 col-xs-12">
+																	<label>Select Price Option  </label>
 																	<div class="select0service mb-10">
 																		<label>Participant Quantity </label>
 																		<button type="button" data-bs-toggle="modal" data-bs-target="#addpartcipate" class="btn btn-red width-100 search-add-client"> Select </button>
 																	</div>
+																	<div class="accordion cart-accordion" id="default-accordion-example">
+																	<div class="accordion-item">
+																		<h2 class="accordion-header" id="headingOne">
+																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+																				Participant
+																			</button>
+																		</h2>
+																		<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
+																			<div class="accordion-body">
+																				<div class="participant-selection btn-group">
+																					<div class="row">
+																						<div class="col-md-12 col-xs-12">
+																							<div class="select">
+																								<label class="btn button_select">Adults (Ages 13 & Up)</label>
+																								<div class="qtyButtons">
+																									<div class="qty count-members ">
+																										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+																										<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly="">
+																										<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+																									</div>   
+																								</div>
+																							</div>
+																						  
+																							<div class="select">
+																								 <label class="btn button_select" for="item_2">Children (Ages 2-12)</label>
+																								 <div class="qtyButtons">
+																									<div class="qty count-members ">
+																										<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
+																										<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly="">
+																										<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+																									</div>
+																								 </div>
+																							</div>
+																						  
+																						  <div class="select">
+																							  <label class="btn button_select" for="item_3">Infants (Under 2)</label>
+																							  <div class="qtyButtons">
+																									<div class="qty count-members ">
+																										<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
+																										<input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly="">
+																										<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i></span>
+																									</div>
+																							  </div>
+																						  </div>
+																						  
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
 																</div>
 																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
 																	<label> Membership Option</label>
@@ -195,7 +273,7 @@
 																		<div class="set-price">
 																			<i class="fas fa-dollar-sign"></i>
 																		</div>
-																		<input type="text" class="form-control valid" id="price" placeholder="$0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<input type="text" class="form-control valid" id="price" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 																	</div>
 																</div>
 																<div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">
@@ -442,12 +520,14 @@
 														<div class="row">
 															<div class="col-md-12 col-xs-12">
 																<div class="check-client-info-box">
-																	@php $i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0; @endphp
+																	@php 
+																		$i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0;  $hasActivityPurchase = false; @endphp
 																	@if(!empty($cart))
 																		@foreach($cart['cart_item'] as $i=>$item)
 																		@if($item['chk'] == 'activity_purchase')
 																			@php 
 																				$checkout_btun_chk = 1;
+																				$hasActivityPurchase = true;
 																				if ($item['image']!="") {
 																					if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
 																						$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
@@ -612,11 +692,11 @@
 																					@endif
 																				</div>
 																			</div>
-																		@else
-																		 	<h5 class="text-center m-100 h-390 y-middle order-middle">Add an Order</h5>
 																		@endif
 																		@endforeach
-																	@else
+																	@endif
+																		
+																	@if(!$hasActivityPurchase)
 																		<h5 class="text-center m-100 h-390 y-middle order-middle">Add an Order</h5>
 																	@endif
 																</div>
@@ -1086,6 +1166,8 @@
 <!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script> -->
 <!-- <link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
 
+
+
 <script>
 	flatpickr(".flatpickr-range", {
         dateFormat: "m/d/Y",
@@ -1124,6 +1206,43 @@
 	                .appendTo( ul );
 	    };
   	});
+</script>
+
+<script>
+	$(document).ready(function () {	
+	    $('#adultcnt').prop('readonly', true);
+		$(document).on('click','.adultplus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
+			if ($('#adultcnt').val() <= 0) {
+				$('#adultcnt').val(0);
+			}
+	    });
+
+	    $('#childcnt').prop('readonly', true);
+		$(document).on('click','.childplus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+		});
+    	$(document).on('click','.childminus',function(){
+			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
+			if ($('#childcnt').val() <= 0) {
+				$('#childcnt').val(0);
+			}
+	    }); 
+
+	    $('#infantcnt').prop('disabled', true);
+		$(document).on('click','.infantplus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+		});
+    	$(document).on('click','.infantminus',function(){
+			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
+			if ($('#infantcnt').val() <= 0) {
+				$('#infantcnt').val(0);
+			}
+	    });
+	});
 </script>
 
 <script type="text/javascript">
@@ -1209,45 +1328,6 @@
 	    });
 	});
 </script>
-
-<script>
-	$(document).ready(function () {
-		
-	    $('#adultcnt').prop('readonly', true);
-		$(document).on('click','.adultplus',function(){
-			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
-		});
-    	$(document).on('click','.adultminus',function(){
-			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
-			if ($('#adultcnt').val() <= 0) {
-				$('#adultcnt').val(0);
-			}
-	    });
-
-	    $('#childcnt').prop('readonly', true);
-		$(document).on('click','.childplus',function(){
-			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
-		});
-    	$(document).on('click','.childminus',function(){
-			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
-			if ($('#childcnt').val() <= 0) {
-				$('#childcnt').val(0);
-			}
-	    }); 
-
-	    $('#infantcnt').prop('disabled', true);
-		$(document).on('click','.infantplus',function(){
-			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
-		});
-    	$(document).on('click','.infantminus',function(){
-			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
-			if ($('#infantcnt').val() <= 0) {
-				$('#infantcnt').val(0);
-			}
-	    });
-	});
-</script>
-
 <script>
 	$(document).ready(function () {
 
@@ -2005,4 +2085,5 @@
 		}
 	});
 </script>
+
 @endsection

@@ -795,112 +795,7 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            <!-- <div class="text-center">
-                                                <div class="text-muted">Total <span class="fw-medium">5.50k</span> reviews</div>
-                                            </div> -->
-
-                                           <!--  <div class="mt-3">
-                                                <div class="row align-items-center g-2">
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0">5 star</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="p-1">
-                                                            <div class="progress bg-soft-success animated-progress progress-sm">
-                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 50.16%" aria-valuenow="50.16" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0 text-muted">2758</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row align-items-center g-2">
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0">4 star</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="p-1">
-                                                            <div class="progress bg-soft-success animated-progress progress-sm">
-                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 29.32%" aria-valuenow="29.32" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0 text-muted">1063</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row align-items-center g-2">
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0">3 star</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="p-1">
-                                                            <div class="progress bg-soft-warning animated-progress progress-sm">
-                                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 18.12%" aria-valuenow="18.12" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0 text-muted">997</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row align-items-center g-2">
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0">2 star</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="p-1">
-                                                            <div class="progress bg-soft-success animated-progress progress-sm">
-                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 4.98%" aria-valuenow="4.98" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0 text-muted">227</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row align-items-center g-2">
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0">1 star</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="p-1">
-                                                            <div class="progress bg-soft-danger animated-progress progress-sm">
-                                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 7.42%" aria-valuenow="7.42" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="p-1">
-                                                            <h6 class="mb-0 text-muted">408</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
+                                            
                                         </div>
 
                                         <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
@@ -1048,7 +943,6 @@
 	        maxDate: "01-01-2050",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
-                alert(dateStr);
                 window.location.href= '/dashboard/'+dateStr;
             },
 	     });
