@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="title get-start-sp">
-					<h3>Get Started Fast</h3>
+					<h3>Find Activities By Category</h3>
 				</div>
 			</div>
 			<!-- Mobile Slider -->
@@ -77,8 +77,8 @@
 				<div class="row">
 					<div class="col-md-10">
 						<div class="title">
-							<h3 class="desktop-none f-16">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
-							<h3 class="d-none">Find Activities Starting In The Next 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="desktop-none f-16">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h3 class="d-none">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
 						</div>
 					</div>
 					<div class="col-md-2 col-xs-12"> 

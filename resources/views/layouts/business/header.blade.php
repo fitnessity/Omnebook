@@ -273,7 +273,7 @@ $total_quantity = 0;
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
         <header>
-			<div class="container-fluid">
+			<div class="container-fluid printnone">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="menu_nav">

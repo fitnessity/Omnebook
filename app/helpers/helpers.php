@@ -39,7 +39,7 @@
             foreach ($ids as $key => $id) {
                 $aOService = AddOnService::find($id);
                 $price =  $aOService->service_price * $qty[$key];
-                $text .= $qty[$key].' X '.$aOService->service_name.' = $'. $price.'<br>';
+                $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
             }
         }else{
             $text = "—";
