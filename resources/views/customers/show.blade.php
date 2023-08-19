@@ -2,9 +2,26 @@
 @extends('layouts.business.header')
 
 @section('content')
+<style>
+	
+	@media screen {
+		.printDiv{
+			display: none !important;
+		}
+	}
 
+	@media print {
+		.printnone {
+			display: none !important;
+		}
+
+		.exclude-from-print {
+			display: block !important;
+		}
+	}
+</style>
 	@include('layouts.business.business_topbar')
-   <div class="main-content">
+   <div class="main-content printnone">
 		<div class="page-content">
          <div class="container-fluid">
             <div class="row">
@@ -679,7 +696,8 @@
 																								</tr>
 																							</thead>
 																							<tbody>
-																								@foreach ($purchase_history as $history)
+																								@foreach ($purchase_history as $history) 
+																									@if($history->item_description()['itemDescription'] != '')
 																									<tr>
 																										<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
 																										<td>{!!$history->item_description()['itemDescription']!!}</td>
@@ -691,6 +709,7 @@
 																										<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																										</td>
 																									</tr>
+																									@endif
 																								@endforeach
 																							</tbody>
 																						</table>
@@ -724,6 +743,16 @@
 																		</h2>
 																		<div id="accor_nesting8Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting8Example2" data-bs-parent="#accordionnesting8">
 																			<div class="accordion-body">
+																				<div class="row">
+																					<div class="col-md-12">
+																							<form class="app-search d-none d-md-block mb-10 float-right">
+																								<div class="position-relative">
+																									<input type="text" class="form-control ui-autocomplete-input" placeholder="Search for family member" autocomplete="off" id="serchFamilyMember" name="fname" value="">
+																								</div>
+																							</form>
+																					</div>						
+																				</div>
+																				
 																				<div class="purchase-history">
 																					<div class="table-responsive">
 																						<table class="table mb-0">
@@ -739,8 +768,8 @@
 																								@foreach($customerdata->get_families() as $index=>$family_member)
 																								<tr>
 																									<td> {{$family_member->full_name}} </td>
-																									<td>{{$family_member->relationship}}</td>
-																									<td>{{$family_member->age}}</td>
+																									<td>{{$family_member->relationship ?? "N/A"}}</td>
+																									<td>{{$family_member->age ?? "N/A"}}</td>
 																									<td><a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-black width-100">View</a></td>
 																								</tr>
 																								@endforeach
@@ -893,34 +922,121 @@
 																			</button>
 																		</h2>
 																		<div id="accor_nesting11Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting11Example2" data-bs-parent="#accordionnesting11">
+																			
 																			<div class="accordion-body">
+																				<div class="row">
+																					<div class="col-lg-12 col-md-12 col-sm-12">
+																						<a href="#" class="btn btn-red float-end mmb-10" data-bs-toggle="modal" data-bs-target=".terms">Edit</a>
+																					</div>
+																				</div>
 																				<div class="mini-stats-wid d-flex align-items-center mt-3 cardinfo">
 																					<div class="container-fluid nopadding">
 																						<div class="row">
-																							<div class="col-lg-10 col-md-10 col-sm-10">
-																								<div class="row">
-																									<div class="col-lg-12 col-md-12">
-																										<span>1.</span>
-																										<span>Covid-19 Protocols agreed on @if(@$customerdata->terms_covid != '') {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
-																									</div>
-																									<div class="col-lg-12 col-md-12">
-																										<span> 2. </span>
-																										<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
-																									</div>
-																									<div class="col-lg-12 col-md-12 mb-10">
-																										<span>3. </span>
-																										<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
-																									</div>
-																								</div>
-																							</div>
-																							<div class="col-lg-2 col-md-2 col-sm-2">
-																								<div class="row">
-																									<div class="col-lg-12 col-md-12 col-sm-12">
-																										<a href="#" class="btn btn-red float-end mmb-10" data-bs-toggle="modal" data-bs-target=".terms">Edit</a>
+																							<div class="col-lg-12 col-md-12">
+																								<span>1.</span>
+																								<span>Covid-19 Protocols agreed on @if(@$customerdata->terms_covid != '') {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul>
+																											<li>
+																												<a onclick="printTerms('covidDiv' ,'Covid')">
+																													<i class="fas fa-plus text-muted"></i>Print
+																												</a>
+																											</li>
+																											<li>
+																												<a onclick="emailTerms('covidDiv',{{@$customerdata->business_id}},'Covid',{{@$customerdata->id}})">
+																													<i class="fas fa-plus text-muted"></i>Email
+																												</a>
+																											</li>
+																										</ul>
 																									</div>
 																								</div>
 																							</div>
-																							
+																							<div class="col-lg-12 col-md-12">
+																								<span> 2. </span>
+																								<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul>
+																											<li>
+																												<a onclick="printTerms('liabilityDiv' ,'Liability')">
+																													<i class="fas fa-plus text-muted"></i>Print
+																												</a>
+																											</li>
+																											<li>
+																												<a onclick="emailTerms('liabilityDiv',{{@$customerdata->business_id}},'Liability',{{@$customerdata->id}})">
+																													<i class="fas fa-plus text-muted"></i>Email
+																												</a>
+																											</li>
+																										</ul>
+																									</div>
+																								</div>
+																							</div>
+																							<div class="col-lg-12 col-md-12">
+																								<span>3. </span>
+																								<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul>
+																											<li>
+																												<a onclick="printTerms('contractDiv' , 'Contract')">
+																													<i class="fas fa-plus text-muted"></i>Print
+																												</a>
+																											</li>
+																											<li>
+																												<a onclick="emailTerms('contractDiv',{{@$customerdata->business_id}},'Contract',{{@$customerdata->id}})" >
+																													<i class="fas fa-plus text-muted"></i>Email
+																												</a>
+																											</li>
+																										</ul>
+																									</div>
+																								</div>
+																							</div>
+																							<div class="col-lg-12 col-md-12">
+																								<span>4. </span>
+																								<span>Refund Policy </span>
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul>
+																											<li>
+																												<a onclick="printTerms('refundDiv' , 'Refund')">
+																													<i class="fas fa-plus text-muted"></i>Print
+																												</a>
+																											</li>
+																											<li>
+																												<a onclick="emailTerms('refundDiv',{{@$customerdata->business_id}},'Refund',{{@$customerdata->id}})" >
+																													<i class="fas fa-plus text-muted"></i>Email
+																												</a>
+																											</li>
+																										</ul>
+																									</div>
+																								</div>
+																							</div>
+																							<div class="col-lg-12 col-md-12 mb-10">
+																								<span>5. </span>
+																								<span>Terms, Conditions, FAQ </span>
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul>
+																											<li>
+																												<a onclick="printTerms('termsDiv' , 'Terms')">
+																													<i class="fas fa-plus text-muted"></i>Print
+																												</a>
+																											</li>
+																											<li>
+																												<a onclick="emailTerms('termsDiv',{{@$customerdata->business_id}},'Terms',{{@$customerdata->id}})">
+																													<i class="fas fa-plus text-muted"></i>Email
+																												</a>
+																											</li>
+																										</ul>
+																									</div>
+																								</div>
+																							</div>
 																						</div>
 																					</div>
 																				</div>
@@ -945,6 +1061,17 @@
    </div>
 </div>
 
+<div class="row mt-25">
+		<div class="col-md-12 text-center printDiv mb-10 printnone" id="covidDiv">{!!@$terms->covidtext!!}</div>
+
+		<div class="col-md-12 text-center printDiv mb-10 printnone" id="liabilityDiv">{!!@$terms->liabilitytext!!}</div>
+
+		<div class="col-md-12 text-center printDiv mb-10 printnone" id="contractDiv">{!!@$terms->contracttermstext!!}</div>
+
+		<div class="col-md-12 text-center printDiv mb-10 printnone" id="refundDiv">{!!@$terms->refundpolicytext!!}</div>
+
+		<div class="col-md-12 text-center printDiv mb-10 printnone" id="termsDiv">{!!@$terms->termcondfaqtext!!}</div>
+</div>
 
 <div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-50">
@@ -1073,7 +1200,7 @@
 						<div class="col-lg-12">
 							<div class="modal-checkbox mb-15">
 								<label>Covid-19 Protocols</label>
-								@if(@$terms->covidtext != '' ) <p>{{@$terms->covidtext}}</p>@endif
+								@if(@$terms->covidtext != '' ) <p>{!!@$terms->covidtext!!}</p>@endif
 								<div class="modal-terms-wrap">
 									<input type="checkbox" id="terms_covid" name="terms_covid" value="1" @if(@$customerdata->terms_covid != '') checked @endif>
 									<p> The provider(s) require that you agree to Covid-19 Protocols. </p>
@@ -1083,7 +1210,7 @@
 						<div class="col-lg-12">
 							<div class="modal-checkbox mb-15">
 								<label>Liability Waiver</label>
-								@if(@$terms->liabilitytext != '' ) <p>{{@$terms->liabilitytext}}</p>@endif
+								@if(@$terms->liabilitytext != '' ) <p>{!!@$terms->liabilitytext!!}</p>@endif
 								<div class="modal-terms-wrap">
 									<input type="checkbox" id="terms_liability" name="terms_liability" value="1"  @if(@$customerdata->terms_liability != '') checked @endif>
 									<p> The provider(s) require that you agree to Liability Waiver.</p>
@@ -1093,7 +1220,7 @@
 						<div class="col-lg-12">
 							<div class="modal-checkbox mb-15">
 								<label>Contract Terms</label>
-								@if(@$terms->contracttermstext != '' ) <p>{{@$terms->contracttermstext}}</p>@endif
+								@if(@$terms->contracttermstext != '' ) <p>{!!@$terms->contracttermstext!!}</p>@endif
 								<div class="modal-terms-wrap">
 									<input type="checkbox" id="terms_contract" name="terms_contract" value="1" @if(@$customerdata->terms_contract != '') checked @endif>
 									<p>The provider(s) require that you agree to Contract Terms.</p>
@@ -1111,12 +1238,106 @@
 </div><!-- /.modal -->	
 
 	
-	@include('layouts.business.footer')
+@include('layouts.business.footer')
 	<script>
+		$(document).ready(function () {
+			var business_id = '{{request()->business_id}}';
+	     	var url = "{{ url('/business/business_id/customers') }}";
+	      url = url.replace('business_id', business_id);
+
+			$("#serchFamilyMember").autocomplete({
+	         source: url,
+	         focus: function( event, ui ) {
+	              return false;
+	         },
+	         select: function( event, ui ) {
+	         	callAddFamily(ui.item.id , business_id);
+	            return false;
+	         }
+	     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+	         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+
+	         if(item.profile_pic_url){
+	             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+	         }
+
+	         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+	                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+	                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+	                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+	        
+	         return $( "<li></li>" )
+	                 .data( "item.autocomplete", item )
+	                 .append(inner_html)
+	                 .appendTo( ul );
+	     	};
+	   });
+
+	   function callAddFamily(cid ,business_id){
+	   	if(cid == '{{$customerdata->id}}'){
+	   		alert("You can't add your self as your family member..");
+	   		return false;
+	   	}
+	   	$.ajax({
+            type: 'POST',
+            url: '{{route("addFamilyViaSearch")}}',
+            data: { 
+            	_token: '{{csrf_token()}}',
+            	business_id: business_id,
+            	cid: cid,
+            	currentCid:'{{$customerdata->id}}'
+         	},
+            success: function(data) {
+               location.reload();
+            }
+         });
+	   }
+      
 		flatpickr(".flatpickr-range", {
         	dateFormat: "m/d/Y",
         	maxDate: "01/01/2050",
       });
+
+      function printTerms(divId,termsName){
+      	var chk = $('#'+divId).html() != '' ? 1 : 0;
+      	if(chk == 1){
+	      	const divName = ['covidDiv','liabilityDiv','contractDiv','refundDiv','termsDiv'];
+	      	divName.forEach(function(div) {
+				   if(divId == div){
+				   	$('#'+divId).removeClass('printnone');
+	      			$('#'+divId).addClass('exclude-from-print');
+				   }else{
+				   	$('#'+div).addClass('printnone');
+	      			$('#'+div).removeClass('exclude-from-print');
+				   }
+				});
+	      	
+	      	print();
+	      }else{
+	      	alert("There is not any " +termsName + " policy.");
+	      }
+      }
+
+      function emailTerms(divId,business_id,termsName,cid){
+      	var chk = $('#'+divId).html() != '' ? 1 : 0;
+      	if(chk == 1){
+	      	$.ajax({
+               type: 'POST',
+               url: '{{route("sendTermsMail")}}',
+               data: { 
+               	_token: '{{csrf_token()}}',
+               	business_id: business_id,
+               	cid: cid,
+               	termsName: termsName,
+            	},
+               success: function(data) {
+                  alert('Email sent successfully.')
+               }
+            });
+	      }else{
+	      	alert("There is not any " +termsName + " policy.");
+	      }
+      }
 
 		$(document).on("click", "[data-behavior~=delete_card]", function(e){
     		e.preventDefault()

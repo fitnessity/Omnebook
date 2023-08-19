@@ -229,7 +229,7 @@
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6">
 						<div class="remaining-number tip-xp mt-150">
-							<span>${{$booking_detail->getperoderprice()}}</span>
+							<span>${{$booking_detail->total() + $booking_detail->getperoderprice()}}</span>
 						</div>
 					</div>
 				</div>

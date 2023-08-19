@@ -198,6 +198,11 @@ class User extends Authenticatable
         return $this->hasMany(BusinessPriceDetailsAges::class,'userid');
     }
 
+    public function AddOnService()
+    {
+        return $this->hasMany(AddOnService::class,'user_id');
+    }
+
     public function BusinessPriceDetails()
     {
         return $this->hasMany(BusinessPriceDetails::class,'userid');
