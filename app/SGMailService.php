@@ -29,31 +29,31 @@ class SGMailService{
 		return $response;
 	}
 
-	public static function sendBookingReceipt($email_detail){
+	public static function sendBookingReceipt($emailDetail){
 
 		$substitutions = [
-			"provider_Name" => $email_detail['getreceipemailtbody']['provider_Name'],  
-		    "booking_ID" =>$email_detail['getreceipemailtbody']['booking_ID'],  
-		    "program_Name" => $email_detail['getreceipemailtbody']['program_Name'],   
-		    "category" => $email_detail['getreceipemailtbody']['category'],   
-		    "price_Option" => $email_detail['getreceipemailtbody']['price_Option'],  
-		    "sessions" => $email_detail['getreceipemailtbody']['sessions'],  
-		    "membership" => $email_detail['getreceipemailtbody']['membership'],  
-		    "quantity" => $email_detail['getreceipemailtbody']['quantity'],  
-		    "participate" => $email_detail['getreceipemailtbody']['participate'],  
-		    "activity_Type" => $email_detail['getreceipemailtbody']['activity_Type'],  
-		    "service_Type" => $email_detail['getreceipemailtbody']['service_Type'],  
-		    "membership_Duration" => $email_detail['getreceipemailtbody']['membership_Duration'],  
-		    "purchase_Date" => $email_detail['getreceipemailtbody']['purchase_Date'],  
-		    "membership_Activation_Date" => $email_detail['getreceipemailtbody']['membership_Activation_Date'],  
-		    "membership_Expiration" => $email_detail['getreceipemailtbody']['membership_Expiration'],  
-		    "price" => $email_detail['getreceipemailtbody']['price'],  
-		    "discount" => $email_detail['getreceipemailtbody']['discount'],  
-		    "total" => $email_detail['getreceipemailtbody']['total'],
-		    "bookingUrl" => $email_detail['getreceipemailtbody']['bookingUrl'],
+			"provider_Name" => $emailDetail['getreceipemailtbody']['provider_Name'],  
+		    "booking_ID" =>$emailDetail['getreceipemailtbody']['booking_ID'],  
+		    "program_Name" => $emailDetail['getreceipemailtbody']['program_Name'],   
+		    "category" => $emailDetail['getreceipemailtbody']['category'],   
+		    "price_Option" => $emailDetail['getreceipemailtbody']['price_Option'],  
+		    "sessions" => $emailDetail['getreceipemailtbody']['sessions'],  
+		    "membership" => $emailDetail['getreceipemailtbody']['membership'],  
+		    "quantity" => $emailDetail['getreceipemailtbody']['quantity'],  
+		    "participate" => $emailDetail['getreceipemailtbody']['participate'],  
+		    "activity_Type" => $emailDetail['getreceipemailtbody']['activity_Type'],  
+		    "service_Type" => $emailDetail['getreceipemailtbody']['service_Type'],  
+		    "membership_Duration" => $emailDetail['getreceipemailtbody']['membership_Duration'],  
+		    "purchase_Date" => $emailDetail['getreceipemailtbody']['purchase_Date'],  
+		    "membership_Activation_Date" => $emailDetail['getreceipemailtbody']['membership_Activation_Date'],  
+		    "membership_Expiration" => $emailDetail['getreceipemailtbody']['membership_Expiration'],  
+		    "price" => $emailDetail['getreceipemailtbody']['price'],  
+		    "discount" => $emailDetail['getreceipemailtbody']['discount'],  
+		    "total" => $emailDetail['getreceipemailtbody']['total'],
+		    "bookingUrl" => $emailDetail['getreceipemailtbody']['bookingUrl'],
 		];
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
 	}
 
 	public static function sendWelcomeMail($email_name){
@@ -99,118 +99,132 @@ class SGMailService{
 		return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248');
 	}
 
-	public static function sendresetemail($email_detail){
+	public static function sendresetemail($emailDetail){
 
-		$index = strpos($email_detail['email'], '@');
+		$index = strpos($emailDetail['email'], '@');
 		$substitutions = [
-			"customername" => $email_detail['customerName'], 
-			"Url" => $email_detail['link'], 
-			"Email"=> substr($email_detail['email'], 0, 1).'***********@'.substr($email_detail['email'], $index + strlen('@'))
+			"customername" => $emailDetail['customerName'], 
+			"Url" => $emailDetail['link'], 
+			"Email"=> substr($emailDetail['email'], 0, 1).'***********@'.substr($emailDetail['email'], $index + strlen('@'))
 		];
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-78e53ff00cab476b9fd398c5ac88c8f3');
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-78e53ff00cab476b9fd398c5ac88c8f3');
 	}
 
-	public static function confirmationMail($email_detail){
+	public static function confirmationMail($emailDetail){
 		$substitutions = [
-			"CustomerName" => $email_detail['CustomerName'], 
-			"Url" => $email_detail['Url'], 
-			"BusinessName"=> $email_detail['BusinessName'],
-			"BookedPerson"=> $email_detail['BookedPerson'],
-			"ParticipantsName"=> $email_detail['ParticipantsName'],
-			"date"=> $email_detail['date'],
-			"time"=> $email_detail['time'],
-			"duration"=> $email_detail['duration'],
-			"ActivitiyType"=> $email_detail['ActivitiyType'],
-			"ProgramName"=> $email_detail['ProgramName'],
-			"CategoryName"=> $email_detail['CategoryName'],
+			"CustomerName" => $emailDetail['CustomerName'], 
+			"Url" => $emailDetail['Url'], 
+			"BusinessName"=> $emailDetail['BusinessName'],
+			"BookedPerson"=> $emailDetail['BookedPerson'],
+			"ParticipantsName"=> $emailDetail['ParticipantsName'],
+			"date"=> $emailDetail['date'],
+			"time"=> $emailDetail['time'],
+			"duration"=> $emailDetail['duration'],
+			"ActivitiyType"=> $emailDetail['ActivitiyType'],
+			"ProgramName"=> $emailDetail['ProgramName'],
+			"CategoryName"=> $emailDetail['CategoryName'],
 		];
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-7a39c17eac4a45f5b2bbf030c5c82f4f');
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-7a39c17eac4a45f5b2bbf030c5c82f4f');
 	}
 
-	public static function sendReminderOfSessionExpireToCustomer($email_detail){
+	public static function sendReminderOfSessionExpireToCustomer($emailDetail){
 
 		$substitutions = [
-			"CustomerName" => $email_detail['CustomerName'], 
-            "ProviderName"=> $email_detail['ProviderName'],
-            "CategoryName"=> $email_detail['CategoryName'],
-            "PriceOptionName"=> $email_detail['PriceOptionName'],
-			"ReNewUrl" => $email_detail['ReNewUrl'],
-			"ProfileUrl" => $email_detail['ProfileUrl'],
-			"CompleteDate" => $email_detail['CompleteDate'],
-			"ExpirationDate" => $email_detail['ExpirationDate'],
-			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
-			"ProviderEmail" => $email_detail['ProviderEmail'],
-			"ProviderAddress" => $email_detail['ProviderAddress'],
+			"CustomerName" => $emailDetail['CustomerName'], 
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "CategoryName"=> $emailDetail['CategoryName'],
+            "PriceOptionName"=> $emailDetail['PriceOptionName'],
+			"ReNewUrl" => $emailDetail['ReNewUrl'],
+			"ProfileUrl" => $emailDetail['ProfileUrl'],
+			"CompleteDate" => $emailDetail['CompleteDate'],
+			"ExpirationDate" => $emailDetail['ExpirationDate'],
+			"ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			"ProviderEmail" => $emailDetail['ProviderEmail'],
+			"ProviderAddress" => $emailDetail['ProviderAddress'],
 		];
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-3500159ca821409e8f8e68c4cd39e2ab');		
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-3500159ca821409e8f8e68c4cd39e2ab');		
 	}
 
-	public static function sendReminderOfSessionExpireToProvider($email_detail){
+	public static function sendReminderOfSessionExpireToProvider($emailDetail){
 
 		$substitutions = [
-            "CustomerName" => $email_detail['CustomerName'], 
-            "ProviderName"=> $email_detail['ProviderName'],
-            "CategoryName"=> $email_detail['CategoryName'],
-            "PriceOptionName"=> $email_detail['PriceOptionName'],
+            "CustomerName" => $emailDetail['CustomerName'], 
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "CategoryName"=> $emailDetail['CategoryName'],
+            "PriceOptionName"=> $emailDetail['PriceOptionName'],
 		];
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-23e938e2491c4d128d78d704787b3809');		
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-23e938e2491c4d128d78d704787b3809');		
 	}
 
-	public static function sendReminderOfSessionOrMembershipAboutToExpireToCustomer($email_detail){
+	public static function sendReminderOfSessionOrMembershipAboutToExpireToCustomer($emailDetail){
 		$substitutions = [
-			"CustomerName" => $email_detail['CustomerName'], 
-            "ProviderName"=> $email_detail['ProviderName'],
-            "ProgramName"=> $email_detail['ProgramName'],
-            "CategoryName"=> $email_detail['CategoryName'],
-            "PriceOptionName"=> $email_detail['PriceOptionName'],
-			"ReNewUrl" => $email_detail['ReNewUrl'],
-			"ProfileUrl" => $email_detail['ProfileUrl'],
-			"ExpirationDate" => $email_detail['ExpirationDate'],
-			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
-			"ProviderEmail" => $email_detail['ProviderEmail'],
-			"ProviderAddress" => $email_detail['ProviderAddress'],
+			"CustomerName" => $emailDetail['CustomerName'], 
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "ProgramName"=> $emailDetail['ProgramName'],
+            "CategoryName"=> $emailDetail['CategoryName'],
+            "PriceOptionName"=> $emailDetail['PriceOptionName'],
+			"ReNewUrl" => $emailDetail['ReNewUrl'],
+			"ProfileUrl" => $emailDetail['ProfileUrl'],
+			"ExpirationDate" => $emailDetail['ExpirationDate'],
+			"ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			"ProviderEmail" => $emailDetail['ProviderEmail'],
+			"ProviderAddress" => $emailDetail['ProviderAddress'],
 		];
 
-		if($email_detail['for'] == 'membership'){
+		if($emailDetail['for'] == 'membership'){
 			$TemplateId = "d-40dc2e0d871b4a21b18e4b7e715c1ecb";
 		}else{
 			$TemplateId = "d-9fd81ddcd60b4ebea9406c5d523bed8a";
 		}
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,$TemplateId);
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,$TemplateId);
 	}
 
-	public static function sendReminderOfMembershipExpireToProvider($email_detail){
+	public static function sendReminderOfMembershipExpireToProvider($emailDetail){
 		
 		$substitutions = [
-			"CustomerName" => $email_detail['CustomerName'], 
-            "ProviderName"=> $email_detail['ProviderName'],
-            "ProgramName"=> $email_detail['ProgramName'],
-            "CategoryName"=> $email_detail['CategoryName'],
-            "PriceOptionName"=> $email_detail['PriceOptionName'],
-			"ExpirationDate" => $email_detail['ExpirationDate'],
+			"CustomerName" => $emailDetail['CustomerName'], 
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "ProgramName"=> $emailDetail['ProgramName'],
+            "CategoryName"=> $emailDetail['CategoryName'],
+            "PriceOptionName"=> $emailDetail['PriceOptionName'],
+			"ExpirationDate" => $emailDetail['ExpirationDate'],
 		];
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-db32cc27830244998a1467f4984a0b20');
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-db32cc27830244998a1467f4984a0b20');
 	}
 
-	public static function sendReminderOfMembershipExpireToCustomer($email_detail){
+	public static function sendReminderOfMembershipExpireToCustomer($emailDetail){
 		$substitutions = [
-			"CustomerName" => $email_detail['CustomerName'], 
-            "ProviderName"=> $email_detail['ProviderName'],
-            "ProgramName"=> $email_detail['ProgramName'],
-            "CategoryName"=> $email_detail['CategoryName'],
-            "PriceOptionName"=> $email_detail['PriceOptionName'],
-			"ReNewUrl" => $email_detail['ReNewUrl'],
-			"ProfileUrl" => $email_detail['ProfileUrl'],
-			"ExpirationDate" => $email_detail['ExpirationDate'],
-			"ProviderPhoneNumber" => $email_detail['ProviderPhoneNumber'],
-			"ProviderEmail" => $email_detail['ProviderEmail'],
-			"ProviderAddress" => $email_detail['ProviderAddress'],
+			"CustomerName" => $emailDetail['CustomerName'], 
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "ProgramName"=> $emailDetail['ProgramName'],
+            "CategoryName"=> $emailDetail['CategoryName'],
+            "PriceOptionName"=> $emailDetail['PriceOptionName'],
+			"ReNewUrl" => $emailDetail['ReNewUrl'],
+			"ProfileUrl" => $emailDetail['ProfileUrl'],
+			"ExpirationDate" => $emailDetail['ExpirationDate'],
+			"ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			"ProviderEmail" => $emailDetail['ProviderEmail'],
+			"ProviderAddress" => $emailDetail['ProviderAddress'],
 		];
 
-		return SGMailService::MailDetail($email_detail['email'],$substitutions,'d-b67277aa0c784091ab87ddd2ab5bc9ea');
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-b67277aa0c784091ab87ddd2ab5bc9ea');
+	}
+
+	public static function sendTermsMail($emailDetail){
+		$substitutions = [
+			"companyImage" => $emailDetail['companyImage'], 
+            "companyName"=> $emailDetail['companyName'],
+            "companyAddress"=> $emailDetail['companyAddress'],
+            "companyEmail"=> $emailDetail['companyEmail'],
+            "companyPhone"=> $emailDetail['companyPhone'],
+			"termsName" => $emailDetail['termsName'],
+			"termsText" => $emailDetail['termsText'],
+		];
+
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-b57b5ad44f744f688265cb0d078a9398');
 	}
 }

@@ -97,9 +97,9 @@
 														</a>
 													</div>
 													<div class="flex-grow-1 ms-3">
-														<h6 class="mb-1">{{$schedule->business_service->program_name}} (@if($schedule->businessPriceDetailsAges()->exists())
+														<h6 class="mb-1">@if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif (@if($schedule->businessPriceDetailsAges()->exists())
     													{{$schedule->businessPriceDetailsAges->category_title}} @endif)</h6>
-														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} {{$schedule->business_service->activity_location}}</p>
+														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
 													<div class="flex-grow-1 ms-3">
 														<a class="float-end" href="#" data-bs-toggle="modal" data-bs-target=".activity-scheduler{{$i}}"><i class="ri-more-fill"></i></a>
@@ -143,17 +143,22 @@
 																					</td>
 																					<td>
 																						<div class="scheduled-location">
-																							<span> {{$schedule->business_service->activity_location}}</span>
+																							<span> @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}}@endif </span>
 																						</div>
 																					</td>
 																					<td>
 																						<div class="scheduled-location">
-																							<span> {{ $schedule->business_service->BusinessStaff()->exists() ? ucfirst($schedule->business_service->BusinessStaff->full_name) : "N/A"}}</span>
+																							<span> {{ $schedule->business_service()->exists() ? ( $schedule->business_service->BusinessStaff()->exists() ? ucfirst($schedule->business_service->BusinessStaff->full_name) : "N/A" )  : "N/A"}}</span>
 																						</div>
 																					</td>
 																					<td>
+																						<?php 
+																							$serviceType = $schedule->business_service()->exists() ? $schedule->business_service->service_type : '' ;
+
+																							$serviceId= $schedule->business_service()->exists() ? $schedule->business_service->id : '' ;
+																						?>
 																						<div class="scheduled-btns">
-																	                  <a class="btn-red mb-10 text-center" href="{{route('business.services.create',['serviceType'=>$schedule->business_service->service_type,'serviceId'=>$schedule->business_service->id])}}" target="_blank">Edit</a>
+																	                  <a class="btn-red mb-10 text-center" href="{{route('business.services.create',['serviceType'=>$serviceType,'serviceId'=>$serviceId])}}" target="_blank">Edit</a>
 
 																	                  <button type="button" class="btn-black" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.delete_modal', ['schedulerId' => $schedule->id, 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}"  @if($schedule_end < time()) disabled @endif>Cancel</button>
 																	               </div>

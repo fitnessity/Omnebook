@@ -1,23 +1,9 @@
 <?php
 namespace App\Http\Controllers;
-
-use Redirect;
-use Validator;
-use Input;
-use Response;
-use Auth;
-use Hash;
-use Image;
-use File;
-use View;
-use Mail;
-use Session;
-use DB;
-use Str;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Redirect,Validator,Input,Response,Auth,Hash,Image,File,View,Mail,Session,DB,Str;
+use Illuminate\Support\Facades\{Gate,Log,Storage};
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -8263,6 +8249,7 @@ class UserProfileController extends Controller {
     }
     
     public function paymentsave(Request $request) {
+
         $user = User::where('id', Auth::user()->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
@@ -8270,8 +8257,10 @@ class UserProfileController extends Controller {
         foreach($payment_methods as $payment_method){
             $fingerprint = $payment_method['card']['fingerprint'];
             if (in_array($fingerprint, $fingerprints, true)) {
-                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->firstOrFail();
-                $deletePaymentMethod->delete();
+                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
+                if($deletePaymentMethod != ''){
+                    $deletePaymentMethod->delete();
+                }
             } else {
                 $fingerprints[] = $fingerprint;
                 $stripePaymentMethod = StripePaymentMethod::firstOrNew([
@@ -8288,11 +8277,12 @@ class UserProfileController extends Controller {
                 $stripePaymentMethod->save();
             }
         }
-        return redirect('/personal-profile/payment-info'); 
+
+        return redirect()->route('paymentinfo'); 
     }
 
     public function paymentinfo(Request $request) {
-
+    
         $cardInfo = [];
         $intent = null;
         $user = User::where('id', Auth::user()->id)->first();
@@ -8300,7 +8290,7 @@ class UserProfileController extends Controller {
         $customer_ids = implode(',',$customers);
         $cardInfo = StripePaymentMethod::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at','desc')->get(); 
         
-        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at' ,'DESC')->get(); 
+        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at' ,'DESC')->paginate(11); 
 
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -8318,10 +8308,6 @@ class UserProfileController extends Controller {
             $cart = $request->session()->get('cart_item');
         }
 
-        /*$stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);*/
-        // /echo $payment_methods;exit;
-        
         return view('personal-profile.payment-info', [
             'UserProfileDetail' => $UserProfileDetail, 
             'transactionDetail' => $transactionDetail, 
