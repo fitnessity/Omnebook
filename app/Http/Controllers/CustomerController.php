@@ -542,20 +542,22 @@ class CustomerController extends Controller {
                 'parent_cus_id' => $request['parent_cus_id'],
             ];
 
-            if($request->cus_id[$i] != ''){
-                $cat = Customer::find($request['cus_id'][$i]);
-                $data = $cat->update($update);
-            }else{
-                $data = Customer::create($update);
-            }
+            Customer::updateOrInsert(['id'=> $request['cus_id'][$i] ] , $update);
         }
 
         return Redirect::back();
     }
 
     public function removefamilyCustomer(Request $request) {
-        DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
-        return Redirect::back()->with('success', 'Family Member Delete.');
+        $customer = Customer::find($request->id);
+        $customer->update(['parent_cus_id' => '']);
+       /* DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
+        return Redirect::back()->with('success', 'Family Member Delete.');*/
+    }
+
+    public function addFamilyViaSearch(Request $request){
+        $customer = Customer::find($request->cid);
+        $customer->update(['parent_cus_id' => $request->currentCid]);
     }
 
     public function update_customer(Request $request){
@@ -686,17 +688,17 @@ class CustomerController extends Controller {
             $bookingDetail = $bookingStatus->UserBookingDetail;
                 foreach($bookingDetail as $bd){
                     $getreceipemailtbody = $this->bookings->getreceipemailtbody($request->oid, $bd['id']);
-                    $email_detail = array(
+                    $emailDetail = array(
                         'getreceipemailtbody' => $getreceipemailtbody,
                         'email' => $getreceipemailtbody['email']);
-                    $status  = SGMailService::sendBookingReceipt($email_detail);
+                    $status  = SGMailService::sendBookingReceipt($emailDetail);
                 }
         }else{
             $getreceipemailtbody = $this->bookings->getreceipemailtbody($request->oid, $request->odetailid);
-            $email_detail = array(
+            $emailDetail = array(
                 'getreceipemailtbody' => $getreceipemailtbody,
                 'email' => $getreceipemailtbody['email']);
-            $status  = SGMailService::sendBookingReceipt($email_detail);
+            $status  = SGMailService::sendBookingReceipt($emailDetail);
         }
 
         return $status;
@@ -770,5 +772,36 @@ class CustomerController extends Controller {
         // Fetch the next set of records using your query logic
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->skip($offset)->take($limit)->orderBy('fname')->get();
         return view('customers.customer-detail-list',compact('customers' ,'char','company'));
+    }
+
+    public function sendTermsMail(Request $request){
+        $company = CompanyInformation::find($request->business_id);
+        $terms = $company->businessterms;
+        
+        $termNameToMap = [
+            'Covid' => 'covidtext',
+            'Liability' => 'liabilitytext',
+            'Contract' => 'contracttermstext',
+            'Refund' => 'refundpolicytext',
+            'Terms' => 'termcondfaqtext',
+        ];
+
+        $termsTextProperty = $termNameToMap[$request->termsName];
+        $termsText = $terms->{$termsTextProperty};
+        
+        $customer = Customer::find($request->cid);
+        $logo = @$company->logo != '' ? Storage::Url(@$company->logo) : '';
+        $emailDetail = array(
+            'companyImage' => $logo, 
+            'companyName'=> $company->company_name,
+            'companyAddress'=> $company->company_address(),
+            'companyEmail'=> $company->business_email,
+            'companyPhone'=> $company->business_phone,
+            'termsName' => $request->termsName,
+            'email' => $customer->email,
+            'termsText' => $termsText
+        );
+        $status  = SGMailService::sendTermsMail($emailDetail);
+
     }
 }

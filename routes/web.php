@@ -1106,6 +1106,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/send-receipt-to-customer', 'CustomerController@sendReceiptToCustomer')->name('sendReceiptToCustomer');
     Route::get('/loadView', 'CustomerController@loadView')->name('load.view');
     Route::get('/get-more-records', 'CustomerController@getMoreRecords');
+    Route::post('/sendTermsMail', 'CustomerController@sendTermsMail')->name('sendTermsMail');
+    Route::post('/addFamilyViaSearch', 'CustomerController@addFamilyViaSearch')->name('addFamilyViaSearch');
 });
 
 

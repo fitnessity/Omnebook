@@ -114,7 +114,7 @@
                                                                         <label class="highlight-font">Bookings Overview</label>
                                                                         <span>{{@$service->this_week_booking()}} Bookings This Week   </span>
                                                                         <span>Service Expires on: {{$service->get_expired_time()}}</span>
-                                                                        <a href="#" onclick="getbookingmodel({{$service->id}},'simple');"> VIEW BOOKINGS</a>
+                                                                        <a class="font-red" onclick="getbookingmodel({{$service->id}},'simple' ,'date' ,'open');"> VIEW BOOKINGS</a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-4 col-md-3 col-sm-6">
@@ -168,13 +168,15 @@
 
     @include('layouts.business.footer')
     <script>
-        function getbookingmodel(sid,chk){  
+        function getbookingmodel(sid,chk,type,open){  
             let date = '';
             if(chk == 'ajax'){
                 date = $('#managecalendarservice').val();
             }else if(chk == 'simple'){
                 date = new Date().toLocaleDateString();
-                $('#bookingmodel').html('');
+                if(open == 'open'){
+                    $('#bookingmodel').html('');
+                }
             }
             //alert(date);
             $.ajax({
@@ -186,12 +188,12 @@
                 data:{
                     sid:sid,
                     date:date,
+                    type:type,
                 },
                 success:function(data){
-                    
                     $('.moreoptions'+sid).modal('hide');
                     $('#bookingmodel').html(data);
-                    if(chk == 'simple'){
+                    if(open == 'open'){
                         $('.view-booking').modal('show');
                     }
                 }

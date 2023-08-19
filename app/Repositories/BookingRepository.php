@@ -1116,19 +1116,51 @@ class BookingRepository
         return $return;
     }
     
-    public function getbusinessbookingsdata($sid,$date){
-        // disable date filter for temporary used;
+    public function getbusinessbookingsdata($sid,$date,$type){
+        $currentDate = Carbon::now(); 
+        switch ($type) {
+            case 'date':
+                $date = $date;
+                break;
+
+            case 'week':
+                $date = $currentDate->startOfWeek()->format('Y-m-d');
+                break;
+
+            case 'month':
+                $date = $currentDate->format('Y-m');
+                break;
+        }
+
         $userBookingDetail = [];
-        $checkInDetail = BookingCheckinDetails::where(['checkin_date' => $date])->join('user_booking_details as bd','booking_checkin_details.booking_detail_id' ,'=' , 'bd.id')->where('bd.sport',$sid)->orderBy('checkin_date', 'desc')->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->get();
-        foreach($checkInDetail as $detail){
+        $checkInDetail = BookingCheckinDetails::where(function ($query) use ($date, $type, $sid) {
+                $query->when($type === 'week', function ($q) use ($date) {
+
+                    $weekStart = Carbon::parse($date)->startOfWeek();
+                    $weekEnd = Carbon::parse($date)->endOfWeek();
+
+                    $q->whereBetween('checkin_date', [$weekStart, $weekEnd]);
+                })
+                ->when($type === 'month', function ($q) use ($date) {
+                    $q->where('checkin_date', 'LIKE', $date . '%');
+                })
+                ->when($type === 'date', function ($q) use ($date) {
+                    $q->where('checkin_date', $date);
+                });
+                $query->orderBy('checkin_date', 'desc');
+            })->orderBy('checkin_date', 'desc')
+            ->join('user_booking_details as bd','booking_checkin_details.booking_detail_id' ,'=' , 'bd.id')
+            ->where('bd.sport',$sid)
+            ->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->orderBy('bd.bookedtime', 'desc')
+            ->get();
+
+        /*foreach($checkInDetail as $detail){
             if($detail->UserBookingDetail != ''){
                $userBookingDetail [] = $detail->UserBookingDetail;
             }
-        }
+        }*/
 
-        return $userBookingDetail;
-        //return UserBookingDetail::where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
-       // return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
+        return $checkInDetail;
     }
 
     public function getbookingbyUserid($userid){

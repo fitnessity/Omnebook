@@ -11,11 +11,18 @@
                     <div class="col">
                         <div class="h-100">
                         	<div class="row mb-3">
-								<div class="col-12">
+								<div class="col-6">
 									<div class="page-heading">
 										<label>Manage Staff</label>
 									</div>
 								</div>
+								@if(!Session('StaffLogin'))
+									<div class="col-6">
+										<div class="import-export float-end mt-10">
+											<a href="{{route('business.staff.index')}}" class="btn btn-red">Staff List</a>
+										</div>
+									</div>
+								@endif
 							</div>
 						
 							<div class="row">
@@ -290,8 +297,136 @@
 																<th class="sort custom-sort" data-sort="time">Time</th>
 															</tr>
 														</thead>
-														<tbody class="list form-check-all">
+														<tbody class="empty-table form-check-all">
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
 															<tr>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td>No Schedule Appointed</td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>	
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<tr rowspan="9">
+																<td></td>
+															</tr>
+															<!-- <tr>
 																<th scope="row">
 																	<div class="form-check">
 																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
@@ -305,127 +440,8 @@
 																<td class="service_type"> 	Class</td>
 																<td class="duration">2h 30m</td>
 																<td class="time">1:00 pm to 3:30 pm </td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">c Kickboxing</td>
-																<td class="program">Kickboxing Level 1 for beginners</td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">S,S </td>
-																<td class="position"> Instructor</td>
-																<td class="service_type"> Class</td>
-																<td class="duration"> 45m</td>
-																<td class="time">12:15 pm to 1:00 pm </td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">c Kickboxing</td>
-																<td class="program">Kickboxing Level 1 for beginners</td>
-																<td class="map">At Business</td>
-																<td class="days_of_week"> M,T,W,T,F </td>
-																<td class="position">Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">6:15 pm to 7:00 pm </td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">c Kickboxing</td>
-																<td class="program">Personal Training </td>
-																<td class="map">On Location</td>
-																<td class="days_of_week">M,T,W,T,F,S,S </td>
-																<td class="position"> Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">ankita</td>
-																<td class="program"> Personal Training </td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">M,T,W,T,F,S,S</td>
-																<td class="position"> 	Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">ankita</td>
-																<td class="program"> Personal Training </td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">M,T,W,T,F,S,S</td>
-																<td class="position"> 	Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">nipa</td>
-																<td class="program"> Personal Training </td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">M,T,W,T,F,S,S</td>
-																<td class="position"> 	Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">ankita</td>
-																<td class="program"> Personal Training </td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">M,T,W,T,F,S,S</td>
-																<td class="position"> 	Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
-															<tr>
-																<th scope="row">
-																	<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-																	</div>
-																</th>
-																<td class="activity">ankita</td>
-																<td class="program"> Personal Training </td>
-																<td class="map">At Business</td>
-																<td class="days_of_week">M,T,W,T,F,S,S</td>
-																<td class="position"> 	Instructor</td>
-																<td class="service_type">Private Lesson</td>
-																<td class="duration">45 m</td>
-																<td class="time">7:15 pm to 8:00 pm</td>
-															</tr>
+															</tr> -->
+															
 														</tbody>
 													</table>
 												</div>

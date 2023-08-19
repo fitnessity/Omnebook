@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<footer id="footer">
+<footer id="footer" class="printnone">
 	@if(session()->has('alert-success'))
     	<div class="alert alert-success">
         	{{ session()->get('alert-success') }}

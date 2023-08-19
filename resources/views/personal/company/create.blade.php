@@ -1396,7 +1396,7 @@
 																				</label>
 
 																				<div id="refundpolicydiv"  style="display:{{ (@$terms->refundpolicy==1) ? 'block' : 'none' }}">
-																					<textarea name="contracttermtext" id="ckeditor-classic5">{{@$terms->refundpolicytext}}</textarea>
+																					<textarea name="refundpolicytext" id="ckeditor-classic5">{{@$terms->refundpolicytext}}</textarea>
 																				</div>
 																				<!-- <div class="col-md-12 textsam" id="refundpolicydiv" style="display:{{ (@$terms->refundpolicy==1) ? 'block' : 'none' }}">
 																					<textarea class="form-control" placeholder="Refund Policy" id="refundpolicytext" name="refundpolicytext" rows="5">{{@$terms->refundpolicytext}}</textarea>
