@@ -412,7 +412,7 @@ header{ position: fixed !important; }
 }
 .set-price {
 	text-align: center;
-	margin-bottom: 25px;
+	/* margin-bottom: 25px; */
 }
 .set-price p{
 	margin-bottom: 0px;
@@ -479,6 +479,9 @@ header{ position: fixed !important; }
 }
 .setting-icon i{
 	margin-right: 15px;
+}
+.ri-more-fill{
+	font-size: 20px;
 }
 .nesting-steps-title{
 	font-size: 20px;
@@ -2282,7 +2285,7 @@ padding: 0px 0px 3px 2px !important; */
 }
 .pricedollar .set-price {
   position: absolute;
-  top: 32px;
+  top: 34px;
   left: 10px;
   font-size: 13px;
 }
@@ -2428,6 +2431,11 @@ padding: 0px 0px 3px 2px !important; */
 }
 .check-client-info label{
 	margin-bottom: 0px;
+	margin-top: 0px;
+}
+.check-client-info span{
+	margin-bottom: 0px;
+	margin-top: 0px;
 }
 .request-access{
 	background: #fff;
@@ -3614,8 +3622,7 @@ div#termsdiv{order: 4;}
   align-items: center;
 }
 
-.price-switch input,
-label {
+.price-switch input, .price-switch label {
   display: inline-block;
   vertical-align: middle;
   margin: 10px 0;
@@ -3891,6 +3898,12 @@ label {
 .access-remove{
 	display: inline-block;
 }
+.access-remove a{
+	color: #000;
+}
+.access-remove a:hover{
+	color: #ed1b24;
+}
 .booking-activity-details span{
 	float: right;
 	margin-bottom: 3px;
@@ -3926,3 +3939,239 @@ label {
 .mr-5{
 	margin-right: 5px;
 }
+.d-inline-block{
+	display: inline-block;
+}
+.mx-line label{
+	margin-bottom: 0px;
+	margin-top: 0px;	
+}
+.active-member h3{
+	text-align: center;
+	font-size: 15px;
+	margin-bottom: 3px;
+}
+.active-member p{
+	text-align: center;
+}
+.mr-10-title{
+	margin-right: 10px;
+}
+
+
+/* cart accordion */ 
+.panel-default > .panel-heading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.participant-accordion .panel-heading a {
+  display: block;
+  position: relative;
+  font-weight: 600;
+  font-size: 15px;
+}
+.participant-selection.btn-group {
+  width: 100%;
+}
+.participant-selection.btn-group .select {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.participant-selection.btn-group .select .button_select {
+  background-color: #e2e2e2;
+  text-align: center;
+  padding: 10px 8px;
+  width: 100%;
+  margin: 0;
+}
+.participant-selection.btn-group .qtyButtons {
+  background: #f8f8f8;
+  height: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  transition: .3s;
+  border-radius: 0 0 4px 4px;
+  margin-top: 0;
+  border-top: 1px solid #eaeaea;
+}
+.qtyButtons .qty.count-members {
+  width: 100%;
+}
+.participant-selection.btn-group .select span {
+  font-size: 15px;
+  display: inline-block;
+  font-weight: 600;
+}
+.minus.bg-darkbtn.adultminus {
+  position: relative;
+}
+.qty .minus {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  width: 30px;
+  color: #000;
+  height: 30px;
+  font: 30px/1 Arial,sans-serif;
+    font-weight: normal;
+    font-size: 30px;
+  text-align: center;
+  border-radius: 50%;
+  background-clip: padding-box;
+}
+.bg-darkbtn {
+  border: 1px solid #000;
+}
+.count-members .minus.bg-darkbtn.adultminus i {
+  font-size: 13px;
+  top: 8px;
+  left: 9px;
+  position: absolute;
+}
+.participant-selection.btn-group .select .qtyButtons input {
+  opacity: 1;
+  position: relative;
+}
+.count-members .count {
+  font-size: 18px;
+}
+.count {
+  border: 0;
+  width: 2%;
+}
+.qty .count {
+  color: #000;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 22px;
+  line-height: 30px;
+  padding: 0 2px;
+  min-width: 35px;
+  text-align: center;
+}
+.participant-selection.btn-group .select span {
+  font-size: 15px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.plus.bg-darkbtn.adultplus {
+  position: relative;
+}
+.qty .plus {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  width: 30px;
+  height: 30px;
+  color: #000;
+  font: 30px/1 Arial,sans-serif;
+    font-weight: normal;
+    font-size: 30px;
+  text-align: center;
+  border-radius: 50%;
+}
+.panel-default > .panel-heading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit;
+}
+.participant-accordion .panel-heading a[aria-expanded="true"]::after {
+  transform: rotate(-135deg);
+  top: 5px;
+}
+.participant-accordion .panel-heading a::after {
+  content: "";
+  border: solid black;
+    border-top-width: medium;
+    border-right-width: medium;
+    border-bottom-width: medium;
+    border-left-width: medium;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  position: absolute;
+  right: 0;
+  top: 5;
+  transform: rotate(45deg);
+}
+.participant-accordion .panel-heading a::after {
+  content: "";
+  border: solid black;
+    border-top-width: medium;
+    border-right-width: medium;
+    border-bottom-width: medium;
+    border-left-width: medium;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  position: absolute;
+  right: 0;
+  top: 5;
+  transform: rotate(45deg);
+}
+.cart-accordion .accordion-button{padding: 10px;}
+
+.cart-accordion .accordion-button:not(.collapsed) {
+  background-color: rgb(255, 255, 255);
+  color: #212529;
+  font-weight: normal;
+}
+.cart-accordion .accordion-button.collapsed{
+	  font-weight: normal;
+}
+/* cart accordion */ 
+
+.empty-table tr td{
+	border: none;
+}
+.cmb-5{
+	margin-bottom: 5px;
+}
+.numInputWrapper span:hover{
+	background: none;
+	border: none !important;
+}
+.flatpickr-current-month span.arrowUp::after {
+  border-bottom-color: rgb(255, 253, 253);
+}
+
+.flatpickr-current-month span.arrowDown::after {
+    border-top-color: rgb(255, 255, 255);
+}
+.numInputWrapper:hover span {
+  opacity: 1;
+  background: none;
+  border: none !important;
+}
+.numInputWrapper span{
+	padding: 0 1px 0 3px;
+	width: 9px;
+}
+.upcoming-scheduled .flatpickr-calendar .numInputWrapper{
+	margin-left: 10px;
+	border: 1px solid var(--vz-border-color);
+	border-radius: 4px;
+	height: 26px;
+}
+.upcoming-scheduled .flatpickr-current-month input.cur-year{
+	height: 24px;
+}
+.upcoming-scheduled .numInputWrapper span.arrowUp{
+	right: 5px;
+}
+.upcoming-scheduled .numInputWrapper span.arrowDown{
+	right: 5px;
+}
+.w-px-100{width:100px;}

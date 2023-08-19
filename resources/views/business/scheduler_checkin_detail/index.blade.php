@@ -67,6 +67,7 @@
 														</div>
 														<div class="btn-client-search">
 															<a class="btn-red-primary btn-red mmt-10"  data-business-activity-scheduler-id="{{$business_activity_scheduler->id}}"  data-behavior="add_client_to_booking_post_order">Add </a>
+															<!--<a class="btn-red-primary btn-red mmt-10" href="#" data-bs-toggle="modal" data-bs-target=".add_client">Add </a>-->
 														</div>
 													</div>
 												</div>
@@ -179,7 +180,48 @@
    </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
     
-
+<div class="modal fade add_client" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-70 bsw-35">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Activity Scheduler</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="container schedulers-container">
+					<div class="row mini-stats-wid d-flex align-items-center mt-3 scheduler-box re-box">
+						<div class="col-lg-2 col-md-1 col-sm-2 col-3">
+							<div class="avatar-sm ">
+								<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+									<span> AJ </span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-9">
+							<h6 class="mb-1">Aadi Jambawalikar</h6>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-2 col-12">
+							<select class="form-select valid price-info mmt-10" data-behavior="change_price_title" data-booking-checkin-detail-id="370">
+								<option value="" selected="">Choose option</option>
+							</select>
+						</div>
+						<div class="col-lg-2 col-md-3 col-sm-3 col-6">
+							<p class="mb-0 mmt-10">    Check In</p>
+							<p class="mb-0 mmt-10">  Late Cancel</p>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-4">
+							<h6 class="text-center mmt-10">Session Remaining</h6>
+							<p class="mb-0 text-center">N/A</p>
+						</div>
+						<div class="col-lg-1 col-md-1 col-sm-1 col-2">
+							<a class="float-end mmt-10" href="#" data-bs-toggle="modal" data-bs-target=".checking-details0"><i class="ri-more-fill"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
 	
 	
 	@include('layouts.business.footer')
