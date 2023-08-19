@@ -115,7 +115,7 @@
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
                         @if($tabname != 'past' )
-                            <a class="btn-booking-red"  href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>@$customer->id ] )}}" target="_blank">Schedule</a>
+                            <a class="btn-booking-red"  href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>$book_details['user_id'] ] )}}" target="_blank">Schedule</a>
                         @endif
                         @if($tabname == 'past')
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
