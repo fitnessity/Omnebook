@@ -1,5 +1,5 @@
 
-<h4 class="modal-title mb-10">What happens if a customer late cancels or no show? </h4>
+<h4 class="modal-title mb-10 fs-17">What happens if a customer late cancels or no show? </h4>
 
 <div class="row">
   <div class="col-md-12">
@@ -31,7 +31,7 @@
           @endif
       >
       <label for="javascript">Deduct from membership</label> 
-      <select class="form-control" name="booking_detail_id">
+      <select class="form-control form-select" name="booking_detail_id">
           @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
             @if($customer_booking_detail->business_price_detail)
                <option value="{{$customer_booking_detail->id}}" >

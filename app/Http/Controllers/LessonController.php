@@ -3026,6 +3026,9 @@ class LessonController extends Controller {
         $everyWeeks = $request->has('everyWeeks') != '' ? $request->everyWeeks : 0;
         $monthDays = $request->has('monthDays') != '' ? $request->monthDays : 0;
         $enddate = $request->has('enddate') != '' ? date('Y-m-d',strtotime($request->enddate)): '';
+        $addOnServicesId = $request->has('addOnServicesId') != '' ? $request->addOnServicesId: '';
+        $addOnServicesQty = $request->has('addOnServicesQty') != '' ? $request->addOnServicesQty: '';
+        $addOnServicesTotalPrice = $request->has('addOnServicesTotalPrice') != '' ? $request->addOnServicesTotalPrice: 0 ;
     
         $pid = isset($request->pid) ? $request->pid : 0;
         $priceid = isset($request->priceid) ? $request->priceid : 0;
@@ -3080,7 +3083,7 @@ class LessonController extends Controller {
                 $pictures = explode(',',$item->profile_pic);
                 $p_image = @$pictures[0];
 
-                $itemArray = array($request->priceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ,'p_session'=>$p_session,'notes' => $notes,'repeateTimeType' => $repeateTimeType,'everyWeeks' => $everyWeeks,'monthDays' => $monthDays,'enddate' => $enddate,'activity_days'=>$activity_days));
+                $itemArray = array($request->priceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ,'p_session'=>$p_session,'notes' => $notes,'repeateTimeType' => $repeateTimeType,'everyWeeks' => $everyWeeks,'monthDays' => $monthDays,'enddate' => $enddate,'activity_days'=>$activity_days ,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice));
                 if(!empty($cart_item["cart_item"])) {
                     if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
@@ -3114,6 +3117,10 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]['child']["quantity"] = $request->childquantity;
 
                                 $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
+
+                                $cart_item["cart_item"][$k]["addOnServicesId"] = $addOnServicesId;
+                                $cart_item["cart_item"][$k]["addOnServicesQty"] = $addOnServicesQty;
+                                $cart_item["cart_item"][$k]["addOnServicesTotalPrice"] = $addOnServicesTotalPrice;
                             }
                         }
                     }else {

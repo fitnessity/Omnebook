@@ -123,7 +123,10 @@ class PaymentController extends Controller {
                     'participate' => json_encode($item['participate']),
                     'transfer_provider_status' =>'unpaid',
                     'payment_number' => '{}',
-                    'order_from' => "Instant Hire"
+                    'order_from' => "Instant Hire",
+                    'addOnservice_total' =>$item['addOnServicesId'],
+                    'addOnservice_ids' => $item['addOnServicesQty'],
+                    'addOnservice_qty' => $item['addOnServicesTotalPrice'],
                 ]);
 
                 $booking_detail->transfer_to_provider();
@@ -419,7 +422,10 @@ class PaymentController extends Controller {
                     'participate' => json_encode($item['participate']),
                     'transfer_provider_status' =>'unpaid',
                     'payment_number' => '{}',
-                    'order_from' => "Instant Hire"
+                    'order_from' => "Instant Hire",
+                    'addOnservice_ids' =>$item['addOnServicesId'],
+                    'addOnservice_qty' => $item['addOnServicesQty'],
+                    'addOnservice_total' => $item['addOnServicesTotalPrice'],
                 ]);
 
                 $booking_detail->transfer_to_provider();

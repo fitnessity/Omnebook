@@ -168,10 +168,11 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
+        //print_r($request->all());
         $bookidarray = [];
         $company = $request->current_company;
         $customer = $company->customers()->findOrFail($request->user_id);
-
+        //echo $customer;exit;
         $user = Auth::User();
         $fitnessity_recurring_fee = $user->recurring_fee / 100;
         $isCash = ($request->cash_amt > 0);

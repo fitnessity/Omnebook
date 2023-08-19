@@ -815,9 +815,7 @@
                                     </div><!-- end card -->
                                 </div>
                             </div>
-                            @php $categoryData = [];
-                                $categoryData = @$service->BusinessPriceDetailsAges; 
-                            @endphp
+                           
                             <div class="row ">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -866,7 +864,7 @@
                                                         @foreach($categoryData as $i=>$category)
                                                             <div class="accordion custom-accordionwithicon accordion-border-box mt-3" id="category{{$i}}">
                                                                 <div class="accordion-item shadow">
-                                                                   <h2 class="accordion-header" id="accordionnestingcat{{$i}}">
+                                                                    <h2 class="accordion-header" id="accordionnestingcat{{$i}}">
                                                                         <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcategory{{$i}}" aria-expanded="false" aria-controls="accor_nestingcategory{{$i}}">
                                                                             <div class="container-fluid nopadding">
                                                                                 <div class="row ">
@@ -882,7 +880,6 @@
                                                                                                         <i class="fas fa-plus text-muted"></i>Taxes</a></li>
                                                                                                     <li><a onclick="scheduleLink('{{@$category->cid}}','{{@$category->id}}');"><i class="fas fa-plus text-muted"></i>Schedule</a></li>
                                                                                                     <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target><a onclick=" return add_another_price_duplicate_category({{$i}});" ><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
-                                                                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service{{$i}}"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>
                                                                                                     @if($i!=0)
                                                                                                     <li class="dropdown-divider"></li>
                                                                                                     <li><a href="" onclick="removeCategoryDiv({{$i}});"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
@@ -923,6 +920,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+
                                                                             @php $priceData = @$category->BusinessPriceDetails; @endphp
                                                                             <input type="hidden"  name="priceCount{{$i}}" id="priceCount{{$i}}" value="{{count($priceData)-1}}" />
                                                                             <div id="priceOptionDiv{{$i}}">
@@ -934,6 +932,33 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="addanother">
                                                                                     <a class="" onclick=" return add_another_price_ages({{$i}});"> +Add Another Price Option</a>
+                                                                                </div>  
+                                                                            </div>
+
+                                                                            @php 
+                                                                                $addOnServiceData = @$category->AddOnService;
+                                                                                if(!empty($addOnServiceData) && count($addOnServiceData)>0 ){
+                                                                                    $addOnCount = count($addOnServiceData)-1;
+                                                                                }else{
+                                                                                    $addOnCount = 0;
+                                                                                }
+                                                                            @endphp
+
+                                                                           
+                                                                            <input type="hidden"  name="addOnServiceCount{{$i}}" id="addOnServiceCount{{$i}}" value="{{$addOnCount}}" />
+                                                                            <div id="addOnServiceDiv{{$i}}">
+                                                                                @if(!empty($addOnServiceData) && count($addOnServiceData)>0 )
+                                                                                    @foreach($addOnServiceData as $j=>$ad_service)
+                                                                                        @include('business.services._add_on_another_service',['addOnService'=> $ad_service, 'i'=>$i,'j'=>$j])
+                                                                                    @endforeach
+                                                                                @else
+                                                                                    @include('business.services._add_on_another_service',[ 'i'=>$i,'j'=>0])
+                                                                                @endif
+                                                                            </div>
+
+                                                                            <div class="col-md-12">
+                                                                                <div class="addanother">
+                                                                                    <a class="" onclick=" return add_another_add_on_service({{$i}});"> +Add Another Add On Service</a>
                                                                                 </div>  
                                                                             </div>
                                                                         </div>
@@ -960,39 +985,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="modal fade add-on-service{{$i}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered modal-50">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title" id="myModalLabel">Create Add On Service</h5>
-                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <div class="row justify-content-md-center">
-                                                                                    <div class="col-md-6">
-                                                                                        <div class="mb-3">
-                                                                                            <label class="form-label" >Name</label>
-                                                                                            <input type="text" class="form-control" id="service_name" name="service_name[]" value="{{$category->service_name}}" placeholder="Enter name" >
-                                                                                        </div>
-                                                                                        <div class="mb-3">
-                                                                                            <label class="form-label" for="product-title-input">Price</label>
-                                                                                            <input type="text" class="form-control" id="service_price" name="service_price[]" value="{{$category->service_price}}" placeholder="Enter price" >
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6">
-                                                                                        <div class="mb-3">
-                                                                                            <label class="form-label" for="product-title-input">Description</label>
-                                                                                            <textarea class="form-control" id="service_description" name="service_description[]"  placeholder="Enter description" rows="3">{{$category->service_description}}</textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>                  
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" data-bs-dismiss="modal"  class="btn btn-primary btn-red">Submit</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     @else
@@ -1014,7 +1006,6 @@
                                                                                                 <li><a href="" data-bs-toggle="modal" data-bs-target=".tax0">
                                                                                                     <i class="fas fa-plus text-muted"></i>Taxes</a></li>
                                                                                                 <li><a onclick=" return add_another_price_duplicate_category(0);"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
-                                                                                                <li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service0"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>
                                                                                             </ul>
                                                                                         </div>
                                                                                     </div>
@@ -1061,6 +1052,18 @@
                                                                                 <a class="" onclick=" return add_another_price_ages(0);"> +Add Another Price Option</a>
                                                                             </div>  
                                                                         </div>
+
+                                                                        <input type="hidden"  name="addOnServiceCount0" id="addOnServiceCount0" value="0" />
+                                                                        <div id="addOnServiceDiv0">
+                                                                            @include('business.services._add_on_another_service',['i'=>0,'j'=>0])
+                                                                        </div>
+
+                                                                        <div class="col-md-12">
+                                                                            <div class="addanother">
+                                                                                <a class="" onclick=" return add_another_add_on_service(0);"> +Add Another Add On Service</a>
+                                                                            </div>  
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1078,39 +1081,6 @@
                                                                             <div class="mb-3">
                                                                                 <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="" placeholder="Dues Tax"> 
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal fade add-on-service0" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog modal-dialog-centered modal-50">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="myModalLabel">Create Add On Service</h5>
-                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <div class="row justify-content-md-center">
-                                                                                <div class="col-md-6">
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label" >Name</label>
-                                                                                        <input type="text" class="form-control" id="service_name" name="service_name[]" placeholder="Enter name" >
-                                                                                    </div>
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label" for="product-title-input">Price</label>
-                                                                                        <input type="text" class="form-control" id="service_price" name="service_price[]" placeholder="Enter price" >
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label" for="product-title-input">Description</label>
-                                                                                        <textarea class="form-control" id="service_description" name="service_description[]"placeholder="Enter description" rows="3"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>                  
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
@@ -1220,7 +1190,7 @@
 @include('layouts.business.footer')
 
 <!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key="+GOOGLE_MAP_KEY+"&callback=initMap" async defer></script> -->
-<script>
+<!-- <script>
 yourButton.addEventListener('mouseenter', (e) => {
   let accordionButton = yourButton.parentElement;
   accordionButton.setAttribute('data-bs-toggle', '');
@@ -1230,7 +1200,7 @@ yourButton.addEventListener('mouseleave', (e) => {
   let accordionButton = yourButton.parentElement;
   accordionButton.setAttribute('data-bs-toggle', 'collapse');
 });
-</script>
+</script> -->
 
 <script>
     $(document).ready(function(){ 
@@ -1698,12 +1668,14 @@ yourButton.addEventListener('mouseleave', (e) => {
         cnt++;
         $('#categoryCount').val(cnt);
         data = '';
-        data += '<div class="accordion custom-accordionwithicon accordion-border-box mt-3" id="category'+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestingcat0"> <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcategory'+cnt+'" aria-expanded="false" aria-controls="accor_nestingcategory'+cnt+'"><div class="container-fluid nopadding"> <div class="row "> <div class="col-md-6"> Category </div> <div class="col-md-6"> <div class="multiple-options"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="catUl'+cnt+'"> <li><a href="" data-bs-toggle="modal" data-bs-target=".tax'+cnt+'"> <i class="fas fa-plus text-muted"></i>Taxes</a></li><li><a onclick=" return add_another_price_duplicate_category('+cnt+');"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>   <li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service'+cnt+'"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>  <li class="dropdown-divider"></li> <li><a href="" onclick="removeCategoryDiv('+cnt+');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingcategory'+cnt+'" class="accordion-collapse collapse" aria-labelledby="accordionnestingcat0" data-bs-parent="#category'+cnt+'"> <div class="accordion-body"> <div class="row"> <div class="col-md-12"> <div class="flex-shrink-0 float-right"> <div class="form-check form-switch form-switch-right form-switch-md"> <label for="default-base-showcode" class="form-label text-muted visibilitytext'+cnt+'">Show To Public</label> <input class="custom-switch form-check-input visibility'+cnt+'" type="checkbox" name="visibility_to_public[]" value="1" checked> </div> </div> </div> <div class="col-lg-3 col-md-6"> <div class="set-price mb-0"> <input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""> <label>Category Title</label> <input name="category_title[]" id="category_title" class="form-control"  type="text" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"> </div> </div> </div> <input type="hidden" name="priceCount'+cnt+'" id="priceCount'+cnt+'" value="0" /> <div id="priceOptionDiv'+cnt+'">';
+        data += '<div class="accordion custom-accordionwithicon accordion-border-box mt-3" id="category'+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestingcat0"> <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcategory'+cnt+'" aria-expanded="false" aria-controls="accor_nestingcategory'+cnt+'"><div class="container-fluid nopadding"> <div class="row "> <div class="col-md-6"> Category </div> <div class="col-md-6"> <div class="multiple-options"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="catUl'+cnt+'"> <li><a href="" data-bs-toggle="modal" data-bs-target=".tax'+cnt+'"> <i class="fas fa-plus text-muted"></i>Taxes</a></li><li><a onclick=" return add_another_price_duplicate_category('+cnt+');"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li> <li class="dropdown-divider"></li> <li><a href="" onclick="removeCategoryDiv('+cnt+');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingcategory'+cnt+'" class="accordion-collapse collapse" aria-labelledby="accordionnestingcat0" data-bs-parent="#category'+cnt+'"> <div class="accordion-body"> <div class="row"> <div class="col-md-12"> <div class="flex-shrink-0 float-right"> <div class="form-check form-switch form-switch-right form-switch-md"> <label for="default-base-showcode" class="form-label text-muted visibilitytext'+cnt+'">Show To Public</label> <input class="custom-switch form-check-input visibility'+cnt+'" type="checkbox" name="visibility_to_public[]" value="1" checked> </div> </div> </div> <div class="col-lg-3 col-md-6"> <div class="set-price mb-0"> <input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""> <label>Category Title</label> <input name="category_title[]" id="category_title" class="form-control"  type="text" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"> </div> </div> </div> <input type="hidden" name="priceCount'+cnt+'" id="priceCount'+cnt+'" value="0" /> <div id="priceOptionDiv'+cnt+'">';
         data +=  getHtmlData(cnt,0);
-        data += '</div> <div class="col-md-12"> <div class="addanother"> <a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Price Option</a> </div> </div> </div> </div> </div> </div>';
+        data += '</div> <div class="col-md-12"> <div class="addanother"> <a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Price Option</a> </div> </div>'; 
+        data +='<input type="hidden"  name="addOnServiceCount'+cnt+'" id="addOnServiceCount'+cnt+'" value="0" /><div id="addOnServiceDiv'+cnt+'">';
+        data +=  getaddOnServiceHtml(cnt,0);
+        data +='</div><div class="col-md-12"><div class="addanother"><a class="" onclick=" return add_another_add_on_service('+cnt+');"> +Add Another Add On Service</a></div></div>';
+        data += '</div> </div> </div> </div>';
         data += '<div class="modal fade tax'+cnt+'" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="myModalLabel">Taxes</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="mb-3"> <input type="text" name="sales_tax[]" id="sales_tax" class="form-control" value="" placeholder="Sales Tax"> </div> <div class="mb-3"> <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="" placeholder="Dues Tax"> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button> </div> </div> </div> </div>';
-
-        data += '<div class="modal fade add-on-service'+cnt+'" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-50"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="myModalLabel">Create Add On Service</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="row justify-content-md-center"><div class="col-md-6"><div class="mb-3"><label class="form-label">Name</label><input type="text" class="form-control" id="service_name" name="service_name[]" value="{{$category->service_name}}" placeholder="Enter name"></div><div class="mb-3"><label class="form-label" for="product-title-input">Price</label><input type="text" class="form-control" id="service_price" name="service_price[]" value="{{$category->service_price}}" placeholder="Enter price"></div></div><div class="col-md-6"><div class="mb-3"><label class="form-label" for="product-title-input">Description</label><textarea class="form-control" id="service_description" name="service_description[]" placeholder="Enter description" rows="3">{{$category->service_description}}</textarea></div></div></div></div><div class="modal-footer"><button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button></div></div></div></div>';
 
         $('#categoryMainDiv').append(data);
 		
@@ -1714,6 +1686,14 @@ yourButton.addEventListener('mouseleave', (e) => {
                 $('.visibilitytext'+cnt).html("Hide From Public");
             }
         });
+    }
+
+    function add_another_add_on_service(i){
+        var cnt = $('#addOnServiceCount'+i).val();
+        cnt++;
+        $('#addOnServiceCount'+i).val(cnt);
+        data = getaddOnServiceHtml(i,cnt);
+        $('#addOnServiceDiv'+i).append(data);
     }
 
     function getHtmlData(i,cnt) {
@@ -1736,11 +1716,25 @@ yourButton.addEventListener('mouseleave', (e) => {
         return data;
     }
 
+
+    function getaddOnServiceHtml(i,cnt) {
+        var data = "";
+        data = '<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="addOnService'+i+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="acc_nestingaddOn'+i+cnt+'"> <button class="accordion-custom-btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingpriceaddOn'+i+cnt+'" aria-expanded="true" aria-controls="accor_nestingpriceaddOn'+i+cnt+'"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-6 col-md-6 col-8">Add On Service </div> <div class="col-lg-6 col-md-6 col-4"> <div class="priceoptionsettings"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="uladdOn'+i+cnt+'"> <li class="dropdown-divider"></li> <li><a href="" onclick="deleteAddOnService('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingpriceaddOn'+i+cnt+'" class="accordion-collapse collapsed" aria-labelledby="acc_nestingaddOn'+i+cnt+'" data-bs-parent="#addOnService'+i+cnt+'"> <div class="accordion-body"> <input type="hidden" name="add_on_service_id_db_'+i+cnt+'" id="add_on_service_id_db'+i+cnt+'" value="{{@$price->id}}" /> <div class="row"> <div class="col-lg-3 col-md-6"> <div class="set-price mb-0"> <label>Service Name</label> <input name="service_name_'+i+cnt+'" id="service_name'+i+cnt+'" value ="" class="form-control" type="text" placeholder="Enter Name"> </div> </div> <div class="col-lg-3 col-md-6"> <div class="set-price mb-0"> <label>Service Price</label> <input name="service_price_'+i+cnt+'" id="service_price'+i+cnt+'" value="" class="form-control" placeholder="Enter Price"> </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-0"> <label>Service Description</label> <textarea class="form-control" id="service_description'+i+cnt+'" name="service_description_'+i+cnt+'" placeholder="Enter description" rows="3" spellcheck="false" class="form-control" ></textarea> </div> </div> </div> </div> </div> </div> </div>';
+        return data;
+    }
+
     function deletePriceOption(i,j){
         var cnt=$('#priceCount'+i).val();
         cnt--;
         $('#priceCount'+i).val(cnt);
         $('#priceoption'+i+j).remove(); 
+    }
+
+    function deleteAddOnService(i,j){
+        var cnt=$('#addOnServiceCount'+i).val();
+        cnt--;
+        $('#addOnServiceCount'+i).val(cnt);
+        $('#addOnService'+i+j).remove(); 
     }
 
     function removeCategoryDiv(i){
@@ -1870,6 +1864,7 @@ yourButton.addEventListener('mouseleave', (e) => {
     function add_another_price_duplicate_category(i){
         var cnt = $('#categoryCount').val();
         var agecnt = $('#priceCount'+i).val();
+        var aosCnt = $('#addOnServiceCount'+i).val();
         cnt++;
         $('#categoryCount').val(cnt);
         $('#category'+i).children().first();
@@ -1888,13 +1883,26 @@ yourButton.addEventListener('mouseleave', (e) => {
                 re = re.replace(new RegExp(i+""+z, "g"), cnt+""+z);
             }
         }
+        var sname = sprice = sdesc = '';
+        for(var s=0; s<=aosCnt ;s++){  
+
+            if(i== 0){ 
+                sprice = $('#service_price0'+s).val();
+                re = re.replace(new RegExp("0"+""+s, "g"),cnt+""+s);
+            }else{
+                sprice = $('#service_price'+i+""+s).val();
+                re = re.replace(new RegExp(i+""+s, "g"), cnt+""+s);
+            }
+        }
        
         re = re.replaceAll("accordionnestingcat"+i,"accordionnestingcat"+cnt);
         re = re.replaceAll("priceCount"+i,"priceCount"+cnt);
+        re = re.replaceAll("addOnServiceCount"+i,"addOnServiceCount"+cnt);
         re = re.replaceAll("#category"+i,"#category"+cnt);
         re = re.replaceAll("#visibilitytext"+i,"#visibilitytext"+cnt);
         re = re.replaceAll("#visibility"+i,"#visibility"+cnt);
         re = re.replaceAll("priceOptionDiv"+i,"priceOptionDiv"+cnt);
+        re = re.replaceAll("addOnServiceDiv"+i,"addOnServiceDiv"+cnt);
         re = re.replaceAll("catUl"+i,"catUl"+cnt);
         re = re.replaceAll("("+i+")","("+cnt+")");
         re = re.replaceAll("("+i+",","("+cnt+",");
@@ -1903,6 +1911,11 @@ yourButton.addEventListener('mouseleave', (e) => {
         
         for(var z=0; z<=agecnt ;z++){
             $('#category'+cnt).find("input[name='price_id_db_"+cnt+""+z+"']").val('');
+        }
+
+        for(var s=0; s<=aosCnt ;s++){
+            $('#service_price'+cnt+""+s).val(sprice);
+            $('#category'+cnt).find("input[name='add_on_service_id_db_"+cnt+""+s+"']").val('');
         }
 
         if(i==0){
@@ -1920,6 +1933,7 @@ yourButton.addEventListener('mouseleave', (e) => {
             var priceClass = $('#acc_nesting'+cnt+s).find('.accordion-button').first();
             priceClass.removeClass('collapsed');
 			$('#accor_nestingprice'+cnt+s).addClass("collapse show");
+            $('#accor_nestingpriceaddOn'+cnt+s).addClass("collapse show");
 		}
     }
 

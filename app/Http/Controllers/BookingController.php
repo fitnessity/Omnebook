@@ -3,26 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use Illuminate\Http\Request;
-use Twilio\Rest\Client;
-use App\Services\TwilioService;
-use Twilio\TwiML\VoiceResponse;
-use Validator;
-use Redirect;
-use Input;
-use Response;
-use Auth;
-use Hash;
-use Image;
-use File;
-use DB;
-use Session;
-use View;
-use Mail;
-use Config;
+use Validator,Redirect,Input,Response,Auth,Hash,Image,File,DB,Session,View,Mail,Config;
 use Carbon\Carbon;
 use App\Repositories\{BookingRepository,BusinessServiceRepository,UserRepository,SportsRepository};
 use App\{Languages,UserFavourite,BusinessExperience,BusinessInformation,BusinessService,BusinessServices,BusinessPriceDetails,CompanyInformation,BusinessActivityScheduler,UserBookingStatus,UserBookingDetailFit_background_check_faq,Fit_vetted_business_faq,MailService,SGMailService,Evident,Evidents,Sports,ProfileSave,InstantForms,User,UserFamilyDetail,UserCustomerDetail,AddrStates,AddrCities,Miscellaneous,UserBookingDetail,BookingCheckinDetails};
@@ -453,7 +435,6 @@ class BookingController extends Controller {
             }
         }
         return $html;
-
     }
 
     public function searchfilterdata(Request $request){
@@ -666,82 +647,12 @@ class BookingController extends Controller {
     }
 
     public function getbookingmodeldata(Request $request){
-        $p_name = $this->businessservice->findById($request->sid)->program_name;
-        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)));
-        $html = '' ;$href ='';
-        $ajax = "'ajax'";
-        $html.= '<div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">View Your bookings for '.$p_name.'</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mt-3 mt-lg-0">
-                        <div class="row g-3 mb-0 align-items-center">
-                            <div class="col-sm-auto">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr" name="actfildate" id="managecalendarservice" class="form-control" onchange="getbookingmodel('.$request->sid.','.$ajax.');" autocomplete="off" value="'.date('m/d/Y',strtotime($request->date)).'">
-                                    <div class="input-group-text bg-primary border-primary text-white">
-                                        <i class="ri-calendar-2-line"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="date-info">
-                                    <label>Today Date:</label><span> '.date('m/d/Y',strtotime($request->date)).'</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="date-info">
-                                    <label>Total Bookings:</label> <span>'.count($data).'</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="view-booking-table">
-                            <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Date Booked</th>
-                                            <th>Who\'s Participating</th>
-                                            <th>Category Name</th>
-                                            <th>Price Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>';
-                                        if(!empty($data) && count($data)>0){
-                                            foreach($data as $i=>$dt){
-                                                $name = $dt->customer->full_name;
-                                                $link = Config::get('constants.SITE_URL')."/business/".$dt->customer->business_id."/customers/".$dt->customer->id;
-                                                $href = 'href="'.$link.'"';
-                                               
-                                                $html .='<tr>
-                                                            <td>'.($i+1).'. <a target="_blank"'.$href.'>'.$name.'</a></td>
-                                                            <td>'.$request->date.'</td>
-                                                            <td>'. nl2br($dt->decodeparticipate()).'</td>
-                                                            <td> '.$dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title.'</td>
-                                                            <td>'.$dt->business_price_detail_with_trashed->price_title .'</td>
-                                                        </tr>';
-                                            }
-                                        }else{
-                                            $html .='<br><p class="fonts-red">There Are No Bookings For This Activity Today</p>';
-                                        }
-                                    $html .='</tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script>
-                    flatpickr(".flatpickr", {
-                        dateFormat: "m/d/Y",
-                        maxDate: "01/01/2050",
-                        enable: [
-                            { from: "today", to: "01/01/2050" },
-                        ]
-                     });
-                </script>';
-        return $html;
+        $programName = $this->businessservice->findById($request->sid)->program_name;
+        $date = date('m-d-Y',strtotime($request->date));
+        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)) ,$request->type );
+        $sid = $request->sid;
+        $type = $request->type;
+        return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type'));
     }
 
     public function getRescheduleModel(Request $request){

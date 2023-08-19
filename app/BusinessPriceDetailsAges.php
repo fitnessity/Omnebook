@@ -41,6 +41,11 @@ class BusinessPriceDetailsAges extends Model
         return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->orderBy('shift_start');
     }
 
+    public function BusinessActivitySchedulerWithThresould()
+    {
+        return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->withTrashed()->orderBy('shift_start');
+    }
+
     public function BusinessServices()
     {
         return $this->belongsTo(BusinessServices::class ,'serviceid');
@@ -48,5 +53,8 @@ class BusinessPriceDetailsAges extends Model
 
     public function BusinessPriceDetails(){
         return $this->hasMany(BusinessPriceDetails::class, 'category_id');
+    }
+    public function AddOnService(){
+        return $this->hasMany(AddOnService::class, 'category_id');
     }
 }

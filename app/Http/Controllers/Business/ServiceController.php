@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous,Sports,BusinessStaff};
+use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous,Sports,BusinessStaff,AddOnService};
 use Auth;
 
 class ServiceController extends BusinessBaseController
@@ -45,6 +45,8 @@ class ServiceController extends BusinessBaseController
         $serviceType =  $request->serviceType;
 
         $service = $company->service()->where(['id'=>$serviceId,'service_type'=>$request->serviceType])->first();
+
+        $categoryData = empty(@$service->BusinessPriceDetailsAges) ? [] : @$service->BusinessPriceDetailsAges;
         $reqSafety = explode(',',@$service->req_safety);
         $proofVerification = empty($reqSafety) ? "" : (in_array("id_proof", $reqSafety) ? "checked" : "");
         $vaccinefVerification = empty($reqSafety) ? "" : (in_array("id_vaccine", $reqSafety) ? "checked" : "");
@@ -56,7 +58,7 @@ class ServiceController extends BusinessBaseController
         if($service == '' && $serviceId != 0){
             return redirect(route('business.services.create',["serviceType"=> $request->serviceType,'business_id'=>$companyId]));
         }
-        return view('business.services.create', compact('serviceType','sportsData','staffData','service','profile_pic','companyId','serviceId','proofVerification','vaccinefVerification','covidVerification','fitnessity_fee','recurring_fee'));
+        return view('business.services.create', compact('serviceType','sportsData','staffData','service','profile_pic','companyId','serviceId','proofVerification','vaccinefVerification','covidVerification','fitnessity_fee','recurring_fee','categoryData'));
     }
     /**
      * Store a newly created resource in storage.
@@ -72,20 +74,19 @@ class ServiceController extends BusinessBaseController
         $user = Auth::user();
         $companyInfo = $request->current_company;
         $companyid = $companyInfo->id;
-        $serviceId = $request->serviceId != '' ? $request->serviceId : '0';
+        $serviceId = $request->serviceId ?? 0;
         $thisService = $companyInfo->service()->where('id', $serviceId)->first(); 
 
         if($request->step == '1'){
-            if($thisService != ''){
-                if($thisService->profile_pic != ''){
-                    $img = rtrim($thisService->profile_pic,',');
-                    $profilePicture .= $img.',';
-                }
+            if($thisService != ''  && $thisService->profile_pic != ''){
+                $img = rtrim($thisService->profile_pic,',');
+                $profilePicture .= $img.',';
             }
+
             if ($request->hasFile('imgUpload')) {
-                for($i=0;$i<count($request->imgUpload);$i++){
-                    $imagestore = ($request->imgUpload[$i])->store('activity');
-                    $profilePicture .= $imagestore.',';
+                foreach ($request->imgUpload as $file) {
+                    $imagestore = $file->store('activity');
+                    $profilePicture .= $imagestore . ',';
                 }
             }
 
@@ -174,6 +175,7 @@ class ServiceController extends BusinessBaseController
            /* print_r($serviceData);exit;*/
         }
 
+
         if($request->step != '3'){
              if($serviceId != 0){
                 $service = $thisService->update($serviceData);
@@ -186,162 +188,88 @@ class ServiceController extends BusinessBaseController
         }else{
             $paycount = count($request->category_title);
             if($paycount > 0) {
-                $idary_cat = $idary_cat1 = $idary_price = $idary_price1 = array();
+                $idary_cat = $idary_cat1 = $idary_price = $idary_price1 = $idary_addOn = $idary_addOn1 = array();
 
                 $idary_cat= $user->BusinessPriceDetailsAges()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
+
+                $idary_addOn = $user->AddOnService()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
 
                 $idary_price = $user->BusinessPriceDetails()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
 
                 for($i=0; $i < $paycount; $i++) {
-                    $idary_cat1[] = $request->cat_id_db[$i] != '' ? $request->cat_id_db[$i] : '' ;
-                    
+                    $idary_cat1[] =  $request->cat_id_db[$i] ?? '';
                     $businessages= [
-                        "category_title" => $request->category_title[$i] != '' ? $request->category_title[$i] : '',
+                        "category_title" => $request->category_title[$i] ?? '',
                         "cid" => $user->cid,
                         "userid" =>  $user->id,
                         "serviceid" => $serviceId,
-                        "dues_tax" => $request->dues_tax[$i] != '' ? $request->dues_tax[$i] : '',
-                        "sales_tax" => $request->sales_tax[$i] != '' ? $request->sales_tax[$i] : '',
-                        "visibility_to_public" => @$request->visibility_to_public[$i] != '' ? $request->visibility_to_public[$i] : 0,
-                        "service_name" => $request->service_name[$i] != '' ? $request->service_name[$i] : '',
-                        "service_price" => $request->service_price[$i] != '' ? $request->service_price[$i] : 0,
-                        "service_description" => $request->service_description[$i] != '' ? $request->service_description[$i] : '',
+                        "dues_tax" => $request->dues_tax[$i] ?? '',
+                        "sales_tax" => $request->sales_tax[$i] ?? '',
+                        "visibility_to_public" =>  @$request->visibility_to_public[$i] ?? 0,
                     ];
-                    if($request->cat_id_db[$i] != ''){
-                        $db_status = 'update';
-                        $create = BusinessPriceDetailsAges::where('id',$request->cat_id_db[$i])->update($businessages);
-                    }else{
-                        $db_status = 'create';
-                        $create = BusinessPriceDetailsAges::create($businessages);
-                    }
-                   
+
+                    $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);
+
+                    $cat_new_id = $createOrUpdate->id; 
+        
                     $age_cnt = $request->input('priceCount'.$i);
                     if($age_cnt >= 0){
                         for($y=0; $y <= $age_cnt; $y++) {
 
-                            $idary_price1[] = $request->input('price_id_db_'.$i.$y)  != '' ? $request->input('price_id_db_'.$i.$y) : '' ;
-
-                            $adultrecurring_price = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('recurring_price_adult_'.$i.$y) : NULL;
-                            $adultrecurring_run_auto_pay = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('run_auto_pay_adult_'.$i.$y) : NULL;
-                            $adultrecurring_cust_be_charge = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('cust_be_charge_adult_'.$i.$y) : NULL;
-                            $adultrecurring_every_time_num = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('every_time_num_adult_'.$i.$y) : NULL;
-                            $adultrecurring_every_time = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('every_time_adult_'.$i.$y) : NULL;
-                            $adultrecurring_nuberofautopays = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('nuberofautopays_adult_'.$i.$y) : NULL;
-                            $adultrecurring_happens_aftr_12_pmt = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('happens_aftr_12_pmt_adult_'.$i.$y) : NULL;
-                            $adultrecurring_client_be_charge_on = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('client_be_charge_on_adult_'.$i.$y) : NULL;
-                            $adultrecurring_first_pmt = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('first_pmt_adult_'.$i.$y) : NULL;
-                            $adultrecurring_recurring_pmt = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('recurring_pmt_adult_'.$i.$y) : NULL;
-                            $adultrecurring_total_contract_revenue = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('total_contract_revenue_adult_'.$i.$y) : NULL;
-                            $recurring_customer_chage_by_adult = $request->input('is_recurring_adult_'.$i.$y) == 1 ? $request->input('customer_charged_num_adult_'.$i.$y).' '.$request->input('customer_charged_time_adult_'.$i.$y) : NULL;
-                            
-                            $childrecurring_price = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('recurring_price_child_'.$i.$y) : NULL;
-                            $childrecurring_run_auto_pay = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('run_auto_pay_child_'.$i.$y) : NULL;
-                            $childrecurring_cust_be_charge = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('cust_be_charge_child_'.$i.$y) : NULL;
-                            $childrecurring_every_time_num = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('every_time_num_child_'.$i.$y) : NULL;
-                            $childrecurring_every_time = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('every_time_child_'.$i.$y) : NULL;
-                            $childrecurring_nuberofautopays = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('nuberofautopays_child_'.$i.$y) : NULL;
-                            $childrecurring_happens_aftr_12_pmt = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('happens_aftr_12_pmt_child_'.$i.$y) : NULL;
-                            $childrecurring_client_be_charge_on = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('client_be_charge_on_child_'.$i.$y) : NULL;
-                            $childrecurring_first_pmt = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('first_pmt_child_'.$i.$y) : NULL;
-                            $childrecurring_recurring_pmt = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('recurring_pmt_child_'.$i.$y) : NULL;
-                            $childrecurring_total_contract_revenue = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('total_contract_revenue_child_'.$i.$y) : NULL;
-                            $recurring_customer_chage_by_child = $request->input('is_recurring_child_'.$i.$y) == 1 ? $request->input('customer_charged_num_child_'.$i.$y).' '.$request->input('customer_charged_time_child_'.$i.$y) : NULL;
-
-                            $infantrecurring_price = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('recurring_price_infant_'.$i.$y) : NULL;
-                            $infantrecurring_run_auto_pay = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('run_auto_pay_infant_'.$i.$y) : NULL;
-                            $infantrecurring_cust_be_charge = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('cust_be_charge_infant_'.$i.$y) : NULL;
-                            $infantrecurring_every_time_num = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('every_time_num_infant_'.$i.$y) : NULL;
-                            $infantrecurring_every_time = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('every_time_infant_'.$i.$y) : NULL;
-                            $infantrecurring_nuberofautopays = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('nuberofautopays_infant_'.$i.$y) : NULL;
-                            $infantrecurring_happens_aftr_12_pmt = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('happens_aftr_12_pmt_infant_'.$i.$y) : NULL;
-                            $infantrecurring_client_be_charge_on = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('client_be_charge_on_infant_'.$i.$y) : NULL;
-                            $infantrecurring_first_pmt = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('first_pmt_infant_'.$i.$y) : NULL;
-                            $infantrecurring_recurring_pmt = $request->input('is_recurring_infant_'.$i.$y) == 1 ? $request->input('recurring_pmt_infant_'.$i.$y) : NULL;
-                            $infantrecurring_total_contract_revenue = $request->input('is_recurring_infant_'.$i.$y) == 1 ?  $request->input('total_contract_revenue_infant_'.$i.$y) : NULL;
-                            $recurring_customer_chage_by_infant = $request->input('is_recurring_infant_'.$i.$y) == 1 ?  $request->input('customer_charged_num_infant_'.$i.$y).' '.$request->input('customer_charged_time_infant_'.$i.$y) : NULL;
-            
-                            
-                            $cat_new_id = $db_status == 'update' ? $request->cat_id_db[$i] : $create->id ;
-
-                            $displaySection = $request->input('sectiondisplay'.$i.$y);
-
-                            if($displaySection == 'freeprice'){
-                                $adult_cus_weekly_price = $adult_weekend_price_diff = $adult_discount =  $adult_estearn = $weekend_adult_estearn = $child_cus_weekly_price = $child_discount = $child_weekend_price_diff = $child_estearn = $weekend_child_estearn = $infant_cus_weekly_price = $infant_weekend_price_diff =$infant_discount =$infant_estearn =  $weekend_infant_estearn =  0;
-                            }else{
-
-                                if($displaySection == ''){
-                                    if( $request->input('adult_weekend_price_diff_'.$i.$y) != '' || $request->input('child_weekend_price_diff_'.$i.$y) || $request->input('infant_weekend_price_diff_'.$i.$y) ){
-                                        $displaySection = 'weekendprice';
-                                    }else{
-                                        $displaySection = 'weekdayprice';
-                                    }
-                                }
-
-                                $adult_cus_weekly_price = $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_cus_weekly_price_'.$i.$y) : '';
-                                $adult_weekend_price_diff =  $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_weekend_price_diff_'.$i.$y) : '';
-                                $adult_discount = $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_discount_'.$i.$y) : '';
-                                $adult_estearn = $request->input('adult'.$i.$y) == 'adult' ? $request->input('adult_estearn_'.$i.$y) : '';
-                                $weekend_adult_estearn = $request->input('adult'.$i.$y) =='adult' ? $request->input('weekend_adult_estearn_'.$i.$y) : '';
-                                $child_cus_weekly_price = $request->input('child'.$i.$y)=='child' ? $request->input('child_cus_weekly_price_'.$i.$y) : '';
-                                $child_discount = $request->input('child'.$i.$y) == 'child' ? $request->input('child_discount_'.$i.$y) : '';
-                                $child_weekend_price_diff = $request->input('child'.$i.$y) == 'child' ? $request->input('child_weekend_price_diff_'.$i.$y) : '';
-                                $child_estearn = $request->input('child'.$i.$y) == 'child' ? $request->input('child_estearn_'.$i.$y) : '';
-                                $weekend_child_estearn = $request->input('child'.$i.$y) == 'child' ? $request->input('weekend_child_estearn_'.$i.$y) : '';
-                                $infant_cus_weekly_price = $request->input('infant'.$i.$y) == 'infant' ? $request->input('infant_cus_weekly_price_'.$i.$y) : '';
-                                $infant_weekend_price_diff = $request->input('infant'.$i.$y) == 'infant' ? $request->input('infant_weekend_price_diff_'.$i.$y) : '';
-                                $infant_discount = $request->input('infant'.$i.$y) == 'infant' ? $request->input('infant_discount_'.$i.$y) : '';
-                                $infant_estearn =  $request->input('infant'.$i.$y) == 'infant' ? $request->input('infant_estearn_'.$i.$y) : '';
-                                $weekend_infant_estearn =  $request->input('infant'.$i.$y) == 'infant' ? $request->input('weekend_infant_estearn_'.$i.$y) : '';
-                            }
-
-                            $businessPayment = [
+                            $idary_price1[] = $request->input('price_id_db_' . $i . $y) ?? '';
+                            $isRecurringAdult = $request->input('is_recurring_adult_' . $i . $y);
+                            $isRecurringChild = $request->input('is_recurring_child_' . $i . $y);
+                            $isRecurringInfant = $request->input('is_recurring_infant_' . $i . $y);
+                            $displaySection = $this->getDisplaySection($request, $i, $y);
+                            $businessPrice = [
                                 "category_id" => $cat_new_id,
                                 "dispaly_section" => $displaySection,
                                 "business_service_id"=>$serviceId,
                                 "cid" => $user->cid,
                                 "userid" => $user->id,
                                 "serviceid" => $serviceId,
-                                "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
-                                "recurring_price_adult"=>$adultrecurring_price,
-                                "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,
-                                "recurring_cust_be_charge_adult" => $adultrecurring_cust_be_charge,
-                                "recurring_every_time_num_adult" => $adultrecurring_every_time_num ,
-                                "recurring_every_time_adult" => $adultrecurring_every_time,
-                                "recurring_nuberofautopays_adult" => $adultrecurring_nuberofautopays,
-                                "recurring_happens_aftr_12_pmt_adult" => $adultrecurring_happens_aftr_12_pmt,
-                                "recurring_client_be_charge_on_adult" => $adultrecurring_client_be_charge_on,
-                                "recurring_first_pmt_adult" => $adultrecurring_first_pmt,
-                                "recurring_recurring_pmt_adult" => $adultrecurring_recurring_pmt,
-                                "recurring_total_contract_revenue_adult" => $adultrecurring_total_contract_revenue,
-                                "recurring_customer_chage_by_adult" => $recurring_customer_chage_by_adult,
+                                "is_recurring_adult"=>  $isRecurringAdult,
+                                "recurring_price_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'recurring_price_adult_', $i, $y),
+                                "recurring_run_auto_pay_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'run_auto_pay_adult_', $i, $y),
+                                "recurring_cust_be_charge_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'cust_be_charge_adult_', $i, $y),
+                                "recurring_every_time_num_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'every_time_num_adult_', $i, $y),
+                                "recurring_every_time_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'every_time_adult_', $i, $y),
+                                "recurring_nuberofautopays_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'nuberofautopays_adult_', $i, $y),
+                                "recurring_happens_aftr_12_pmt_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'happens_aftr_12_pmt_adult_', $i, $y),
+                                "recurring_client_be_charge_on_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'client_be_charge_on_adult_', $i, $y),
+                                "recurring_first_pmt_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'first_pmt_adult_', $i, $y),
+                                "recurring_recurring_pmt_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'recurring_pmt_adult_', $i, $y),
+                                "recurring_total_contract_revenue_adult" =>  $this->getRecurringValue($isRecurringAdult, $request, 'total_contract_revenue_adult_', $i, $y),
 
-                                "is_recurring_child"=> $request->input('is_recurring_child_'.$i.$y),
-                                "recurring_price_child"=>$childrecurring_price,
-                                "recurring_run_auto_pay_child" => $childrecurring_run_auto_pay,
-                                "recurring_cust_be_charge_child" => $childrecurring_cust_be_charge,
-                                "recurring_every_time_num_child" => $childrecurring_every_time_num ,
-                                "recurring_every_time_child" => $childrecurring_every_time,
-                                "recurring_nuberofautopays_child" => $childrecurring_nuberofautopays,
-                                "recurring_happens_aftr_12_pmt_child" => $childrecurring_happens_aftr_12_pmt,
-                                "recurring_client_be_charge_on_child" => $childrecurring_client_be_charge_on,
-                                "recurring_first_pmt_child" => $childrecurring_first_pmt,
-                                "recurring_recurring_pmt_child" => $childrecurring_recurring_pmt,
-                                "recurring_total_contract_revenue_child" => $childrecurring_total_contract_revenue,
-                                "recurring_customer_chage_by_child" => $recurring_customer_chage_by_child,
+                                "recurring_customer_chage_by_adult" => $this->getRecurringCustomerChargeBy($isRecurringAdult, $request, 'customer_charged_num_adult_', 'customer_charged_time_adult_', $i, $y),
 
-                                "is_recurring_infant"=> $request->input('is_recurring_infant_'.$i.$y),
-                                "recurring_price_infant"=>$infantrecurring_price,
-                                "recurring_run_auto_pay_infant" => $infantrecurring_run_auto_pay,
-                                "recurring_cust_be_charge_infant" => $infantrecurring_cust_be_charge,
-                                "recurring_every_time_num_infant" => $infantrecurring_every_time_num ,
-                                "recurring_every_time_infant" => $infantrecurring_every_time,
-                                "recurring_nuberofautopays_infant" => $infantrecurring_nuberofautopays,
-                                "recurring_happens_aftr_12_pmt_infant" => $infantrecurring_happens_aftr_12_pmt,
-                                "recurring_client_be_charge_on_infant" => $infantrecurring_client_be_charge_on,
-                                "recurring_first_pmt_infant" => $infantrecurring_first_pmt,
-                                "recurring_recurring_pmt_infant" => $infantrecurring_recurring_pmt,
-                                "recurring_total_contract_revenue_infant" => $infantrecurring_total_contract_revenue,
-                                "recurring_customer_chage_by_infant" => $recurring_customer_chage_by_infant,
+                               "is_recurring_child" => $isRecurringChild,
+                                "recurring_price_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'recurring_price_child_', $i, $y),
+                                "recurring_run_auto_pay_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'run_auto_pay_child_', $i, $y),
+                                "recurring_cust_be_charge_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'cust_be_charge_child_', $i, $y),
+                                "recurring_every_time_num_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'every_time_num_child_', $i, $y),
+                                "recurring_every_time_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'every_time_child_', $i, $y),
+                                "recurring_nuberofautopays_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'nuberofautopays_child_', $i, $y),
+                                "recurring_happens_aftr_12_pmt_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'happens_aftr_12_pmt_child_', $i, $y),
+                                "recurring_client_be_charge_on_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'client_be_charge_on_child_', $i, $y),
+                                "recurring_first_pmt_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'first_pmt_child_', $i, $y),
+                                "recurring_recurring_pmt_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'recurring_pmt_child_', $i, $y),
+                                "recurring_total_contract_revenue_child" =>  $this->getRecurringValue($isRecurringChild, $request, 'total_contract_revenue_child_', $i, $y),
+                                "recurring_customer_chage_by_child" => $this->getRecurringCustomerChargeBy($isRecurringChild, $request, 'customer_charged_num_child_', 'customer_charged_time_child_', $i, $y),
+
+                                "is_recurring_infant" => $isRecurringInfant,
+                                "recurring_price_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'recurring_price_infant_', $i, $y),
+                                "recurring_run_auto_pay_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'run_auto_pay_infant_', $i, $y),
+                                "recurring_cust_be_charge_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'cust_be_charge_infant_', $i, $y),
+                                "recurring_every_time_num_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'every_time_num_infant_', $i, $y),
+                                "recurring_every_time_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'every_time_infant_', $i, $y),
+                                "recurring_nuberofautopays_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'nuberofautopays_infant_', $i, $y),
+                                "recurring_happens_aftr_12_pmt_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'happens_aftr_12_pmt_infant_', $i, $y),
+                                "recurring_client_be_charge_on_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'client_be_charge_on_infant_', $i, $y),
+                                "recurring_first_pmt_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'first_pmt_infant_', $i, $y),
+                                "recurring_recurring_pmt_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'recurring_pmt_infant_', $i, $y),
+                                "recurring_total_contract_revenue_infant" =>  $this->getRecurringValue($isRecurringInfant, $request, 'total_contract_revenue_infant_', $i, $y),
+                                "recurring_customer_chage_by_infant" => $this->getRecurringCustomerChargeBy($isRecurringInfant, $request, 'customer_charged_num_infant_', 'customer_charged_time_infant_', $i, $y),
 
                                 "fitnessity_fee"=> $user->fitnessity_fee,
                                 "pay_setnum" => $request->input('pay_setnum_'.$i.$y),
@@ -351,40 +279,57 @@ class ServiceController extends BusinessBaseController
                                 "membership_type" =>  $request->input('membership_type_'.$i.$y),
                                 "pay_session" => $request->input('pay_session_'.$i.$y),
                                 "price_title" => $request->input('price_title_'.$i.$y),
-                                "adult_cus_weekly_price" => $adult_cus_weekly_price,
-                                "adult_weekend_price_diff" =>  $adult_weekend_price_diff,
-                                "adult_discount" => $adult_discount, 
-                                "adult_estearn" => $adult_estearn,
-                                "weekend_adult_estearn" => $weekend_adult_estearn,
-                                "child_cus_weekly_price" => $child_cus_weekly_price ,
-                                "child_discount" => $child_discount,
-                                "child_weekend_price_diff" => $child_weekend_price_diff,
-                                "child_estearn" => $child_estearn,
-                                "weekend_child_estearn" => $weekend_child_estearn,
-                                "infant_cus_weekly_price" => $infant_cus_weekly_price,
-                                "infant_weekend_price_diff" => $infant_weekend_price_diff, 
-                                "infant_discount" => $infant_discount, 
-                                "infant_estearn" =>  $infant_estearn,  
-                                "weekend_infant_estearn" =>  $weekend_infant_estearn,  
+
+                                "adult_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_cus_weekly_price_', $displaySection),
+                                "adult_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_weekend_price_diff_', $displaySection),
+                                "adult_discount" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_discount_', $displaySection),
+                                "adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_estearn_', $displaySection),
+                                "weekend_adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'weekend_adult_estearn_', $displaySection),
+                                "child_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_cus_weekly_price_', $displaySection),
+                                "child_discount" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_discount_', $displaySection),
+                                "child_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_weekend_price_diff_', $displaySection),
+                                "child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_estearn_', $displaySection),
+                                "weekend_child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'weekend_child_estearn_', $displaySection),
+                                "infant_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_cus_weekly_price_', $displaySection),
+                                "infant_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_weekend_price_diff_', $displaySection),
+                                "infant_discount" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_discount_', $displaySection),
+                                "infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_estearn_', $displaySection),
+                                "weekend_infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'weekend_infant_estearn_', $displaySection), 
                             ];
-                            if($request->input('price_id_db_'.$i.$y) != ''){
-                                BusinessPriceDetails::where('id',$request->input('price_id_db_'.$i.$y))->update($businessPayment);
-                            }else{
-                                BusinessPriceDetails::create($businessPayment);
+                            
+                            $createOrUpdate = BusinessPriceDetails::updateOrCreate(['id' => $request->input('price_id_db_' . $i . $y)], $businessPrice);
+                        }
+                    }
+
+                    $addOnCnt = $request->input('addOnServiceCount'.$i);
+                    if($addOnCnt >= 0){
+                        for($z=0; $z <= $addOnCnt; $z++) {
+                            if($request->input('service_name_'.$i.$z) != ''){
+                                $idary_addOn1[] = $request->input('add_on_service_id_db_'.$i.$z)  ?? '' ;
+                                $businessAddOnService = [
+                                    "category_id" => $cat_new_id,
+                                    "serviceid" => $serviceId,
+                                    "cid" => $user->cid,
+                                    "user_id" => $user->id,
+                                    "service_name"=>$request->input('service_name_'.$i.$z)  ?? NULL,
+                                    "service_price" =>  $request->input('service_price_'.$i.$z) ?? 0,
+                                    "service_description" => $request->input('service_description_'.$i.$z) ?? NULL,
+                                ];
+
+                                $createOrUpdate = AddOnService::updateOrCreate(['id' => $request->input('add_on_service_id_db_' . $i . $z)], $businessAddOnService);
                             }
                         }
                     }
                 }
                
                 $differenceArray_cat1 = array_diff($idary_cat, $idary_cat1);
-                foreach($differenceArray_cat1 as $deletdata){
-                    BusinessPriceDetailsAges::where('id',$deletdata)->delete();
-                }
-
+                BusinessPriceDetailsAges::whereIn('id', $differenceArray_cat1)->delete();
+                
                 $differenceArray_price1 = array_diff($idary_price, $idary_price1);
-                foreach($differenceArray_price1 as $deletdata){
-                    BusinessPriceDetails::where('id',$deletdata)->delete();
-                }
+                BusinessPriceDetails::whereIn('id',$differenceArray_price1)->delete();
+
+                $differenceArray_AOS1 = array_diff($idary_addOn, $idary_addOn1);
+                AddOnService::whereIn('id',$differenceArray_AOS1)->delete();
             }
 
             $companyservice = $companyInfo->service->sortByDesc('created_at');
@@ -393,6 +338,53 @@ class ServiceController extends BusinessBaseController
             return redirect()->route('business.services.index');
         }   
     }
+
+    public function getRecurringValue($isRecurring, $request, $fieldPrefix, $i, $y)
+    {
+        if ($isRecurring == 1) {
+            return $request->input($fieldPrefix . $i . $y);
+        }
+        return NULL;
+    }
+
+    public function getRecurringCustomerChargeBy($isRecurring, $request, $numFieldPrefix, $timeFieldPrefix, $i, $y)
+    {
+        if ($isRecurring == 1) {
+            $numValue = $request->input($numFieldPrefix . $i . $y);
+            $timeValue = $request->input($timeFieldPrefix . $i . $y);
+            return $numValue . ' ' . $timeValue;
+        }
+
+        return NULL;
+    }
+
+    public function getSectionValue($request, $i, $y, $section, $fieldPrefix,$displaySection)
+    {   
+        if ($displaySection != 'freeprice') {
+            if ($request->input($section . $i . $y) == $section) {
+                return $request->input($fieldPrefix . $i . $y);
+            }
+            return '';
+        }
+        return '';
+    }
+
+    public function getDisplaySection($request, $i, $y)
+    {
+        $displaySection = $request->input('sectiondisplay'.$i.$y);
+        if ($displaySection == 'freeprice') {
+            return 'freeprice';
+        } elseif ($displaySection == '') {
+            if ($request->input('adult_weekend_price_diff_'.$i.$y)!=''||$request->input('child_weekend_price_diff_'.$i.$y)||$request->input('infant_weekend_price_diff_'.$i.$y))
+            {
+               return 'weekendprice';
+            } else {
+                return 'weekdayprice';
+            }
+        }
+        return $displaySection;
+    }
+
 
     /**
      * Display the specified resource.

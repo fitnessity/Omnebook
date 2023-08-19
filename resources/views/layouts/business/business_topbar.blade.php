@@ -45,7 +45,7 @@
 </head>
 
  <!-- Begin page -->
-    <div id="layout-wrapper">
+    <div id="layout-wrapper printnone">
 		<div id="page-topbar">
 			<div class="layout-width">
 				<div class="navbar-header">

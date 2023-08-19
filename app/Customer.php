@@ -47,11 +47,6 @@ class Customer extends Authenticatable
                 $model->user_id = $fitnessity_user->id;
             }
         });
-      /*  self::retrieved(function($model){
-            if(!$model->stripe_customer_id){
-                $model->create_stripe_customer_id();
-            }
-        });*/
         
     }
 
@@ -267,7 +262,7 @@ class Customer extends Authenticatable
     }
 
     function create_stripe_customer_id(){
-	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-'){
+	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
             try {
                 \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
                 $customer = \Stripe\Customer::create([
