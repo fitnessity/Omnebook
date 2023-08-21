@@ -78,7 +78,7 @@ input:disabled{
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
-					@php $i=0; $newary= []; @endphp
+					<!-- @php $i=0; $newary= []; @endphp
 					@if(is_array(@$pro_pic1) && !empty(@$pro_pic1))
                     	@foreach(@$pro_pic1 as $img) 
                     		@if(!empty($img) && Storage::disk('s3')->exists($img))
@@ -104,7 +104,7 @@ input:disabled{
 				            </a>
 						</div>
                         @endif
-                    @endif
+                    @endif -->
 				</div>
 			</div>
 
