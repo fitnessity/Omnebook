@@ -92,62 +92,61 @@
 								<i class='bx bx-message-square-add fs-22' ></i>
 							</button>
 						</div>
-						<div class="dropdown ms-1 topbar-head-dropdown header-item">
+						<!-- <div class="dropdown ms-1 topbar-head-dropdown header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="rounded" height="20">
 							</button>
 							<div class="dropdown-menu dropdown-menu-end">
 
-								<!-- item-->
 								<a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
 									<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">English</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
 									<img src="{{asset('/public/dashboard-design/images/spain.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Española</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr" title="German">
 									<img src="{{asset('/public/dashboard-design/images/germany.svg')}}" alt="user-image" class="me-2 rounded" height="18"> <span class="align-middle">Deutsche</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it" title="Italian">
 									<img src="{{asset('/public/dashboard-design/images/italy.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Italiana</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
 									<img src="{{asset('/public/dashboard-design/images/russia.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">русский</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
 									<img src="{{asset('/public/dashboard-design/images/china.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">中国人</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="fr" title="French">
 									<img src="{{asset('/public/dashboard-design/images/french.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">français</span>
 								</a>
 
-								<!-- item-->
+								
 								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
 									<img src="{{asset('/public/dashboard-design/images/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Arabic</span>
 								</a>
 							</div>
-						</div>
+						</div> -->
 
-						<div class="dropdown topbar-head-dropdown ms-1 header-item">
+						<!-- <div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-category-alt fs-22'></i>
 							</button>
@@ -208,7 +207,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
@@ -646,7 +645,7 @@
 								</span>
 							</button>
 							<div class="dropdown-menu dropdown-menu-end">
-								<!-- item-->
+								
 								<h6 class="dropdown-header">Welcome Anna!</h6>
 								<a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
 								<a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
