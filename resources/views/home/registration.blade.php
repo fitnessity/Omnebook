@@ -35,9 +35,18 @@
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
                     <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Date Of Birth (mm/dd/yyyy)">
-
-                    <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
-                    <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+					<div class="position-relative auth-pass-inputgroup">	
+						<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+                        <button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "password">
+                            <i class="fas fa-eye"></i>
+						</button>
+					</div>
+					<div class="position-relative auth-pass-inputgroup">
+						<input class="password-input" type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+						<button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "confirm_password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+					</div>
                     <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
                         <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
@@ -698,6 +707,22 @@
 
 
     $(document).ready(function () {
+
+        $('.toggle-password').on('click', function() {
+            var passwordField = $('#password');
+            if($(this).data('tp') == 'confirm_password'){
+                passwordField = $('#confirm_password');
+            }
+
+            var toggleButton = $(this);
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                toggleButton.html('<i class="fas fa-eye-slash"></i>');
+            } else {
+                passwordField.attr('type', 'password');
+                toggleButton.html('<i class="fas fa-eye"></i>');
+            }
+        });
 
         $(".birthday").keyup(function(){
             if ($(this).val().length == 2){

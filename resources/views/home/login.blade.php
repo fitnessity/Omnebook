@@ -30,8 +30,13 @@ if(!empty(@$response)){
                     @endif
                     <input type="hidden" name="redirect" value="{{$request->redirect}}">
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" autocomplete="off">
-                    <span class="text-danger cls-error" id="erremail"></span>                    
-                    <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+                    <span class="text-danger cls-error" id="erremail"></span> 
+					<div class="position-relative auth-pass-inputgroup">
+						<input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+						<button class="btn-link position-absolute password-addon toggle-password" type="button" id="password-addon" >
+							<i class="fas fa-eye"></i>
+						</button>
+					</div>
                     <span class="text-danger cls-error" id="errpass"></span>                    
                     <div class="remembermediv terms-wrap">
                         <input type="checkbox" id="remember" name="remember" checked class="remembercheckbox" />
@@ -61,6 +66,20 @@ if(!empty(@$response)){
 @include('layouts.footer')
 <script>
     $(document).ready(function() {
+
+        $('.toggle-password').on('click', function() {
+            var passwordField = $('#password');
+            var toggleButton = $(this);
+
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                toggleButton.html('<i class="fas fa-eye-slash"></i>');
+            } else {
+                passwordField.attr('type', 'password');
+                toggleButton.html('<i class="fas fa-eye"></i>');
+            }
+        });
+
         $("#login_submit").click(function(){
             $("#erremail").html('');
             $("#errpass").html('');

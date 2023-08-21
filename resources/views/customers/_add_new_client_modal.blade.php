@@ -7,7 +7,7 @@
 @php $business_id = Auth::user()->cid; @endphp
 
 
-<div class="modal fade new-client-steps" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal fade new-client-steps" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -31,7 +31,7 @@
 									<input type="hidden" name="business_id" value="{{$business_id}}">
 									<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
 									<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
-									<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+									<!-- <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off"> -->
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" id="dob" name="dob" placeholder="Birth Date">
@@ -143,8 +143,7 @@
 												</ul>
 												<ul class="nav nav-tabs nav-stacked">
 													<li class="active"><a data-bs-toggle="tab" data-bs-target="#add_personel_info" role="tab" aria-controls="add_personel_info" aria-selected="true"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
-													<li><a data-bs-toggle="tab" data-bs-target="#adding_photo" role="tab" aria-controls="adding_photo" aria-selected="false"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
-													<li><a data-bs-toggle="tab" data-bs-target="#" role="tab" aria-controls=""><span class="stp-numbr" aria-selected="false">5</span> <span>Adding Family Member</span></a></li>
+													<li><a data-bs-toggle="tab" data-bs-target="#" role="tab" aria-controls=""><span class="stp-numbr" aria-selected="false">4</span> <span>Adding Family Member</span></a></li>
 												</ul>
 												
 												<div class="tab-content">
@@ -177,23 +176,6 @@
 															<button type="button" class="signup-new btn-red" id="step4_next">Next</button>
 														</div>
 													</div>
-													<div id="adding_photo" class="tab-pane fade">
-														<div class="upload-wrp-content">
-															<p><b>Put a face to the name </b>and improve your adds to networking success.</p>
-															<p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
-														</div>
-														<div class="">
-															<div class="upload-img">
-																<input type="file" name="file_upload" id="file" onchange="">
-																<div class="upload-img-msg">
-																	<p>Touble uploading profile photo?</p>
-																</div>
-															</div>
-														</div>
-														<div class="signup-step-btn">
-															<button type="button" class="signup-new btn-red" id="fileimgnext">Upload</button>
-														</div>
-													</div>
 												</div>
 											</div>
 										</div>
@@ -201,57 +183,6 @@
 								</form>
 							</div>
 							
-							<div id="divstep5" style="display: none;">
-								<form action="#" enctype="multipart/form-data" id="myformprofile">
-									<h4 class="heading-step">Step 4</h4>
-									<div class="sign-step_4">
-										<div class="filledstep-bar">
-											<div class="row">
-												<div class="col-sm-12">
-													<span class="filledstep"></span>
-													<span class="filledstep"></span>
-													<span class="filledstep"></span>
-													<span></span>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<ul class="">
-													<li><i class="fa fa-check"></i><span>Registration Information</span></li>
-													<li><i class="fa fa-check"></i><span>Your Identification</span></li>
-													<li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
-												</ul>
-												<ul class="nav nav-tabs nav-stacked">
-													<li class="active"><a data-toggle="tab" data-bs-target="#adding_photo" role="tab" aria-controls="adding_photo" class="active" aria-selected="true"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
-													<li class=""><a data-toggle="tab" data-bs-target="#" role="tab" class="" aria-controls="" aria-selected="false"><span class="stp-numbr">5</span> <span>Adding Family Member</span></a></li>
-												</ul>
-												
-												<div class="tab-content">
-												   
-													<div id="adding_photo" class="tab-pane fade show active">
-														<div class="upload-wrp-content">
-															<p><b>Put a face to the name </b>and improve your adds to networking success.</p>
-															<p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
-														</div>
-														<div class="">
-															<div class="upload-img">
-																<input type="file" name="file_upload_profile" id="file_upload_profile" onchange="">
-																<div class="upload-img-msg">
-																	<p>Touble uploading profile photo?</p>
-																</div>
-															</div>
-														</div>
-														<div class="signup-step-btn">
-															<button type="button" class="signup-new btn-red" id="step44_next">Next</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
 							
 							<div id="divstep6" style="display: none;">
 								<form action="#" id="familyform">
@@ -298,6 +229,15 @@
 																			<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" name="birthdate" id="birthdate"  placeholder="Birth Date">
 																		</div>
 																		<div class="form-group">
+																			<select name="gender[]" id="gender" class="form-select gender" required="">
+																				<option value="">Select Gender</option>
+																				<option value="male">Male</option>
+																				<option value="female">Female</option>
+																				<option value="other">Specify other</option>
+																			</select>
+																			<span class="error" id="err_gender"></span>
+																		</div>
+																		<div class="form-group">
 																			<select name="relationship[]" id="relationship" class="form-select relationship required">
 																				<option value="">Select Relationship</option>
 																				<option value="Brother">Brother</option>
@@ -316,21 +256,34 @@
 																			<span class="error" id="err_mphone"></span>
 																		</div>
 																		<div class="form-group">
+																			<input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email">
+																			<span class="error" id="err_emailid"></span>
+																		</div>
+																		<div class="form-group">
+																			<input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name" placeholder="Emergency Contact Name">
+																			<span class="error" id="err_emergency_name"></span>
+																		</div>
+																		<div class="form-group">
 																			<input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
 																			<span class="error" id="err_emergency_phone"></span>
 																		</div>
 																		<div class="form-group">
-																			<select name="gender[]" id="gender" class="form-select gender" required="">
-																				<option value="">Select Gender</option>
-																				<option value="male">Male</option>
-																				<option value="female">Female</option>
-																				<option value="other">Specify other</option>
-																			</select>
-																			<span class="error" id="err_gender"></span>
+																			<input type="text" name="emergency_email[]" id="emergency_email" class="form-control emergency_email" placeholder="Emergency Contact Email">
+																			<span class="error" id="err_emergency_email"></span>
 																		</div>
 																		<div class="form-group">
-																			<input type="email" name="emailid[]" id="emailid" class="form-control email" placeholder="Email">
-																			<span class="error" id="err_emailid"></span>
+																			<select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation required">
+																				<option value="">Select Relationship</option>
+																				<option value="Brother">Brother</option>
+																				<option value="Sister">Sister</option>
+																				<option value="Father">Father</option>
+																				<option value="Mother">Mother</option>
+																				<option value="Wife">Wife</option>
+																				<option value="Husband">Husband</option>
+																				<option value="Son">Son</option>
+																				<option value="Daughter">Daughter</option>
+																			</select>
+																			<span class="error" id="err_emergency_relation"></span>
 																		</div>
 																	</div>
 																</div>
@@ -340,11 +293,28 @@
 												</div>
 											</div>
 										</div>
-										<div class="signup-step-btn">
+										<div class="row">
+											<div class="col-xl-12 col-lg-12 col-sm-12">
+												<div class="">
+													<button type="button" class="btn btn-red mb-10 w-100" id="add_family">Add New Family Member</button>
+												</div>
+											</div>
+											<div class="col-xl-6 col-lg-6 col-sm-12">
+												<div class="">
+													<button type="button" class="btn btn-red mb-10 w-100" id="step5_next">Save</button>
+												</div>
+											</div>
+											<div class="col-xl-6 col-lg-6 col-sm-12">
+												<div class="">
+													<button type="button" class="btn btn-red mb-10 w-100" id="skip5_next">Skip</button>
+												</div>
+											</div>
+										</div>
+										<!--<div class="signup-step-btn">
 											<button type="button" class="signup-new btn-red mb-10 mt-25" id="add_family">Add New Family Member</button>
 											<button type="button" class="signup-new btn-red mb-10" id="step5_next">Save</button>
 											<button type="button" class="signup-new btn-red mb-10" id="skip5_next">Skip</button>
-										</div>
+										</div> -->
 									</div>
 								</form>
 							</div>
@@ -380,12 +350,20 @@
         maxDate: "today",
 	});
 
+	$(document).on('focus', '#birthdate', function(e){
+        //jQuery.noConflict();
+        $(this).flatpickr( { 
+           dateFormat: "m/d/Y",
+        	maxDate: "today",
+        });
+    });
+
 	jQuery(function ($) {
       	$('#frmregister').validate({
           	rules: {
 	            firstname: "required",
 	            lastname: "required",
-	            username: "required",
+	            /*username: "required",*/
 	            email: {
 	                required: true,
 	                email: true
@@ -397,7 +375,7 @@
           	messages: {
               	firstname: "Enter your Firstname",
               	lastname: "Enter your Lastname",
-             	username: "Enter your Username",
+             	/*username: "Enter your Username",*/
               	email: {
                   	required: "Please enter a valid email address",
               	},
@@ -533,7 +511,7 @@
 	            },
 	            success: function (response) {
 	                $("#divstep4").css("display","none");
-	                $("#divstep5").css("display","block");
+	                $("#divstep6").css("display","block");
 	            }
 	        });
 	    	}
