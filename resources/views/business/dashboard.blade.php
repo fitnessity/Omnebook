@@ -478,9 +478,9 @@
 													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none" onclick="getExpiringMembership('90','{{$startDate}}','{{$endDate}}')">
                                                         90D
                                                     </button>
-													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
+													<!-- <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
                                                         All
-                                                    </button>
+                                                    </button> -->
                                                 </div>
                                             </div><!-- end card header -->
 											<div class="month-year align-items-center d-flex flip-view">
@@ -553,8 +553,6 @@
                             <div class="layout-rightside">
                                 <div class="card h-100 rounded-0">
                                     <div class="card-body p-0">
-                                       
-                                        @if(count($notificationAry) > 0 || count($todayBooking)>0)
                                             <div class="p-3">
                                                 <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
                                             </div>
@@ -594,9 +592,12 @@
                                                             </div>
                                                         </div>
                                                     @endforeach
+
+                                                    @if(count($notificationAry) == 0 || count($todayBooking) == 0)
+                                                       <p class="text-center mb-3">Not Available</p>
+                                                    @endif
                                                 </div>
                                             </div>
-                                        @endif
                                         <div class="p-3 mt-2">
                                             <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top Booked Memberships
                                             </h6>
