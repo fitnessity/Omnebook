@@ -575,7 +575,7 @@ input:disabled{
 						            $companycountry = $companyData ? $companyData['country'] : '';
 
 			                        $profilePic = $service->first_profile_pic();
-			                        $profilePic =  Storage::disk('s3')->exists($profilePic)) ? Storage::url($profilePic) : '/public/images/service-nofound.jpg';
+			                        $profilePic =  Storage::disk('s3')->exists($profilePic) ? Storage::url($profilePic) : '/public/images/service-nofound.jpg';
 			                     
 			                     	$businessServiceReview = BusinessServiceReview::where('service_id', $service['id']);
 									$reviews_avg = $businessServiceReview->count() >0 ? round($businessServiceReview->sum('rating')/$businessServiceReview->count(),2) :0 ;
