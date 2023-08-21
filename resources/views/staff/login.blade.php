@@ -32,9 +32,15 @@
                     <input type="search" name="searchCompany" id="searchCompany" class="myemail" size="30" autocomplete="off" placeholder="Seach Company Name" maxlength="80" required>
 
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" required>
-                    <span class="text-danger cls-error" id="erremail"></span>                    
-                    <input type="password" name="password" id="password" size="30" placeholder="Password" required>
-                    <span class="text-danger cls-error" id="errpass"></span>   
+                    <span class="text-danger cls-error" id="erremail"></span>        
+					<div class="position-relative auth-pass-inputgroup">
+						<input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" required>
+
+						<button class="btn-link position-absolute password-addon" type="button" id="toggle-password">
+							<i class="fas fa-eye"></i>
+						</button>
+						<span class="text-danger cls-error" id="errpass"></span>   
+					</div>
 					<div class="row">
 						<div class="col-md-6"></div> 
 						<div class="col-md-6">
@@ -54,13 +60,24 @@
     </div>
 </section>
 
-@include('layouts.footer')
-
+@include('layouts.footer')                          
 <script>
     $(document).ready(function () {
 
-        var url = "{{ url('/staff_login') }}";
+        $('#toggle-password').on('click', function() {
+            var passwordField = $('#password');
+            var toggleButton = $(this);
 
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                toggleButton.html('<i class="fas fa-eye-slash"></i>');
+            } else {
+                passwordField.attr('type', 'password');
+                toggleButton.html('<i class="fas fa-eye"></i>');
+            }
+        });
+
+        var url = "{{ url('/staff_login') }}";
         $( "#searchCompany" ).autocomplete({
         source: url,
         focus: function( event, ui ) {

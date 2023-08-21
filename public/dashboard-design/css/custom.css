@@ -4150,11 +4150,7 @@ div#termsdiv{order: 4;}
 .flatpickr-current-month span.arrowDown::after {
     border-top-color: rgb(255, 255, 255);
 }
-.numInputWrapper:hover span {
-  opacity: 1;
-  background: none;
-  border: none !important;
-}
+
 .numInputWrapper span{
 	padding: 0 1px 0 3px;
 	width: 9px;
@@ -4170,8 +4166,16 @@ div#termsdiv{order: 4;}
 }
 .upcoming-scheduled .numInputWrapper span.arrowUp{
 	right: 5px;
+
 }
 .upcoming-scheduled .numInputWrapper span.arrowDown{
 	right: 5px;
 }
-.w-px-100{width:100px;}
+.w-px-100{
+	width:100px;
+}
+.numInputWrapper span{
+	opacity: 1 !important;
+	background: none !important;
+	border: none !important;
+}
