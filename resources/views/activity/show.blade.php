@@ -78,7 +78,7 @@ input:disabled{
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
-					<!-- @php $i=0; $newary= []; @endphp
+					@php $i=0; $newary= []; @endphp
 					@if(is_array(@$pro_pic1) && !empty(@$pro_pic1))
                     	@foreach(@$pro_pic1 as $img) 
                     		@if(!empty($img) && Storage::disk('s3')->exists($img))
@@ -104,7 +104,7 @@ input:disabled{
 				            </a>
 						</div>
                         @endif
-                    @endif -->
+                    @endif
 				</div>
 			</div>
 
@@ -575,7 +575,7 @@ input:disabled{
 						            $companycountry = $companyData ? $companyData['country'] : '';
 
 			                        $profilePic = $service->first_profile_pic();
-			                        $profilePic =  Storage::url($profilePic) ?? '/public/images/service-nofound.jpg';
+			                        $profilePic =  Storage::disk('s3')->exists($profilePic)) ? Storage::url($profilePic) : '/public/images/service-nofound.jpg';
 			                     
 			                     	$businessServiceReview = BusinessServiceReview::where('service_id', $service['id']);
 									$reviews_avg = $businessServiceReview->count() >0 ? round($businessServiceReview->sum('rating')/$businessServiceReview->count(),2) :0 ;
