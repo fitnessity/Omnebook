@@ -69,13 +69,13 @@ class RegistrationController extends Controller
         } else {
 
             //check for unique customer name
-            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
+            /*if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'User name already exists. Please select different Name',
                 );
                 return Response::json($response);
-            };
+            };*/
 
             //check for unique email id
             if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
@@ -115,7 +115,7 @@ class RegistrationController extends Controller
                 $customerObj->business_id = $company->id;
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                $customerObj->username = $postArr['username'];
+                // $customerObj->username = $postArr['username'];
                 //$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $customerObj->password = Hash::make($random_password);
                 $customerObj->email = $postArr['email'];
@@ -149,7 +149,7 @@ class RegistrationController extends Controller
                 $userObj->role = 'customer';
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                $userObj->username = $postArr['username'];
+                $userObj->username = $postArr['firstname'].$postArr['lastname'];
                 /*$userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $userObj->buddy_key = $postArr['password'];*/
                 $userObj->password = $customerObj->password;
@@ -248,6 +248,9 @@ class RegistrationController extends Controller
                 $customerObj->phone_number = $request->mphone[$i];
                 $customerObj->birthdate = $date;
                 $customerObj->emergency_contact = $request->emergency_phone[$i];
+                $customerObj->emergency_name = $request->emergency_name[$i];
+                $customerObj->emergency_email = $request->emergency_email[$i];
+                $customerObj->emergency_relation = $request->emergency_relation[$i];
                 $customerObj->gender =  $request->gender[$i];
                 $customerObj->save();
                 if ($customerObj) {      
@@ -265,6 +268,5 @@ class RegistrationController extends Controller
         );
 
         return Response::json($response);
-            
     }
 }
