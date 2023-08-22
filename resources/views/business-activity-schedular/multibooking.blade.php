@@ -10,6 +10,7 @@
 					<div class="col-lg-12">
 						<div class="valor-mix-title">
 							<h2>{{$company->company_name}}</h2>
+							<p>Booking Schedule for {{ucwords(@$customer->full_name)}}</p>
 						</div>
 					</div>
 				</div>
@@ -224,7 +225,7 @@
        	
     });
 
-    function openPopUp(scheduleId,sid,activityName,time,chk,catId,checkboxId){
+    function openPopUp(scheduleId,sid,activityName,time,chk,catId,checkboxId ,category_id){
     	$('#select-booking-type').html('');
 		if(chk == 1){
  			$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
@@ -244,6 +245,7 @@
 					pname:activityName,
 					time:time,
 					pname:activityName,
+					category_id:catId,
 				},
 				success:function(data){
 					$('#timeSlotCnt').html(data);
