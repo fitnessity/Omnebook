@@ -190,64 +190,62 @@
 																	</div>
 																</div>
 																<div class="col-md-6 col-sm-4 col-xs-12">
-																	<label>Select Price Option  </label>
 																	<div class="select0service mb-10">
-																		<label>Participant Quantity </label>
+																		<label>Participant Quantity</label>
 																		<button type="button" data-bs-toggle="modal" data-bs-target="#addpartcipate" class="btn btn-red width-100 search-add-client"> Select </button>
 																	</div>
-																	<div class="accordion cart-accordion" id="default-accordion-example">
-																	<div class="accordion-item">
-																		<h2 class="accordion-header" id="headingOne">
-																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-																				Participant
-																			</button>
-																		</h2>
-																		<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
-																			<div class="accordion-body">
-																				<div class="participant-selection btn-group">
-																					<div class="row">
-																						<div class="col-md-12 col-xs-12">
-																							<div class="select">
-																								<label class="btn button_select">Adults (Ages 13 & Up)</label>
-																								<div class="qtyButtons">
-																									<div class="qty count-members ">
-																										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
-																										<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly="">
-																										<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
-																									</div>   
+																	<!-- <div class="accordion cart-accordion" id="default-accordion-example">
+																		<div class="accordion-item">
+																			<h2 class="accordion-header" id="headingOne">
+																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+																					Participant
+																				</button>
+																			</h2>
+																			<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
+																				<div class="accordion-body">
+																					<div class="participant-selection btn-group">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<div class="select">
+																									<label class="btn button_select">Adults (Ages 13 & Up)</label>
+																									<div class="qtyButtons">
+																										<div class="qty count-members ">
+																											<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+																											<input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly="">
+																											<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+																										</div>   
+																									</div>
 																								</div>
-																							</div>
-																						  
-																							<div class="select">
-																								 <label class="btn button_select" for="item_2">Children (Ages 2-12)</label>
-																								 <div class="qtyButtons">
-																									<div class="qty count-members ">
-																										<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
-																										<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly="">
-																										<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
-																									</div>
-																								 </div>
-																							</div>
-																						  
-																						  <div class="select">
-																							  <label class="btn button_select" for="item_3">Infants (Under 2)</label>
-																							  <div class="qtyButtons">
-																									<div class="qty count-members ">
-																										<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
-																										<input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly="">
-																										<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i></span>
-																									</div>
+																							  
+																								<div class="select">
+																									 <label class="btn button_select" for="item_2">Children (Ages 2-12)</label>
+																									 <div class="qtyButtons">
+																										<div class="qty count-members ">
+																											<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
+																											<input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly="">
+																											<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+																										</div>
+																									 </div>
+																								</div>
+																							  
+																							  <div class="select">
+																								  <label class="btn button_select" for="item_3">Infants (Under 2)</label>
+																								  <div class="qtyButtons">
+																										<div class="qty count-members ">
+																											<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
+																											<input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly="">
+																											<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i></span>
+																										</div>
+																								  </div>
 																							  </div>
-																						  </div>
-																						  
+																							  
+																							</div>
 																						</div>
 																					</div>
 																				</div>
 																			</div>
 																		</div>
-																	</div>
-																</div>
-
+																	</div> -->
 																</div>
 																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
 																	<label> Membership Option</label>
