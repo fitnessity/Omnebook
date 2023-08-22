@@ -3,7 +3,7 @@ a{
 	cursor: pointer;
 }
 a:hover{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .navbar-menu .navbar-nav .nav-link img{
 	display: inline-block;
@@ -59,7 +59,7 @@ a:hover{
 }
 .multiple-activites label{
 	font-size: 7px;
-	color: #000;
+	color: var(--vz-black-font-color);
 	margin-top: -5px;
 	text-align: center;
 }
@@ -70,9 +70,7 @@ a:hover{
 	font-size: 12px;
 	line-height: 13px;
 }
-.color-black{
-	color: #000 !important;
-}
+
 .activity-show i{
 	font-size: 18px;
 	margin-left: 7px;
@@ -119,7 +117,7 @@ header{ position: fixed !important; }
 	padding: 4px 0px;
 	font-size: 17px;
 	font-weight: bold;
-	color: #000;
+	color: var(--vz-black-font-color);
 	text-transform: uppercase;
 	text-align: center;
 	margin-top: 11px;
@@ -130,7 +128,7 @@ header{ position: fixed !important; }
 }
 .service-details p{
 	font-size: 15px;
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .fix-box{
 	height: 360px;
@@ -153,7 +151,7 @@ header{ position: fixed !important; }
 	text-transform: uppercase;
 	display: block;
 	padding-bottom: 0;
-	color: #000;
+	color:  var(--vz-black-font-color);
 	margin-bottom: 2px;
 }
 .page-sub-title p{
@@ -175,7 +173,7 @@ header{ position: fixed !important; }
 	width: 100%;
 }
 .personal-trainer p{
-	color: #000;
+	color:  var(--vz-black-font-color);
 	font-size: 14px;
 	line-height: 21px;
 	margin-top: 15px;
@@ -199,7 +197,7 @@ header{ position: fixed !important; }
 }
 .tips ul li{
 	font-size: 14px;
-	color: #000;
+	color:  var(--vz-black-font-color);
 	line-height: 25px;
 }
 .tips-accordion .accordion-button:not(.collapsed) {
@@ -216,7 +214,7 @@ header{ position: fixed !important; }
 .steps-title h3{
 	font-size: 20px;
 	font-weight: 600;
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .form-control:focus{
 	border-color: #f91942;
@@ -254,7 +252,7 @@ header{ position: fixed !important; }
 .add-photos h3{
 	font-size: 20px;
 	font-weight: 600;
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .add-photos ul{
 	list-style: disc;
@@ -319,12 +317,12 @@ header{ position: fixed !important; }
 	margin-top: 8px;
 }
 .alinkdrop{
-	color: #000;
+	color:  var(--vz-black-font-color);
 	font-size: 13px;
 	font-weight: 500;
 }
 .alinkdrop:hover{
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .sp-select {
   margin-top: 25px;
@@ -407,7 +405,7 @@ header{ position: fixed !important; }
 	font-size: 15px;
 }
 .set-price label{
-	color: #000;
+	color:  var(--vz-black-font-color);
 	margin-bottom: 0px;
 }
 .set-price {
@@ -467,7 +465,7 @@ header{ position: fixed !important; }
 	padding: 5px 15px;
 	width: 100%;
 	display: inline-block;
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .setting-icon > ul > li a:hover{
 	color: #ed1b24;
@@ -486,7 +484,7 @@ header{ position: fixed !important; }
 .nesting-steps-title{
 	font-size: 20px;
 	font-weight: 600;
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .price-selection label{
 	margin-right: 10px;
@@ -500,14 +498,14 @@ header{ position: fixed !important; }
 	padding-top: 9px;
 }
 .steps-title .mb-3 label{
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .accordion-custom-btn.accordion-button:not(.collapsed){
 	background-color: rgba(237, 36, 45, 0.05);
 	color: #ed1b24;
 }
 .priceselect label{
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .priceoptiondelete i{
 	float: right;
@@ -519,7 +517,7 @@ header{ position: fixed !important; }
 .setting-title h3{
 	font-weight: 600;
 	font-size: 15px;
-	color: #000;
+	color:  var(--vz-black-font-color);
 	text-align: left;
 }
 .setting-box{
@@ -531,10 +529,10 @@ header{ position: fixed !important; }
 	max-width: 70%;
 }
 .contractsettings{
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .every{
-	color: #000;
+	color:  var(--vz-black-font-color);
 }
 .autopays input{
 	width: 20%;
@@ -542,14 +540,14 @@ header{ position: fixed !important; }
 .contract p {
 	display: inline-block;
 	margin-bottom: 0px;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .contract label{
-	color: #000;
+	color: var(--vz-black-font-color);
 	font-weight: 600;
 }
 .autopay label{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .saledate {
   width: 50%;
@@ -558,12 +556,12 @@ header{ position: fixed !important; }
   border-bottom: 1px solid #000;
 }
 .font-black{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .Settings-title h5 {
   font-weight: 600;
   font-size: 15px;
-  color: #000;
+  color: var(--vz-black-font-color);
   text-align: left;
   margin-top:15px;
   margin-bottom: 15px;
@@ -574,10 +572,10 @@ header{ position: fixed !important; }
 .serviceprice h3 {
   font-size: 15px;
   font-weight: 600;
-  color: #000;
+  color: var(--vz-black-font-color);
 }
 .set-num label{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .set-num {
   text-align: center;
@@ -595,7 +593,7 @@ header{ position: fixed !important; }
 .choose-age p{
 	font-size: 14px;
 	margin-bottom: 7px;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .delete-recurring {
 	display: inline;
@@ -652,7 +650,7 @@ header{ position: fixed !important; }
   display: grid;
 }
 .modal-inner-txt h4{
-	color: #000;
+	color: var(--vz-black-font-color);
 	line-height: inherit;
 	font-weight: 600;
 	font-size: 15px;
@@ -955,7 +953,7 @@ header{ position: fixed !important; }
 }
 
 .imagediv .more-option .more-post-optns:hover > i {
-  color: #000;
+  color: var(--vz-black-font-color);
 }
 
 .imagediv .more-option .more-post-optns > i {
@@ -1244,7 +1242,7 @@ header{ position: fixed !important; }
 .plandaybyday label {
 	font-size: 16px;
 	font-weight: 600;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .select-dropoff {
   margin-bottom: 15px;
@@ -1258,7 +1256,7 @@ header{ position: fixed !important; }
   height: 135px;
   border: 1px solid #cfd6dc;
   border-radius: 5px;
-  color: #000;
+  color: var(--vz-black-font-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1512,7 +1510,7 @@ header{ position: fixed !important; }
 }
 .sign-step_4 ul li {
   font-size: 18px;
-  color: #000;
+  color: var(--vz-black-font-color);
   padding: 0;
   margin: 0 0 30px;
   width: 100%;
@@ -1538,13 +1536,13 @@ header{ position: fixed !important; }
   background: none;
   border: 0;
   padding: 0;
-  color: #000;
+  color: var(--vz-black-font-color);
   box-shadow: none;
 }
 .sign-step_4 ul.nav-tabs li a .stp-numbr {
   border: 2px solid #000;
   width: 30px;
-  color: #000;
+  color: var(--vz-black-font-color);
   height: 30px;
   text-align: center;
   border-radius: 50%;
@@ -1612,7 +1610,7 @@ header{ position: fixed !important; }
 }
 .manage-txt span {
   font-size: 13px;
-  color: #000;
+  color: var(--vz-black-font-color);
   margin-bottom: 0px;
 }
 .avatar-1{
@@ -1905,7 +1903,7 @@ padding: 0px 0px 3px 2px !important; */
 	border-radius: 5px;
 }
 .font-black{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .modal-50{
 	max-width: 50%;
@@ -1926,11 +1924,11 @@ padding: 0px 0px 3px 2px !important; */
 	border-bottom: 1px solid #e2e2e2;
 }
 .inner-accordion-titles label{
-	color: #000;
+	color: var(--vz-black-font-color);
 	font-size: 13px;
 }
 .inner-accordion-titles span{
-	color: #000;
+	color: var(--vz-black-font-color);
 	font-size: 13px;
 }
 .your-booking-page.side-part {
@@ -2017,7 +2015,7 @@ padding: 0px 0px 3px 2px !important; */
 }
 .modal-sub-title h4{
 	text-align: left;
-	color: #000;
+	color: var(--vz-black-font-color);
 	line-height: inherit;
 	font-weight: 600;
 	margin-top: 9px;
@@ -2026,7 +2024,7 @@ padding: 0px 0px 3px 2px !important; */
 }
 .modal-side-title h4{
 	text-align: end; 
-	color: #000; 
+	color: var(--vz-black-font-color); 
 	line-height: inherit; 
 	font-weight: 600; 
 	margin-top: 9px; 
@@ -2225,10 +2223,10 @@ padding: 0px 0px 3px 2px !important; */
   color: #ea1515;
 }
 .pagination-next:hover, .pagination-prev:hover {
-  color: #000;
+  color: var(--vz-black-font-color);
 }
 .listjs-pagination li .page {
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .modal-title {
     font-weight: 600;
@@ -2339,7 +2337,7 @@ padding: 0px 0px 3px 2px !important; */
 	width: 100% !important;
 }
 .fc-event .fc-content {
-  color: #000;
+  color: var(--vz-black-font-color);
 }
 .payment-method-img {
   text-align: center;
@@ -2449,7 +2447,7 @@ padding: 0px 0px 3px 2px !important; */
   display: inline-block;
   vertical-align: top;
   width: 30px;
-  color: #000;
+  color: var(--vz-black-font-color);
   height: 30px;
   font: 30px/1 Arial,sans-serif;
   text-align: center;
@@ -2466,7 +2464,7 @@ padding: 0px 0px 3px 2px !important; */
   border: 1px solid #000;
 }
 .qty .count {
-  color: #000;
+  color: var(--vz-black-font-color);
   display: inline-block;
   vertical-align: top;
   font-size: 22px;
@@ -2484,7 +2482,7 @@ padding: 0px 0px 3px 2px !important; */
   vertical-align: top;
   width: 30px;
   height: 30px;
-  color: #000;
+  color: var(--vz-black-font-color);
   font: 30px/1 Arial,sans-serif;
   text-align: center;
   border-radius: 50%;
@@ -2577,7 +2575,7 @@ padding: 0px 0px 3px 2px !important; */
 	width: 100%;
 	display: block;
 	cursor: pointer;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .fc-icon-right-single-arrow::after{
 	content: none !important;
@@ -2664,7 +2662,7 @@ padding: 0px 0px 3px 2px !important; */
   border-right: inherit;
   top: 0;
   left: 0;
-  color: #000;
+  color: var(--vz-black-font-color);
   font-weight: normal;
 }
 
@@ -2743,7 +2741,7 @@ padding: 0px 0px 3px 2px !important; */
    outline: none; 
    cursor:pointer;
    background: #fff;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .btn-grp button:first-child{
   border-left: 1px solid var(--vz-input-border);
@@ -2893,7 +2891,7 @@ padding: 0px 0px 3px 2px !important; */
 .grand-total label{
 	font-size: 16px;
 	padding: 0 10px;
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .avatar-lg-custom{
 	height: 15rem;
@@ -3553,7 +3551,7 @@ div#termsdiv{order: 4;}
 	position: absolute;
 	top: 10px;
 	left: 10px;
-	color: #000;
+	color: var(--vz-black-font-color);
 	font-size: 10px;
 	font-weight: 600;
 }
@@ -3900,7 +3898,7 @@ div#termsdiv{order: 4;}
 	display: inline-block;
 }
 .access-remove a{
-	color: #000;
+	color: var(--vz-black-font-color);
 }
 .access-remove a:hover{
 	color: #ed1b24;
@@ -4016,7 +4014,7 @@ div#termsdiv{order: 4;}
   display: inline-block;
   vertical-align: top;
   width: 30px;
-  color: #000;
+  color: var(--vz-black-font-color);
   height: 30px;
   font: 30px/1 Arial,sans-serif;
     font-weight: normal;
@@ -4046,7 +4044,7 @@ div#termsdiv{order: 4;}
   width: 2%;
 }
 .qty .count {
-  color: #000;
+  color: var(--vz-black-font-color);
   display: inline-block;
   vertical-align: top;
   font-size: 22px;
@@ -4070,7 +4068,7 @@ div#termsdiv{order: 4;}
   vertical-align: top;
   width: 30px;
   height: 30px;
-  color: #000;
+  color: var(--vz-black-font-color);
   font: 30px/1 Arial,sans-serif;
     font-weight: normal;
     font-size: 30px;
@@ -4179,4 +4177,8 @@ div#termsdiv{order: 4;}
 	opacity: 1 !important;
 	background: none !important;
 	border: none !important;
+}
+.customer-avatar{
+	height: 48px;
+	width: 70px;
 }
