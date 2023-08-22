@@ -150,7 +150,7 @@ class Customer extends Authenticatable
     {
         if($this->parent_cus_id){
             $parent = Customer::where('id',$this->parent_cus_id)->first();
-            $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
+            $familes = Customer::where('parent_cus_id', @$parent->id)->where('id', '<>', $this->id)->get();
             $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
             return $familes;
         }else{
