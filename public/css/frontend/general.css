@@ -24890,3 +24890,32 @@ padding-left: 0px;
 .sign-step_5 .form-group {
 	width: 100% !important;
 }
+.d-grid{
+	display: grid;
+}
+.service-desc{
+	font-weight: normal;
+	font-size: 12px;
+}
+.label-space label{
+	font-size: 17px;
+	margin-bottom: 0px;
+}
+.label-space{
+	display: grid;
+	padding: 25px;
+}
+.position-relative {
+  position: relative !important;
+}
+.password-addon{
+	right: 0 !important;
+	top: 0;
+	position: absolute;
+	min-height: 45px;
+	padding: 12px;
+	color: #04344d;
+}
+.btn-link:hover, .btn-link:focus{
+	text-decoration: none;
+}
