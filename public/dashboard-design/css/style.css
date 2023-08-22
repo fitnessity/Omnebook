@@ -89,7 +89,8 @@
     --vz-input-focus-border:#a59cd9;
     --vz-input-disabled-bg:#eff2f7;
     --vz-input-group-addon-bg:#eff2f7;
-    --vz-input-check-border:var(--vz-input-border)
+    --vz-input-check-border:var(--vz-input-border);
+	--vz-black-font-color:#000;
 }
 :root .nav-tabs{
     --vz-nav-tabs-link-active-bg:#f2f2f7
@@ -104,6 +105,7 @@ body{
 	overflow-x: hidden;
 }
 [data-layout-mode=dark]{
+	--vz-black-font-color:#fff;
     --vz-gray-100:#1a1d21;
     --vz-gray-200:#212529;
     --vz-gray-300:#2a2f34;
@@ -285,6 +287,23 @@ body{
     --vz-vertical-menu-border-gradient:var(--vz-primary);
     --vz-twocolumn-menu-bg-dark:var(--vz-primary)
 }
+
+[data-layout-mode=dark] :is(.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6){
+	color: --vz-black-font-color:#fff;
+}
+[data-layout-mode=dark] .fix-box:hover {
+  background: #6a6a6a;
+}
+[data-layout-mode=dark] .nav-tabs-custom .nav-item .nav-link{
+  color: #fff;
+}
+[data-layout-mode=dark] .setting-icon > ul {
+  background: #3f3f3f none repeat scroll 0 0;
+}
+[data-layout-mode=dark] .check-client-info-box {
+  background: #4c4c4c;
+}
+
 #page-topbar{
     position: absolute;
 	top: 65px;
@@ -4207,7 +4226,7 @@ html{
     min-height:100%
 }
 :is(.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6){
-    color: #000;
+    color: --vz-black-font-color:#000;
     font-family:Inter,sans-serif
 }
 a{
@@ -14727,4 +14746,13 @@ span.flatpickr-weekday{
     right:-35px
 }
 /*# sourceMappingURL=app.min.css.map */
- 
+
+
+/* A-Class Start*/
+.scheduler-box a{
+	color: var(--vz-black-font-color);
+}
+.color-black{
+	color: var(--vz-black-font-color) !important;
+}
+/* A-Class End*/

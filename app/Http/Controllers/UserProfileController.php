@@ -89,6 +89,7 @@ class UserProfileController extends Controller {
     }
     public function about() { 
         return view('profiles.about');
+        
     }
 
     public function editpost(Request $request) {

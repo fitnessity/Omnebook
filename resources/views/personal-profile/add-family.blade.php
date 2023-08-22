@@ -31,6 +31,7 @@
 <?php 
     $today =date('m-d-Y') ;
 ?>
+
 <div class="page-wrapper inner_top" id="wrapper">
     <div class="page-container">
 
@@ -65,7 +66,7 @@
 														</li>
 													
 														<li>
-															<a data-behavior="ajax_html_modal" data-url="{{route('payment_history' ,['id'=> Auth::user()->id,'type'=>'user'])}}" data-modal-width="1200px">
+															<a href="{{route('paymentinfo')}}" >
 															<i class="fas fa-money-check"></i> Payment History</a>
 														</li>
 													</ul>
