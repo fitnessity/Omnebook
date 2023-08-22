@@ -431,7 +431,7 @@ input:disabled{
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<div class="activityselect3 special-date mb-20">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyid}},{{$sid}},'','');" >
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyid}},{{$sid}},'date','');" >
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
@@ -982,7 +982,12 @@ input:disabled{
 		var categoryId = $('#selcatpr').val();
 		var priceId = $('#selprice').val();
 		var scheduleId = $('.checkbox-option:checked').attr('id');
-		if(type == 'category'){
+		if(type == 'date'){
+			categoryId = '';
+			scheduleId = '';
+			priceId = '';
+			scheduleId = '';
+		}else if(type == 'category'){
 			categoryId = val;
 			scheduleId = '';
 			priceId = '';
@@ -1107,7 +1112,7 @@ input:disabled{
 
 	$( function() {
 		$('#actfildate_forcart').val('{{$next_available_date->format('M-d-Y')}}');
-        updatedetail('{{$companyid}}','{{$sid}}','','');
+        updatedetail('{{$companyid}}','{{$sid}}','date','');
 	} );
 </script>
 

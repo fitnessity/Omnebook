@@ -104,39 +104,50 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <form action="{{route('paymentsave')}}" method="POST" class="validation" data-secret="{{$intent['client_secret']}}" id="payment-form">
+                                    <form  class="validation" data-secret="{{$intent['client_secret']}}" id="payment-form">
                                         <div id="payment-element" style="margin-top: 8px;"></div>
                                         <button class="post-btn-red" type="submit" id="submit">Save</button>
                                     </form>
                                 </div>
 							</div>
-							<!-- <table id="example" class="table table-striped table-bordered" style="width:100%" style="display:none;"> -->
-							<div class="table-responsive">
-								<table id="historyTable" class="table table-striped table-bordered" style="width: 100%">
-									<thead>
-										<tr>
-											<th>Sale Date</th>
-											<th>Item Description</th>
-											<th>Item Type</th>
-											<th>Pay Method</th>
-											<th>Price</th>
-											<th>Qty</th>
-										</tr>
-									</thead>
-									<tbody id="tbodydetail">
-										@foreach($transactionDetail as $history )
-										<tr>
-											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-											<td>{!!$history->item_description()['itemDescription']!!}</td>
-											<td>{{$history->item_type_terms()}}</td>
-											<td>{{$history->getPmtMethod()}}</td>
-											<td>${{$history->amount}}</td>
-											<td>{{$history->item_description()['qty']}}</td>
-										</tr>
-										@endforeach
-									</tbody>
-								</table>
-							</div>
+							<div class="purchase-history">
+                                <div class="table-responsive">
+                                    <table id="historyTable" class="table mb-0" style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Sale Date </th>
+                                                <th>Item Description </th>
+                                                <th>Item Type</th>
+                                                <th>Pay Method</th>
+                                                <th>Price</th>
+                                                <th>Qty</th>
+                                                <th>Refund/Void</th>
+                                                <th>Receipt</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodydetail">
+                                            @foreach($transactionDetail as $history )
+                                            @if($history->item_description()['itemDescription'] != '')
+                                                <tr>
+                                                    <td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+                                                    <td>{!!$history->item_description()['itemDescription']!!}</td>
+                                                    <td>{{$history->item_type_terms()}}</td>
+                                                    <td>{{$history->getPmtMethod()}}</td>
+                                                    <td>${{$history->amount}}</td>
+                                                    <td>{{$history->item_description()['qty']}}</td>
+                                                    <td>Refund | Void</td>
+                                                    <td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$history->user_id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="float-right">
+                                        {{ $transactionDetail->links() }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,36 +157,35 @@
 </div>
 @include('layouts.footer')
 <script>
-$(".payment-info").owlCarousel({
-	loop: false,
-	autoWidth: true,
-	autoplay: false,
-	autoplayTimeout: 2000, //2000ms = 2s;
-	autoplayHoverPause: true,
-	responsiveClass: true,
-	responsive: {
-			0: {
-			  items: 1
-			},
+    $(".payment-info").owlCarousel({
+    	loop: false,
+    	autoWidth: true,
+    	autoplay: false,
+    	autoplayTimeout: 2000, //2000ms = 2s;
+    	autoplayHoverPause: true,
+    	responsiveClass: true,
+    	responsive: {
+    			0: {
+    			  items: 1
+    			},
 
-			600: {
-			  items: 2
-			},
+    			600: {
+    			  items: 2
+    			},
 
-			1024: {
-			  items: 2
-			},
-			
-			1200: {
-			  items: 3
-			},
-			
-			1366: {
-			  items: 5
-			},
-		  },
-		});
-	
+    			1024: {
+    			  items: 2
+    			},
+    			
+    			1200: {
+    			  items: 3
+    			},
+    			
+    			1366: {
+    			  items: 5
+    			},
+        },
+    });
 </script>
 <script type="text/javascript">
 
@@ -202,7 +212,7 @@ $(".payment-info").owlCarousel({
         $('#submit').text('loading...')
 
         const {error} = await stripe.confirmSetup({
-        //`Elements` instance that was used to create the Payment Element
+        //Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
                 return_url: '{{route("paymentsave")}}',
@@ -267,92 +277,12 @@ $(".payment-info").owlCarousel({
     
     $(".dispalycard").on("click", function(){
         $('#stripediv').css('display','none');
-        /*$('#historyTable').css('display','inline-table');
-        var pid = $(this).data('id');
-        $.ajax({
-            type: 'POST',
-            url: '{{route("card_purchase_history")}}',
-            data: {
-                _token: '{{csrf_token()}}',
-                pid: pid
-            },
-            success: function(data) {
-                $('#tbodydetail').html(data);
-            }
-        });*/
     });
 
     $(".addcard").on("click", function(){
         $('#stripediv').css('display','block');
-       /* $('#historyTable').css('display','none');*/
     });
 
-    /* $(".delCard").on("click", function(){
-        $("#owner").val("");
-        $("#cvv").val("");
-        $("#cardNumber").val("");
-        $("#card-error").html("");
-        $("#card_month option:selected").text("Mon");
-        $("#card_year option:selected").text("Year");
-        $("#card_month").val("");
-        $("#card_year").val("");
-        if (confirm('You are sure to delete card?')) {
-            var _token = $("input[name='_token']").val();
-            var cardid = $(this).data("cardid");
-            $.ajax({
-                type: 'POST',
-                url: '{{route("paymentdelete")}}',
-                data: {
-                    _token: _token,
-                    cardid: cardid
-                },
-                success: function(data) {
-                    // alert("Card removed successfully.");
-                    window.location.reload();
-                }
-            });
-        } else {
-            //alert('Why did you press cancel? You should have confirmed');
-        }
-    });*/
-    
-    /*$(".cards-block").on("click", function(){
-        // alert($(this).data('type'));
-        $("#card-error").html('');
-        $("#payment_type").val($(this).data('ptype'));
-        $("#owner").val($(this).data('name'));
-        if($(this).data('month') != "") {
-            $("#card_month option:selected").text(chkmonth($(this).data('month')));
-            $("#card_year option:selected").text($(this).data('year'));
-            $("#cardNumber").val('************'+$(this).data('cnumber'));
-            $("#cvv").val('***');
-            $("#confirm-purchase").attr('disabled', true);
-        } else {
-            $("#card_month option:selected").text("Mon");
-            $("#card_year option:selected").text("Year");
-            $("#cardNumber").val($(this).data('cnumber'));
-            $("#cvv").val($(this).data('cvv'));
-            $("#confirm-purchase").attr('disabled', false);
-        }
-        // $("#card_month option:selected").val($(this).data('month'));
-        $("#card_type").val($(this).data('type'));
-        $("#credit_cards img").addClass('transparent');
-        $("#"+$(this).data('type')).removeClass('transparent');
-    });*/
 
-    function chkmonth(id) {
-        if(id==1)return "Jan";
-        if(id==2)return "Feb";
-        if(id==3)return "Mar";
-        if(id==4)return "Apr";
-        if(id==5)return "May";
-        if(id==6)return "Jun";
-        if(id==7)return "Jul";
-        if(id==8)return "Aug";
-        if(id==9)return "Sep";
-        if(id==10)return "Oct";
-        if(id==11)return "Nov";
-        if(id==12)return "Dec";
-    }
 </script>
 @endsection
