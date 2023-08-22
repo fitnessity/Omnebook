@@ -550,7 +550,7 @@ class CustomerController extends Controller {
 
     public function removefamilyCustomer(Request $request) {
         $customer = Customer::find($request->id);
-        $customer->update(['parent_cus_id' => '']);
+        $customer->update(['parent_cus_id' => NULL]);
        /* DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
         return Redirect::back()->with('success', 'Family Member Delete.');*/
     }

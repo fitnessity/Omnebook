@@ -761,7 +761,7 @@
 																									<th>Name</th>
 																									<th>Relationship</th>
 																									<th>Age</th>
-																									<th></th>
+																									<th>Action</th>
 																								</tr>
 																							</thead>
 																							<tbody>
@@ -770,7 +770,11 @@
 																									<td> {{$family_member->full_name}} </td>
 																									<td>{{$family_member->relationship ?? "N/A"}}</td>
 																									<td>{{$family_member->age ?? "N/A"}}</td>
-																									<td><a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-black width-100">View</a></td>
+																									<td class="text-center">
+																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red ">Delete</a>
+
+																										<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-black ">View</a></td>
+																									
 																								</tr>
 																								@endforeach
 																							</tbody>
@@ -1272,6 +1276,25 @@
 	                 .appendTo( ul );
 	     	};
 	   });
+
+	   function deleteMember(id) {
+			if(id == undefined){
+				window.location.reload();
+			}else{
+				var _token = $("input[name='_token']").val();
+		        $.ajax({
+		            type: 'POST',
+		            url: '{{route("removefamilyCustomer")}}',
+		            data: {
+		               _token: _token,
+		               id: id
+		            },
+		            success: function (data) {
+		               window.location.reload();
+		            }
+		        });
+			}
+		}
 
 	   function callAddFamily(cid ,business_id){
 	   	if(cid == '{{$customerdata->id}}'){
