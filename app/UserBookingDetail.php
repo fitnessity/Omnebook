@@ -258,7 +258,7 @@ class UserBookingDetail extends Model
         $pay_session = $this->pay_session;
         //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
         //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->count('use_session_amount');
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->count();
+        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->where('checkin_date' ,'!=',NULL)->count();
         $remaining = $pay_session - $checkindetailscnt;
         return $remaining;
     }
