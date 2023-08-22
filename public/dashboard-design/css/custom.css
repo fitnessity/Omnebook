@@ -1865,8 +1865,6 @@ padding: 0px 0px 3px 2px !important; */
 }
 .page-content{
 	min-height: 1000px;
-	z-index: -1;
-	position: relative;
 }
 .font-green{
 	color: #009f0a;
@@ -3449,7 +3447,7 @@ div#termsdiv{order: 4;}
 
 .scroll-customer{
 	overflow-y: scroll;
-	height: 840px;
+	max-height: 840px;
 	scrollbar-width: thin;
 	scrollbar-color: #a7a7a7 #e0e0e0;
 }
