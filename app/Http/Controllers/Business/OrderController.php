@@ -55,12 +55,10 @@ class OrderController extends BusinessBaseController
         
         $tax = BusinessSubscriptionPlan::where('id',1)->first();
         $userfamilydata = [];
-        $username = $address = $current_membership =''; 
+        $username = $address = $current_membership = $user_data = $participateName = $email = '';
         $pageid  = $visits = 0;
-        $user_data = '';
-        $intent = null;
-        $customer = null;
-        $participateName = '';
+    
+        $intent = $customer = null;
         if($request->book_id){
             var_dump('no this cases');
             exit();
@@ -101,6 +99,7 @@ class OrderController extends BusinessBaseController
                 'payment_method_types' => ['card'],
                 'customer' => $customerdata->stripe_customer_id,
             ]);
+            $email = @$customerdata->email;
         }
 
         if($request->cus_id == ''){
@@ -127,7 +126,7 @@ class OrderController extends BusinessBaseController
         $ordermodelary = session()->get('ordermodelary');
         if(!empty($ordermodelary)){
             $modelchk = 1;
-            $modeldata = $this->getmultipleodermodel($ordermodelary);
+            $modeldata = $this->getmultipleodermodel($ordermodelary,$email);
             session()->forget('ordermodelary');
         }
 
@@ -530,7 +529,7 @@ class OrderController extends BusinessBaseController
         //
     }
 
-    public function getmultipleodermodel($array)
+    public function getmultipleodermodel($array,$email)
     {    
         $html = $idarry = '';
         $totaltax =  $subtotaltax = $tot_dis = $tot_tip = $service_fee = 0;
@@ -544,13 +543,17 @@ class OrderController extends BusinessBaseController
                         <div class="box-subtitle">
                             <h4>Transaction Complete</h4>
                             <div class="modal-inner-box">
-                                <label></label>
                                 <h3>Email Receipt</h3>
                                 <div class="form-group">
-                                    <input type="text" name="email" id="receipt_email"  placeholder="youremail@abc.com" class="form-control">
+                                    <input type="text" name="email" id="receipt_email"  placeholder="youremail@abc.com" class="form-control" value="'.$email.'">
                                 </div>
                                 <button class="btn btn-red mt-10 width-100 mb-25" onclick="sendemail();">Send Email Receipt</button>
                                 <div class="reviewerro" id="reviewerro"></div>
+
+                                <h3>Notes</h3>
+                                <div class="form-group">
+                                    <textarea id="notes" name="notes" rows="4" cols="50" class="form-control">Thank you for doing business with us</textarea>
+                                </div>
                             </div>
                         </div>
                         <div class="powered-img">
@@ -735,7 +738,7 @@ class OrderController extends BusinessBaseController
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                    <label>MEMBERSHIP EXPIRATION:</label>
+                                <label>MEMBERSHIP EXPIRATION:</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
@@ -746,34 +749,34 @@ class OrderController extends BusinessBaseController
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">PRICE:</label>
+                                <label>PRICE:</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$odt['totprice_for_this'].'</span>
+                                <span>$'.$odt['totprice_for_this'].'</span>
                             </div>
                         </div>
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">DISCOUNT:</label>
+                                <label>DISCOUNT:</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$odt['discount'].'</span>
+                                <span>$'.$odt['discount'].'</span>
                             </div>
                         </div>
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">TOTAL:</label>
+                                <label>TOTAL:</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$per_total.'</span>
+                                <span>$'.$per_total.'</span>
                             </div>
                         </div>
                     </div>
@@ -791,12 +794,12 @@ class OrderController extends BusinessBaseController
                     <div class="row border-xx mg-tp">
                         <div class="col-md-6 col-xs-6">
                            <div class="text-left">
-                                <label class="highlight-fonts">PAYMENT METHOD</label>
+                                <label>PAYMENT METHOD</label>
                            </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">'. $odt['pmt_type'].'</span>
+                                <span>'. $odt['pmt_type'].'</span>
                             </div>
                         </div>
                     </div>
@@ -804,12 +807,12 @@ class OrderController extends BusinessBaseController
                     <div class="row border-xx">
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">TIP AMOUNT</label>
+                                <label>TIP AMOUNT</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$tot_tip.'</span>
+                                <span>$'.$tot_tip.'</span>
                             </div>
                         </div>
                     </div>
@@ -817,12 +820,12 @@ class OrderController extends BusinessBaseController
                     <div class="row border-xx">
                         <div class="col-md-6 col-xs-6">
                            <div class="text-left">
-                                <label class="highlight-fonts">DISCOUNT</label>
+                                <label>DISCOUNT</label>
                            </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                            <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$tot_dis.'</span>
+                                <span>$'.$tot_dis.'</span>
                            </div>
                         </div>
                     </div>
@@ -830,24 +833,24 @@ class OrderController extends BusinessBaseController
                     <div class="row border-xx">
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">TAXES AND FEES</label>
+                                <label>TAXES AND FEES</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'. ($totaltax +  $service_fee ).'</span>
+                                <span>$'. ($totaltax +  $service_fee ).'</span>
                             </div>
                         </div>
                     </div>
                     <div class="row border-xx">
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
-                                <label class="highlight-fonts">TOTAL AMOUNT PAID</label>
+                                <label>TOTAL AMOUNT PAID</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
-                                <span class="highlight-fonts">$'.$odt['amount'].'</span>
+                                <span>$'.$odt['amount'].'</span>
                             </div>
                         </div>
                     </div>
