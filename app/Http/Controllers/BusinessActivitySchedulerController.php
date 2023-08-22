@@ -170,13 +170,12 @@ class BusinessActivitySchedulerController extends Controller
             }
         }else{
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->get();
-            print_r($bookingDetail); echo "<br>";
+           
             if(!empty($bookingDetail)){
                 foreach($bookingDetail as $i=>$detail){
                     $remainingSession = $detail->getremainingsession();
                     $priceDetail = $detail->business_price_detail;
-                    echo $priceDetail."<br>";
-                    echo $remainingSession."<br>";
+                  
                     if($remainingSession != 0 &&  $priceDetail->category_id == $request->catId){
                         if (!$firstDataProcessed) {
                             $remaining = $remainingSession; 

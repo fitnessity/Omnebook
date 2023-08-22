@@ -1,24 +1,28 @@
 @foreach ($customers as $customer) 
     <div class="mini-stats-wid d-flex align-items-center mt-3 scheduler-box">
-		<div class="flex-shrink-0 avatar-sm">
-			@if($customer->profile_pic)
-				<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($customer->profile_pic)}}" width=60 height=60 alt="">
-			@else
-				<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">{{$char}}</span>
-			@endif
-		</div>
-		<div class="col-lg-2 col-md-3 col-sm-3 ms-3">
-			<h6 class="mb-1">{{$customer->full_name}}</h6>
-			<p class="text-muted mb-0">Last Attended:  {{$customer->get_last_seen()}}</p>
-		</div>
-		<div class="col-lg-3 col-md-4 col-sm-4 ms-3">
-			<div class="client-age">
-				<h6 class="mb-1">Age</h6>
-				<span>{{ $customer->age != '' ? $customer->age : "-"}}</span>
+		<a class="w-100" href="{{ route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]) }}" target="_blank">
+			<div class="row">
+				<div class="flex-shrink-0 avatar-sm customer-avatar">
+					@if($customer->profile_pic)
+						<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($customer->profile_pic)}}" width=60 height=60 alt="">
+					@else
+						<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">{{$char}}</span>
+					@endif
+				</div>
+			
+				<div class="col-lg-2 col-md-3 col-sm-3 col-5">
+					<h6 class="mb-1">{{$customer->full_name}}</h6>
+					<p class="text-muted mb-0">Last Attended:  {{$customer->get_last_seen()}}</p>
+				</div>
+				<div class="col-lg-3 col-md-4 col-sm-4 col-3">
+					<div class="client-age">
+						<h6 class="mb-1">Age</h6>
+						<span>{{ $customer->age != '' ? $customer->age : "-"}}</span>
+					</div>
+				</div>
 			</div>
-		</div>
-
-		<div class="flex-grow-1 ms-3">
+		</a>
+		<div class="flex-grow-1 ">
 			<a class="float-end" href="#" data-bs-toggle="modal" data-bs-target=".customer-info{{$customer->id}}"><i class="ri-more-fill"></i></a>
 		</div>
 	</div>

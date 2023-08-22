@@ -454,7 +454,7 @@ class OrderController extends BusinessBaseController
 
             BookingCheckinDetails::create([
                 'business_activity_scheduler_id' => 0,
-                'customer_id' => $customer->id,
+                'customer_id' => $cUid,
                 'booking_detail_id' => $booking_detail->id,
                 'checkin_date' => NULL,
                 'use_session_amount' => 0,
