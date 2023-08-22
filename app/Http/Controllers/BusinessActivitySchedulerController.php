@@ -350,6 +350,7 @@ class BusinessActivitySchedulerController extends Controller
         if($alreadyAdded  == 0){
             $multiBookingAry [] = [
                 'date' => $request->date,
+                'category_id' => $request->category_id,
                 'cid' => $request->customerID,
                 'timeId' =>$request->timeid,
                 'pname' =>$request->pname,

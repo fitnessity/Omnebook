@@ -40,7 +40,7 @@
 				                foreach($bookingDetail as $detail){
 				                    $remainingSession = $detail->getremainingsession();
 				                    $priceDetail = $detail->business_price_detail;
-				                    if($remainingSession != 0 ){
+				                    if($remainingSession != 0 &&  $priceDetail->category_id == @$sesAry['category_id']){
 				                        if (!$firstDataProcessed) {
 				                            $remaining = $remainingSession; 
 				                            $firstDataProcessed = true; 
