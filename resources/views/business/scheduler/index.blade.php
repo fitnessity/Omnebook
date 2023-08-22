@@ -11,7 +11,7 @@
             <div class="row">
                <div class="col">
                   <div class="h-100">
-							<div class="row">
+							<!-- <div class="row">
 								<div class="col-lg-12">
 									<div class="float-right">
 										<form class="client-search" action="{{route('business_customer_index', ['business_id' => $request->current_company->id])}}" method="get">
@@ -31,7 +31,7 @@
 										</form>
 									</div>
 								</div>
-							</div>
+							</div> -->
                      <div class="row mb-3">
 								<div class="col-6">
 									<div class="page-heading">
