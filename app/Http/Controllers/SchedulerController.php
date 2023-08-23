@@ -210,6 +210,10 @@ class SchedulerController extends Controller
                $orderId = explode("," , $detail['oid']);
                foreach($orderId as $oid){
                     $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $oid);
+
+                    if($request->notes != ''){
+                         $getreceipemailtbody['notes'] = $request->notes;
+                    } 
                     $email_detail = array(
                          'getreceipemailtbody' => $getreceipemailtbody,
                          'email' => $request->email);

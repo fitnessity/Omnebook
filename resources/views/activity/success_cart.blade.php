@@ -688,7 +688,7 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-								<input type="text" id="dob" name="dob" class="  flatpicker_registration" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10">
+								<input type="text" id="dob" name="dob" class="  flatpicker_registration" placeholder="Birthdate" maxlength="10">
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">

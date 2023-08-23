@@ -2015,6 +2015,7 @@
     function sendemail(){
         $('.reviewerro').html('');
         var email = $('#receipt_email').val();
+        var notes = $('#notes').val();
         var orderdetalidary = $('#orderdetalidary').val();
         var booking_id = $('#booking_id').val();
         if(email == ''){
@@ -2037,6 +2038,7 @@
                     orderdetalidary:orderdetalidary,
                     email:email,
                     booking_id:booking_id,
+                    notes:notes,
                 },
                 success: function (response) {
                     $('.reviewerro').html('');

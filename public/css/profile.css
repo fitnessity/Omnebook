@@ -1049,6 +1049,7 @@
     box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, .35);
     border-radius: 8px;
     padding: 10px;
+	
 }
 
 .boxes_arts .headboxes {
@@ -1057,6 +1058,7 @@
     border-bottom: 1px solid #2d2d2d;
     margin-bottom: 5px;
 	padding-bottom: 10px;
+	height: 90px;
 }
 
 .boxes_arts .headboxes .imgboxes {
@@ -1075,6 +1077,7 @@
     font-weight: 900;
     margin-top: 25px;
 	text-align: center;
+
 }
 .date-timebooking{
 	text-align: center;
@@ -1283,7 +1286,7 @@
     display: flex;
     flex-flow: column-reverse;
     align-items: center;
-    margin-right: 22px;
+    margin-right: 0px;
 }
 /*
 #calendar .fc-toolbar.fc-header-toolbar .fc-left {
@@ -1293,7 +1296,7 @@
 }
 */
 #calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group {
-    width: 197px;
+    width: 162px;
     display: flex;
     justify-content: space-between;
     margin-left: .2%;

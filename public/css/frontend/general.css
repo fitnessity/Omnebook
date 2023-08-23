@@ -24919,3 +24919,27 @@ padding-left: 0px;
 .btn-link:hover, .btn-link:focus{
 	text-decoration: none;
 }
+.fc-prev-button::before {
+	content: "\2039" !important;
+	font-weight: 700;
+	font-size: 200% !important;
+	top: -4% !important;
+}
+.fc-icon-left-single-arrow::after{
+	font-family: remixicon !important;
+}
+.fc-icon-left-single-arrow::after{
+	display: none;
+}
+.fc-icon-right-single-arrow::after{
+	display: none;
+}
+.fc-next-button::before{
+	content: "\203A" !important;
+	font-weight: 700;
+	font-size: 200% !important;
+	top: -4% !important;
+}
+.fc-next-button::before, .fc-prev-button::before{
+	bottom: 4px !important;
+}
