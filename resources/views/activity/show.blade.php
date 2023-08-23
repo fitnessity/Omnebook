@@ -1068,23 +1068,20 @@ input:disabled{
 </script>
 
 <?php
-	$next_available_date = new DateTime();
+	$next_available_date = null;
 	$activities = BusinessActivityScheduler::where('serviceid', $sid)->get();
-	$result = [];
+	$result = $arrayofdates = [];
 	foreach($activities as $local_activity){
 		$activity_next_available_date = $local_activity->next_available_date();
-		if($next_available_date == null){
-			$next_available_date = $activity_next_available_date;	
-		}else{
-			if($next_available_date < $activity_next_available_date){
-				$next_available_date = $activity_next_available_date;		
-			}
-		}
-
+		if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
+            $next_available_date = $activity_next_available_date;
+        }
+		
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
+	
 ?>
-<script>
+ <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
 	const days = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',]
 	$( function() {
@@ -1114,7 +1111,7 @@ input:disabled{
 		$('#actfildate_forcart').val('{{$next_available_date->format('M-d-Y')}}');
         updatedetail('{{$companyid}}','{{$sid}}','date','');
 	} );
-</script>
+</script> 
 
 <script type="text/javascript">	
 	function submit_rating(sid)
