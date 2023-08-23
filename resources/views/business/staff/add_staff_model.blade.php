@@ -89,7 +89,7 @@
 					<div class="form-group mb-10">
 						<label for="email">Birthday <!-- <span id="star">*</span> --></label>
 						<div class="input-group">
-							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" name="birthdate" id="birthdate">
+							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" name="birthdate" id="birthdate" placeholder="Birthday">
 						</div>
 					</div>
 				</div>
