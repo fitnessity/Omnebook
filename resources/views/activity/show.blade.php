@@ -1074,18 +1074,13 @@ input:disabled{
 	foreach($activities as $local_activity){
 		$activity_next_available_date = $local_activity->next_available_date();
 		if($activity_next_available_date != ''){
-			echo "next"; print_r($activity_next_available_date);
-			echo "<br>";
 			if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
 	            $next_available_date = $activity_next_available_date;
 	        }
-			echo "next2"; print_r($next_available_date);
-			echo "<br>";
+			
 		}
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
-	echo "next3s"; print_r($next_available_date);
-	echo "<br>";
 ?>
  <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
