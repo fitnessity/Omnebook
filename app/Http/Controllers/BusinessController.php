@@ -168,7 +168,7 @@ class BusinessController extends Controller
                     ->get();
 
         $formatNotification = function ($userData, $action, $type, $text) {
-            $image = Storage::disk('s3')->exists($userData->profile_pic) ? Storage::url($userData->profile_pic) : '';
+            $image = Storage::disk('s3')->exists(@$userData->profile_pic) ? Storage::url(@$userData->profile_pic) : '';
             $date = new DateTime($action->created_at);
 
             return [
