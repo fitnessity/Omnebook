@@ -578,7 +578,7 @@
                                                         <div class="acitivity-item d-flex">
                                                             <div class="flex-shrink-0">
                                                                 @if( $nd['image'] != '')
-                                                                    <img src="" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                                                    <img src="{{$nd['image']}}" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
                                                                 @else
                                                                     <div class="avatar-xsmall">
                                                                        <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
@@ -587,13 +587,13 @@
                                                             </div>
                                                             <div class="flex-grow-1 ms-3 mb-10">
                                                                 <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
-                                                                <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {{$nd['text']}} @endif</p>
+                                                                <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {!!$nd['text'] !!} @endif</p>
                                                                 <small class="mb-0 text-muted">{{$nd['date']}}</small>
                                                             </div>
                                                         </div>
                                                     @endforeach
 
-                                                    @if(count($notificationAry) == 0 || count($todayBooking) == 0)
+                                                    @if(count($notificationAry) == 0 && count($todayBooking) == 0)
                                                        <p class="text-center mb-3">Not Available</p>
                                                     @endif
                                                 </div>

@@ -21,7 +21,7 @@
                     <label></label>
                     <h3>Email Receipt</h3>
                     <div class="form-group mb-25">
-                        <input type="text" name="email" id="email" placeholder="youremail@abc.com" class="form-control" value="{{$email}}">
+                        <input type="text" name="email" id="clientEmail" placeholder="youremail@abc.com" class="form-control" value="{{$email}}">
                     </div>
                     <button class="btn btn-red width-100 mb-25" onclick="sendemail();">Send Email Receipt</button>
                     <div class="reviewerro" id="reviewerro"></div>
@@ -339,7 +339,7 @@
 <script type="text/javascript">
     function sendemail(){
         $('.reviewerro').html('');
-        var email = $('#email').val();
+        var email = $('#clientEmail').val();
         var orderdetalidary = $('#orderdetalidary').val();
         var booking_id = $('#booking_id').val();
         if(email == ''){
