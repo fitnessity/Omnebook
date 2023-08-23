@@ -478,7 +478,10 @@ class BookingRepository
         $businessuser = $booking_details->business_services->company_information;
         $BusinessPriceDetails = $booking_details->business_price_detail;
         $qty = $booking_details->getparticipate();
-      
+        
+
+        $companyImage = $businessuser->getCompanyImage();
+
         $participate = $booking_details->decodeparticipate();
         $price = $booking_details->total();
         $total = ($price + $booking_details->getperoderprice());
@@ -549,6 +552,8 @@ class BookingRepository
             "total" => $total,
             "email" => $email,
             "bookingUrl" => $bookingUrl,
+            "companyImage" => $companyImage,
+            "notes" => 'Thank you for doing business with us',
         );
 
         //return json_encode($one_array); 

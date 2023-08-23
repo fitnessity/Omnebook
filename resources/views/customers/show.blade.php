@@ -1118,7 +1118,7 @@
 							<div class="mb-10">
 								<label>	Birthdate </label>
 								<div class="input-group">
-									<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="{{date('m/d/Y',strtotime($customerdata->birthdate))}}">
+									<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
 								</div>
 							</div>
 						</div>

@@ -1,4 +1,3 @@
-
 <h5 class="modal-title mb-10" id="myModalLabel">Booking Receipt</h5>
 
 @php
