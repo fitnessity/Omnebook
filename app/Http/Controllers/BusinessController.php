@@ -198,7 +198,7 @@ class BusinessController extends Controller
         }
 
         foreach ($transaction as $tr) {
-            if($tr->item_type == 'user'){
+            if($tr->user_type == 'user'){
                 $userData =  $tr->User;
             }else{
                 $userData = $tr->Customer;
@@ -997,19 +997,19 @@ class BusinessController extends Controller
                     $company = CompanyInformation::where('id', $service['cid'])->get();
                     $company = isset($company[0]) ? $company[0] : [];
                     if(!empty($company)) {
-                    	$companyData[$company['id']][] = $company;
+                    	$companyData[@$company['id']][] = $company;
                     }
 
                     $price = BusinessPriceDetails::where('cid', $service['cid'])->get();
                     $price = isset($price[0]) ? $price[0] : [];
                     if(!empty($company)) {
-                    	$servicePrice[$company['id']][] = $price;
+                    	$servicePrice[@$company['id']][] = $price;
                     }
 
                     $business_spec = BusinessService::where('cid', $service['cid'])->get();
                     $business_spec = isset($business_spec[0]) ? $business_spec[0] : [];
                     if(!empty($company)) {
-                    	$businessSpec[$company['id']][] = $business_spec;
+                    	$businessSpec[@$company['id']][] = $business_spec;
                     }
                 }
             }

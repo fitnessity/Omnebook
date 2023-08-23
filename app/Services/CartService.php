@@ -131,7 +131,7 @@ class CartService
             }else{
                 $result['price'][$role] = 0;
             }
-            $discount += $result['qty'][$role] * ($result['price'][$role] * $dis)/100; 
+            $discount += is_int(is_int($result['qty'][$role]) * is_int(($result['price'][$role] * $dis))/100); 
         }
         return $discount;
     }
