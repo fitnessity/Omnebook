@@ -76,6 +76,7 @@ class BusinessActivityScheduler extends Model
         }else{
             return null;
         }
+        echo $i;
     } 
 
     public static function next_8_hours($datetime){
