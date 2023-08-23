@@ -44,7 +44,7 @@ class BusinessController extends Controller
 
         $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt = 0;
 
-        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = [];
+        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = [];
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
@@ -136,6 +136,19 @@ class BusinessController extends Controller
 
         $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');
 
+        $businessServices = $business->business_services()->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+        $usDetail = $business->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                   ->orderby('created_at','desc')->get();
+        foreach($usDetail as $usd){
+            if($usd->userBookingStatus != ''){
+                $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
+            }
+        }            
+
         $comments = PagePostComments::whereIn('post_id',$pagepostIds)
                     ->where('user_id','!=',Auth::user()->id)
                     ->whereDate('created_at', '>=', $startOfWeek)
@@ -178,6 +191,19 @@ class BusinessController extends Controller
 
         foreach ($commentslikes as $cl) {
             $notificationAry[] = $formatNotification($cl->user, $cl, 'like',' liked your post comment.');
+        }
+
+        foreach ($businessServices as $bs) {
+            $notificationAry[] = $formatNotification($bs->user, $bs, 'service',' added new activity "'.$bs->program_name.'".');
+        }
+
+        foreach ($transaction as $tr) {
+            if($tr->item_type == 'user'){
+                $userData =  $tr->User;
+            }else{
+                $userData = $tr->Customer;
+            }
+            $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
         }
 
         /*print_r($notificationAry);*/

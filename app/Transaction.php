@@ -26,7 +26,11 @@ class Transaction extends Model
      */
 
     public function User(){
-        return $this->belongsTo(User::class,'user_id')->where('user_type','user');
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function Customer(){
+        return $this->belongsTo(Customer::class,'user_id');
     }
 
     public function UserBookingStatus(){
