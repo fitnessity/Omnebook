@@ -12,7 +12,7 @@
 			<label>Duration:</label>
 		</div>
 		<div class="col-md-7">
-			<span class="float-right">{{@$scheduler->activity_time()}} / {{@$scheduler->get_clean_duration()}}</span>
+			<span class="float-right">@if($scheduler != '') {{@$scheduler->activity_time()}} / {{@$scheduler->get_clean_duration()}} @else "—" @endif</span>
 		</div>
 		<div class="col-md-5">
 			<label>Price Title:</label>
