@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
+use Storage;
 use DB;
 use Carbon\Carbon;
 
@@ -247,4 +248,14 @@ class CompanyInformation extends Model {
         $booking_details = UserBookingDetail::where(['business_id'=>$this->id,'user_type'=>'customer','user_id'=>$customerId]);
         return $booking_details->orderBy('created_at','desc')->get();
     }
+
+    public function getCompanyImage(){
+        $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->logo)){
+            $profile_pic = Storage::url($this->logo);
+        }
+
+        return $profile_pic;
+    }
+
 }

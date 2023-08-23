@@ -51,6 +51,8 @@ class SGMailService{
 		    "discount" => $emailDetail['getreceipemailtbody']['discount'],  
 		    "total" => $emailDetail['getreceipemailtbody']['total'],
 		    "bookingUrl" => $emailDetail['getreceipemailtbody']['bookingUrl'],
+		    "companyImage" => @$emailDetail['getreceipemailtbody']['companyImage'],
+		    "notes" => @$emailDetail['getreceipemailtbody']['notes'],
 		];
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	

@@ -34,7 +34,7 @@
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-                    <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Date Of Birth (mm/dd/yyyy)">
+                    <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Birthday">
 					<div class="position-relative auth-pass-inputgroup">	
 						<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                         <button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "password">
@@ -305,7 +305,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="birthday_date-position">
-                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthdayFlatpicker required" placeholder="mm/dd/yyyy"/>
+                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
                                                                 <span class="error" id="err_birthday_date"></span>
                                                             </div>
                                                         </div>
@@ -375,7 +375,6 @@
     flatpickr(".flatpicker_birthdate1", {
         dateFormat: "m/d/Y",
         maxDate: "01/01/2050",
-        defaultDate: [new Date()],
     });
 
     document.getElementById("birthday0").addEventListener("focus", function(event) {
@@ -383,7 +382,6 @@
             flatpickr(event.target, {
                 dateFormat: "m/d/Y",
                 maxDate: "01/01/2050",
-                defaultDate: new Date(),
             });
         
     }, true);

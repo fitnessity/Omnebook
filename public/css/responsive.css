@@ -2569,6 +2569,9 @@
 	.custom-multiple-book .owl-prev{left: 0px;}
 	.custom-multiple-book .owl-next{right: -5px;}
 	.book0total-price {  text-align: left;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{margin-top: -65px; height: 35px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
+	.fc .fc-toolbar h2{text-align: center; width: 100%; }
 }
 
 @media(max-width: 575px) {

@@ -34,7 +34,7 @@
 									<!-- <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off"> -->
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" id="dob" name="dob" placeholder="Birth Date">
+									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" id="dob" name="dob" placeholder="Birthday">
 									
 									<div class="row check-txt-center">
 										<div class="col-lg-8 col-md-12 col-9">
@@ -226,7 +226,7 @@
 																			<span class="error" id="err_lname"></span>
 																		</div>
 																		<div>
-																			<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" name="birthdate" id="birthdate"  placeholder="Birth Date">
+																			<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" name="birthdate" id="birthdate"  placeholder="Birthday">
 																		</div>
 																		<div class="form-group">
 																			<select name="gender[]" id="gender" class="form-select gender" required="">
