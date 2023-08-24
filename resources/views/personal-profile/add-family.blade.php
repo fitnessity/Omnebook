@@ -96,7 +96,8 @@
 															<p class="character">{{$family->first_letter}}</p>
 														</div>
 													@endif
-													<span>{{$family->full_name}}</span>
+													<div class="fname">{{$family->full_name}}</div>
+													<div >{{$family->company_information->company_name}}</div>
 												</div>
 												<div class="settings-options">
 													<div class="more-settings-optns">
