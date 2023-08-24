@@ -374,6 +374,62 @@ class BusinessActivitySchedulerController extends Controller
         return $j;
     }
 
+    /*public function chkMultipleOrder(Request $request){
+        $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
+        $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
+
+        $UserBookingDetails = $customer->bookingDetail()->whereDate('expired_at' ,'>' ,date('Y-m-d'))->where(['sport'=>$request->serviceID ])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->first();
+        $remainingSession = $UserBookingDetails->getremainingsession();
+        $inSessionArray = Session::get('multibooking') ?? [];
+        $multiBookingAry = [];
+        $alreadyAdded  = $count = 0;
+        if(!empty($inSessionArray)){
+            foreach($inSessionArray as $ary){
+                if($ary['serviceID'] == $request->serviceID && $ary['cid'] == $request->customerID && $ary['date'] == $request->date && $ary['timeId'] == $request->timeid){
+                   $alreadyAdded  = 1;
+                }
+
+                if($ary['serviceID'] == $request->serviceID && $ary['cid'] == $request->customerID  ){
+                   $count  += 1;
+                }
+            }
+        }
+
+        $totalSession =  $count + $remainingSession;
+        echo $totalSession;  echo $UserBookingDetails->pay_session;exit;
+        if($alreadyAdded  == 0 && $totalSession <= $UserBookingDetails->pay_session){
+            $multiBookingAry [] = [
+                'date' => $request->date,
+                'category_id' => $request->category_id,
+                'cid' => $request->customerID,
+                'timeId' =>$request->timeid,
+                'pname' =>$request->pname,
+                'serviceID' =>$request->serviceID,
+                'businessId' =>$request->businessId,
+                'time' => $request->time,
+                'duration' =>$activitySchedulerData->get_duration(),
+                'priceId' =>@$UserBookingDetails->priceid,
+                'oId' =>@$UserBookingDetails->id,
+            ];
+        }else{
+            if($alreadyAdded  == 0){
+                return "it's already added.";
+            }else{
+                return "You can't book this schedule. You don't have enough session.";
+            }
+        }
+    
+        $multiBookingAry = !empty($inSessionArray) ? array_merge($inSessionArray ,$multiBookingAry) : $multiBookingAry;
+        
+        session::put('multibooking', $multiBookingAry);
+
+        $j = collect($multiBookingAry)->filter(function ($ary) use ($request) {
+            return $ary['cid'] == $request->customerID;
+        })->count();
+
+        return $j;
+    }*/
+
     public function getReviewData($cid,$business_id){
 
         $sessionAry = Session::get('multibooking',[]);
