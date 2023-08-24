@@ -57,7 +57,7 @@
 					            $data .='<select class="mb-10 form-control" id="priceId'.$i.'" onchange="getRemainingSession('.$i.',\''.$sesAry["date"].'\','.$sesAry['timeId'].')">'.$html.'</select><div class="font-red text-center" id="remainingSession'.$i.'">'.$remaining.' Session Remaining.</div>';
 					        }
 				        ?>
-				        {!! $data != '' ? $data : "No MemberShip Available" !!}
+				        {!! $data != '' ? $data : '<div class="text-center"><p> No MemberShip Available</p><a href="/activity-details/'.$sesAry['serviceID'].'" class="btn btn-lp" target="_blank">Buy Membership Now </a></div>' !!}
 				    </td>
 					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0);"> Delete </button></td>
 				  </tr>

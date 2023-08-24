@@ -8,13 +8,13 @@
 			$first_name = @$familyData->first_name;
 			$last_name = @$familyData->last_name;
 			$phone_number = @$familyData->mobile;
-			$birthday = date('m-d-Y' , strtotime(@$familyData->birthday));
+			$birthday = @$familyData->birthday != '' ? date('m-d-Y' , strtotime(@$familyData->birthday)) : '';
 			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthday));
 		}else{
 			$first_name = @$familyData->fname;
 			$last_name = @$familyData->lname;
 			$phone_number = @$familyData->phone_number;
-			$birthday = date('m-d-Y' , strtotime(@$familyData->birthdate));
+			$birthday =  @$familyData->birthdate != '' ?date('m-d-Y' , strtotime(@$familyData->birthdate)) : '';
 			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthdate));
 		}
 

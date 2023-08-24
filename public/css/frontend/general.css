@@ -24943,3 +24943,8 @@ padding-left: 0px;
 .fc-next-button::before, .fc-prev-button::before{
 	bottom: 4px !important;
 }
+
+.dot-settings .fname{
+    margin-top: 10px
+}
+
