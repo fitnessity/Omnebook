@@ -8725,7 +8725,7 @@ class UserProfileController extends Controller {
                 $familyData->update();
             }
         }else{
-            $data = UserFamilyDetail::create([
+            /*$data = UserFamilyDetail::create([
                 'user_id' => Auth::user()->id,
                 'first_name' => $request->fname,
                 'last_name' => $request->lname,
@@ -8737,7 +8737,7 @@ class UserProfileController extends Controller {
                 'profile_pic' => $profile_pic,
                 'birthday' =>   $birthdate,
                 'emergency_contact_name' => $request->emergency_name,
-            ]);
+            ]);*/
 
             $company = $user->company;
             foreach($company as $key=>$c){
@@ -8745,7 +8745,9 @@ class UserProfileController extends Controller {
                     $random_password = Str::random(8);
                     $Password = Hash::make($random_password);
                 }
-                $Customer = Customer::create([
+
+                $businessCustomer = $c->customers()->where('user_id' ,$user->id)->first();
+                $createCustomer = Customer::create([
                     'business_id' => $c->id,
                     'password' => $Password ,
                     'fname' => $request->fname,
@@ -8757,6 +8759,7 @@ class UserProfileController extends Controller {
                     'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
                     'birthdate' =>  $birthdate,
+                    'parent_cus_id' =>  $businessCustomer->id,
                 ]);
 
                 if($key == 0){
@@ -8773,14 +8776,14 @@ class UserProfileController extends Controller {
                         'profile_pic' => $profile_pic,
                         'gender' => $request->gender,
                         'birthdate' =>  $birthdate,
-                        'stripe_customer_id' => $Customer->stripe_customer_id
+                        'stripe_customer_id' => $createCustomer->stripe_customer_id
                     ]);
 
-                    $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
+                    $status = SGMailService::sendWelcomeMailToCustomer($createCustomer->id,$c->id,$random_password); 
                 }
-                $Customer->update(['user_id'=>$User->id]);            
+                $createCustomer->update(['user_id'=>$User->id]);            
             }   
-        }   
+        }  
 
         return redirect()->route('addFamily');
     }
@@ -8796,10 +8799,10 @@ class UserProfileController extends Controller {
             }  
         }
         //print_r($UserFamilyDetails);exit;
-        $userfamily = $loggedinUser->user_family_details;
+        /*$userfamily = $loggedinUser->user_family_details;
         foreach($userfamily as $uf){
             $UserFamilyDetails [] = $uf;
-        }
+        }*/
         //print_r( $UserFamilyDetails);exit;
         $cart = [];
         if ($request->session()->has('cart_item')) {

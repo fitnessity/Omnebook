@@ -249,6 +249,13 @@
 				},
 				success:function(data){
 					$('#timeSlotCnt').html(data);
+					/*if (Number.isInteger(data)) {
+					    $('#timeSlotCnt').html(data);
+					} else {
+						$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>'+data+'</p></div> </div></div>');
+			 			$("#"+checkboxId).prop("checked", false);
+			 			$('.selectbooking').modal('show');  
+					}*/
 				}
 			});
 		}
