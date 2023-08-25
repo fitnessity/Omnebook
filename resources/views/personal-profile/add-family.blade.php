@@ -112,16 +112,9 @@
 							                                        <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> <i class="fas fa-info"></i> Booking Info</a>
 																</li>
 															@endif
-															<!-- <li>
-																<a data-behavior="ajax_html_modal" data-url="{{route('payment_history' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
-																<i class="fas fa-money-check"></i> Payment History</a>
-															</li> -->
+															
 															<li>
-																@if( $type == 'user')
-						                                            <a class="delete-family" data-href="{{route('removefamily' ,['id'=>$family->id,'type' =>$type])}}" data-method="get"> <i class="fas fa-trash-alt"></i> Delete</a>
-						                                        @else
-						                                            <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}" data-method="delete"> <i class="fas fa-trash-alt"></i> Delete</a>
-						                                        @endif
+						                                        <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}" data-method="delete"> <i class="fas fa-trash-alt"></i> Delete</a>
 															</li>
 														</ul>
 													</div>

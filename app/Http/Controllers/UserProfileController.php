@@ -8688,7 +8688,7 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('error', 'Problem in password change.');
     }
 
-    public function addFamilyMember(Request $request) {
+    /*public function addFamilyMember(Request $request) {
         $user = Auth::user();
         if($request->hasFile('profile_pic')){
             $profile_pic = $request->file('profile_pic')->store('customer');
@@ -8725,19 +8725,19 @@ class UserProfileController extends Controller {
                 $familyData->update();
             }
         }else{
-            /*$data = UserFamilyDetail::create([
-                'user_id' => Auth::user()->id,
-                'first_name' => $request->fname,
-                'last_name' => $request->lname,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'emergency_contact' => $request->emergency_contact,
-                'relationship' => $request->relationship,
-                'gender' => $request->gender,
-                'profile_pic' => $profile_pic,
-                'birthday' =>   $birthdate,
-                'emergency_contact_name' => $request->emergency_name,
-            ]);*/
+            // $data = UserFamilyDetail::create([
+            //     'user_id' => Auth::user()->id,
+            //     'first_name' => $request->fname,
+            //     'last_name' => $request->lname,
+            //     'email' => $request->email,
+            //     'mobile' => $request->mobile,
+            //     'emergency_contact' => $request->emergency_contact,
+            //     'relationship' => $request->relationship,
+            //     'gender' => $request->gender,
+            //     'profile_pic' => $profile_pic,
+            //     'birthday' =>   $birthdate,
+            //     'emergency_contact_name' => $request->emergency_name,
+            // ]);
 
             $company = $user->company;
             foreach($company as $key=>$c){
@@ -8747,6 +8747,25 @@ class UserProfileController extends Controller {
                 }
 
                 $businessCustomer = $c->customers()->where('user_id' ,$user->id)->first();
+                if($businessCustomer == ''){
+                    $createCustomerForBusiness = Customer::create([
+                        'business_id' => $c->id,
+                        'password' => $Password ,
+                        'fname' => $user->firstname,
+                        'lname' => $user->lastname,
+                        'email' => $user->email,
+                        'phone_number' => $user->phone_number,
+                        'emergency_contact' => $user->emergency_contact,
+                        'relationship' => $user->relationship,
+                        'profile_pic' => $user->profile_pic,
+                        'user_id' => $user->gender,
+                        'gender' => $user->id,
+                        'birthdate' => $user->birthdate
+                    ]);
+
+                    $businessCustomer = $createCustomerForBusiness->id;
+                }
+
                 $createCustomer = Customer::create([
                     'business_id' => $c->id,
                     'password' => $Password ,
@@ -8759,34 +8778,13 @@ class UserProfileController extends Controller {
                     'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
                     'birthdate' =>  $birthdate,
-                    'parent_cus_id' =>  $businessCustomer->id,
+                    'parent_cus_id' => @$businessCustomer->id,
                 ]);
-
-                if($key == 0){
-                    $User = User::create([
-                        'role' => 'customer',
-                        'password' => $Password,
-                        'firstname' => $request->fname,
-                        'lastname' => $request->lname,
-                        'username' => $request->fname.' '.$request->lname,
-                        'email' => $request->email,
-                        'phone_number' => $request->mobile,
-                        'emergency_contact' => $request->emergency_contact,
-                        'relationship' => $request->relationship,
-                        'profile_pic' => $profile_pic,
-                        'gender' => $request->gender,
-                        'birthdate' =>  $birthdate,
-                        'stripe_customer_id' => $createCustomer->stripe_customer_id
-                    ]);
-
-                    $status = SGMailService::sendWelcomeMailToCustomer($createCustomer->id,$c->id,$random_password); 
-                }
-                $createCustomer->update(['user_id'=>$User->id]);            
             }   
         }  
 
         return redirect()->route('addFamily');
-    }
+    }*/
 
     public function addFamily(Request $request) {
         $loggedinUser = Auth::user();
@@ -8815,6 +8813,29 @@ class UserProfileController extends Controller {
         ]);
     }
 
+    public function showFamilyMember(Request $request) {
+        $familyData = '';
+        if($request->has('id')){
+            /*$user = Auth::user();
+            if($request->type == 'user'){
+                $familyData = $user->user_family_details()->findOrFail($request->id);
+            }else{
+                $familyData = Customer::where('id',$request->id)->first();
+            }*/
+
+            $familyData = Customer::where('id',$request->id)->first();
+        }
+
+        return view('personal-profile.add-edit-family',compact('familyData'));
+    }
+
+    public function removefamily(Request $request) {
+        //print_r($request->all());exit;
+        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+    
+        return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
+    }
+
     public function payment_history(Request $request){
         if($request->type == 'user'){
             $purchase_history = Auth::user()->Transaction()->orderby('id', 'desc')->get();
@@ -8824,28 +8845,6 @@ class UserProfileController extends Controller {
         }
         //print_r($purchase_history);exit;
         return view('personal-profile.payment-history-modal',['purchase_history'=>$purchase_history ,'id'=>$request->id]);
-    }
-
-    public function showFamilyMember(Request $request) {
-        $familyData = '';
-        $type = $request->type;
-        if($request->has('id')){
-            $user = Auth::user();
-            if($request->type == 'user'){
-                $familyData = $user->user_family_details()->findOrFail($request->id);
-            }else{
-                $familyData = Customer::where('id',$request->id)->first();
-            }
-        }
-
-        return view('personal-profile.add-edit-family',compact('familyData','type'));
-    }
-
-    public function removefamily(Request $request) {
-        //print_r($request->all());exit;
-        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
-    
-        return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
 
     public function spotify() 

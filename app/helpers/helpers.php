@@ -1,12 +1,8 @@
 <?php
 
     use Carbon\Carbon;
-    use App\Repositories\ReviewRepository;
-    use App\Repositories\UserRepository;
-    use App\Repositories\NetworkRepository;
-    use App\UserFollower;
-    use App\UserBookingStatus;
-    use App\AddOnService;
+    use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer};
 
     function getUserRatings($user_id)
     {
@@ -45,5 +41,47 @@
             $text = "—";
         }
         return $text;
+    }
+
+
+    function createBusinessCustomer($user ,$passwords,$businessId){
+        $createCustomerForBusiness = Customer::create([
+            'business_id' => $businessId,
+            'password' => $passwords,
+            'fname' => $user->firstname,
+            'lname' => $user->lastname,
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'emergency_contact' => $user->emergency_contact,
+            'relationship' => $user->relationship,
+            'profile_pic' => $user->profile_pic,
+            'user_id' => $user->id,
+            'gender' => $user->gender,
+            'birthdate' => $user->birthdate,
+        ]);
+
+        return $createCustomerForBusiness;
+    }
+
+    function getFamilyMember(){
+        $user = Auth::user();
+        $businessCustomer = $customers = [];
+        $company = $user->company;
+        foreach($company as $key=>$c){
+            $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
+        }
+        //print_r($businessCustomer);exit;
+        foreach($businessCustomer as $customer){
+            foreach($customer as $c){
+                if(!empty($c)){
+                    $cus = Customer::where('parent_cus_id', $c)->get();
+                    foreach($cus as $c1){
+                        $customers [] = $c1;
+                    }
+                }
+            }
+        }
+
+        return $customers;
     }
 ?>

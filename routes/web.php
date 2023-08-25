@@ -230,6 +230,9 @@ Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('m
 Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
 Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
 
+Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
+
+
 Route::get('make-new-logout',function(){
     if(Auth::check()){
         Auth::logout();

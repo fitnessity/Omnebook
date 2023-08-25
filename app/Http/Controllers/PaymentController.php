@@ -566,7 +566,7 @@ class PaymentController extends Controller {
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'user';
                     }else{
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = $request->familyid;
-                        $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'family';
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'customer';
                     }
                 }
             }

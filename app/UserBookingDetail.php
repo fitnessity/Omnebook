@@ -228,8 +228,13 @@ class UserBookingDetail extends Model
                     $name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
                     $all_pr .= $name.' </br> ';
                 }else if($pr['from'] == "customer"){
-                    $name = str_replace('(me)','',@$pr['pc_name']);
-                    $all_pr .= $name.' </br> ';
+                    if($this->booking->user_type == 'customer'){
+                        $name = str_replace('(me)','',@$pr['pc_name']);
+                        $all_pr .= $name.' </br> ';
+                    }else{
+                        $cus = Customer::where('id',@$pr['id'])->first();
+                        $all_pr = $cus->fname.' '.$cus->lname.' </br> ';
+                    }
                 }else{
                      
                     if($this->booking->user_type == 'customer'){
