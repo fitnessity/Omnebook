@@ -45,7 +45,7 @@ class FamilyMemberController extends Controller
 
             $businessCustomer = $c->customers()->where('user_id', $user->id)->first();
             if($businessCustomer == ''){
-                $businessCustomer = createBusinessCustomer($user,$passwords,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
+                $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
             }
 
             $createCustomer = Customer::create([
