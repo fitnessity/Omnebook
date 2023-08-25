@@ -723,18 +723,14 @@
 <!-- end modal -->
 
 <!-- The Add New Participant Modal -->
-	<div class="modal fade compare-model" id="newparticipant">
-		<div class="modal-dialog eventcalender">
+	<!-- <div class="modal" id="newparticipant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
-				<div class="modal-header" style="text-align: right;"> 
-					<div class="closebtn">
-						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
+				<div class="modal-header">
+				
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<!-- Modal body -->
-				<div class="modal-body body-tbm">
+				<div class="modal-body">
 					<div class="row"> 
 						<div class="col-lg-12">
 							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Family or Friends</h4>
@@ -793,10 +789,9 @@
 						</form>
 					</div>
 				</div>
-				
 			</div>
 		</div>
-	</div>
+	</div> -->
 <!-- end modal -->
 
 <div class="modal" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
