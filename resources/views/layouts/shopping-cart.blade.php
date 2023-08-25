@@ -6,7 +6,6 @@
 <?php 
 	
 	$username = Auth::user() != '' ? Auth::user()->full_name : '';
-
     /*echo"<pre>"; print_r($cart['cart_item']);exit();*/
     $ajaxname = '';
 
@@ -161,7 +160,7 @@
 									                                                    {{$fa->fname}} {{$fa->lname}}</option>
 									                                            <?php } ?>
 
-	                                           	 								<option value="addparticipate">+ Add New Participant</option>
+	                                           	 								<!-- <option value="addparticipate">+ Add New Participant</option> -->
 																			</select>
 																		</div>
 																	</div>
