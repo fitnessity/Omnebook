@@ -1,34 +1,25 @@
-<form method="post" action="{{route('addFamilyMember')}}" enctype="multipart/form-data">
+@php 
+	$title = @$familyData != '' ? "Edit" : "Add";
+
+	$first_name = @$familyData->fname;
+	$last_name = @$familyData->lname;
+	$phone_number = @$familyData->phone_number;
+	$birthday =  @$familyData->birthdate != '' ?date('m-d-Y' , strtotime(@$familyData->birthdate)) : '';
+	$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthdate));
+	
+	$profile_pic = Storage::disk('s3')->exists(@$familyData->profile_pic) ? Storage::URL(@$familyData->profile_pic) : url('/images/service-nofound.jpg');
+
+	$route = @$familyData != '' ? route('family-member.update' ,['family_member' =>$familyData->id]) : route('family-member.store');
+@endphp
+
+<form method="post" action="{{$route}}" enctype="multipart/form-data">
 	@csrf
-
-	@php 
-		$title = @$familyData != '' ? "Edit" : "Add";
-
-		if($type == 'user'){
-			$first_name = @$familyData->first_name;
-			$last_name = @$familyData->last_name;
-			$phone_number = @$familyData->mobile;
-			$birthday = @$familyData->birthday != '' ? date('m-d-Y' , strtotime(@$familyData->birthday)) : '';
-			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthday));
-		}else{
-			$first_name = @$familyData->fname;
-			$last_name = @$familyData->lname;
-			$phone_number = @$familyData->phone_number;
-			$birthday =  @$familyData->birthdate != '' ?date('m-d-Y' , strtotime(@$familyData->birthdate)) : '';
-			$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthdate));
-		}
-
-		$profile_pic = Storage::disk('s3')->exists(@$familyData->profile_pic) ? Storage::URL(@$familyData->profile_pic) : url('/images/service-nofound.jpg');
-
-	@endphp
-
 	<div class="row contentPop"> 
 		<div class="col-lg-12">
 		   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-bottom: 15px; margin-top: 15px;">{{$title}} Family or Friends</h4>
 		</div>
 	</div>
 	<input type="hidden" name="id" value="{{@$familyData->id}}">
-	<input type="hidden" name="type" value="{{@$type}}">
 	<div class="editfamily_frnds">
 		<div class="row">	
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
@@ -91,13 +82,7 @@
 					<input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{@$phone_number}}" data-behavior="text-phone" maxlength="14">
 				</div>
 			</div>
-			@if($type == 'user')
-			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-				<div class="form-group">
-					<input type="text" name="emergency_name" id="emergency_name" placeholder="Emergency Contact Name" class="form-control" value="{{@$familyData->emergency_contact_name}}">
-				</div>
-			</div>
-			@endif
+	
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group">
 					<input type="text" name="emergency_contact" id="emergency_contact" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="{{@$familyData->emergency_contact}}" data-behavior="text-phone" >

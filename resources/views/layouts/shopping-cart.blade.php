@@ -141,7 +141,8 @@
 														<h5 class="fs-20 text-truncate"><a href="#" class="text-dark">{{$item["name"]}}</a></h5>
 														<a class="fs-13 color-red-a" data-bs-toggle="modal" data-bs-target="#booking-details{{$it}}">Booking Details</a>
 														<div class="row">
-															<?php $family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
+															<?php //$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
+																$family = getFamilyMember();
 																
 																for($i=0; $i<$totalquantity ; $i++)
 																{ ?>
@@ -156,10 +157,8 @@
 	                                            								
 	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
 	                                            								<?php foreach($family as $fa){ ?>   
-									                                            	<option value="<?php echo $fa['id']; ?>" 
-									                                                    data-name="<?php echo $fa['first_name'].' '.$fa['last_name']; ?>"
-									                                                    data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="<?php /*echo $age;*/ ?>" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="family">
-									                                                    {{$fa['first_name']}} {{$fa['last_name']}}</option>
+									                                            	<option value="{{$fa->id}}"  data-name="{{$fa->fname}}  {{$fa->lname}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa->id) selected @endif data-type="customer">
+									                                                    {{$fa->fname}} {{$fa->lname}}</option>
 									                                            <?php } ?>
 
 	                                           	 								<option value="addparticipate">+ Add New Participant</option>
@@ -719,6 +718,83 @@
 	        	<div class="modal-body" id="leavegiftbody">
 	        	</div>					        
 	       	</div>
+		</div>
+	</div>
+<!-- end modal -->
+
+<!-- The Add New Participant Modal -->
+	<div class="modal fade compare-model" id="newparticipant">
+		<div class="modal-dialog eventcalender">
+			<div class="modal-content">
+				<div class="modal-header" style="text-align: right;"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body body-tbm">
+					<div class="row"> 
+						<div class="col-lg-12">
+							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Family or Friends</h4>
+						</div>
+					</div>
+					<div id='termserror'></div>
+					<div class="row"> 
+						<form action="{{route('addfamilyfromcart')}}" method="POST">
+							@csrf
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>First Name</label>
+									<input type="text" name="fname" id="fname" class="form-control" required>
+									
+									<label>Last Name</label>
+									<input type="text" name="lname" id="lname" class="form-control" required>
+									
+									<label>Select Gender</label>
+									<select name="gender" id="gender" class="form-control" required>
+										<option value="" hidden="">Select Gender</option>
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+									</select>
+									
+									<label>Email</label>
+									<input type="text" name="email" id="email" class="form-control" >
+									
+									<label>Select Relationship</label>
+									<select name="relationship" id="relationship" class="form-control" required>
+										<option value="" hidden="">Select Relationship</option>
+										<option>Brother</option><option>Sister</option>
+										<option>Father</option><option>Mother</option>
+										<option>Wife</option><option>Husband</option>
+										<option>Son</option><option>Daughter</option>
+										<option>Friend</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="new-participant">
+									<label>Birthday</label>
+									<input required="required" type="text" name="birthdate" id="birthdate" class="form-control" maxlength= "10" value="" placeholder="Date Formate: dd/mm/yyyy">
+									
+									<label>Mobile Number</label>
+									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')">
+									
+									<label>Emergency Contact Name</label>
+									<input type="text" name="emergency_name" id="emergency_name" class="form-control">
+									
+									<label>Emergency Contact Number</label>
+									<input type="text" name="emergency_contact" id="emergency_contact" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('emergency_contact')">
+									
+									<button type="submit" class="btn-nxt-part add-btn-submit" id="submitfamily">Submit</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+			</div>
 		</div>
 	</div>
 <!-- end modal -->
