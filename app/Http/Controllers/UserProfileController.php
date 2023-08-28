@@ -8786,7 +8786,7 @@ class UserProfileController extends Controller {
         return redirect()->route('addFamily');
     }*/
 
-    public function addFamily(Request $request) {
+    /*public function addFamily(Request $request) {
         $loggedinUser = Auth::user();
         $customer = $loggedinUser->customers;
         $UserFamilyDetails = [];
@@ -8797,10 +8797,10 @@ class UserProfileController extends Controller {
             }  
         }
         //print_r($UserFamilyDetails);exit;
-        /*$userfamily = $loggedinUser->user_family_details;
-        foreach($userfamily as $uf){
-            $UserFamilyDetails [] = $uf;
-        }*/
+        // $userfamily = $loggedinUser->user_family_details;
+        // foreach($userfamily as $uf){
+        //     $UserFamilyDetails [] = $uf;
+        // }
         //print_r( $UserFamilyDetails);exit;
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -8811,23 +8811,23 @@ class UserProfileController extends Controller {
             'cart' => $cart,       
             'UserFamilyDetails' => $UserFamilyDetails,
         ]);
-    }
+    }*/
 
-    public function showFamilyMember(Request $request) {
+    /*public function showFamilyMember(Request $request) {
         $familyData = '';
         if($request->has('id')){
-            /*$user = Auth::user();
-            if($request->type == 'user'){
-                $familyData = $user->user_family_details()->findOrFail($request->id);
-            }else{
-                $familyData = Customer::where('id',$request->id)->first();
-            }*/
+            // $user = Auth::user();
+            // if($request->type == 'user'){
+            //     $familyData = $user->user_family_details()->findOrFail($request->id);
+            // }else{
+            //     $familyData = Customer::where('id',$request->id)->first();
+            // }
 
             $familyData = Customer::where('id',$request->id)->first();
         }
 
         return view('personal-profile.add-edit-family',compact('familyData'));
-    }
+    }*/
 
     public function removefamily(Request $request) {
         //print_r($request->all());exit;

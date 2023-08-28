@@ -232,6 +232,7 @@ Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->nam
 
 Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
 
+Route::get('family-member.show', 'FamilyMemberController@show')->name('family-member.show');
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){

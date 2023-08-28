@@ -97,24 +97,24 @@
 														</div>
 													@endif
 													<div class="fname">{{$family->full_name}}</div>
-													<div >{{$family->company_information->company_name}}</div>
+													<!-- <div >{{$family->company_information->company_name}}</div> -->
 												</div>
 												<div class="settings-options">
 													<div class="more-settings-optns">
 														<i class="fas fa-ellipsis-h"></i>
 														<ul>
 															<li>
-																<a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
+																<a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('family-member.show' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
 																<i class="fas fa-edit"></i> Edit</a>
 															</li>
 															@if( $type == 'customer')
 																<li>
-							                                        <a class="view-booikng" href="{{route('personal.family_members.index',['customerId'=>$family->id])}}"> <i class="fas fa-info"></i> Booking Info</a>
+							                                        <a class="view-booikng" href="{{route('personal.family_members.index',['name'=>$family->fname.' '.$family->lname])}}"> <i class="fas fa-info"></i> Booking Info</a>
 																</li>
 															@endif
 															
 															<li>
-						                                        <a class="delete-family" data-href="{{ route('business_customer_delete',['business_id' =>$family->business_id, 'id'=>$family->id]) }}" data-method="delete"> <i class="fas fa-trash-alt"></i> Delete</a>
+						                                        <a class="delete-family" data-href="{{ route('family-member.destroy',[ 'family_member'=>$family->id]) }}" > <i class="fas fa-trash-alt"></i> Delete</a>
 															</li>
 														</ul>
 													</div>
@@ -124,7 +124,7 @@
 										</div>
 									@endforeach
 									
-									<a data-behavior="ajax_html_modal" data-url="{{route('showFamilyMember')}}" data-modal-width="1200px">
+									<a data-behavior="ajax_html_modal" data-url="{{route('family-member.show')}}" data-modal-width="1200px">
 										<div class="user0imgs plus-set">
 											<div class="plus-add-family">
 												<i class="fas fa-plus"></i>
@@ -149,7 +149,7 @@
         if (confirm(text) == true) {
             $.ajax({
                 url: $(this).data('href'),
-                type: $(this).data('method'),
+                type: 'DELETE',
                 data:{
                 	_token: '{{csrf_token()}}',
                 },
