@@ -49,6 +49,7 @@ class FamilyMemberController extends Controller
 	}
 
 	public function store(Request $request){
+        //print_r($request->all());exit;
 		$user = Auth::user();
 		$company = $user->company;
 
@@ -58,7 +59,11 @@ class FamilyMemberController extends Controller
         	$profile_pic = $request->file('profile_pic')->store('customer');
         }
 
-        $birthdate = $request->birthdatehidden;
+        $date = explode('-', $request->birthdate);
+        $birthdate = @$date[2].'-'.@$date[0].'-'.@$date[1];
+        //print_r($date);exit;
+        //$birthdate = $request->birthdatehidden;
+        //$birthdate = date('Y-m-d',strtotime($request->birthdate));
 
         $data = UserFamilyDetail::create([
             'user_id' => $user->id,
