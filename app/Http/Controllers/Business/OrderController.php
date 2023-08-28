@@ -167,7 +167,7 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //print_r($request->all());
+        //print_r($request->all());exit;
         $bookidarray = [];
         $company = $request->current_company;
         $customer = $company->customers()->findOrFail($request->user_id);

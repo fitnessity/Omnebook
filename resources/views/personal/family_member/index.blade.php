@@ -24,7 +24,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY  - {{strtoupper(@$customer->full_name)}} </h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY  - {{strtoupper(@$name)}} </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -36,6 +36,7 @@
                             </div>
                             <div class="row">
                                 @foreach($business as $bs)
+                                @php $customer = getCustomerByname($bs->id ,$name); @endphp
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
                                         <div class="cards-content" style="color:#ffffff;  background-image: url(/public/img/add-family.png);">
@@ -49,7 +50,7 @@
                                             </div>
                                             
                                             <div class="booking-activity-view">
-                                                <a class="view-booking" href="{{route('personal.family_members.index',['business_id'=>$bs->id ,'customerId' =>@$customer->id])}}"> View Bookings</a>
+                                                <a class="view-booking" href="{{route('personal.family_members.index',['business_id'=>$bs->id ,'id' =>@$customer->id])}}"> View Bookings</a>
                                                 <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
                                             </div>
                                          </div>
@@ -106,13 +107,7 @@
                                                 <div class="col-md-2 col-sm-6 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-3 col-sm-6">
-                                                    <div class="date_block">
-                                                        <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_current" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('current')">
-                                                        <i class="far fa-calendar-alt" ></i>
-                                                    </div>
-                                                </div> -->
+                                            
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
@@ -139,13 +134,6 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>                                                
-                                                <!-- <div class="col-md-3 col-sm-6">
-                                                    <div class="date_block">
-                                                        <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_today" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('today')">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </div>
-                                                </div> -->
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
@@ -175,13 +163,7 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-3 col-sm-6">
-                                                    <div class="date_block">
-                                                        <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_upcoming" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('upcoming')">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </div>
-                                                </div> -->
+
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
@@ -211,13 +193,7 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                                <!-- <div class="col-md-3 col-sm-6">
-                                                    <div class="date_block">
-                                                        <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_past" placeholder="Search By Date" class="form-control booking-date w-80" data-behavior="datepicker" onchange="serchDateData('past')">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </div>
-                                                </div> -->
+                                                
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">

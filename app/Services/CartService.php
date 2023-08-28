@@ -146,8 +146,15 @@ class CartService
         $names = '';
         if(!empty($participate)){
             foreach($participate as $p){
-                if($p['from'] == 'family'){
+               /* if($p['from'] == 'family'){
                     $data = UserFamilyDetail::where('id',$p['id'])->first();
+                    if($data != '' ){
+                        $names .= $data->full_name.' ,';
+                    }
+                }*/
+
+                if($p['from'] == 'customer'){
+                    $data = Customer::where('id',$p['id'])->first();
                     if($data != '' ){
                         $names .= $data->full_name.' ,';
                     }

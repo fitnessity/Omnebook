@@ -127,6 +127,7 @@ class BookingRepository
                 $bookingDetail = @$customer->active_memberships()->join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->get();
             }
         }
+        //print_r($bookingDetail);exit();
         return $bookingDetail;
     } 
 
@@ -165,7 +166,6 @@ class BookingRepository
     }
 
     public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
-
         $full_ary = $bookingDetail= [];
         $now = Carbon::now();
        

@@ -23,8 +23,8 @@
                                 </a>
                             </li> <?php ?>
 
-                            <li class=" {{ (request()->is('personal-profile/add-family*')) ? 'active' : '' }}">
-                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family">
+                            <li class=" {{ (request()->is('family-member')) ? 'active' : '' }}">
+                                <a href="{{route('family-member.index')}}">
                                     <img src="{{ url('public/img/menu-icon5.svg') }}" alt="">
                                     <span><!-- Add Family -->  Manage Accounts</span>
                                 </a>
