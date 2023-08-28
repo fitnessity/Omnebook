@@ -105,6 +105,7 @@
                                         </div>
                                     @endif
                                     <form  class="validation" data-secret="{{$intent['client_secret']}}" id="payment-form">
+                                        <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
                                         <div id="payment-element" style="margin-top: 8px;"></div>
                                         <button class="post-btn-red" type="submit" id="submit">Save</button>
                                     </form>
