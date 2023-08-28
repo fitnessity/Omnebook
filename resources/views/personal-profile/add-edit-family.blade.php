@@ -102,9 +102,10 @@
 		maxDate:"today",
 		minDate:"01-01-1970",
 		defaultDate : '',
-		onChange: function(selectedDates, dateStr, instance) {
+		/*onChange: function(selectedDates, dateStr, instance) {
+			let date =  moment(dateStr, "YYYY-MM-DD").format("YYYY-MM-DD")
             let date = moment(dateStr).format("YYYY-MM-DD");
             $("#birthdatehidden").val(date);
-        }
+        }*/
 	});
 </script>
