@@ -197,9 +197,11 @@
 									<!-- <li class="pc-link">
 										   <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
 									 </li> -->
+
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Family</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
+								
 									<!-- <li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
 									</li> -->
