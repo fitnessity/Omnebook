@@ -1077,7 +1077,10 @@ input:disabled{
 			if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
 	            $next_available_date = $activity_next_available_date;
 	        }
-			
+		}
+
+		if($next_available_date == null){
+			$next_available_date = new DateTime();
 		}
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
