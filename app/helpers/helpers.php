@@ -66,22 +66,32 @@
     function getFamilyMember(){
         $user = Auth::user();
         $businessCustomer = $customers = [];
-        $company = $user->company;
+        /*$company = $user->company;
         foreach($company as $key=>$c){
             $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
-        }
+        }*/
+        $company = $user->current_company;
+        $businessCustomer = $company->customers()->where('user_id', $user->id)->pluck('id')->toArray();
         //print_r($businessCustomer);exit;
-        foreach($businessCustomer as $customer){
-            foreach($customer as $c){
-                if(!empty($c)){
-                    $cus = Customer::where('parent_cus_id', $c)->get();
-                    foreach($cus as $c1){
-                        $customers [] = $c1;
-                    }
+        foreach($businessCustomer as $c){
+            if(!empty($c)){
+                $cus = Customer::where('parent_cus_id', $c)->get();
+                foreach($cus as $c1){
+                    $customers [] = $c1;
                 }
             }
+            
         }
-
         return $customers;
     }
+
+    function getCustomerByname($businessId ,$customerName ){
+        $name =  explode(' ', @$customerName);
+        $customer = '';
+        if(@$name[0] != '' || @$name[1] != ''){
+            $customer = Customer::where(['business_id'=>$businessId , 'fname' => @$name[0], 'lname' => @$name[1]])->first();
+        }
+        return $customer;
+    }
+
 ?>
