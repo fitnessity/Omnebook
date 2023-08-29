@@ -561,31 +561,16 @@ class CustomerController extends Controller {
     }
 
     public function update_customer(Request $request){
-      /*print_r($request->all());exit;*/
+        //print_r($request->all());exit;
         session()->forget('strpecarderror');
         if($request->chk == 'update_billing'){
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
             
             $customerdata = Customer::find($request->cus_id);
-            // /echo $customerdata;exit();
-            if($customerdata->stripe_customer_id == ''){
-                $last_name = ($customerdata->firstname) ? $customerdata->lastname : '';
-                $cus_name = $customerdata->firstname.' '.$last_name;
-                $customer = \Stripe\Customer::create(
-                    [
-                        'name' => $cus_name,
-                        'email'=> $customerdata->email,
-                    ]);
-                $stripe_customer_id = $customer->id;
-                $data1 = array(
-                    'stripe_customer_id'=>$stripe_customer_id,
-                );
-                $cust = Customer::find($request->cus_id);
-                $cust->update($data1);
-            }else{
-                $stripe_customer_id = $customerdata->stripe_customer_id;
-            }
+            $customerdata->create_stripe_customer_id();
+
+            $stripe_customer_id = $customerdata->stripe_customer_id;
 
             if($request->payment_type == 'update'){
                 $stripval = $stripe->customers->deleteSource(
@@ -652,6 +637,7 @@ class CustomerController extends Controller {
             if(@$data['terms_contract'] != ''){
                 $data['terms_contract'] = date('Y-m-d');
             }
+            
             
             $position = array_search(request()->_token, $data);
             $position1 = array_search(request()->cus_id, $data);
