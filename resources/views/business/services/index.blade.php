@@ -31,25 +31,33 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="row">
-                                                        <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">  
-                                                            @if(Storage::disk('s3')->exists($profilePic) && $profilePic != '')
-                                                                <img src="{{Storage::URL($profilePic) }}" alt="Avatar" class="avatar">
-                                                            @else 
-                                                                @php $sF=substr($service->program_name, 0, 1); @endphp
-                                                                <div class="company-list-text">
-                                                                   <p class="character">{{$sF}}</p>
+                                                        <div class="col-md-10 col-10">
+                                                            <a href="{{route('business.services.create',['serviceType'=>$service->service_type,'serviceId'=>$service->id])}}" target="_blank">
+                                                                <div class="row y-middle">
+                                                                    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12 col-3">  
+                                                                        @if(Storage::disk('s3')->exists($profilePic) && $profilePic != '')
+                                                                            <img src="{{Storage::URL($profilePic) }}" alt="Avatar" class="avatar">
+                                                                        @else 
+                                                                            @php $sF=substr($service->program_name, 0, 1); @endphp
+                                                                            <div class="company-list-text">
+                                                                               <p class="character">{{$sF}}</p>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-lg-6 col-md-8 col-sm-8 col-9">
+                                                                        <div class="nw-user-details service-space">
+                                                                            <p class="texttr">{{$service->program_name}} ({{$service->sport_activity}}) <b>   {{ ($service->is_active==1) ? "Active" : "Inactive"}} </b></p>
+                                                                            <p class="texttr"><b>{{ ($service->service_type=='individual') ? 'Personal Training' : $service->service_type }}</b></p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            @endif
+                                                            </a>
                                                         </div>
-                                                        <div class="col-xs-12 col-lg-6 col-md-8 col-sm-8">
-                                                            <div class="nw-user-details">
-                                                                <p class="texttr">{{$service->program_name}} ({{$service->sport_activity}}) <b>   {{ ($service->is_active==1) ? "Active" : "Inactive"}} </b></p>
-                                                                <p class="texttr"><b>{{ ($service->service_type=='individual') ? 'Personal Training' : $service->service_type }}</b></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xs-12 col-lg-5 col-md-2 col-sm-2">
-                                                            <div class="float-end">
-                                                                <a href="#" data-bs-toggle="modal" data-bs-target=".moreoptions{{$service->id}}"> <i class="ri-more-fill"></i> </a>
+                                                        <div class="col-md-2 col-2">
+                                                            <div class="">
+                                                                <div class="float-end">
+                                                                    <a href="#" data-bs-toggle="modal" data-bs-target=".moreoptions{{$service->id}}"> <i class="ri-more-fill"></i> </a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
