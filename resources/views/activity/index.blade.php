@@ -101,7 +101,13 @@
 												<div class="find-activity">
 													<div class="row y-middle">
 														<div class="col-xs-4 col-sm-4 padding-r0">
-															<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}">
+															@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}}">
+															@endif 
 														</div>
 														
 														<div class="col-xs-8 col-sm-8 activity-data">
@@ -183,7 +189,13 @@
 							<div class="find-activity d-none">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
-										<img src="{{ url('public/uploads/profile_pic/'.$bookscheduler->business_service->first_profile_pic())}}" >
+										@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
+											<div class="item-inner">
+												<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
+											</div>
+										@else
+											<img src="{{url('/images/service-nofound.jpg')}}}">
+										@endif 
 									</div>
 									<div class="col-md-8 col-sm-8 activity-data">
 										<div class="row">
