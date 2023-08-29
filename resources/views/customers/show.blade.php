@@ -132,7 +132,7 @@
 																											<label class="font-black">Birthday :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
-																											<span>{{date('m-d-Y',strtotime($customerdata->birthdate))}}</span>
+																											<span>@if($customerdata->birthdate != '' ) {{date('m/d/Y',strtotime($customerdata->birthdate))}} @else N/A @endif</span>
 																										</div>
 																									</div>
 																								</div>
@@ -167,7 +167,7 @@
 																											<label class="font-black">Customers Since :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
-																											<span>{{date('m-d-Y',strtotime($customerdata->created_at))}}</span>
+																											<span>{{date('m/d/Y',strtotime($customerdata->created_at))}}</span>
 																										</div>
 																									</div>
 																								</div>
@@ -1077,7 +1077,7 @@
 		<div class="col-md-12 text-center printDiv mb-10 printnone" id="termsDiv">{!!@$terms->termcondfaqtext!!}</div>
 </div>
 
-<div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered modal-50">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1118,7 +1118,7 @@
 							<div class="mb-10">
 								<label>	Birthdate </label>
 								<div class="input-group">
-									<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
+									<input type="text" name="birthdate" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
 								</div>
 							</div>
 						</div>
