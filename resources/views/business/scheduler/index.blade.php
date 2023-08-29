@@ -97,7 +97,9 @@
 														</a>
 													</div>
 													<div class="flex-grow-1 ms-3">
-														<h6 class="mb-1"> @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) - {{$schedule->businessPriceDetailsAges->category_title}} @endif </h6>
+														<h3 class="fs-17 mb-1"> @if($schedule->business_service()->exists())  {{$schedule->businessPriceDetailsAges->category_title}} @endif </h3>
+														<p class="mb-1"> @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif  </p> 
+														
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
 													<div class="flex-grow-1 ms-3">
