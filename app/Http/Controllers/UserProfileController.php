@@ -8289,10 +8289,30 @@ class UserProfileController extends Controller {
         $user = User::where('id', Auth::user()->id)->first();
         $customers = $user->customers()->pluck('id')->toArray();
         $customer_ids = implode(',',$customers);
-        $cardInfo = StripePaymentMethod::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at','desc')->get(); 
-        
-        $transactionDetail = Transaction::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and user_id in ('.$customer_ids.')))', [Auth::user()->id])->orderby('created_at' ,'DESC')->paginate(11); 
 
+        $query = StripePaymentMethod::where('user_type', 'user')
+            ->where('user_id', Auth::user()->id);
+
+        if ($customer_ids) {
+            $query->orWhere(function($subquery) use ($customer_ids) {
+                $subquery->where('user_type', 'customer')
+                    ->whereIn('user_id', explode(',', $customer_ids));
+            });
+        }
+
+        $cardInfo = $query->orderBy('created_at', 'desc')->get();
+
+        $query2 = Transaction::where('user_type', 'user')
+            ->where('user_id', Auth::user()->id);
+
+        if ($customer_ids) {
+            $query2->orWhere(function($subquery) use ($customer_ids) {
+                $subquery->where('user_type', 'customer')
+                    ->whereIn('user_id', explode(',', $customer_ids));
+            });
+        }
+
+        $transactionDetail = $query2->orderby('created_at' ,'DESC')->paginate(11); 
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         if($user->stripe_customer_id != ''){
@@ -9224,7 +9244,7 @@ class UserProfileController extends Controller {
             }else{
                 $pro_img = $name;
             }  
-        }  
+        }    
         $pro_img = rtrim($pro_img,',');
         $updateval = $businessData->update(['profile_pic' => $pro_img]);
         return redirect()->route('business.services.create',['business_id'=>$businessData->cid ,'serviceType'=>$businessData->service_type, 'serviceId'=> $serviceId]);

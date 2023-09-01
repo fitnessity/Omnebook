@@ -2,7 +2,7 @@
 
   <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
   <div id="payment-element" style="margin-top: 8px;"></div>
-  
+   
   <button class="btn btn-red" type="submit" id="submit">Add on file</button>
 </form>
 

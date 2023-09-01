@@ -707,18 +707,11 @@ class CustomerController extends Controller {
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
-        $customer = Customer::create([
-            'business_id' => $bId,
-            'fname' => $user->firstname,
-            'lname' => ($user->lastname) ? $user->lastname : '',
-            'username' => $user->username,
-            'email' => $user->email,
-            'country' => 'US',
-            'status' => 0,
-            'phone_number' => $user->phone_number,
-            'birthdate' => $user->birthdate,
-            'user_id' => $user->id
-        ]);
+        $chk = Customer::where('user_id' , $user->id)->first();
+        if($chk == ''){
+            profileSyncToBusiness($bId, $user);
+        }
+        
         return Redirect()->route('personal.orders.index');
     }
 
