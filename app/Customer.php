@@ -148,7 +148,7 @@ class Customer extends Authenticatable
 
     public function get_families()
     {
-        $familes = [];
+        /*$familes = [];
         if($this->parent_cus_id){
             $parent = Customer::where('id',$this->parent_cus_id)->first();
             if ($parent != '') {
@@ -159,9 +159,16 @@ class Customer extends Authenticatable
             return $familes;
         }else{
             return Customer::where('parent_cus_id',$this->id)->get();
+        }*/
+
+        $familes = [];
+        if($this->parent_cus_id){
+            $familes = Customer::where('parent_cus_id', $this->id)->where('id', '<>', $this->id)->get();
+            return $familes;
+        }else{
+            return Customer::where('parent_cus_id',$this->id)->get();
         }
     }
-
 
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -248,9 +255,9 @@ class Customer extends Authenticatable
             $results = $results->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
         }
 
-        $results = $results->select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN booking_checkin_details.checkin_date IS NOT NULL THEN COUNT(booking_checkin_details.use_session_amount) ELSE 0 END) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
            
-            //print_r($results->get());exit;
+        //print_r($results->get());exit;
         return $results; 
     }
 

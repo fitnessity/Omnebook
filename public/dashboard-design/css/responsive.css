@@ -291,6 +291,7 @@
 	.free-trial-img{text-align: center;}
 	.free-trial-text{text-align: center;}
 	.mobile-none{display: none;}
+	#calendar .fc-left .fc-button-group .fc-prev-button, #calendar .fc-left .fc-button-group .fc-next-button{margin-bottom: 35px;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

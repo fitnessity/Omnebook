@@ -21148,6 +21148,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-inner-data span {
   font-weight: 600;
+  color: #000;
 }
 .activity-hours {
   display: inline-block;
@@ -21158,6 +21159,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   padding: 2px 4px;
   border-radius: 5px;
   font-size: 11px;
+  color: #000;
 }
 .activity-city {
   display: inline-block;
@@ -21182,6 +21184,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-information p {
   margin-bottom: 4px;
+  color: #000;
 }
 .showall-btn {
   background: #f91942;
@@ -21195,6 +21198,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .dollar-person {
   line-height: 1;
+  color: #000;
 }
 .dollar-person span {
   font-size: 11px;
@@ -21205,6 +21209,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .activity-time-main {
   text-align: end;
   line-height: 1;
+  color: #000;
 }
 .activity-time-main span {
   font-size: 11px;
@@ -21212,6 +21217,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .home-black-section{
 	background: #010101;
 	max-height: 150px;
+	width: 100%;
 }
 .home-black-section label{
 	color: white;
@@ -24946,5 +24952,8 @@ padding-left: 0px;
 
 .dot-settings .fname{
     margin-top: 10px
+}
+.card-info{
+	background-color: #fff !important;
 }
 

@@ -7,7 +7,7 @@ use Auth;
 use App\Repositories\{SportsCategoriesRepository,SportsRepository,ProfessionalRepository,UserRepository};
 use DB;
 use Session;
-use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User};
+use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User,Customer};
 
 use Illuminate\Support\Facades\Crypt;
 
@@ -457,8 +457,8 @@ class HomeController extends Controller
     public function sendGrantAccessMail(Request $request){
     	$user = User::where('id',$request->id)->first();
     	$company = CompanyInformation::findOrFail($request->business_id);
-    	$customer = $user->customers()->get();
-    	if(count($customer) >0 && !empty($customer)){
+    	$customer = Customer::where('user_id' , $user->id)->first();
+    	if($customer != ''){
     		return "already";
     	}else{
     		$data = array(

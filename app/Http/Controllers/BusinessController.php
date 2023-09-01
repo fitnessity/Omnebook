@@ -44,12 +44,15 @@ class BusinessController extends Controller
 
         $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingdata = $completedtdata = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt = 0;
 
-        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = [];
+        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
         $dba_business_name =  @$business->dba_business_name ?? @$business->company_name;
 
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        
         if(@$business != ''){
             $services = $business->service()->orderby('created_at')->take(5)->get();
 
@@ -109,6 +112,14 @@ class BusinessController extends Controller
             $expiringMembership = $booking->whereDate('expired_at', '>=', $startDate)->whereDate('expired_at', '<=', $endDate)->get();
 
             $activitySchedule = @$business->business_activity_schedulers()->whereDate('end_activity_date','>=', $startDate)->whereDate('end_activity_date','<=', $endDate)->limit(3)->get();
+
+            $businessServices = $business->business_services()->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+            $usDetail = $business->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                   ->orderby('created_at','desc')->get();
         }
         
         $topBookedPriceId = array_values(array_unique($topBookedPriceId));
@@ -130,24 +141,8 @@ class BusinessController extends Controller
 
         $key_values = array_column($topBookedCategories, 'paid'); 
         array_multisort($key_values, SORT_DESC, $topBookedCategories);
-       
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
 
-        $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');
-
-        $businessServices = $business->business_services()->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
-
-        $usDetail = $business->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                   ->orderby('created_at','desc')->get();
-        foreach($usDetail as $usd){
-            if($usd->userBookingStatus != ''){
-                $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
-            }
-        }            
+        $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');   
 
         $comments = PagePostComments::whereIn('post_id',$pagepostIds)
                     ->where('user_id','!=',Auth::user()->id)
@@ -205,6 +200,12 @@ class BusinessController extends Controller
             }
             $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
         }
+
+        foreach($usDetail as $usd){
+            if($usd->userBookingStatus != ''){
+                $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
+            }
+        }   
 
         /*print_r($notificationAry);*/
 
@@ -1642,5 +1643,5 @@ class BusinessController extends Controller
 
         echo $var;
         exit;
-    }
+    } 
 }
