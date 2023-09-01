@@ -30,19 +30,22 @@ class SGMailService{
 	}
 
 	public static function sendBookingReceipt($emailDetail){
-
+		$notes = @$emailDetail['getreceipemailtbody']['notes'];
+		if($notes == ''){
+			$notes = "Thank you for doing business with us!";
+		}
 		$substitutions = [
 			"provider_Name" => $emailDetail['getreceipemailtbody']['provider_Name'],  
 		    "booking_ID" =>$emailDetail['getreceipemailtbody']['booking_ID'],  
 		    "program_Name" => $emailDetail['getreceipemailtbody']['program_Name'],   
 		    "category" => $emailDetail['getreceipemailtbody']['category'],   
 		    "price_Option" => $emailDetail['getreceipemailtbody']['price_Option'],  
-		    "sessions" => $emailDetail['getreceipemailtbody']['sessions'],  
+		    "Sessions" => $emailDetail['getreceipemailtbody']['sessions'],  
 		    "membership" => $emailDetail['getreceipemailtbody']['membership'],  
 		    "quantity" => $emailDetail['getreceipemailtbody']['quantity'],  
-		    "participate" => $emailDetail['getreceipemailtbody']['participate'],  
+		    "participants" => $emailDetail['getreceipemailtbody']['participate'],  
 		    "activity_Type" => $emailDetail['getreceipemailtbody']['activity_Type'],  
-		    "service_Type" => $emailDetail['getreceipemailtbody']['service_Type'],  
+		    "Service_Type" => $emailDetail['getreceipemailtbody']['service_Type'],  
 		    "membership_Duration" => $emailDetail['getreceipemailtbody']['membership_Duration'],  
 		    "purchase_Date" => $emailDetail['getreceipemailtbody']['purchase_Date'],  
 		    "membership_Activation_Date" => $emailDetail['getreceipemailtbody']['membership_Activation_Date'],  
@@ -52,7 +55,7 @@ class SGMailService{
 		    "total" => $emailDetail['getreceipemailtbody']['total'],
 		    "bookingUrl" => $emailDetail['getreceipemailtbody']['bookingUrl'],
 		    "companyImage" => @$emailDetail['getreceipemailtbody']['companyImage'],
-		    "notes" => @$emailDetail['getreceipemailtbody']['notes'],
+		    "message" => $notes,
 		];
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
