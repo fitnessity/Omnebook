@@ -61,7 +61,9 @@
 										</div>
 									</div>
 								@else
-                                    <div style="padding:50px; text-align: center; font-size:14px; color:#585858">Upload a credit card safely so you can process bookings faster.</div>
+                                    <div class="col-md-12 desktop-none mobile-custom">
+                                        <div style="padding:50px; text-align: center; font-size:14px; color:#585858">Upload a credit card safely so you can process bookings faster.</div>
+                                    </div>
                                 @endif
 								<!-- Mobile Slider End -->
 
@@ -81,14 +83,16 @@
 		                                    </div>
                                         </div>
                                     @endforeach
-                                    <div class="cards-block addcard mdisplay-none" style="cursor: pointer" data-name="" data-cvv="" data-cnumber="" data-month="" data-year="" data-type=""  data-ptype="insert">
-                                        <div class="cards-content"style="height:166px; color:#ffffff; background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
-                                            <span style="text-align: center">Add New Card</span>
-                                        </div>
-                                    </div>
+                                    
                                 @else
-                                    <div style="padding:50px; text-align: center; font-size:14px; color:#585858">Upload a credit card safely so you can process bookings faster.</div>
+                                    <div class="mdisplay-none" style="padding:50px; text-align: center; font-size:14px; color:#585858">Upload a credit card safely so you can process bookings faster.</div>
                                 @endif
+
+                                <div class="cards-block addcard mdisplay-none" style="cursor: pointer" data-name="" data-cvv="" data-cnumber="" data-month="" data-year="" data-type=""  data-ptype="insert">
+                                    <div class="cards-content"style="height:166px; color:#ffffff; background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
+                                        <span style="text-align: center">Add New Card</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row" id="stripediv" style="display:none;">
@@ -127,25 +131,29 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbodydetail">
-                                            @foreach($transactionDetail as $history )
-                                            @if($history->item_description()['itemDescription'] != '')
-                                                <tr>
-                                                    <td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-                                                    <td>{!!$history->item_description()['itemDescription']!!}</td>
-                                                    <td>{{$history->item_type_terms()}}</td>
-                                                    <td>{{$history->getPmtMethod()}}</td>
-                                                    <td>${{$history->amount}}</td>
-                                                    <td>{{$history->item_description()['qty']}}</td>
-                                                    <td>Refund | Void</td>
-                                                    <td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$history->user_id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                            @endforeach
+                                            @forelse($transactionDetail as $history )
+                                                @if($history->item_description()['itemDescription'] != '')
+                                                    <tr>
+                                                        <td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+                                                        <td>{!!$history->item_description()['itemDescription']!!}</td>
+                                                        <td>{{$history->item_type_terms()}}</td>
+                                                        <td>{{$history->getPmtMethod()}}</td>
+                                                        <td>${{$history->amount}}</td>
+                                                        <td>{{$history->item_description()['qty']}}</td>
+                                                        <td>Refund | Void</td>
+                                                        <td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$history->user_id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="900px" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @empty 
+
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <div class="float-right">
-                                        {{ $transactionDetail->links() }}
+                                        @if(!empty($transactionDetail))
+                                        {{ @$transactionDetail->links() }}
+                                        @endif
                                     </div>
                                 </div>
                             </div>

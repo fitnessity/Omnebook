@@ -673,13 +673,13 @@
                 business_id:'{{$business_id}}'
             },
             success: function(response){
-            	$('.errclass').removeClass('green-fonts');
+            	$('.errclass').removeClass('font-green');
               	if(response == 'already'){
-              		$('.errclass').html("<p> Request Access Already Granted..</p>");
+              		$('.errclass').html("<p> Request access already granted. And user already sync with this business.</p>");
               		$('.request_access_btn').attr('disabled', 'disabled');
               	}else if(response == 'success'){
               		$('.errclass').removeClass('error');
-              		$('.errclass').addClass('green-fonts');
+              		$('.errclass').addClass('font-green');
               		$('.errclass').html("<p>Email Successfully Sent..</p>");
               	}else{
               		$('.errclass').html("<p>Can't Send Mail to your mail..</p>");

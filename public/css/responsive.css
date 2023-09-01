@@ -2494,7 +2494,7 @@
 	.padding-r0{padding-right: 0px;}
 	.activity-inner-data{font-size: 11px;}
 	.activity-hours span{font-size: 10px;}
-	.activity-city span{font-size: 12px;}
+	.activity-city span{font-size: 12px; color: #000;}
 	.companyalink{font-size: 14px;}
 	.activity-information span{font-size: 13px !important; }
 	.activity-information p{font-size: 13px;}

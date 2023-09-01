@@ -54,7 +54,7 @@ class FamilyMemberController extends Controller
 		$company = $user->company;
 
 		$profile_pic = '';
-
+        $message = "There is issue while adding member.Please try again.";
 		if($request->hasFile('profile_pic')){
         	$profile_pic = $request->file('profile_pic')->store('customer');
         }
@@ -65,20 +65,24 @@ class FamilyMemberController extends Controller
         //$birthdate = $request->birthdatehidden;
         //$birthdate = date('Y-m-d',strtotime($request->birthdate));
 
-        $data = UserFamilyDetail::create([
-            'user_id' => $user->id,
-            'first_name' => $request->fname,
-            'last_name' => $request->lname,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'emergency_contact' => $request->emergency_contact,
-            'relationship' => $request->relationship,
-            'gender' => $request->gender,
-            'profile_pic' => $profile_pic,
-            'birthday' =>   $birthdate,
-            'emergency_contact_name' => $request->emergency_name,
-        ]);
-
+        $familyMember = UserFamilyDetail::where(['user_id' => $user->id , 'first_name' =>  $request->fname , 'last_name' => $request->lname])->first();
+        //print_r($familyMember);exit;
+        if($familyMember == ''){
+            UserFamilyDetail::create([
+                'user_id' => $user->id,
+                'first_name' => $request->fname,
+                'last_name' => $request->lname,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'emergency_contact' => $request->emergency_contact,
+                'relationship' => $request->relationship,
+                'gender' => $request->gender,
+                'profile_pic' => $profile_pic,
+                'birthday' =>   $birthdate,
+                'emergency_contact_name' => $request->emergency_name,
+            ]);
+        }
+       
         foreach($company as $key=>$c){
             if($key == 0){
                 $random_password = Str::random(8);
@@ -90,22 +94,29 @@ class FamilyMemberController extends Controller
                 $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
             }
 
-            $createCustomer = Customer::create([
-                'business_id' => $c->id,
-                'password' => $password,
-                'fname' => $request->fname,
-                'lname' => $request->lname,
-                'email' => $request->email,
-                'phone_number' => $request->mobile,
-                'emergency_contact' => $request->emergency_contact,
-                'relationship' => $request->relationship,
-                'profile_pic' => $profile_pic,
-                'gender' => $request->gender,
-                'birthdate' =>  $birthdate,
-                'parent_cus_id' => @$businessCustomer->id,
-            ]);          
-        } 
-        return redirect()->route('family-member.index');
+            $customer = Customer::where(['business_id'=> $businessCustomer->id, 'fname' =>  $request->fname ,'lname' => $request->lname,'email' => $request->email])->first();
+            if($customer == ''){
+                $createCustomer = Customer::create([
+                    'business_id' => $c->id,
+                    'password' => $password,
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'email' => $request->email,
+                    'phone_number' => $request->mobile,
+                    'emergency_contact' => $request->emergency_contact,
+                    'relationship' => $request->relationship,
+                    'profile_pic' => $profile_pic,
+                    'gender' => $request->gender,
+                    'birthdate' =>  $birthdate,
+                    'parent_cus_id' => @$businessCustomer->id,
+                ]); 
+                $chk = 1;
+            }else{
+                $message = 'Member already added as customer..';
+            }
+        }
+
+        return redirect()->route('family-member.index')->with(['message'=>$message]);
 	}
 
 	public function update(Request $request ,$id){
@@ -149,9 +160,9 @@ class FamilyMemberController extends Controller
 
         return view('personal-profile.add-edit-family',compact('familyData'));
     }
-
+ 
     public function destroy($id){
         $familyData = Customer::where('id',$id)->first();
         $familyData->update(['parent_cus_id'=>NULL]);
-    }
+    }  
 }
