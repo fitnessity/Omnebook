@@ -34,7 +34,7 @@ class ProcessCustomerExcelData implements ShouldQueue
     {
         $count = count($this->data) - 1;
         for ($i=1; $i < $count; $i++){
-            if( Customer::where(['email'=> $this->data[$i]['email']])->first() == ''){
+            if( Customer::where(['email'=> $this->data[$i]['email'] ,'business_id' => $this->business_id ])->first() == ''){
                 $createdata = new Customer;
                 $createdata->business_id =  $this->business_id;
                 $createdata->lname =  $this->data[$i]['last_name'];
