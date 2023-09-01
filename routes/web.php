@@ -158,9 +158,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
         Route::get('/void_or_refund_modal','CustomerController@void_or_refund_modal')->name('void_or_refund_modal');
         Route::get('/terminate_or_suspend_modal','CustomerController@terminate_or_suspend_modal')->name('terminate_or_suspend_modal');
-
-        Route::get('/customers/another/{id}/','CustomerController@customerpage')->name('customerpage');
-
+        
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
 
         // BookingPostorders

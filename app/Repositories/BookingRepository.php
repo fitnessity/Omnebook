@@ -553,7 +553,7 @@ class BookingRepository
             "email" => $email,
             "bookingUrl" => $bookingUrl,
             "companyImage" => $companyImage,
-            "notes" => 'Thank you for doing business with us',
+            "notes" => 'Thank you for doing business with us!',
         );
 
         //return json_encode($one_array); 
