@@ -18,6 +18,7 @@ class StripePaymentMethod extends Model
         'exp_year',
         'last4',
         'primary',
+        'brand',
     ];
 
     public static function boot(){

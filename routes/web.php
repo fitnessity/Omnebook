@@ -101,6 +101,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/price_plan','DesignController@price_plan')->name('price_plan');
 	Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
 	Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
+	Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');

@@ -18,7 +18,7 @@ use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -707,18 +707,81 @@ class CustomerController extends Controller {
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
-        $customer = Customer::create([
-            'business_id' => $bId,
-            'fname' => $user->firstname,
-            'lname' => ($user->lastname) ? $user->lastname : '',
-            'username' => $user->username,
-            'email' => $user->email,
-            'country' => 'US',
-            'status' => 0,
-            'phone_number' => $user->phone_number,
-            'birthdate' => $user->birthdate,
-            'user_id' => $user->id
-        ]);
+        $chk = Customer::where('user_id' , $user->id)->first();
+        if($chk == ''){
+            profileSyncToBusiness($bId, $user);
+        }else{
+            $familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
+            foreach($familyMember as $member){
+                $chkFamily = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
+                if($chkFamily == ''){
+                    Customer::create([
+                        'business_id' => $bId,
+                        'fname' => $member->first_name,
+                        'lname' => ($member->last_name) ? $member->last_name : '',
+                        'username' => $member->first_name.' '.$member->last_name,
+                        'email' => $member->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => $member->mobile,
+                        'birthdate' => $member->birthday,
+                        'gender' => $member->gender,
+                        'user_id' => NULL, //this is null bcz of user is not created at 
+                        'parent_cus_id'=> $chk->id ,
+                        'relationship' =>$member->relationship
+                    ]);
+                }
+            }
+
+            $cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+
+            foreach($cardData as $data){
+                $stripData = StripePaymentMethod::where(['user_id' =>$chk->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
+                if($stripData == ''){
+                    StripePaymentMethod::create([
+                        'payment_id' => $data->payment_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $customer->id,
+                        'pay_type'=> $data->pay_type,
+                        'brand'=> $data->brand,
+                        'exp_month'=> $data->exp_month,
+                        'exp_year'=> $data->exp_year,
+                        'last4'=> $data->last4,
+                    ]);
+                }
+                
+            }
+
+            $paymentHistory = Transaction::where('user_type', 'User')
+            ->where('user_id', $user->id)
+            ->orWhere(function($subquery) use ($customer) {
+                $subquery->where('user_type', 'Customer')
+                    ->where('user_id', $chk->id);
+            })->get();
+
+            foreach($paymentHistory as $data){
+            $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
+                if($history == ''){
+                    Transaction::create([
+                        'item_id' => $data->item_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $chk->id,
+                        'item_type'=> $data->item_type,
+                        'channel'=> $data->channel,
+                        'kind'=> $data->kind,
+                        'transaction_id'=> $data->transaction_id,
+                        'stripe_payment_method_id'=> $data->stripe_payment_method_id,
+                        'amount'=> $data->amount,
+                        'qty'=> $data->qty,
+                        'status'=> $data->status,
+                        'refund_amount'=> $data->refund_amount,
+                        'payload'=> $data->payload
+                    ]);
+                }
+                
+            }
+        }
+        
         return Redirect()->route('personal.orders.index');
     }
 
