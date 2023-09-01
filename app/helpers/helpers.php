@@ -154,16 +154,16 @@
             })->get();
 
         foreach($paymentHistory as $data){
-            if($data->user_type == 'Customer'){
+            /*if($data->user_type == 'Customer'){
                 $userId = $customer->id;
             }else{
                 $userId = $detail->id;
-            }
+            }*/
 
             Transaction::create([
                 'item_id' => $data->item_id,
-                'user_type' => $data->user_type,
-                'user_id' => $userId,
+                'user_type' => 'Customer',
+                'user_id' => $customer->id,
                 'item_type'=> $data->item_type,
                 'channel'=> $data->channel,
                 'kind'=> $data->kind,
