@@ -397,8 +397,8 @@ class OrderController extends BusinessBaseController
                     }
                 }
                 $categoryData = $checkoutRegisterCartService->getCategory($item['priceid']);
-                $duesTax = $categoryData->dues_tax;
-                $salesTax = $categoryData->sales_tax;
+                $duesTax = @$categoryData->dues_tax;
+                $salesTax = @$categoryData->sales_tax;
                 if($duesTax == '' || $duesTax == null){
                     $duesTax = 0;
                 }
@@ -429,6 +429,8 @@ class OrderController extends BusinessBaseController
                                     $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
                                 }else if($timeChk == 'Year'){
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                }else{
+                                    $paymentDate = (Carbon::now()->addDays($addTime))->format('Y-m-d');
                                 }
                                 $status = 'Scheduled';
                             } 
