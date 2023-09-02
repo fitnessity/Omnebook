@@ -10,33 +10,38 @@ class FamilyMemberController extends Controller
 
 	public function index(Request $request){
         $loggedinUser = Auth::user();
-        $customer = @$loggedinUser->customers;
-        $UserFamilyDetails = $familyDetails = [];
 
-        foreach($customer as $cs){
-            foreach ($cs->get_families() as $fm){
-                $UserFamilyDetails [] = $fm;
-            }  
+        if(count($loggedinUser->company) ==  0){
+            $userfamily = $loggedinUser->user_family_details;
+            foreach($userfamily as $uf){
+                $familyDetails [] = $uf;
+            }
+        }else{
+            $customer = @$loggedinUser->customers;
+            $UserFamilyDetails = $familyDetails = [];
+
+            foreach($customer as $cs){
+                foreach ($cs->get_families() as $fm){
+                    $UserFamilyDetails [] = $fm;
+                }  
+            }
+
+            $groupedFamilyDetails = collect($UserFamilyDetails)->groupBy(function ($item) {
+                return $item->fname . ' ' . $item->lname;
+            });
+
+            $uniqueFamilyDetails = collect([]);
+
+            foreach ($groupedFamilyDetails as $name => $group) {
+                $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
+            }
+
+            foreach ($uniqueFamilyDetails as $detail) {
+                $familyDetails [] = $detail;
+            }
         }
 
-        $groupedFamilyDetails = collect($UserFamilyDetails)->groupBy(function ($item) {
-            return $item->fname . ' ' . $item->lname;
-        });
-
-        $uniqueFamilyDetails = collect([]);
-
-        foreach ($groupedFamilyDetails as $name => $group) {
-            $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
-        }
-
-        foreach ($uniqueFamilyDetails as $detail) {
-            $familyDetails [] = $detail;
-        }
-
-        /*$userfamily = $loggedinUser->user_family_details;
-        foreach($userfamily as $uf){
-            $UserFamilyDetails [] = $uf;
-        }*/
+       //print_r( $familyDetails);exit();
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
@@ -53,14 +58,16 @@ class FamilyMemberController extends Controller
 		$user = Auth::user();
 		$company = $user->company;
 
-		$profile_pic = '';
+		$profile_pic = $birthdate = '';
         $message = "There is issue while adding member.Please try again.";
 		if($request->hasFile('profile_pic')){
         	$profile_pic = $request->file('profile_pic')->store('customer');
         }
 
-        $date = explode('-', $request->birthdate);
-        $birthdate = @$date[2].'-'.@$date[0].'-'.@$date[1];
+        if($request->birthdate != ''){
+            $date = explode('-', $request->birthdate);
+            $birthdate = @$date[2].'-'.@$date[0].'-'.@$date[1];
+        }
         //print_r($date);exit;
         //$birthdate = $request->birthdatehidden;
         //$birthdate = date('Y-m-d',strtotime($request->birthdate));
@@ -120,49 +127,90 @@ class FamilyMemberController extends Controller
 	}
 
 	public function update(Request $request ,$id){
-		$familyData = Customer::where('id',$id)->first();
+        if($request->birthdate != ''){
+            $date = explode('-', $request->birthdate);
+            $birthdate = @$date[2].'-'.@$date[0].'-'.@$date[1];
+        }
 
-		if($familyData != ''){
-			if($request->hasFile('profile_pic')){
-            	$profile_pic = $request->file('profile_pic')->store('customer');
-	        }else{
-	            $profile_pic = $request->old_pic;
-	        }
+        if($request->hasFile('profile_pic')){
+            $profile_pic = $request->file('profile_pic')->store('customer');
+        }else{
+            $profile_pic = $request->old_pic;
+        }
 
-	        $birthdate = $request->birthdatehidden;
+        if($request->type == 'user'){
+            $familyData = UserFamilyDetail::where('id',$id)->first();
+            if($familyData != ''){
+                $familyData->update([ 'first_name' => $request->fname,
+                    'last_name' => $request->lname,
+                    'birthday' =>   $birthdate,
+                    'mobile' => $request->mobile,
+                    'emergency_contact' => $request->emergency_contact,
+                    'profile_pic' => $profile_pic,
+                    'gender' => $request->gender,
+                    'email' => $request->email,
+                    'relationship' => $request->relationship]);
+            }
+        }else{
+            $companyIds = Auth::user()->company()->pluck('id')->toArray();
+    		$familyData = Customer::where('id',$id)->first();
+            $customers = Customer::where(['fname' => @$familyData->fname ,'lname' => @$familyData->lname]);
+            if (!empty($companyIds)) {
+                $customers->whereIn('business_id', $companyIds);
+            }
+    		
+            $customers = $customers->get();
+            if(!empty($customers)){
+                foreach($customers as $customer){
+                    $customer->update(['fname' => $request->fname,
+                        'lname' => $request->lname,
+                        'birthdate' =>   $birthdate,
+                        'phone_number' => $request->mobile,
+                        'emergency_contact' => $request->emergency_contact,
+                        'profile_pic' => $profile_pic,
+                        'gender' => $request->gender,
+                        'email' => $request->email,
+                        'relationship' => $request->relationship]);
+                }
+            }
+            
+        }
 
-			$familyData->fname = $request->fname;
-	        $familyData->lname = $request->lname;
-	        $familyData->gender = $request->gender;
-	        $familyData->email = $request->email;
-	        $familyData->relationship = $request->relationship;
-	        $familyData->birthdate =   $birthdate;
-	        $familyData->phone_number = $request->mobile;
-	        $familyData->emergency_contact = $request->emergency_contact;
-	        $familyData->profile_pic = $profile_pic;
-	        $familyData->update();
-		}
-		return redirect()->route('family-member.index');
+    	return redirect()->route('family-member.index');
 	}
 
     public function show(Request $request){
         $familyData = '';
+        $type = $request->type;
         if($request->has('id')){
-            /*$user = Auth::user();
-            if($request->type == 'user'){
-                $familyData = $user->user_family_details()->findOrFail($request->id);
+            $user = Auth::user();
+            if($type == 'user'){
+                $familyData = $user->user_family_details()->findOrFail($request->id); // this is for user who are not providers 
             }else{
-                $familyData = Customer::where('id',$request->id)->first();
-            }*/
-
-            $familyData = Customer::where('id',$request->id)->first();
+                $familyData = Customer::where('id',$request->id)->first(); // this is for user who are providers
+            }
         }
 
-        return view('personal-profile.add-edit-family',compact('familyData'));
+        return view('personal-profile.add-edit-family',compact('familyData' ,'type'));
     }
  
-    public function destroy($id){
-        $familyData = Customer::where('id',$id)->first();
-        $familyData->update(['parent_cus_id'=>NULL]);
+    public function destroy(Request $request, $id){
+        if($request->type == 'customer'){
+            $companyIds = Auth::user()->company()->pluck('id')->toArray();
+            $familyData = Customer::where('id',$id)->first();
+            $customers = Customer::where(['fname' => @$familyData->fname ,'lname' => @$familyData->lname]);
+            if (!empty($companyIds)) {
+                $customers->whereIn('business_id', $companyIds);
+            }
+            
+            $customers = $customers->get();
+            if(!empty($customers)){
+                foreach($customers as $customer){
+                    $customer->update(['parent_cus_id'=>NULL]);
+                }
+            }
+        }else{
+            $familyData = UserFamilyDetail::where('id',$id)->delete();
+        }
     }  
 }
