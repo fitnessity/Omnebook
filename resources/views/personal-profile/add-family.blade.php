@@ -98,7 +98,7 @@
 														</div>
 													@endif
 													<div class="fname">{{$family->full_name}}</div>
-													<!-- <div >{{$family->company_information->company_name}}</div> -->
+													
 												</div>
 												<div class="settings-options">
 													<div class="more-settings-optns">
@@ -115,7 +115,7 @@
 															@endif
 															
 															<li>
-						                                        <a class="delete-family" data-href="{{ route('family-member.destroy',[ 'family_member'=>$family->id]) }}" > <i class="fas fa-trash-alt"></i> Delete</a>
+						                                        <a class="delete-family" data-href="{{ route('family-member.destroy',[ 'family_member'=>$family->id ,'type'=> $type]) }}" > <i class="fas fa-trash-alt"></i> Delete</a>
 															</li>
 														</ul>
 													</div>
