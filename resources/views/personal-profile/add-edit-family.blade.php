@@ -1,12 +1,11 @@
 @php 
 	$title = @$familyData != '' ? "Edit" : "Add";
 
-	$first_name = @$familyData->fname;
-	$last_name = @$familyData->lname;
-	$phone_number = @$familyData->phone_number;
-	$birthday =  @$familyData->birthdate != '' ?date('m-d-Y' , strtotime(@$familyData->birthdate)) : '';
-	$birthdayhiden = date('Y-m-d' , strtotime(@$familyData->birthdate));
-	
+	$first_name = @$familyData->fname ??  @$familyData->first_name;
+	$last_name = @$familyData->lname ?? @$familyData->last_name;
+	$phone_number = @$familyData->phone_number ?? @$familyData->mobile;
+	$birthday =  @$familyData->birthdate ?? @$familyData->birthday ;
+	$birthday = $birthday != '' ? date('m-d-Y' , strtotime(@$birthday)) : '';
 	$profile_pic = Storage::disk('s3')->exists(@$familyData->profile_pic) ? Storage::URL(@$familyData->profile_pic) : url('/images/service-nofound.jpg');
 
 	$route = @$familyData != '' ? route('family-member.update' ,['family_member' =>$familyData->id]) : route('family-member.store');
@@ -14,12 +13,16 @@
 
 <form method="post" action="{{$route}}" enctype="multipart/form-data">
 	@csrf
+	@if($familyData != '')
+		@method('PUT')
+	@endif
 	<div class="row contentPop"> 
 		<div class="col-lg-12">
 		   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-bottom: 15px; margin-top: 15px;">{{$title}} Family or Friends</h4>
 		</div>
 	</div>
 	<input type="hidden" name="id" value="{{@$familyData->id}}">
+	<input type="hidden" name="type" value="{{@$type}}">
 	<div class="editfamily_frnds">
 		<div class="row">	
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
@@ -72,9 +75,7 @@
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
 				<div class="form-group dob">
 					<label>mm-dd-yyyy</label>
-					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{$birthday}}" required="required" >
-
-					<input type="hidden" name="birthdatehidden" id="birthdatehidden" value="{{$birthdayhiden}}">
+					<input type="text" name="birthdate" id="birthdate" placeholder="Birthday" class="form-control" value="{{$birthday}}" required>
 				</div>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
