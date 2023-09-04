@@ -67,7 +67,12 @@
 														</li>
 													
 														<li>
-															<a href="{{route('paymentinfo')}}" >
+															<a href="{{route('creditCardInfo')}}" >
+															<i class="fas fa-money-check"></i> Credit Card Info</a>
+														</li>
+
+														<li>
+															<a href="{{route('paymentHistory')}}" >
 															<i class="fas fa-money-check"></i> Payment History</a>
 														</li>
 													</ul>
