@@ -8241,15 +8241,15 @@ class UserProfileController extends Controller {
         ]);
     }
     
-    public function paymentdelete(Request $request) {
+
+    public function cardDelete(Request $request) {
         $user = User::where('id', Auth::user()->id)->first();
         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
 
         $stripePaymentMethod->delete();
-       
     }
     
-    public function paymentsave(Request $request) {
+    public function cardsSave(Request $request) {
 
         $user = User::where('id', Auth::user()->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -8279,11 +8279,10 @@ class UserProfileController extends Controller {
             }
         }
 
-        return redirect()->route('paymentinfo'); 
+        return redirect()->route('creditCardInfo'); 
     }
 
-    public function paymentinfo(Request $request) {
-    
+    public function creditCardInfo(Request $request){
         $cardInfo = [];
         $intent = null;
         $user = User::where('id', Auth::user()->id)->first();
@@ -8302,17 +8301,13 @@ class UserProfileController extends Controller {
 
         $cardInfo = $query->orderBy('created_at', 'desc')->get();
 
-        $query2 = Transaction::where('user_type', 'user')
-            ->where('user_id', Auth::user()->id);
-
-        if ($customer_ids) {
-            $query2->orWhere(function($subquery) use ($customer_ids) {
-                $subquery->where('user_type', 'customer')
-                    ->whereIn('user_id', explode(',', $customer_ids));
-            });
+        $UserProfileDetail['firstname'] =  $user->firstname;
+       
+        $cart = [];
+        if ($request->session()->has('cart_item')) {
+            $cart = $request->session()->get('cart_item');
         }
 
-        $transactionDetail = $query2->orderby('created_at' ,'DESC')->paginate(11); 
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         if($user->stripe_customer_id != ''){
@@ -8322,19 +8317,42 @@ class UserProfileController extends Controller {
             ]);
         }
 
+        return view('personal-profile.credit-cards', [
+            'UserProfileDetail' => $UserProfileDetail, 
+            'cardInfo' => $cardInfo,
+            'cart' => $cart,
+            'intent' => $intent 
+        ]);
+    }
+
+    public function paymentHistory(Request $request){
+        $user = User::where('id', Auth::user()->id)->first();
+        $customers = $user->customers()->pluck('id')->toArray();
+        $customer_ids = implode(',',$customers);
+
+        $query2 = Transaction::where('transaction.user_type', 'user')
+            ->where('transaction.user_id', Auth::user()->id);
+
+        if ($customer_ids) {
+            $query2->orWhere(function($subquery) use ($customer_ids) {
+                $subquery->where('transaction.user_type', 'customer')
+                    ->whereIn('transaction.user_id', explode(',', $customer_ids));
+            });
+        }
+
+        $query2 = $query2->join("user_booking_status as ubs", "transaction.item_id", "=", "ubs.id")->Join("user_booking_details as usd", "ubs.id", "=", "usd.booking_id");
+        $transactionDetail = $query2->orderby('transaction.created_at' ,'DESC')->whereNotNull('usd.id')->paginate(10); 
+
+        //print_r($transactionDetail);exit;
         $UserProfileDetail['firstname'] =  $user->firstname;
-       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
-
-        return view('personal-profile.payment-info', [
+        return view('personal-profile.payment-history', [
             'UserProfileDetail' => $UserProfileDetail, 
             'transactionDetail' => $transactionDetail, 
-            'cardInfo' => $cardInfo,
-            'cart' => $cart,
-            'intent' => $intent 
+            'cart' => $cart
         ]);
     }
 

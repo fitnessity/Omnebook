@@ -117,42 +117,6 @@ class CustomerController extends Controller {
         ]);
     }
 
-    public function customerpage(Request $request, $business_id, $id){
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-
-        $terms = $company->business_terms->first();
-
-        $customerdata = $company->customers->find($id);
-        $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
-        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
-        $purchase_history = $customerdata->Transaction()->orderby('id', 'desc')->get();
-       
-        $complete_booking_details = $customerdata->complete_booking_details()->get();
-          //print_r($complete_booking_details);exit();
-        $strpecarderror = '';
-        if (session()->has('strpecarderror')) {
-            $strpecarderror = Session::get('strpecarderror');
-        }
-
-        $auto_pay_payment_msg = '';
-        if($request->session()->has('recurringPayment')){
-            $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
-            $request->session()->forget('recurringPayment');
-        }
-
-        return view('customers.=show', [
-            'customerdata'=>$customerdata,
-            'strpecarderror'=>$strpecarderror,
-            'terms'=> $terms,
-            'visits' => $visits,
-            'purchase_history' => $purchase_history,
-            'active_memberships' => $active_memberships,
-            'complete_booking_details' => $complete_booking_details,
-            'auto_pay_payment_msg' =>$auto_pay_payment_msg
-        ]);
-    }
-
     public function searchcustomersaction(Request $request) {
         if($request->get('query'))
         {
@@ -232,7 +196,7 @@ class CustomerController extends Controller {
        return  $status;
     }
 
-    public function importmembership(Request $request){
+        public function importmembership(Request $request){
         $user = Auth::user();
         $current_company =  $user->current_company;
         if($current_company->id == $request->business_id && $current_company->membership_uploading == 0){
@@ -248,7 +212,12 @@ class CustomerController extends Controller {
                 if(!empty($headings)){
                     foreach($headings as $key => $row) {
                         $firstrow = $row[0];
-                        if($firstrow[0] != 'name' || $firstrow[1] != 'membership_type' ||  $firstrow[2] != 'status'|| $firstrow[3] != 'member_from'|| $firstrow[4] != 'member_to') 
+                        /*if($firstrow[0] != 'name' || $firstrow[1] != 'membership_type' ||  $firstrow[2] != 'status'|| $firstrow[3] != 'member_from'|| $firstrow[4] != 'member_to') 
+                        {
+                            $this->error = 'Problem in header.';
+                            break;
+                        }*/
+                        if($firstrow[1] != 'name' || $firstrow[2] != 'membership_type' ||  $firstrow[3] != 'status'|| $firstrow[4] != 'member_from'|| $firstrow[5] != 'member_to') 
                         {
                             $this->error = 'Problem in header.';
                             break;
@@ -754,7 +723,7 @@ class CustomerController extends Controller {
 
             $paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)
-            ->orWhere(function($subquery) use ($customer) {
+            ->orWhere(function($subquery) use ($chk) {
                 $subquery->where('user_type', 'Customer')
                     ->where('user_id', $chk->id);
             })->get();
