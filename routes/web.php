@@ -102,6 +102,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
 	Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
 	Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
+	Route::get('/o_payment_info','DesignController@o_payment_info')->name('o_payment_info');
+	Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -1017,10 +1019,11 @@ Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalen
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');
-Route::get('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
-Route::get('/personal-profile/payment-info', 'UserProfileController@paymentinfo')->name('paymentinfo');
+Route::post('/personal-profile/card-delete', 'UserProfileController@cardDelete')->name('cardDelete');
+Route::get('/personal-profile/cards-save', 'UserProfileController@cardsSave')->name('cards-save');
+Route::get('/personal-profile/credit-cards-info', 'UserProfileController@creditCardInfo')->name('creditCardInfo');
+Route::get('/personal-profile/payment-history', 'UserProfileController@paymentHistory')->name('paymentHistory');
 Route::post('/personal-profile/get-card-purchase-history', 'UserProfileController@card_purchase_history')->name('card_purchase_history');
-Route::post('/personal-profile/payment-delete', 'UserProfileController@paymentdelete')->name('paymentdelete');
 Route::get('/personal-profile/review', 'UserProfileController@review');
 Route::get('/personal-profile/user-profile', 'UserProfileController@userprofile')->name('user-profile');
 Route::post('updateuserprofile', 'UserProfileController@updateuserprofile')->name('updateuserprofile');

@@ -1384,6 +1384,7 @@
 	.main-box-body {  padding: 0 0px !important;}
 	.custom-multiple-book .owl-prev{left: 13px !important;}
 	.custom-multiple-book .owl-next{right: 0px !important;}
+	.business-info{padding: 25px 20px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2381,7 +2382,7 @@
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
 	.points-cards-home-text {  display: block;}
-	.activity-time-main{float: left; margin-top: 4px;}
+	.activity-time-main{text-align: center !important; margin-top: 4px;} 
 	.find-activity img{margin-bottom: 0px !important; min-height: 150px !important;}
 	.nav-sliders-activites{float: left;}
 	.instant-banner h4{top: 60%; width: 70%; left: 15px;}
@@ -2572,6 +2573,7 @@
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{margin-top: -65px; height: 35px;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
 	.fc .fc-toolbar h2{text-align: center; width: 100%; }
+	.business-info{padding: 23px 10px;}
 }
 
 @media(max-width: 575px) {
