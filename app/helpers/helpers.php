@@ -70,6 +70,7 @@
         foreach($company as $key=>$c){
             $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
         }*/
+
         $company = $user->current_company;
         if($company != ''){
             $businessCustomer = $company->customers()->where('user_id', $user->id)->pluck('id')->toArray();
@@ -78,13 +79,28 @@
                 if(!empty($c)){
                     $cus = Customer::where('parent_cus_id', $c)->get();
                     foreach($cus as $c1){
-                        $customers [] = $c1;
+                        $customers [] = array(
+                            "fname" => $c1->fname,
+                            "lname" => $c1->lname,
+                            "id" => $c1->id,
+                            "type" => 'customer',
+                        );
                     }
                 }
                 
             }
+        }else{
+            $family = $user->user_family_details;
+            foreach($family as $fm){
+                $customers [] = array(
+                    "fname" => $fm->first_name,
+                    "lname" => $fm->last_name,
+                    "id" => $fm->id,
+                    "type" => 'family',
+                );
+            }
         }
-        
+        //print_r($customers);exit;
         return $customers;
     }
 

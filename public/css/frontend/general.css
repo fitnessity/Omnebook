@@ -52,7 +52,10 @@ p {
     list-style: none;
     font-weight: normal;
 }
-
+hr{
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+}
 a {
     text-decoration: none; transition: 0.5s;
 }
@@ -22806,6 +22809,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-schedule-tabs ul li a{
 	color: #000;
+	padding: 10px 12px !important;
+	border: none !important;
 }
 .activity-schedule-tabs .nav-tabs > li.active > a:hover{
 	color: #000;
@@ -24955,5 +24960,9 @@ padding-left: 0px;
 }
 .card-info{
 	background-color: #fff !important;
+}
+
+.mw-70{
+    min-width: 70% !important;
 }
 

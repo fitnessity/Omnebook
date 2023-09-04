@@ -35,13 +35,13 @@ class ProcessMembershipExcelData implements ShouldQueue
     public function handle()
     {
         for ($i=1; $i < count($this->data); $i++){
-            if($this->data[$i][0] != ''  && is_numeric($this->data[$i][3])){
-                $member_from = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][3]));
+            if($this->data[$i][1] != '' && $this->data[$i][4] != '' && $this->data[$i][5] != '' && $this->data[$i][3] != 'Declined'){
+                //$member_from = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][4]));
 
-                $member_to = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][4]));
+                //$member_to = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->data[$i][5]));
 
                 $customerData = $string = $content = $content1 = '';$nameary = [];
-                $string = htmlentities($this->data[$i][0], null, 'utf-8');
+                $string = htmlentities($this->data[$i][1], null, 'utf-8');
                 $content1 = str_replace("&nbsp;", "", $string);
                 $content1 = str_replace(" ", "", $content1);
                 $content = html_entity_decode($content1);
@@ -50,17 +50,17 @@ class ProcessMembershipExcelData implements ShouldQueue
                 if($customerData != ''){
 
                     $priceDetailsData = BusinessPriceDetails::where('cid', $this->business_id)->get();
-                    $title = str_replace("&nbsp;", "", htmlentities($this->data[$i][1], null, 'utf-8'));
+                    $title = str_replace("&nbsp;", "", htmlentities($this->data[$i][2], null, 'utf-8'));
                     $title = html_entity_decode($title);
                     $priceDetail = $priceDetailsData->first(function ($pd) use ($title) {
                         return str_replace(" ", "", $pd->price_title) === str_replace(" ", "", $title);
                     });
 
                     if($priceDetail != ''){ 
-                        /*$exDate = explode('/',$member_from);
-                        $conDate = explode('/',$);
-                        $expired_at = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1];
-                        $contract_date = @$conDate[2].'-'.@$conDate[0].'-'.@$conDate[1];*/
+                        $exDate = explode('/',$this->data[$i][4]);
+                        $conDate = explode('/',$this->data[$i][5]);
+                        $member_to = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1];
+                        $member_from = @$conDate[2].'-'.@$conDate[0].'-'.@$conDate[1];
                         $BookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$member_to)->whereDate('contract_date','=',$member_from)->first();
                        
                         if($BookingDetail == ''){
@@ -122,6 +122,14 @@ class ProcessMembershipExcelData implements ShouldQueue
                             );
 
                             $transactionstatus = Transaction::create($transactiondata);
+                            $status = $this->data[$i][3];
+                            if($status = 'Terminated'){
+                                $status = 'cancel';
+                            }else if($status = 'Suspended'){
+                                $status = 'suspend';
+                            }else if ($status = 'Expired') {
+                                $status = 'complete';
+                            }
 
                             $booking_detail = UserBookingDetail::create([                 
                                 'booking_id' => $userBookingStatus->id,
@@ -143,7 +151,8 @@ class ProcessMembershipExcelData implements ShouldQueue
                                 'user_id'=> $customerData->id,
                                 'transfer_provider_status' =>'paid',
                                 'payment_number' => '{}',
-                                'order_from' => "Excel Order"
+                                'order_from' => "Excel Order",
+                                'status' => strtolower($status),
                             ]);
 
                             BookingCheckinDetails::create([

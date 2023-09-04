@@ -115,7 +115,7 @@
 
 														<div class="col-lg-2 col-md-2 col-sm-2 col-4">
 															<h6 class="text-center mmt-10">Session Remaining</h6>
-															<p class="mb-0 text-center">{{ $booking_checkin_detail->order_detail !='' ? $booking_checkin_detail->order_detail->getremainingsession()/$booking_checkin_detail->order_detail->pay_session : "N/A"}}</p>
+															<p class="mb-0 text-center">{{ $booking_checkin_detail->order_detail !='' ? $booking_checkin_detail->order_detail->getremainingsession()."/".$booking_checkin_detail->order_detail->pay_session : "N/A"}}</p>
 														</div>
 
 														<div class="col-lg-1 col-md-1 col-sm-1 col-2">
