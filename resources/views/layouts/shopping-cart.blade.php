@@ -6,7 +6,7 @@
 <?php 
 	
 	$username = Auth::user() != '' ? Auth::user()->full_name : '';
-    /*echo"<pre>"; print_r($cart['cart_item']);exit();*/
+    /*echo"<pre>"; print_r($cart['cart_item']); exit();*/
     $ajaxname = '';
 
     $fees = App\BusinessSubscriptionPlan::where('id',1)->first();
@@ -142,7 +142,7 @@
 														<div class="row">
 															<?php //$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
 																$family = getFamilyMember();
-																
+																print_r($family);exit;
 																for($i=0; $i<$totalquantity ; $i++)
 																{ ?>
 																	<div class="col-md-4 col-sm-6 mb-3">
@@ -156,11 +156,11 @@
 	                                            								
 	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
 	                                            								<?php foreach($family as $fa){ ?>   
-									                                            	<option value="{{$fa->id}}"  data-name="{{$fa->fname}}  {{$fa->lname}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa->id) selected @endif data-type="customer">
-									                                                    {{$fa->fname}} {{$fa->lname}}</option>
+									                                            	<option value="{{$fa['id']}}"  data-name="{{$fa['fname']}}  {{$fa['lname']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
+									                                                    {{$fa['fname']}} {{$fa['lname']}}</option>
 									                                            <?php } ?>
 
-	                                           	 								<!-- <option value="addparticipate">+ Add New Participant</option> -->
+	                                           	 								<option value="addparticipate">+ Add New Participant</option>
 																			</select>
 																		</div>
 																	</div>
@@ -173,9 +173,8 @@
 															var $this = $(this);
 															var selectedOption = $this.children("option:selected");
 															var value = selectedOption.val();
-
 															if(value == 'addparticipate'){
-																$('#newparticipant').modal('show');
+																$('.newparticipant').modal('show');
 															}else{
 																var data = {
 															      	_token: $('meta[name="csrf-token"]').attr('content'),
@@ -561,7 +560,7 @@
 														<div class="col-6">
 															<!-- <a href="/personal-profile/payment-info" class="edit-cart fs-15 color-red-a float-end"> Edit</a> -->
 
-															<a href="#" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
+															<a href="{{route('creditCardInfo')}}" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
 														</div>
 													</div>
 														
@@ -721,77 +720,102 @@
 	</div>
 <!-- end modal -->
 
-<!-- The Add New Participant Modal -->
-	<!-- <div class="modal" id="newparticipant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-				
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
+<div class="modal fade in newparticipant" tabindex="-1" aria-modal="true" role="dialog" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered mw-70" >
+		<div class="modal-content">
+			<div class="modal-header p-3">
+				<h5 class="modal-title" id="exampleModalLabel">Add Family or Friends</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+			</div>
+			<form action="{{route('family-member.store')}}" method="post">
+				@csrf
 				<div class="modal-body">
-					<div class="row"> 
-						<div class="col-lg-12">
-							<h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px; margin-bottom: 12px;">Add Family or Friends</h4>
+					<div class="row">	
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="photo-select product-edit user-dash-img mb-10">
+								<input type="hidden" name="old_pic" value="">
+								<img src="{{'/images/service-nofound.jpg'}}" class="pro_card_img blah" id="showimg">
+									<input type="file" id="profile_pic" name="profile_pic" class="text-center fs-12">
+							</div>
+						</div>
+						<div class="col-lg-8 col-md-8 fs-12">	
+							<div class="row">
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>First Name</label>
+										<input type="text" name="fname" class="form-control fs-12" required="required" value="">
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Last Name</label>
+										<input type="text" name="lname" id="lname" class="form-control fs-12" required="required" value="">
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Gender</label>
+										<select name="gender" id="gender" class="form-select fs-12" required="required">
+											<option value="" hidden="">Select Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">	
+										<label>Email</label>
+										<input type="email" name="email" id="email" class="form-control fs-12" value="" required="required">
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Relationship</label>
+										<select name="relationship" id="relationship" class="form-select fs-12" required="required">
+											<option value="" hidden="">Select Relationship</option>
+											<option value="Brother">Brother</option>
+											<option value="Sister">Sister</option>
+											<option value="Father">Father</option>
+											<option value="Mother">Mother</option>
+											<option value="Wife">Wife</option>
+											<option value="Husband">Husband</option>
+											<option value="Son">Son</option>
+											<option value="Daughter">Daughter</option>
+											<option value="Friend">Friend</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Birth date</label>
+										<input type="text" class="fs-12 form-control flatpickr-input" name="birthdate" id="birthdate" readonly="readonly">
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Mobile Number</label>
+										<input type="text" name="mobile" id="mobile"  class="form-control fs-12" value="" data-behavior="text-phone" maxlength="14">
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<div class="form-group mb-10">
+										<label>Emergency Contact Number</label>
+										<input type="text" name="emergency_contact" id="emergency_contact" class="form-control fs-12" maxlength="14" value="" data-behavior="text-phone">
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div id='termserror'></div>
-					<div class="row"> 
-						<form action="{{route('addfamilyfromcart')}}" method="POST">
-							@csrf
-							<div class="col-md-6">
-								<div class="new-participant">
-									<label>First Name</label>
-									<input type="text" name="fname" id="fname" class="form-control" required>
-									
-									<label>Last Name</label>
-									<input type="text" name="lname" id="lname" class="form-control" required>
-									
-									<label>Select Gender</label>
-									<select name="gender" id="gender" class="form-control" required>
-										<option value="" hidden="">Select Gender</option>
-										<option value="Male">Male</option>
-										<option value="Female">Female</option>
-									</select>
-									
-									<label>Email</label>
-									<input type="text" name="email" id="email" class="form-control" >
-									
-									<label>Select Relationship</label>
-									<select name="relationship" id="relationship" class="form-control" required>
-										<option value="" hidden="">Select Relationship</option>
-										<option>Brother</option><option>Sister</option>
-										<option>Father</option><option>Mother</option>
-										<option>Wife</option><option>Husband</option>
-										<option>Son</option><option>Daughter</option>
-										<option>Friend</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="new-participant">
-									<label>Birthday</label>
-									<input required="required" type="text" name="birthdate" id="birthdate" class="form-control" maxlength= "10" value="" placeholder="Date Formate: dd/mm/yyyy">
-									
-									<label>Mobile Number</label>
-									<input type="text" name="mobile" id="mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('mobile')">
-									
-									<label>Emergency Contact Name</label>
-									<input type="text" name="emergency_name" id="emergency_name" class="form-control">
-									
-									<label>Emergency Contact Number</label>
-									<input type="text" name="emergency_contact" id="emergency_contact" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  onkeyup="changeformate('emergency_contact')">
-									
-									<button type="submit" class="btn-nxt-part add-btn-submit" id="submitfamily">Submit</button>
-								</div>
-							</div>
-						</form>
+				</div>
+				<div class="modal-footer">
+					<div class="hstack gap-2 justify-content-end">
+						<button type="submit" id="btn_family" class="btn-cart-checkout fs-12">Submit</button>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
-	</div> -->
-<!-- end modal -->
+	</div>
+</div>
 
 <div class="modal" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -802,6 +826,10 @@
 										
 @include('layouts.business.footer')
 <script>
+	flatpickr('.flatpickr-input',{
+		dateFormat: "m-d-Y",
+        maxDate: "today",
+	});
 	function opengiftpopup(pid,img,name,date){
 		var checkBox = document.getElementById("payforcheckbox"+pid);
 		if (checkBox.checked == true){
