@@ -123,7 +123,7 @@ class FamilyMemberController extends Controller
             }
         }
 
-        return redirect()->route('family-member.index')->with(['message'=>$message]);
+        return redirect()->back()->with(['message'=>$message]);
 	}
 
 	public function update(Request $request ,$id){
