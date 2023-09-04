@@ -142,7 +142,7 @@
 														<div class="row">
 															<?php //$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
 																$family = getFamilyMember();
-																print_r($family);exit;
+																//print_r($family);exit;
 																for($i=0; $i<$totalquantity ; $i++)
 																{ ?>
 																	<div class="col-md-4 col-sm-6 mb-3">
