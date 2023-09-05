@@ -189,23 +189,6 @@
                                             <button type="button" class="signbutton-next step4_next" id="step4_next">Next</button>
                                         </div>
                                     </div>
-                                    <div id="adding_photo" class="tab-pane fade">
-                                        <div class="upload-wrp-content">
-                                            <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
-                                            <p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
-                                        </div>
-                                        <div class="">
-                                            <div class="upload-img">
-                                                <input type="file" name="file_upload" id="file" onchange="readURL(this);">
-                                                <div class="upload-img-msg">
-                                                    <p>Touble uploading profile photo?</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="signup-step-btn">
-                                            <button type="button" class="signbutton-next" id="fileimgnext">Upload</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -251,12 +234,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="signup-step-btn">
-                                            <button type="button" class="signbutton-next" id="fileimgnext">Upload</button>
-                                        </div> -->
+                                
                                         <div class="signup-step-btn">
-                                    <button type="button" class="signbutton-next step3_next" id="step44_next">Next</button>
-                                </div>
+                                            <button type="button" class="signbutton-next step3_next" id="step44_next">Next</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -500,39 +481,42 @@
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
 
-        var posturl = '/auth/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('show_step', 5)
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                window.location.href = "{{url('/registration/?showstep=1')}}"
-            }
-        });
-       
+        if(address_sign == ''){
+            $('#err_address_sign').html('Please Enter Address..');
+        }else{
+            var posturl = '/auth/saveaddress';
+            var formdata = new FormData();
+            formdata.append('_token', '{{csrf_token()}}')
+            formdata.append('address', address_sign)
+            formdata.append('country', country_sign)
+            formdata.append('city', city_sign)
+            formdata.append('state', state_sign)
+            formdata.append('zipcode', zipcode_sign)
+            formdata.append('lon', lon)
+            formdata.append('lat', lat)
+            formdata.append('show_step', 5)
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $("#_token").val()
+                },
+                beforeSend: function () {
+                    $('.step4_next').prop('disabled', true).css('background','#999999');
+                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                },
+                complete: function () {
+                    $('.step4_next').prop('disabled', false).css('background','#ed1b24');
+                },
+                success: function (response) {
+                    window.location.href = "{{url('/registration/?showstep=1')}}"
+                }
+            });
+        }
     });
 
     /* Step 4 new */
@@ -552,60 +536,6 @@
                 window.location.href = "{{url('/registration/?showstep=1')}}"
             }
         });
-       
-    });
-
-    /* Step 5 add photo */
-    $(document).on('click', '#step5_next', function () {
-        
-        var address_sign = $('#address_sign').val();
-        var country_sign = $('#country_sign').val();
-        var city_sign = $('#city_sign').val();
-        var state_sign = $('#state_sign').val();
-        var zipcode_sign = $('#zipcode_sign').val();
-        var lon = $('#lon').val();
-        var lat = $('#lat').val();
-        
-        $('#err_address_sign').html('');
-        $('#err_country_sign').html('');
-        $('#err_city_sign').html('');
-        $('#err_state_sign').html('');
-        $('#err_zipcode_sign').html('');
-        
-        var posturl = '/auth/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('show_step', 6)
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                //window.location.href = "{{url('/registration/?showstep=1')}}"
-                window.location.href = response.redirecturl;
-            }
-        });
-       
     });
 
     /* Step 5 */
