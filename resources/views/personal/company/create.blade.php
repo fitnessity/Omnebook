@@ -121,7 +121,7 @@
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="pno">Business Phone Number <span id="star">*</span></label>
-																				<input type="text" class="form-control" name="businessPhone" id="businessPhone" placeholder="Business Phone" value="{{@$company->business_phone}}" maxlength="14" required="" data-behaviour="text-phone">
+																				<input type="text" class="form-control" name="businessPhone" id="businessPhone" placeholder="Business Phone" value="{{@$company->business_phone}}" required="" data-behavior="text-phone">
 																			</div>
 																		</div>
 																		<div class="col-lg-6 col-md-6">
@@ -195,7 +195,7 @@
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label>Contact Number </label>
-																				<input type="text" class="form-control" name="contact" id="contact" size="30" maxlength="14" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" placeholder="Contact No" value="{{@$company->contact_number}}" data-behaviour="text-phone">
+																				<input type="text" class="form-control" name="contact" id="contact" size="30" placeholder="Contact No" value="{{@$company->contact_number}}" data-behavior="text-phone">
 																				<span class="error" id="b_cot"></span>
 																			</div>
 																		</div>
@@ -327,7 +327,7 @@
 																								<div class="form-group mt-10">
 																									<label>From (mm/dd/yyyy)</label>
 																									<div class="input-group">
-																										<input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr-from{{$i}} flatpiker-with-border"  value="{{ $serviceStart[$i] }}" id="from{{$i}}" name="frm_servicestart[]" placeholder="From">
+																										<input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr-from{{$i}} flatpiker-with-border "  value="{{ $serviceStart[$i] }}" id="from{{$i}}" name="frm_servicestart[]" placeholder="From">
 																									</div>
 																								</div>
 																							</div>

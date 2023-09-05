@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','new_password_key','username','is_deleted','isguestuser','fitnessity_fee','firstname','lastname','birthdate'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','firstname','lastname','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus'
     ];
     /**
      * The attributes that should be hidden for arrays.
