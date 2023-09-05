@@ -75,7 +75,7 @@
 													
 												</div>
 												<div class="row">
-													<div class="col-md-12">
+													<div class="col-md-12 col-xs-12">
 														<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 													</div>
 													<div class="col-sm-12 col-xs-12 activites-price-details">

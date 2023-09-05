@@ -6,7 +6,7 @@
 <?php 
 	
 	$username = Auth::user() != '' ? Auth::user()->full_name : '';
-    /*echo"<pre>"; print_r($cart['cart_item']); exit();*/
+    /*echo"<pre>";*/ /*print_r($cart['cart_item']);*/ /*exit();*/
     $ajaxname = '';
 
     $fees = App\BusinessSubscriptionPlan::where('id',1)->first();
@@ -495,6 +495,8 @@
 					    			$total_amount =  number_format(($item_price + $service_fee + $tax - $discount),2,'.','');
 					    		?>
 					    		<input type="hidden" name="grand_total" id="total_amount" value="{{$total_amount}}">
+					    		<input type="hidden" name="tax" id="tax" value="{{$tax}}">
+					    		<input type="hidden" name="service_fee" id="service_fee" value="{{$service_fee}}">
 								<div class="col-xl-4">
 									<div class="sticky-side-div">
 										<div class="card">
@@ -510,7 +512,7 @@
 														<span class="fs-15 float-end">{{$cartCount}}</span>
 													</div>
 													<div class="col-6">
-														<label class="fs-15">Subtotal</label>
+														<label class="fs-15">Subtotal {{$discount}}</label>
 													</div>
 													<div class="col-6">
 														<span class="fs-15 float-end">
@@ -522,7 +524,7 @@
 				    									</span>
 													</div>
 													<div class="col-6">
-														<label class="fs-15">Taxes & Fees:</label>
+														<label class="fs-15">Taxes & Fees: </label>
 													</div>
 													<div class="col-6">
 														<span class="fs-15 float-end">$ {{(number_format(($tax + $service_fee),2))}}</span>

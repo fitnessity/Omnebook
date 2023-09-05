@@ -33,7 +33,7 @@ class PaymentController extends Controller {
     }
 
     public function createCheckoutSession(Request $request) {
-        // /print_r($request->all());exit;
+        //print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $customer='';
 
@@ -71,12 +71,12 @@ class PaymentController extends Controller {
             $lastid = $userBookingStatus->id; 
 
             foreach($cartService->items() as $item){
-                $paySessionQty = 0;
+/*                $paySessionQty = 0;
                 foreach(['adult', 'child', 'infant'] as $role){
                     if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
                         $paySessionQty +=  $cartService->getQtyPriceByItem($item)['qty'][$role];    
                     }
-                }
+                }*/
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->users;
@@ -101,147 +101,237 @@ class PaymentController extends Controller {
                     $customer->create_stripe_customer_id();
                 }
 
-                $booking_detail = UserBookingDetail::create([                 
-                    'booking_id' => $userBookingStatus->id,
-                    'user_id'=> $customer->id,
-                    'user_type'=> 'customer',
-                    'sport' => $item['code'],
-                    'bookedtime' => $item['sesdate'],
-                    'business_id'=> $businessServices->cid,
-                    'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
-                    'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
-                    'priceid' => $item['priceid'],
-                    'pay_session' =>  $paySessionQty *  $price_detail->pay_session,
-                    'act_schedule_id' => $activityScheduler->id,
-                    'expired_at' => $activityScheduler->end_activity_date,
-                    'contract_date' => Carbon::now()->format('Y-m-d'),
-                    'subtotal' => $cartService->getSubTotalByItem($item, $user),
-                    'fitnessity_fee' => $cartService->getFitnessityFeeByItem($item, $user),
-                    'tax' => 0,
-                    'tip' => 0,
-                    'discount' => 0,
-                    'participate' => json_encode($item['participate']),
-                    'transfer_provider_status' =>'unpaid',
-                    'payment_number' => '{}',
-                    'order_from' => "Instant Hire",
-                    'addOnservice_total' =>$item['addOnServicesId'],
-                    'addOnservice_ids' => $item['addOnServicesQty'],
-                    'addOnservice_qty' => $item['addOnServicesTotalPrice'],
-                ]);
+                $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
+                foreach($participateLoop as $d){
+                    $participateAry = [];
+                    $qtyAry = [];
+                    $qtyPrice = [];
+                    foreach(['adult', 'child', 'infant'] as $role){
+                        if($d['type'] == $role){
+                            $qtyAry[$role] = 1;
+                            $qtyPrice[$role] = $d['price'];
+                        }else{
+                            $qtyAry[$role] = 0;
+                            $qtyPrice[$role] = 0;
+                        }
+                    }
+                    $participateAry['from'] ='customer';
+                    $participateAry['id'] = $d['id'];
 
-                $booking_detail->transfer_to_provider();
+                    $booking_detail = UserBookingDetail::create([                 
+                        'booking_id' => $userBookingStatus->id,
+                        'user_id'=> $d['id'],
+                        'user_type'=> 'customer',
+                        'sport' => $item['code'],
+                        'bookedtime' => $item['sesdate'],
+                        'business_id'=> $businessServices->cid,
+                        'price' => json_encode($qtyPrice),
+                        'qty' => json_encode($qtyAry),
+                        'priceid' => $item['priceid'],
+                       // 'pay_session' => $paySessionQty * $price_detail->pay_session,
+                        'pay_session' => $price_detail->pay_session,
+                        'act_schedule_id' => $activityScheduler->id,
+                        'expired_at' => $activityScheduler->end_activity_date,
+                        'contract_date' => Carbon::now()->format('Y-m-d'),
+                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price']),
+                        'discount' => 0,
+                        'tax' =>  0,
+                        'fitnessity_fee' => 0,
+                        'service_fee' => 0,
+                        'tip' => 0,
+                        'participate' => '['.json_encode($participateAry).']',
+                        'transfer_provider_status' =>'unpaid',
+                        'payment_number' => '{}',
+                        'order_from' => "Instant Hire",
+                        'addOnservice_ids' =>$item['addOnServicesId'],
+                        'addOnservice_qty' => $item['addOnServicesQty'],
+                        'addOnservice_total' => $item['addOnServicesTotalPrice'],
+                    ]);
 
-                $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
-                $price_detail = $cartService->getPriceDetail($item['priceid']);
-                
-                foreach($qty_c as $key=> $qty){
+                    $booking_detail->transfer_to_provider();
+
+                    $price_detail = $cartService->getPriceDetail($item['priceid']);
+
                     $re_i = 0;
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
-
-                    if($key == 'adult'){
-                        if($qty != '' && $qty != 0){
-                            $amount = $qty * $price_detail->recurring_first_pmt_adult;
-                            $re_i = $price_detail->recurring_nuberofautopays_adult; 
-                            $reCharge  = $price_detail->recurring_customer_chage_by_adult;
-                        }
+                    $amount = $re_i = $reCharge = ''; 
+                    if($d['type'] == 'adult'){
+                        $amount = 1 * $price_detail->recurring_first_pmt_adult;
+                        $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_adult;
+                    }else if($d['type'] == 'child'){
+                        $amount =  1 * $price_detail->recurring_first_pmt_child;
+                        $re_i = $price_detail->recurring_nuberofautopays_child; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_child;
+                    }else if($d['type'] == 'infant'){
+                        $amount =  1 * $price_detail->recurring_first_pmt_infant;
+                        $re_i = $price_detail->recurring_nuberofautopays_infant;
+                        $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
 
-                    if($key == 'child'){
-                        if($qty != '' && $qty != 0){
-                            $amount = $qty * $price_detail->recurring_first_pmt_child;
-                            $re_i = $price_detail->recurring_nuberofautopays_child; 
-                            $reCharge  = $price_detail->recurring_customer_chage_by_child;
-                        }
-                    }
-
-                    if($key == 'infant'){
-                        if($qty != '' && $qty != 0){
-                            $amount = $qty * $price_detail->recurring_first_pmt_infant;
-                            $re_i = $price_detail->recurring_nuberofautopays_infant;
-                            $reCharge  = $price_detail->recurring_customer_chage_by_infant;
-                        }
-                    }
-
-                    if($qty != '' && $qty != 0){
+                    if($re_i != '' && $re_i != 0 && $amount != ''){
                         $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-                        $paymentMethod = $transactionstatus->stripe_payment_method_id;
-                        if($re_i != '' && $re_i != 0 && $amount != ''){
-                            for ($num = $re_i; $num >0 ; $num--) { 
-                                if($num==1){
-                                    $stripe_id =  $transactionstatus->transaction_id;
-                                    $stripe_charged_amount = 0;
-                                    $payment_date = $date->format('Y-m-d');
-                                    $status = 'Completed';
-                                }else{
-                                    $Chk = explode(" ",$reCharge);
-                                    $timeChk = @$Chk[1];
-                                    $afterHowmanytime = @$Chk[0];
-                                    $addTime  = $afterHowmanytime * ($num - 1);
+                        for ($num = $re_i; $num >0 ; $num--) { 
+                            $payment_method = $transactionstatus->stripe_payment_method_id;
+                            if($num==1){
+                                $stripe_id =  $transactionstatus->transaction_id;
+                                $stripe_charged_amount = number_format($transactionstatus->amount,2);
+                                $paymentDate = $date->format('Y-m-d');
+                                $status = 'Completed';
+                            }else{
+                                $Chk = explode(" ",$reCharge);
+                                $timeChk = @$Chk[1];
+                                $afterHowmanytime = @$Chk[0];
+                                $addTime  = $afterHowmanytime * ($num - 1);
 
-                                    if($timeChk == 'Month'){
-                                        $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
-                                    }else if($timeChk == 'Week'){
-                                        $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
-                                    }else if($timeChk == 'Year'){
-                                        $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
-                                    }
-                                    $status = 'Scheduled';
-                                } 
+                                if($timeChk == 'Month'){
+                                    $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Week'){
+                                    $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Year'){
+                                    $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                }
+                                $status = 'Scheduled';
+                            } 
 
-                                $recurring = array(
-                                    "booking_detail_id" => $booking_detail->id,
-                                    "user_id" => $loggedinUser->customers()->where('business_id',$booking_detail->business_id)->first()->id,
-                                    "user_type" => 'customer',
-                                    "business_id" => $booking_detail->business_id ,
-                                    "payment_date" => $payment_date,
-                                    "amount" => $amount,
-                                    'charged_amount'=> $stripe_charged_amount,
-                                    'payment_method'=> $paymentMethod,
-                                    'stripe_payment_id'=> $stripe_id,
-                                    "tax" => $tax_recurring,
-                                    "status" => $status,
-                                );
-                                Recurring::create($recurring);
-                            }
+                            $recurring = array(
+                                "booking_detail_id" => $booking_detail->id,
+                                "user_id" => $d['id'],
+                                "user_type" => 'customer',
+                                "business_id" => $booking_detail->business_id ,
+                                "payment_date" => $paymentDate,
+                                "amount" => $amount,
+                                'charged_amount'=> $stripe_charged_amount,
+                                'payment_method'=> $payment_method,
+                                'stripe_payment_id'=> $stripe_id,
+                                "tax" => $tax_recurring ,
+                                "status" => $status,
+                            );
+                            Recurring::create($recurring);
                         }
                     }
-                }
 
-                for($i=0; $i<$paySessionQty;$i++){
                     BookingCheckinDetails::create([
                         'business_activity_scheduler_id' => $activityScheduler->id,
-                        'customer_id' => $customer->id,
+                        'customer_id' => $d['id'],
                         'booking_detail_id' => $booking_detail->id,
                         'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
                         'use_session_amount' => 0,
                         'source_type' => 'marketplace',
                     ]);
-                }
+
+                    /*$qty_c = $cartService->getQtyPriceByItem($item)['qty'];
+                    $price_detail = $cartService->getPriceDetail($item['priceid']);
+                    
+                    foreach($qty_c as $key=> $qty){
+                        $re_i = 0;
+                        $date = new Carbon;
+                        $stripe_id = $stripe_charged_amount = $payment_method= '';
+
+                        if($key == 'adult'){
+                            if($qty != '' && $qty != 0){
+                                $amount = $qty * $price_detail->recurring_first_pmt_adult;
+                                $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                                $reCharge  = $price_detail->recurring_customer_chage_by_adult;
+                            }
+                        }
+
+                        if($key == 'child'){
+                            if($qty != '' && $qty != 0){
+                                $amount = $qty * $price_detail->recurring_first_pmt_child;
+                                $re_i = $price_detail->recurring_nuberofautopays_child; 
+                                $reCharge  = $price_detail->recurring_customer_chage_by_child;
+                            }
+                        }
+
+                        if($key == 'infant'){
+                            if($qty != '' && $qty != 0){
+                                $amount = $qty * $price_detail->recurring_first_pmt_infant;
+                                $re_i = $price_detail->recurring_nuberofautopays_infant;
+                                $reCharge  = $price_detail->recurring_customer_chage_by_infant;
+                            }
+                        }
+
+                        if($qty != '' && $qty != 0){
+                            $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                            $paymentMethod = $transactionstatus->stripe_payment_method_id;
+                            if($re_i != '' && $re_i != 0 && $amount != ''){
+                                for ($num = $re_i; $num >0 ; $num--) { 
+                                    if($num==1){
+                                        $stripe_id =  $transactionstatus->transaction_id;
+                                        $stripe_charged_amount = 0;
+                                        $payment_date = $date->format('Y-m-d');
+                                        $status = 'Completed';
+                                    }else{
+                                        $Chk = explode(" ",$reCharge);
+                                        $timeChk = @$Chk[1];
+                                        $afterHowmanytime = @$Chk[0];
+                                        $addTime  = $afterHowmanytime * ($num - 1);
+
+                                        if($timeChk == 'Month'){
+                                            $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                        }else if($timeChk == 'Week'){
+                                            $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                        }else if($timeChk == 'Year'){
+                                            $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                        }
+                                        $status = 'Scheduled';
+                                    } 
+
+                                    $recurring = array(
+                                        "booking_detail_id" => $booking_detail->id,
+                                        "user_id" => $loggedinUser->customers()->where('business_id',$booking_detail->business_id)->first()->id,
+                                        "user_type" => 'customer',
+                                        "business_id" => $booking_detail->business_id ,
+                                        "payment_date" => $payment_date,
+                                        "amount" => $amount,
+                                        'charged_amount'=> $stripe_charged_amount,
+                                        'payment_method'=> $paymentMethod,
+                                        'stripe_payment_id'=> $stripe_id,
+                                        "tax" => $tax_recurring,
+                                        "status" => $status,
+                                    );
+                                    Recurring::create($recurring);
+                                }
+                            }
+                        }
+                    }*/
+
+                    /*for($i=0; $i<$paySessionQty;$i++){
+                        BookingCheckinDetails::create([
+                            'business_activity_scheduler_id' => $activityScheduler->id,
+                            'customer_id' => $customer->id,
+                            'booking_detail_id' => $booking_detail->id,
+                            'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                            'use_session_amount' => 0,
+                            'source_type' => 'marketplace',
+                        ]);
+                    }*/
                 
-                $company_email =  $businessServices->company_information->business_email;
-                $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
-                $email_detail = array(
-                    'getreceipemailtbody' => $getreceipemailtbody,
-                    'email' => Auth::user()->email);
-                SGMailService::sendBookingReceipt($email_detail);
+                    $company_email =  $businessServices->company_information->business_email;
+                    $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
+                    $email_detail = array(
+                        'getreceipemailtbody' => $getreceipemailtbody,
+                        'email' => Auth::user()->email);
+                    SGMailService::sendBookingReceipt($email_detail);
 
+                    $email_detail2 = array(
+                        "email" => $company_email, 
+                        "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
+                        "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
+                        "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
+                        "BookedPerson"=> Auth::user()->full_name,
+                        "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
+                        "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+                        "time"=> $activityScheduler->activity_time(),
+                        "duration"=> $activityScheduler->get_clean_duration(),
+                        "ActivitiyType"=> $businessServices->service_type,
+                        "ProgramName"=> $businessServices->program_name,
+                        "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
 
-                $email_detail2 = array(
-                    "email" => $company_email, 
-                    "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
-                    "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
-                    "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
-                    "BookedPerson"=> Auth::user()->full_name,
-                    "ParticipantsName"=> @$cartService->getParticipateByComa($item['participate']),
-                    "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
-                    "time"=> $activityScheduler->activity_time(),
-                    "duration"=> $activityScheduler->get_clean_duration(),
-                    "ActivitiyType"=> $businessServices->service_type,
-                    "ProgramName"=> $businessServices->program_name,
-                    "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
-
-                SGMailService::confirmationMail($email_detail2);
+                    SGMailService::confirmationMail($email_detail2);
+                }
             }
 
             $updatedCartitems = $cartService->updatedCartitems();
@@ -257,7 +347,7 @@ class PaymentController extends Controller {
                 $stripe_customer_id = $loggedinUser->create_stripe_customer_id();
             }
 
-            $totalprice = 0;
+            $totalprice =  $priceWithDiscount = 0;
             $totalprice = $request->grand_total;
 
             if($request->has('cardinfo')){
@@ -368,13 +458,15 @@ class PaymentController extends Controller {
 
             $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
             $tax = $bspdata->site_tax;
+
             foreach($cartService->items() as $item){
-                $paySessionQty = 0;
+
+                /*$paySessionQty = 0;
                 foreach(['adult', 'child', 'infant'] as $role){
                     if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
                         $paySessionQty +=  $cartService->getQtyPriceByItem($item)['qty'][$role];    
                     }
-                }
+                }*/
 
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
@@ -400,150 +492,246 @@ class PaymentController extends Controller {
                     $customer->create_stripe_customer_id();
                 }
 
-                $booking_detail = UserBookingDetail::create([                 
-                    'booking_id' => $userBookingStatus->id,
-                    'user_id'=> $customer->id,
-                    'user_type'=> 'customer',
-                    'sport' => $item['code'],
-                    'bookedtime' => $item['sesdate'],
-                    'business_id'=> $businessServices->cid,
-                    'price' => json_encode($cartService->getQtyPriceByItem($item)['price']),
-                    'qty' => json_encode($cartService->getQtyPriceByItem($item)['qty']),
-                    'priceid' => $item['priceid'],
-                    'pay_session' => $paySessionQty * $price_detail->pay_session,
-                    'act_schedule_id' => $activityScheduler->id,
-                    'expired_at' => $activityScheduler->end_activity_date,
-                    'contract_date' => Carbon::now()->format('Y-m-d'),
-                    'subtotal' => $cartService->getSubTotalByItem($item, $user),
-                    'fitnessity_fee' => $cartService->getFitnessityFeeByItem($item, $user),
-                    'tax' =>  ($cartService->getGrossSubtotalByItem($item) * $tax )/100,
-                    'tip' => 0,
-                    'discount' => $cartService->getDiscountTotal($item),
-                    'participate' => json_encode($item['participate']),
-                    'transfer_provider_status' =>'unpaid',
-                    'payment_number' => '{}',
-                    'order_from' => "Instant Hire",
-                    'addOnservice_ids' =>$item['addOnServicesId'],
-                    'addOnservice_qty' => $item['addOnServicesQty'],
-                    'addOnservice_total' => $item['addOnServicesTotalPrice'],
-                ]);
+                $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
+                //print_r($participateLoop);exit();
+                foreach($participateLoop as $d){
+                    $participateAry = [];
+                    $qtyAry = [];
+                    $qtyPrice = [];
+                    foreach(['adult', 'child', 'infant'] as $role){
+                        if($d['type'] == $role){
+                            $qtyAry[$role] = 1;
+                            $qtyPrice[$role] = $d['price'];
+                        }else{
+                            $qtyAry[$role] = 0;
+                            $qtyPrice[$role] = 0;
+                        }
+                    }
+                    $participateAry['from'] ='customer';
+                    $participateAry['id'] = $d['id'];
 
-                $booking_detail->transfer_to_provider();
+                    $discount = $cartService->getDiscount($item['priceid'],$d['type'],$d['price']);
+                    $priceWithDiscount = $d['price'] - $discount;
 
-                $qty_c = $cartService->getQtyPriceByItem($item)['qty'];
-                $price_detail = $cartService->getPriceDetail($item['priceid']);
+                    $booking_detail = UserBookingDetail::create([                 
+                        'booking_id' => $userBookingStatus->id,
+                        'user_id'=> $d['id'],
+                        'user_type'=> 'customer',
+                        'sport' => $item['code'],
+                        'bookedtime' => $item['sesdate'],
+                        'business_id'=> $businessServices->cid,
+                        'price' => json_encode($qtyPrice),
+                        'qty' => json_encode($qtyAry),
+                        'priceid' => $item['priceid'],
+                       // 'pay_session' => $paySessionQty * $price_detail->pay_session,
+                        'pay_session' => $price_detail->pay_session,
+                        'act_schedule_id' => $activityScheduler->id,
+                        'expired_at' => $activityScheduler->end_activity_date,
+                        'contract_date' => Carbon::now()->format('Y-m-d'),
+                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price']),
+                        'discount' => $discount,
+                        'tax' =>  $cartService->getTax($priceWithDiscount),
+                        'fitnessity_fee' => $cartService->getFitnessFee($priceWithDiscount, $user),
+                        'service_fee' => $cartService->getServiceFee($priceWithDiscount),
+                        //'subtotal' => $cartService->getSubTotalByItem($item, $user),
+                        //'fitnessity_fee' => $cartService->getFitnessityFeeByItem($item, $user),
+                        //'tax' =>  ($cartService->getGrossSubtotalByItem($item) * $tax )/100,
+                        //'discount' => $cartService->getDiscountTotal($item),
+                        'tip' => 0,
+                        'participate' =>'['.json_encode($participateAry).']',
+                        'transfer_provider_status' =>'unpaid',
+                        'payment_number' => '{}',
+                        'order_from' => "Instant Hire",
+                        'addOnservice_ids' =>$item['addOnServicesId'],
+                        'addOnservice_qty' => $item['addOnServicesQty'],
+                        'addOnservice_total' => $item['addOnServicesTotalPrice'],
+                    ]);
 
-                foreach($qty_c as $key=> $qty){
+                    $booking_detail->transfer_to_provider();
+
+                    $price_detail = $cartService->getPriceDetail($item['priceid']);
+
                     $re_i = 0;
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
-
-                    if($key == 'adult'){
-                        if($qty != '' && $qty != 0){
-                            $amount = $qty * $price_detail->recurring_first_pmt_adult;
-                            $re_i = $price_detail->recurring_nuberofautopays_adult; 
-                            $reCharge  = $price_detail->recurring_customer_chage_by_adult;
-                        }
+                    $amount = $re_i = $reCharge = ''; 
+                    if($d['type'] == 'adult'){
+                        $amount = 1 * $price_detail->recurring_first_pmt_adult;
+                        $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_adult;
+                    }else if($d['type'] == 'child'){
+                        $amount =  1 * $price_detail->recurring_first_pmt_child;
+                        $re_i = $price_detail->recurring_nuberofautopays_child; 
+                        $reCharge  = $price_detail->recurring_customer_chage_by_child;
+                    }else if($d['type'] == 'infant'){
+                        $amount =  1 * $price_detail->recurring_first_pmt_infant;
+                        $re_i = $price_detail->recurring_nuberofautopays_infant;
+                        $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
 
-                    if($key == 'child'){
-                        if($qty != '' && $qty != 0){
-                            $amount =  $qty * $price_detail->recurring_first_pmt_child;
-                            $re_i = $price_detail->recurring_nuberofautopays_child; 
-                            $reCharge  = $price_detail->recurring_customer_chage_by_child;
-                        }
-                    }
-
-                    if($key == 'infant'){
-                        if($qty != '' && $qty != 0){
-                            $amount =  $qty * $price_detail->recurring_first_pmt_infant;
-                            $re_i = $price_detail->recurring_nuberofautopays_infant;
-                            $reCharge  = $price_detail->recurring_customer_chage_by_infant;
-                        }
-                    }
-
-                    if($qty != '' && $qty != 0){
+                    if($re_i != '' && $re_i != 0 && $amount != ''){
                         $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-                        if($re_i != '' && $re_i != 0 && $amount != ''){
-                            for ($num = $re_i; $num >0 ; $num--) { 
-                                $payment_method = $transactionstatus->stripe_payment_method_id;
-                                if($num==1){
-                                    $stripe_id =  $transactionstatus->transaction_id;
-                                    $stripe_charged_amount = number_format($transactionstatus->amount,2);
-                                    $paymentDate = $date->format('Y-m-d');
-                                    $status = 'Completed';
-                                }else{
-                                    $Chk = explode(" ",$reCharge);
-                                    $timeChk = @$Chk[1];
-                                    $afterHowmanytime = @$Chk[0];
-                                    $addTime  = $afterHowmanytime * ($num - 1);
+                        for ($num = $re_i; $num >0 ; $num--) { 
+                            $payment_method = $transactionstatus->stripe_payment_method_id;
+                            if($num==1){
+                                $stripe_id =  $transactionstatus->transaction_id;
+                                $stripe_charged_amount = number_format($transactionstatus->amount,2);
+                                $paymentDate = $date->format('Y-m-d');
+                                $status = 'Completed';
+                            }else{
+                                $Chk = explode(" ",$reCharge);
+                                $timeChk = @$Chk[1];
+                                $afterHowmanytime = @$Chk[0];
+                                $addTime  = $afterHowmanytime * ($num - 1);
 
-                                    if($timeChk == 'Month'){
-                                        $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
-                                    }else if($timeChk == 'Week'){
-                                        $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
-                                    }else if($timeChk == 'Year'){
-                                        $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
-                                    }
-                                    $status = 'Scheduled';
-                                } 
+                                if($timeChk == 'Month'){
+                                    $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Week'){
+                                    $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                }else if($timeChk == 'Year'){
+                                    $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                }
+                                $status = 'Scheduled';
+                            } 
 
-                                $recurring = array(
-                                    "booking_detail_id" => $booking_detail->id,
-                                    "user_id" => $loggedinUser->id,
-                                    "user_type" => 'user',
-                                    "business_id" => $booking_detail->business_id ,
-                                    "payment_date" => $paymentDate,
-                                    "amount" => $amount,
-                                    'charged_amount'=> $stripe_charged_amount,
-                                    'payment_method'=> $payment_method,
-                                    'stripe_payment_id'=> $stripe_id,
-                                    "tax" => $tax_recurring ,
-                                    "status" => $status,
-                                );
-                                Recurring::create($recurring);
-                            }
+                            $recurring = array(
+                                "booking_detail_id" => $booking_detail->id,
+                                "user_id" => $loggedinUser->id,
+                                "user_type" => 'user',
+                                "business_id" => $booking_detail->business_id ,
+                                "payment_date" => $paymentDate,
+                                "amount" => $amount,
+                                'charged_amount'=> $stripe_charged_amount,
+                                'payment_method'=> $payment_method,
+                                'stripe_payment_id'=> $stripe_id,
+                                "tax" => $tax_recurring ,
+                                "status" => $status,
+                            );
+                            Recurring::create($recurring);
                         }
                     }
-                }
 
-                for($i=0; $i<$paySessionQty;$i++){
                     BookingCheckinDetails::create([
                         'business_activity_scheduler_id' => $activityScheduler->id,
-                        'customer_id' => $customer->id,
+                        'customer_id' => $d['id'],
                         'booking_detail_id' => $booking_detail->id,
                         'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
                         'use_session_amount' => 0,
                         'source_type' => 'marketplace',
                     ]);
-                }
-                
-                $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
-                $email_detail = array(
-                    'getreceipemailtbody' => $getreceipemailtbody,
-                    'email' => Auth::user()->email);
-                SGMailService::sendBookingReceipt($email_detail);
-               
-                $email_detail2 = array(
-                    "email" => @$cartService->getCompany($businessServices->cid)->business_email, 
-                    "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
-                    "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
-                    "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
-                    "BookedPerson"=> Auth::user()->full_name,
-                    "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($item['participate'])),
-                    "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
-                    "time"=> $activityScheduler->activity_time(),
-                    "duration"=> $activityScheduler->get_clean_duration(),
-                    "ActivitiyType"=> $businessServices->service_type,
-                    "ProgramName"=> $businessServices->program_name,
-                    "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
 
-                SGMailService::confirmationMail($email_detail2);
+                    /*$qty_c = $cartService->getQtyPriceByItem($item)['qty'];
+                    foreach($qty_c as $key=> $qty){
+                        $re_i = 0;
+                        $date = new Carbon;
+                        $stripe_id = $stripe_charged_amount = $payment_method= '';
+
+                        if($key == 'adult'){
+                            if($qty != '' && $qty != 0){
+                                $amount = $qty * $price_detail->recurring_first_pmt_adult;
+                                $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                                $reCharge  = $price_detail->recurring_customer_chage_by_adult;
+                            }
+                        }
+
+                        if($key == 'child'){
+                            if($qty != '' && $qty != 0){
+                                $amount =  $qty * $price_detail->recurring_first_pmt_child;
+                                $re_i = $price_detail->recurring_nuberofautopays_child; 
+                                $reCharge  = $price_detail->recurring_customer_chage_by_child;
+                            }
+                        }
+
+                        if($key == 'infant'){
+                            if($qty != '' && $qty != 0){
+                                $amount =  $qty * $price_detail->recurring_first_pmt_infant;
+                                $re_i = $price_detail->recurring_nuberofautopays_infant;
+                                $reCharge  = $price_detail->recurring_customer_chage_by_infant;
+                            }
+                        }
+
+                        if($qty != '' && $qty != 0){
+                            $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                            if($re_i != '' && $re_i != 0 && $amount != ''){
+                                for ($num = $re_i; $num >0 ; $num--) { 
+                                    $payment_method = $transactionstatus->stripe_payment_method_id;
+                                    if($num==1){
+                                        $stripe_id =  $transactionstatus->transaction_id;
+                                        $stripe_charged_amount = number_format($transactionstatus->amount,2);
+                                        $paymentDate = $date->format('Y-m-d');
+                                        $status = 'Completed';
+                                    }else{
+                                        $Chk = explode(" ",$reCharge);
+                                        $timeChk = @$Chk[1];
+                                        $afterHowmanytime = @$Chk[0];
+                                        $addTime  = $afterHowmanytime * ($num - 1);
+
+                                        if($timeChk == 'Month'){
+                                            $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                        }else if($timeChk == 'Week'){
+                                            $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                        }else if($timeChk == 'Year'){
+                                            $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                        }
+                                        $status = 'Scheduled';
+                                    } 
+
+                                    $recurring = array(
+                                        "booking_detail_id" => $booking_detail->id,
+                                        "user_id" => $loggedinUser->id,
+                                        "user_type" => 'user',
+                                        "business_id" => $booking_detail->business_id ,
+                                        "payment_date" => $paymentDate,
+                                        "amount" => $amount,
+                                        'charged_amount'=> $stripe_charged_amount,
+                                        'payment_method'=> $payment_method,
+                                        'stripe_payment_id'=> $stripe_id,
+                                        "tax" => $tax_recurring ,
+                                        "status" => $status,
+                                    );
+                                    Recurring::create($recurring);
+                                }
+                            }
+                        }
+                    }*/
+
+                    /*for($i=0; $i<$paySessionQty;$i++){
+                        BookingCheckinDetails::create([
+                            'business_activity_scheduler_id' => $activityScheduler->id,
+                            'customer_id' => $customer->id,
+                            'booking_detail_id' => $booking_detail->id,
+                            'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                            'use_session_amount' => 0,
+                            'source_type' => 'marketplace',
+                        ]);
+                    }*/
+
+                    $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
+                    $email_detail = array(
+                        'getreceipemailtbody' => $getreceipemailtbody,
+                        'email' => Auth::user()->email);
+                    SGMailService::sendBookingReceipt($email_detail);
+                    
+                    $email_detail2 = array(
+                        "email" => @$cartService->getCompany($businessServices->cid)->business_email, 
+                        "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
+                        "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
+                        "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
+                        "BookedPerson"=> Auth::user()->full_name,
+                        "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
+                        "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+                        "time"=> $activityScheduler->activity_time(),
+                        "duration"=> $activityScheduler->get_clean_duration(),
+                        "ActivitiyType"=> $businessServices->service_type,
+                        "ProgramName"=> $businessServices->program_name,
+                        "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title);
+
+                    SGMailService::confirmationMail($email_detail2);
+                }
             }
 
             $updatedCartitems = $cartService->updatedCartitems();
             session()->put('cart_item', $updatedCartitems);
-
             return redirect('/instant-hire/confirm-payment');
         }
     }
@@ -553,7 +741,7 @@ class PaymentController extends Controller {
     }
 
     public function form_participate(Request $request){
-     /*   print_r($request->all());exit;*/
+        //print_r($request->all());exit;
         $cart_item = [];
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');
@@ -564,6 +752,9 @@ class PaymentController extends Controller {
                     if($request->type == 'user'){
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = Auth::user()->id;
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'user';
+                    }else if($request->type == 'family'){
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = $request->familyid;
+                        $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'family';
                     }else{
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['id'] = $request->familyid;
                         $cart_item["cart_item"][$k]["participate"][$request->counter]['from'] = 'customer';

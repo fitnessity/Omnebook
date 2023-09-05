@@ -59,11 +59,8 @@ class StripeController extends Controller
 		$stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 		$current_user = Auth::user(); 
 		$company = CompanyInformation::where('id', $current_user->cid)->first();
-		if(!$company->stripe_connect_id) $company->stripe_connect_id = '111111111';
+		if(!@$company->stripe_connect_id) $company->stripe_connect_id = '111111111';
 		
-		
-
-
 		try{
 			$stripe_account = $stripe_client->accounts->retrieve(
 			  $company->stripe_connect_id,
