@@ -394,7 +394,7 @@
 																								<div class="form-group mt-10" >
 																									<label>From (mm/dd/yyyy)</label>
 																									<div class="input-group">
-																										<input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr-from flatpiker-with-border"  value="" id="from0" name="frm_servicestart[]" placeholder="From">
+																										<input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr-from0 flatpiker-with-border"  value="" id="from0" name="frm_servicestart[]" placeholder="From">
 																									</div>
 																								</div>
 																							</div>

@@ -27,8 +27,8 @@ class UserBookingDetail extends Model
     use SoftDeletes;
     protected $table = 'user_booking_details';
     public $timestamps = false;
-	protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty'];
+    protected $fillable = [
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee'];
 
 
     /**
@@ -60,7 +60,7 @@ class UserBookingDetail extends Model
 
     public function userBookingStatus()
     {
-		return $this->belongsTo(UserBookingStatus::class, 'booking_id');
+        return $this->belongsTo(UserBookingStatus::class, 'booking_id');
     }
 
     public function booking(){
@@ -181,7 +181,7 @@ class UserBookingDetail extends Model
             
             try {
                 $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->booking->id)->firstOrFail();
-                $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax, 2);
+                $transfer_amount = round($this->subtotal - $this->fitnessity_fee - $this->tax - $this->service_fee , 2);
 
                 $payment_intent = $stripe->paymentIntents->retrieve(
                     $transaction->transaction_id,
@@ -224,24 +224,25 @@ class UserBookingDetail extends Model
         $all_pr = '';
         if(!empty($participate) && count($participate)>0){
             foreach($participate as $pr){
-                if($pr['from'] == "user"){
-                    $name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
+                if(@$pr['from'] == "user"){
+                    $user = User::where('id',$pr['id'])->first();
+                    $name = @$user->firstname.' '.@$user->lastname .' ( age '. Carbon::parse(@$user->birthdate)->age .' ) ' ; 
+                    //$name = Auth::user()->firstname.' '.Auth::user()->lastname .' ( age '. Carbon::parse(Auth::user()->birthdate)->age .' ) ' ;
                     $all_pr .= $name.' </br> ';
-                }else if($pr['from'] == "customer"){
+                }else if(@$pr['from'] == "customer"){
                     if($this->booking->user_type == 'customer'){
                         $name = str_replace('(me)','',@$pr['pc_name']);
                         $all_pr .= $name.' </br> ';
                     }else{
                         $cus = Customer::where('id',@$pr['id'])->first();
-                        $all_pr = $cus->fname.' '.$cus->lname.' </br> ';
+                        $all_pr = @$cus->fname.' '.@$cus->lname.' </br> ';
                     }
                 }else{
-                     
                     if($this->booking->user_type == 'customer'){
-                        $name = str_replace('(me)','',$pr['pc_name']);
+                        $name = str_replace('(me)','',@$pr['pc_name']);
                         $all_pr .= $name.' </br> ';
                     }else{
-                        $familydata = UserFamilyDetail::select('first_name','last_name','birthday')->where('id',$pr['id'])->first();
+                        $familydata = UserFamilyDetail::select('first_name','last_name','birthday')->where('id',@$pr['id'])->first();
                         if( $familydata != ''){
                             $name = $familydata->first_name.' '.$familydata->last_name .' ( age '. Carbon::parse($familydata->birthday)->age .' ) ';
                             $all_pr .= $name.' </br> ';
@@ -302,21 +303,7 @@ class UserBookingDetail extends Model
 
     public function getperoderprice(){
         $fees = 0;
-        /*$extra_fees =  json_decode($this->extra_fees, true);
-        if(!empty($extra_fees)){
-            foreach($extra_fees as $key => $value){
-                if($key == 'service_fee' ){
-                    $fees += ($this->total() * $value) /100;
-                }else if($key == 'discount'){
-                    $fees -= $value;
-                }else if($key == 'fitnessity_fee'){
-                    $fees += 0;
-                }else{
-                    $fees += $value;
-                }
-            }
-        }*/
-       
+        
         if($this->tax != 0){
             $fees += $this->tax ;
         }
@@ -325,9 +312,6 @@ class UserBookingDetail extends Model
         }
         if($this->discount != 0){
             $fees -=  $this->discount ;
-        }
-        if($this->fitnessity_fee != 0){
-            $fees +=  $this->fitnessity_fee ;
         }
         if($this->addOnservice_total != 0){
             $fees +=  $this->addOnservice_total ;
