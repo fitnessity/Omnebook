@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Str,Hash,Auth,Redirect;
-use App\{Customer,UserFamilyDetail};
+use App\{Customer,UserFamilyDetail,CompanyInformation};
 
 class FamilyMemberController extends Controller
 {
@@ -53,9 +53,11 @@ class FamilyMemberController extends Controller
 	}
 
 	public function store(Request $request){
-        //print_r($request->all());exit;
+
 		$user = Auth::user();
-		$company = $user->company;
+		$company_ids = $user->customers()->distinct('business_id')->pluck('business_id')->toArray();
+		
+		$company = CompanyInformation::whereIn('id', $company_ids)->get();
 
 		$profile_pic = $birthdate = '';
         $message = "There is issue while adding member.Please try again.";
@@ -90,21 +92,18 @@ class FamilyMemberController extends Controller
         }
        
         foreach($company as $key=>$c){
-            if($key == 0){
-                $random_password = Str::random(8);
-                $password = Hash::make($random_password);
-            }
 
             $businessCustomer = $c->customers()->where('user_id', $user->id)->first();
             if($businessCustomer == ''){
+                $random_password = Str::random(8);
+                $password = Hash::make($random_password);
                 $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
             }
 
-            $customer = Customer::where(['business_id'=> $businessCustomer->id, 'fname' =>  $request->fname ,'lname' => $request->lname,'email' => $request->email])->first();
+            $customer = Customer::where(['business_id'=> $businessCustomer->business_id, 'fname' =>  $request->fname ,'lname' => $request->lname])->first();
             if($customer == ''){
                 $createCustomer = Customer::create([
                     'business_id' => $c->id,
-                    'password' => $password,
                     'fname' => $request->fname,
                     'lname' => $request->lname,
                     'email' => $request->email,
@@ -114,7 +113,7 @@ class FamilyMemberController extends Controller
                     'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
                     'birthdate' =>  $birthdate,
-                    'parent_cus_id' => @$businessCustomer->id,
+                    'parent_cus_id' => $businessCustomer->id,
                 ]); 
                 $chk = 1;
             }else{
