@@ -139,44 +139,37 @@ class FamilyMemberController extends Controller
         }else{
             $profile_pic = $request->old_pic;
         }
+		$familyData = UserFamilyDetail::where('id',$id)->first();
 
-        if($request->type == 'user'){
-            $familyData = UserFamilyDetail::where('id',$id)->first();
-            if($familyData != ''){
-                $familyData->update([ 'first_name' => $request->fname,
-                    'last_name' => $request->lname,
-                    'birthday' =>   $birthdate,
-                    'mobile' => $request->mobile,
-                    'emergency_contact' => $request->emergency_contact,
-                    'profile_pic' => $profile_pic,
-                    'gender' => $request->gender,
-                    'email' => $request->email,
-                    'relationship' => $request->relationship]);
-            }
-        }else{
-            $companyIds = Auth::user()->company()->pluck('id')->toArray();
-    		$familyData = Customer::where('id',$id)->first();
-            $customers = Customer::where(['fname' => @$familyData->fname ,'lname' => @$familyData->lname]);
-            if (!empty($companyIds)) {
-                $customers->whereIn('business_id', $companyIds);
-            }
-    		
-            $customers = $customers->get();
-            if(!empty($customers)){
-                foreach($customers as $customer){
-                    $customer->update(['fname' => $request->fname,
-                        'lname' => $request->lname,
-                        'birthdate' =>   $birthdate,
-                        'phone_number' => $request->mobile,
-                        'emergency_contact' => $request->emergency_contact,
-                        'profile_pic' => $profile_pic,
-                        'gender' => $request->gender,
-                        'email' => $request->email,
-                        'relationship' => $request->relationship]);
-                }
-            }
-            
+
+	        
+        $primary_customers = Auth::user()->customers()->get();
+        
+        foreach($primary_customers as $primary_customer){
+    	    $family_member = $primary_customer->CustomerFamilyDetail()->where(['fname' => $familyData->first_name ,'lname' => $familyData->last_name])->first();
+
+    	    if($family_member){
+	    	    $family_member->update(['fname' => $request->fname,
+				                        'lname' => $request->lname,
+				                        'birthdate' =>   $birthdate,
+				                        'phone_number' => $request->mobile,
+				                        'emergency_contact' => $request->emergency_contact,
+				                        'profile_pic' => $profile_pic,
+				                        'gender' => $request->gender,
+				                        'email' => $request->email,
+				                        'relationship' => $request->relationship]);
+    	    }
         }
+        
+		$familyData->update([ 'first_name' => $request->fname,
+            'last_name' => $request->lname,
+            'birthday' =>   $birthdate,
+            'mobile' => $request->mobile,
+            'emergency_contact' => $request->emergency_contact,
+            'profile_pic' => $profile_pic,
+            'gender' => $request->gender,
+            'email' => $request->email,
+            'relationship' => $request->relationship]);
 
     	return redirect()->route('family-member.index');
 	}
