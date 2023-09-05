@@ -51,7 +51,14 @@ class CustomerController extends Controller {
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
         }*/
         if($request->term){
-            $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+            $customers = $customers->where('business_id', $business_id)
+                ->where(function ($query) use ($request) {
+                    $term = strtolower($request->term);
+                    $query->whereRaw('LOWER(`fname`) LIKE ?', ['%' . $term . '%'])
+                          ->orWhereRaw('LOWER(`lname`) LIKE ?', ['%' . $term . '%'])
+                          ->orWhereRaw('LOWER(`email`) LIKE ?', ['%' . $term . '%'])
+                          ->orWhereRaw('LOWER(`phone_number`) LIKE ?', ['%' . $term . '%']);
+                });
         }
 
         if($request->customer_id){
