@@ -74,14 +74,14 @@
 																						</div>
 																						<!--end col-->
 																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
-																							<div class="p-2">
+																							<div class="p-2 mmt-10">
 																								<h3 class="mb-1">{{$customerdata->full_name}}</h3>
 																							</div>
 																						</div>
 																						<!--end col-->
 																						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 col-lg-auto order-last order-lg-0">
 																							<div class="flex-shrink-0 float-end mfloat-left small0width">
-																								<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width">
+																								<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width mmt-25">
 																									<i class="ri-edit-box-line align-bottom"></i> Edit Profile
 																								</a>
 																							</div>
@@ -723,33 +723,33 @@
 																		<h2 class="accordion-header" id="accordionnesting8Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting8Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting8Examplecollapse2">
 																				<div class="container-fluid nopadding">
-                                                              	<div class="row ">
-                                                                  <div class="col-lg-6 col-md-6 col-8">
-                                                                     Connected Family Accounts ({{count($customerdata->get_families())}})
-                                                                  </div>
-                                                                  <div class="col-lg-6 col-md-6 col-4">
-                                                                     <div class="multiple-options">
-                                                                        <div class="setting-icon">
-                                                                            <i class="ri-more-fill"></i>
-                                                                              <ul>
-                                                                              	<li><a href="#" onclick="redirctAddfamily({{$customerdata->id}});"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																					<div class="row">
+																						<div class="col-lg-6 col-md-6 col-8">
+																							Connected Family Accounts ({{count($customerdata->get_families())}})
+																						</div>
+																						<div class="col-lg-6 col-md-6 col-4">
+																							<div class="multiple-options">
+																								<div class="setting-icon">
+																									<i class="ri-more-fill"></i>
+																									  <ul>
+																											<li><a href="#" onclick="redirctAddfamily({{$customerdata->id}});"><i class="fas fa-plus text-muted"></i>Add</a></li>
 																										</ul>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                          	</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
 																			</button>
 																		</h2>
 																		<div id="accor_nesting8Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting8Example2" data-bs-parent="#accordionnesting8">
 																			<div class="accordion-body">
 																				<div class="row">
 																					<div class="col-md-12">
-																							<form class="app-search d-none d-md-block mb-10 float-right">
-																								<div class="position-relative">
-																									<input type="text" class="form-control ui-autocomplete-input" placeholder="Search for family member" autocomplete="off" id="serchFamilyMember" name="fname" value="">
-																								</div>
-																							</form>
+																						<form class="app-search d-none d-md-block mb-10 float-right">
+																							<div class="position-relative">
+																								<input type="text" class="form-control ui-autocomplete-input" placeholder="Search for family member" autocomplete="off" id="serchFamilyMember" name="fname" value="">
+																							</div>
+																						</form>
 																					</div>						
 																				</div>
 																				
@@ -771,7 +771,7 @@
 																									<td>{{$family_member->relationship ?? "N/A"}}</td>
 																									<td>{{$family_member->age ?? "N/A"}}</td>
 																									<td class="text-center">
-																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red ">Delete</a>
+																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red mmb-10">Delete</a>
 
 																										<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-black ">View</a></td>
 																									
@@ -936,9 +936,11 @@
 																				<div class="mini-stats-wid d-flex align-items-center mt-3 cardinfo">
 																					<div class="container-fluid nopadding">
 																						<div class="row">
-																							<div class="col-lg-12 col-md-12">
+																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>1.</span>
 																								<span>Covid-19 Protocols agreed on @if(@$customerdata->terms_covid != '') {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
+																							</div>
+																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -957,9 +959,11 @@
 																									</div>
 																								</div>
 																							</div>
-																							<div class="col-lg-12 col-md-12">
+																							<div class="col-lg-10 col-md-10 col-10">
 																								<span> 2. </span>
 																								<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
+																							</div>
+																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -978,9 +982,11 @@
 																									</div>
 																								</div>
 																							</div>
-																							<div class="col-lg-12 col-md-12">
+																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>3. </span>
 																								<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
+																							</div>
+																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -999,9 +1005,11 @@
 																									</div>
 																								</div>
 																							</div>
-																							<div class="col-lg-12 col-md-12">
+																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>4. </span>
 																								<span>Refund Policy </span>
+																							</div>
+																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -1020,9 +1028,11 @@
 																									</div>
 																								</div>
 																							</div>
-																							<div class="col-lg-12 col-md-12 mb-10">
+																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>5. </span>
 																								<span>Terms, Conditions, FAQ </span>
+																							</div>
+																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>

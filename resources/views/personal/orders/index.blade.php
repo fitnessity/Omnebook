@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="pre-next-btns pre-nxt-btn-space mt-10">
-                            <a class="btn-previous btn-red" id="btn-next" href="{{route('addFamily')}}">Back</a>
+                            <a class="btn-previous btn-red" id="btn-next" href="{{route('family-member.index')}}">Back</a>
                         </div>
                     @else
                         <div class="booking-info-menu">

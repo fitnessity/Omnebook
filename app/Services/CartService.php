@@ -2,7 +2,7 @@
 
 
 namespace App\Services;
-use App\{BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,UserFamilyDetail,User};
+use App\{BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,UserFamilyDetail,User,Customer};
 
 class CartService
 {
@@ -48,6 +48,10 @@ class CartService
         return $cart['cart_item'];
     }
 
+    public function planData(){
+        return BusinessSubscriptionPlan::where('id',1)->first();
+    }
+
     public function getQtyPriceByItem($item){
         $result = [];
         foreach(['adult', 'child', 'infant'] as $role){
@@ -72,7 +76,7 @@ class CartService
 
 
     public function getSubTotalByItem($item, $user){
-        $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
+        $bspdata = $this->planData();
         $tax = $bspdata->site_tax;
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
 
@@ -166,6 +170,102 @@ class CartService
         return $names;
     }
 
+    public function participateLoop($item ,$businessID){
+        $newArray = [];
+        foreach($item['participate'] as $key => $p){
+            if (isset($item['infant']) && isset($item['infant']['quantity']) && $key < $item['infant']['quantity']) {
+                $category = 'infant';
+            } elseif (isset($item['child']) && isset($item['child']['quantity']) && $key < ($item['infant']['quantity'] + $item['child']['quantity'])) {
+                $category = 'child';
+            } else {
+                $category = 'adult';
+            }
+
+            if($p['from'] == 'user'){
+                $findCustomer = Customer::where(['business_id' => $businessID,'user_id' => $p['id']])->first();
+                $userID = $findCustomer->id;
+            }else if($p['from'] == 'family'){
+                $family = UserFamilyDetail::where('id', $p['id'])->first();
+                $customer = Customer::where(['business_id' => $businessID, 'fname' => $family->first_name, 'lname' => $family->last_name ,'email' =>$family->email])->first();
+                if($customer == ''){
+                    $customer = Customer::create([
+                        'business_id' => $businessID,
+                        'fname' => $family->first_name,
+                        'lname' => $family->last_name,
+                        'email' => $family->email,
+                        'phone_number' => $family->mobile,
+                        'emergency_contact' => $family->emergency_contact,
+                        'relationship' => $family->relationship,
+                        'profile_pic' => $family->profile_pic,
+                        'user_id' => NULL,
+                        'gender' => $family->gender,
+                        'birthdate' => $family->birthday,
+                    ]);
+                }
+                $userID = @$customer->id;
+                $name = @$customer->full_name;
+            }else{
+                $userID = $p['id'];
+            }
+
+
+            $participant['id'] = $userID;
+            $participant['from'] = $p['from'];
+            $participant['type'] = $category;
+            $participant['quantity'] = $item[$category]['quantity'];
+            $participant['price'] = $item[$category]['price'];
+            $participant['name'] = $name;
+
+            $newArray[] = $participant;
+        }
+        return $newArray; 
+    }
+
+    public function getSubTotal($priceId,$role,$price)
+    {
+        $subTotal = 0;
+        $discount = $this->getDiscount($priceId,$role,$price);
+        $priceWithDiscount = $price - $discount;
+        $tax = $this->getTax($priceWithDiscount);
+        $serviceFee = $this->getServiceFee($priceWithDiscount);
+        $subTotal = $price + $tax + $serviceFee - $discount ;
+        $subTotal = $subTotal < 0 ?  0 : $subTotal;
+        return $subTotal;
+    }
+
+    public function getDiscount($priceId,$role,$price){
+        $discount = 0;
+        $priceDetail = $this->getPriceDetail($priceId);
+        if($role == 'adult'){
+            $dis = $priceDetail->adult_discount;
+        }if($role == 'child'){
+            $dis = $priceDetail->child_discount;
+        }if($role == 'infant'){
+            $dis = $priceDetail->infant_discount;
+        }
+        $discount = ($price * $dis)/100;
+        return $discount;
+    }
+
+    public function getTax($price){
+        $bspdata = $this->planData();
+        $tax = @$bspdata->site_tax !='' ? @$bspdata->site_tax : 0;
+        return  ($price * $tax)/100;
+    }
+
+    public function getServiceFee($price){
+        $bspdata = $this->planData();
+        $service_fee = @$bspdata->service_fee !='' ? @$bspdata->service_fee : 0;
+        return  ($price * $service_fee)/100;
+    }
+
+    public function getFitnessFee($price, $user){
+        return $price * $user->fitnessity_fee/100;
+    }
+
+   
+
+    
     /*[
         {'activity_id': 1, 'price_detail_id': 1, }
     ]

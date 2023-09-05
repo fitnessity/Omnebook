@@ -231,9 +231,6 @@ Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('m
 Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
 Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
 
-Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
-
-Route::get('family-member.show', 'FamilyMemberController@show')->name('family-member.show');
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){
@@ -1013,6 +1010,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
 
+    Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
+
+    Route::get('family-member.show', 'FamilyMemberController@show')->name('family-member.show');
 });
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');

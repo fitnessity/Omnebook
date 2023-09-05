@@ -31,8 +31,8 @@
     <div class="col-lg-8">
         <div class="modal-booking-info">
             <h3>Booking Receipt</h3>
-            <div class="row">
-                <div class="">
+            <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>BOOKING#</label>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>TOTAL PRICE:</label>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>PRICE OPTION:</label>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>TOTAL REMAINNIG:</label>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>PROGRAM NAME:</label>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>EXPIRATION DATE:</label>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>DATE BOOKED:</label>
@@ -123,7 +123,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>RESERVED DATE:</label>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>BOOKED BY:</label>
@@ -149,7 +149,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>CHECK IN DATE:</label>
@@ -162,7 +162,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>CHECK IN TIME:</label>
@@ -175,7 +175,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>ACTIVITY TYPE:</label>
@@ -188,7 +188,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>SERVICE TYPE:</label>
@@ -201,7 +201,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>ACTIVITY LOCATION:</label>
@@ -214,7 +214,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>ACTIVITY DURATION:</label>
@@ -227,7 +227,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>GREAT FOR:</label>
@@ -240,7 +240,7 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>PARTICIPANTS#</label>
@@ -252,7 +252,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="">
+                <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <div class="booking-page-meta-info">
                             <label>WHO IS PRATICIPATING?</label>

@@ -656,7 +656,7 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 <!-- The Modal Registraion-->
-<div class="modal fade compare-model" id="registermodal">
+<div class="modal fade compare-model" id="registermodal" tabindex="-1" role="dialog" data-focus="false">
     <div class="modal-dialog registermodal">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
@@ -668,7 +668,7 @@ if(!empty($cart["cart_item"])) {
 			</div>
 
             <!-- Modal body -->
-            <div class="modal-body body-tbm register-bg">
+            <div class="modal-body body-tbm register-bg" data-focus="false">
 				<div class="row"> 
                     <div class="col-lg-6 col-xs-12 register-modal">
 						<div class="logo-my">
@@ -688,7 +688,8 @@ if(!empty($cart["cart_item"])) {
 								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-								<input type="text" id="dob" name="dob" class="  flatpicker_registration" placeholder="Birthdate" maxlength="10">
+								<input type="text" id="dob" name="dob" class="flatpicker_registration" placeholder="Birthdate" maxlength="10">  
+								
 								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
 								<div class="row check-txt-center">
@@ -713,11 +714,10 @@ if(!empty($cart["cart_item"])) {
 
 @include('layouts.footer')
 <script type="text/javascript">
-
 	flatpickr(".flatpicker_registration", {
 		dateFormat: 'm/d/Y',
-	    maxDate: '01/01/2050',
-	});
+	    maxDate: '01/01/2050',		
+	}); 
  
     jQuery(function ($) {
     	$('#frmregister').validate({
