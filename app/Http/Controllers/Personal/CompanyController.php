@@ -44,12 +44,10 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {   
-        /*print_r($request->all()); exit;*/
+        //print_r($request->all()); exit;
 
-        $companyId = $request->cid != '' ? $request->cid: '';
+        $companyId = $request->cid != '' &&  $request->cid != '0' ? $request->cid : '';
         if($request->step == 1){
-
-           
             $companyImage = $request->has('profilePic') ? $request->file('profilePic')->store('company') : $request->oldProfile; 
             if($request->has('profilePic') && $request->oldProfile != ''){
                 Storage::delete($request->oldProfile);
@@ -84,10 +82,13 @@ class CompanyController extends Controller
             ];
 
             if($companyId != ''){
-                CompanyInformation::where('id',$companyId)->update($company);
+                $companyDetail = CompanyInformation::where('id',$companyId)->update($company);
             }else{
-                CompanyInformation::create($company);
+                $companyDetail  =  CompanyInformation::create($company);
+                Auth::user()->update(['cid'=>$companyDetail->id]);
+                $companyId = $companyDetail->id;
             }
+            
         }else if($request->step == 2){
             $frm_organisation = $frm_posi = $frm_servi_start = $frm_service_end = $frm_ispresent = $frm_course = array();
             for($i=0; $i < count($request->frm_organisationname);$i++){
@@ -158,7 +159,6 @@ class CompanyController extends Controller
             }else{
                 BusinessExperience::create($experience);
             }
-
         }else if($request->step == 3){
             $service = [
               'cid' => $companyId,

@@ -126,13 +126,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link @if(Route::current()->getName() == 'provider_calendar' ) tab-active @endif" href="{{route('provider_calendar')}}" aria-controls="sidebarUI">
+                    <a class="nav-link menu-link @if(Route::current()->getName() == 'provider_calendar' ) tab-active @endif"  @if($companyId) href="{{route('provider_calendar')}}" @endif aria-controls="sidebarUI">
                         <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
                     </a>
                 </li>
                 @if(!Session('StaffLogin'))
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI" target="_blank">
+                        <a class="nav-link menu-link" @if($companyId) href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI"  @endif target="_blank">
                             <img src="{{asset('/public/img/financial-dash.png')}}" alt="Fitnessity"> <span data-key="t-advance-ui">Financial Dashboard</span>
                         </a>
                     </li>
