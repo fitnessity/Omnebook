@@ -188,6 +188,7 @@ class CartService
             if($p['from'] == 'user'){
                 $findCustomer = Customer::where(['business_id' => $businessID,'user_id' => $p['id']])->first();
                 $userID = $findCustomer->id;
+                $name = $findCustomer->full_name;
             }else if($p['from'] == 'family'){
                 $family = UserFamilyDetail::where('id', $p['id'])->first();
                 $customer = Customer::where(['business_id' => $businessID, 'fname' => $family->first_name, 'lname' => $family->last_name ,'email' =>$family->email])->first();
