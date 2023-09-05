@@ -10,7 +10,7 @@ class FamilyMemberController extends Controller
 
 	public function index(Request $request){
         $loggedinUser = Auth::user();
-
+        $UserFamilyDetails = $familyDetails = [];
         if(count($loggedinUser->company) ==  0){
             $userfamily = $loggedinUser->user_family_details;
             foreach($userfamily as $uf){
@@ -18,8 +18,7 @@ class FamilyMemberController extends Controller
             }
         }else{
             $customer = @$loggedinUser->customers;
-            $UserFamilyDetails = $familyDetails = [];
-
+           
             foreach($customer as $cs){
                 foreach ($cs->get_families() as $fm){
                     $UserFamilyDetails [] = $fm;
