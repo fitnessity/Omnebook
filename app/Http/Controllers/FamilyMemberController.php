@@ -100,7 +100,10 @@ class FamilyMemberController extends Controller
                 $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
             }
 
-            $customer = Customer::where(['business_id'=> $businessCustomer->business_id, 'fname' =>  $request->fname ,'lname' => $request->lname])->first();
+			$customer = Customer::where(['business_id'=> $businessCustomer->business_id, 
+                                         'fname' =>  $request->fname,
+                                         'lname' => $request->lname,
+                                         'parent_cus_id' => $businessCustomer->id])->first();
             if($customer == ''){
                 $createCustomer = Customer::create([
                     'business_id' => $c->id,
@@ -115,6 +118,7 @@ class FamilyMemberController extends Controller
                     'birthdate' =>  $birthdate,
                     'parent_cus_id' => $businessCustomer->id,
                 ]); 
+                $createCustomer->create_stripe_customer_id();
                 $chk = 1;
             }else{
                 $message = 'Member already added as customer..';
