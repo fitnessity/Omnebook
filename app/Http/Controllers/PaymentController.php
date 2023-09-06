@@ -33,7 +33,7 @@ class PaymentController extends Controller {
     }
 
     public function createCheckoutSession(Request $request) {
-        //print_r($request->all());exit;
+        print_r($request->all());/*exit;*/
         $loggedinUser = Auth::user();
         $customer='';
 
@@ -71,7 +71,7 @@ class PaymentController extends Controller {
             $lastid = $userBookingStatus->id; 
 
             foreach($cartService->items() as $item){
-/*                $paySessionQty = 0;
+                /*$paySessionQty = 0;
                 foreach(['adult', 'child', 'infant'] as $role){
                     if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
                         $paySessionQty +=  $cartService->getQtyPriceByItem($item)['qty'][$role];    
@@ -493,7 +493,7 @@ class PaymentController extends Controller {
                 }
 
                 $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
-                //print_r($participateLoop);exit();
+                print_r($participateLoop);/*exit();*/
                 foreach($participateLoop as $d){
                     $participateAry = [];
                     $qtyAry = [];
@@ -547,6 +547,7 @@ class PaymentController extends Controller {
                         'addOnservice_total' => $item['addOnServicesTotalPrice'],
                     ]);
 
+                    print_r($booking_detail);exit();
                     $booking_detail->transfer_to_provider();
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
