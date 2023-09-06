@@ -171,7 +171,6 @@ class CartService
     }
 
     public function participateLoop($item ,$businessID){
-        echo "hiiin";
         $newArray = [];
         foreach($item['participate'] as $key => $p){
             if (isset($item['infant']) && isset($item['infant']['quantity']) && $key < $item['infant']['quantity']) {
