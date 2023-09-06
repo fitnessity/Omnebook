@@ -175,6 +175,7 @@ class CartService
     }
 
     public function participateLoop($item ,$businessID){
+        echo "hiiin";
         $newArray = [];
         foreach($item['participate'] as $key => $p){
             if (isset($item['infant']) && isset($item['infant']['quantity']) && $key < $item['infant']['quantity']) {
@@ -208,7 +209,6 @@ class CartService
                     ]);
                 }
                 $userID = @$customer->id;
-                $name = @$customer->full_name;
             }else{
                 $userID = $p['id'];
             }
@@ -219,7 +219,6 @@ class CartService
             $participant['type'] = $category;
             $participant['quantity'] = $item[$category]['quantity'];
             $participant['price'] = $item[$category]['price'];
-            $participant['name'] = $name;
 
             $newArray[] = $participant;
         }
