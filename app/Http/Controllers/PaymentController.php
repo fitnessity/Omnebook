@@ -460,7 +460,7 @@ class PaymentController extends Controller {
             $tax = $bspdata->site_tax;
 
             foreach($cartService->items() as $item){
-
+                echo "hii";
                 /*$paySessionQty = 0;
                 foreach(['adult', 'child', 'infant'] as $role){
                     if(array_key_exists($role,$cartService->getQtyPriceByItem($item)['qty'])){
@@ -474,7 +474,7 @@ class PaymentController extends Controller {
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
 
                 $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
-
+                echo $customer;
                 if(!$customer){
                     $customer = Customer::create([
                         'business_id' => $businessServices->cid,
