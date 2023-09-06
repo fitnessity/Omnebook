@@ -178,12 +178,17 @@ class CompanyInformation extends Model {
     public function visits_count_by_user_id($customerId = null){
         if($customerId == ''){
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
-            $customerId = @$customer->id;
         }else{
             $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
+        $customerId = @$customer->id;
         
-        $booking_details = UserBookingDetail::where(['business_id'=>$this->id,'user_type'=>'customer','user_id'=>$customerId]);
+        $booking_details = UserBookingDetail::where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$customerId])->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
+        if(@$customer->user_id == Auth::user()->id){
+            $booking_details = $booking_details->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+        }
+        $booking_details = $booking_details->where('user_booking_details.business_id', $this->id)
+        ;
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
         });
@@ -196,18 +201,23 @@ class CompanyInformation extends Model {
     }
 
     public function active_memberships_count_by_user_id($customerId = null){
+        //echo $customerId;
         if($customerId == ''){
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
-            $customerId = @$customer->id;
         }else{
             $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
+        $customerId = @$customer->id;
 
         $now = Carbon::now();
-        $result = CompanyInformation::use_user_details()->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $this->id)
-            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])
-            ->groupBy('user_booking_details.id')
+        $result = CompanyInformation::use_user_details()->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
+            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
+        if(@$customer->user_id == Auth::user()->id){
+            $result = $result->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+        }
+        $result = $result->where('user_booking_details.business_id', $this->id)->groupBy('user_booking_details.id')
             ->whereDate('user_booking_details.expired_at', '>', $now)->get();
+        //print_r($result);
         return  count($result);
     }
 
@@ -218,10 +228,13 @@ class CompanyInformation extends Model {
         }else{
             $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
+        $customerId = @$customer->id;
         $now = Carbon::now();
-        $result = CompanyInformation::use_user_details()->where('user_booking_details.business_id', $this->id)
-            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])
-            ->whereDate('user_booking_details.expired_at', '<', $now)
+        $result = CompanyInformation::use_user_details()->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
+        if(@$customer->user_id == Auth::user()->id){
+            $result = $result->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+        }
+        $result = $result->where('user_booking_details.business_id', $this->id)->whereDate('user_booking_details.expired_at', '<', $now)
             /*->havingRaw('(user_booking_details.pay_session - checkin_count) = 0')*/->get();
         return  count($result);
     }
@@ -236,8 +249,11 @@ class CompanyInformation extends Model {
         $now = Carbon::now();
         $from = (Carbon::now()->subDays(7))->format('Y-m-d');
         $to = (Carbon::now()->addDays(7))->format('Y-m-d');
-        $result = CompanyInformation::use_user_details()->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $this->id)
-            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])->whereDate('user_booking_details.expired_at', '>',  $now)->whereBetween('user_booking_details.expired_at',  [$from, $to])->get();
+        $result = CompanyInformation::use_user_details()->havingRaw('(user_booking_details.pay_session - checkin_count) > 0') ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
+        if(@$customer->user_id == Auth::user()->id){
+            $result = $result->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+        }
+        $result = $result->where('user_booking_details.business_id', $this->id)->whereDate('user_booking_details.expired_at', '>',  $now)->whereBetween('user_booking_details.expired_at',  [$from, $to])->get();
         return  count($result);
         //return $result->count(); 
     }

@@ -4,7 +4,6 @@
 @section('content')
 
 <?php 
-	
 	$username = Auth::user() != '' ? Auth::user()->full_name : '';
     /*echo"<pre>";*/ /*print_r($cart['cart_item']);*/ /*exit();*/
     $ajaxname = '';

@@ -29,7 +29,7 @@
                     </p>
                     <p>
                         <span class="text-left">TOTAL PRICE:</span>
-                        <span class="text-rihgt">@if($book_details->booking->getPaymentDetail() != 'Comp') {{$book_details->getperoderprice() + $book_details->total()}} @else 0 @endif </span>
+                        <span class="text-rihgt">@if($book_details->booking->getPaymentDetail() != 'Comp') {{ $book_details->subtotal}} @else 0 @endif </span>
                     </p>
                     <p>
                         <span class="text-left">PRICE OPTION:</span>

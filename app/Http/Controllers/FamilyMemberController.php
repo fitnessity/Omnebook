@@ -90,6 +90,7 @@ class FamilyMemberController extends Controller
         }
        
         foreach($company as $key=>$c){
+            $password = '';
             if($key == 0){
                 $random_password = Str::random(8);
                 $password = Hash::make($random_password);

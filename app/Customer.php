@@ -239,17 +239,19 @@ class Customer extends Authenticatable
     }
 
     public function active_memberships(){
+        //echo $this->id;exit;
+
         $company = $this->company_information;
         $now = Carbon::now();
-        $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
-
+        $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id);
         if($this->user_id == Auth::user()->id){
-            $results = $results->orwhere(['user_booking_status.user_id' => Auth::user()->id]);
+            $results = $results->join('user_booking_status as ubs','user_booking_details.booking_id', '=', 'ubs.id')->orwhere(['ubs.user_id' => Auth::user()->id])->where('user_booking_details.business_id', $company->id);
         }
-
-        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN booking_checkin_details.checkin_date IS NOT NULL AND booking_checkin_details.checkin_date != CURDATE() THEN COUNT(booking_checkin_details.use_session_amount) ELSE 0 END) as checkin_count'), 'user_booking_status.id as user_booking_status_id')->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
-           
-      
+        //$results = $results->select('user_booking_details.*');
+          //print_r($results->get());
+        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date <= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+        
+        //print_r($results->get());exit; 
         return $results; 
     }
 
