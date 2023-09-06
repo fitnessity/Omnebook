@@ -269,6 +269,13 @@ class UserBookingDetail extends Model
         return $remaining;
     }
 
+    public function getremainingSessionAfterCheckIn(){
+        $pay_session = $this->pay_session;
+        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
+        $remaining = $pay_session - $checkindetailscnt;
+        return $remaining;
+    }
+
     public function getReserveData($feildName)
     {
         $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->orderBy('checkin_date','desc')->first();

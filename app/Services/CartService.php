@@ -175,7 +175,7 @@ class CartService
         foreach($item['participate'] as $key => $p){
             if (isset($item['infant']) && isset($item['infant']['quantity']) && $key < $item['infant']['quantity']) {
                 $category = 'infant';
-            } elseif (isset($item['child']) && isset($item['child']['quantity']) && $key < ($item['infant']['quantity'] + $item['child']['quantity'])) {
+            } elseif (isset($item['child']) && isset($item['child']['quantity']) && $key < (@$item['infant']['quantity'] + $item['child']['quantity'])) {
                 $category = 'child';
             } else {
                 $category = 'adult';
@@ -219,14 +219,14 @@ class CartService
         return $newArray; 
     }
 
-    public function getSubTotal($priceId,$role,$price)
+    public function getSubTotal($priceId,$role,$price,$addOnServicePrice)
     {
         $subTotal = 0;
         $discount = $this->getDiscount($priceId,$role,$price);
-        $priceWithDiscount = $price - $discount;
+        $priceWithDiscount = $price - $discount + $addOnServicePrice;
         $tax = $this->getTax($priceWithDiscount);
         $serviceFee = $this->getServiceFee($priceWithDiscount);
-        $subTotal = $price + $tax + $serviceFee - $discount ;
+        $subTotal = $price + $tax + $serviceFee - $discount + $addOnServicePrice;
         $subTotal = $subTotal < 0 ?  0 : $subTotal;
         return $subTotal;
     }
