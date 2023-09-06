@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<input type="hidden" name="id" value="{{@$familyData->id}}">
-	<input type="hidden" name="type" value="{{@$type}}">
+	<input type="hidden" name="type" value="family_member">
 	<div class="editfamily_frnds">
 		<div class="row">	
 			<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">

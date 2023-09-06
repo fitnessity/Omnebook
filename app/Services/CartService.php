@@ -119,13 +119,17 @@ class CartService
                 $result['qty'][$role] = 0;
             }
             $priceDetail = $this->getPriceDetail($item['priceid']);
+            $dis = 100;
             if(array_key_exists("price",$item[$role])){
                 $result['price'][$role] = $item[$role]['price']; 
+
                 if($role == 'adult'){
                     $dis = $priceDetail->adult_discount;
-                }if($role == 'child'){
+                }
+                if($role == 'child'){
                     $dis = $priceDetail->child_discount;
-                }if($role == 'infant'){
+                }
+                if($role == 'infant'){
                     $dis = $priceDetail->infant_discount;
                 }
             }else{
@@ -184,6 +188,7 @@ class CartService
             if($p['from'] == 'user'){
                 $findCustomer = Customer::where(['business_id' => $businessID,'user_id' => $p['id']])->first();
                 $userID = $findCustomer->id;
+                $name = $findCustomer->full_name;
             }else if($p['from'] == 'family'){
                 $family = UserFamilyDetail::where('id', $p['id'])->first();
                 $customer = Customer::where(['business_id' => $businessID, 'fname' => $family->first_name, 'lname' => $family->last_name ,'email' =>$family->email])->first();
