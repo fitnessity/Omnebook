@@ -118,6 +118,8 @@ class PaymentController extends Controller {
                     $participateAry['from'] ='customer';
                     $participateAry['id'] = $d['id'];
 
+                    $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
+                    
                     $booking_detail = UserBookingDetail::create([                 
                         'booking_id' => $userBookingStatus->id,
                         'user_id'=> $d['id'],
@@ -133,7 +135,7 @@ class PaymentController extends Controller {
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $activityScheduler->end_activity_date,
                         'contract_date' => Carbon::now()->format('Y-m-d'),
-                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price']),
+                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price'],$addOnServicePrice),
                         'discount' => 0,
                         'tax' =>  0,
                         'fitnessity_fee' => 0,
@@ -143,9 +145,9 @@ class PaymentController extends Controller {
                         'transfer_provider_status' =>'unpaid',
                         'payment_number' => '{}',
                         'order_from' => "Instant Hire",
-                        'addOnservice_ids' =>$item['addOnServicesId'],
-                        'addOnservice_qty' => $item['addOnServicesQty'],
-                        'addOnservice_total' => $item['addOnServicesTotalPrice'],
+                        'addOnservice_ids' =>@$item['addOnServicesId'],
+                        'addOnservice_qty' => @$item['addOnServicesQty'],
+                        'addOnservice_total' => $addOnServicePrice,
                     ]);
 
                     $booking_detail->transfer_to_provider();
@@ -511,7 +513,9 @@ class PaymentController extends Controller {
                     $participateAry['id'] = $d['id'];
 
                     $discount = $cartService->getDiscount($item['priceid'],$d['type'],$d['price']);
-                    $priceWithDiscount = $d['price'] - $discount;
+
+                    $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
+                    $priceWithDiscount = $d['price'] - $discount + $addOnServicePrice;
 
                     $booking_detail = UserBookingDetail::create([                 
                         'booking_id' => $userBookingStatus->id,
@@ -528,7 +532,7 @@ class PaymentController extends Controller {
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $activityScheduler->end_activity_date,
                         'contract_date' => Carbon::now()->format('Y-m-d'),
-                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price']),
+                        'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price'], $addOnServicePrice),
                         'discount' => $discount,
                         'tax' =>  $cartService->getTax($priceWithDiscount),
                         'fitnessity_fee' => $cartService->getFitnessFee($priceWithDiscount, $user),
@@ -542,9 +546,9 @@ class PaymentController extends Controller {
                         'transfer_provider_status' =>'unpaid',
                         'payment_number' => '{}',
                         'order_from' => "Instant Hire",
-                        'addOnservice_ids' =>$item['addOnServicesId'],
-                        'addOnservice_qty' => $item['addOnServicesQty'],
-                        'addOnservice_total' => $item['addOnServicesTotalPrice'],
+                        'addOnservice_ids' =>@$item['addOnServicesId'],
+                        'addOnservice_qty' => @$item['addOnServicesQty'],
+                        'addOnservice_total' =>  $addOnServicePrice,
                     ]);
 
                     $booking_detail->transfer_to_provider();
