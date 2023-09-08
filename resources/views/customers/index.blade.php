@@ -135,9 +135,22 @@
 			</div>
 			<div class="modal-body text-center">
 				<div class="upload-files">
-					<button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
+					@if ($company->customer_uploading)
+					    <button type="button" disabled data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Client importing</button>
+					@else
+					    <button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
+					@endif
+					
 					<button type="button" id="upload-csv2" class="btn btn-primary btn-black mb-10" data-bs-toggle="modal" data-bs-target=".uploadmembership" >Upload Membership Details</button>
 					<button type="button" id="upload-csv3" class="btn btn-primary btn-red mb-10" data-bs-toggle="modal" data-bs-target=".uploadAttendance" >Upload Attendance Details</button>
+					<br/>
+					Client Import Logs:
+					@if ($company->client_imported_at)
+					    Skip List: <a href="{{Storage::url($company->client_skip_logs_url)}}">Link</a>
+					    Fail List: <a href="{{Storage::url($company->client_fail_logs_url)}}">Link</a>
+					@else
+					    <button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
+					@endif
 				</div>
 			</div>
 		</div>
@@ -207,7 +220,7 @@
          	formdata.append('business_id','{{$company->id}}');
           	formdata.append('_token','{{csrf_token()}}')
           	$.ajax({
-               url:'/import-customer',
+               url: '{{route('business.customers.import')}}',
                type:'post',
                dataType: 'json',
                enctype: 'multipart/form-data',
