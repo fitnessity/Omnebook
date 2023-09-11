@@ -191,7 +191,29 @@ class HomeController extends Controller
 				$array_data[]=$state->dba_business_name."~~business_profile"."~~".str_replace(" ","-",$state->dba_business_name)."/".$state->id;
 			}
 			
-			$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+			$searchValues = preg_split('/\s+/', $query, -1, PREG_SPLIT_NO_EMPTY);
+			$data_user = User::where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%")->orWhere(DB::raw('LOWER(username)'), 'LIKE', "%{$serch1}%");
+                } 
+            })->get();
+
+			//$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+
+
 			foreach($data_user as $user_data)
 			{
 				$array_data[]=$user_data->full_name."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
@@ -448,7 +470,26 @@ class HomeController extends Controller
     public function searchuser(Request $request) {
     	$user = User::orderby('created_at','desc');
     	if($request->term){
-            $user = $user->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+    		$searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
+            $user = $user->where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                } 
+            });
+            	//->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
         }
         $user = $user->get();
     	return response()->json($user);

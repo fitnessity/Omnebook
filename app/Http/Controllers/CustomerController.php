@@ -51,35 +51,53 @@ class CustomerController extends Controller {
             $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
         }*/
         if($request->term){
-            $customers = $customers->where('business_id', $business_id)
+            /*$customers = $customers->where('business_id', $business_id)
                 ->where(function ($query) use ($request) {
                     $term = strtolower($request->term);
                     $query->whereRaw('LOWER(`fname`) LIKE ?', ['%' . $term . '%'])
                           ->orWhereRaw('LOWER(`lname`) LIKE ?', ['%' . $term . '%'])
                           ->orWhereRaw('LOWER(`email`) LIKE ?', ['%' . $term . '%'])
                           ->orWhereRaw('LOWER(`phone_number`) LIKE ?', ['%' . $term . '%']);
+                });*/
+
+            $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY); 
+            
+            $customers = $customers->where('business_id', $business_id)
+                ->where(function ($q) use ($searchValues) {
+                    $serch1 = @$searchValues[0] != '' ? @$searchValues[0] : '';
+                    $serch2 = @$searchValues[1] != '' ? @$searchValues[1] : '';
+                    $q->orderBy('fname');
+                    if($serch1 != '' && $serch2 != ''){
+                        $q->where(function($q) use ($serch1, $serch2) {
+                            $q->where('fname', 'like', "%{$serch1}%")
+                              ->where('lname', 'like', "%{$serch2}%");
+                        })
+                        ->orWhere(function($q) use ($serch1, $serch2) {
+                            $q->where('fname', 'like', "%{$serch2}%")
+                              ->where('lname', 'like', "%{$serch1}%");
+                        });
+                    }else{
+                        $q->orWhere('fname', 'like', "%{$serch1}%")
+                        ->orWhere('lname', 'like', "%{$serch1}%")
+                        ->orWhere('email', 'like', "%{$serch1}%")
+                        ->orWhere('phone_number', 'like', "%{$serch1}%");
+                    }  
                 });
+                //print_r($customers);exit;
         }
 
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
         }
 
-        $customerCount = $customers->count();
-        $customers = $customers->limit(1000)->get();
-        $url = '';
-        $grouped_customers= array();
-
-		foreach ($customers as $customer) {
-		    $grouped_customers[strtoupper(@$customer['fname'][0])][] = $customer;
-		}
+        $customers = $customers->get();
+        $customerCount = count($customers);
 
         if ($request->ajax()) {
             return response()->json($customers);
         }
         return view('customers.index', [
             'company' => $company,
-            // 'grouped_customers' => $grouped_customers,
             'customerCount' => $customerCount,
         ]); 
     }
@@ -203,7 +221,7 @@ class CustomerController extends Controller {
        return  $status;
     }
 
-        public function importmembership(Request $request){
+    public function importmembership(Request $request){
         $user = Auth::user();
         $current_company =  $user->current_company;
         if($current_company->id == $request->business_id && $current_company->membership_uploading == 0){
@@ -781,8 +799,7 @@ class CustomerController extends Controller {
         $char = $request->input('char');
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
-        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->limit(20)->get();
-        // You can use the $dataVariable in your code if needed
+        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
         return view('customers.customer-detail-list',compact('customers' ,'char','company'));
     }
 
