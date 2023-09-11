@@ -134,6 +134,34 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-7a39c17eac4a45f5b2bbf030c5c82f4f');
 	}
 
+	public static function confirmationMailForCustomer($emailDetail){
+		$substitutions = [
+			"CustomerName" => $emailDetail['CustomerName'], 
+			"Url" => $emailDetail['Url'], 
+			"BusinessName"=> $emailDetail['BusinessName'],
+			"BookedBy"=> $emailDetail['BookedPerson'],
+			"Participants"=> $emailDetail['ParticipantsName'],
+			"date"=> $emailDetail['date'],
+			"time"=> $emailDetail['time'],
+			"duration"=> $emailDetail['duration'],
+			"ActivitiyType"=> $emailDetail['ActivitiyType'],
+			"ProgramName"=> $emailDetail['ProgramName'],
+			"CategoryName"=> $emailDetail['CategoryName'],
+			"CompanyName" => $emailDetail['CompanyName'], 
+			"RepName" => $emailDetail['RepName'], 
+			"CompanyAddress" => $emailDetail['CompanyAddress'], 
+			"phone" => $emailDetail['phone'], 
+			"email" => $emailDetail['email'], 
+			"website" => $emailDetail['website'], 
+			"MapImage" => $emailDetail['MapImage'], 
+			"thingsToKnow" => $emailDetail['thingsToKnow'], 
+			"CancellationText" => $emailDetail['CancellationText'], 
+			"RefundText" => $emailDetail['RefundText'], 
+		];
+
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-0afb04e69fe14a93abfacd6022818247');
+	}
+
 	public static function sendReminderOfSessionExpireToCustomer($emailDetail){
 
 		$substitutions = [
