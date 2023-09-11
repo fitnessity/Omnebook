@@ -2574,6 +2574,8 @@
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
 	.fc .fc-toolbar h2{text-align: center; width: 100%; }
 	.business-info{padding: 23px 10px;}
+	.reset-passthru form {  padding: 0 0px;}
+	.reset-title{padding-left: 0px;}
 }
 
 @media(max-width: 575px) {

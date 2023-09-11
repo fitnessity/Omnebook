@@ -90,6 +90,8 @@ class UserBookingStatus extends Model
 
         if($transaction){
             return $transaction->getPmtMethod();
+        }else{
+            return "N/A";
         }
     }
 
