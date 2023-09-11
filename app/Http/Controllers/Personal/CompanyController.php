@@ -225,10 +225,10 @@ class CompanyController extends Controller
                 "refundpolicytext" => $refundpolicytext
             ];
 
-            if($request->has('id')){
+            if(@$request->id != ''){
                 BusinessTerms::where('id' , $request->id)->update($terms);
             }else{
-                BusinessTerms::create($terms);
+               BusinessTerms::create($terms);
             }
         }   
 

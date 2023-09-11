@@ -62,7 +62,7 @@
 																			<div class="container-fluid">
 																				<div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
 																					<div class="row d-flex align-items-center">
-																						<div class="col-auto">
+																						<div class="col-auto col-md-3 col-lg-2 col-sm-4">
 																							<div class="avatar-lg">
 																								@if($customerdata->profile_pic)
 																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
@@ -79,11 +79,24 @@
 																							</div>
 																						</div>
 																						<!--end col-->
-																						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 col-lg-auto order-last order-lg-0">
+																						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-lg-auto order-last order-lg-0">
 																							<div class="flex-shrink-0 float-end mfloat-left small0width">
-																								<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width mmt-25">
+																								<div class="multiple-options">
+																									<div class="setting-icon">
+																										<i class="ri-more-fill"></i>
+																										<ul id="catUl0">
+																											<li><a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" ><i class="fas fa-plus text-muted"></i>Edit Profile</a></li>
+																											<li><a href=""><i class="fas fa-plus text-muted"></i>Send Welcome Email</a></li>
+																											<li><a href=""><i class="fas fa-plus text-muted"></i>Set Password</a></li>
+																											<li><a href=""><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+																											<li class="dropdown-divider"></li>
+																											<li><a href=""><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete Account</a></li>	 																											
+																										</ul>
+																									</div>
+																								</div>
+																								<!--<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width">
 																									<i class="ri-edit-box-line align-bottom"></i> Edit Profile
-																								</a>
+																								</a>-->
 																							</div>
 																						</div>
 																						<!--end col-->
@@ -277,7 +290,7 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}}</div>
+																														<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
 																														<div class="col-lg-6 col-md-6 col-4">
 																															<div class="multiple-options">
 																																<div class="setting-icon">
@@ -368,7 +381,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span></span>
+																																	<span>{{$booking_detail->booking->getPaymentDetail()}}</span>
 																																</div>
 																															</div>
 																														
@@ -391,6 +404,28 @@
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
 																																	<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
+																																</div>
+																															</div>
+
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="line-break">
+																																	<label>CATEGORY NAME:</label>
+																																</div>
+																															</div>
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="float-end line-break text-right">
+																																	<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																</div>
+																															</div>
+
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="line-break">
+																																	<label>PRICE OPTION:</label>
+																																</div>
+																															</div>
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="float-end line-break text-right">
+																																	<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
 																																</div>
 																															</div>
 																														
@@ -483,7 +518,7 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}}</div>
+																															<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
 																															<div class="col-lg-6 col-md-6 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
@@ -554,7 +589,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span></span>
+																																		<span>{{$booking_detail->booking->getPaymentDetail()}}</span>
 																																	</div>
 																																</div>
 																																
@@ -581,6 +616,28 @@
 																																		@if ($booking_detail->business_services_with_trashed)
 																																			<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
 																																		@endif
+																																	</div>
+																																</div>
+
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="line-break">
+																																		<label>CATEGORY NAME:</label>
+																																	</div>
+																																</div>
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="float-end line-break text-right">
+																																		<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																	</div>
+																																</div>
+
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="line-break">
+																																		<label>PRICE OPTION:</label>
+																																	</div>
+																																</div>
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="float-end line-break text-right">
+																																		<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
 																																	</div>
 																																</div>
 																															
@@ -671,49 +728,60 @@
 																			</div>
 																		</div>
 																	</div>
-																	
+																		
+																	@php
+																		$totalPaid = 0;
+																	@endphp
+
+																	@foreach ($purchase_history as $history) 
+																	    @if($history->item_description()['itemDescription'] != '')
+																	        @php
+																	            $totalPaid += $history->amount;
+																	        @endphp
+																	    @endif
+																	@endforeach
 																	<div class="accordion-item shadow">
-																		<h2 class="accordion-header" id="accordionnesting2Example2">
-																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting2Examplecollapse2">
-																				Purchase history
-																			</button>
-																		</h2>
-																		<div id="accor_nesting2Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting2Example2" data-bs-parent="#accordionnesting2">
-																			<div class="accordion-body">
-																				<div class="purchase-history">
-																					<div class="table-responsive">
-																						<table class="table mb-0">
-																							<thead>
-																								<tr>
-																									<th>Sale Date </th>
-																									<th>Item Description </th>
-																									<th>Item Type</th>
-																									<th>Pay Method</th>
-																									<th>Price</th>
-																									<th>Qty</th>
-																									<th>Refund/Void</th>
-																									<th>Receipt</th>
-																								</tr>
-																							</thead>
-																							<tbody>
-																								@foreach ($purchase_history as $history) 
-																									@if($history->item_description()['itemDescription'] != '')
+																			<h2 class="accordion-header" id="accordionnesting2Example2">
+																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting2Examplecollapse2">
+																					Purchase history - total ${{$totalPaid}}  
+																				</button>
+																			</h2>
+																			<div id="accor_nesting2Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting2Example2" data-bs-parent="#accordionnesting2">
+																				<div class="accordion-body">
+																					<div class="purchase-history">
+																						<div class="table-responsive">
+																							<table class="table mb-0">
+																								<thead>
 																									<tr>
-																										<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-																										<td>{!!$history->item_description()['itemDescription']!!}</td>
-																										<td>{{$history->item_type_terms()}}</td>
-																										<td>{{$history->getPmtMethod()}}</td>
-																										<td>${{$history->amount}}</td>
-																										<td>{{$history->item_description()['qty']}}</td>
-																										<td>Refund | Void</td>
-																										<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
-																										</td>
+																										<th>Sale Date </th>
+																										<th>Item Description </th>
+																										<th>Item Type</th>
+																										<th>Pay Method</th>
+																										<th>Price</th>
+																										<th>Qty</th>
+																										<th>Refund/Void</th>
+																										<th>Receipt</th>
 																									</tr>
-																									@endif
-																								@endforeach
-																							</tbody>
-																						</table>
-																					</div>
+																								</thead>
+																								<tbody>
+																									@foreach ($purchase_history as $history) 
+																										@if($history->item_description()['itemDescription'] != '')
+																										<tr>
+																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+																											<td>{!!$history->item_description()['itemDescription']!!}</td>
+																											<td>{{$history->item_type_terms()}}</td>
+																											<td>{{$history->getPmtMethod()}}</td>
+																											<td>${{$history->amount}}</td>
+																											<td>{{$history->item_description()['qty']}}</td>
+																											<td>Refund | Void</td>
+																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+																											</td>
+																										</tr>
+																										@endif
+																									@endforeach
+																								</tbody>
+																							</table>
+																						</div>
 																				</div>
 																			</div>
 																		</div>

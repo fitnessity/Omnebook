@@ -462,7 +462,7 @@ class OrderController extends BusinessBaseController
                 'use_session_amount' => 0,
                 'source_type' => 'in_person',
             ]);
-            $businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
+            /*$businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
             $email_detail = array(
                 "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
                 "CustomerName" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->full_name, 
@@ -477,7 +477,7 @@ class OrderController extends BusinessBaseController
                 "ProgramName"=> $businessService->program_name,
                 "CategoryName"=> @$categoryData->category_title);
 
-            SGMailService::confirmationMail($email_detail);
+            SGMailService::confirmationMail($email_detail);*/
         }
 
         session()->forget('cart_item');
