@@ -86,11 +86,12 @@
 																										<i class="ri-more-fill"></i>
 																										<ul id="catUl0">
 																											<li><a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" ><i class="fas fa-plus text-muted"></i>Edit Profile</a></li>
-																											<li><a href=""><i class="fas fa-plus text-muted"></i>Send Welcome Email</a></li>
+																											<li><a onclick="sendmailTocustomer({{$customerdata->id}},{{$customerdata->business_id}});"><i class="fas fa-plus text-muted"></i>Send Welcome Email</a></li>
 																											<li><a href=""><i class="fas fa-plus text-muted"></i>Set Password</a></li>
-																											<li><a href=""><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+																											<li><a href="{{route('business.orders.create',['business_id' =>$customerdata->business_id , 'cus_id' => $customerdata->id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
 																											<li class="dropdown-divider"></li>
-																											<li><a href=""><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete Account</a></li>	 																											
+																											<li><a data-business_id = "{{$customerdata->business_id}}" data-id="{{$customerdata->id}}" class="delcustomer"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete Account</a>
+																											</li>				
 																										</ul>
 																									</div>
 																								</div>
@@ -1373,6 +1374,25 @@
 		        });
 			}
 		}
+
+		$(document).on('click', '.delcustomer', function(e){
+			e.preventDefault();
+			var business_id = $(this).attr('data-business_id');
+			let text = "Are you sure to delete this customer?";
+			if (confirm(text) == true) {
+				var token = $("meta[name='csrf-token']").attr("content");
+			   $.ajax({
+			      url: '/business/'+business_id+'/customers/delete/'+$(this).attr('data-id'),
+			      type: 'DELETE',
+			      data: {
+			          "_token": token,
+			      },
+			      success: function (){
+			      	window.location = '/business/'+business_id+'/customers';
+			      }
+			   });
+			}
+		});
 
 	   function callAddFamily(cid ,business_id){
 	   	if(cid == '{{$customerdata->id}}'){
