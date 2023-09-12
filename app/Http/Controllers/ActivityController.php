@@ -1653,11 +1653,11 @@ class ActivityController extends Controller {
 
 	   	
 	   	$rawcategory = $service->BusinessPriceDetailsAges()->orderBy('id', 'ASC');
-        $categories = $firstSchedule != '' ? $rawcategory->get() : [];
+        $categories = $firstSchedule != '' ? $rawcategory->where('visibility_to_public' , 1)->get() : [];
         
         $firstCategory = $firstSchedule != '' ?  $rawcategory->when($categoryId, function ($query) use ($categoryId) {
 		    $query->where('id', $categoryId);
-		})->first() : '';
+		})->where('visibility_to_public' , 1)->first() : '';
    		$categoryId = $categoryId ?? @$firstCategory->id;
 
         $prices = $firstCategory  != '' ? $firstCategory->BusinessPriceDetails()->orderBy('id', 'ASC')->get() : []; 

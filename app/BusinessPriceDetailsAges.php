@@ -34,6 +34,7 @@ class BusinessPriceDetailsAges extends Model
         'service_name',
         'service_price',
         'service_description',
+        'visibility_to_public',
     ];
     
     public function BusinessActivityScheduler()
