@@ -59,7 +59,7 @@
 										</td>
 										<td>
 											<div class="scheduled-btns">
-												<button type="submit" class="btn btn-red mb-10" onclick="sendmail({{$customer->id}},{{$company->id}});">Send Welcome Email</button>
+												<button type="submit" class="btn btn-red mb-10" onclick="sendmailTocustomer({{$customer->id}},{{$company->id}});">Send Welcome Email</button>
 												<a type="button" class="btn btn-black mb-10" href="{{ route('business_customer_show',['business_id' => $company->id, 'id'=>$customer->id]) }}" target="_blank">View Account</a>
 											</div>
 										</td>

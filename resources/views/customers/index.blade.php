@@ -339,29 +339,6 @@
 			}
 		});
 	});
-
-	function  sendmail(cid,bid) {
-		$.ajax({
-			url:'{{route("sendemailtocutomer")}}',
-			type:"GET",
-			xhrFields: {
-            withCredentials: true
-         },
-			data:{
-				cid:cid,
-				bid:bid,
-			},
-			success:function(response){
-				if(response == 'success'){
-                    //$('.reviewerro').html('Email Successfully Sent..');
-                  alert('Email Successfully Sent..');
-                }else{
-                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                  alert("Can't Mail on this Address. Plese Check Email..");
-                }
-			}
-		});
-	}
 </script>
 
 <script type="text/javascript">
