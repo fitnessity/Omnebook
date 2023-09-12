@@ -357,13 +357,18 @@ class BookingRepository
             $main_total =  number_format(($tax_for_this + $totprice_for_this),2);
             $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
         }else{  
-            $extra_fees = json_decode(@$booking_details->extra_fees,true); 
+            /*$extra_fees = json_decode(@$booking_details->extra_fees,true); 
             $tax_for_this = @$extra_fees['tax'];
             $tip = @$extra_fees['tip'];
             $discount = @$extra_fees['discount'];
-            $service_fee = @$extra_fees['service_fee'];
-            $service_fee = ($totprice_for_this * $service_fee )/100;
-            $main_total = number_format(( $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee),2);
+            $service_fee = @$extra_fees['service_fee'];*/
+            $tax_for_this = @$booking_details->tax;
+            $tip = @$booking_details->tip;
+            $discount = @$booking_details->discount;
+            $service_fee = @$booking_details->$service_fee;
+            //$service_fee = ($totprice_for_this * $service_fee )/100;
+
+            $main_total = number_format($booking_details->subtotal,2);
             $nameofbookedby = $booking_status->customer->fname.' '.$booking_status->customer->lname;
         }
 
