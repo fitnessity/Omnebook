@@ -489,7 +489,7 @@
 																		</div>
 																	</div>
 																	<input type="hidden" name="duestax" id="duestax" value="">
-																	<input type="hidden" name="salestax" id="salestax" value="">
+																	<!-- <input type="hidden" name="salestax" id="salestax" value=""> -->
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
 																		<span id="taxvalspan">$0.00</span>
 																	</div>
@@ -1516,11 +1516,11 @@
 
 	function get_total_ajax() {
 		tax =salestax= duestax= 0;
-		salestax = $('#salestaxajax').val();
+		//salestax = $('#salestaxajax').val();
 		duestax = $('#duestaxajax').val();
-		if(salestax == ''){
+		/*if(salestax == ''){
 			salestax = 0;
-		}
+		}*/
 		if(duestax == ''){
 			duestax = 0;
 		}
@@ -1532,9 +1532,9 @@
  			if(duestax != 0){
 	 			tax += (price*duestax)/100;
 	 		}
-	 		if(salestax != 0){
+	 		/*if(salestax != 0){
 	 			tax += (price*salestax)/100;
-	 		}
+	 		}*/
 	 		$('#value_taxajax').val(tax);
  		}
 	}
@@ -1597,7 +1597,7 @@
 
 					var splittax =  data1[1].split('^^');
 					$('#duestaxajax').val(splittax[0]);
-					$('#salestaxajax').val(splittax[1]);
+					//$('#salestaxajax').val(splittax[1]);
 				}
 				if(chk == 'priceopt'){
 					$('#pricedivajax').html('');
@@ -1677,7 +1677,7 @@
 
 					var splittax =  data1[1].split('^^');
 					$('#duestax').val(splittax[0]);
-					$('#salestax').val(splittax[1]);
+					//$('#salestax').val(splittax[1]);
 
 				}
 				if(chk == 'priceopt'){
@@ -1720,11 +1720,11 @@
 	 	
 	 	dis_val  = parseInt($('#dis_amt').val());
 		tip_val =parseInt($('#tip_amt').val());
-		salestax = $('#salestax').val();
+		//salestax = $('#salestax').val();
 		duestax = $('#duestax').val();
-		if(salestax == ''){
+		/*if(salestax == ''){
 			salestax = 0;
-		}
+		}*/
 		if(duestax == ''){
 			duestax = 0;
 		}
@@ -1767,9 +1767,9 @@
 	 			if(duestax != 0){
 		 			tax += (price*duestax)/100;
 		 		}
-		 		if(salestax != 0){
+		 		/*if(salestax != 0){
 		 			tax += (price*salestax)/100;
-		 		}
+		 		}*/
 		 		$('#value_tax').val(tax);
 	 		}
 	 		

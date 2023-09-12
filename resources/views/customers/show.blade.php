@@ -792,7 +792,7 @@
 																		<h2 class="accordion-header" id="accordionnesting8Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting8Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting8Examplecollapse2">
 																				<div class="container-fluid nopadding">
-																					<div class="row">
+																					<div class="row  y-middle">
 																						<div class="col-lg-6 col-md-6 col-8">
 																							Connected Family Accounts ({{count($customerdata->get_families())}})
 																						</div>
@@ -916,9 +916,9 @@
 																		<h2 class="accordion-header" id="accordionnesting9Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting9Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting9Examplecollapse2">
 																				<div class="container-fluid nopadding">
-                                                              <div class="row ">
+                                                              <div class="row y-middle">
                                                                   <div class="col-lg-6 col-md-6 col-8">
-                                                                      Credit Card Info
+                                                                      Credit Card Info     <span class="font-green ml-15">  CC  </span>  ({{$customerdata->stripePaymentMethods()->count()}})   
                                                                   </div>
                                                                   <div class="col-lg-6 col-md-6 col-4">
                                                                       <div class="multiple-options">
