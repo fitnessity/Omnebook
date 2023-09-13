@@ -251,6 +251,7 @@
 															</div>
 														</div>
 													</div>
+													<a href="{{route('business_customer_show',['business_id' => $companyId, 'id' =>$parent_cus_id ])}}" class="btn btn-red float-end mt-10">Back</a>
 												</div>
 											</div>
 										</div><!-- end card-body -->
