@@ -429,7 +429,18 @@
 																																	<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
 																																</div>
 																															</div>
-																														
+																															
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="line-break">
+																																	<label>ACTIVATION START DATE:</label>
+																																</div>
+																															</div>
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="float-end line-break text-right">
+																																	<span> {{date('m/d/Y',strtotime($booking_detail->contract_date))}}</span>
+																																</div>
+																															</div>
+
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="line-break">
 																																	<label>EXPIRATION DATE:</label>
@@ -639,6 +650,17 @@
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
 																																		<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
+																																	</div>
+																																</div>
+
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="line-break">
+																																		<label>ACTIVATION START DATE:</label>
+																																	</div>
+																																</div>
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="float-end line-break text-right">
+																																		<span> {{date('m/d/Y',strtotime($booking_detail->contract_date))}}</span>
 																																	</div>
 																																</div>
 																															
