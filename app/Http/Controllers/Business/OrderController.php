@@ -182,6 +182,7 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
+        //print_r($checkoutRegisterCartService->items());
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -306,7 +307,7 @@ class OrderController extends BusinessBaseController
 
         $userBookingStatus = UserBookingStatus::create([
             'user_id' => Auth::user()->id,
-            /*'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,*/
+            //'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,
             'customer_id' => $request->user_id,
             'user_type' => 'customer',
             'status' => 'active',
@@ -329,9 +330,13 @@ class OrderController extends BusinessBaseController
         foreach($checkoutRegisterCartService->items() as $item){
 
             $now = new DateTime();
-            $contact_date = $now->format('Y-m-d');
+            /*$contractDate = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
-            $expired_at = $now;
+            $expired_at = $now;*/
+            $date = new DateTime($item['sesdate']);
+            $contractDate = $date->format('Y-m-d');
+            $date->modify('+'. $item['actscheduleid']);
+            $expired_at = $date;
             $cUid = NULL;
             $participateName = NULL;
             if(@$item['participate_from_checkout_regi']['id'] != ''){
@@ -348,7 +353,7 @@ class OrderController extends BusinessBaseController
                 'priceid' => $item['priceid'],
                 'pay_session' => $item['p_session'],
                 'expired_at' => $expired_at,
-                'contract_date' => Carbon::now()->format('Y-m-d'),
+                'contract_date' => $contractDate,
                 'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
                 'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
                 'tax' => $item['tax'],

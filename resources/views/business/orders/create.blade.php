@@ -1087,7 +1087,7 @@
 		</div>
 	</div>
 </div>
-	<div class="modal fade compare-model" role="dialog" id="editcartitempp" >
+	<div class="modal fade compare-model" role="dialog" id="editcartitempp" data-bs-focus="false">
 		<div class="modal-dialog manage-customer modal-70">
 			<div class="modal-content">
             	<div class="modal-header p-3">
@@ -1549,7 +1549,7 @@
 			$('#date').html($('#managecalendarservice').val());
 			$('#sesdate').val($('#managecalendarservice').val());
 		}else{
-			$('#sesdateajax').val($('#managecalendarserviceajax').val());
+			$('#sesdateajax').val($('#contractajax').val());
 		}
 	}
 
