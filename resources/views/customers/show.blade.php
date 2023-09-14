@@ -314,7 +314,7 @@
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-100"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
@@ -540,7 +540,7 @@
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-100"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
@@ -1601,6 +1601,6 @@
     	}
 	</script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}&callback=initMap" async defer></script>
-	
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}&callback=initMap" async defer></script>
+ -->	
 @endsection
