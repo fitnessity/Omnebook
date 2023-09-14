@@ -6,13 +6,13 @@
 			<label>Auopay Schedule For:</label>
 			<span>{{$customer->full_name}}</span>
 		</div>
-		<div class="col-lg-5">
+		<div class="col-lg-6">
 			<div>
 				<label>Contract Details:</label>
 				<span>{{$bookingDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} , {{$bookingDetail->business_price_detail_with_trashed->price_title}}</span>
 			</div>
 		</div>
-		<div class="col-lg-7">
+		<div class="col-lg-6">
 			<div class="auto-details-location float-end">
 				<label>Location:</label>
 				<span>{{$bookingDetail->company_information->dba_business_name}}</span>
@@ -20,8 +20,8 @@
 				<label> Autopay Remaining</label>
 				<span>{{$remaining}}/{{$autopayListCnt}}</span>
 				
-				<label>Autopay History</label>
-				<a href="#"> View </a>
+				<!-- <label>Autopay History</label>
+				<a href="#"> View </a> -->
 			</div>
 		</div>
 	</div>
@@ -62,9 +62,9 @@
 						</td>
 						<td>${{$list['tax']}}</td>
 						<td>@if($list['charged_amount'] != '') ${{$list['charged_amount']}} @else $0 @endif</td>
-						<td> {{$list->getStripeCard()}} </td> 
+						<td> {{$list->getStripeCard() ?? "N/A" }} </td> 
 						<td>{{$list['status']}}</td>
-						<td><input type="checkbox" id="chkbox{{$list->id}}" name="chkbox[]" class="custom_chkbox" value="{{$list->id}}"></td>
+						<td><input type="checkbox" id="chkbox{{$list->id}}" name="chkboxes[]" class="custom_chkbox" value="{{$list->id}}"></td>
 						<td>
 							<button id="submit" type="button" class="btn btn-red" data-behavior="updateAutoPay" data-recurring-id="{{$list->id}}">Save</button>
 						</td>
@@ -90,7 +90,7 @@
 						<td> {{$list['amount']}}</td>
 						<td>${{$list['tax']}}</td>
 						<td>@if($list['charged_amount'] != '') ${{$list['charged_amount']}} @else $0 @endif</td>
-						<td> {{$list->getStripeCard()}} </td> 
+						<td> {{$list->getStripeCard() ?? "N/A"}} </td> 
 						<td>{{$list['status']}}</td>
 					</tr>
 					@php $i++; @endphp
@@ -113,75 +113,88 @@
     	maxDate: "01/01/2050",
     });
 
-	$(document).on('click', '[data-behavior~=updateAutoPay]', function(e){
-        e.preventDefault()
-        $.ajax({
-            url: "/business/{{$business_id}}/recurring/" + $(this).data('recurring-id'),
-            method: "PATCH",
-            data: { 
-                _token: '{{csrf_token()}}', 
-                amount: $('#amount'+$(this).data('recurring-id')).val(), 
-                payment_date: $('#payment_date'+$(this).data('recurring-id')).val(), 
-            },
-            success: function(html){
-                location.reload();
-            }
-        });
-    });
-
-    $(document).on('click', '[data-behavior~=delete_recurring_detail]', function(e){
-        e.preventDefault()
-        var ids =$("input[name='chkbox']:checked").map(function () {
-            return this.value;
-        }).get().join(',');
-
-        if(ids != ''){
+	$(document).ready(function() {
+		$(document).on('click', '[data-behavior~=updateAutoPay]', function(e){
+	        e.preventDefault()
 	        $.ajax({
-	            url: "/business/{{$business_id}}/recurring/" + ids,
-	            method: "DELETE",
+	            url: "/business/{{$business_id}}/recurring/" + $(this).data('recurring-id'),
+	            method: "PATCH",
 	            data: { 
 	                _token: '{{csrf_token()}}', 
+	                amount: $('#amount'+$(this).data('recurring-id')).val(), 
+	                payment_date: $('#payment_date'+$(this).data('recurring-id')).val(), 
 	            },
 	            success: function(html){
 	                location.reload();
 	            }
-	        })
-	   	}else{
-	   		alert("Please select items that you want to delete. ")
-	   	}
-    });
- 	
- 	$(document).on('click', '[data-behavior~=pay_recurring_item]', function(e){
-        e.preventDefault()
-
-        var ids =$("input[name='chkbox']:checked").map(function () {
-        	alert(this.value);
-            return this.value;
-        }).get().join(',');
-        if(ids != ''){
-	        $.ajax({
-	            url: "/business/{{$business_id}}/recurring/pay_recurring_item",
-	            method: "POST",
-	            data: { 
-	                _token: '{{csrf_token()}}', 
-	                ids: ids, 
-	            },
-	            success: function(html){
-	              	location.reload();
-	            }
-	        })
-	   	}else{ alert("Please select items that you want to Pay. ")}
-    });
-
-	$(".checkAll").on("click", function(){
-		if($(".checkAll").is(':checked')) {
-	        $(".custom_chkbox").each(function(){
-	            $(this).prop("checked",true);
 	        });
-	    }else{
-	    	$(".custom_chkbox").each(function(){
-	            $(this).prop("checked",false);
-	        });
-	    }
-    });
+	    });
+
+	    $(document).on('click', '[data-behavior~=delete_recurring_detail]', function(e){
+	        e.preventDefault()
+	        var ids = '';
+	       	var idsAry = [];
+		    $("input[name='chkboxes[]']:checked").each(function() {
+		        idsAry.push($(this).val());
+		    });
+		    ids = idsAry.join(',');
+
+	        if(ids != ''){
+		        $.ajax({
+		            url: "/business/{{$business_id}}/recurring/" + ids,
+		            method: "DELETE",
+		            data: { 
+		                _token: '{{csrf_token()}}', 
+		            },
+		            success: function(html){
+		                location.reload();
+		            }
+		        })
+		   	}else{
+		   		alert("Please select items that you want to delete. ")
+		   	}
+	    });
+	 	
+	 	$(document).on('click', '[data-behavior~=pay_recurring_item]', function(e){
+	        e.preventDefault()
+	        var ids = '';
+	       	var idsAry = [];
+		    $("input[name='chkboxes[]']:checked").each(function() {
+		        idsAry.push($(this).val());
+		    });
+		    ids = idsAry.join(',');
+		   
+	        if(ids != ''){
+		        $.ajax({
+		            url: "/business/{{$business_id}}/recurring/pay_recurring_item",
+		            method: "POST",
+		            data: { 
+		                _token: '{{csrf_token()}}', 
+		                ids: ids, 
+		            },
+		            success: function(response){
+		            	if(response.message == 'success'){
+		            		location.reload();
+		            	}else{
+		            		alert(response.message);
+		            	}
+		              	//location.reload();
+		            }
+		        })
+		   	}else{ alert("Please select items that you want to Pay. ")}
+	    });
+
+		$(".checkAll").on("click", function(){
+			if($(".checkAll").is(':checked')) {
+		        $(".custom_chkbox").each(function(){
+		            $(this).prop("checked",true);
+		        });
+		    }else{
+		    	$(".custom_chkbox").each(function(){
+		            $(this).prop("checked",false);
+		        });
+		    }
+	    });
+	});
+
 </script>
