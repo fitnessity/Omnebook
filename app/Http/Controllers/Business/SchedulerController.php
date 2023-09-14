@@ -134,23 +134,19 @@ class SchedulerController extends BusinessBaseController
           }
 
           if($request->has('email_clients')){
-               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
-               foreach($databooked as $db){
-                    if($db->booking->user_type == 'user'){
-                         $userdata = $db->booking->user;
-                    }elseif($db->booking->user_type == 'customer'){
-                         $userdata = $db->booking->customer;
-                    }  
-
-                    $businessdata = $db->business_services;
-                    $companydata = $db->business_services->company_information;
-                    $time = date('h:i a',strtotime($db->business_activity_scheduler->shift_start));
+               $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $request->schedule_id)->where('checkin_date' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
+               //$databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
+               foreach($checkInDetails as $cid){
+                    $userdata = $cid->customer;
+                    $businessdata = $cid->order_detail->business_services;
+                    $companydata = $cid->order_detail->business_services->company_information;
+                    $time = date('h:i a',strtotime($cid->scheduler->shift_start));
                     $date = $request->cancel_date;
-                    $status = MailService::sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
+                    $status = MailService::sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,'customer',$mail_type);
                } 
           }
 
-          if($request->has('email_Instructor')){
+          /*if($request->has('email_Instructor')){
                $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->first();
                //print_r($databooked);
             
@@ -164,7 +160,7 @@ class SchedulerController extends BusinessBaseController
                          $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
                     }
                }
-          }
+          }*/
           return redirect($request->return_url);
      }
 
