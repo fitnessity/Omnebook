@@ -426,7 +426,7 @@ class OrderController extends BusinessBaseController
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
                                 $afterHowmanytime = @$Chk[0];
-                                $addTime  = is_int($afterHowmanytime) * ($num - 1);
+                                $addTime  = is_numeric($afterHowmanytime) ? $afterHowmanytime * ($num - 1) : 0;
 
                                 if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');

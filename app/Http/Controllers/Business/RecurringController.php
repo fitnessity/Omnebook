@@ -22,10 +22,9 @@ class RecurringController extends Controller
         $customer = $company->customers->find($request->customer_id);
         $bookingDetail = $company->UserBookingDetails->find($request->booking_detail_id);
         $autopayListScheduled = $bookingDetail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
-        $autopayListHistory = $customer->recurring($request->booking_detail_id , 'Completed')->orderby('payment_date')->get();
-        $autopayListCnt =  count($autopayListScheduled) + count($autopayListHistory);
-        $remaining = Recurring::autoPayRemaining($autopayListCnt,$request->booking_detail_id);
-            
+        $autopayListHistory = $bookingDetail->Recurring()->where('status' , 'Completed')->orderby('payment_date')->get();
+        $autopayListCnt =  $bookingDetail->Recurring()->count();
+        $remaining = count($autopayListScheduled);
         if($request->type == 'history'){
             $pageName = 'Autopay History';
         }else{
@@ -118,7 +117,7 @@ class RecurringController extends Controller
         }
 
         $amount = number_format( $amount ,2,'.','');
-         //print_r( $payment_intent );exit;
+        
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         try {
             $payment = $stripe->paymentIntents->create([
@@ -150,12 +149,18 @@ class RecurringController extends Controller
                     'refund_amount' =>0,
                     'payload' =>json_encode($payment,true),
                 );
+                print_r($transactiondata);
                 $transactionstatus = Transaction::create($transactiondata);
                 $update_recurring_detail->charged();
             }
-            $request->session()->put('recurringPayment', 'Autopay Payment is successfully done..');
+            return response()->json(['message' => 'success']);
+            //$request->session()->put('recurringPayment', 'Autopay Payment is successfully done..');
         } catch(\Exception $e) {
-            $request->session()->put('recurringPayment', 'Autopay payment is failed due to some reason. Please try again latter. ');
+           /* print_r($e);
+            echo"ghf";*/
+            return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
+
+            //$request->session()->put('recurringPayment', 'Autopay payment is failed due to some reason. Please try again latter. ');
         }  
     }
 }
