@@ -852,7 +852,7 @@
 																									<th>Name</th>
 																									<th>Relationship</th>
 																									<th>Age</th>
-																									<th>Action</th>
+																									<th class="action-width">Action</th>
 																								</tr>
 																							</thead>
 																							<tbody>
@@ -864,7 +864,9 @@
 																									<td class="text-center">
 																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red mmb-10">Delete</a>
 
-																										<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-black ">View</a></td>
+																										<a href="#" onclick="redirctAddfamily({{$customerdata->id}});" class="btn btn-black mmb-10">Edit</a>
+
+																										<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-red mmb-10">View</a></td>
 																									
 																								</tr>
 																								@endforeach
@@ -938,48 +940,49 @@
 																		<h2 class="accordion-header" id="accordionnesting9Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting9Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting9Examplecollapse2">
 																				<div class="container-fluid nopadding">
-                                                              <div class="row y-middle">
-                                                                  <div class="col-lg-6 col-md-6 col-8">
-                                                                      Credit Card Info     <span class="font-green ml-15">  CC  </span>  ({{$customerdata->stripePaymentMethods()->count()}})   
-                                                                  </div>
-                                                                  <div class="col-lg-6 col-md-6 col-4">
-                                                                      <div class="multiple-options">
-                                                                          <div class="setting-icon">
-                                                                              <i class="ri-more-fill"></i>
-                                                                              <ul>
-																											<li><a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}"><i class="fas fa-plus text-muted"></i>Add</a></li>
-                                                                              </ul>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                          	</div>
+																				  <div class="row y-middle">
+																					  <div class="col-lg-6 col-md-6 col-8">
+																						  Credit Card Info     <span class="font-green ml-15">  CC  </span>  ({{$customerdata->stripePaymentMethods()->count()}})   
+																					  </div>
+																					  <div class="col-lg-6 col-md-6 col-4">
+																						  <div class="multiple-options">
+																							  <div class="setting-icon">
+																								  <i class="ri-more-fill"></i>
+																								  <ul>
+																									<li>
+																										<a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">
+																										<i class="fas fa-plus text-muted"></i>Add</a>
+																									</li>
+																								  </ul>
+																							  </div>
+																						  </div>
+																					  </div>
+																				  </div>
+																				</div>
 																			</button>
 																		</h2>
 																		<div id="accor_nesting9Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting9Example2" data-bs-parent="#accordionnesting9">
 																			<div class="accordion-body">
-																				@foreach($customerdata->stripePaymentMethods()->get() as $card)
-																					<div class="mini-stats-wid d-flex align-items-center mt-3 scheduler-box">
-																						<div class="flex-grow-1">
-																							<div class="mb-10">
-																								<p class="text-muted card-details mb-0">{{$card->brand}} **** **** **** {{$card->last4}}</p>
-																							</div>
-																						</div>
-																																									
-																						<div class="flex-grow-1 ms-3">
-																							<div class="priceoptionsettings">
-																								<div class="setting-icon">
-																									<i class="ri-more-fill"></i>
-																									<ul>
-																										<!-- <li><a href="#"><i class="fas fa-plus text-muted"></i>Edit</a></li>
-																										<li class="dropdown-divider"></li> -->
-																										<li><a data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="<?=$card['id']?>"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
-																									</ul>
+																				<div class="row">
+																					@foreach($customerdata->stripePaymentMethods()->get() as $card)
+																							<div class="col-lg-3 col-sm-6">
+																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="$card->exp_year" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
+																									<div class="cards-content" style="background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
+																										<img src="{{ url('/public/images/creditcard/'.strtolower($card->brand).'.jpg') }}" alt="">
+																										<span></span>
+																										<p>{{ucfirst(strtolower($card->brand))}}</p>
+																										<span>
+																											<span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span>{{$card->last4}} 
+																										</span>
+
+																										<a class="float-end card-remove" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="{{$card->id}}" class="delCard">
+																											<i class="fa fa-trash"></i> 
+																										</a>
+																									</div>
 																								</div>
 																							</div>
-																						</div>
-																					</div>
-																				@endforeach
+																					@endforeach
+																				</div> 
 																			</div>
 																		</div>
 																	</div>
