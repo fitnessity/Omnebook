@@ -96,7 +96,7 @@ class Recurring extends Authenticatable
             $customer = Customer::findOrFail($this->user_id); 
             $stripeCustomerId = $customer->stripe_customer_id;  
             $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'customer'])->latest()->first();
-            $stripeCardID = $cardDetails->payment_id;
+            $stripeCardID = @$cardDetails->payment_id;
         }
        
         $cardID =  $this->payment_method;
