@@ -4,14 +4,12 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\CompanyInformation;
-use App\BookingCheckinDetails;
+use App\{BookingCheckinDetails,StripePaymentMethod,CompanyInformation};
 use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
 use Auth;
-use App\StripePaymentMethod;
 
 use Illuminate\Support\Str;
 
@@ -366,6 +364,31 @@ class Customer extends Authenticatable
 
     public function sendemail($customer){
         
+    }
+
+    public function chkSignedTerms(){
+        $termsChk = $this->terms_covid != '' && $this->terms_liability != '' && $this->terms_contract != '' ? "" : "Terms not signed. <br>";
+        return $termsChk;
+    }
+
+    public function chkBirthday(){
+        $currentDate = date('m-d');
+        $birthdate = date('m-d' , strtotime($this->birthdate));
+
+        return $birthdate == $currentDate ?  "<br>Today is Your Birthday.<br>" : '';  
+    }
+
+    public function findExpiredCC(){
+        $cards = '';
+        $cardDetails = $this->stripePaymentMethods()->get();
+       // print_r($cardDetails);
+        foreach($cardDetails as $card){
+            if($card->exp_year <= date('Y') && $card->exp_month <= date('n')){
+                $cards .=  $card->brand."  **** ".$card->last4."<br>";
+            }
+        }
+
+        return $cards != '' ? "<br><h6>Expired CC List</h6>".$cards : '';
     }
 
     
