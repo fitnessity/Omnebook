@@ -506,8 +506,8 @@ class PaymentController extends Controller {
 
                             $recurring = array(
                                 "booking_detail_id" => $booking_detail->id,
-                                "user_id" => $loggedinUser->id,
-                                "user_type" => 'user',
+                                "user_id" =>  $d['id'],
+                                "user_type" => 'customer',
                                 "business_id" => $booking_detail->business_id ,
                                 "payment_date" => $paymentDate,
                                 "amount" => $amount,
