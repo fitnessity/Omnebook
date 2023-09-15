@@ -28,16 +28,15 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('stripe:cron')->everyMinute();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
 
             foreach($user_booking_details->get() as $user_booking_detail){
                 $user_booking_detail->transfer_to_provider();
             }
-        })->everyTenMinutes();*/
+        })->everyTenMinutes();
 
         $schedule->call(function () {
-           // $recurringDetails = Recurring::whereDate('payment_date' ,'=', '2023-07-03')->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->orderBy('created_at','desc')->get();
             $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->orderBy('created_at','desc')->get();
             //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
@@ -45,14 +44,14 @@ class Kernel extends ConsoleKernel
             }
         })->everyMinute();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
             }
-        })->daily();*/
+        })->daily();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::select('user_booking_details.*', DB::raw('COUNT(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')
             ->groupBy('user_booking_details.id')
             ->havingRaw('(user_booking_details.pay_session - checkin_count) between 0 and 2')
@@ -61,14 +60,14 @@ class Kernel extends ConsoleKernel
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
             }
-        })->daily();*/
+        })->daily();
         
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", "=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipExpiredAlert('membership');
             }
-        })->daily();*/
+        })->daily();
        // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
 
     }
