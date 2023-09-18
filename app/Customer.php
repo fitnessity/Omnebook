@@ -4,7 +4,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\{BookingCheckinDetails,StripePaymentMethod,CompanyInformation};
+use App\{BookingCheckinDetails,StripePaymentMethod,CompanyInformation,Recurring};
 use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -123,6 +123,10 @@ class Customer extends Authenticatable
 
     public function bookingDetail(){
         return $this->hasMany(UserBookingDetail::class,'user_id');
+    }
+
+    public function recurringDetail(){
+        return $this->hasMany(recurring::class,'user_id');
     }
 
     public function bookingStatus()
@@ -375,7 +379,7 @@ class Customer extends Authenticatable
         $currentDate = date('m-d');
         $birthdate = date('m-d' , strtotime($this->birthdate));
 
-        return $birthdate == $currentDate ?  "<br>Today is Your Birthday.<br>" : '';  
+        return $birthdate == $currentDate ?  "<br>Today is your birthday.<br>" : '';  
     }
 
     public function findExpiredCC(){
@@ -391,6 +395,16 @@ class Customer extends Authenticatable
         return $cards != '' ? "<br><h6>Expired CC List</h6>".$cards : '';
     }
 
+    public function chkRecurringPayment($bookId){
+        $currentMonth = date('m');
+        $bookingData  = UserBookingDetail::find($bookId);
+        $data = @$bookingData->Recurring()->where(['booking_detail_id' =>$bookId])->whereMonth('payment_date', '=' , $currentMonth)->first();
+        if(@$data->status == 'Completed'){
+            return "<br>Default payment done";
+        }else if(@$data->status == 'Retry'){
+            return "<br>Default payment failed";
+        }
+    } 
     
 }
    
