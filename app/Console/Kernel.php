@@ -37,7 +37,8 @@ class Kernel extends ConsoleKernel
         })->everyTenMinutes();
 
         $schedule->call(function () {
-            $recurringDetails = Recurring::whereDate('payment_date' ,'=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','Scheduled')->get();
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->orderBy('created_at','desc')->get();
+            //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
@@ -55,7 +56,7 @@ class Kernel extends ConsoleKernel
             ->groupBy('user_booking_details.id')
             ->havingRaw('(user_booking_details.pay_session - checkin_count) between 0 and 2')
             ->whereDate('user_booking_details.expired_at', '>=', date('Y-m-d'))->get();
-           /* print_r($userBookingDetails);exit;*/
+            //print_r($userBookingDetails);exit;
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
             }
