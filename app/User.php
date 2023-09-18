@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 
+use App\StripePaymentMethod;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -349,6 +351,11 @@ class User extends Authenticatable
         $customer_ids = implode(',',$customer_ids);
         //return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in (?)))', [$this->id,$customer_ids]); 
         return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in ('.$customer_ids.')))', [$this->id]); 
+    }
+
+
+    public function stripePaymentMethods(){
+        return StripePaymentMethod::where('user_type', 'User')->where('user_id', $this->id);
     }
 
 }

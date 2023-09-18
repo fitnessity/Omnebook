@@ -223,7 +223,7 @@ class OrderController extends BusinessBaseController
                             'payload' =>json_encode($onFilePaymentIntent,true),
                         ];
                     }
-                }catch(\Stripe\Exception\CardException $e) {
+                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = $e->getError()->message;
                     return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
                 }catch (Exception $e) {
@@ -267,7 +267,7 @@ class OrderController extends BusinessBaseController
                             'payload' =>json_encode($newCardPaymentIntent,true),
                         ];
                     }
-                }catch(\Stripe\Exception\CardException $e) {
+                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = $e->getError()->message;
                     $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
                     return redirect($url)->with('stripeErrorMsg', $errormsg);

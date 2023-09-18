@@ -8,7 +8,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
-use App\Transaction;
+use App\{Transaction,User,Customer};
 
 // /use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -86,23 +86,19 @@ class Recurring extends Authenticatable
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        
-        if($this->user_type == 'user'){
-            $customer = User::findOrFail($this->user_id);
-            $stripeCustomerId = $customer->stripe_customer_id;
-            $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'user'])->latest()->first();
-            $stripeCardID = $cardDetails->payment_id;
-        }else{
-            $customer = Customer::findOrFail($this->user_id); 
-            $stripeCustomerId = $customer->stripe_customer_id;  
-            $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'customer'])->latest()->first();
-            $stripeCardID = @$cardDetails->payment_id;
+        if ($this->user_type == 'user') {
+            $customer = User::find($this->user_id);
+        } else {
+            $customer = Customer::find($this->user_id); 
         }
+
+        $stripeCustomerId = @$customer->stripe_customer_id;
+        $cardDetails = @$customer != '' ? $customer->stripePaymentMethods()->latest()->first() : '';
+        $stripeCardID = $cardDetails ? $cardDetails->payment_id : null;
        
         $cardID =  $this->payment_method;
-        if($cardID== ''){
-            $cardID =  $stripeCardID;
-        }
+        $cardID = $cardID != ''  ?  $cardID : $stripeCardID;
+        
         if($cardID != '' && $stripeCustomerId != ''){
             try {
                 $totalPrice = ($this->amount + $this->tax )*100;
@@ -118,8 +114,7 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
-                $this->save();
-
+            
                 $transactiondata = array( 
                     'user_type' => $this->user_type ,
                     'user_id' => $this->user_id,
@@ -137,9 +132,17 @@ class Recurring extends Authenticatable
                 $transactionstatus = Transaction::create($transactiondata);
 
                 $this->charged();
-            }catch(\Stripe\Exception\CardException $e) {
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
+                $this->payment_method = NULL;
+                $this->status = "Retry";
             }catch (Exception $e) {
+                $this->status = "Retry";
+            }finally {
+                $this->save();
             }
+        }else{
+            $this->status = "Retry";
+            $this->save();
         }
     }
 
