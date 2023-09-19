@@ -271,13 +271,27 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	}
 
 	function openPopUp(scheduleId,sid,activityName,time,chk,catId){
-		if(chk == 1){
- 			$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
+		if ("{{Auth::check()}}") { 
+			if(chk == 1){
+	 			$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
+			}else{
+				$('#select-booking-type').html('<div class="row contentPop text-center"><div class="col-lg-12 btns-modal"><h4 class="mb-20">Choose How You Would Like To Book</h4><button type="button" class="addbusiness-btn-modal" onclick="timeBookingPopUP('+scheduleId+','+sid+',\''+activityName+'\',\''+time+'\','+chk+','+catId+')" id="singletime" data-id="">Book 1 Time Slot</button>  <button type="button" class="addbusiness-btn-modal" onclick="goToMultibookingPage('+sid+');">Book Multiple Time Slots At Once</button></div></div>');
+			}
+			
+			$('.selectbooking').modal('show');
 		}else{
-			$('#select-booking-type').html('<div class="row contentPop text-center"><div class="col-lg-12 btns-modal"><h4 class="mb-20">Choose How You Would Like To Book</h4><button type="button" class="addbusiness-btn-modal" onclick="timeBookingPopUP('+scheduleId+','+sid+',\''+activityName+'\',\''+time+'\','+chk+','+catId+')" id="singletime" data-id="">Book 1 Time Slot</button>  <button type="button" class="addbusiness-btn-modal" onclick="goToMultibookingPage('+sid+');">Book Multiple Time Slots At Once</button></div></div>');
+			$.ajax({
+				url:'{{route("setSessionOfSchedule")}}',
+				type: 'POST',
+				data:{
+					_token: '{{csrf_token()}}',
+					businessId : '{{$businessId}}',
+				},
+				success:function(data){
+					 window.location.href = '/userlogin';
+				}
+			});
 		}
-		
-		$('.selectbooking').modal('show');
 	}
 
 	function goToMultibookingPage(sid) {

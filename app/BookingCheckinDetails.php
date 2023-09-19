@@ -36,6 +36,7 @@ class BookingCheckinDetails extends Model
                             $id= $userBookingDetail->user_id;
                         }
                     }
+                    $model->instructor_id = @$userBookingDetail->business_services->instructor_id;
                 }
                 $id = @$id != '' ? @$id : 0;
                 $model->booked_by_customer_id = $id;
@@ -77,7 +78,7 @@ class BookingCheckinDetails extends Model
     public $timestamps = false;
     protected $table = 'booking_checkin_details';
 	protected $fillable = [
-        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type','booked_by_customer_id',
+        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type','booked_by_customer_id','instructor_id'
     ];
 
 
@@ -91,6 +92,10 @@ class BookingCheckinDetails extends Model
 
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id');
+    }
+
+    public function instructor(){
+        return $this->belongsTo(BusinessStaff::class,'instructor_id');
     }
 
     public function order_detail(){

@@ -163,7 +163,7 @@ class UserBookingDetail extends Model
                         if($transfer->id){
                           $transfer_amount += $transaction->amount;
                         }
-                    } catch(\Exception $e) {
+                    } catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
 
                         $this->update(['transfer_provider_status'=>'unpaid', 
                                'provider_amount' => 0]);
@@ -186,7 +186,7 @@ class UserBookingDetail extends Model
                 $payment_intent = $stripe->paymentIntents->retrieve(
                     $transaction->transaction_id,
                     []
-                );
+                );  
 
                 $transfer = $stripe->transfers->create([
                     'amount' => $transfer_amount * 100,
@@ -200,8 +200,10 @@ class UserBookingDetail extends Model
                                    'provider_amount' => $transfer_amount ,
                                    'provider_transaction_id' => $transfer->id]);
                 }
-            } catch(\Exception $e) {
-                var_dump($e);
+            } catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
+                $this->update(['transfer_provider_status'=>'unpaid', 
+                               'provider_amount' => 0]);
+                        return;
             } 
         }   
     }

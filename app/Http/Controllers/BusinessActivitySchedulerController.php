@@ -26,7 +26,12 @@ class BusinessActivitySchedulerController extends Controller
 
     public function index(Request $request , $business_id)
     {
+        $chkScheduleSession = '';
+
         $company = CompanyInformation::findOrFail($business_id);
+        $companyName = $company->dba_business_name;
+        $companyName = $companyName ?? $company->company_name ; 
+        
         $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
         $servicetype = 'all';
         if($request->stype && $request->business_service_id == ''){
@@ -38,20 +43,28 @@ class BusinessActivitySchedulerController extends Controller
             }
         }
 
-        $full_name = '';
+        if(session()->has('schedule')) {
+            session()->forget('schedule');
+        }
+
+        $user = Auth::user();
+        $userCompany = @$user->company ?? [];
+        $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
+        if($user != '' && count($userCompany) == 0  && $request->customer_id == ''){
+            $request->customer_id = $customer->id;
+        }
+
         if($request->customer_id){
             $customer = Customer::where('id',$request->customer_id)->first();
-        }else{
-            $user= Auth::user();
-            $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
+            $memberships = $customer->active_memberships()->pluck('sport')->unique();
+            $business_services = $company->service()->whereIn('id', $memberships)->get();
         }
 
         if($request->business_service_id){
             $servicetype = $request->stype;
-            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]);
-            //print_r($business_services);exit;
-            
+            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]); 
         }
+
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -65,10 +78,6 @@ class BusinessActivitySchedulerController extends Controller
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
 
-        $companyName = $company->dba_business_name;
-        if($companyName == ''){
-           $companyName = $company->company_name; 
-        }
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
         $services = [];
 
@@ -164,7 +173,7 @@ class BusinessActivitySchedulerController extends Controller
         if($request->priceId != ''){
             $priceDetail = BusinessPriceDetails::find($request->priceId);
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid,'priceid' => $request->priceId])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->first();
-            $remaining= @$bookingDetail->getremainingsession() ?? 0;
+            $remaining= @$bookingDetail != '' ? @$bookingDetail->getremainingsession() : 0;
             if($remaining != 0 ){
                 $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
@@ -211,12 +220,7 @@ class BusinessActivitySchedulerController extends Controller
     }
 
     public function multibooking(Request $request, $business_id){
-        if($request->customer_id){
-            $customer = Customer::where('id',$request->customer_id)->first();
-        }else{
-            $user= Auth::user();
-            $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
-        }
+        
 
         $company = CompanyInformation::findOrFail($business_id);
         $filter_date = new DateTime();
@@ -235,6 +239,19 @@ class BusinessActivitySchedulerController extends Controller
         $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
         if($request->business_service_id){
             $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1]);            
+        }
+
+        $user = Auth::user();
+        $userCompany = @$user->company ?? [];
+        $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
+        if($user != '' && count($userCompany) == 0  && $request->customer_id == ''){
+            $request->customer_id = $customer->id;
+        }
+
+        if($request->customer_id){
+            $customer = Customer::where('id',$request->customer_id)->first();
+            $memberships = $customer->active_memberships()->pluck('sport')->unique();
+            $business_services = $company->service()->whereIn('id', $memberships)->get();
         }
 
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
@@ -523,5 +540,9 @@ class BusinessActivitySchedulerController extends Controller
             unset($sessionAry[$i]);
         }
         session::put('multibooking', $sessionAry);
+    }
+
+    public function setSessionOfSchedule(Request $request){
+        Session::put('schedule', $request->businessId);   
     }
 }

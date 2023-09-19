@@ -52,6 +52,11 @@
 											</form>
 
 											<h6 class="text-uppercase fw-semibold mt-4 mb-3 text-muted"></h6>
+											<div class="col-12">
+												<div class="text-right">
+													<input type="checkbox" id="delete" name="delete" value="delete">
+												</div>
+											</div>
 											@php $total_reservations = 0; @endphp
 											@foreach ($schedules as $i=>$schedule)
 												@php 
@@ -76,11 +81,14 @@
 															</span>
 														</a>
 													</div>
-													<div class="flex-grow-1 ms-3">
+													<div class="flex-grow-auto ms-3">
 														<h3 class="fs-15 mb-1"> @if($schedule->business_service()->exists())  {{$schedule->businessPriceDetailsAges->category_title}} @endif </h3>
 														<p class="mb-1"> @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif  </p> 
 														
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
+													</div>
+													<div class="flex-grow-auto ms-3">
+														<!-- <p class="font-red mb-0">Activity Canceled </p> -->
 													</div>
 													<div class="flex-grow-1 ms-3">
 														<a class="float-end" href="#" data-bs-toggle="modal" data-bs-target=".activity-scheduler{{$i}}"><i class="ri-more-fill"></i></a>
