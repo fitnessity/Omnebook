@@ -42,8 +42,9 @@ class OrderController extends BusinessBaseController
     public function create(Request $request ,$business_id)
     {    //print_r($request->all());
         $cart_item = [];
-        if (session()->has('cart_item')) {
-            $cart_item = session()->get('cart_item');
+        if (session()->has('cart_item_for_checkout')) {
+            $cart_item = session()->get('cart_item_for_checkout');
+            // /session()->forget('cart_item_for_checkout');
         }
 
         //print_r($cart_item);exit;
@@ -104,12 +105,7 @@ class OrderController extends BusinessBaseController
 
         if($request->cus_id == ''){
             if(!empty($cart_item)){
-                foreach($cart_item['cart_item'] as $key=>$item){
-                    if($item['chk'] == 'activity_purchase'){
-                        unset($cart_item['cart_item'][$key]);
-                    }
-                }
-                session()->put('cart_item',$cart_item);
+                session()->put('cart_item_for_checkout',[]);
             }
         }
         if($activated == 0){
@@ -487,7 +483,7 @@ class OrderController extends BusinessBaseController
             SGMailService::confirmationMail($email_detail);*/
         }
 
-        session()->forget('cart_item');
+        session()->forget('cart_item_for_checkout');
         session()->put('ordermodelary', $bookidarray);
         
         return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->user_id]);
@@ -1265,5 +1261,112 @@ class OrderController extends BusinessBaseController
                     </div>';
         }
         return $html.'~~'.$result;
+    }
+
+    public function addToCartForCheckout(Request $request){
+        //print_r($request->all());exit;
+        $customerId = $request->pc_regi_id;
+        $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
+        $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
+        $tip_amt_val = $request->has('tip_amt_val') != '' ? $request->tip_amt_val : 0;
+        $dis_amt_val = $request->has('dis_amt_val') != '' ? $request->dis_amt_val : 0;
+        $parti_from_chkout_regi = $request->has('pc_value') != '' ? array('id'=>$customerId, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value) : array();
+        $categoryid = $request->has('categoryid') != '' ? $request->categoryid : '';
+        $p_session = $request->has('pay_session') != '' ? $request->pay_session : '';
+        $addOnServicesId = $request->has('addOnServicesId') != '' ? $request->addOnServicesId: '';
+        $addOnServicesQty = $request->has('addOnServicesQty') != '' ? $request->addOnServicesQty: '';
+        $addOnServicesTotalPrice = $request->has('addOnServicesTotalPrice') != '' ? $request->addOnServicesTotalPrice: 0 ;
+    
+        $pid = $request->pid ?? 0;
+        $priceid = $request->priceid ?? 0;
+        $price =  $request->price ?? 0;
+        $pricetotal =$request->pricetotal ?? 0;
+        $actscheduleid = $request->actscheduleid ?? 0;
+        $sesdate = isset($request->sesdate) ? date('Y-m-d',strtotime($request->sesdate)) : 0;
+
+        $service = BusinessServices::find($pid);
+        $infantarray = $childarray = $adultarray= [];
+        $tot_qty = 0;
+        if($request->aduquantity != 0){
+            $adultarray = array('quantity'=>$request->aduquantity, 'price'=>$request->cartaduprice);
+            $tot_qty += $request->aduquantity;
+        }
+        if($request->childquantity != 0){
+            $childarray = array('quantity'=>$request->childquantity, 'price'=>$request->cartchildprice);
+            $tot_qty += $request->childquantity;
+        }
+        if($request->infantquantity != 0){
+            $infantarray = array('quantity'=>$request->infantquantity, 'price'=>$request->cartinfantprice);
+            $tot_qty += $request->infantquantity;
+        }
+
+        if ($service != '') {
+            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'customerId' => $customerId ));
+
+            if(!empty($cart_item["cart_item"])) {
+                if(in_array($customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
+                    foreach($cart_item["cart_item"] as $k => $v) {
+                        if($customerId.'~~'.$request->priceid == $k) {
+                            $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
+                            $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
+                            $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
+                            $cart_item["cart_item"][$k]["tax"] = $tax;
+                            $cart_item["cart_item"][$k]["categoryid"] = $categoryid;
+                            $cart_item["cart_item"][$k]["p_session"] = $p_session;
+
+                            $cart_item["cart_item"][$k]["participate_from_checkout_regi"] = $parti_from_chkout_regi ;
+                            $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
+                            $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
+                            $cart_item["cart_item"][$k]["priceid"] = $request->priceid;
+                            $cart_item["cart_item"][$k]['adult']["price"] = $request->cartaduprice;
+                            $cart_item["cart_item"][$k]['child']["price"] = $request->cartchildprice;
+                            $cart_item["cart_item"][$k]['infant']["price"] = $request->cartinfantprice;
+
+                            $cart_item["cart_item"][$k]['adult']["quantity"] = $request->aduquantity;
+
+                            $cart_item["cart_item"][$k]['child']["quantity"] = $request->childquantity;
+
+                            $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
+
+                            $cart_item["cart_item"][$k]["addOnServicesId"] = $addOnServicesId;
+                            $cart_item["cart_item"][$k]["addOnServicesQty"] = $addOnServicesQty;
+                            $cart_item["cart_item"][$k]["addOnServicesTotalPrice"] = $addOnServicesTotalPrice;
+                            $cart_item["cart_item"][$k]["customerId"] = $customerId;
+                        }
+                    }
+                }else{
+                    $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;;
+                }
+            }else {
+                $cart_item["cart_item"] = $itemArray;
+            }
+        }
+        if (isset($cart_item)) {
+            $request->session()->put('cart_item_for_checkout', $cart_item);
+        } else {
+            $request->session()->forget('cart_item_for_checkout');
+        }
+        //print_r($cart_item['cart_item']);exit;
+        
+        return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]); 
+    }
+
+    public function removeFromCartForCheckout(Request $request){
+        $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
+        
+        if(!empty($cart_item["cart_item"])) {
+            foreach($cart_item["cart_item"] as $k => $v) {
+                if($request->customerID.'~~'.$_GET["priceid"] == $v['customerId'].'~~'.$v['priceid']) {
+                    unset($cart_item["cart_item"][$k]);
+                }
+            }
+        }
+        if (isset($cart_item)) {
+            $request->session()->put('cart_item_for_checkout', $cart_item);
+        } else {
+            $request->session()->forget('cart_item_for_checkout');
+        }
+        
+        return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
     }
 }
