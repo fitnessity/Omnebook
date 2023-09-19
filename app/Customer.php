@@ -398,7 +398,7 @@ class Customer extends Authenticatable
     public function chkRecurringPayment($bookId){
         $currentMonth = date('m');
         $bookingData  = UserBookingDetail::find($bookId);
-        $data = @$bookingData->Recurring()->where(['booking_detail_id' =>$bookId])->whereMonth('payment_date', '=' , $currentMonth)->first();
+        $data = $bookingData != '' ? @$bookingData->Recurring()->where(['booking_detail_id' =>$bookId])->whereMonth('payment_date', '=' , $currentMonth)->first() : '';
         if(@$data->status == 'Completed'){
             return "<br>Default payment done";
         }else if(@$data->status == 'Retry'){
