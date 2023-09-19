@@ -25,6 +25,7 @@
 @php 
 	use Carbon\Carbon;
 	use App\{BusinessPriceDetailsAges,BusinessServices,BusinessService,BusinessPriceDetails};
+	$addOnServices = [];
 @endphp
 
 <div class="main-content">
@@ -125,7 +126,7 @@
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 														<div class="check-out-steps">
 															<label>
-																<h2 class="color-red">Step 1: </h2> Select Participant & Service
+																<h2 class="color-red">Step 1: </h2> Select Participant, Memberships, Add on Services & Products
 															</label>
 														</div>
 														<div class="check-client-info-box">
@@ -189,6 +190,66 @@
 																		</select>
 																	</div>
 																</div>
+
+																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
+																	<div class="select0service mb-10">
+																		<label>Select Add-On Service (Optional)</label>
+																	</div>
+																	<div class="participant-accordion">
+																		<div class="content1">
+																			<div class="panel-group" id="accordiontwo">
+																				<div class="panel panel-default">
+																					<div class="panel-heading">
+																						<h4 class="panel-title">
+																						   	<a data-toggle="collapse" data-parent="#accordiontwo" href="#collapseTwo">Add-On Services</a>
+																						</h4>
+																					</div>
+																					<div id="collapseTwo" class="panel-collapse collapse">
+																						<div class="panel-body">
+																							<div class="row">
+																								<div class="col-md-12">
+																									<div class="add-onservice btn-group">
+																										<div class="row">
+																											<div class="col-md-12 col-xs-12">
+																												@forelse(@$addOnServices as $aos)
+																													<div class="select">
+																														<label class="btn button_select" for="item_4">
+																															<div class="row">
+																																<div class="col-md-6">
+																																	{{ $aos->service_name}}
+																																	<a class="single-service-price d-grid font-red service-desc" data-behavior="ajax_html_modal" data-url="{{route('getAddOnData',['id' => $aos->id])}}">Description</a>
+																																</div>
+																																<div class="col-md-6">
+																																	<span class="single-service-price">${{ $aos->service_price}}</span>
+																																</div>
+																															</div>
+																														</label>
+																														<div class="qtyButtons">
+																															<div class="qty count-members mt-5">
+																																<span class="minus bg-darkbtn addonminus" aid="{{$aos->id}}" ><i class="fa fa-minus"></i></span>
+																																<input type="text" class="count" name="add-one" id="add-one{{$aos->id}}" min="0" value="0" readonly="" apirce="{{$aos->service_price}}">
+																																<span class="plus bg-darkbtn addonplus" aid="{{$aos->id}}"><i class="fa fa-plus"></i></span>
+																															</div>   
+																														</div>
+																													</div>
+																												@empty
+																													<p>Not Available</p>
+																												@endforelse
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+															</div>
+
+															<div class="row">
 																<div class="col-md-6 col-sm-4 col-xs-12">
 																	<div class="select0service mb-10">
 																		<label>Participant Quantity</label>
@@ -247,6 +308,7 @@
 																		</div>
 																	</div> -->
 																</div>
+																
 																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
 																	<label> Membership Option</label>
 																	<select name="membership_opt_list" id="membership_opt_list" class="form-control" onchange="loaddropdown('mpopt',this,this.value);">

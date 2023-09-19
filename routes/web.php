@@ -21,6 +21,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
     // Scheduler Checkin Details
     Route::get('schedulers/{scheduler_id}/checkin_details/{id}/latecancel_modal', 'SchedulerCheckinDetailController@latecancel_modal')->name('scheduler_checkin_details.latecencel_modal');
+
+    Route::post('schedulers/{scheduler_id}/checkin_details/change_instructor', 'SchedulerCheckinDetailController@changeInstructor')->name('scheduler_checkin_details.changeInstructor');
+
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
@@ -104,6 +107,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
 	Route::get('/o_payment_info','DesignController@o_payment_info')->name('o_payment_info');
 	Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
+	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
+	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -119,6 +124,8 @@ Route::get('/getReviewData/{cid}/{business_id}', 'BusinessActivitySchedulerContr
 Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
 
 Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+
+Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 

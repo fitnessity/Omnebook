@@ -33,7 +33,6 @@ class PaymentController extends Controller {
     }
 
     public function createCheckoutSession(Request $request) {
-        //print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $customer='';
 
@@ -312,17 +311,12 @@ class PaymentController extends Controller {
 
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException $e) {
-                    $errormsg = $e->getError()->message;
-                    return redirect('/carts')->with('stripeErrorMsg', $errormsg);
-                }catch (Exception $e) {
+                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
                     $errormsg = $e->getError()->message;
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
             }else{
-               // echo $request->new_card_payment_method_id;
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
-              //  echo  $newCardPaymentMethodId;exit;
                 try {
                     $newCardPaymentIntent = $stripe->paymentIntents->create([
                         'amount' =>  round($totalprice *100),
@@ -366,10 +360,11 @@ class PaymentController extends Controller {
 
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException $e) {
-                    $errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
+                    //$errormsg = $e->getError()->message;
+                    $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
-                }catch (Exception $e) {
+                }catch( \Exception $e) {
                     $errormsg = $e->getError()->message;
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
@@ -405,7 +400,6 @@ class PaymentController extends Controller {
                 }
 
                 $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
-                //print_r($participateLoop);exit();
                 foreach($participateLoop as $d){
                     $participateAry = [];
                     $qtyAry = [];
@@ -437,7 +431,6 @@ class PaymentController extends Controller {
                         'price' => json_encode($qtyPrice),
                         'qty' => json_encode($qtyAry),
                         'priceid' => $item['priceid'],
-                       // 'pay_session' => $paySessionQty * $price_detail->pay_session,
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $activityScheduler->end_activity_date,
@@ -594,7 +587,6 @@ class PaymentController extends Controller {
     }
 
     public function form_participate(Request $request){
-        //print_r($request->all());exit;
         $cart_item = [];
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');

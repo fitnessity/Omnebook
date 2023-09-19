@@ -606,9 +606,10 @@ class CustomerController extends Controller {
                 );
                 $cust = Customer::find($request->cus_id);
                 $cust->update($data);
-            }catch(\Stripe\Exception\CardException $e) {
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
+                //$errormsg = $e->getError()->message;
+                    $statusmsg = "Your card is not valid.";
               // Since it's a decline, \Stripe\Exception\CardException will be caught
-              $statusmsg= $e->getError()->message ;
               Session::put('strpecarderror', $statusmsg);
             }   
         }elseif($request->chk == 'update_personal'){

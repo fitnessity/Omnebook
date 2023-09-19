@@ -921,7 +921,7 @@
 																											@if($visit->status_term())
 																												{{$visit->status_term()}}
 																											@else
-																												<a target="_blank" href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$visit->business_activity_scheduler_id, 'date' =>$visit->checkin_date])}}">Unprocess</a>
+																												<a class="font-red" onclick="getCheckInDetails({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
 																											@endif
 																											
 																										</td>
@@ -1345,7 +1345,21 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->	
 
-	
+
+<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-70">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Activity Scheduler Check-In</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="checkInHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
 @include('layouts.business.footer')
 	<script>
 		$(document).ready(function () {
@@ -1380,6 +1394,19 @@
 	                 .appendTo( ul );
 	     	};
 	   });
+
+		function getCheckInDetails(business_id,scheduleId,date,cid){
+			if(scheduleId != 0){
+				$.ajax({	
+					url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&customerId="+cid,
+					type:'GET',
+					success:function(data){
+						$('#checkInHtml').html(data);
+						$('.checkinDetails').modal('show');
+					}
+				});
+			}	
+		}
 
 	   function deleteMember(id) {
 			if(id == undefined){
