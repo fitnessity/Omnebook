@@ -20,19 +20,25 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $company = $request->current_company;
     $date = Carbon::parse($request->date);
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-    $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->get();
-
+    $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->when($request->customerId != '', function($query) use ($request) {
+            return $query->where('customer_id', $request->customerId);
+        })->get();
+    $instructor_id = $booking_checkin_details->first() != '' ? $booking_checkin_details->first()->instructor_id : '';
     $filter_date = $date;
-
-    $pricrdropdown = BusinessServices::find($business_activity_scheduler->serviceid)->price_details;
-    $bookingdata = UserBookingDetail::where('sport',$business_activity_scheduler->serviceid)->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
-    
+    $staffMember = $company->business_staff;
+    $bookingdata = UserBookingDetail::where('sport',$business_activity_scheduler->serviceid)
+        ->when($request->customerId != '', function($query) use ($request) {
+            return $query->where('user_id', $request->customerId);
+        })->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
+    $today = date('Y-m-d');
     return view('business.scheduler_checkin_detail.index', [
         'booking_checkin_details' => $booking_checkin_details,
         'business_activity_scheduler' =>$business_activity_scheduler,
         'filter_date' => $filter_date,
+        'today' => $today,
         'bookingdata' => $bookingdata,
-        'pricrdropdown' => $pricrdropdown,
+        'staffMember' => $staffMember,
+        'instructor_id' => $instructor_id,
     ]);
   }
 
@@ -192,5 +198,12 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $booking_checkin_detail = BookingCheckinDetails::where('business_activity_scheduler_id', $business_activity_scheduler->id)->findOrFail($id);
 
     return view('business.scheduler_checkin_detail.latecancel_edit', compact('booking_checkin_detail'));
+  }
+
+
+  public function changeInstructor(Request $request , $business_id, $scheduler_id){
+
+        BookingCheckinDetails::where(['business_activity_scheduler_id'=> $scheduler_id, 'checkin_date' =>date('Y-m-d')])->update(['instructor_id' => $request->insID]);
+      
   }
 }

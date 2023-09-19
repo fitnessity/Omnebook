@@ -8,9 +8,11 @@
 	.layout-rightside-col .layout-rightside{margin-right: 0px;}
 	.manage-customer-modal-title h3{}
 	.desktop-none-booking{display: none;}
+	.dots {  overflow-x: visible !important;}
 }
 @media screen and (min-width: 1200px) and (max-width: 1900px){
 	.desktop-none-booking{display: none;}
+	.dots {  overflow-x: visible !important;}
 }
 @media screen and (min-width: 768px) and (max-width: 992px){
 	#page-topbar{top: 65px;} 

@@ -63,12 +63,7 @@ class LoginController extends Controller {
                 $_SESSION["myses"] = $request->user();
                // $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $claim = 'not set';
-                $claim_cid = '';
-                $claim_status = '';
-                $claim_cname = '';
-                $claim_welcome = '';
-                $claim_company = '';
-                $checkoutsession  = '';
+                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $claim_company = $checkoutsession  = $schedule = '';
                 if(session()->has('claim_business_page')) {
                 	$claim = 'set';
                     $claim_cid = session()->get('claim_cid');
@@ -88,6 +83,10 @@ class LoginController extends Controller {
 
                 if(session()->has('checkoutsession')) {
                     $checkoutsession = session()->get('checkoutsession');
+                }
+
+                if(session()->has('schedule')) {
+                    $schedule = session()->get('schedule');
                 }
                /* $response = array(
                     'type' => 'success',
@@ -113,6 +112,8 @@ class LoginController extends Controller {
                     return redirect('/manage/company');
                 }else if($checkoutsession != ''){
                     return redirect('/carts');
+                }else if($schedule != ''){
+                    return redirect('/business_activity_schedulers/'.$schedule);
                 }else{
                     //return redirect()->route('profile-viewProfile');
                     return redirect()->route('homepage');
