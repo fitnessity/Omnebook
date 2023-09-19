@@ -54,6 +54,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('position_modal/delete/{id}','StaffController@position_delete')->name('staff.position_modal.delete');
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
+    Route::any('addToCartForCheckout', 'OrderController@addToCartForCheckout')->name('addToCartForCheckout');
+    Route::any('removeFromCartForCheckout', 'OrderController@removeFromCartForCheckout')->name('removeFromCartForCheckout');
   
 });
 
