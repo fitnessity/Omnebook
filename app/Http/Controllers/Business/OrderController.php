@@ -224,7 +224,8 @@ class OrderController extends BusinessBaseController
                         ];
                     }
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    $errormsg = $e->getError()->message;
+                    //$errormsg = $e->getError()->message;
+                    $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
@@ -268,7 +269,8 @@ class OrderController extends BusinessBaseController
                         ];
                     }
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    $errormsg = $e->getError()->message;
+                    //$errormsg = $e->getError()->message;
+                    $errormsg = "Your card is not connected with your account. Please add your card again.";
                     $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
                     return redirect($url)->with('stripeErrorMsg', $errormsg);
                 }catch (Exception $e) {

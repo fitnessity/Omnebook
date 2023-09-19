@@ -4185,3 +4185,67 @@ div#termsdiv{order: 4;}
 .service-space{
 	margin-left: 15px;
 }   
+.onboared h3{
+	font-size: 40px;
+}
+.onboared-steps label{
+	font-size: 17px;
+}
+.onboard-img img{
+	width: 55px;
+	height: auto;
+	float: right;
+	margin-bottom: 15px;
+}
+.page-content-two{
+	background: #fff;
+	padding: calc(40px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);
+}
+.onboared{
+	margin-right: 45px;
+}
+.setting-icon > ul > li a{
+	color: #000 !important;
+}
+.setting-icon > ul > li a:hover{
+	color: #ed1b24 !important;
+}
+.ml-15{
+	margin-left: 15px;
+}
+.sports-side-img img{
+	width: 375px;
+}
+.action-width {
+	width: 255px;
+}
+.steps-title h5{
+	font-size: 20px;
+	color: #ed1b24;
+}
+.progress-nav .nav .nav-link.active, .progress-nav .nav .nav-link.done {
+  background-color: #ed1b24;
+  color: #fff;
+}
+.progress-bar{
+	background-color: #ed1b24;
+}
+.welcome-text label{
+	font-size: 25px;
+	text-transform: uppercase;
+	font-weight: 600;
+}
+.welcome-logo img{
+	width: 385px;
+}
+.mb-35 {
+	margin-bottom: 35px;
+}
+.progress-nav .progress{
+	top: 22%;
+}
+.steps-titles{
+	margin-left: -30px;
+	margin-top: 10px;
+	font-size: 15px;
+}

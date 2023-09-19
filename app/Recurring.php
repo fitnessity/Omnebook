@@ -72,7 +72,7 @@ class Recurring extends Authenticatable
                 $brand = $payment_intent['charges']['data'][0]['payment_method_details']['card']['brand'];
 
                 $card_id =  $brand.'  XXXX'.$last4;
-            }catch(\Stripe\Exception\CardException $e) {
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
             }catch(Exception $e){
             }
         }else{
@@ -186,7 +186,7 @@ class Recurring extends Authenticatable
                 }
 
             }
-        } catch(\Exception $e) {
+        } catch(\Stripe\Exception\CardException  | \Stripe\Exception\InvalidRequestException | \Exception $e) {
         } 
     }
 

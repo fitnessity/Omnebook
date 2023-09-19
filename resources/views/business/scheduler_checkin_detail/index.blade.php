@@ -38,12 +38,11 @@
 	</div>
 	<div class="col-md-4 col-sm-4 col-12">	
 		<div class="mb-3 select-staff-member">
-			<select name="activity_type" class="form-select" id="" data-choices="" data-choices-search-false="">
+			<select name="activity_type" class="form-select" id="" onchange="changeInstructor(this.value)">
 				<option value="">Select Staff Member</option>
-				<option value="">Option 2</option>
-				<option value="">Option 3</option>
-				<option value="">Option 4</option>
-				<option value="">Option 5</option>
+				@foreach($staffMember as $sm)
+					<option value="{{$sm->id}}" @if($instructor_id == $sm->id) selected @endif>{{$sm->full_name}}</option>
+				@endforeach
 			</select>
 		</div>
 	</div>
@@ -52,7 +51,9 @@
 			<div class="search-set manage-search manage-space">
 				<div class="client-search">
 					<div class="position-relative">
-						<input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value="">
+						<input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="" class="form-control" data-customer-id = "">
+                      
+						<!-- <input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value=""> -->
 						<span class="mdi mdi-magnify search-widget-icon"></span>
 						<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
 					</div>
@@ -60,8 +61,7 @@
 				</div>
 			</div>
 			<div class="btn-client-search">
-				<a class="btn-red-primary btn-red mmt-10" data-business-activity-scheduler-id="1101" data-behavior="add_client_to_booking_post_order">Add </a>
-				<!--<a class="btn-red-primary btn-red mmt-10" href="#" data-bs-toggle="modal" data-bs-target=".add_client">Add </a>-->
+				<a class="btn-red-primary btn-red mmt-10 addCustomer" data-business-activity-scheduler-id="{{$business_activity_scheduler->id}}" data-behavior="add_client_to_booking_post_order">Add </a>
 			</div>
 		</div>
 	</div>
@@ -101,7 +101,7 @@
 							<td>
 								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}">
 									<option value="" @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
-									@foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
+									@foreach($booking_checkin_detail->customer->active_memberships()->where('sport',$business_activity_scheduler->business_service->id)->get() as $customer_booking_detail)
                          				@if($customer_booking_detail->business_price_detail)
                              				@if($customer_booking_detail->getremainingsession() > 0 || ($booking_checkin_detail->order_detail && $customer_booking_detail->id == $booking_checkin_detail->order_detail->id))
                                                 <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
@@ -132,7 +132,7 @@
 								</div>
 							</td>
 							<td>{{$booking_checkin_detail->order_detail != '' ? Carbon\Carbon::parse($booking_checkin_detail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
-							<td>expired CC</td>
+							<td>{!! $booking_checkin_detail->customer->chkSignedTerms() !!} {!!$booking_checkin_detail->customer->chkBirthday() !!} {!! $booking_checkin_detail->customer->findExpiredCC() !!} {!! $booking_checkin_detail->customer->chkRecurringPayment($booking_checkin_detail->booking_detail_id) !!}</td>
 							<td>
 								<div class="multiple-options">
 									<div class="setting-icon">
@@ -154,7 +154,7 @@
 						<tr>
 							<td colspan="8"> 
 								<div class="no0signup text-center">
-									<img src="http://dev.fitnessity.co/public/dashboard-design/images/sports-set.jpg">
+									<img src="{{url('/dashboard-design/images/sports-set.jpg')}}">
 									<h3>No one is signed up. Add them to this activity</h3>
 								</div>
 							</td>
@@ -167,9 +167,64 @@
 </div>
 
 <script type="text/javascript">
+	$(document).ready(function () {
+        var business_id = '{{request()->current_company->id}}';
+        var url = "{{ url('/business/business_id/customers') }}";
+        url = url.replace('business_id', business_id);
 
-	$(document).on('click', '[data-behavior~=delete_checkin_detail]', function(e){
-    	e.preventDefault()
+        $( "#search_postorder_client" ).autocomplete({
+            source: url,
+            focus: function( event, ui ) {
+                 return false;
+            },
+            select: function( event, ui ) {
+                $("#search_postorder_client").val( ui.item.fname + ' ' +  ui.item.lname);
+                $('#search_postorder_client').data('customer-id', ui.item.id)
+                 return false;
+            }
+        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+
+            if(item.profile_pic_url){
+                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+            }
+
+            var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
+           
+            return $( "<li></li>" )
+                    .data( "item.autocomplete", item )
+                    .append(inner_html)
+                    .appendTo( ul );
+        };
+    });
+
+	function changeInstructor(value){
+		date = "{{$filter_date->format('Y-m-d')}}";
+		today = "{{$today}}";
+		if(today == date){
+			$.ajax({
+				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
+		        method: "POST",
+		        data: { 
+		            _token: '{{csrf_token()}}',  
+		            date: date, 
+		            insID: value, 
+		        },
+		        success: function(html){
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
+		            //location.reload();
+		        }
+			})
+		}else{
+			alert("You can't change instructor at this time.");
+		}
+	}
+
+	$('[data-behavior~=delete_checkin_detail]').click(function(e){
+	    e.preventDefault()
     	$.ajax({
 	        url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
 	        method: "DELETE",
@@ -181,10 +236,10 @@
 	            //location.reload();
 	        }
     	})
-	})
+	});
 
-	$(document).on('click', '[data-behavior~=add_client_to_booking_post_order]', function(e){
-    	e.preventDefault()
+	$('[data-behavior~=add_client_to_booking_post_order]').click(function(e){
+	    e.preventDefault()
     	if(!$('#search_postorder_client').data('customer-id')){
 	        $('#search_postorder_client').focus();
 	        return
@@ -199,25 +254,11 @@
                 checkin_date: "{{$filter_date->format('Y/m/d')}}"
             },
             success: function(html){
-                location.reload();
+                //location.reload();
+                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
         	}
     	})
-	})
-
-	$(document).on('click', 'body', function(){
-      $("#serch_postorder_client_box .customer-list").html('');
-      $("#serch_postorder_client_box").hide();
-   	})
-
-	$(document).on('click', '.click_to_input', function(e){
-        e.preventDefault()
-        e.stopPropagation()
-        $('#search_postorder_client').val($(this).data('name'))
-        $('#search_postorder_client').data('customer-id', $(this).data('customer-id'))
-        $("#serch_postorder_client_box").hide();
-        $("#serch_postorder_client_box .customer-list").html('');
-        $("[data-behavior~=add_client_to_booking_post_order]").show();
-    })
+	});
 
     $(document).on('change', "[data-behvaior~=checkin]", function(e){
         checkbox = this

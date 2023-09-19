@@ -675,7 +675,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 								<a class="nav-link" href="#reviews">Reviews</a>
 							</li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('business_activity_schedulers',['business_id' =>$compinfo['id']])}}}">Schedule</a>
+                                <a class="nav-link" href="{{route('business_activity_schedulers',['business_id' =>$compinfo['id']])}}">Schedule</a>
                             </li>
 							
                             <?php /*if($loggedinUser->id == $company->user_id) { ?>

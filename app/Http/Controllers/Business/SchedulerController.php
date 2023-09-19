@@ -50,6 +50,7 @@ class SchedulerController extends BusinessBaseController
           $filterDate = Carbon::parse($request->date);
           $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
 
+          //print_r($schedules);exit;
           return view('business.scheduler.index', [
               'schedules' => $schedules, 
               'filterDate' => $filterDate,
@@ -111,31 +112,30 @@ class SchedulerController extends BusinessBaseController
      }
 
      public function destroy(Request $request){
-
+          // /print_r($request->all());exit;
           $mail_type = $request->has('cancel_date_chk') ? 'cancel' : 'reschedule';
           $cancel_date_chk = $request->has('cancel_date_chk') ? 1:0 ;
           $act_cancel_chk = $request->has('cancel_date_chk') ? 1:0;
+          $showSchedule = $request->chk_cancel_on_schedule == 1 ? 1: 0;
+          $hideSchedule = $request->chk_cancel_on_schedule == 1 ? 0: 1;
+          $email_Instructor = $request->has('hide_cancel_on_schedule') ? 1: 0;
+          $email_clients = $request->has('hide_cancel_on_schedule') ? 1: 0;
 
-          if($request->can_id == ''){
-               $data = $request->all();
-               if(@$data['cancel_date'] != ''){
-                    $data['cancel_date'] = date('Y-m-d',strtotime($request->cancel_date));
-               }
-               $position = array_search(request()->_token, $data);
-               unset($data[$position]);
-               ActivityCancel::create($data);
-          }else{
-               $show_cancel_on_schedule = $request->has('hide_cancel_on_schedule') ? 1: 0;
-               $hide_cancel_on_schedule = $request->has('hide_cancel_on_schedule') ? 1: 0;
-               $email_Instructor = $request->has('hide_cancel_on_schedule') ? 1: 0;
-               $email_clients = $request->has('hide_cancel_on_schedule') ? 1: 0;
+          $ac_data = [
+              "show_cancel_on_schedule" => $showSchedule,
+              "hide_cancel_on_schedule" => $hideSchedule,
+              "email_Instructor" => $email_Instructor,
+              "email_clients" => $email_clients,
+              "act_cancel_chk" => $act_cancel_chk ,
+              "cancel_date_chk" => $cancel_date_chk,
+              "schedule_id" => $request->schedule_id,
+              "cancel_date" => date('Y-m-d',strtotime($request->cancel_date)),
+          ];
 
-               $ac_data = ActivityCancel::where('id',$request->can_id)->update(['show_cancel_on_schedule'=>$show_cancel_on_schedule,'hide_cancel_on_schedule'=>$hide_cancel_on_schedule,'email_Instructor'=>$email_Instructor,'email_clients'=>$email_clients,'act_cancel_chk'=>$act_cancel_chk ,'cancel_date_chk'=>$cancel_date_chk]);
-          }
+          ActivityCancel::updateOrCreate(['id' => $request->can_id], $ac_data);
 
           if($request->has('email_clients')){
                $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $request->schedule_id)->where('checkin_date' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
-               //$databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
                foreach($checkInDetails as $cid){
                     $userdata = $cid->customer;
                     $businessdata = $cid->order_detail->business_services;
@@ -146,21 +146,22 @@ class SchedulerController extends BusinessBaseController
                } 
           }
 
-          /*if($request->has('email_Instructor')){
-               $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->first();
-               //print_r($databooked);
-            
-               $insdata = $databooked->business_services->StaffMembers;
-               if($insdata != ''){
-                    $businessdata = $databooked->business_services;
-                    $companydata = $databooked->business_services->company_information;
-                    $time = date('h:i a',strtotime($databooked->business_activity_scheduler->shift_start));
-                    $date = $request->cancel_date;
-                    if($insdata->email != ''){
-                         $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
+          if($request->has('email_Instructor')){
+               $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $request->schedule_id)->where('checkin_date' ,date('Y-m-d',strtotime($request->cancel_date)))->groupBy('instructor_id')->get();
+          
+               foreach($checkInDetails as $cid){
+                    $insdata = $cid->instructor;
+                    if($insdata != ''){
+                         $businessdata = $cid->order_detail->business_services;
+                         $companydata = $cid->order_detail->business_services->company_information;
+                         $time = date('h:i a',strtotime($cid->scheduler->shift_start));
+                         $date = $request->cancel_date;
+                         if($insdata->email != ''){
+                              $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
+                         }
                     }
                }
-          }*/
+          }
           return redirect($request->return_url);
      }
 
@@ -174,8 +175,9 @@ class SchedulerController extends BusinessBaseController
           $hideCancelOnSchedule = @$activityCancel->hide_cancel_on_schedule == 1 ? 'checked': '' ;
           $emailInstructor = @$activityCancel->email_Instructor == 1 ? 'checked': '' ;
           $emailClients = @$activityCancel->email_clients == 1 ? 'checked': '' ;
-                                
-          $output = '';
+          $return_url = $request->return_url;
+          return view('business.scheduler.cancel',compact('cancelDateChk','showCancelOnSchedule','hideCancelOnSchedule','emailInstructor','emailClients','return_url','schedule','cancelDate','activityCancel'));        
+          /*$output = '';
           $output .='<h5 class="modal-title mb-10" id="myModalLabel">Cancel Activity</h5><form method="post" action="'.route("business.schedulers.destroy", ['scheduler' => $schedule->id]).'">
                  <input type="hidden" name="_method" value="delete">
                  <input type="hidden" name="_token" value="'.csrf_token().'">
@@ -210,6 +212,6 @@ class SchedulerController extends BusinessBaseController
                       </div>
                  </div>
             </form>';
-          return $output;
+          return $output;*/
      }
 }

@@ -353,6 +353,8 @@
 	<!-- chat init js -->
 	<script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+	
+	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
   
  <!-- new design end -->
 
