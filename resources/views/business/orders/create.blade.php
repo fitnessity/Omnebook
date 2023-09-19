@@ -432,7 +432,7 @@
 																<h2 class="color-red">Step 3: </h2> Check Your Booking Summary
 															</label>
 														</div>
-														<form method="post" action="{{route('addtocart')}}">
+														<form method="post" action="{{route('business.addToCartForCheckout')}}">
 															@csrf
 															<input type="hidden" name="chk" value="activity_purchase">
 															<input type="hidden" name="value_tax" id="value_tax" value="0">
@@ -570,7 +570,7 @@
 													
 												</div>
 											</div>
-											
+											<!-- @php print_r(@$cart['cart_item']); @endphp -->  
 											<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 												<div class="activity_purchase-box">
 													<div class="ticket-summery ticket-title">
@@ -584,20 +584,9 @@
 																		$i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0;  $hasActivityPurchase = false; @endphp
 																	@if(!empty($cart))
 																		@foreach($cart['cart_item'] as $i=>$item)
-																		@if($item['chk'] == 'activity_purchase')
 																			@php 
 																				$checkout_btun_chk = 1;
 																				$hasActivityPurchase = true;
-																				if ($item['image']!="") {
-																					if (File::exists(public_path("/uploads/profile_pic/" . $item['image']))) {
-																						$profilePic = url('/public/uploads/profile_pic/' . $item['image']);
-																					} else {
-																						$profilePic = url('/public/images/service-nofound.jpg');
-																					}
-																				}else{ 
-																					$profilePic = url('/public/images/service-nofound.jpg');
-																				}
-
 																				$subtotal += $item['totalprice'] ;
 																				$tip += $item['tip'];
 																				$discount += $item['discount'];
@@ -612,7 +601,7 @@
 																				$iprice = number_format($total,0, '.', '');
 																			@endphp
 																			<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
-																			<input type="hidden" name="itemimage[]" value="<?= $profilePic ?>" />
+																			<input type="hidden" name="itemimage[]"  />
 																			<input type="hidden" name="itemname[]" value="<?= $item["name"]; ?>" />
 																			<input type="hidden" name="itemqty[]" value="1" />
 																			<input type="hidden" name="itemprice[]" value="<?= $iprice * 100; ?>" />
@@ -624,7 +613,7 @@
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
-																					<a href="{{route('removetocart',['priceid'=>$item['priceid'],'pageid'=>$pageid,'chk'=>'purchase','user_type'=>$user_type])}}" class="p-red-color">
+																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],])}}" class="p-red-color">
 																					<i class="fas fa-trash-alt"></i></a>
 																				</div>
 																			</div>
@@ -632,7 +621,7 @@
 																			<div class="ticket-summery-details">
 																				<div class="row">
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<label>Program Name </label>
+																						<label>Program Name: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<span>{{$act->program_name}} </span>
@@ -714,21 +703,21 @@
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<label class="total0spretor">Tip Amount </label>
+																						<label class="total0spretor">Tip Amount: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<span class="total0spretor">${{$item['tip'] }}</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<label>Discount </label>
+																						<label>Discount: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<span>${{$item['discount'] }}</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<label>Taxes (NYC) </label>
+																						<label>Taxes (NYC): </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<span>${{$taxval}}</span>
@@ -752,7 +741,6 @@
 																					@endif
 																				</div>
 																			</div>
-																		@endif
 																		@endforeach
 																	@endif
 																		
