@@ -172,9 +172,6 @@ class BookingRepository
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
-
-            /*echo $chk;
-            echo $chkD->checkin_date;*/
             if(date('Y-m-d',strtotime($chkD->checkin_date)) == $date && $chk == 'today'){
                 $datechk = 1;
             }
@@ -183,7 +180,6 @@ class BookingRepository
             }if(date('Y-m-d',strtotime($chkD->checkin_date)) < $date && $chk == 'past'){
                 $datechk = 1;
             }
-            /*echo $datechk;*/
             if($datechk == 1){
                 $full_ary[] =  $chkD;
             }

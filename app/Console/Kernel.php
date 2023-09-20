@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
         })->everyTenMinutes();
 
         $schedule->call(function () {
-            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->orderBy('created_at','desc')->get();
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->get();
             //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();

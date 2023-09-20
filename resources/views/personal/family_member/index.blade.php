@@ -24,7 +24,8 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY  - {{strtoupper(@$name)}} </h4>
+                        <h4 class="page-title">BOOKINGS INFO & PURCHASE HISTORY @if(request()->business_id 
+                            != '') - {{strtoupper(@$customer->full_name)}} @endif </h4>
                     </div>
 
                     @if(!request()->business_id)
@@ -39,8 +40,8 @@
                                 @php $customer = getCustomerByname($bs->id ,$name); @endphp
                                 <div class="col-md-4 col-sm-6">
                                     <div class="booking-info-history">
-                                        <div class="cards-content" style="color:#ffffff;  background-image: url(/public/img/add-family.png);">
-                                            <h2>{{ $bs->dba_business_name}}</h2>
+                                        <div class="cards-content" style="color:#ffffff; background-image: url(/public/img/add-family.png );">
+                                            <h2>@if($bs->dba_business_name == '') {{ $bs->company_name}} @else {{$bs->dba_business_name}} @endif</h2>
                                             <p>{{$bs->company_address()}}</p>
                                             <div class="booking-activity">
                                                 <span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customer->id)}}</span>
@@ -67,17 +68,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="pre-next-btns pre-nxt-btn-space mt-10">
+                            <a class="btn-previous btn-red" id="btn-next" href="{{route('family-member.index')}}">Back</a>
+                        </div>
                     @else
                         <div class="booking-info-menu">
                             <div class='row'>
                                 <div class="col-lg-7 col-md-6 col-sm-12">
                                     <ul>
-                                        <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=> null]))}}" @if(!request()->serviceType) class="active" @endif> All </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=> null]))}}" @if(!request()->serviceType) class="active" @endif> All </a> </li>
 
-                                        <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=>'individual']))}}" @if(request()->serviceType == 'individual') class="active" @endif> Personal Trainer </a> </li>
-                                        <li> <a href="{{route('personal.family_members.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
-                                        <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=>'events']))}}"  @if(request()->serviceType == 'events') class="active" @endif> Events </a> </li>
-                                        <li> <a href="{{route('personal.family_members.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}"  @if(request()->serviceType == 'experience') class="active" @endif> Experiences </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'individual']))}}" @if(request()->serviceType == 'individual') class="active" @endif> Personal Trainer </a> </li>
+                                        <li> <a href="{{route('personal.orders.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}"  @if(request()->serviceType == 'classes') class="active" @endif>Classes </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'events']))}}"  @if(request()->serviceType == 'events') class="active" @endif> Events </a> </li>
+                                        <li> <a href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}"  @if(request()->serviceType == 'experience') class="active" @endif> Experiences </a> </li>
+                                        
+                                      <!--   <li> <a href="#"> Products </a> </li> -->
                                     </ul>
                                 </div>
                                 <div class="col-lg-5 col-md-6 col-sm-12">
@@ -104,16 +111,15 @@
                                     <div class="tab-pane" id="nav-current" role="tabpanel" aria-labelledby="nav-current-tab">
                                         <div class="col-lg-12 col-md-12 book-info-sear">
                                             <div class='row'>
-                                                <div class="col-md-2 col-sm-6 nopadding">
+                                                <div class="col-md-2 col-sm-6 nopadding mb-7">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-                                            
+                                               
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_current" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('current')">
                                                 </div>
-                                               
-                                                <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
+                                                <div class="col-md-2 col-sm-3 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
                                                 <div class="col-md-2 col-sm-3 col-xs-6 text-center" style="padding-top: 7px;">
@@ -133,12 +139,13 @@
                                             <div class='row'>
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
-                                                </div>                                                
+                                                </div>
+                                                
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_today" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('today')">
                                                 </div>
-                                                
+                                               
                                                 <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
@@ -163,7 +170,7 @@
                                                 <div class="col-md-2 col-sm-12 nopadding">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?> </b></p>
                                                 </div>
-
+                                                
                                                 <div class="col-md-3 col-sm-6 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_upcoming" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('upcoming')">
@@ -198,7 +205,7 @@
                                                     <label for="">Search:</label>
                                                     <input type="text"  id="serchByActivity_past" placeholder="Search By Activity" class="form-control  w-85 search-wid"  onkeyup="serchByActivty('past')">
                                                 </div>
-                                                
+                                               
                                                 <div class="col-md-2 col-sm-12 col-xs-6 nopadding mb-7">
                                                     <a href="#" class="access-req booking-access-req" style="background: #0a9410">Access Granted</a>
                                                 </div>
@@ -222,14 +229,8 @@
                                                 <div class="col-md-3 col-sm-12">
                                                     <p><b>Today Date: <?php echo date('l'); echo", ";echo date('F d , Y')?></b></p>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
-                                                    <div class="date_block">
-                                                        <label for="">Date:</label>
-                                                        <input type="text"  id="dateserchfilter_pending" placeholder="Search By Date" class="form-control booking-date w-80" onchange="serchDateData('pending')">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                
+                                                <div class="col-md-4 col-sm-12 mb-7">
                                                     <label for="">Search:</label>
                                                     <input type="search" id="search_pending" placeholder="See by Businesses Booked" class="form-control w-85" onkeyup="getsearchdata('pending');">
                                                 </div>
@@ -262,7 +263,7 @@
                                             </div>
                                             
                                             <div class="col-lg-12 btns-modal">
-                                                <a class="addbusiness-btn-modal acc-btn-grant" href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ])}}">Deny Access</a>
+                                                <a class="addbusiness-btn-modal acc-btn-grant" href="{{route('remove_grant_access',['id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => 'personal'])}}">Deny Access</a>
                                             </div>
                                          </div>
                                     </div>
@@ -275,7 +276,8 @@
         </div>
     </div>
 </div>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
 @include('layouts.footer')
 <script>
 
@@ -323,12 +325,13 @@
         }
     });
 
+
     function getsearchdata(type){
         var text = $('#search_'+type).val();
         $.ajax({
             type: "post",
             url:'{{route("searchfilterdata")}}',
-            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}' ,"customerId":"{{@$customer->id}}"},
+            data:{"_token":"{{csrf_token()}}" ,"text":text ,"type":type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}',"customerId":"{{@$customer->id}}"},
             success: function(data){
                 //alert(data);
                 $("#searchbydate_"+type).html(data);
@@ -349,42 +352,9 @@
         });
     }
 
-    function serchDateData(type){
-        var date = $('#dateserchfilter_'+type).val();
-        $.ajax({
-            type: "post",
-            url:'{{route("datefilterdata")}}',
-            data:{"_token":"{{csrf_token()}}" ,"date":date ,'type':type,"businessId" :"{{request()->business_id}}" ,'serviceType':'{{request()->serviceType}}'},
-            success: function(data){
-                $("#searchbydate_"+type).html(data);
-            }
-        });
-    }
 </script>
 
 <script type="text/javascript">
-
-    function cancelorder(bookingid) {
-        $.ajax({
-            url: "{{route('cancelbooking')}}",
-            xhrFields: {
-                withCredentials: true
-            },
-            type: 'get',
-            data:{
-                bookingid:bookingid,
-            },
-            success: function (response) {
-               /* $('.reviewerro').html('');
-                $('.reviewerro').css('display','block');
-                if(response == 'success'){
-                    $('.reviewerro').html('Email Successfully Sent..');
-                }else{
-                    $('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                }*/
-            }
-        });
-    }
 
     function  changecolor(id){
      /*   alert(id);*/
