@@ -91,7 +91,11 @@
 									</div>
 
 									@foreach($UserFamilyDetails as $family)
-										@php $type =  $family->parent_cus_id != '' ? 'customer' : 'user';  @endphp
+										@php 
+											$type =  $family->parent_cus_id != '' ? 'customer' : 'user';  
+									 		$fname =  $type != 'customer' ? $family->first_name : $family->fname;
+									 		$lname =  $type != 'customer' ? $family->last_name : $family->lname;  
+									 	@endphp
 										<div class="user0imgs @if(!Storage::disk('s3')->exists(@$family->profile_pic)) set-text @endif">
 											<div class="dot-settings p-relative">
 												<div class="d-grid">
@@ -113,11 +117,10 @@
 																<a class="edit-family" href="#" data-behavior="ajax_html_modal" data-url="{{route('family-member.show' ,['id'=>$family->id ,'type' =>$type])}}" data-modal-width="1200px">
 																<i class="fas fa-edit"></i> Edit</a>
 															</li>
-															@if( $type == 'customer')
-																<li>
-							                                        <a class="view-booikng" href="{{route('personal.family_members.index',['name'=>$family->fname.' '.$family->lname])}}"> <i class="fas fa-info"></i> Booking Info</a>
-																</li>
-															@endif
+															
+															<li>
+						                                        <a class="view-booikng" href="{{route('personal.family_members.index',['name'=>$fname.' '.$lname])}}"> <i class="fas fa-info"></i> Booking Info</a>
+															</li>
 															
 															<li>
 						                                        <a class="delete-family" data-href="{{ route('family-member.destroy',[ 'family_member'=>$family->id ,'type'=> $type]) }}" > <i class="fas fa-trash-alt"></i> Delete</a>

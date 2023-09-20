@@ -295,6 +295,11 @@
 	.mobile-none{display: none;}
 	#calendar .fc-left .fc-button-group .fc-prev-button, #calendar .fc-left .fc-button-group .fc-next-button{margin-bottom: 35px;}
 	.mmt-25{margin-top: 25px;}
+	.steps-titles{display: none;}
+	.steps-titles-about{display: none;}
+	.steps-titles-payout{display: none;}
+	.steps-titles-plan{display: none;}
+	.progress-nav .progress {  top: 50%;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
