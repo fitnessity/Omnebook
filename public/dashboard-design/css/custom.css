@@ -4244,8 +4244,29 @@ div#termsdiv{order: 4;}
 .progress-nav .progress{
 	top: 22%;
 }
-.steps-titles{
+.steps-titles label{
 	margin-left: -30px;
 	margin-top: 10px;
 	font-size: 15px;
+}
+.steps-titles-about label{
+	margin-left: -20px;
+	margin-top: 10px;
+	font-size: 15px;
+}
+.steps-titles-payout label {
+	margin-left: -10px;
+	margin-top: 10px;
+	font-size: 15px;
+}
+.steps-titles-plan label{
+	margin-right: -25px;
+	margin-top: 10px;
+	font-size: 15px;
+}
+.ml-25{
+	margin-left: 25px;
+}
+.service-set{
+	margin-right: -35px;
 }

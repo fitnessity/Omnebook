@@ -123,7 +123,6 @@ class PaymentController extends Controller {
                         'price' => json_encode($qtyPrice),
                         'qty' => json_encode($qtyAry),
                         'priceid' => $item['priceid'],
-                       // 'pay_session' => $paySessionQty * $price_detail->pay_session,
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $activityScheduler->end_activity_date,

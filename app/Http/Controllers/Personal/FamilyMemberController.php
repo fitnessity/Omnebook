@@ -34,7 +34,7 @@ class FamilyMemberController extends Controller
             $customer = Customer::where(['business_id'=>$request->business_id , 'id' =>$request->id])->first();
             $bookingDetail = [];
             $bookingDetail =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,$customer);
-    
+           
             $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,$customer);
             //print_r($currentbookingstatus );exit;
@@ -50,8 +50,9 @@ class FamilyMemberController extends Controller
         }else{
             $company_information = [];
             $name =  explode(' ', @$request->name);
-            $customers = Customer::where(['fname'=>@$name[0] ,'lname'=>@$name[1]]);
-            foreach ($customers->get() as $key => $cus) {
+            $customers = Customer::where(['fname'=>@$name[0] ,'lname'=>@$name[1]])->get();
+
+            foreach ($customers as $key => $cus) {
                 $company_information [] = $cus->company_information;
             }
             

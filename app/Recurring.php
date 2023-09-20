@@ -25,7 +25,7 @@ class Recurring extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id'];
+    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
 
 
     public function company_information(){
@@ -114,6 +114,7 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
+                $this->attempt += 1;
             
                 $transactiondata = array( 
                     'user_type' => $this->user_type ,
@@ -134,9 +135,11 @@ class Recurring extends Authenticatable
                 $this->charged();
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
                 $this->payment_method = NULL;
+                $this->attempt += 1;
                 $this->status = "Retry";
             }catch (Exception $e) {
                 $this->status = "Retry";
+                $this->attempt += 1;
             }finally {
                 $this->save();
             }

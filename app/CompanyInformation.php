@@ -179,7 +179,7 @@ class CompanyInformation extends Model {
         if($customerId == ''){
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
         }else{
-            $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
+            $customer = Customer::where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
         $customerId = @$customer->id;
         
@@ -205,10 +205,11 @@ class CompanyInformation extends Model {
         if($customerId == ''){
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
         }else{
-            $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
+            $customer = Customer::where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
+    
         $customerId = @$customer->id;
-
+       
         $now = Carbon::now();
         $result = CompanyInformation::use_user_details()->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')
             ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $customerId])->join('user_booking_status','user_booking_details.booking_id', '=', 'user_booking_status.id');
@@ -226,7 +227,7 @@ class CompanyInformation extends Model {
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
             $customerId = @$customer->id;
         }else{
-            $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
+            $customer = Customer::where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
         $customerId = @$customer->id;
         $now = Carbon::now();
@@ -244,7 +245,7 @@ class CompanyInformation extends Model {
             $customer = Auth::user()->customers()->where('business_id', $this->id)->first();
             $customerId = @$customer->id;
         }else{
-            $customer = Auth::user()->customers()->where(['business_id'=> $this->id,'id'=> $customerId])->first();
+            $customer = Customer::where(['business_id'=> $this->id,'id'=> $customerId])->first();
         }
         $now = Carbon::now();
         $from = (Carbon::now()->subDays(7))->format('Y-m-d');
