@@ -4270,3 +4270,22 @@ div#termsdiv{order: 4;}
 .service-set{
 	margin-right: -35px;
 }
+.save-exit{
+	text-align: right;
+	margin-bottom: 25px;
+	margin-top: -45px;
+}
+.table-custom-dash{
+	overflow-y: scroll;
+	height: 350px;
+}
+.mt-105{
+	margin-top: 105px;
+} 
+.mb-55{
+	margin-bottom: 55px;
+}
+.steps-free-trial-img img{
+	margin-bottom: -45px;
+	margin-top: -63px;
+}

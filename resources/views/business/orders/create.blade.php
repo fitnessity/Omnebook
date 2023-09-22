@@ -609,7 +609,7 @@
 																			<input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 																			<div class="d-flex">
 																				<div class="close-cross-icon mr-10"> 
-																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}"> 
+																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}"> 
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
@@ -1143,7 +1143,7 @@
             	<div class="modal-header p-3">
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
 				</div>  
-				<div class="modal-body body-tbm editcartdiv">
+				<div class="modal-body body-tbm editcartdiv  mb-10">
 				</div>
             </div>
 		</div>
@@ -1414,19 +1414,22 @@
 	});
 
 	$(document).on('click', '.editcartitemaks', function () {
+		$('#Countermodalbodyajax').html('');
 		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
+		var customerId = $(this).attr('data-customerId');
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
 			data:  {
 				'priceid':priceid,
 				'pageid':pageid,
+				'customerId':customerId,
 				'companyId': '{{$companyId}}',
 				_token: '{{csrf_token()}}', 
 			},
 			success:function(response){
-				var data = response.split('~~');
+				var data = response.split('~~~');
 				$('.editcartdiv').html(data[0]);
 				$('#Countermodalbodyajax').html(data[1]);
 				$('#editcartitempp').modal('show');
@@ -1440,128 +1443,131 @@
 	function saveparticipate(){
 		$('#qty').html('');
 		var aducnt = $('#adultcnt').val();
-		var chilcnt = $('#childcnt').val();
+		var childcnt = $('#childcnt').val();
 		var infcnt = $('#infantcnt').val();
 		if(typeof(aducnt) == 'undefined'){
 			aducnt = 0;
 		}
-		if(typeof(chilcnt) == 'undefined'){
-			chilcnt = 0;
+		if(typeof(childcnt) == 'undefined'){
+			childcnt = 0;
 		}
 		if(typeof(infcnt) == 'undefined'){
 			infcnt = 0;
 		}
 
-		var adult = '';
-		var child = '';
-		var infant = '';
+		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+			alert("You can select only 1 participate.");
+		}else{
 
-		var totalprice = 0;
-		var totalpriceadult = 0;
-		var totalpricechild = 0;
-		var totalpriceinfant = 0; 
-		var aduprice = $('#adultprice').val();
-		var childprice = $('#childprice').val();
-		var infantprice = $('#infantprice').val();
-		var pay_session = $('#session_val').val();
-	
-		if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
-			if(aducnt != 0){
-				adult = '<span>Adults x '+aducnt+'</span><br>';
+			var adult = '';
+			var child = '';
+			var infant = '';
+
+			var totalprice = 0;
+			var totalpriceadult = 0;
+			var totalpricechild = 0;
+			var totalpriceinfant = 0; 
+			var aduprice = $('#adultprice').val();
+			var childprice = $('#childprice').val();
+			var infantprice = $('#infantprice').val();
+			var pay_session = $('#session_val').val();
+		
+			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
+				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+				if(aducnt != 0){
+					adult = '<span>Adults x '+aducnt+'</span><br>';
+				}
+				$('#adupricequantity').val(aducnt);
 			}
-			$('#adupricequantity').val(aducnt);
+
+			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
+				totalpricechild = parseInt(childcnt)*parseInt(childprice);
+				if(childcnt != 0){
+					child = '<span>Kids x  '+childcnt+'</span><br>';
+				}
+				$('#childpricequantity').val(childcnt);
+			}
+			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
+				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+				if(infcnt != 0){
+					infant = '<span>Infants x  '+infcnt+'</span>';
+				}
+				$('#infantpricequantity').val(infcnt);
+			}
+		
+			$('#cartaduprice').val(aduprice);
+			$('#cartinfantprice').val(infantprice);
+			$('#cartchildprice').val(childprice);
+
+			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+		
+			$('#price').val(totalprice);
+			$('#p_session').val(pay_session);
+			$('#session_span').html(pay_session);
+			$('#pay_session').val(pay_session);
+			$('#qty').html(adult+' '+child+' '+infant);
+			$('.participateclosebtn').click();
+			gettotal('','')
+			$("#addpartcipate").modal('hide');
+			$("#addpartcipate").removeClass('show');
 		}
 
-		if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
-			if(chilcnt != 0){
-				child = '<span>Kids x  '+chilcnt+'</span><br>';
-			}
-			$('#childpricequantity').val(chilcnt);
-		}
-		if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
-			if(infcnt != 0){
-				infant = '<span>Infants x  '+infcnt+'</span>';
-			}
-			$('#infantpricequantity').val(infcnt);
-		}
-	
-		$('#cartaduprice').val(aduprice);
-		$('#cartinfantprice').val(infantprice);
-		$('#cartchildprice').val(childprice);
-
-		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-	
-		$('#price').val(totalprice);
-		$('#p_session').val(pay_session);
-		$('#session_span').html(pay_session);
-		$('#pay_session').val(pay_session);
-		$('#qty').html(adult+' '+child+' '+infant);
-		$('.participateclosebtn').click();
-		gettotal('','')
-		$("#addpartcipate").modal('hide');
-		$("#addpartcipate").removeClass('show');
 	}
 
 	function saveparticipateajax (){
 		var aducnt = $('#adultcntajax').val();
-		var chilcnt = $('#childcntajax').val();
+		var childcnt = $('#childcntajax').val();
 		var infcnt = $('#infantcntajax').val();
 		if(typeof(aducnt) == 'undefined'){
 			aducnt = 0;
 		}
-		if(typeof(chilcnt) == 'undefined'){
-			chilcnt = 0;
+		if(typeof(childcnt) == 'undefined'){
+			childcnt = 0;
 		}
 		if(typeof(infcnt) == 'undefined'){
 			infcnt = 0;
 		}
 
-		var adult = '';
-		var child = '';
-		var infant = '';
-
-		var adult = '';
-		var child = '';
-		var infant = '';
-
-		var totalprice = 0;
-		var totalpriceadult = 0;
-		var totalpricechild = 0;
-		var totalpriceinfant = 0; 
-		var aduprice = $('#adultpriceajax').val();
-		var childprice = $('#childpriceajax').val();
-		var infantprice = $('#infantpriceajax').val();
-	
-		if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-			totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
-		}
-
-		if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-			totalpricechild = parseInt(chilcnt)*parseInt(childprice);
-		}
-		if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-			totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
-		}
+		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+			alert("You can select only 1 participate.");
+		}else{
+			var totalprice = 0;
+			var totalpriceadult = 0;
+			var totalpricechild = 0;
+			var totalpriceinfant = 0; 
+			var aduprice = $('#adultpriceajax').val();
+			var childprice = $('#childpriceajax').val();
+			var infantprice = $('#infantpriceajax').val();
 		
-		$('#adupricequantityajax').val(aducnt);
-		$('#childpricequantityajax').val(chilcnt);
-		$('#infantpricequantityajax').val(infcnt);
-		$('#cartadupriceajax').val(aduprice);
-		$('#cartinfantpriceajax').val(infantprice);
-		$('#cartchildpriceajax').val(childprice);
+			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
+				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+			}
 
-		totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-	
-		$('#priceajax').val(totalprice);
-		$('#pricetotalajax').val(totalprice);
-		$('.participateclosebtnajax').click();
-		get_total_ajax();
-		$("#addpartcipateajax").modal('hide');
-		$("#addpartcipateajax").removeClass('show');
-		$("#editcartitempp").modal('show');
+			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
+				totalpricechild = parseInt(childcnt)*parseInt(childprice);
+			}
+			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
+				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+			}
+			
+			$('#adupricequantityajax').val(aducnt);
+			$('#childpricequantityajax').val(childcnt);
+			$('#infantpricequantityajax').val(infcnt);
+			$('#cartadupriceajax').val(aduprice);
+			$('#cartinfantpriceajax').val(infantprice);
+			$('#cartchildpriceajax').val(childprice);
+
+			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+		
+			$('#priceajax').val(totalprice);
+			$('#p_sessionajax').val($('#session_valajax').val());
+			$('#pricetotalajax').val(totalprice);
+			$('.participateclosebtnajax').click();
+			get_total_ajax();
+			$("#addpartcipateajax").modal('hide');
+			$("#addpartcipateajax").removeClass('show');
+			$("#editcartitempp").modal('show');
+		}
 	}
 
 	function get_total_ajax() {
@@ -1608,6 +1614,7 @@
 	}
 
 	function loaddropdownajax(chk,val,id){
+
 		var selectedText = val.options[val.selectedIndex].innerHTML;
 		if(chk == 'program'){
 			$('#pidajax').val(id);
@@ -1635,9 +1642,11 @@
 				'sid':id,
 				'chk':chk,
 				'type':'ajax',
+				'page':'checkout',
 				'user_type':'{{$user_type}}',
 			},
 			success:function(data){
+
 				if(chk == 'program'){
 					$('#category_listajax').html(data);
 				}
@@ -1660,13 +1669,6 @@
 					$('#duration_dropdownajax').val(second[1]);
 					$('#actscheduleidajax').val(second[0]+ ' ' + second[1]);
 				}
-				
-				/*if(chk != 'participat' && chk != 'mpopt'){
-					$('#adultcnt').val(0);
-					$('#childcnt').val(0);
-					$('#infantcnt').val(0);
-					$('#price').val(0);
-				}*/
 			}
 		});
 

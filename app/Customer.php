@@ -40,7 +40,7 @@ class Customer extends Authenticatable
 
         self::updating(function($model){
             
-            $fitnessity_user = User::where('email', $model->email)->first();
+            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
             }

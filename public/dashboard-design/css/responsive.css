@@ -87,6 +87,7 @@
 	.width-100per{width: 100%;}
 	.free-trial-img img {  margin-bottom: -45px;  margin-top: -40px;}
 	.mobile0view-flex{display: flex;}
+	.steps-free-trial-img img { margin-bottom: -45px; margin-top: -43px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -185,6 +186,7 @@
 	.select-staff-member{ margin-top: 15px;}
 	.free-trial-img img { margin-bottom: 0; margin-top: -85px !important;}
 	.mobile0view-flex{display: flex;}
+	.save-exit{margin-top: 0px;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -300,6 +302,9 @@
 	.steps-titles-payout{display: none;}
 	.steps-titles-plan{display: none;}
 	.progress-nav .progress {  top: 50%;}
+	.steps-free-trial-img img { margin-bottom: -45px; margin-top: 17px; }
+	.steps-free-trial-img{text-align: center;}
+	.save-exit{margin-top: 0px;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

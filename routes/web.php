@@ -55,6 +55,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
     Route::any('addToCartForCheckout', 'OrderController@addToCartForCheckout')->name('addToCartForCheckout');
     Route::any('removeFromCartForCheckout', 'OrderController@removeFromCartForCheckout')->name('removeFromCartForCheckout');
+
+    Route::get('/member_expirations','MembershipExpirationsController@index')->name('member_expirations.index');
+    Route::post('/getMemberships','MembershipExpirationsController@getMemberships')->name('member_expirations.getMemberships');
+    Route::get('/getMoreMemberships','MembershipExpirationsController@getMoreMemberships')->name('member_expirations.getMoreMemberships');
   
 });
 
