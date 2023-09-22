@@ -152,8 +152,8 @@
 							<li class="nav-item">
 								<a href="#" class="nav-link" data-key="t-basic-elements">Sales Reports</a>
 							</li>
-							<li class="nav-item">
-								<a href="#" class="nav-link" data-key="t-form-select">Membership Expirations</a>
+							<li class="nav-item @if(Route::current()->getName()=='business.member_expirations.index') tab-active @endif">
+								<a @if($companyId)  href="{{route('business.member_expirations.index')}}" @endif class="nav-link" data-key="t-form-select">Membership Expirations</a>
 							</li>
 						</ul>
 					</div>

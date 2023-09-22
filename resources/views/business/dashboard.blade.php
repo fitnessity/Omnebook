@@ -491,7 +491,7 @@
                                             </div>
 
                                             <div class="card-body">
-                                                <div class="table-responsive table-card">
+                                                <div class="table-responsive table-card table-custom-dash">
                                                     <table class="table table-hover table-centered align-middle table-nowrap mb-0 memberships-pack">
 														<thead>
 															<tr>
