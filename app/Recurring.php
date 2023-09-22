@@ -8,7 +8,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
-use App\{Transaction,User,Customer};
+use App\{Transaction,User,Customer,SGMailService};
 
 // /use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -88,8 +88,10 @@ class Recurring extends Authenticatable
 
         if ($this->user_type == 'user') {
             $customer = User::find($this->user_id);
+            $personalData = $this->User;
         } else {
             $customer = Customer::find($this->user_id); 
+            $personalData = $this->Customer;
         }
 
         $stripeCustomerId = @$customer->stripe_customer_id;
@@ -100,6 +102,7 @@ class Recurring extends Authenticatable
         $cardID = $cardID != ''  ?  $cardID : $stripeCardID;
         
         if($cardID != '' && $stripeCustomerId != ''){
+            
             try {
                 $totalPrice = ($this->amount + $this->tax )*100;
                 $paymentIntent = \Stripe\PaymentIntent::create([
@@ -142,6 +145,40 @@ class Recurring extends Authenticatable
                 $this->attempt += 1;
             }finally {
                 $this->save();
+
+                if($this->attempt != 0){
+                    $priceOption = $this->UserBookingDetail != '' ? $this->UserBookingDetail->business_price_detail_with_trashed : '';
+                    $category =  @$priceOption->business_price_details_ages_with_trashed;
+                    $emailDetail = array(
+                        'CompanyImage'=> $this->company_information->getCompanyImage(),
+                        'CompanyName'=> $this->company_information->company_name,
+                        'ProviderName'=> $this->company_information->full_name,
+                        'CustomerName'=> @$personalData->full_name,
+                        'PriceOption'=> @$priceOption->price_title,
+                        'CategoryName'=> @$category->category_title ,
+                        'amount'=> $this->amount,
+                        'email'=> $this->company_information->business_email,
+                    );
+
+                    $emailDetail1 = array(
+                        'CompanyImage'=> $this->company_information->getCompanyImage(),
+                        'CompanyName'=> $this->company_information->company_name,
+                        'ProviderName'=> $this->company_information->full_name,
+                        'address'=> $this->company_information->company_address(),
+                        'ProviderEmail'=> $this->company_information->business_email,
+                        'phone'=> $this->company_information->business_phone,
+                        'CustomerName'=> @$personalData->full_name,
+                        'email'=> @$personalData->email,
+                        'PriceOption'=> @$priceOption->price_title,
+                        'CategoryName'=> @$category->category_title ,
+                        'amount'=> $this->amount,
+                        'Website' => env('APP_URL'),
+                        'url'=> env('APP_URL').'/family-member',
+                    );
+
+                    SGMailService::sendAutoPayFaildAlertToProvider($emailDetail);
+                    SGMailService::sendAutoPayFaildAlertToCustomer($emailDetail1);
+                }
             }
         }else{
             $this->status = "Retry";
