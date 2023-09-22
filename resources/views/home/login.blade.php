@@ -25,6 +25,14 @@ if(!empty(@$response)){
                         <h3>Welcome to fitnessity</h3>
                     </div>
                     <br/> 
+
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     @if($msg != '')
                         <div id='systemMessage' class="alert-class alert-danger">{{ $msg }}</div>
                     @endif
