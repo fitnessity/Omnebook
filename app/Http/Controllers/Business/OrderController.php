@@ -868,399 +868,49 @@ class OrderController extends BusinessBaseController
 
     public function editcartmodel(Request $request){
         $cart_item = [];
-        if (session()->has('cart_item')) {
-               $cart_item = session()->get('cart_item');
+        if (session()->has('cart_item_for_checkout')) {
+            $cart_item = session()->get('cart_item_for_checkout');
         }
         $html = '';
         $salestaxajax = 0;
         $duestaxajax = 0;
         $result = '';
         $cart = [];
-        if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
-            $cart = $cart_item["cart_item"][$request->priceid];
+        if(in_array($request->customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
+            $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
             $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
             $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
             $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
             $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
             $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();
-            $aduqty = $infantqty = $childqty = $aduprice = $childprice = $infantprice = 0;
-            if(date('l') == 'Saturday' || date('l') == 'Sunday'){ 
-                $aduprice =  @$cartselectedpriceid['adult_weekend_price_diff'];
-                $childprice =  @$cartselectedpriceid['child_weekend_price_diff'];
-                $infantprice =  @$cartselectedpriceid['infant_weekend_price_diff'];
-            }else{
-                $aduprice =  @$cartselectedpriceid['adult_cus_weekly_price'];
-                $childprice =  @$cartselectedpriceid['child_cus_weekly_price'];
-                $infantprice =  @$cartselectedpriceid['infant_cus_weekly_price']; 
-            }
-            if($cartselectedcategoryid->sales_tax != ''){
-                $salestaxajax = $cartselectedcategoryid->sales_tax ;
-            }
-            if($cartselectedcategoryid->dues_tax != ''){
-                $duestaxajax = $cartselectedcategoryid->dues_tax ;
-            }
-            if(!empty($cart['adult'])) {
-                if($cart['adult']['quantity']  != 0){
-                    $aduqty  = $cart['adult']['quantity'];
-                }
-            }
-            if(!empty($cart['child'])) {
-                if($cart['child']['quantity']  != 0){
-                    $childqty  = $cart['child']['quantity'];
-                }
-            } 
-            if(!empty($cart['infant'])) {
-                if($cart['infant']['quantity']  != 0){
-                    $infantqty  = $cart['infant']['quantity'];
-                }
-            }
+
+            $aduqty = $infantqty = $childqty = 0;
+            $priceType = (date('l') == 'Saturday' || date('l') == 'Sunday') ? 'weekend_price_diff' : 'cus_weekly_price';
+
+            $aduprice = $cartselectedpriceid['adult_'.$priceType] ?? 0;
+            $childprice = $cartselectedpriceid['child_'.$priceType] ?? 0;
+            $infantprice = $cartselectedpriceid['infant_'.$priceType] ?? 0;
+
+            $salestaxajax = $cartselectedcategoryid->sales_tax ?? '';
+            $duestaxajax = $cartselectedcategoryid->dues_tax ?? '';
+
+            $aduqty = !empty($cart['adult']) ? ($cart['adult']['quantity'] != 0 ? $cart['adult']['quantity'] : 0) : 0;
+            $childqty = !empty($cart['child']) ? ($cart['child']['quantity'] != 0 ? $cart['child']['quantity'] : 0) : 0;
+            $infantqty = !empty($cart['infant']) ? ($cart['infant']['quantity'] != 0 ? $cart['infant']['quantity'] : 0) : 0;
+
             $actscheduleid = explode(' ' ,$cart["actscheduleid"]);
+
             $participate = $cart["participate_from_checkout_regi"]['pc_name'];
-            $html='<div class="row">
-                    <form method="post" action="'.route("addtocart").'">
-                        <input type="hidden" name="_token"  value="'.csrf_token().'" />
-                        <div class="col-lg-12 col-xs-12 space-remover">
-                            <div class="manage-customer-modal-title">
-                                <h4>Edit Cart Item</h4>
-                            </div>
-                            <div class="manage-customer-from">
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12">
-                                        <div class="check-out-steps">
-                                            <label><h2 class="color-red">Step 1: </h2> Select Service</label>
-                                        </div>
-                                        <div class="check-client-info-box">
-                                            <div class="row">
-                                                <input type="hidden" name="pc_regi_id" value="'.@$cart["participate_from_checkout_regi"]["id"].'">
-                                                <input type="hidden" name="pc_user_tp" value="'.@$cart["participate_from_checkout_regi"]["pc_user_tp"].'">
-                                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="select0service">
-                                                        <label>Who\'s Participating </label>
-                                                        <select name="pc_value" id="participate_listajax" class="form-control">
-                                                            <option value="'.@$cart["participate_from_checkout_regi"]["id"].'">'.@$participate.'</option>
-                                                        </select>
-                                                    </div>
-                                                </div>';
-                                                $pdrop = "'program',this,this.value";
-                                                $cdrop = "'category',this,this.value";
-                                                $html .='<div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <label>Select Program </label>
-                                                             <select name="program_listajax" id="program_listajax" class="form-control" onchange="loaddropdownajax('.$pdrop.');">
-                                                                  <option value="" >Select</option>';
-                                                                  if(!empty(@$program_list)){
-                                                                       foreach($program_list as $pl){
-                                                                            $html .='<option value="'.$pl->id.'"';
-                                                                       if($cart['code'] == $pl->id){$html .='selected'; 
-                                                                       }
-                                                                       $html .='>'.$pl->program_name.'</option>';
-                                                                       }
-                                                                  }
-                                                             $html .='</select>
-                                                        </div>
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <label>Select Catagory </label>
-                                                        <select name="category_listajax" id="category_listajax" class="form-control"  onchange="loaddropdownajax('.$cdrop.');">  
-                                                             <option value="">Select Category</option>';
-                                                             if(!empty(@$catelist)){
-                                                                  foreach($catelist as $cl){
-                                                                       $html .='<option value="'.$cl->id.'"'; 
-                                                                       if(@$cartselectedcategoryid->id == $cl->id){
-                                                                            $html .='selected';
-                                                                       }
-                                                                       $html .='>'.$cl->category_title.'</option>';
-                                                                  }
-                                                             }
-                                                         $html .='</select>
-                                                   </div>
-                                              </div>';
-                                         
-                                              $html .='<div class="row">';
-                                                   $pridrop = "'priceopt',this,this.value";
-                                                   $html .='<div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <label>Select Price Option  </label>
-                                                        <select name="priceopt_listajax" id="priceopt_listajax" class="form-control" onchange="loaddropdownajax('.$pridrop.');">
-                                                             <option value="">Select Price Title</option>';
-                                                             if(!empty(@$pricelist)){
-                                                             foreach($pricelist as $pl){
-                                                                  $html .='<option value="'.$pl->id.'"';
-                                                                  if(@$cartselectedpriceid->id == $pl->id){
-                                                                       $html .='selected';
-                                                                  }
-                                                                  $html .='>'.$pl->price_title.'</option>';
-                                                                  }
-                                                             }
-                                                        $html .='</select>
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <div class="date-activity-scheduler date-activity-check paynowset">
-                                                                  <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addpartcipateajax">Participant Quantity </button>
-                                                             </div>
-                                                        </div>
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <label> Membership Option</label>
-                                                        <select name="membership_opt_listajax" id="membership_opt_listajax" class="form-control">
-                                                             <option value="">Select Membership Type</option>';
-                                                             if(!empty(@$membershiplist)){
-                                                             foreach($membershiplist as $mp){
-                                                                  $html .='<option value="'.$mp->id.'"'; if(@$cartselectedpriceid->membership_type == $mp->membership_type){ 
-                                                                            $html .='selected'; 
-                                                                       }
-                                                                       $html .='>'.$mp->membership_type.'
-                                                                  </option>';
-                                                             }
-                                                             }
-                                                        $html .='</select>
-                                                   </div>
-                                              </div>
-                                         </div>
-                                    </div>
-                                    
-                                    <div class="col-md-12">
-                                         <div class="check-out-steps"><label><h2 class="color-red">Step 2: </h2> Check Details </label></div>
-                                         <div class="check-client-info-box">
-                                              <div class="row">
-                                                   <div class="col-md-2 col-sm-4 col-xs-12">
-                                                        <div class="select0service pricedollar">
-                                                             <label>Price </label>
-                                                <div class="set-price">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </div>
-                                                             <input type="text" class="form-control valid" id="priceajax" placeholder="$0.00" value="'.$cart["totalprice"].'">
-                                                        </div>
-                                                   </div>
-                                                   <div class="col-md-2 col-sm-4 col-xs-12">
-                                                        <div class="select0service pricedollar">
-                                                             <label>Session</label>
-                                                             <input type="text" class="form-control valid" id="p_sessionajax" name="pay_session" placeholder="1"  value="'.$cart["p_session"].'" >
-                                                        </div>
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <label>Discount</label>
-                                                             <div class="row">
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <div class="choose-tip">
-                                                                            <select name="dis_amt_drop" id="dis_amt_dropajax" class="form-control" onchange="getdis();"> 
-                                                                                 <option value="">Choose $ or % </option>
-                                                                                 <option value="$" selected>$</option>
-                                                                                 <option value="%">%</option>
-                                                                            </select>
-                                                                       </div>
-                                                                  </div>
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <div class="choose-tip">
-                                                                            <input type="text" class="form-control valid" id="dis_amtajax" name="dis_amtajax" placeholder="Enter Amount" value="'.$cart["discount"].'" onkeyup="getdis();">
-                                                                       </div>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <label>Tip Amount</label>
-                                                             <div class="row">
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <div class="choose-tip">
-                                                                            <select name="tip_amt_dropajax" id="tip_amt_dropajax" class="form-control" onchange="getdis();" >
-                                                                                 <option value="">Choose $ or % </option>
-                                                                                 <option value="$" selected>$</option>
-                                                                                 <option value="%">%</option>
-                                                                            </select>
-                                                                       </div>
-                                                                  </div>
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <div class="choose-tip">
-                                                                            <input type="text" class="form-control valid" id="tip_amtajax" name="tip_amtajax" placeholder="Enter Amount" value="'.$cart["tip"].'" onkeyup="getdis();">
-                                                                       </div>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
-                                                   </div>
-                                              </div>';
-                                              $dval = "'duration',this,this.value";
-                                              $html .='<div class="row">
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="col-md-6 col-sm-6 col-xs-6"> 
-                                                             <div class="tax-check">
-                                                                  <label>Tax </label>
-                                                                  <input type="checkbox" id="taxajax" name="taxajax" value="1"';
-                                                                  if($cart["tax"] == 0 || $cart["tax"] == ''){
-                                                                       $html .='checked';
-                                                                  }
-                                                                  $html .='>
-                                                                  <label for="tax"> No Tax</label><br>
-                                                             </div>
-                                                        </div>
-                                                        <input type="hidden" name="duestax" id="duestaxajax" value="'.$duestaxajax.'">
-                                                        <input type="hidden" name="salestax" id="salestaxajax" value="'.$salestaxajax.'">
-                                                   </div>
-                                                   <div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <label>Duration</label>
-                                                             <div class="row">
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <input type="text" class="form-control valid" id="duration_intajax" name=duration_intajax placeholder="1" value="'.@$actscheduleid[0].'" onkeyup="changeduration();">
-                                                                  </div>
-                                                                  
-                                                                  <div class="col-md-6 col-sm-6 col-xs-6 nopadding">
-                                                                       <div class="choose-tip">
-                                                                            <select name="duration_dropdownajax" id="duration_dropdownajax" class="form-control" onchange="loaddropdownajax('.$dval.');">
-                                                                                 <option value="Days"';
-                                                                                 if(@$actscheduleid[1] == "Days"){
-                                                                                  $html .='selected';
-                                                                                 }
-                                                                                 $html .='>Day(s) </option>
-                                                                                 <option value="Weeks"';
-                                                                                 if(@$actscheduleid[1] == "Weeks"){
-                                                                                  $html .='selected';
-                                                                                 }
-                                                                                 $html .='>Week(s)</option>
-                                                                                 <option value="Months"';
-                                                                                 if(@$actscheduleid[1] == "Months"){
-                                                                                  $html .='selected';
-                                                                                 }
-                                                                                 $html .='>Month(s) </option>
-                                                                                 <option value="Years"';
-                                                                                 if(@$actscheduleid[1] == "Years"){
-                                                                                  $html .='selected';
-                                                                                 }
-                                                                                 $html .='>Year(s) </option>
-                                                                            </select>
-                                                                       </div>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
-                                                   </div>';
-                                                   $dtval = "'ajax'";
-                                                   $html .='<div class="col-md-4 col-sm-4 col-xs-12">
-                                                        <div class="select0service">
-                                                             <label>Date This Activaties?</label>
-                                                             <div class="date-activity-scheduler date-activity-check">
-                                                                  <input type="text"  name="actfildate"  id="contractajax" placeholder="Search By Date" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="'.date("m/d/Y",strtotime($cart['sesdate'])).'" onchange="changedate('.$dtval.');">
-                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                               </div>
-                            </div>
-                            <input type="hidden" name="aduquantity" id="adupricequantityajax" value="'.$aduqty.'" class="product-quantity"/>
-                            <input type="hidden" name="childquantity" id="childpricequantityajax" value="'.$childqty.'" class="product-quantity"/>
-                            <input type="hidden" name="infantquantity" id="infantpricequantityajax" value="'.$infantqty.'" class="product-quantity"/>
+            $pageid = $request->pageid;
+            $p_session = $cart["p_session"];
+            $indexOfAry = $request->customerId.'~~'.$request->priceid;
+            $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategoryid','program_list','catelist','pricelist','pageid','indexOfAry'));
 
-                            <input type="hidden" name="cartaduprice" id="cartadupriceajax" value="'.$aduprice.'" class="product-quantity"/>
-                            <input type="hidden" name="cartchildprice" id="cartchildpriceajax" value="'.$childprice.'" class="product-quantity"/>
-                            <input type="hidden" name="cartinfantprice" id="cartinfantpriceajax" value="'.$infantprice.'" class="product-quantity"/>
+            $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session'));
 
-                            <input type="hidden" name="type" value="customer">
-                            <input type="hidden" name="pageid" value="'.$request->pageid.'">
-
-                            <input type="hidden" name="priceid" value="'.$cart['priceid'].'" id="priceidajax">
-                            <input type="hidden" name="actscheduleid" value="'.$cart['actscheduleid'].'" id="actscheduleidajax">
-                            <input type="hidden" name="sesdate" value="'.$cart['sesdate'].'" id="sesdateajax">
-                            <input type="hidden" name="pricetotal" id="pricetotalajax" value="'.$cart['totalprice'].'" class="product-price">
-                            <input type="hidden" name="tip_amt_val" id="tip_amt_valajax" value="'.$cart['tip'].'" class="product-price">
-                            <input type="hidden" name="dis_amt_val" id="dis_amt_valajax" value="'.$cart['discount'].'" class="product-price">
-                            <input type="hidden" name="pc_regi_id" id="pc_regi_idajax" value="'.$cart['participate_from_checkout_regi']['id'].'" class="product-price">
-                            <input type="hidden" name="pc_user_tp" id="pc_user_tpajax" value="'.$cart['participate_from_checkout_regi']['from'].'" class="product-price">
-                            <input type="hidden" name="pc_value" id="pc_valueajax" value="'.$cart['participate_from_checkout_regi']['pc_name'].'" class="product-price">
-                            <input type="hidden" name="pid" id="pidajax" value="'.$cart['code'].'">
-                            <input type="hidden" name="deletepid" id="deletepid" value="'.$cart['code'].'">
-                            <input type="hidden" name="categoryid" id="categoryidajax" value="'.$cart['categoryid'].'">
-                            <input type="hidden" name="chk" value="activity_purchase">
-                            <input type="hidden" name="value_tax" id="value_taxajax" value="'.$cart['tax'].'">
-                            <button type="submit" class="btn btn-red" >Submit</a>
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        flatpickr(".flatpickr-input", {
-                            dateFormat: "m/d/Y",
-                            maxDate: "01/01/2050",
-                        });
-                    </script>';
-
-                    $result .= '<div class="row">
-                                    <div class="col-lg-12">
-                                       <h4 class="modal-title partcipate-model">Select The Number of Participants</h4>
-                                    </div>';
-
-                    if($aduprice != '' &&  $aduprice != '0'){
-                        $result .= '<div class="col-md-12 col-sm-12 col-xs-12">
-                                       <div class="row">
-                                            <div class="col-md-8 col-sm-8 col-xs-7">
-                                                 <div class="counter-titles">
-                                                      <p class="counter-age-heading">Adults</p>
-                                                      <p>Ages 13 & Up</p>
-                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 col-xs-5">
-                                                 <div class="qty counter-txt">
-                                                      <span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
-                                                      <input type="text" class="count" name="adultcnt" id="adultcntajax" min="0" value="'.$aduqty.'" readonly>
-                                                      <span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
-                                                 </div>
-                                            </div>
-                                       </div>
-                                  </div>';
-                    }
-
-                    if($childprice != '' &&  $childprice != '0'){
-                        $result .= '<div class="col-md-12 col-sm-12 col-xs-12">
-                                       <div class="row">
-                                            <div class="col-md-8 col-sm-8 col-xs-7">
-                                                 <div class="counter-titles">
-                                                      <p class="counter-age-heading">Children</p>
-                                                      <p>Ages 2-12</p>
-                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 col-xs-5">
-                                                 <div class="qty counter-txt">
-                                                      <span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
-                                                      <input type="text" class="count" name="childcnt" id="childcntajax" min="0" value="'.$childqty.'" readonly>
-                                                      <span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
-                                                 </div>
-                                            </div>
-                                       </div>
-                                  </div>';
-                    }
-
-                    if($infantprice != '' &&  $infantprice != '0'){
-                        $result .= ' <div class="col-md-12 col-sm-12 col-xs-12">
-                                       <div class="row">
-                                            <div class="col-md-8 col-sm-8 col-xs-7">
-                                                 <div class="counter-titles">
-                                                      <p class="counter-age-heading">Infants</p>
-                                                      <p>Under 2</p>
-                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 col-xs-5">
-                                                 <div class="qty counter-txt">
-                                                      <span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
-                                                      <input type="text" class="count" name="infantcnt" id="infantcntajax" value="'.$infantqty.'" min="0" readonly>
-                                                      <span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i>
-                                            </span>
-                                                 </div>
-                                            </div>
-                                       </div>
-                                  </div>';
-                    }
-
-            $result .= '<div id="pricedivajax">
-                           <input type="hidden" name="session_val" id="session_valajax" value="'.@$cart["p_session"].'" >
-                           <input type="hidden" name="adultprice" id="adultpriceajax" value="'.$aduprice.'" >
-                           <input type="hidden" name="childprice" id="childpriceajax" value="'.$childprice.'" >
-                           <input type="hidden" name="infantprice" id="infantpriceajax" value="'.$infantprice.'"> 
-                        </div>
-                    </div>';
+            return $view1.'~~~'.$view2;
         }
-        return $html.'~~'.$result;
     }
 
     public function addToCartForCheckout(Request $request){
@@ -1298,6 +948,10 @@ class OrderController extends BusinessBaseController
         if($request->infantquantity != 0){
             $infantarray = array('quantity'=>$request->infantquantity, 'price'=>$request->cartinfantprice);
             $tot_qty += $request->infantquantity;
+        }
+        
+        if($request->deletepid != $customerId.'~~'.$priceid){
+            unset($cart_item["cart_item"][$request->deletepid]);
         }
 
         if ($service != '') {

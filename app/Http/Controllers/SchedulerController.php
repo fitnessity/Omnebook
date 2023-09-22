@@ -265,6 +265,10 @@ class SchedulerController extends Controller
                $infantid = $request->type == 'ajax' ? "infantpriceajax" : "infantprice";
                $session_val = $request->type == 'ajax' ? "session_valajax" : "session_val";
 
+               $adultcnt = $request->type == 'ajax' ? "adultcntajax" : "adultcnt";
+               $childcnt = $request->type == 'ajax' ? "childcntajax" : "childcnt";
+               $infantcnt = $request->type == 'ajax' ? "infantcntajax" : "infantcnt";
+
                if($total_price_val_adult != 0 &&  $total_price_val_adult != '' ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
@@ -277,7 +281,7 @@ class SchedulerController extends Controller
                                         <div class="col-md-4 col-sm-4 col-xs-6 col-6">
                                              <div class="qty counter-txt">
                                                   <span class="minus bg-darkbtn adultminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count '. $inputSize.'" name="adultcnt" id="adultcnt" min="0" value="0" readonly>
+                                                  <input type="text" class="count '. $inputSize.'" name="adultcnt" id="'.$adultcnt.'" min="0" value="0" readonly>
                                                   <span class="plus bg-darkbtn adultplus '.$circleSize.'"><i class="fa fa-plus"></i></span>
                                              </div>
                                         </div>
@@ -297,7 +301,7 @@ class SchedulerController extends Controller
                                         <div class="col-md-4 col-sm-4 col-xs-6 col-6">
                                              <div class="qty counter-txt">
                                                   <span class="minus bg-darkbtn childminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count '. $inputSize.'" name="childcnt" id="childcnt" min="0" value="0" readonly>
+                                                  <input type="text" class="count '. $inputSize.'" name="childcnt" id="'.$childcnt.'" min="0" value="0" readonly>
                                                   <span class="plus bg-darkbtn childplus '.$circleSize.'"><i class="fa fa-plus"></i></span>
                                              </div>
                                         </div>
@@ -317,7 +321,7 @@ class SchedulerController extends Controller
                                         <div class="col-md-4 col-sm-4 col-xs-6 col-6">
                                              <div class="qty counter-txt">
                                                   <span class="minus bg-darkbtn infantminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count '. $inputSize.'" name="infantcnt" id="infantcnt" value="0" min="0" readonly>
+                                                  <input type="text" class="count '. $inputSize.'" name="infantcnt" id="'.$infantcnt.'" value="0" min="0" readonly>
                                                   <span class="plus bg-darkbtn infantplus '.$circleSize.'"><i class="fa fa-plus"></i>
                                              </span>
                                              </div>
