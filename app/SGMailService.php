@@ -260,4 +260,39 @@ class SGMailService{
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-b57b5ad44f744f688265cb0d078a9398');
 	}
+
+	public static function sendAutoPayFaildAlertToProvider($emailDetail){
+		$substitutions = [
+			"CompanyImage" => $emailDetail['CompanyImage'], 
+            "CompanyName"=> $emailDetail['CompanyName'],
+            "ProviderName"=> $emailDetail['ProviderName'],
+            "CustomerName"=> $emailDetail['CustomerName'],
+            "PriceOption"=> $emailDetail['PriceOption'],
+			"amount" => $emailDetail['amount'],
+			"CategoryName" => $emailDetail['CategoryName'],
+		];
+
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-b65d27b8ee91494ba9a4951108c103c1');
+	}
+
+
+	public static function sendAutoPayFaildAlertToCustomer($emailDetail){
+		$substitutions = [
+			'CompanyImage'=> $emailDetail['CompanyImage'],
+            'CompanyName'=> $emailDetail['CompanyName'],
+            'ProviderName'=> $emailDetail['ProviderName'],
+            'address'=>$emailDetail['address'],
+            'ProviderEmail'=> $emailDetail['ProviderEmail'],
+            'phone'=> $emailDetail['phone'],
+            'CustomerName'=> $emailDetail['CustomerName'],
+            'PriceOption'=> $emailDetail['PriceOption'],
+            'CategoryName'=>$emailDetail['CategoryName'],
+            'amount'=> $emailDetail['amount'],
+            'Website' => $emailDetail['Website'],
+            'url'=> $emailDetail['url'],
+		];
+
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-eeca6da4bb6240d48abb661c49489afa');
+	}
+
 }
