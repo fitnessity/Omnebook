@@ -213,10 +213,6 @@
 		flatpickr(".flatpickr-range", {
 	      dateFormat: "m/d/Y",
 	      maxDate: "01/01/2050",
-	      enable:[{
-	      	"from":'today',
-	      	"to" : "01/01/2050",
-	      }],
 	   });
 		 
 		flatpickr(".flatpickr-range-birthdate", {
