@@ -114,8 +114,12 @@
 							</td>
 							<td>
 								<div class="check-cancel width-105">
-									@if($booking_checkin_detail->order_detail && $booking_checkin_detail->checkin_date == date('Y-m-d') ) 
-										<input type="checkbox" name="check_in" value="1" data-behvaior="checkin"data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}" 			@if($booking_checkin_detail->checked_at != '' ) checked @endif  > 
+									@if($booking_checkin_detail->order_detail && $booking_checkin_detail->checkin_date <= date('Y-m-d') ) 
+										@php  
+											$datetime = new DateTime($booking_checkin_detail->checkin_date.' '.$business_activity_scheduler->shift_start);
+											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
+										@endphp
+										<input type="checkbox" name="check_in" value="1" data-behvaior="checkin"data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}"			@if($booking_checkin_detail->checked_at != '' ) checked @endif  > 
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
@@ -269,13 +273,14 @@
             e.stopPropagation();
             return false
     	}
-     
+     	
+     	var date = $(this).data('booking-detail-date');
      	$.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
             type: "PATCH",
             data:{
                 _token: '{{csrf_token()}}', 
-                checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null,
+                checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
             	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
