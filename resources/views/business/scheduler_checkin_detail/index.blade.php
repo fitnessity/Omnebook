@@ -65,7 +65,17 @@
 			</div>
 		</div>
 	</div>
-	
+	@if(session()->has('success'))
+	    <div class="font-green mb-10 fs-16">
+	        {{ session()->get('success') }}
+	    </div>
+	@endif
+
+	@if(session()->has('error'))
+	    <div class="font-red mb-10 fs-16">
+	        {{ session()->get('error') }}
+	    </div>
+	@endif
 	<div class="col-md-12">	
 		<div class="booking-add-client">
 			<div class="table-responsive dots">
@@ -81,71 +91,72 @@
 						<th></th>
 					</tr>
 
-					@foreach($booking_checkin_details as $i=>$booking_checkin_detail)
+					@foreach($customers as $i=>$cus)
+						@php 
+							$firstCheckInDetail = '';
+							$rowRelation = $cus->BookingCheckinDetails();
+							$firstCheckInDetail = $chkCusId != $cus->id ||  $chkInId == '' ? $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first() : $rowRelation->where('id',$chkInId)->first();
+     					@endphp
 						<tr>
 							<td>{{$i+1}}</td>
 							<td>
 								<div class="mini-stats-wid d-flex align-items-center width-185">
 									<div class="avatar-sm mr-15">
-										@if($booking_checkin_detail->customer->profile_pic)
-											<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($booking_checkin_detail->customer->profile_pic)}}" width=60 height=60 alt="">
+										@if($cus->profile_pic)
+											<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($cus->profile_pic)}}" width=60 height=60 alt="">
 										@else
 											<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
-												<span> {{$booking_checkin_detail->customer->first_letter}} </span>
+												<span> {{$cus->first_letter}} </span>
 											</div>
 										@endif
 									</div>
-									<h6 class="mb-1">{{$booking_checkin_detail->customer->full_name}}</h6>
+									<h6 class="mb-1">{{$cus->full_name}}</h6>
 								</div>
 							</td>
 							<td>
-								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}">
-									<option value="" @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
-									@foreach($booking_checkin_detail->customer->active_memberships()->where('sport',$business_activity_scheduler->business_service->id)->get() as $customer_booking_detail)
-                         				@if($customer_booking_detail->business_price_detail)
-                             				@if($customer_booking_detail->getremainingsession() > 0 || ($booking_checkin_detail->order_detail && $customer_booking_detail->id == $booking_checkin_detail->order_detail->id))
-                                                <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
-                                                     {{$customer_booking_detail->business_price_detail->price_title}}
-                                                </option>
-                             				@endif
-                         				@endif
+								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
+									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
+									@foreach($cus->active_memberships($business_activity_scheduler->business_service->id,$filter_date->format('Y-m-d'))->get() as $bookingDetail)
+                                        <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
+                                                {{$bookingDetail->business_price_detail->price_title}} 
+                                        </option>
                      				@endforeach
 								</select>
 							</td>
 							<td>
 								<div class="check-cancel width-105">
-									@if($booking_checkin_detail->order_detail && $booking_checkin_detail->checkin_date <= date('Y-m-d') ) 
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date <= date('Y-m-d') ) 
 										@php  
-											$datetime = new DateTime($booking_checkin_detail->checkin_date.' '.$business_activity_scheduler->shift_start);
+											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
 										@endphp
-										<input type="checkbox" name="check_in" value="1" data-behvaior="checkin"data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}"			@if($booking_checkin_detail->checked_at != '' ) checked @endif  > 
+										<input type="checkbox" name="check_in" value="1" data-behavior="checkin"data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if($booking_checkin_detail->order_detail && $booking_checkin_detail->checkin_date == date('Y-m-d'))
-					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => $booking_checkin_detail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}"
-					                        @if($booking_checkin_detail->no_show_action) checked @endif >
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date == date('Y-m-d'))
+					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
+					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 
 									<label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br>
 								</div>
 							</td>
 							<td>
 								<div>
-									<p class="mb-0">{{ $booking_checkin_detail->order_detail !='' ? $booking_checkin_detail->order_detail->getremainingSessionAfterCheckIn()."/".$booking_checkin_detail->order_detail->pay_session : "N/A"}}</p>
+									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingSessionAfterCheckIn()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
 								</div>
 							</td>
-							<td>{{$booking_checkin_detail->order_detail != '' ? Carbon\Carbon::parse($booking_checkin_detail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
-							<td>{!! $booking_checkin_detail->customer->chkSignedTerms() !!} {!!$booking_checkin_detail->customer->chkBirthday() !!} {!! $booking_checkin_detail->customer->findExpiredCC() !!} {!! $booking_checkin_detail->customer->chkRecurringPayment($booking_checkin_detail->booking_detail_id) !!}</td>
+							<td>{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
+							<td>{!! $cus->chkSignedTerms() !!} {!!$cus->chkBirthday() !!} {!! $cus->findExpiredCC() !!} {!! $cus->chkRecurringPayment(@$firstCheckInDetail->booking_detail_id) !!}</td>
 							<td>
 								<div class="multiple-options">
 									<div class="setting-icon">
 										<i class="ri-more-fill"></i>
 										<ul>
-											<li><a href="{{route('business.orders.create',['cus_id' => $booking_checkin_detail->customer_id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
-											<li><a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $booking_checkin_detail->customer_id])}}" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
+											<li><a href="{{route('business.orders.create',['cus_id' => $cus->id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+											<li><a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $cus->id])}}" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
 											<li>
-												<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+												<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
 											</li>
 										</ul>
 									</div>
@@ -154,7 +165,7 @@
 						</tr>
 					@endforeach
 
-				  	@if(count($booking_checkin_details) == 0 )
+				  	@if(count($customers) == 0 )
 						<tr>
 							<td colspan="8"> 
 								<div class="no0signup text-center">
@@ -218,7 +229,7 @@
 		            insID: value, 
 		        },
 		        success: function(html){
-		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
 		            //location.reload();
 		        }
 			})
@@ -236,7 +247,7 @@
 	            _token: '{{csrf_token()}}', 
 	        },
 	        success: function(html){
-	        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
+	        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
 	            //location.reload();
 	        }
     	})
@@ -259,12 +270,12 @@
             },
             success: function(html){
                 //location.reload();
-                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
+                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
         	}
     	})
 	});
 
-    $(document).on('change', "[data-behvaior~=checkin]", function(e){
+	$('[data-behavior~=checkin]').change(function(e){
         checkbox = this
      	if(!$(this).data('booking-detail-id')){
             this.checked = false;
@@ -275,15 +286,18 @@
     	}
      	
      	var date = $(this).data('booking-detail-date');
+     	var chkInID =$(this).data('booking-checkin-detail-id');
+     	var cus_id =$(this).data('cus-id');
+     	var chk = $(this).is(':checked') ? 1 : 0;
      	$.ajax({
-            url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
+            url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + chkInID,
             type: "PATCH",
             data:{
                 _token: '{{csrf_token()}}', 
                 checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
-            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}');
+            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk);
                 //location.reload()
             },
             error: function(){
@@ -294,7 +308,7 @@
         });
     });
 
-    $(document).on('change', "[data-behavior~=change_price_title]", function(){
+    /*$(document).on('change', "[data-behavior~=change_price_title]", function(){
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
             type: "PATCH",
@@ -306,7 +320,15 @@
                 location.reload()
             },
        	});
-    });
+    });*/
+
+    $('[data-behavior~=change_price_title]').change(function(e){
+	    e.preventDefault()
+	    var cus_id =$(this).data('cus-id');
+    	var selectedOption = $(this).find('option:selected');
+    	var chkInID = selectedOption.attr('checkInId');
+    	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'');
+	});
 
     function call() {
     	$('.checkinDetails').modal('hide');

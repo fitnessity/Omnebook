@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{BusinessCompanyDetail,BusinessActivityScheduler,UserBookingDetail,BookingPostorder, BusinessServices, BookingCheckinDetails,SGMailService};
+use App\{BusinessCompanyDetail,BusinessActivityScheduler,UserBookingDetail,BookingPostorder, BusinessServices, BookingCheckinDetails,SGMailService,Customer};
 use Auth;
 use Carbon\Carbon;
 
@@ -20,10 +20,11 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     $company = $request->current_company;
     $date = Carbon::parse($request->date);
     $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
+   
     $booking_checkin_details = BookingCheckinDetails::where('business_activity_scheduler_id', $scheduler_id)->where('checkin_date', $date->format('Y-m-d'))->when($request->customerId != '', function($query) use ($request) {
             return $query->where('customer_id', $request->customerId);
-        })->get();
-    $instructor_id = $booking_checkin_details->first() != '' ? $booking_checkin_details->first()->instructor_id : '';
+        });
+
     $filter_date = $date;
     $staffMember = $company->business_staff;
     $bookingdata = UserBookingDetail::where('sport',$business_activity_scheduler->serviceid)
@@ -31,6 +32,28 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             return $query->where('user_id', $request->customerId);
         })->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
     $today = date('Y-m-d');
+
+    //print_r($booking_checkin_details);exit;
+    
+    $customers = [];
+    $customerIds = $booking_checkin_details->pluck('customer_id')->unique();
+    foreach ($customerIds as $id) {
+      $customer = Customer::find($id);
+      $customers[] = $customer != '' ? $customer : '';
+    }
+
+    $chkInId = $request->chkInId ?? '';
+    $chkCusId = $request->cus_id ?? '';
+     
+      $instructor_id = $booking_checkin_details->first() != '' ? $booking_checkin_details->first()->instructor_id : '';
+   // print_r($customers);exit;
+
+      if($request->chk === '1'){
+          session()->flash('success', 'Check in successful');
+      }
+      if($request->chk === '0'){
+          session()->flash('error', 'Check Out successful');
+      }
     return view('business.scheduler_checkin_detail.index', [
         'booking_checkin_details' => $booking_checkin_details,
         'business_activity_scheduler' =>$business_activity_scheduler,
@@ -39,6 +62,9 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         'bookingdata' => $bookingdata,
         'staffMember' => $staffMember,
         'instructor_id' => $instructor_id,
+        'customers' => $customers,
+        'chkInId' => $chkInId,
+        'chkCusId' => $chkCusId,
     ]);
   }
 
