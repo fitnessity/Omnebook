@@ -139,6 +139,11 @@ class Customer extends Authenticatable
         return $this->hasMany(Transaction::class,'user_id');
     }
 
+    public function BookingCheckinDetails()
+    {
+        return $this->hasMany(BookingCheckinDetails::class,'customer_id');
+    }
+
     public static function getcustomerofthiscompany($companyId){
         return Customer::where('business_id', $companyId)->orderBy('fname', 'ASC')->get();
     }
@@ -240,19 +245,38 @@ class Customer extends Authenticatable
         return $result->count();
     }
 
-    public function active_memberships(){
+    public function active_memberships($sport = null,$date=null){
         //echo $this->id;exit;
 
         $company = $this->company_information;
         $now = Carbon::now();
         $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id);
+        if($sport != NULL){
+            $results = $results->where('user_booking_details.sport',$sport);
+        }
+        $results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });
         if($this->user_id == Auth::user()->id){
             $results = $results->join('user_booking_status as ubs','user_booking_details.booking_id', '=', 'ubs.id')->orwhere(['ubs.user_id' => Auth::user()->id])->where('user_booking_details.business_id', $company->id);
         }
+
+        $results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });
+
         //$results = $results->select('user_booking_details.*');
           //print_r($results->get());
         $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
-        
+
+        $results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });
+        if($sport != NULL){
+            $results = $results->where('user_booking_details.sport',$sport);
+        }
+
+       
         //print_r($results->get());exit; 
         return $results; 
     }
@@ -405,6 +429,11 @@ class Customer extends Authenticatable
             return "<br>Default payment failed";
         }
     } 
+
+    public function getCheckInId($bookingId,$date){
+        $checkInDetail = $this->BookingCheckinDetails()->where('booking_detail_id',$bookingId)->whereDate('checkin_date' ,$date)->first();
+        return @$checkInDetail->id;
+    }
     
 }
    
