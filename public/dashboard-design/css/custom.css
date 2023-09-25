@@ -4289,3 +4289,6 @@ div#termsdiv{order: 4;}
 	margin-bottom: -45px;
 	margin-top: -63px;
 }
+.steps-table{
+	padding: 0px !important;
+}
