@@ -318,7 +318,7 @@ class OrderController extends BusinessBaseController
         foreach($transactions as $transaction){
             
             $tran_data = Transaction::create(array_merge($transaction, [ 
-                'user_type' => 'Customer',
+                'user_type' => 'customer',
                 'user_id' => $customer->id,
                 'item_type' =>'UserBookingStatus',
                 'item_id' => $userBookingStatus->id,

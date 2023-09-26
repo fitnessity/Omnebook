@@ -138,7 +138,7 @@ class RecurringController extends Controller
                     $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed']);
 
                     $transactiondata = array( 
-                        'user_type' => ucfirst($update_recurring_detail->user_type),
+                        'user_type' =>$update_recurring_detail->user_type,
                         'user_id' => $update_recurring_detail->user_id,
                         'item_type' =>'Recurring',
                         'item_id' => $update_recurring_detail->id,
