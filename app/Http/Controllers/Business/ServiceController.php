@@ -68,7 +68,7 @@ class ServiceController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-       // print_r($request->all()); 
+        //print_r($request->all()); 
         $profilePicture = $dayImage = $safe_varification ="";
 
         $user = Auth::user();
@@ -196,6 +196,8 @@ class ServiceController extends BusinessBaseController
 
                 $idary_price = $user->BusinessPriceDetails()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
 
+
+
                 for($i=0; $i < $paycount; $i++) {
                     $idary_cat1[] =  $request->cat_id_db[$i] ?? '';
                     $businessages= [
@@ -205,10 +207,12 @@ class ServiceController extends BusinessBaseController
                         "serviceid" => $serviceId,
                         "dues_tax" => $request->dues_tax[$i] ?? '',
                         "sales_tax" => $request->sales_tax[$i] ?? '',
-                        "visibility_to_public" =>  @$request->visibility_to_public[$i] ?? 0,
+                        "visibility_to_public" => in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0,
                     ];
 
                     $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);
+
+                    //print_r($createOrUpdate);
 
                     $cat_new_id = $createOrUpdate->id; 
         
@@ -321,7 +325,7 @@ class ServiceController extends BusinessBaseController
                         }
                     }
                 }
-               
+
                 $differenceArray_cat1 = array_diff($idary_cat, $idary_cat1);
                 BusinessPriceDetailsAges::whereIn('id', $differenceArray_cat1)->delete();
                 
