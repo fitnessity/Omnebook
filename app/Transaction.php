@@ -65,15 +65,8 @@ class Transaction extends Model
     }
 
     public function item_description($chkBusiness = null){
-        $itemDescription = '';
-        $itemPrice = '';
-        $itemSubTotal = '';
-        $itemDis = '';
-        $itemTax = '';
-        $location = '';
-        $totalTax = 0;
-        $totalPaid = 0;
-        $qty = 0;
+        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = '';
+        $totalTax = $totalDis = $totalPaid =  $qty = 0;
         $arry = [];
         if($this->item_type == 'UserBookingStatus'){
             if($this->userBookingStatus != ''){
@@ -91,7 +84,9 @@ class Transaction extends Model
                             $itemTax .= $bd->tax != '0.00' ? '$'.$bd->tax.'<br>' : '$0<br>';
                             $location .= @$bd->company_information != '' ? @$bd->company_information->public_company_name.'<br>' : '<br>';
                             $totalTax += $bd->tax != '0.00' ? $bd->tax : 0;
+                            $totalDis += $bd->discount != '0.00' ? $bd->discount : 0;
                             $totalPaid += $bd->subtotal != '0.00' ? $bd->subtotal : 0;
+                            $notes .= $bd->note != '' ? $bd->note.'<br>' : 'N/A<br>';
                             $qty++;
                         }
                     }
@@ -111,13 +106,24 @@ class Transaction extends Model
                 $itemTax .= $bookingData->tax != '0.00' ? '$'.$bookingData->tax.'<br>' : '$0<br>';
                 $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
                 $totalTax += $bookingData->tax != '0.00' ? $bookingData->tax : 0;
+                $totalDis += $bookingData->discount != '0.00' ? $bookingData->discount : 0;
                 $totalPaid += $bookingData->subtotal != '0.00' ? $bookingData->subtotal : 0;
+                $notes .= $bookingData->note != '' ? $bookingData->note.'<br>' : 'N/A<br>';
                 $qty++;
             }
         }
 
        
-        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax  ?? 0,"totalPaid"=> $totalPaid  ?? 0);
+        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes);
         return $arry;
+    }
+
+    public function getCustomer($business_id){
+        if($this->user_type == 'customer'){
+            return $this->Customer;
+        }else{
+            $user = $this->User;
+            return Customer::where(['email'=>@$user->email ,'fname' => @$user->firstname ,'lname' => @$user->lastname ,'business_id' =>$business_id])->first();
+        }
     }
 }
