@@ -110,8 +110,8 @@ class Transaction extends Model
                 $itemDis .= $bookingData->discount != '0.00' ? '$'.$bookingData->discount.'<br>' : '$0<br>';
                 $itemTax .= $bookingData->tax != '0.00' ? '$'.$bookingData->tax.'<br>' : '$0<br>';
                 $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
-                $totalTax += $bd->tax != '0.00' ? $bd->tax : 0;
-                $totalPaid += $bd->subtotal != '0.00' ? $bd->subtotal : 0;
+                $totalTax += $bookingData->tax != '0.00' ? $bookingData->tax : 0;
+                $totalPaid += $bookingData->subtotal != '0.00' ? $bookingData->subtotal : 0;
                 $qty++;
             }
         }
