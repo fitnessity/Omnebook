@@ -345,14 +345,19 @@ function closeMobileNav() {
         var width = $(this).data('modal-width');
         if(width == undefined){
             width = '600px';
-        }            
+        }          
+        var chkbackdrop  =   $(this).attr('data-modal-chkBackdrop');
         e.preventDefault()
         $.ajax({
             url: $(this).data('url'),
             success: function(html){
                 $('#ajax_html_modal .modal-body').html(html)
-                $('#ajax_html_modal .modal-dialog').css({width:width});
-                $('#ajax_html_modal').modal('show')
+                $('#ajax_html_modal .modal-dialog').css('width', width);
+            	if(chkbackdrop == 1){
+            		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
+        		}else{
+                   $('#ajax_html_modal').modal('show');
+        		}
             }
         })
     });

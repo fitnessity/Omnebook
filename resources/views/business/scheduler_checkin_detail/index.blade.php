@@ -116,7 +116,7 @@
 							<td>
 								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
 									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
-									@foreach($cus->active_memberships($business_activity_scheduler->business_service->id,$filter_date->format('Y-m-d'))->get() as $bookingDetail)
+									@foreach($cus->active_memberships($business_activity_scheduler->business_service->id,$filter_date->format('Y-m-d'))->where('user_booking_details.user_id',$cus->id)->get() as $bookingDetail)
                                         <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
                                                 {{$bookingDetail->business_price_detail->price_title}} 
                                         </option>
@@ -229,7 +229,7 @@
 		            insID: value, 
 		        },
 		        success: function(html){
-		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','');
 		            //location.reload();
 		        }
 			})
@@ -247,7 +247,7 @@
 	            _token: '{{csrf_token()}}', 
 	        },
 	        success: function(html){
-	        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
+	        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','');
 	            //location.reload();
 	        }
     	})
@@ -266,11 +266,12 @@
             data: { 
                 _token: '{{csrf_token()}}', 
                 customer_id: $('#search_postorder_client').data('customer-id'),
-                checkin_date: "{{$filter_date->format('Y/m/d')}}"
+                checkin_date: "{{$filter_date->format('Y/m/d')}}",
+                serviceId: "{{$business_activity_scheduler->serviceid}}",
             },
             success: function(html){
-                //location.reload();
-                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','');
+                //location.reload();	
+                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','',html);
         	}
     	})
 	});
@@ -297,7 +298,7 @@
                 checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
-            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk);
+            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'');
                 //location.reload()
             },
             error: function(){
@@ -327,7 +328,7 @@
 	    var cus_id =$(this).data('cus-id');
     	var selectedOption = $(this).find('option:selected');
     	var chkInID = selectedOption.attr('checkInId');
-    	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'');
+    	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','');
 	});
 
     function call() {

@@ -194,4 +194,9 @@
         }
     }
 
+    function getUserbookingDetail($sid,$cid)
+    {
+        return App\UserBookingDetail::where(['sport'=> $sid ,'user_id'=>$cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
+    }
+
 ?>
