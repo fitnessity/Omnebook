@@ -111,7 +111,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="{{$totalSales}}">{{$totalSales}}</span></h4>
-                                                        <a href="" class="text-decoration-underline">View Sales Report</a>
+                                                        <a href="{{route('business.sales_report.index')}}" target="_blank" class="text-decoration-underline">View Sales Report</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-success rounded fs-3">
@@ -177,7 +177,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$customerCount}}">{{$customerCount}}</span></h4>
-                                                        <a href="{{route('business_customer_index')}}" class="text-decoration-underline">View Customers</a>
+                                                        <a href="{{route('business_customer_index')}}" target="_blank" class="text-decoration-underline">View Customers</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-warning rounded fs-3">
@@ -207,7 +207,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="0">0</span></h4>
-                                                        <a href="" class="text-decoration-underline">View Sales Report</a>
+                                                        <a href="" target="_blank" class="text-decoration-underline">View Sales Report</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-danger rounded fs-3">
