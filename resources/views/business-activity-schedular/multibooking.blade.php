@@ -289,7 +289,7 @@
 		var did = $('#priceId'+i).find('option:selected').data('did');
 		if(did != '' &&  did != '0'){
 			$.ajax({
-				url:'/chksession/'+did+'/'+date+'/'+timeid+'1',
+				url:'/chksession/'+did+'/'+date+'/'+timeid+'/1',
 				type: 'GET',
 				success:function(data){
 					$('#remainingSession'+i).html(data+' Session Remaining.')
