@@ -25,7 +25,7 @@
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1">Jul, 2023</h4>
+											<h4 class="card-title mb-0 flex-grow-1">{{$today->format('l, F j, Y')}}</h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 											<input type="hidden" id="type" value="">
