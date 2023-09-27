@@ -9,13 +9,14 @@
 <div class="time-slots-saprator mb-20">
 	<label><span>{{count($finalSessionAry)}} </span>- Time Slots Selected</label>
 </div>
+<div class="mb-20 font-green" id="successMsg"></div>
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive confirm-booking purchase-history review-data">
 			<table style="width:100%" class="table mb-0">
 				<tr>
 					<th>No</th>
-					<th>Program</th>
+					<th>Activity Name</th>
 					<th>Date</th>
 					<th>Time</th>
 					<th>Duration</th>
@@ -25,17 +26,17 @@
 				</tr>
 
 				@foreach($finalSessionAry as $i=>$sesAry)
-				  <tr>
+				<tr id="blankTr">
 					<td>{{$i+1}}.</td>
-					<td>{{$sesAry['pname']}}</td>
+					<td>{{$sesAry['pname']}} @if(@$sesAry['catname']) -  {{@$sesAry['catname']}} @endif</td>
 					<td>{{(new DateTime($sesAry['date']))->format("l, F j,Y")}}</td>
 					<td>{{$sesAry['time']}} </td>
-					<td> {{$sesAry['duration']}} </td>
+					<td>{{$sesAry['duration']}} </td>
 					<td> 1 Slot </td>
 					<td>  
 						<?php 
 							$html = $data = '';$remaining = 0;$firstDataProcessed = false; 
-							$bookingDetail = App\UserBookingDetail::where(['sport'=> $sesAry['serviceID'] ,'user_id'=>$sesAry['cid']])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
+							$bookingDetail = getUserbookingDetail($sesAry['serviceID'], $sesAry['cid']);
 				            if(!empty($bookingDetail)){
 				                foreach($bookingDetail as $detail){
 				                    $remainingSession = $detail->getremainingsession();
@@ -47,17 +48,23 @@
 				                        }
 				                        $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$detail->id.'"';
 
-				                        $html .= array_key_exists('priceId', $sesAry) && $sesAry['priceId'] == $priceDetail->id ? 'selected' : '';
+				                        /*$html .= array_key_exists('priceId', $sesAry) && $sesAry['priceId'] == $priceDetail->id ? 'selected' : '';*/
 
 				                        $html .= '>'.$priceDetail->price_title.'</option>';
 				                    }
 				                }
 				            }
 				            if($html != ''){
-					            $data .='<select class="mb-10 form-control" id="priceId'.$i.'" onchange="getRemainingSession('.$i.',\''.$sesAry["date"].'\','.$sesAry['timeId'].')">'.$html.'</select><div class="font-red text-center" id="remainingSession'.$i.'">'.$remaining.' Session Remaining.</div>';
+					            $data .='<select class="mb-10 form-control required" id="priceId'.$i.'" onchange="getRemainingSession('.$i.',\''.$sesAry["date"].'\','.$sesAry['timeId'].')"  ><option value="" data-did ="0">Choose Membership</option>'.$html.'</select>  <div class="font-red text-center" id="remainingSession'.$i.'"></div>';
+
+					            //'<div class="font-red text-center" id="remainingSession'.$i.'">'.$remaining.' Session Remaining.</div>';
 					        }
 				        ?>
-				        {!! $data != '' ? $data : '<div class="text-center"><p> No MemberShip Available</p><a href="/activity-details/'.$sesAry['serviceID'].'" class="btn btn-lp" target="_blank">Buy Membership Now </a></div>' !!}
+				        <div class="text-center">
+				        	{!! $data != '' ? $data : '<p> No MemberShip Available</p>' !!}
+
+				        	<div class="time-slots-saprator mb-20"></div><a href="/activity-details/{{$sesAry['serviceID']}}" class="btn btn-lp" target="_blank">Purchase A Membership.</a>
+				        </div>
 				    </td>
 					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0);"> Delete </button></td>
 				  </tr>
@@ -76,20 +83,36 @@
 			if(cnt == 0){
 				alert('Please select time first..');
 			}else{
-				$.ajax({
-			   		url: "{{route('multibooking.save')}}",
-					type: 'POST',
-					xhrFields: {
-						withCredentials: true
-			    	},
-			    	data:{
-						_token: '{{csrf_token()}}',
-						cid: '{{$cid}}',
-					},
-					success: function (response) { 
-						window.location.reload();
-					}
+				var isValid = 1;
+				$('.required').each(function() {
+					if ($(this).val() === '') {
+				        alert('Please select membership from each activity.');
+				        isValid = 0;
+			      	}
 				});
+
+				if (isValid == 1) {
+					$.ajax({
+			   			url: "{{route('multibooking.save')}}",
+						type: 'POST',
+						xhrFields: {
+							withCredentials: true
+				    	},
+				    	data:{
+							_token: '{{csrf_token()}}',
+							cid: '{{$cid}}',
+						},
+						success: function (response) { 
+							//window.location.reload();
+							$('#blankTr').html('');
+							$('#successMsg').html(response);
+							setTimeout(function() {
+							    window.location.href = "/business_activity_schedulers/" + "{{$company->id}}" + "?customer_id=" + "{{$cid}}";
+							}, 2000);
+							
+						}
+					});
+				}
 			}			
 		}
 	}

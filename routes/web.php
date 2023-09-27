@@ -123,7 +123,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
 Route::any('/schedule/multibooking/{business_id}/', 'BusinessActivitySchedulerController@multibooking')->name('multibooking');
 Route::post('/chkOrderAvailable', 'BusinessActivitySchedulerController@chkOrderAvailable')->name('chkOrderAvailable');
-Route::get('/chksession/{did}/{date?}/{timeId?}', 'BusinessActivitySchedulerController@chksession')->name('chksession');
+Route::get('/chksession/{did}/{date?}/{timeId?}/{chk?}', 'BusinessActivitySchedulerController@chksession')->name('chksession');
 Route::post('/chkMultiBooking', 'BusinessActivitySchedulerController@chkMultiBooking')->name('chkMultiBooking');
 
 Route::post('/chkMultipleOrder', 'BusinessActivitySchedulerController@chkMultipleOrder')->name('chkMultipleOrder');
