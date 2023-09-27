@@ -159,7 +159,7 @@
 						<div class="calendar-footer mt-10">
 							<label><span id="timeSlotCnt">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
 							<!-- <a href="#" class="showall-btn" data-toggle="modal" data-target="#review_selections" >Review Selections</a> -->
-							<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-modal-width="1000px" >Review Selections</a>
+							<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-modal-width="1000px"data-modal-chkBackdrop="1" id="reviewData">Review Selections</a>
 						</div>
 					</div>
 				</div>
@@ -249,17 +249,11 @@
 				},
 				success:function(data){
 					$('#timeSlotCnt').html(data);
-					/*if (Number.isInteger(data)) {
-					    $('#timeSlotCnt').html(data);
-					} else {
-						$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>'+data+'</p></div> </div></div>');
-			 			$("#"+checkboxId).prop("checked", false);
-			 			$('.selectbooking').modal('show');  
-					}*/
 				}
 			});
 		}
 	}
+
 
 	function addtimedate(scheduleId,sid,activityName,time){
 	
@@ -293,14 +287,16 @@
 
 	function  getRemainingSession(i,date,timeid){
 		var did = $('#priceId'+i).find('option:selected').data('did');
-		if(did != ''){
+		if(did != '' &&  did != '0'){
 			$.ajax({
-				url:'/chksession/'+did+'/'+date+'/'+timeid,
+				url:'/chksession/'+did+'/'+date+'/'+timeid+'1',
 				type: 'GET',
 				success:function(data){
 					$('#remainingSession'+i).html(data+' Session Remaining.')
 				}
 			});
+		}else{
+			$('#remainingSession'+i).html('')
 		}
 	}
 
@@ -321,7 +317,8 @@
 				},
 				success: function (response) { 
 					if(chk ==0){
-						window.location.reload();
+						//window.location.reload();
+						$('#reviewData').click();
 					}else{
 						$('#timeSlotCnt').html(response);
 					}

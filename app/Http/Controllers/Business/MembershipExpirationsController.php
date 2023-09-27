@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
 use Auth;
-
+use DateTime;
 
 class MembershipExpirationsController extends BusinessBaseController
 {
@@ -16,7 +16,8 @@ class MembershipExpirationsController extends BusinessBaseController
 
     public function index()
     {
-    	return view('business.member_expirations.index');
+        $today = new DateTime();
+    	return view('business.member_expirations.index',compact('today'));
     }
 
     public function membership($days){
