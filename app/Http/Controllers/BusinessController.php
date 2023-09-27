@@ -60,7 +60,7 @@ class BusinessController extends Controller
         
             $totalRecurringPmt = $recurringdata[0]['total_sales'] ?? 0;
 
-            $remainigpmt = @$business->Recurring()->whereMonth('payment_date', '>=', $startDateMonth)->whereMonth('payment_date', '<=', $endDateMonth)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Scheduled')->get();
+            $remainigpmt = @$business->Recurring()->whereMonth('payment_date', '>=', $startDateMonth)->whereMonth('payment_date', '<=', $endDateMonth)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'!=', 'Completed')->get();
 
             $compltedpmt = @$business->Recurring()->whereMonth('payment_date', '>=', $startDateMonth)->whereMonth('payment_date', '<=', $endDateMonth)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
 
@@ -105,6 +105,10 @@ class BusinessController extends Controller
                     $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
                 }
             }
+
+            $totalSales += $compltedpmtcnt;
+              
+            //print_r($totalSales);exit();
 
             $totalSales = number_format($totalSales,2,'.','');
             $totalsalePercentage =  $previousTotalSales != 0 ? number_format(($totalSales - $previousTotalSales)*100/$previousTotalSales,2,'.','') : 0;
