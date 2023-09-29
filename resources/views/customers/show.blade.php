@@ -291,7 +291,7 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
+																														<div class="col-lg-6 col-md-6 col-8"> {{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
 																														<div class="col-lg-6 col-md-6 col-4">
 																															<div class="multiple-options">
 																																<div class="setting-icon">
@@ -474,6 +474,19 @@
 																																	<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
 																																</div>
 																															</div>
+																															@endif
+
+																															@if ($booking_detail->customer)
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="line-break">
+																																		<label>BOOKED BY:</label>
+																																	</div>
+																																</div>
+																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																	<div class="float-end line-break text-right">
+																																		<span>{{$booking_detail->customer->fname}} {{$booking_detail->customer->lname}} (In person)</span>
+																																	</div>
+																																</div>
 																															@endif
 																															
 																															@if ($booking_detail->business_services_with_trashed)
@@ -698,7 +711,7 @@
 																																		</div>
 																																	</div>
 																																@endif
-																																@if ($booking_detail->booking->customer)
+																																@if ($booking_detail->customer)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>BOOKED BY:</label>
@@ -706,7 +719,7 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->booking->customer->fname}} {{$booking_detail->booking->customer->lname}} (In person)</span>
+																																			<span>{{$booking_detail->customer->fname}} {{$booking_detail->customer->lname}} (In person)</span>
 																																		</div>
 																																	</div>
 																																@endif
