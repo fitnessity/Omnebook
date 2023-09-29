@@ -273,7 +273,7 @@ class BusinessActivitySchedulerController extends Controller
 
         if(!empty($sessionAry)){
             foreach($sessionAry as $i=>$ary){
-                if($ary['date'] == date('Y-m-d') &&  date( "H:i", strtotime($ary['time']) ) < date( "H:i", strtotime(date('Y-m-d H:i:s')) ) ){
+                if($ary['date'] == date('Y-m-d') &&  date( "H:i", strtotime($ary['time']) ) < date( "H:i", strtotime(date('Y-m-d H:i:s')) ) ||  $ary['date'] <  date('Y-m-d')){
                     unset($sessionAry[$i]);
                 }else{
                     $finalSessionAry[] = $ary;

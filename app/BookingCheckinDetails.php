@@ -112,4 +112,12 @@ class BookingCheckinDetails extends Model
         }
     }
 
+    public static function checkCustomerInClass($scheduleId,$date){
+        $pos = strpos($date, ' ');
+        $result = substr($date, 0, $pos);
+        $checkInDetails = BookingCheckinDetails::where("business_activity_scheduler_id" , $scheduleId)->whereDate('checkin_date',date('Y-m-d',strtotime($date)))->whereNotNull('checked_at')->count();
+
+        return $checkInDetails;
+    }
+
 }

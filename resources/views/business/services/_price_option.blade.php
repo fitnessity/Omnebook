@@ -401,13 +401,13 @@
                             <h3>When Does This Price Setting Expire</h3>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="set-num">
                             <label>Set The Number</label>
                             <input type="text" name="pay_setnum_{{$i}}{{$j}}" id="pay_setnum{{$i}}{{$j}}" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="{{@$price->pay_setnum != '' ? @$price->pay_setnum : 1}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" >
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="set-num">
                             <label>The Duration</label>
                             <select name="pay_setduration_{{$i}}{{$j}}" id="pay_setduration{{$i}}{{$j}}" class="form-control valid">
@@ -418,7 +418,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-md-2 col-xs-12">
+                    <!-- <div class="col-lg-1 col-md-2 col-xs-12">
                         <div class="set-num after">
                             <label>After</label>
                         </div>
@@ -430,7 +430,7 @@
                                 <option value="2" {{@$price->pay_after =='2' ?'selected':'' }}>Starts to expire when the customer first participates in the activity</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

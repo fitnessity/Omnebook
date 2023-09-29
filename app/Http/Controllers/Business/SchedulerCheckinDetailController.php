@@ -58,6 +58,10 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             session()->flash('error', 'There is no membership available for this customer');
         }
 
+        if($request->chkInMsg == '2'){
+            session()->flash('error', "There is no spot available so you can't checkIn in this class.");
+        }
+
         return view('business.scheduler_checkin_detail.index', [
             'booking_checkin_details' => $booking_checkin_details,
             'business_activity_scheduler' =>$business_activity_scheduler,
@@ -93,20 +97,23 @@ class SchedulerCheckinDetailController extends BusinessBaseController
     {
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-        $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id, 'sport'=> $request->serviceId])->whereDate('expired_at','>=',date('Y-m-d'))->get();
+        $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
         $chk = 0;
         foreach($bookingDetail as $detail){
             $reminingSession = $detail->getremainingsession();
             if($reminingSession > 0){
                 $chk = 1;
-                $status = BookingCheckinDetails::create([
-                    'customer_id' => $request->customer_id,
-                    'booking_detail_id' => $detail->id,
-                    'checkin_date' => $request->checkin_date,
-                    'business_activity_scheduler_id' => $business_activity_scheduler->id,
-                    'source_type' => 'in_person',
-                    'use_session_amount' => 0,
-                ]);
+                $chkCheckInDetails = BookingCheckinDetails::where(['booking_detail_id' =>$detail->id,'checkin_date' => $request->checkin_date, 'business_activity_scheduler_id' => $business_activity_scheduler->id])->first();
+                if($chkCheckInDetails == ''){
+                    $status = BookingCheckinDetails::create([
+                        'customer_id' => $request->customer_id,
+                        'booking_detail_id' => $detail->id,
+                        'checkin_date' => $request->checkin_date,
+                        'business_activity_scheduler_id' => $business_activity_scheduler->id,
+                        'source_type' => 'in_person',
+                        'use_session_amount' => 0,
+                    ]);
+                }
             }
         }
       
@@ -149,78 +156,97 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
-        $overwrite = [];
+        $overwrite = []; $sendmail= 0;
+
         if($request->checked_at){
-          $business_checkin_detail = $business_checkin_detail->whereNotNull('booking_detail_id');
-          $overwrite['use_session_amount'] = 1;
-          $overwrite['no_show_action'] = Null;
-          $overwrite['no_show_charged'] = Null;
+            $customerInClass = BookingCheckinDetails::checkCustomerInClass($scheduler_id,$request->checked_at);
+           /* echo $customerInClass;
+            exit();*/
+            $checkin = BookingCheckinDetails::whereNotNull('booking_detail_id')->findOrFail($id);
+            $overwrite['use_session_amount'] = 1;
+            $overwrite['no_show_action'] = Null;
+            $overwrite['no_show_charged'] = Null;
+            
+            if($customerInClass  <  $business_activity_scheduler->spots_available){
+                $checkin->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+                $sendmail= 1;
+            }else{
+                $sendmail= 2;
+            }
+            
         }else{
-          $overwrite['use_session_amount'] = 0;
+            $checkin_detail = BookingCheckinDetails::whereNotNull('booking_detail_id')->findOrFail($id);
+            $overwrite['use_session_amount'] = 0;
+            $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
         }
 
         $business_checkin_detail = $business_checkin_detail->findOrFail($id);
 
         if($request->no_show_action){
-          $overwrite['no_show_charged'] = Null;
-          $overwrite['use_session_amount'] = 0;
-          $overwrite['booking_detail_id'] = $business_checkin_detail->booking_detail_id;
-          $overwrite['checked_at'] = Null;
+            $overwrite['no_show_charged'] = Null;
+            $overwrite['use_session_amount'] = 0;
+            $overwrite['booking_detail_id'] = $business_checkin_detail->booking_detail_id;
+            $overwrite['checked_at'] = Null;
           
-          switch ($request->no_show_action) {
-              case 'nothing':
-                break;
-              case 'charge_fee':
-                $overwrite['no_show_charged'] = $request->no_show_charged;
-                break;
-              case 'deduct':
-                $overwrite['use_session_amount'] = 1;
-                $overwrite['booking_detail_id'] = $request->booking_detail_id;
-                break;
-          }
+            switch ($request->no_show_action) {
+                case 'nothing':
+                    break;
+                case 'charge_fee':
+                    $overwrite['no_show_charged'] = $request->no_show_charged;
+                    break;
+                case 'deduct':
+                    $overwrite['use_session_amount'] = 1;
+                    $overwrite['booking_detail_id'] = $request->booking_detail_id;
+                    break;
+            }
+
+            $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
         }
 
-        $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
 
         if($request->checked_at){
-            $userbookingdetail = UserBookingDetail::find($business_checkin_detail->booking_detail_id);
-            $customer =  $userbookingdetail->Customer;
-            $business_price_detail =  $userbookingdetail->business_price_detail;
-            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
-            $reminingSession = $userbookingdetail->getremainingsession();
-            if($reminingSession == 0){
-                $email_detail_customer = array(
-                    "email" =>$customer->email, 
-                    "CustomerName" => $customer->full_name, 
-                    "ReNewUrl" => env('APP_URL').'/activity-details/'.$userbookingdetail->sport, 
-                    "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
-                    "ProviderName"=> $company->dba_business_name,
-                    "CategoryName"=> $business_price_details_ages->category_title,
-                    "PriceOptionName"=> @$business_price_detail->price_title,
-                    "CompleteDate"=> date('m-d-Y'),
-                    "ExpirationDate"=> date('m-d-Y' ,strtotime($userbookingdetail->expired_at)),
-                    "ProviderPhoneNumber"=> $company->business_phone,
-                    "ProviderEmail"=> $company->business_email,
-                    "ProviderAddress"=> $company->company_address());
+            if($sendmail == 1){
+                $userbookingdetail = UserBookingDetail::find($business_checkin_detail->booking_detail_id);
+                $customer =  $userbookingdetail->Customer;
+                $business_price_detail =  $userbookingdetail->business_price_detail_with_trashed;
+                $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+                $reminingSession = $userbookingdetail->getremainingsession();
+                if($reminingSession == 0){
+                    $email_detail_customer = array(
+                        "email" =>$customer->email, 
+                        "CustomerName" => $customer->full_name, 
+                        "ReNewUrl" => env('APP_URL').'/activity-details/'.$userbookingdetail->sport, 
+                        "ProfileUrl" => env('APP_URL').'/profile/viewProfile', 
+                        "ProviderName"=> $company->dba_business_name,
+                        "CategoryName"=> $business_price_details_ages->category_title,
+                        "PriceOptionName"=> @$business_price_detail->price_title,
+                        "CompleteDate"=> date('m-d-Y'),
+                        "ExpirationDate"=> date('m-d-Y' ,strtotime($userbookingdetail->expired_at)),
+                        "ProviderPhoneNumber"=> $company->business_phone,
+                        "ProviderEmail"=> $company->business_email,
+                        "ProviderAddress"=> $company->company_address());
 
-                $email_detail_provider = array(
-                    "email" => $company->business_email, 
-                    "CustomerName" => $customer->full_name, 
-                    "ProviderName"=> $company->dba_business_name,
-                    "CategoryName"=> $business_price_details_ages->category_title,
-                    "PriceOptionName"=> @$business_price_detail->price_title );
+                    $email_detail_provider = array(
+                        "email" => $company->business_email, 
+                        "CustomerName" => $customer->full_name, 
+                        "ProviderName"=> $company->dba_business_name,
+                        "CategoryName"=> $business_price_details_ages->category_title,
+                        "PriceOptionName"=> @$business_price_detail->price_title );
 
-                SGMailService::sendReminderOfSessionExpireToCustomer($email_detail_customer);
-                SGMailService::sendReminderOfSessionExpireToProvider($email_detail_provider);
+                    SGMailService::sendReminderOfSessionExpireToCustomer($email_detail_customer);
+                    SGMailService::sendReminderOfSessionExpireToProvider($email_detail_provider);
+                }
             }
         }
 
-        if (!$request->ajax()) {
+        /*if (!$request->ajax()) {
           return redirect()->route('business.schedulers.checkin_details.index',[
             'scheduler'=>$business_checkin_detail->business_activity_scheduler_id, 
             'date' =>$business_checkin_detail->checkin_date
           ]);
-        }
+        }*/
+
+        return $sendmail;
     }
 
       /**
@@ -231,10 +257,11 @@ class SchedulerCheckinDetailController extends BusinessBaseController
        */
     public function destroy(Request $request, $business_id, $scheduler_id, $id)
     {
+        $idsArray = explode(',', $id);
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-        $business_checkin_detail = BookingCheckinDetails::findOrFail($id);
-        $business_checkin_detail->delete();
+        $business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
+        //$business_checkin_detail->delete();
     }
 
     public function latecancel_modal(Request $request, $business_id, $scheduler_id, $id){

@@ -112,7 +112,8 @@ class PaymentController extends Controller {
                     $participateAry['id'] = $d['id'];
 
                     $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
-                    
+                    $expiredate = $price_detail->getExpirationDate($item['sesdate']);
+                    $expired_duration   = $price_detail->pay_setnum.' '.$price_detail->pay_setduration;
                     $booking_detail = UserBookingDetail::create([                 
                         'booking_id' => $userBookingStatus->id,
                         'user_id'=> $d['id'],
@@ -125,8 +126,9 @@ class PaymentController extends Controller {
                         'priceid' => $item['priceid'],
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
-                        'expired_at' => $activityScheduler->end_activity_date,
-                        'contract_date' => Carbon::now()->format('Y-m-d'),
+                        'expired_at' => $expiredate,
+                        'expired_duration' => $expired_duration,
+                        'contract_date' => $item['sesdate'],
                         'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price'],$addOnServicePrice),
                         'discount' => 0,
                         'tax' =>  0,
@@ -419,6 +421,8 @@ class PaymentController extends Controller {
 
                     $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
                     $priceWithDiscount = $d['price'] - $discount + $addOnServicePrice;
+                    $expiredate = $price_detail->getExpirationDate($item['sesdate']);
+                    $expired_duration   = $price_detail->pay_setnum.' '.$price_detail->pay_setduration;
 
                     $booking_detail = UserBookingDetail::create([                 
                         'booking_id' => $userBookingStatus->id,
@@ -432,8 +436,9 @@ class PaymentController extends Controller {
                         'priceid' => $item['priceid'],
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
-                        'expired_at' => $activityScheduler->end_activity_date,
-                        'contract_date' => Carbon::now()->format('Y-m-d'),
+                        'expired_at' => $expiredate,
+                        'expired_duration' => $expired_duration,
+                        'contract_date' => $item['sesdate'],
                         'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price'], $addOnServicePrice),
                         'discount' => $discount,
                         'tax' =>  $cartService->getTax($priceWithDiscount),

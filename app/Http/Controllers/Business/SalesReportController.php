@@ -31,7 +31,30 @@ class SalesReportController extends BusinessBaseController
           }
 
           $sortedDates = array_reverse($dates);
-    	     $cardDataStatusTable = Transaction::select('transaction.*')
+
+          $cardReport = Transaction::select('transaction.*')
+              ->where('kind', 'card')
+              ->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id) {
+                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                      ->where('ubd.business_id', '=', $business_id);
+              })
+              ->whereDate('transaction.created_at', '>=', $filterStartDate)
+              ->whereDate('transaction.created_at', '<=', $filterEndDate)
+              ->orderBy('transaction.created_at', 'Desc')
+              ->union
+              (
+                  Transaction::select('transaction.*')
+                      ->where('kind', 'card')
+                      ->where('item_type', 'Recurring')
+                      ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                      ->where('rec.business_id', '=', $business_id)
+                      ->whereDate('transaction.created_at', '>=', $filterStartDate)
+                      ->whereDate('transaction.created_at', '<=', $filterEndDate)
+              );
+
+    	     /*$cardDataStatusTable = Transaction::select('transaction.*')
                ->where('kind', 'card')->where('item_type', 'UserBookingStatus')
                ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
                ->join('user_booking_details as ubd', function($join) use ($business_id) {
@@ -41,16 +64,16 @@ class SalesReportController extends BusinessBaseController
 
           $cardDataRecurringTable = Transaction::select('transaction.*')
                ->where('kind', 'card')->where('item_type', 'Recurring')
-               ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')->where('rec.business_id', '=', $business_id)->orderBy('transaction.created_at','Desc')->whereDate('transaction.created_at','>=', $filterStartDate)->whereDate('transaction.created_at','<=', $filterEndDate)->get();
+               ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')->where('rec.business_id', '=', $business_id)->orderBy('transaction.created_at','Desc')->whereDate('transaction.created_at','>=', $filterStartDate)->whereDate('transaction.created_at','<=', $filterEndDate)->get();*/
 
-          $mergedCardData = $cardDataStatusTable->merge($cardDataRecurringTable);
+          //$mergedCardData = $cardDataStatusTable->merge($cardDataRecurringTable);
 
-          $cardReport = [];
+          /*$cardReport = [];
           foreach ($mergedCardData as $key => $data) {
                $stripeResponse = json_decode($data->payload,true);
                $card = $stripeResponse['charges']['data'][0]['payment_method_details']['card']['brand'];
                $cardReport[$card][] = $data;
-          }
+          }*/
 
           $cashReport = Transaction::select('ubs.id as user_booking_status_id', 'transaction.*')
                ->where('kind', 'cash')
