@@ -164,4 +164,9 @@ class BusinessPriceDetails extends Model
         }
         return ($discount  != '' && $price != 0 ? ($price - ($price * $discount )/100) : $price);  
     }
+
+    public function getExpirationDate($startDate){
+        $date = new \DateTime($startDate);
+        return $date->modify('+'.$this->pay_setnum.' '.$this->pay_setduration);
+    }
 }
