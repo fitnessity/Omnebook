@@ -113,12 +113,15 @@
 						</div><!-- end col -->
 					</div>
 					
-					@php $grandTax =  $grandDiscount =  $grandCash =  $grandcheck =  $grandCard = $grandComp = $grandTotal = 0; 
+					@php $grandTax =  $grandDiscount =  $grandCash =  $grandCheck =  $grandCard = $grandComp = $grandTotal = 0; 
 					@endphp
 					<div class="row">
 						@foreach($sortedDates as $y=>$date)
 
 						@php  
+					        $cardDetails = clone $cardReport; // Create a fresh copy of the query
+					        $cardDetails = $cardDetails->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
+
 					        $cashData = clone $cashReport; // Create a fresh copy of the query
 					        $cashData = $cashData->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
 
@@ -127,10 +130,10 @@
 
 							$compData = clone $compReport; // Create a fresh copy of the query
 							$compData = $compData->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
-
+							$cardData = [];
 					    @endphp
 
-					    @if(count($cashData) > 0 || count($checkData) > 0 || count($compData) > 0 )
+					    @if(count($cardDetails) > 0 ||count($cashData) > 0 || count($checkData) > 0 || count($compData) > 0 )
 							<div class="col-xxl-12">
 								<div class="card">
 	                                <div class="card-header align-items-center d-flex">
@@ -140,8 +143,14 @@
 	                                <div class="card-body">
 	                                    <div class="live-preview">
 	                                        <div class="accordion accordion-border-box" id="default-accordion-example">
-
-	                                        	@forelse($cardReport as $i=>$data)
+	                                        	@php foreach ($cardDetails as $key => $data1) 
+	                                        		{
+											            $stripeResponse = json_decode($data1->payload,true);
+											            $card = $stripeResponse['charges']['data'][0]['payment_method_details']['card']['brand'];
+										               	$cardData[$card][] = $data1;
+										          	}
+									          	@endphp
+	                                        	@forelse($cardData as $i=>$data)
 	                                            <div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="heading{{$i}}{{$y}}">
 	                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$i}}{{$y}}" aria-expanded="true" aria-controls="collapse{{$i}}{{$y}}">
@@ -530,7 +539,7 @@
 																	<td>${{$grandDiscount}}</td>
 																	<td>-</td>
 																	<td>${{$grandCash}}</td>
-																	<td>${{$grandcheck}}</td>
+																	<td>${{$grandCheck}}</td>
 																	<td>${{$grandCard}}</td>
 																	<td>${{$grandComp}}</td>
 																	<td>${{$grandTotal}}</td>

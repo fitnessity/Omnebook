@@ -75,7 +75,7 @@
 															</span>
 														</a> -->
 
-														<a class="cursor-pointer" onclick="getCheckInDetails({{$schedule->id}},'{{$filterDate->format("m/d/Y")}}','','','','')">
+														<a class="cursor-pointer" onclick="getCheckInDetails({{$schedule->id}},'{{$filterDate->format("m/d/Y")}}','','','','','')">
 															<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4">
 																{{$schedule->spots_left($filterDate)}}/{{$schedule->spots_available}}
 															</span>
@@ -233,10 +233,10 @@
 			e.preventDefault()
 		});
 
-		function getCheckInDetails(scheduleId,date,chkInID,cus_id,chk,chkMsg){
+		function getCheckInDetails(scheduleId,date,chkInID,cus_id,chk,chkMsg,chkInMsg){
 			var business_id = '{{$request->current_company->id}}';
 			$.ajax({	
-				url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&chkInId="+chkInID+"&cus_id="+cus_id+"&chk="+chk+"&msg="+chkMsg,
+				url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&chkInId="+chkInID+"&cus_id="+cus_id+"&chk="+chk+"&msg="+chkMsg+"&chkInMsg="+chkInMsg,
 				type:'GET',
 				success:function(data){
 					$('#checkInHtml').html(data);
