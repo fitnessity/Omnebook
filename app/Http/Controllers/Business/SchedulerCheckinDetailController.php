@@ -113,6 +113,8 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                         'source_type' => 'in_person',
                         'use_session_amount' => 0,
                     ]);
+
+                    return $chk;
                 }
             }
         }
