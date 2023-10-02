@@ -4214,7 +4214,8 @@ div#termsdiv{order: 4;}
 	margin-left: 15px;
 }
 .sports-side-img img{
-	width: 375px;
+	width: 405px;
+	float: right;
 }
 .action-width {
 	width: 255px;
@@ -4260,9 +4261,17 @@ div#termsdiv{order: 4;}
 	font-size: 15px;
 }
 .steps-titles-plan label{
-	margin-right: -25px;
+	margin-left: -23px;
 	margin-top: 10px;
 	font-size: 15px;
+}
+.steps-titles-service label{
+	margin-left: -10px;
+	margin-top: 10px;
+	font-size: 15px;
+}
+.cre-service{
+	margin-right: -24px;
 }
 .ml-25{
 	margin-left: 25px;
@@ -4291,4 +4300,26 @@ div#termsdiv{order: 4;}
 }
 .steps-table{
 	padding: 0px !important;
+}
+.width-135{
+	width: 135px;
+}
+.payout-sub-txt label{
+	font-size: 16px;
+	text-align: center;
+}
+.width-125{
+	width: 125px;
+}
+.service-img-steps img{
+	width: 100%;
+	margin-bottom: 25px;
+}
+.dashboard-side-img img{
+	width: 100%;
+}
+.about-text-steps p{
+	margin-bottom: 1px;
+	font-size: 16px;
+	font-weight: 500;
 }

@@ -8241,47 +8241,6 @@ class UserProfileController extends Controller {
         ]);
     }
     
-
-    public function cardDelete(Request $request) {
-        $user = User::where('id', Auth::user()->id)->first();
-        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
-
-        $stripePaymentMethod->delete();
-    }
-    
-    public function cardsSave(Request $request) {
-
-        $user = User::where('id', Auth::user()->id)->first();
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
-        $fingerprints = [];
-        foreach($payment_methods as $payment_method){
-            $fingerprint = $payment_method['card']['fingerprint'];
-            if (in_array($fingerprint, $fingerprints, true)) {
-                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
-                if($deletePaymentMethod != ''){
-                    $deletePaymentMethod->delete();
-                }
-            } else {
-                $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
-            }
-        }
-
-        return redirect()->route('creditCardInfo'); 
-    }
-
     public function creditCardInfo(Request $request){
         $cardInfo = [];
         $intent = null;
@@ -8323,6 +8282,64 @@ class UserProfileController extends Controller {
             'cart' => $cart,
             'intent' => $intent 
         ]);
+    }
+    
+    public function cardsSave(Request $request) {
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
+        $fingerprints = [];
+        foreach($payment_methods as $payment_method){
+            $fingerprint = $payment_method['card']['fingerprint'];
+            if (in_array($fingerprint, $fingerprints, true)) {
+                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
+                if($deletePaymentMethod != ''){
+                    $deletePaymentMethod->delete();
+                }
+            } else {
+                $fingerprints[] = $fingerprint;
+                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
+                    'payment_id' => $payment_method['id'],
+                    'user_type' => 'User',
+                    'user_id' => $user->id,
+                ]);
+
+                $stripePaymentMethod->pay_type = $payment_method['type'];
+                $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                $stripePaymentMethod->save();
+
+                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
+
+                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
+                  
+                    foreach($customer as $cus){
+                        $spmForCus = StripePaymentMethod::create([
+                            'payment_id' => $payment_method['id'],
+                            'user_type' => 'Customer',
+                            'user_id' => $cus->id,
+                            'pay_type' => $payment_method['type'],
+                            'brand' => $payment_method['card']['brand'],
+                            'exp_month' => $payment_method['card']['exp_month'],
+                            'exp_year' => $payment_method['card']['exp_year'],
+                            'last4' => $payment_method['card']['last4'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('creditCardInfo'); 
+    }
+
+    public function cardDelete(Request $request) {
+        $user = User::where('id', Auth::user()->id)->first();
+        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
+
+        $stripePaymentMethod->delete();
     }
 
     public function paymentHistory(Request $request){
@@ -8725,147 +8742,6 @@ class UserProfileController extends Controller {
         else
             return Redirect::back()->with('error', 'Problem in password change.');
     }
-
-    /*public function addFamilyMember(Request $request) {
-        $user = Auth::user();
-        if($request->hasFile('profile_pic')){
-            $profile_pic = $request->file('profile_pic')->store('customer');
-        }else{
-            $profile_pic = $request->old_pic;
-        }
-
-        $birthdate = $request->birthdatehidden;
-        if($request->id != ''){
-            if($request->type == 'user'){
-                $familyData = $user->user_family_details()->findOrFail($request->id);
-                $familyData->first_name = $request->fname;
-                $familyData->last_name = $request->lname;
-                $familyData->gender = $request->gender;
-                $familyData->email = $request->email;
-                $familyData->relationship = $request->relationship;
-                $familyData->birthday =  $birthdate;
-                $familyData->mobile = $request->mobile;
-                $familyData->emergency_contact_name = $request->emergency_name;
-                $familyData->emergency_contact = $request->emergency_contact;
-                $familyData->profile_pic = $profile_pic;
-                $familyData->update();
-            }else{
-                $familyData = Customer::where('id',$request->id)->first();
-                $familyData->fname = $request->fname;
-                $familyData->lname = $request->lname;
-                $familyData->gender = $request->gender;
-                $familyData->email = $request->email;
-                $familyData->relationship = $request->relationship;
-                $familyData->birthdate =   $birthdate;
-                $familyData->phone_number = $request->mobile;
-                $familyData->emergency_contact = $request->emergency_contact;
-                $familyData->profile_pic = $profile_pic;
-                $familyData->update();
-            }
-        }else{
-            // $data = UserFamilyDetail::create([
-            //     'user_id' => Auth::user()->id,
-            //     'first_name' => $request->fname,
-            //     'last_name' => $request->lname,
-            //     'email' => $request->email,
-            //     'mobile' => $request->mobile,
-            //     'emergency_contact' => $request->emergency_contact,
-            //     'relationship' => $request->relationship,
-            //     'gender' => $request->gender,
-            //     'profile_pic' => $profile_pic,
-            //     'birthday' =>   $birthdate,
-            //     'emergency_contact_name' => $request->emergency_name,
-            // ]);
-
-            $company = $user->company;
-            foreach($company as $key=>$c){
-                if($key == 0){
-                    $random_password = Str::random(8);
-                    $Password = Hash::make($random_password);
-                }
-
-                $businessCustomer = $c->customers()->where('user_id' ,$user->id)->first();
-                if($businessCustomer == ''){
-                    $createCustomerForBusiness = Customer::create([
-                        'business_id' => $c->id,
-                        'password' => $Password ,
-                        'fname' => $user->firstname,
-                        'lname' => $user->lastname,
-                        'email' => $user->email,
-                        'phone_number' => $user->phone_number,
-                        'emergency_contact' => $user->emergency_contact,
-                        'relationship' => $user->relationship,
-                        'profile_pic' => $user->profile_pic,
-                        'user_id' => $user->gender,
-                        'gender' => $user->id,
-                        'birthdate' => $user->birthdate
-                    ]);
-
-                    $businessCustomer = $createCustomerForBusiness->id;
-                }
-
-                $createCustomer = Customer::create([
-                    'business_id' => $c->id,
-                    'password' => $Password ,
-                    'fname' => $request->fname,
-                    'lname' => $request->lname,
-                    'email' => $request->email,
-                    'phone_number' => $request->mobile,
-                    'emergency_contact' => $request->emergency_contact,
-                    'relationship' => $request->relationship,
-                    'profile_pic' => $profile_pic,
-                    'gender' => $request->gender,
-                    'birthdate' =>  $birthdate,
-                    'parent_cus_id' => @$businessCustomer->id,
-                ]);
-            }   
-        }  
-
-        return redirect()->route('addFamily');
-    }*/
-
-    /*public function addFamily(Request $request) {
-        $loggedinUser = Auth::user();
-        $customer = $loggedinUser->customers;
-        $UserFamilyDetails = [];
-
-        foreach($customer as $cs){
-            foreach ($cs->get_families() as $fm){
-                $UserFamilyDetails [] = $fm;
-            }  
-        }
-        //print_r($UserFamilyDetails);exit;
-        // $userfamily = $loggedinUser->user_family_details;
-        // foreach($userfamily as $uf){
-        //     $UserFamilyDetails [] = $uf;
-        // }
-        //print_r( $UserFamilyDetails);exit;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.add-family', [
-            'cart' => $cart,       
-            'UserFamilyDetails' => $UserFamilyDetails,
-        ]);
-    }*/
-
-    /*public function showFamilyMember(Request $request) {
-        $familyData = '';
-        if($request->has('id')){
-            // $user = Auth::user();
-            // if($request->type == 'user'){
-            //     $familyData = $user->user_family_details()->findOrFail($request->id);
-            // }else{
-            //     $familyData = Customer::where('id',$request->id)->first();
-            // }
-
-            $familyData = Customer::where('id',$request->id)->first();
-        }
-
-        return view('personal-profile.add-edit-family',compact('familyData'));
-    }*/
 
     public function removefamily(Request $request) {
         //print_r($request->all());exit;

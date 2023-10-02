@@ -58,6 +58,7 @@
             'user_id' => $user->id,
             'gender' => $user->gender,
             'birthdate' => $user->birthdate,
+            'stripe_customer_id' => $user->stripe_customer_id,
         ]);
 
         return $createCustomerForBusiness;
@@ -124,7 +125,8 @@
             'status' => 0,
             'phone_number' => $detail->phone_number,
             'birthdate' => $detail->birthdate,
-            'user_id' => $detail->id
+            'user_id' => $detail->id,
+            'stripe_customer_id' => $detail->stripe_customer_id
         ]);
 
         $familyMember = UserFamilyDetail::where(['user_id' => $detail->id])->get();
