@@ -117,7 +117,7 @@
 							<td>
 								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
 									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
-									@foreach($cus->active_memberships()->where('user_booking_details.user_id',$cus->id)->get() as $bookingDetail)
+									@foreach($cus->active_memberships()->get() as $bookingDetail)
 										@php $checkInIds .= $bookingDetail->id.','; @endphp
                                         <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
                                                 {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
@@ -145,7 +145,7 @@
 							</td>
 							<td>
 								<div>
-									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingSessionAfterCheckIn()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
+									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingsession()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
 								</div>
 							</td>
 							<td>{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
@@ -312,7 +312,8 @@
         });
     });
 
-    /*$(document).on('change', "[data-behavior~=change_price_title]", function(){
+    $('[data-behavior~=change_price_title]').change(function(e){
+    	var t = $(this)
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
             type: "PATCH",
@@ -321,18 +322,13 @@
                 booking_detail_id: $(this).val()
             },
             success:function(response) {
-                location.reload()
+        	    var cus_id =t.data('cus-id');
+            	var selectedOption = t.find('option:selected');
+            	var chkInID = selectedOption.attr('checkInId');
+            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
             },
        	});
-    });*/
-
-    $('[data-behavior~=change_price_title]').change(function(e){
-	    e.preventDefault()
-	    var cus_id =$(this).data('cus-id');
-    	var selectedOption = $(this).find('option:selected');
-    	var chkInID = selectedOption.attr('checkInId');
-    	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
-	});
+    });
 
     function call() {
     	$('.checkinDetails').modal('hide');
