@@ -12,8 +12,11 @@
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
 use App\Http\Controllers\Customers_Auth\HomeController;
+use App\Http\Controllers\Products\ProductController;
+
 
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
@@ -28,6 +31,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
 
+    Route::get('addVariantModal/{name}','ProductController@addVariantModal')->name('products.addVariantModal');
+    Route::post('addVariant','ProductController@addVariant')->name('products.addVariant');
+    
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
     Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');    
     
@@ -117,6 +123,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
 	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
 	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
+	Route::get('/home','DesignController@home')->name('home');  
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -348,6 +355,9 @@ Route::get('/check',function(){
 
 
 Route::post('/auth/postRegistration_as_guest', 'ActivityController@postRegistration_as_guest')->name('auth/postRegistration_as_guest');
+
+Route::get('/openGuestRegistration', 'ActivityController@openGuestRegistration')->name('openGuestRegistration');
+
 Route::get('/', 'Frontend\HomeController@index')->name('homepage');
 Route::get('/home', 'Frontend\HomeController@index')->name('homemy');
 Route::get('/testleft', 'Frontend\HomeController@testleft')->name('testleft');
@@ -1159,6 +1169,13 @@ Route::group(['middleware' => ['auth']], function()
 Route::get('/staff_login','StaffController@index')->name('staff_login');
 Route::post('/login','StaffController@login')->name('dologin');
 Route::post('/import-staff','StaffController@importstaff')->name('importstaff');
+
+
+Route::get('/addproducts',[ProductController::class,'addProduct'])->name('addproducts');
+
+
+    //Route::resource('product', 'Products\ProductController')->only(['store','create']);
+    Route::post('products', 'Products\ProductController@store')->name('products');
 
 
 ?>
