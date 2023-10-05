@@ -4620,10 +4620,25 @@ class UserProfileController extends Controller {
             $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
         }
 
+        $user = Auth::user();
+        $intent = null;
+        $client_secret = null;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($user->stripe_customer_id != ''){
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $user->stripe_customer_id,
+            ]);
+            $client_secret = $intent['client_secret'];
+        }
+
+    
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully added family member',
             'redirecturl' => $url,
+            'client_secret' => $client_secret
         );
 
         return Response::json($response);
@@ -4649,10 +4664,24 @@ class UserProfileController extends Controller {
             $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
         }
 
+        $user = Auth::user();
+        $intent = null;
+        $client_secret = null;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($user->stripe_customer_id != ''){
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $user->stripe_customer_id,
+            ]);
+            $client_secret = $intent['client_secret'];
+        }
+
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully logged in',
             'redirecturl' => $url,
+            'client_secret' => $client_secret
         );
 
         return Response::json($response);
@@ -8285,7 +8314,7 @@ class UserProfileController extends Controller {
     }
     
     public function cardsSave(Request $request) {
-
+       
         $user = User::where('id', Auth::user()->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
@@ -8332,7 +8361,12 @@ class UserProfileController extends Controller {
             }
         }
 
-        return redirect()->route('creditCardInfo'); 
+        if($request->chkRedirection == 1){
+            return redirect()->route('carts_index'); 
+        }else{
+            return redirect()->route('creditCardInfo'); 
+        }
+        
     }
 
     public function cardDelete(Request $request) {

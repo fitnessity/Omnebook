@@ -2132,6 +2132,10 @@ class ActivityController extends Controller {
         echo $stactbox; 
     }
 
+    public function openGuestRegistration(){
+    	return view('activity.guest_registration');
+    }
+
     public function postRegistration_as_guest(Request $request) {
 
         $postArr = $request->all();       
