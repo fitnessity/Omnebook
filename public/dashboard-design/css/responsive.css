@@ -88,6 +88,7 @@
 	.free-trial-img img {  margin-bottom: -45px;  margin-top: -40px;}
 	.mobile0view-flex{display: flex;}
 	.steps-free-trial-img img { margin-bottom: -45px; margin-top: -43px;}
+	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -187,6 +188,7 @@
 	.free-trial-img img { margin-bottom: 0; margin-top: -85px !important;}
 	.mobile0view-flex{display: flex;}
 	.save-exit{margin-top: 0px;}
+	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -301,10 +303,13 @@
 	.steps-titles-about{display: none;}
 	.steps-titles-payout{display: none;}
 	.steps-titles-plan{display: none;}
+	.steps-titles-service{display: none;}
 	.progress-nav .progress {  top: 50%;}
 	.steps-free-trial-img img { margin-bottom: -45px; margin-top: 17px; }
 	.steps-free-trial-img{text-align: center;}
 	.save-exit{margin-top: 0px;}
+	.cre-service {  margin-right: 0;}
+	.sports-side-img img { width: 315px; float: none;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

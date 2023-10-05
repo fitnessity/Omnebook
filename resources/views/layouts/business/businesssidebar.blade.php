@@ -97,10 +97,10 @@
                                 </a>
                             </li>
 
-                            <!-- <li class="nav-item">
-                                <a href="{{route('business.products.index')}}" class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Add/Manage Product
+                            <li class="nav-item">
+                                <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Add/Manage Product
                                 </a>
-                            </li> -->
+                            </li>
                             @if(!Session('StaffLogin'))
                                 <li class="nav-item">
                                     <a href="{{route('business.staff.index')}}" class="nav-link @if(Route::current()->getName() == 'business.staff.index') tab-active @endif" data-key="t-password-create">

@@ -125,6 +125,10 @@ class CompanyInformation extends Model {
         return $this->hasMany(BusinessServices::class, 'cid');
     }
 
+    public function products() {
+        return $this->hasMany(Products::class, 'business_id');
+    }
+
     public function skill() {
         return $this->hasMany(UserSkillAward::class, 'company_id');
     }
