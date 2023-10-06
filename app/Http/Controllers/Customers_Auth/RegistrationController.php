@@ -212,8 +212,20 @@ class RegistrationController extends Controller
         /*$customers->latitude=$request->lat;
         $customers->longitude=$request->lon;*/
         $customers->save();
-        $url = '/viewcustomer/'.$request->cus_id;
-        return response()->json(['status'=>200,'redirecturl'=>route('business_customer_show',['business_id' => $customers->company_information->id, 'id'=>$customers->id])]);
+
+        $customers->create_stripe_customer_id();
+        $intent = $client_secret = null;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($customers->stripe_customer_id != ''){
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $customers->stripe_customer_id,
+            ]);
+            $client_secret = $intent['client_secret'];
+        }
+
+        return response()->json(['status'=>200,'redirecturl'=>route('business_customer_show',['business_id' => $customers->company_information->id, 'id'=>$customers->id ] ),'client_secret'=>$client_secret]);
     }
 
     public function savephotoCustomer(Request $request)

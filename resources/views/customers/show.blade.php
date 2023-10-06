@@ -38,7 +38,7 @@
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1">{{$customerdata->full_name}}'s Account</h4>
+											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account</h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 											<div class="live-preview">
@@ -64,10 +64,10 @@
 																					<div class="row d-flex align-items-center">
 																						<div class="col-auto col-md-3 col-lg-2 col-sm-4">
 																							<div class="avatar-lg">
-																								@if($customerdata->profile_pic)
+																								@if(@$customerdata->profile_pic)
 																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
 																								@else
-																									<div class="customers-name rounded-circle"><p>{{$customerdata->fname[0]}}</p></div>
+																									<div class="customers-name rounded-circle"><p>{{@$customerdata->fname[0]}}</p></div>
 																								@endif
 																							</div>
 																								

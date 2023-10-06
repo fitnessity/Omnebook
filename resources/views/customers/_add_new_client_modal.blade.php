@@ -81,9 +81,10 @@
 							</div>
 							
 							<div id="divstep3" style="display: none;">
+
 								<form action="#">
-									<h4 class="heading-step">Step 2</h4>
 									<input type="hidden" name="cust_id" id="cust_id" value="">
+									<h4 class="heading-step">Step 2</h4>
 									<div class="sign-step_3">
 										<div class="filledstep-bar">
 											<div class="row">
@@ -183,14 +184,14 @@
 								</form>
 							</div>
 							
-							
-							<div id="divstep6" style="display: none;">
+							<div id="divstep5" style="display: none;">
 								<form action="#" id="familyform">
 									<h4 class="heading-step">Step 5</h4>
 									<div class="sign-step_5">
 										<div class="filledstep-bar">
 											<div class="row">
 												<div class="col-sm-12">
+													<span class="filledstep"></span>
 													<span class="filledstep"></span>
 													<span class="filledstep"></span>
 													<span class="filledstep"></span>
@@ -301,24 +302,56 @@
 											</div>
 											<div class="col-xl-6 col-lg-6 col-sm-12">
 												<div class="">
-													<button type="button" class="btn btn-red mb-10 w-100" id="step5_next">Save</button>
+													<button type="button" class="btn btn-red mb-10 w-100" id="step6_next">Save</button>
 												</div>
 											</div>
 											<div class="col-xl-6 col-lg-6 col-sm-12">
 												<div class="">
-													<button type="button" class="btn btn-red mb-10 w-100" id="skip5_next">Skip</button>
+													<button type="button" class="btn btn-red mb-10 w-100" id="skip6_next">Skip</button>
 												</div>
 											</div>
 										</div>
-										<!--<div class="signup-step-btn">
-											<button type="button" class="signup-new btn-red mb-10 mt-25" id="add_family">Add New Family Member</button>
-											<button type="button" class="signup-new btn-red mb-10" id="step5_next">Save</button>
-											<button type="button" class="signup-new btn-red mb-10" id="skip5_next">Skip</button>
-										</div> -->
 									</div>
 								</form>
 							</div>
-							
+
+							<div id="divstep6" style="display: none;">
+								<input type="hidden" id="client_secret" value="">
+								<div class="sign-step_5">
+									<div class="filledstep-bar">
+										<div class="row">
+											<div class="col-sm-12">
+												<span class="filledstep"></span>
+												<span class="filledstep"></span>
+												<span class="filledstep"></span>
+												<span class="filledstep"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										@if (session('stripeErrorMsg'))
+				                            <div class="col-md-12">
+				                                <div class='form-row row'>
+				                                    <div class='col-md-12  error form-group'>
+				                                        <div class="alert-danger alert">
+				                                            {{ session('stripeErrorMsg') }}
+				                                        </div>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        @endif
+										<form id="payment-form1" data-secret="{{@$intent['client_secret']}}" style="padding: 16px;margin-bottom: 0px;">
+											<div>
+											  	<div id="error-message1" class="alert alert-danger" role="alert" style="display: none;"></div>
+											  	<div id="payment-element1" style="margin-top: 8px;"></div>
+											</div>
+											<div class="text-center mt-10">
+										  		<button class="btn btn-red" type="submit" id="submit1">Add on file</button>
+										  	</div>
+										</form>
+									</div>
+								</div>
+				   			</div>
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6 space-remover manage-customer-gray-bg">
@@ -492,6 +525,7 @@
 	        formdata.append('lon', lon)
 	        formdata.append('lat', lat)
 	        formdata.append('cust_id', $('#cust_id').val())
+	        var cus_id = $('#cust_id').val();
 	        $.ajax({
 	            url: posturl,
 	            type: 'POST',
@@ -511,34 +545,15 @@
 	            },
 	            success: function (response) {
 	                $("#divstep4").css("display","none");
-	                $("#divstep6").css("display","block");
+	                $("#divstep5").css("display","block");
+	                $('#client_secret').val(response.client_secret)
+	                $('#payment-form1').attr('data-secret', response.client_secret);
 	            }
 	        });
-	    	}
+	    }
     });
 
-    $(document).on('click', '#step44_next', function () {
-      	var posturl = '/customers/savephoto';
-       	var getData = new FormData($("#myformprofile")[0]);
-      	getData.append('_token', '{{csrf_token()}}')       
-      	getData.append('cust_id', $('#cust_id').val())       
-      	$.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: getData,
-            cache: true,
-            processData: false,
-            contentType: false,
-           
-            success: function (response) {
-                $("#divstep5").css("display","none");
-                $("#divstep6").css("display","block");
-            }
-        });
-  	});
-
-  	$(document).on('click', '#step5_next', function () {
+  	$(document).on('click', '#step6_next', function () {
        $('.relationship').each(function(e) {
         	$(this).removeClass("font-red");
         });
@@ -558,7 +573,6 @@
 	        }
         });
 
-
 	    $(".required").each(function() {
 	        if ($(this).val() === "") {
 	            $(this).addClass("font-red");
@@ -577,48 +591,54 @@
 	    	$('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
 	    	return false;
 	    }else{
-
+	    	var cus_id = $('#cust_id').val();
 	        var form = $('#familyform')[0];
 	        var posturl = '/submitfamilyCustomer';
 	        var formdata = new FormData(form);
 	        formdata.append('_token', '{{csrf_token()}}')
-	        formdata.append('cust_id', $('#cust_id').val())
+	        formdata.append('cust_id', cus_id)
 	        formdata.append('business_id', '{{$business_id}}')
 	     
         	setTimeout(function () {
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $("#_token").val()
-                },
-                beforeSend: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                  
-                    $("#systemMessage").html('Please wait while we submitting the data.')
-                },
-                complete: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
-                },
-                success: function (response) {
-                    $("#systemMessage").html(response.msg);
-                    if (response.type === 'success') {
-                        window.location.href = response.redirecturl;
-                    } else {
-                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }, 1000)
+	            $.ajax({
+	                url: posturl,
+	                type: 'POST',
+	                dataType: 'json',
+	                data: formdata,
+	                processData: false,
+	                contentType: false,
+	                headers: {
+	                    'X-CSRF-TOKEN': $("#_token").val()
+	                },
+	                beforeSend: function () {
+	                    $('#step6_next').prop('disabled', true).css('background','#999999');
+	                  
+	                    $("#systemMessage").html('Please wait while we submitting the data.')
+	                },
+	                complete: function () {
+	                    $('#step6_next').prop('disabled', true).css('background','#999999');
+	                },
+	                success: function (response) {
+	                    $("#systemMessage").html(response.msg);
+	                    if (response.type === 'success') {
+	                    	$("#divstep5").css("display","none");
+							$("#divstep6").css("display","block");
+							executeScript(cus_id);
+	                       // window.location.href = response.redirecturl;
+	                    } else {
+	                        $('#step6_next').prop('disabled', false).css('background','#ed1b24');
+	                    }
+	                }
+	            });
+	        }, 1000)
         }
     });
 
-    $(document).on('click', '#skip5_next', function () {
-    	window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
+    $(document).on('click', '#skip6_next', function () {
+    	$("#divstep5").css("display","none");
+		$("#divstep6").css("display","block");
+		executeScript($('#cust_id').val());
+    	//window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
 
     function getAge() {
@@ -634,6 +654,8 @@
         }
         return agechk;
     }
+
+   
 
 	$(document).on("click",'#add_family',function(e){
 		var cnt = $('#familycnt').val();
@@ -836,6 +858,56 @@ $(document).ready(function() {
       $(a.target).prev('.panel-heading').removeClass('active');
     });
 });
+</script>
+
+<script type="text/javascript">
+	function executeScript(customer_id){
+	    const stripe1 = Stripe('{{ env('STRIPE_PKEY') }}');
+	    const options1 = {
+	        clientSecret: $('#client_secret').val(),
+	        appearance: {
+	        theme: 'flat'
+	        },
+	    };
+
+	    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
+	    const elements1 = stripe1.elements(options1);
+
+	    // Create and mount the Payment Element
+	    const paymentElement1 = elements1.create('payment');
+	    paymentElement1.mount('#payment-element1');
+
+	    const form = document.getElementById('payment-form1');
+		const cus_id = customer_id;
+	    var return_url = '/business/'+'{{$business_id}}'+'/customers/'+customer_id;
+	    form.addEventListener('submit', async (event) => {
+	        event.preventDefault();
+	        $('#submit1').text('loading...')
+
+	        const {error} = await stripe1.confirmSetup({
+	        //Elements` instance that was used to create the Payment Element
+	            elements: elements1,
+	            confirmParams: {
+	                return_url: '{{ route('business.customers.refresh_payment_methods',['business_id' => $business_id ])}}?customer_id=' + cus_id,
+	            }
+	        });
+
+	        if (error) {
+	          // This point will only be reached if there is an immediate error when
+	          // confirming the payment. Show error to your customer (for example, payment
+	          // details incomplete)  
+	          const messageContainer1 = document.querySelector('#error-message1');
+	          messageContainer1.textContent = error.message;
+	          $('#error-message1').show();
+
+	        } else {
+	          	// Your customer will be redirected to your `return_url`. For some payment
+	          	// methods like iDEAL, your customer will be redirected to an intermediate
+	          	// site first to authorize the payment, then redirected to the `return_url`.
+	        }
+	        $('#submit1').text('Add on file')
+	    });
+  	}
 </script>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script> -->

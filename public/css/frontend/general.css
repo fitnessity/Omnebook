@@ -18684,6 +18684,7 @@ input#zipcode {
 .register_wrap {
     background: #ffffff;
     float: left;
+	width: 100%;
 }
 
 .register_wrap .logo-my {
@@ -18697,7 +18698,7 @@ input#zipcode {
 
 .register_wrap form {
     padding: 0 110px;
-    float: left;
+    float: none;
 }
 
 .register_wrap form input {
@@ -24977,4 +24978,6 @@ padding-left: 0px;
 .manage-customer-from form{
 	padding: 0 50px;
 }
-
+.width-65{
+	width: 65% !important;
+}
