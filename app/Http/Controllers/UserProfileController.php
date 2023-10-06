@@ -4620,25 +4620,10 @@ class UserProfileController extends Controller {
             $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
         }
 
-        $user = Auth::user();
-        $intent = null;
-        $client_secret = null;
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if($user->stripe_customer_id != ''){
-            $intent = $stripe->setupIntents->create([
-                'payment_method_types' => ['card'],
-                'customer' => $user->stripe_customer_id,
-            ]);
-            $client_secret = $intent['client_secret'];
-        }
-
-    
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully added family member',
             'redirecturl' => $url,
-            'client_secret' => $client_secret
         );
 
         return Response::json($response);
@@ -4664,24 +4649,10 @@ class UserProfileController extends Controller {
             $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
         }
 
-        $user = Auth::user();
-        $intent = null;
-        $client_secret = null;
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if($user->stripe_customer_id != ''){
-            $intent = $stripe->setupIntents->create([
-                'payment_method_types' => ['card'],
-                'customer' => $user->stripe_customer_id,
-            ]);
-            $client_secret = $intent['client_secret'];
-        }
-
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully logged in',
             'redirecturl' => $url,
-            'client_secret' => $client_secret
         );
 
         return Response::json($response);
@@ -8362,7 +8333,9 @@ class UserProfileController extends Controller {
         }
 
         if($request->chkRedirection == 1){
-            return redirect()->route('carts_index'); 
+            $user->show_step = 7;
+            $user->save();
+            return redirect('/registration/?showstep=1'); 
         }else{
             return redirect()->route('creditCardInfo'); 
         }

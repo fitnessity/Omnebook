@@ -11,6 +11,7 @@
 					</div>
 					<br>
 					<h4 class="text-center">To make sure you are 18, please complete these steps</h4>
+					
 					<div id='systemMessage' class="alert-msgs"></div>
 	    			<input type="hidden" name="_token" value="{{csrf_token()}}">
 					<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
@@ -18,8 +19,9 @@
 					<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 					<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
 					<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-					<input type="text" id="dob" name="dob" class="flatpicker_birthdate1" placeholder="Birthdate" maxlength="10">  
+					<input type="text" id="dob" name="dob" class="flatpicker_birthdate1" placeholder="Birthdate" maxlength="10" data-behavior="flatpicker_birthdate1">  
 					
+
 					<div class="position-relative auth-pass-inputgroup">	
 						<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                         <button class="btn-link position-absolute password-addon-guest-regi toggle-password" type="button" data-tp = "password">
@@ -149,7 +151,7 @@
 															</div>
 														</div>
 														<div class="form-group">
-															<select name="relationship[]" id="relationship required" class="form-control relationship">
+															<select name="relationship[]" id="relationship required" class="form-group relationship">
 																<option value="">Select Relationship</option>
 																<option value="Brother">Brother</option>
 																<option value="Sister">Sister</option>
@@ -171,7 +173,7 @@
 															<span class="error" id="err_emergency_phone"></span>
 														</div>
 														<div class="form-group">
-															<select name="gender[]" id="gender" class="form-control gender" required="">
+															<select name="gender[]" id="gender" class="form-group gender" required="">
 																<option value="">Select Gender</option>
 																<option value="male">Male</option>
 																<option value="female">Female</option>
@@ -200,48 +202,28 @@
 					</div>
 				</form>
 			</div>
-
-			<div id="divstep4" style="display: none;">
-				<input type="hidden" id="client_secret" value="">
-				<div class="sign-step_5">
-					<div class="filledstep-bar">
-						<div class="row">
-							<div class="col-sm-12">
-								<span class="filledstep"></span>
-								<span class="filledstep"></span>
-								<span class="filledstep"></span>
-								<span class="filledstep"></span>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						@if (session('stripeErrorMsg'))
-                            <div class="col-md-12">
-                                <div class='form-row row'>
-                                    <div class='col-md-12  error form-group'>
-                                        <div class="alert-danger alert">
-                                            {{ session('stripeErrorMsg') }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-						<form id="payment-form" data-secret="{{@$intent['client_secret']}}" style="padding: 16px;margin-bottom: 0px;">
-							<div>
-							  	<div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
-							  	<div id="payment-element" style="margin-top: 8px;"></div>
-							</div>
-							<div class="signup-step-btn">
-						  		<button class="signbutton-next step4_next" type="submit" id="submit">Add on file</button>
-						  	</div>
-						</form>
-					</div>
-				</div>
-   			</div>
 		</div>
 	</div>
 </div>
 
+
+<script type="text/javascript">
+
+	//$(".flatpicker_birthdate1").flatpickr({ static : true });
+	
+	flatpickr("[data-behavior~=flatpicker_birthdate1]", {
+        dateFormat: "m/d/Y",
+        maxDate: "01/01/2050",
+    });
+
+	$(document).on('focus', '#birthday', function(e){
+        $(this).flatpickr({ 
+           	dateFormat: "m/d/Y",
+        	maxDate: "today",
+        });
+    });
+ 
+</script>
 
 <script type="text/javascript">
 	jQuery(function ($) {
@@ -433,12 +415,7 @@
 	                success: function (response) {
 	                    $("#systemMessage").html(response.msg);
 	                    if (response.type === 'success') {
-	                    	$('#client_secret').val(response.client_secret)
-	                    	$("#divstep3").css("display","none");
-		            		$("#divstep4").css("display","block");  
-		            		$('#payment-form').attr('data-secret', response.client_secret);
-		            		executeScript();
-	                        //window.location.href = '{{route("carts_index")}}';
+	                        window.location.href = '{{route("carts_index")}}';
 	                    } else {
 	                        $('#step3_next').prop('disabled', false).css('background','#ed1b24');
 	                    }
@@ -474,12 +451,7 @@
 	                success: function (response) {
 	                    $("#systemMessage").html(response.msg);
 	                    if (response.type === 'success') {
-	                        //window.location.href = '{{route("carts_index")}}';
-	                        $('#client_secret').val(response.client_secret)
-	                    	$("#divstep3").css("display","none");
-		            		$("#divstep4").css("display","block");
-		            		$('#payment-form').attr('data-secret', response.client_secret);  
-		            		executeScript();
+	                        window.location.href = '{{route("carts_index")}}';
 	                    } else {
 	                        $('#skip3_next').prop('disabled', false).css('background','#ed1b24');
 	                    }
@@ -530,73 +502,7 @@
         }
         return agechk;
     }
-
-    function executeScript(){
-	    const stripe = Stripe('{{ env('STRIPE_PKEY') }}');
-	    const options = {
-	        clientSecret: $('#client_secret').val(),
-	        appearance: {
-	        theme: 'flat'
-	        },
-	    };
-
-	    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
-	    const elements = stripe.elements(options);
-
-	    // Create and mount the Payment Element
-	    const paymentElement = elements.create('payment');
-	    paymentElement.mount('#payment-element');
-
-	    const form = document.getElementById('payment-form');
-
-	    form.addEventListener('submit', async (event) => {
-	        event.preventDefault();
-	        $('#submit').text('loading...')
-
-	        const {error} = await stripe.confirmSetup({
-	        //Elements` instance that was used to create the Payment Element
-	            elements,
-	            confirmParams: {
-	                return_url: '{{route("cards-save",["chkRedirection" => 1])}}',
-	            }
-	        });
-
-	        if (error) {
-	          // This point will only be reached if there is an immediate error when
-	          // confirming the payment. Show error to your customer (for example, payment
-	          // details incomplete)  
-	          const messageContainer = document.querySelector('#error-message');
-	          messageContainer.textContent = error.message;
-	          $('#error-message').show();
-
-	        } else {
-	          // Your customer will be redirected to your `return_url`. For some payment
-	          // methods like iDEAL, your customer will be redirected to an intermediate
-	          // site first to authorize the payment, then redirected to the `return_url`.
-	        }
-	        $('#submit').text('Add on file')
-	    });
-  	}
 </script>
+ 
 
-<script type="text/javascript">
-	flatpickr(".flatpicker_birthdate1", {
-        dateFormat: "m/d/Y",
-        maxDate: "01/01/2050",
-    });
 
-	$(document).on('focus', '#birthday', function(e){
-        //jQuery.noConflict();
-        $(this).flatpickr({ 
-           	dateFormat: "m/d/Y",
-        	maxDate: "today",
-        });
-    });
-
-</script>
-
-<script src="{{ url('public/js/metisMenu.min.js') }}"></script>
-
-<script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
-
-<script src="{{ url('public/js/creditcard.js') }}"></script>

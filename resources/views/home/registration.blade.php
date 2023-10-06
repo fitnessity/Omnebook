@@ -63,9 +63,7 @@
                             <i class="fa fa-google-plus" aria-hidden="true"></i> Sign with Google+
                         </a> 
                     </div> -->
-                    <p class="already">Already have an account? <a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Login</a></p>
-
-                   
+                    <p class="already">Already have an account? <a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Login</a></p>    
                 </form>
                 @elseif(Auth::check() && Auth::user()->show_step == 2)
                 <form action="#">
@@ -125,9 +123,9 @@
                                     </div>
                                     <div class="radio">
                                         <label for="other">Specify another<input type="radio" name="gender" id="other" value="other" class="" /><span class="checkmark"></span></label>
-                                        <input type="text" name="othergender" id="othergender">
                                     </div>
                                 </div>
+                                <input type="text" name="othergender" id="othergender" class="width-65">
                                 <div class="signup-step-btn">
                                     <button type="button" class="signbutton-next step3_next" id="step3_next">Next</button>
                                 </div>
@@ -220,7 +218,7 @@
                                 </ul>
                                 
                                 <div class="tab-content">
-                                   
+                                    <div class='error' id='systemMessage'></div>
                                     <div id="adding_photo" class="tab-pane fade in active">
                                         <div class="upload-wrp-content">
                                             <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
@@ -230,13 +228,14 @@
                                             <div class="upload-img">
                                                 <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);">
                                                 <div class="upload-img-msg">
-                                                    <p>Touble uploading profile photo?</p>
+                                                    <!-- <p>Touble uploading profile photo?</p> -->
                                                 </div>
                                             </div>
                                         </div>
                                 
                                         <div class="signup-step-btn">
-                                            <button type="button" class="signbutton-next step3_next" id="step44_next">Next</button>
+                                            <button type="button" class="signbutton-next step44_next" id="step44_next" data-check = "1">Next</button>
+                                            <button type="button" class="signbutton-next step44_next" id="step44_next">Skip</button>
                                         </div>
                                     </div>
                                 </div>
@@ -244,9 +243,10 @@
                         </div>
                     </div>
                 </form>
-                @else
-                <form action="#" id="familyform">
-                    <div class="sign-step_5">
+                
+                @elseif(Auth::check() && Auth::user()->show_step == 6)
+                 <form id="payment-form" data-secret="{{@$intent->client_secret}}" style="">
+                    <div class="sign-step_4">
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -254,93 +254,145 @@
                                     <span class="filledstep"></span>
                                     <span class="filledstep"></span>
                                     <span class="filledstep"></span>
+                                    <span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <h2>Activities are much more fun with family</h2>
-                                <div class='error' id='systemMessage'></div>
-                                <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
-                                <div class="error" id="familyerrormessage"></div>
-                                <input type="hidden" name="familycnt" id="familycnt" value="0">
-                                <div id="familymaindiv">
-                                    <div class="new-client" id="familydiv0">
-										<div class="content1">
-											<div class="panel-group" id="accordion">
-												<div class="panel panel-default">
-													 <div class="panel-heading">
-													   <h4 class="panel-title">
-														 <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
-													   </h4>
-													 </div>
-													<div id="collapse0" class="panel-collapse collapse in">
-														 <div class="panel-body">
-															  <div class="form-group">
-                                                            <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
-                                                            <span class="error" id="err_fname" ></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="text" name="last_name[]" id="last_name" class="form-control last_name required" placeholder="Last Name" >
-                                                            <span class="error" id="err_lname"></span>
-                                                        </div>
-                                                        <div>
-                                                            <div class="birthday_date-position">
-                                                                <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
-                                                                <span class="error" id="err_birthday_date"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select name="relationship[]" id="relationship required" class="form-control relationship">
-                                                                <option value="">Select Relationship</option>
-                                                                <option value="Brother">Brother</option>
-                                                                <option value="Sister">Sister</option>
-                                                                <option value="Father">Father</option>
-                                                                <option value="Mother">Mother</option>
-                                                                <option value="Wife">Wife</option>
-                                                                <option value="Husband">Husband</option>
-                                                                <option value="Son">Son</option>
-                                                                <option value="Daughter">Daughter</option>
-                                                            </select>
-                                                            <span class="error" id="err_relationship"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                                            <span class="error" id="err_mphone"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone " placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-                                                            <span class="error" id="err_emergency_phone" ></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select name="gender[]" id="gender" class="form-control gender" required>
-                                                                <option value="">Select Gender</option>
-                                                                <option value="male">Male</option>
-                                                                <option value="female">Female</option>
-                                                                <option value="other">Specify other</option>
-                                                            </select>
-                                                            <span class="error" id="err_gender"></span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="email" name="email[]" id="email" class="form-control email required" placeholder="Email">
-                                                            <span class="error" id="err_emailid"></span>
-                                                        </div>
-														  </div>
-													</div>
-												</div>
-											</div>
-										</div>
+                                <ul class="">
+                                    <li><i class="fa fa-check"></i><span>Registration Information</span></li>
+                                    <li><i class="fa fa-check"></i><span>Your Identification</span></li>
+                                    <li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
+                                    <li><i class="fa fa-check"></i><span>Adding Photo</span></li>
+                                </ul>
+                                <ul class="nav nav-tabs nav-stacked">
+                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    @if (session('stripeErrorMsg'))
+                                        <div class="col-md-12">
+                                            <div class='form-row row'>
+                                                <div class='col-md-12  error form-group'>
+                                                    <div class="alert-danger alert">
+                                                        {{ session('stripeErrorMsg') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                   
+                                    <div>
+                                        <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
+                                        <div id="payment-element" style="margin-top: 8px;"></div>
+                                    </div>
+                                    <div class="signup-step-btn">
+                                        <button class="signbutton-next" type="submit" id="submit">Add on file</button>
+                                        <button class="signbutton-next" type="button" id="skip_next">Skip</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="signup-step-btn">
-                            <button type="button" class="signbutton-next" id="add_family">Add New Family Member</button>
-                            <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
-                            <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
-                        </div>
                     </div>
                 </form>
+                @else
+                    <form action="#" id="familyform">
+                        <div class="sign-step_5">
+                            <div class="filledstep-bar">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Activities are much more fun with family</h2>
+                                    <div class='error' id='systemMessage'></div>
+                                    <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
+                                    <div class="error" id="familyerrormessage"></div>
+                                    <input type="hidden" name="familycnt" id="familycnt" value="0">
+                                    <div id="familymaindiv">
+                                        <div class="new-client" id="familydiv0">
+                                            <div class="content1">
+                                                <div class="panel-group" id="accordion">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
+                                                            </h4>
+                                                        </div>
+                                                        <div id="collapse0" class="panel-collapse collapse in">
+                                                            <div class="panel-body">
+                                                                  <div class="form-group">
+                                                                <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
+                                                                <span class="error" id="err_fname" ></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" name="last_name[]" id="last_name" class="form-control last_name required" placeholder="Last Name" >
+                                                                <span class="error" id="err_lname"></span>
+                                                            </div>
+                                                            <div>
+                                                                <div class="birthday_date-position">
+                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
+                                                                    <span class="error" id="err_birthday_date"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <select name="relationship[]" id="relationship required" class="form-control relationship">
+                                                                    <option value="">Select Relationship</option>
+                                                                    <option value="Brother">Brother</option>
+                                                                    <option value="Sister">Sister</option>
+                                                                    <option value="Father">Father</option>
+                                                                    <option value="Mother">Mother</option>
+                                                                    <option value="Wife">Wife</option>
+                                                                    <option value="Husband">Husband</option>
+                                                                    <option value="Son">Son</option>
+                                                                    <option value="Daughter">Daughter</option>
+                                                                </select>
+                                                                <span class="error" id="err_relationship"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                                <span class="error" id="err_mphone"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone " placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                                <span class="error" id="err_emergency_phone" ></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <select name="gender[]" id="gender" class="form-control gender" required>
+                                                                    <option value="">Select Gender</option>
+                                                                    <option value="male">Male</option>
+                                                                    <option value="female">Female</option>
+                                                                    <option value="other">Specify other</option>
+                                                                </select>
+                                                                <span class="error" id="err_gender"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="email" name="email[]" id="email" class="form-control email required" placeholder="Email">
+                                                                <span class="error" id="err_emailid"></span>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="signup-step-btn">
+                                <button type="button" class="signbutton-next" id="add_family">Add New Family Member</button>
+                                <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
+                                <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
+                            </div>
+                        </div>
+                    </form>
                 @endif
             </div>
         </div>
@@ -351,21 +403,68 @@
 @include('layouts.footer')
 
 
+@if(Auth::check() && Auth::user()->show_step == 6)
+<script type="text/javascript">
+    const stripe = Stripe('{{ env('STRIPE_PKEY') }}');
+    const options = {
+        clientSecret: '{{@$intent->client_secret}}',
+        appearance: {
+        theme: 'flat'
+        },
+    };
+
+    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
+    const elements = stripe.elements(options);
+
+    // Create and mount the Payment Element
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    const form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        $('#submit').text('loading...')
+
+        const {error} = await stripe.confirmSetup({
+        //Elements` instance that was used to create the Payment Element
+            elements,
+            confirmParams: {
+                return_url: '{{route("cards-save",["chkRedirection" => 1])}}',
+            }
+        });
+
+        if (error) {
+          // This point will only be reached if there is an immediate error when
+          // confirming the payment. Show error to your customer (for example, payment
+          // details incomplete)  
+          const messageContainer = document.querySelector('#error-message');
+          messageContainer.textContent = error.message;
+          $('#error-message').show();
+
+        } else {
+          // Your customer will be redirected to your `return_url`. For some payment
+          // methods like iDEAL, your customer will be redirected to an intermediate
+          // site first to authorize the payment, then redirected to the `return_url`.
+        }
+        $('#submit').text('Add on file')
+    });
+</script>
+
+<script src="{{ url('public/js/metisMenu.min.js') }}"></script>
+
+<script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
+
+<script src="{{ url('public/js/creditcard.js') }}"></script>
+
+@endif
+
 <script>
 
     flatpickr(".flatpicker_birthdate1", {
         dateFormat: "m/d/Y",
         maxDate: "01/01/2050",
     });
-
-   /* document.getElementById("birthday0").addEventListener("focus", function(event) {
-      
-            flatpickr(event.target, {
-                dateFormat: "m/d/Y",
-                maxDate: "01/01/2050",
-            });
-        
-    }, true);*/
 
     $(document).on('focus', '#birthday', function(e){
         //jQuery.noConflict();
@@ -374,7 +473,7 @@
             maxDate: "today",
         });
     });
-   
+    
     $(document).on("click",'#add_family',function(e){
         var cnt = $('#familycnt').val();
         var old_cnt = cnt;
@@ -536,22 +635,39 @@
     });
 
     /* Step 4 new */
-    $(document).on('click', '#step44_next', function () {
-        var posturl = '/auth/savephoto';
-        var getData = new FormData($("#myformprofile")[0]);
-        getData.append('_token', '{{csrf_token()}}') 
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: getData,
-            cache: true,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                window.location.href = "{{url('/registration/?showstep=1')}}"
+    $(document).on('click', '.step44_next', function () {
+        var chk = 0;
+        if($(this).attr('data-check') == 1){
+            if($('#file_upload_profile').val() != ''){
+                chk = 1;
             }
-        });
+        }else{
+            chk = 1;
+        }
+
+        if(chk == 1){
+            var posturl = '/auth/savephoto';
+            var getData = new FormData($("#myformprofile")[0]);
+            getData.append('_token', '{{csrf_token()}}') 
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: getData,
+                cache: true,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.href = "{{url('/registration/?showstep=1')}}"
+                }
+            }); 
+        }else{
+             $("#systemMessage").html('Please Upload Profile Photo.');
+        }
+    });
+
+    $(document).on("click",'#skip_next',function(e){
+        window.location.href = "{{url('/registration/?showstep=7')}}"
     });
 
     /* Step 5 */
@@ -649,9 +765,7 @@
         }
     });
 
-
     $(document).ready(function () {
-
         $('.toggle-password').on('click', function() {
             var passwordField = $('#password');
             if($(this).data('tp') == 'confirm_password'){
