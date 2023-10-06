@@ -49,8 +49,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
-    Route::get('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
-    Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
+    Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
     
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
    
@@ -1126,6 +1125,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
+    Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
     Route::post('/import-membership','CustomerController@importmembership')->name('importmembership');
     Route::post('/import-attendance','CustomerController@importattendance')->name('importattendance');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');

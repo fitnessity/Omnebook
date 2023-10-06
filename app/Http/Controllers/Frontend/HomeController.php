@@ -174,8 +174,22 @@ class HomeController extends Controller {
     }
 
     public function registration(Request $request,$id = null) {
+        $intent = null;
         if (Auth::check()) {
             $show_step = Auth::user()->show_step;
+            $user =Auth::user();
+            if($request->showstep == 7){
+                $user->show_step = 7;
+                $user->save();
+            }
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($user->stripe_customer_id != ''){
+                $intent = $stripe->setupIntents->create([
+                    'payment_method_types' => ['card'],
+                    'customer' => $user->stripe_customer_id,
+                ]);
+            }
         } else {
             $show_step = 1;
         }
@@ -183,13 +197,14 @@ class HomeController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
-        if($id != ''){
+        if($id != '' && $id != '7'){
             $id = Crypt::decryptString($id);
         }
         return view('home.registration', [
             'show_step' => $show_step,
             'cart' => $cart,
-            'customerId'=>$id
+            'customerId'=>$id,
+            'intent'=>$intent
         ]);
     }
     public function emailvalidation(Request $request) {
