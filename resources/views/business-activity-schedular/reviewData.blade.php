@@ -36,24 +36,36 @@
 					<td>  
 						<?php 
 							$html = $data = '';$remaining = 0;$firstDataProcessed = false; 
-							$bookingDetail = getUserbookingDetail($sesAry['serviceID'], $sesAry['cid']);
-				            if(!empty($bookingDetail)){
-				                foreach($bookingDetail as $detail){
-				                    $remainingSession = $detail->getremainingsession();
-				                    $priceDetail = $detail->business_price_detail;
-				                    if($remainingSession != 0 &&  $priceDetail->category_id == @$sesAry['category_id']){
-				                        if (!$firstDataProcessed) {
-				                            $remaining = $remainingSession; 
-				                            $firstDataProcessed = true; 
-				                        }
-				                        $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$detail->id.'"';
+							// $bookingDetail = getUserbookingDetail($sesAry['serviceID'], $sesAry['cid']);
+				            // if(!empty($bookingDetail)){
+				            //     foreach($bookingDetail as $detail){
+				            //         $remainingSession = $detail->getremainingsession();
+				            //         $priceDetail = $detail->business_price_detail;
+				            //         if($remainingSession != 0 &&  $priceDetail->category_id == @$sesAry['category_id']){
+				            //             if (!$firstDataProcessed) {
+				            //                 $remaining = $remainingSession; 
+				            //                 $firstDataProcessed = true; 
+				            //             }
+				            //             $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$detail->id.'"';
 
-				                        /*$html .= array_key_exists('priceId', $sesAry) && $sesAry['priceId'] == $priceDetail->id ? 'selected' : '';*/
+				            //             /*$html .= array_key_exists('priceId', $sesAry) && $sesAry['priceId'] == $priceDetail->id ? 'selected' : '';*/
 
-				                        $html .= '>'.$priceDetail->price_title.'</option>';
-				                    }
+				            //             $html .= '>'.$priceDetail->price_title.'</option>';
+				            //         }
+				            //     }
+				            // }
+				            $customer = Auth::user()->customers()->find(request()->cid);
+
+				            $active_memberships = $customer->active_memberships()->get();
+
+				            foreach($active_memberships as $active_membership){
+				                $remainingSession = $active_membership->getremainingsession();
+				                if($remainingSession > 0 && $active_membership->business_price_detail){
+				                    $priceDetail = $active_membership->business_price_detail;
+				                    $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
 				                }
 				            }
+
 				            if($html != ''){
 					            $data .='<select class="mb-10 form-control required" id="priceId'.$i.'" onchange="getRemainingSession('.$i.',\''.$sesAry["date"].'\','.$sesAry['timeId'].')"  ><option value="" data-did ="0">Choose Membership</option>'.$html.'</select>  <div class="font-red text-center" id="remainingSession'.$i.'"></div>';
 

@@ -59,6 +59,9 @@ class CompanyInformation extends Model {
         "attendance_uploading",
         "customer_uploading",
         "membership_uploading",
+        "client_skip_logs_url",
+        "client_fail_logs_url",
+        "client_imported_at"
     ];
 
     protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter'];
