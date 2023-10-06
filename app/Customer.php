@@ -294,20 +294,28 @@ class Customer extends Authenticatable
 
     function create_stripe_customer_id(){
 	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
-            try {
-                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                $customer = \Stripe\Customer::create([
-                    'name' => $this->fname . ' '. $this->lname,
-                    'email'=> $this->email,
-                ]);
-                $this->stripe_customer_id = $customer->id;
+            $FndCustomer = Customer::where(['fname' => $this->fname, 'lname' => $this->lname,'email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
+            if($FndCustomer == ''){
+                try {
+                    \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                    $customer = \Stripe\Customer::create([
+                        'name' => $this->fname . ' '. $this->lname,
+                        'email'=> $this->email,
+                    ]);
+                    $this->stripe_customer_id = $customer->id;
+                    $this->save();
+            
+                    return $customer->id;
+                    
+                } catch (Exception $e) {
+                    return '';
+                }
+            }else{
+                $this->stripe_customer_id = $FndCustomer->stripe_customer_id;
                 $this->save();
-        
                 return $customer->id;
-                
-            } catch (Exception $e) {
-                return '';
             }
+            
 	   }
 	   
     }

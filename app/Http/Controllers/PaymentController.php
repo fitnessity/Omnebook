@@ -33,6 +33,7 @@ class PaymentController extends Controller {
     }
 
     public function createCheckoutSession(Request $request) {
+       //print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $customer='';
 
@@ -88,7 +89,8 @@ class PaymentController extends Controller {
                         'status' => 0,
                         'phone_number' => Auth::user()->phone_number,
                         'birthdate' => Auth::user()->birthdate,
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'stripe_customer_id' => Auth::user()->stripe_customer_id,
                     ]);
 
                     $customer->create_stripe_customer_id();
@@ -328,7 +330,7 @@ class PaymentController extends Controller {
                         'confirm' => true,
                         'metadata' => [],
                     ]);
-                    if(!$request->has('save_card')){
+                    if($request->save_card != 1){
                         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
                         $stripePaymentMethod->delete();
                     }
@@ -394,7 +396,8 @@ class PaymentController extends Controller {
                         'status' => 0,
                         'phone_number' => Auth::user()->phone_number,
                         'birthdate' => Auth::user()->birthdate,
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'stripe_customer_id' => Auth::user()->stripe_customer_id,
                     ]);
 
                     $customer->create_stripe_customer_id();
@@ -639,6 +642,24 @@ class PaymentController extends Controller {
                 $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
                 $stripePaymentMethod->last4 = $payment_method['card']['last4'];
                 $stripePaymentMethod->save();
+
+                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
+
+                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
+                  
+                    foreach($customer as $cus){
+                        $spmForCus = StripePaymentMethod::create([
+                            'payment_id' => $payment_method['id'],
+                            'user_type' => 'Customer',
+                            'user_id' => $cus->id,
+                            'pay_type' => $payment_method['type'],
+                            'brand' => $payment_method['card']['brand'],
+                            'exp_month' => $payment_method['card']['exp_month'],
+                            'exp_year' => $payment_method['card']['exp_year'],
+                            'last4' => $payment_method['card']['last4'],
+                        ]);
+                    }
+                }
             }
         }
         if($request->return_url)

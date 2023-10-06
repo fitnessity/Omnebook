@@ -23,11 +23,11 @@
                     </div>
 					<div class="payment_info_section padding-1 white-bg border-radius1">
                         <div class="payment-info-block">
+                            
                             <div class="savecard-block">
                                 <div class="sacecard-title">Your Saved Cards</div>
-								<!-- Mobile Slider Start -->
-								 
-									<!-- Mobile Slider Start -->
+								
+                                	<!-- Mobile Slider Start -->
 									@if(!empty($cardInfo)) 
 										<div class="col-md-12 desktop-none mobile-custom">
 											<div class="mobile-slider payment-info owl-carousel owl-theme">
@@ -93,7 +93,7 @@
                                         <span style="text-align: center">Add New Card</span>
                                     </div>
                                 </div>
-								</div>
+							</div>
 
                             <div class="row" id="stripediv" style="display:none;">
                                 <div class="col-md-6">
