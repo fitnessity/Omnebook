@@ -286,7 +286,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="birthday_date-position">
-                                                                <input type="text" name="birthday[]" id="birthday0" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
+                                                                <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
                                                                 <span class="error" id="err_birthday_date"></span>
                                                             </div>
                                                         </div>
@@ -358,16 +358,22 @@
         maxDate: "01/01/2050",
     });
 
-    document.getElementById("birthday0").addEventListener("focus", function(event) {
+   /* document.getElementById("birthday0").addEventListener("focus", function(event) {
       
             flatpickr(event.target, {
                 dateFormat: "m/d/Y",
                 maxDate: "01/01/2050",
             });
         
-    }, true);
+    }, true);*/
 
-
+    $(document).on('focus', '#birthday', function(e){
+        //jQuery.noConflict();
+        $(this).flatpickr( { 
+           dateFormat: "m/d/Y",
+            maxDate: "today",
+        });
+    });
    
     $(document).on("click",'#add_family',function(e){
         var cnt = $('#familycnt').val();
@@ -384,6 +390,16 @@
         re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
         $('#familymaindiv').append(re);
+        $('.relationship').each(function(e) {
+            $(this).removeClass("font-red");
+        });
+        $('.gender').each(function(e) {
+            $(this).removeClass("font-red");
+        });
+
+        $(".required").each(function() {
+            $(this).removeClass("font-red");
+        });
         $('#familycnt').val(cnt);
     });
 </script>

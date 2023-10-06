@@ -370,7 +370,7 @@
                                         <div class="row contentPop"> 
                                             <div class="col-lg-12">
                                                 <div class="modal-access-autho">
-                                                    <p>You are about to remove your sync with {{$customer->company_information->dba_business_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+                                                    <p>You are about to remove your sync with {{@$customer->company_information->dba_business_name}}. By denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
                                                 </div>
                                             </div>
                                             

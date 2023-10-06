@@ -96,12 +96,12 @@ class CartController extends Controller {
                     'relationship' => $request['relationship'],
                     'gender' => $request['gender'],
                     'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
-                    'stripe_customer_id' => $Customer->stripe_customer_id
+                    //'stripe_customer_id' => $Customer->stripe_customer_id
                 ]);
 
                 $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
             }
-            $Customer->update(['user_id'=>$User->id]);            
+            $Customer->update(['user_id'=>$User->id , 'stripe_customer_id' =>@$User->stripe_customer_id ]);            
         } 
 
     	return redirect('/carts');
