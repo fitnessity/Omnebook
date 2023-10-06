@@ -49,7 +49,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
-    Route::get('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
+    Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
     
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
    

@@ -114,7 +114,7 @@ class CustomerController extends Controller
 
 
     public function refresh_payment_methods(Request $request){
-
+        
         $customer = Customer::findOrFail($request->customer_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
@@ -144,7 +144,10 @@ class CustomerController extends Controller
             }
         }
         // echo $request->return_url;exit;
-        if($request->return_url)
+        if($request->return_url){
             return redirect($request->return_url);
+        }else{
+            return redirect()->route('business_customer_show',['business_id' => $customer->business_id , 'id' =>$request->customer_id ]);
+        }
     }
 }
