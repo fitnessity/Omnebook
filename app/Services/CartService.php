@@ -146,16 +146,31 @@ class CartService
     }
 
     public function getParticipateByComa($participateData){
-        $participate =  json_decode($participateData,true);
+        $participate = json_decode($participateData,true);
         $names = '';
         if(!empty($participate)){
+            if(@$participate['from'] == 'customer'){
+                $data = Customer::where('id',@$participate['id'])->first();
+                if($data != '' ){
+                    $names .= $data->full_name.' ,';
+                }
+            }else{
+                $data = User::where('id',@$participate['id'])->first();
+                if($data != '' ){
+                    $names .= $data->full_name.' ,';
+                }
+            }
+            $names = rtrim($names ,' ,');
+        }
+        /*if(!empty($participate)){
             foreach($participate as $p){
-               /* if($p['from'] == 'family'){
-                    $data = UserFamilyDetail::where('id',$p['id'])->first();
-                    if($data != '' ){
-                        $names .= $data->full_name.' ,';
-                    }
-                }*/
+                print_r( $p).'!!!<br>';
+                // if($p['from'] == 'family'){
+                //     $data = UserFamilyDetail::where('id',$p['id'])->first();
+                //     if($data != '' ){
+                //         $names .= $data->full_name.' ,';
+                //     }
+                // }
 
                 if($p['from'] == 'customer'){
                     $data = Customer::where('id',$p['id'])->first();
@@ -170,7 +185,7 @@ class CartService
                 } 
             }
             $names = rtrim($names ,' ,');
-        }
+        }*/
         return $names;
     }
 

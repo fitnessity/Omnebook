@@ -77,18 +77,22 @@ class SGMailService{
         }
 
 		$substitutions = [
-			"providerName" => $businessdata->dba_business_name,  
-			"Customer_Name" => @$customer->full_name,  
-			"Customer_Email" => $customer->email,  
-			"temppassword" => $password,  
-			"Company_Name" => $businessdata->dba_business_name,  
+			"ProviderName" => $businessdata->public_company_name,  
+			"CustomerName" => @$customer->full_name,  
+			"CustomerEmail" => $customer->email,  
+			"TempPassword" => $password,  
+			"CompanyName" => $businessdata->public_company_name,  
 		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
-		    "address" => $businessdata->company_address(),   
+		    "Address" => $businessdata->company_address(),   
 		    "PhoneNumber" => $businessdata->business_phone,   
 		    "Email" => $businessdata->business_email,  
-		    "website" => $businessdata->business_website,
-		    "Company_Image" => $ImageUrl,
-		    "url" => $businessdata->users->username
+		    "Website" => $businessdata->business_website,
+		    "companyImage" => $ImageUrl,
+		    "PersonalProfile" => env('APP_URL').'userprofile/'.$businessdata->users->username,
+		    "SiteUrl" => env('APP_URL'),
+		    "AddInfo" => env('APP_URL').'addcustomerbusiness',
+		    "ContactUs" => env('APP_URL').'contact-us',
+		    "Activity" => env('APP_URL').'activities',
 		];
 		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');
 	}
@@ -118,7 +122,6 @@ class SGMailService{
 
 	public static function confirmationMail($emailDetail){
 		$substitutions = [
-			"CustomerName" => $emailDetail['CustomerName'], 
 			"Url" => $emailDetail['Url'], 
 			"BusinessName"=> $emailDetail['BusinessName'],
 			"BookedPerson"=> $emailDetail['BookedPerson'],

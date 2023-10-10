@@ -90,44 +90,46 @@ class FamilyMemberController extends Controller
                 'emergency_contact_name' => $request->emergency_name,
             ]);
         }
-       
-        foreach($company as $key=>$c){
-            $password = '';
-            if($key == 0){
-                $random_password = Str::random(8);
-                $password = Hash::make($random_password);
-            }
+        
+        $chkProviderOrNot = CompanyInformation::where('user_id' , Auth::user()->id)->first();
+        if($chkProviderOrNot){
+            foreach($company as $key=>$c){
+                $password = '';
+                if($key == 0){
+                    $random_password = Str::random(8);
+                    $password = Hash::make($random_password);
+                }
 
+                $businessCustomer = $c->customers()->where('user_id', $user->id)->first();
+                if($businessCustomer == ''){
+                    $random_password = Str::random(8);
+                    $password = Hash::make($random_password);
+                    $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
+                }
 
-            $businessCustomer = $c->customers()->where('user_id', $user->id)->first();
-            if($businessCustomer == ''){
-                $random_password = Str::random(8);
-                $password = Hash::make($random_password);
-                $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
-            }
-
-			$customer = Customer::where(['business_id'=> $businessCustomer->business_id, 
-                                         'fname' =>  $request->fname,
-                                         'lname' => $request->lname,
-                                         'parent_cus_id' => $businessCustomer->id])->first();
-            if($customer == ''){
-                $createCustomer = Customer::create([
-                    'business_id' => $c->id,
-                    'fname' => $request->fname,
-                    'lname' => $request->lname,
-                    'email' => $request->email,
-                    'phone_number' => $request->mobile,
-                    'emergency_contact' => $request->emergency_contact,
-                    'relationship' => $request->relationship,
-                    'profile_pic' => $profile_pic,
-                    'gender' => $request->gender,
-                    'birthdate' =>  $birthdate,
-                    'parent_cus_id' => $businessCustomer->id,
-                ]); 
-                $createCustomer->create_stripe_customer_id();
-                $chk = 1;
-            }else{
-                $message = 'Member already added as customer..';
+    			$customer = Customer::where(['business_id'=> $businessCustomer->business_id, 
+                                             'fname' =>  $request->fname,
+                                             'lname' => $request->lname,
+                                             'parent_cus_id' => $businessCustomer->id])->first();
+                if($customer == ''){
+                    $createCustomer = Customer::create([
+                        'business_id' => $c->id,
+                        'fname' => $request->fname,
+                        'lname' => $request->lname,
+                        'email' => $request->email,
+                        'phone_number' => $request->mobile,
+                        'emergency_contact' => $request->emergency_contact,
+                        'relationship' => $request->relationship,
+                        'profile_pic' => $profile_pic,
+                        'gender' => $request->gender,
+                        'birthdate' =>  $birthdate,
+                        'parent_cus_id' => $businessCustomer->id,
+                    ]); 
+                    $createCustomer->create_stripe_customer_id();
+                    $chk = 1;
+                }else{
+                    $message = 'Member already added as customer..';
+                }
             }
         }
 
