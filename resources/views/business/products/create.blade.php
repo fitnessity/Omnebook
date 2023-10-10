@@ -27,7 +27,7 @@
                                 @csrf
                                 <input type="hidden" name="id" id="id" value="{{$id}}">
                                 <div class="row">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-9">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="mb-3">
@@ -545,8 +545,35 @@
                                         <div class="text-end mb-3">
                                             <button type="submit" class="btn btn-red w-sm">Submit</button>
                                         </div>
-                                    </div>
-                                    <!-- end col -->
+                                    </div><!-- end col -->
+									<div class="col-lg-3">
+										<div class="card">
+											<div class="card-header">
+												<h5 class="card-title mb-0">Publish</h5>
+											</div>
+											<div class="card-body">
+												<div class="mb-3">
+													<label for="choices-publish-status-input" class="form-label">Status</label>
+
+													<select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false name="status">
+														<option value="Draft" @if(@$product->status == '' || @$product->status =='Draft') selected @endif>Draft</option>
+														<option value="Published"  @if(@$product->status =='Published') selected @endif>Published</option>
+													</select>
+												</div>
+
+												<div>
+													<label for="choices-publish-visibility-input" class="form-label">Visibility</label>
+													<select class="form-select" id="choices-publish-visibility-input" data-choices data-choices-search-false name="visibility">
+                                                        <option value="Public" @if(@$product->visibility == '' || @$product->status =='Public') selected @endif>Visible On Online</option>
+														<option value="Hidden" @if(@$product->visibility =='Hidden') selected @endif>Hidden Online</option>
+													</select>
+												</div>
+											</div>
+											<!-- end card body -->
+										</div>
+										<!-- end card -->
+									</div>
+									<!-- end col -->
                                 </div>
                                 <!-- end row -->
                             </form>
