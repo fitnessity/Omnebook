@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
-
+use Maatwebsite\Excel\HeadingRowImport;
 use App\Customer;
 use App\StripePaymentMethod;
+use Illuminate\Support\Facades\Storage;
+use App\{ExcelUploadTracker};
+use Excel;
+use App\Imports\{CustomerImport,ImportMembership,customerAtendanceImport};
+use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
 
 class CustomerController extends Controller
 {
@@ -149,5 +154,55 @@ class CustomerController extends Controller
         }else{
             return redirect()->route('business_customer_show',['business_id' => $customer->business_id , 'id' =>$request->customer_id ]);
         }
+    }
+
+    public function importcustomer(Request $request, $business_id)
+    {
+        $user = Auth::user();
+        $current_company = $user->businesses()->findOrFail($business_id);
+        $file = $request->file('import_file');
+
+        // if($current_company->customer_uploading){
+        //    return response()->json(['status'=>500,'message'=>'Client import processing...']); 
+        // }
+        if($request->hasFile('import_file')){
+            $ext = $file->getClientOriginalExtension();
+            // if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' ){
+            if($ext != 'csv'){
+                return response()->json(['status'=>500,'message'=>'File format is not supported.']);
+            }
+
+            $headings = (new HeadingRowImport)->toArray($file);
+            /*print_r($headings);*/
+            if(!empty($headings)){
+                foreach($headings as $key => $row) {
+                    $firstrow = $row[0];
+                    /*print_r($firstrow);exit;*/
+                    if(  $firstrow[0] != 'last_name' || $firstrow[1] != 'first_name' || $firstrow[3] != 'id' ||  $firstrow[4] != 'address'|| $firstrow[5] != 'city'|| $firstrow[6] != 'state' || $firstrow[7] != 'postal_code' || $firstrow[8] != 'country'|| $firstrow[9] != 'mobile_phone' || $firstrow[10] != 'home_phone' || $firstrow[11] != 'work_phone' || $firstrow[12] != 'email') 
+                    {
+                        return response()->json(['status'=>500,'message'=>'Problem in header.']);
+                    }
+                }
+            }
+
+
+            $current_company->update(['customer_uploading' => 1]);
+            
+            
+            $timestamp = now()->timestamp;
+            $newFileName = 'business/customer_imports/'.$request->business_id.'-'.$timestamp.'-'.$user->id.'.'.$file->getClientOriginalExtension();
+
+
+            Storage::disk('s3')->put($newFileName, file_get_contents($file));
+
+
+            ProcessCustomerExcelData::dispatch($request->business_id, $newFileName);
+
+            
+
+            return response()->json(['status'=>200,'message'=>'File processing...']);
+        }
+
+
     }
 }

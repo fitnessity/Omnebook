@@ -178,19 +178,18 @@ class BusinessActivitySchedulerController extends Controller
                 $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
         }else{
-            $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->get();
-           
-            if(!empty($bookingDetail)){
-                foreach($bookingDetail as $i=>$detail){
-                    $remainingSession = $detail->getremainingsession();
-                    $priceDetail = $detail->business_price_detail;
-                  
-                    if($remainingSession != 0 &&  $priceDetail->category_id == $request->catId){
-                        if (!$firstDataProcessed) {
-                            $remaining = $remainingSession; 
-                            $firstDataProcessed = true; 
-                        }
-                        $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$detail->id.'">'.$priceDetail->price_title.'</option>';
+            $customer = $request->user()->customers()->find($request->cid);
+
+            $active_memberships = $customer->active_memberships()->get();
+
+            foreach($active_memberships as $active_membership){
+                $remainingSession = $active_membership->getremainingsession();
+                if($remainingSession > 0 && $active_membership->business_price_detail){
+                    $priceDetail = $active_membership->business_price_detail;
+                    $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
+                    if (!$firstDataProcessed) {
+                        $remaining = $remainingSession; 
+                        $firstDataProcessed = true; 
                     }
                 }
             }
