@@ -52,7 +52,7 @@
 																		<h5 class="fs-13 mb-0 listname">{{$c->name}}</h5>
 																	</div>
 																	<div class="flex-shrink-0 ms-2">
-																		<span class="badge bg-light text-muted">{{$c->getCategoryProductCount()->count()}}</span>
+																		<span class="badge bg-light text-muted">{{$c->getCategoryProductCount($business_id)->count()}}</span>
 																	</div>
 																</a>
 															</li>

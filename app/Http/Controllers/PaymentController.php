@@ -220,9 +220,10 @@ class PaymentController extends Controller {
                     ]);
 
                     $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
+                    $MailCustomer = Customer::find($d['id']);
                     $email_detail = array(
                         'getreceipemailtbody' => $getreceipemailtbody,
-                        'email' => Auth::user()->email);
+                        'email' => @$MailCustomer->email);
                     SGMailService::sendBookingReceipt($email_detail);
 
                     $email_detail2 = $this->generateEmailDetails(
@@ -239,13 +240,14 @@ class PaymentController extends Controller {
                     $company = @$cartService->getCompany($businessServices->cid);
                     $businessTerms = @$company->businessterms; 
                     $email_detail1 = array(
+                        "CustomerName" =>  @$MailCustomer->full_name, 
                         "CompanyName" =>  @$company->company_name, 
                         "RepName" =>  @$company->full_name, 
                         "CompanyAddress" => @$company->company_address(), 
                         "phone" => @$company->business_phone, 
-                        "email" => @$company->business_email, 
+                        "email" => @$MailCustomer->email,  
                         "website" => @$company->business_website, 
-                        "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key=AIzaSyBHm1RdzTbNsr9qm-AEfdreOWihD-oHN9A', 
+                        "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key='.env('GOOGLE_MAP_KEY'), 
                         "thingsToKnow" => @$businessTerms->houserules, 
                         "CancellationText" => @$businessTerms->cancelation, 
                         "RefundText" => @$businessTerms->refundpolicytext
@@ -531,9 +533,10 @@ class PaymentController extends Controller {
                     ]);
 
                     $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
+                    $MailCustomer = Customer::find($d['id']);
                     $email_detail = array(
                         'getreceipemailtbody' => $getreceipemailtbody,
-                        'email' => Auth::user()->email);
+                        'email' => @$MailCustomer->email);
                     SGMailService::sendBookingReceipt($email_detail);
                     
                     $email_detail2 = $this->generateEmailDetails(
@@ -550,11 +553,12 @@ class PaymentController extends Controller {
                     $company = @$cartService->getCompany($businessServices->cid);
                     $businessTerms = @$company->businessterms; 
                     $email_detail1 = array(
+                        "CustomerName" =>  @$MailCustomer->full_name, 
                         "CompanyName" =>  @$company->company_name, 
                         "RepName" =>  @$company->full_name, 
                         "CompanyAddress" => @$company->company_address(), 
                         "phone" => @$company->business_phone, 
-                        "email" => @$company->business_email, 
+                        "email" => @$MailCustomer->email, 
                         "website" => @$company->business_website, 
                         "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key=AIzaSyBHm1RdzTbNsr9qm-AEfdreOWihD-oHN9A',
                         "thingsToKnow" => @$businessTerms->houserules, 
@@ -573,8 +577,7 @@ class PaymentController extends Controller {
 
     public function generateEmailDetails($email, $businessServices, $cartService, $participateAry, $item, $activityScheduler, $price_detail){
         return array(
-            "email" => $email, 
-            "CustomerName" => @$cartService->getCompany($businessServices->cid)->full_name, 
+            "email" => $email,  
             "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
             "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
             "BookedPerson"=> Auth::user()->full_name,

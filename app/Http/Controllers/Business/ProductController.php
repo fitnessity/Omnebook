@@ -21,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request, $business_id)
     {
         $productCategory = ProductsCategory::orderBy('name')->get();
-        $data = Products::orderBy('created_at','desc');
+        $data = Products::where('business_id',$business_id)->orderBy('created_at','desc');
 
         if ($request->ajax()) {
             $data->when($request->categoryId ,function($q) use($request){
@@ -192,6 +192,8 @@ class ProductController extends Controller
             'activity_is_for' =>$request->activity_for != '' ? implode(',' ,$request->activity_for): '',
             'material' =>$request->material != '' ? implode(',' ,$request->material): '',
             'policy_returning' =>$request->product_policy,
+            'status' =>$request->status,
+            'visibility' =>$request->visibility,
         ];
 
         Products::updateOrCreate(['id' => $id],$data);
