@@ -311,7 +311,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 				_token: '{{csrf_token()}}',
 				sid : sid,
 				cid : '{{@$customer->id}}',
-				priceId : '{{$priceid}}',
+				// priceId : '{{$priceid}}',
 				catId : catId,
 			},
 			success:function(data){
