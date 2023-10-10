@@ -45,8 +45,8 @@ class CompanyController extends Controller
     public function store(Request $request)
     {   
         //print_r($request->all()); exit;
-
-        $companyId = $request->cid != '' &&  $request->cid != '0' ? $request->cid : '';
+        $chkCompanyId =  $request->cid ?? $request->company;
+        $companyId = $chkCompanyId != '' &&  $chkCompanyId != '0' ? $chkCompanyId : '';
         if($request->step == 1){
             $companyImage = $request->has('profilePic') ? $request->file('profilePic')->store('company') : $request->oldProfile; 
             if($request->has('profilePic') && $request->oldProfile != ''){
@@ -137,7 +137,7 @@ class CompanyController extends Controller
             $stillwork= $request->frm_ispresentcheck=='on' ? 1: 0;
     
             $experience = [
-                "cid" => $request->cid,
+                "cid" => $companyId,
                 "userid" => Auth::user()->id,
                 "frm_organisationname" => $frm_organisationname,
                 "frm_position" => $frm_position,
@@ -154,7 +154,7 @@ class CompanyController extends Controller
                 "frm_skilldetail" => $frm_skilldetail,
             ];
 
-            if($request->has('id')){
+            if($request->id){
                 BusinessExperience::where('id' , $request->id)->update($experience);
             }else{
                 BusinessExperience::create($experience);
@@ -185,7 +185,7 @@ class CompanyController extends Controller
             ];
 
             //print_r($service);exit;
-            if($request->has('id')){
+            if($request->id){
                 BusinessService::where('id' , $request->id)->update($service);
             }else{
                 BusinessService::create($service);
@@ -225,7 +225,7 @@ class CompanyController extends Controller
                 "refundpolicytext" => $refundpolicytext
             ];
 
-            if(@$request->id != ''){
+            if(@$request->id){
                 BusinessTerms::where('id' , $request->id)->update($terms);
             }else{
                BusinessTerms::create($terms);
