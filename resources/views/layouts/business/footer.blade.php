@@ -63,7 +63,7 @@
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
                 <div class="footer-logo">
-                    <img src="/public/images/fitnessity_logo1.png" style="width:250px">
+                    <img src="/public/images/fitnessity-logo-white.png" style="width:250px">
                     <p style="text-align: justify; padding: 5px 50px 5px 0px">
                         {!!$footercon->content!!}
                     </p>
@@ -239,7 +239,7 @@
 										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Staff Login</a>
+										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a style="color: white;" @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif  >Staff Login</a>
 									</li>
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>
