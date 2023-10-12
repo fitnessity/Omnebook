@@ -750,7 +750,7 @@ header{ position: fixed !important; }
 	display: grid;
 }
 .btn-list-business{
-	color: #000 !important;
+	color: #fff;
 }
 .bg-soft-red {
   background-color: #ececec;
