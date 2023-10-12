@@ -286,9 +286,9 @@ $total_quantity = 0;
                    
 					
 						<div class="header-right">
-                        	@if(Session('StaffLogin'))
+                        	  <?php /* @if(Session('StaffLogin'))
                             	<a href="{{ Config::get('constants.SITE_URL') }}/userlogout" class="btn btn-list-business mr-15 header-bottom-sp" style="color: white;">Logout </a>
-							@endif
+							@endif  */?>
 							
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
@@ -370,8 +370,7 @@ $total_quantity = 0;
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
                                                     	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
-
-                                                    	<a href="{{route('business_dashboard')}}" style="color: white;">Staff Login</a>
+                                                    	<a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
