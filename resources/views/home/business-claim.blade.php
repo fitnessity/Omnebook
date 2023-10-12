@@ -77,8 +77,8 @@
 <script>
 	function redirect_to_detail()
 	{ 
-
-        if ("{{Auth::check()}}") {
+         window.location.href = '{{route('onboard_process.welcome')}}';
+        /*if ("{{Auth::check()}}") {
             var  check = 'login';
             var redirect ="/business-welcome";   
         }else{
@@ -93,17 +93,12 @@
             success:function(response){
                 window.location.href = redirect;
             },
-        });
+        });*/
            
 		//window.location="claim-your-business-detail";
 	}
 
     $(document).ready(function() {
-        $("document").on("click", "#makeloginpopup", function() {
-            console.log("gggggg")
-            $("#loginbtn").click();
-        })
-
         /* City Name */
         $("#pac-input1").keyup(function() {
             var _token = $('input[name="_token"]').val();
@@ -144,150 +139,7 @@
                 }
             });
         });
-
-       /* $(document).on('click', '.searchclick', function() {
-            $("#business_name").val($(this).attr('data-num'));
-            $("#option-box").hide();
-            var status = $("#claim_business_status").val();
-            alert(status);  
-            if(status == 0){
-                window.location.href = "claim-your-business-detail";
-            }else{
-
-            }
-        });*/
-
-        /*$('#business_name').keyup(function() {
-            $.ajax({
-                url: '/get-my-location-business?location=' + $('#pac-input1').val() + '&business_name=' + $('#business_name').val(),
-                type: 'GET',
-                beforeSend: function() {
-                    $('.loader').show();
-                    //showSystemMessages('#systemMessage', 'info', 'Please wait while we create a company with Fitnessity.');
-                },
-                complete: function() {
-                    // $('.loader').hide();ccccccc
-                    // $('.s_form').prop('disabled', false);
-                },
-                success: function(response) {
-                    $('.loader').hide();
-                    showSystemMessages('#systemMessage', response.type, response.msg);
-                    if (response.status == 200) {
-                        var str = '';
-                        var check = "{{Auth::check()}}";
-                        if (check == false) {
-                            str = str + '<div class="option topsec-opt" style="padding-left:10px;"><div class="col-sm-12 text-left"><span>My Business isn\'t here</span> <a  type="button" data-toggle="modal" data-target="#login_modal" href="/auth/jsModallogin" class="addnewclaim-btn" id="makeloginpopup">Add New</button></div></div><br/>';
-                        }
-                        if (response.search_data2.length != 0 && response.search_data.length != 0) {
-                            response.search_data2.forEach(function(value, key) {
-                                var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
-
-                                if (key + 1 == response.search_data2.length) {
-
-                                    response.search_data.forEach(function(value, key) {
-
-                                        var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-
-                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
-
-                                        if (key + 1 == response.search_data.length) {
-
-                                            $('#option-box').empty();
-
-                                            $('#option-box').append(str);
-
-                                            $('.option').show()
-
-                                        }
-
-                                    })
-                                }
-                            })
-                        } else {
-                            response.search_data2.forEach(function(value, key) {
-                                var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
-
-                                if (key + 1 == response.search_data2.length) {
-
-                                    $('#option-box').empty();
-
-                                    $('#option-box').append(str);
-
-                                    $('.option').show()
-
-                                }
-                            })
-
-                            response.search_data.forEach(function(value, key) {
-
-                                var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
-
-                                if (key + 1 == response.search_data.length) {
-
-                                    $('#option-box').empty();
-
-                                    $('#option-box').append(str);
-
-                                    $('.option').show()
-
-                                }
-
-                            })
-                        }
-
-                        //   response.search_data2.forEach(function(value,key){
-                        //       var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                        //       str=str+'<div class="option" style="padding-left:10px;" onclick="setValueInput(\''+value.business_name +' '+ value.location+'\','+value.id+',\'claimed\');"><div class="col-sm-12 text-left"><img src="'+mysrc+'/'+value.logo+'" style="width:30px;height:30px;" />&nbsp;'+value.business_name+'&nbsp;'+value.location+'</div></div>';
-
-                        //       if(key+1 ==  response.search_data2.length){
-                        //           if( response.search_data.length == 0)
-                        //             $('#option-box').empty();
-                        //           $('#option-box').append(str);
-                        //           $('.option').show()
-                        //       }
-                        //   })
-
-                        //   response.search_data.forEach(function(value,key){
-                        //       str=str+'<div class="option" style="padding-left:10px;" onclick="setValueInput(\''+value.business_name +' '+ value.location+'\','+value.id+',\'unclaimed\');"><div class="col-sm-12 text-left"><i class="fa fa-building" style="color:red; aria-hidden="true"></i>&nbsp;'+value.business_name+'&nbsp;'+value.location+'</div></div>';
-
-                        //       if(key+1 ==  response.search_data.length){
-                        //           $('#option-box').empty();
-                        //           $('#option-box').append(str);
-                        //           $('.option').show()
-                        //       }
-
-                        //   })
-
-                        //   response.search_data2.forEach(function(value,key){
-
-                        //       var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-
-                        //       str=str+'<div class="option" style="padding-left:10px;" onclick="setValueInput(\''+value.business_name +' '+ value.location+'\','+value.id+',\'claimed\');"><div class="col-sm-12 text-left"><img src="'+mysrc+'/'+value.logo+'" style="width:30px;height:30px;" />&nbsp;'+value.business_name+'&nbsp;'+value.location+'</div></div>';
-
-                        //       if(key+1 ==  response.search_data2.length){
-
-                        //           if( response.search_data.length == 0)
-                        //             $('#option-box').empty();
-                        //           $('#option-box').append(str);
-                        //           $('.option').show()
-                        //       }
-                        //   })
-
-                    }
-
-                }
-
-            });
-
-
-            // console.log("aaaaa")
-
-            // $('.option').show()
-        })*/
+    
     })
 
 </script>
@@ -296,8 +148,6 @@
     function searchclick(status,cid){
         $("#business_name").val($(this).attr('data-num'));
         $("#option-box").hide();
-      /*  alert(status);*/
-        // alert(cid);
         if ("{{Auth::check()}}") {
             if(status == 0){
                 window.location.href = "claim-your-business-detail"+"/"+cid;

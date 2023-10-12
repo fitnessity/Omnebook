@@ -8821,7 +8821,19 @@ class UserProfileController extends Controller {
         echo 'success';
     }   
 
-     
+    public function resendOpt(Request $request){
+        $digits = 4;
+        $random = rand(pow(10, $digits-1), pow(10, $digits)-1);
+        CompanyInformation::where('id',$request->cid)->update(['claim_business_verification_code'=>$random]);
+        $details = [];
+        $data = CompanyInformation::where('id',$request->cid)->first();
+        $details = array(
+            "random_code" => $random,
+            "email" =>$data->business_email
+        );
+        $success = MailService::sendEmailclaimvarification($details);
+        return $success;
+    }
 
     public function varify_email_for_claim_business(Request $request){
         $digits = 4;

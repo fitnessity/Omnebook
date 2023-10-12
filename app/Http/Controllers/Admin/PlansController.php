@@ -363,7 +363,7 @@ class PlansController extends Controller
         }
         
 
-        CompanyInformation::where('id',$request->cid)->update(['company_name'=>$request->bname,'business_phone'=>@$request->phone,'state'=>@$request->state,'website'=>@$request->website,'business_email'=>@$request->email,'zip_code'=>@$request->zip,'address'=>@$address,'city'=>@$request->city,'country'=>@$request->country,'about_company'=>@$request->business_desc,'latitude' => $data['lat'],'longitude' => $data['lng']]);
+        CompanyInformation::where('id',$request->cid)->update(['company_name'=>$request->bname,'dba_business_name'=>$request->bname,'business_phone'=>@$request->phone,'state'=>@$request->state,'website'=>@$request->website,'business_email'=>@$request->email,'zip_code'=>@$request->zip,'address'=>@$address,'city'=>@$request->city,'country'=>@$request->country,'about_company'=>@$request->business_desc,'latitude' => $data['lat'],'longitude' => $data['lng']]);
 
         BusinessCompanyDetail::where('id',$request->cid)->update(['Companyname'=>$request->bname,'Phonenumber'=>@$request->phone,'State'=>@$request->state,'Emailb'=>@$request->email,'ZipCode'=>@$request->zip,'Address'=>@$address,'City'=>@$request->city,'Aboutcompany'=>@$request->business_desc,'country'=>@$request->country]);
 
@@ -419,6 +419,7 @@ class PlansController extends Controller
 
         $bc = new CompanyInformation;
         $bc->company_name = $request->bname;
+        $bc->dba_business_name = $request->bname;
         $bc->business_phone = @$request->phone;
         $bc->address = $address ;
         $bc->city = @$request->city;

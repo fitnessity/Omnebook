@@ -33,13 +33,28 @@
 
             <div class="claiming-boxn">
                 <h4><i class="fa fa-envelope" aria-hidden="true"></i>VERIFICATION CODE</h4>
-                <form id="verify_code">
+                <form id="verify_code" class="mb-10">
                     @csrf
-                        <input type="hidden" name="cid" id="cid" value="{{$cid}}">
-                        <div class="form-group">
-                            <input type="text" name="vari_code" id="vari_code" class="form-control" placeholder="Verification Code" required="">
+                    <input type="hidden" name="cid" id="cid" value="{{$cid}}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="">
+                                    <input type="text" name="vari_code" id="vari_code" class="form-control" placeholder="Verification Code" required="">
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <input type="submit" value="Submit" class="btnsend">
+                               
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mt-15">
+                                    <a onclick="resendOtp();">Resend</a>
+                                    <div class="fs-16" id="otpMsg"></div>
+                                </div>
+                            </div>
                         </div>
-                        <input type="submit" value="Submit" class="btnsend">
+                    </div>
                 </form>
                 <span class="text-danger" id="error_msg" style="display: none;">Verification code is not valid. Please enter valid code.</span>
                 <br>
@@ -79,8 +94,12 @@
                 },
 
                 success:function(response){
+                    $('#otpMsg').html('');
                     if(response == 'Match'){
-                       window.location.href = "/createNewBusinessProfile";
+                        var url = "{{route('onboard_process.welcome',['cid' => 'val'])}}";
+                        url = url.replace('val',cid);
+                        alert(url)
+                       window.location = url;
                     }else if(response == 'Not Match'){
                         $('#error_msg').show();
                     }else{
@@ -91,6 +110,27 @@
             });
         });
     })
+
+    function resendOtp(){
+        var _token = $("input[name='_token']").val();
+        var cid = $('#cid').val();
+        $.ajax({
+            url: "/resend-otp-for-claim",
+            type:"POST",
+            headers: {'X-CSRF-TOKEN': _token},
+            data:{
+                cid:cid
+            },
+            success:function(response){
+                $('#otpMsg').removeClass('font-red').addClass('font-green').html('Text message sent! Enter the code above.');
+                /*if(response == 'success'){
+                   $('#otpMsg').removeClass('font-red').addClass('font-green').html('Text message sent! Enter the code above.');
+                }else{
+                    $('#otpMsg').removeClass('font-green').addClass('font-red').html('Something went to wrong. Please try again');
+                }*/
+            },
+        });
+    }
 
 </script>
 
