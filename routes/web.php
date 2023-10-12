@@ -16,6 +16,14 @@ use App\Http\Controllers\Products\ProductController;
 
 
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
+Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
+Route::get('/onboard_process/','OnBoardedController@index')->name('onboard_process.index');
+Route::get('/stripe-dashboard-onboard','OnBoardedController@stripeDashboard')->name('stripe-dashboard-onboard');
+Route::post('/onboard_process/store','OnBoardedController@store')->name('onboard_process.store');
+Route::post('/storePlan','OnBoardedController@storePlan')->name('onboard_process.storePlan');
+Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_process.getCardForm');
+Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
+Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
@@ -272,6 +280,9 @@ Route::get('/unset-session-for-claim','UserProfileController@unset_session_for_c
 Route::any('/varify-code-to-claim-business','UserProfileController@varify_code_to_claim_business')->name('varify_code_to_claim_business');
 
 Route::any('/varify-email-for-claim-business','UserProfileController@varify_email_for_claim_business')->name('varify_email_for_claim_business');
+
+Route::any('/resend-otp-for-claim','UserProfileController@resendOpt')->name('resendOpt');
+
 
 Route::any('/business-claim-varification/{cid}','UserProfileController@business_claim_varification')->name('business_claim_varification');
 
