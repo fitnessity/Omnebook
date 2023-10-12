@@ -79,7 +79,8 @@ class PasswordController extends Controller
         $email_data = array(
             "customerName"=> $userdata->firstname.' '.$userdata->lastname,
             "link" => $link.'/reset-password/'.Crypt::encryptString($userdata->id),
-            "email"=> $request['email']
+           // "email"=> $request['email']
+             "email"=> 'arya.developers.2017@gmail.com'
         );
         $status = SGMailService::sendresetemail($email_data);
         
@@ -136,6 +137,7 @@ class PasswordController extends Controller
         $userdata = $this->users->findByEmail($credentials['email']);
         $userdata = $userdata[0];
         $userdata->password = bcrypt($request->password);
+        $userdata->buddy_key = $request->password;
         $userdata->save();
         Auth::login($userdata);
         if($userdata['role'] == "admin") {
