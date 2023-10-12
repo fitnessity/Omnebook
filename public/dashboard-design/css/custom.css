@@ -5076,4 +5076,9 @@ div#termsdiv{order: 4;}
 	justify-content: center;
 	align-items: center;
 }
+.btn.business-sp.btn-style-two{
+		display: flex;
+	justify-content: center;
+	align-items: center;
+}
 /* header class */
