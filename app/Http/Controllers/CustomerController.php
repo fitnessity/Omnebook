@@ -62,7 +62,7 @@ class CustomerController extends Controller {
 
             $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY); 
             
-            $customers = $customers->where('business_id', $business_id)
+            $customers = $customers->where('business_id', $business_id)->limit(20)
                 ->where(function ($q) use ($searchValues) {
                     $serch1 = @$searchValues[0] != '' ? @$searchValues[0] : '';
                     $serch2 = @$searchValues[1] != '' ? @$searchValues[1] : '';

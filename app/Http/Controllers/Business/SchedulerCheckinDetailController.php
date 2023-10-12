@@ -99,6 +99,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
         $chk = 0;
+
         foreach($bookingDetail as $detail){
             $reminingSession = $detail->getremainingsession();
             if($reminingSession > 0){
@@ -117,6 +118,20 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                     return $chk;
                 }
             }
+        }
+
+        if($chk == 0){
+
+            $status = BookingCheckinDetails::create([
+                'customer_id' => $request->customer_id,
+                // 'booking_detail_id' => $detail->id,
+                'checkin_date' => $request->checkin_date,
+                'business_activity_scheduler_id' => $business_activity_scheduler->id,
+                'source_type' => 'in_person',
+                'use_session_amount' => 0,
+            ]);
+            
+            $chk = 1;
         }
       
         return $chk; 
