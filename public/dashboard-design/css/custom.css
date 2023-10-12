@@ -752,6 +752,9 @@ header{ position: fixed !important; }
 .btn-list-business{
 	color: #fff;
 }
+.btn-list-business:hover{
+	color: #fff;
+}
 .bg-soft-red {
   background-color: #ececec;
 }
@@ -5057,3 +5060,16 @@ div#termsdiv{order: 4;}
 	margin-bottom: 0px;
 	padding: 3px 0;
 }
+
+
+/* header class */
+
+
+.userblock .login_links a {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+/* header class */
