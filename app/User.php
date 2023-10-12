@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
-
+use Storage;
 use App\StripePaymentMethod;
 
 class User extends Authenticatable
@@ -82,6 +82,15 @@ class User extends Authenticatable
         }else{
             return 'F';
         }
+    }
+
+    public function getPic(){
+       $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->profile_pic)){
+            $profile_pic = Storage::url($this->profile_pic);
+        }
+
+        return $profile_pic;
     }
 
     public function getaddress(){

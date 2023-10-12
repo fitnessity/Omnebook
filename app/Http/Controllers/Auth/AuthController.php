@@ -177,7 +177,7 @@ class AuthController extends Controller
             $name = $request->file('file_upload_profile')->store('customer');
 			$user->profile_pic =  $name; 
 		 }
-         $user->show_step=6;
+         $user->show_step = 6;
 		 $user->save();
          return response()->json(['status'=>200]);
      }

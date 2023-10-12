@@ -354,7 +354,7 @@ class HomeController extends Controller
             $query = $request->get('query');
             //$query = $request->get('query');
           
-            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
+            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->orWhere('company_name', 'LIKE', "%{$query}%")->get();
            /* $data_bus1 =BusinessClaim::where('business_name', 'LIKE', "%{$query}%")->where('is_verified',0)->get();*/
             foreach($data_bus as $buss)
             {	
@@ -376,7 +376,7 @@ class HomeController extends Controller
             	}
 
                 $array_data [] = array(
-	                "cname"=>$buss->dba_business_name, 
+	                "cname"=>$buss->public_company_name, 
 	                "cid"=>$buss->id,
 	                "claim_business_status"=> $buss->is_verified,
 	                "image" => $buss->logo,

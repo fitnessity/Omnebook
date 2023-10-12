@@ -27,7 +27,7 @@ class StaffController extends Controller
     public $error = '';
     public function index(Request $request)
     {
-        if(Auth::check() == '0'){
+        /*if(Auth::check() == '0'){
         	if($request->has('term'))
         	{
         		$companies = CompanyInformation::whereRaw('LOWER(`company_name`) LIKE ?', [ '%'. strtolower($request->term) .'%' ])->get();	
@@ -38,7 +38,21 @@ class StaffController extends Controller
             }
             return view('staff.login');
         }
-        return redirect('/');
+        return redirect('/');*/
+        if(Auth::check() == 1){
+
+            Auth::logout();
+        }
+        
+        if($request->has('term'))
+        {
+            $companies = CompanyInformation::whereRaw('LOWER(`company_name`) LIKE ?', [ '%'. strtolower($request->term) .'%' ])->get(); 
+        }
+
+        if ($request->ajax()) {
+            return response()->json($companies);
+        }
+        return view('staff.login');
     }
 
     public function login(Request $request)
