@@ -79,8 +79,7 @@ class PasswordController extends Controller
         $email_data = array(
             "customerName"=> $userdata->firstname.' '.$userdata->lastname,
             "link" => $link.'/reset-password/'.Crypt::encryptString($userdata->id),
-           // "email"=> $request['email']
-             "email"=> 'arya.developers.2017@gmail.com'
+            "email"=> $request['email']
         );
         $status = SGMailService::sendresetemail($email_data);
         
