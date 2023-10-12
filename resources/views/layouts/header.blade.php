@@ -33,7 +33,12 @@ $total_quantity = 0;
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
 		
-		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile') 
+		@if(Route::current()->getName() == 'design.home' ) 
+			<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+		@endif
+		
+		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
+			<!--<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
 			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
 
        		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
@@ -59,7 +64,9 @@ $total_quantity = 0;
 		@endif
 		
 
-        <style>/*
+        <style>
+
+		/*
             .btn-style-one {
                 position: relative;
                 display: inline-block;
@@ -271,6 +278,7 @@ $total_quantity = 0;
 			}
 			@media screen and (min-width: 1920px) and (max-width: 2500px){ }
 			*/
+			
 	</style>
 	
 	<!-- Google tag (gtag.js) -->
@@ -342,11 +350,11 @@ $total_quantity = 0;
                     </nav><?php */?>
 					
 						<div class="header-right">
-                            @if(Session('StaffLogin'))
+                           <?php /* @if(Session('StaffLogin'))
                             	<a href="{{ Config::get('constants.SITE_URL') }}/userlogout" class="btn btn-list-business mr-15 header-bottom-sp"  style="color: white;">Logout </a>
 							@elseif(Auth::check() == '0')
 								<a  class="btn btn-list-business mr-15 header-bottom-sp" href="{{route('staff_login')}}">Staff Login</a>
-							@endif
+							@endif  */?>
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
 
@@ -372,7 +380,7 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png')  }}"
+                                	<img src="{{ Auth::user()->getPic() ?? url('/images/user-icon.png')  }}"
                                      alt="Fitnessity" >
                                 </div>
 								<nav class="pc-sidebar">
@@ -382,7 +390,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('public/images/user-icon.png') }}" class="sidemenupic">
+                                                        <img src="{{ Auth::user()->getPic() ?? url('/images/user-icon.png')  }}" class="sidemenupic">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -434,7 +442,7 @@ $total_quantity = 0;
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
                                                     	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
-                                                    	<a href="{{route('business_dashboard')}}" style="color: white;">Staff Login</a>
+                                                    	<a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
@@ -544,6 +552,7 @@ $total_quantity = 0;
         
     </body>
 </html>
+
 
 <script>
 	

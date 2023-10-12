@@ -99,6 +99,7 @@
 
                             <li class="nav-item">
                                 <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Add/Manage Product
+									<span class="badge badge-pill bg-success" data-key="t-new">New</span>
                                 </a>
                             </li>
                             @if(!Session('StaffLogin'))
