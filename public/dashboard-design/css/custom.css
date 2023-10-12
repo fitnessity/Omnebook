@@ -5071,5 +5071,9 @@ div#termsdiv{order: 4;}
   font-weight: 500;
   vertical-align: middle;
 }
-
+.btn-list-business.business-sp{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 /* header class */
