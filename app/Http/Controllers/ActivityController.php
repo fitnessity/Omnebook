@@ -2198,7 +2198,7 @@ class ActivityController extends Controller {
                 $userObj->stripe_customer_id = $stripe_customer_id;
                 $userObj->role = 'customer';
                 $userObj->country = 'US';
-                $userObj->activated = 0;
+                $userObj->activated = 1;
                 $userObj->phone_number = $postArr['contact'];
                 $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
                 $userObj->status = "approved";
