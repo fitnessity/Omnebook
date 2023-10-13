@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DateTime;
 use Config;
 use DateInterval;
+use View;
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use DateTimeZone;
 
@@ -245,10 +246,10 @@ class SchedulerController extends Controller
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
 
-               $dues_tax = $catedata->dues_tax != '' ?  $catedata->dues_tax : 0;
-               $sales_tax = $catedata->sales_tax != '' ?  $catedata->sales_tax : 0;
+               $addOnServices = $catedata  != '' ?  $catedata->AddOnService: [];
+               $addOnData = View::make('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices,'ajax'=>'','idsArray'=>[] ,'qtysArray'=>[]])->render();
                
-               $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
+               $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax.'^!^'.$addOnData;
           }else if($request->chk == 'priceopt'){
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->first();
 

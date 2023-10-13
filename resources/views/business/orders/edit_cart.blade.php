@@ -44,7 +44,7 @@
                                                   @if(!empty(@$catelist)){
                                                        @foreach($catelist as $cl){
                                                             <option value="{{$cl->id}}" 
-                                                            @if(@$cartselectedcategoryid->id == $cl->id) selected 
+                                                            @if(@$cartselectedcategory->id == $cl->id) selected 
                                                             @endif >{{$cl->category_title}}</option>
                                                        @endforeach
                                                   @endif
@@ -69,6 +69,25 @@
                                              <div class="select0service">
                                                   <div class="date-activity-scheduler date-activity-check paynowset">
                                                        <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addpartcipateajax">Participant Quantity </button>
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                             <div class="select0service">
+                                                  <label>Select Add-On Service (Optional)</label>
+                                             </div>
+                                             <div class="accordion cart-accordion" id="default-accordion-exampleaddon">
+                                                  <div class="accordion-item">
+                                                       <h2 class="accordion-header" id="headingOneaddon">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneaddon" aria-expanded="true" aria-controls="collapseOneaddon">Add On Service
+                                                            </button>
+                                                       </h2>
+                                                       <div id="collapseOneaddon" class="accordion-collapse collapse" aria-labelledby="headingOneaddon" data-bs-parent="#default-accordion-exampleaddon">
+                                                            <div class="accordion-body addondataajax">
+                                                                 {!! $addOnData !!}
+                                                            </div>
+                                                       </div>
                                                   </div>
                                              </div>
                                         </div>
@@ -212,6 +231,10 @@
           <input type="hidden" name="categoryid" id="categoryidajax" value="{{$cart['categoryid']}}">
           <input type="hidden" name="chk" value="activity_purchase">
           <input type="hidden" name="value_tax" id="value_taxajax" value="{{$cart['tax']}}">
+          <input type="hidden" name="addOnServicesId"  value="{{$cart['addOnServicesId']}}" id="addOnServicesIdajax" />
+          <input type="hidden" name="addOnServicesQty"  value="{{$cart['addOnServicesQty']}}" id="addOnServicesQtyajax" />
+          <input type="hidden" name="addOnServicesTotalPrice"  value="{{$cart['addOnServicesTotalPrice']}}"id="addOnServicesTotalPriceajax" />
+                                                                           
           <button type="submit" class="btn btn-red" >Submit</a>
      </form>
 </div>
