@@ -96,6 +96,7 @@ class CartController extends Controller {
                     'relationship' => $request['relationship'],
                     'gender' => $request['gender'],
                     'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
+                    'activated' => 1,
                     //'stripe_customer_id' => $Customer->stripe_customer_id
                 ]);
 

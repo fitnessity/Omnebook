@@ -191,66 +191,27 @@
 																	</div>
 																</div>
 
-																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
-																	<div class="select0service mb-10">
+																<div class="col-md-6 col-sm-6 col-xs-12">
+																	<div class="select0service">
 																		<label>Select Add-On Service (Optional)</label>
 																	</div>
-																	<div class="participant-accordion">
-																		<div class="content1">
-																			<div class="panel-group" id="accordiontwo">
-																				<div class="panel panel-default">
-																					<div class="panel-heading">
-																						<h4 class="panel-title">
-																						   	<a data-toggle="collapse" data-parent="#accordiontwo" href="#collapseTwo">Add-On Services</a>
-																						</h4>
-																					</div>
-																					<div id="collapseTwo" class="panel-collapse collapse">
-																						<div class="panel-body">
-																							<div class="row">
-																								<div class="col-md-12">
-																									<div class="add-onservice btn-group">
-																										<div class="row">
-																											<div class="col-md-12 col-xs-12">
-																												@forelse(@$addOnServices as $aos)
-																													<div class="select">
-																														<label class="btn button_select" for="item_4">
-																															<div class="row">
-																																<div class="col-md-6">
-																																	{{ $aos->service_name}}
-																																	<a class="single-service-price d-grid font-red service-desc" data-behavior="ajax_html_modal" data-url="{{route('getAddOnData',['id' => $aos->id])}}">Description</a>
-																																</div>
-																																<div class="col-md-6">
-																																	<span class="single-service-price">${{ $aos->service_price}}</span>
-																																</div>
-																															</div>
-																														</label>
-																														<div class="qtyButtons">
-																															<div class="qty count-members mt-5">
-																																<span class="minus bg-darkbtn addonminus" aid="{{$aos->id}}" ><i class="fa fa-minus"></i></span>
-																																<input type="text" class="count" name="add-one" id="add-one{{$aos->id}}" min="0" value="0" readonly="" apirce="{{$aos->service_price}}">
-																																<span class="plus bg-darkbtn addonplus" aid="{{$aos->id}}"><i class="fa fa-plus"></i></span>
-																															</div>   
-																														</div>
-																													</div>
-																												@empty
-																													<p>Not Available</p>
-																												@endforelse
-																											</div>
-																										</div>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
+																	<div class="accordion cart-accordion" id="default-accordion-exampleaddon">
+																		<div class="accordion-item">
+																			<h2 class="accordion-header" id="headingOneaddon">
+																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneaddon" aria-expanded="true" aria-controls="collapseOneaddon">Add On Service
+																				</button>
+																			</h2>
+																			<div id="collapseOneaddon" class="accordion-collapse collapse" aria-labelledby="headingOneaddon" data-bs-parent="#default-accordion-exampleaddon">
+																				<div class="accordion-body addondata">
 																				</div>
 																			</div>
 																		</div>
 																	</div>
-																</div> -->
+																</div>
 															</div>
 
 															<div class="row">
-																<div class="col-md-6 col-sm-4 col-xs-12">
+																<div class="col-md-4 col-sm-4 col-xs-12">
 																	<div class="select0service mb-10">
 																		<label>Participant Quantity</label>
 																		<button type="button" data-bs-toggle="modal" data-bs-target="#addpartcipate" class="btn btn-red width-100 search-add-client"> Select </button>
@@ -258,8 +219,7 @@
 																	<!-- <div class="accordion cart-accordion" id="default-accordion-example">
 																		<div class="accordion-item">
 																			<h2 class="accordion-header" id="headingOne">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-																					Participant
+																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Participant
 																				</button>
 																			</h2>
 																			<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
@@ -308,13 +268,18 @@
 																		</div>
 																	</div> -->
 																</div>
-																
-																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
-																	<label> Membership Option</label>
-																	<select name="membership_opt_list" id="membership_opt_list" class="form-control" onchange="loaddropdown('mpopt',this,this.value);">
-																		<option value="">Select</option>
-																	</select>
-																</div> -->
+
+																<div class="col-md-4 col-sm-4 col-xs-12">
+																	<div class="select0service mb-10">
+																		<label>Select Product  </label>
+																		<select name="product_list" id="product_list" class="form-select" onchange="loaddropdown('product',this,this.value);">
+																			<option value="">Select</option>
+																			@foreach($products as $pro)
+																				<option value="{{$pro->id}}">{{$pro->name}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -459,6 +424,9 @@
 															<input type="hidden" name="pc_regi_id" id="pc_regi_id" value="{{$pc_regi_id}}" class="product-price">
 															<input type="hidden" name="pc_user_tp" id="pc_user_tp" value="{{$pc_user_tp}}" class="product-price">
 															<input type="hidden" name="pc_value" id="pc_value" value="{{$pc_value}}" class="product-price">
+															<input type="hidden" name="addOnServicesId" value="" id="addOnServicesId" />
+										                    <input type="hidden" name="addOnServicesQty" value="" id="addOnServicesQty" />
+										                    <input type="hidden" name="addOnServicesTotalPrice" value="0" id="addOnServicesTotalPrice" />
 															<div class="check-client-info">
 																<div class="row payment-detials">
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
@@ -487,6 +455,13 @@
 																	</div>
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
 																		<span id="mp_name"></span>
+																	</div>
+																	
+																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
+																		<label>Product</label>
+																	</div>
+																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
+																		<span id="products"></span>
 																	</div>
 																	
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
@@ -581,13 +556,14 @@
 															<div class="col-md-12 col-xs-12">
 																<div class="check-client-info-box">
 																	@php 
-																		$i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk = 0;  $hasActivityPurchase = false; @endphp
+																		$i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk =  $addOnPrice =0;  $hasActivityPurchase = false; @endphp
 																	@if(!empty($cart))
 																		@foreach($cart['cart_item'] as $i=>$item)
 																			@php 
 																				$checkout_btun_chk = 1;
 																				$hasActivityPurchase = true;
 																				$subtotal += $item['totalprice'] ;
+																				$addOnPrice += $item['addOnServicesTotalPrice'] ;
 																				$tip += $item['tip'];
 																				$discount += $item['discount'];
 																				$taxval = $item["tax"];
@@ -597,7 +573,7 @@
 																				$serprice =$act->price_details->find($item['priceid']);
 																				$serpricecate =$act->businessPriceDetailsAges->find(@$serprice->category_id);
 
-																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval;
+																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval + $item['addOnServicesTotalPrice'] ;
 																				$iprice = number_format($total,0, '.', '');
 																			@endphp
 																			<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
@@ -755,7 +731,7 @@
 															if($subtotal != $discount){
 																$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 
-																$grand_total = ($subtotal + $tip + $taxes) - $discount;
+																$grand_total = ($subtotal + $tip + $taxes + $addOnPrice) - $discount;
 																$grand_total = number_format($grand_total, 2, '.', '');
 															}else{
 																$grand_total = $subtotal  = $tax_ser_fees = 0 ;
@@ -1122,17 +1098,13 @@
 													</form>				
 												</div>
 											</div>
-											
 										</div>
-										
-										
 									</div><!-- end card-body -->
 								</div><!-- end card -->
-							</div>
-							<!--end col-->
+							</div><!--end col-->
 						</div>				
 					</div> 
-               </div> 
+                </div> 
             </div>
 		</div>
 	</div>
@@ -1152,7 +1124,7 @@
     <div class="modal fade modal-child" role="dialog" id="addpartcipateajax" data-backdrop-limit="1" tabindex="-1" data-modal-parent="#editcartitempp">
         <div class="modal-dialog counter-modal-size modal-70">
             <div class="modal-content">
-               <div class="modal-header p-3">
+                <div class="modal-header p-3">
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
 				</div>   
                 <div class="modal-body conuter-body" id="Countermodalbodyajax">
@@ -1160,7 +1132,7 @@
                 <div class="modal-footer conuter-body">
                     <button type="button" onclick="saveparticipateajax();" class="btn btn-red">Save</button>
                 </div>
-         </div>                                                                       
+         	</div>                                                                       
         </div>                                          
     </div>
 
@@ -1203,18 +1175,6 @@
 	    	</div>                                                                       
 	    </div>                                          
 	</div>
-	
-
-
-<!-- <script src="{{asset('/public/js/compare/jquery-1.9.1.min.js')}}"></script> -->
-
-<!-- <script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script> -->
- 
-
-<!-- <script src="{{ url('/public/js/front/jquery-ui.js') }}"></script> -->
-<!-- <link href="{{ url('/public/css/frontend/jquery-ui.css') }}" rel="stylesheet" type="text/css" media="all"/> -->
-
-
 
 <script>
 	flatpickr(".flatpickr-range", {
@@ -1258,6 +1218,39 @@
 
 <script>
 	$(document).ready(function () {	
+		var uniqueAids = {};
+		$('#add-one').prop('readonly', true);
+		$(document).on('click','.addonplus',function(){
+			id = $(this).attr('aid');
+			chk = $(this).attr('chk');
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) + 1 );
+			if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId'+chk).val(commaSeparatedAids);
+		    setAddOnServiceTotal(chk);
+		});
+    	$(document).on('click','.addonminus',function(){
+    		id = $(this).attr('aid');
+    		chk = $(this).attr('chk');
+    		if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) - 1 );
+			if ($('#add-one'+id).val() <= 0) {
+				$('#add-one'+id).val(0);
+		    	delete uniqueAids[id];
+			}
+			
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId'+chk).val(commaSeparatedAids);
+
+		    setAddOnServiceTotal(chk);
+	    });
+
 	    $('#adultcnt').prop('readonly', true);
 		$(document).on('click','.adultplus',function(){
 			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
@@ -1291,6 +1284,26 @@
 			}
 	    });
 	});
+
+	function  setAddOnServiceTotal(chk) {
+		var totalQty =  0;
+		var sQty = '';
+		var addOnServicesId = $('#addOnServicesId'+chk).val();
+		var idArray = addOnServicesId.split(','); 
+		for (var i = 0; i < idArray.length; i++) {
+			sQty +=  $('#add-one' + idArray[i]).val() + ',';
+		    qty  = parseFloat($('#add-one' + idArray[i]).val()) || 0;
+		    price = parseFloat($('#add-one' + idArray[i]).attr('apirce')) || 0;
+			totalQty += qty * price;
+		}
+		if (sQty.endsWith(",")) {
+		  	sQty = sQty.slice(0, -1);
+		}
+		sQty = (addOnServicesId != '') ? sQty : '';
+		$('#addOnServicesQty'+chk).val(sQty);
+		$('#addOnServicesTotalPrice'+chk).val(totalQty);		
+		gettotal('','');
+	}
 </script>
 
 <script type="text/javascript">
@@ -1511,7 +1524,6 @@
 			$("#addpartcipate").modal('hide');
 			$("#addpartcipate").removeClass('show');
 		}
-
 	}
 
 	function saveparticipateajax (){
@@ -1621,6 +1633,7 @@
 			$('#category_listajax').html('');
 			$('#priceopt_listajax').html('');
 			$('#membership_opt_listajax').html('');
+			$('.addondataajax').html('');
 		}
 		if(chk == 'category'){
 			$('#categoryidajax').val(id);
@@ -1656,7 +1669,11 @@
 
 					var splittax =  data1[1].split('^^');
 					$('#duestaxajax').val(splittax[0]);
-					//$('#salestaxajax').val(splittax[1]);
+
+					var splitforaddon =  splittax[1].split('^!^');
+					$('#salestaxajax').val(splitforaddon[0]);
+					$('.addondataajax').html(splitforaddon[1]);
+
 				}
 				if(chk == 'priceopt'){
 					$('#pricedivajax').html('');
@@ -1671,7 +1688,6 @@
 				}
 			}
 		});
-
 	}
 
 	function loaddropdown(chk,val,id){
@@ -1682,6 +1698,8 @@
 			$('#category_list').html('');
 			$('#priceopt_list').html('');
 			$('#membership_opt_list').html('');
+			$('.addondata').html('');
+
 		}
 		if(chk == 'category'){
 			$('#c_name').html(selectedText);
@@ -1693,6 +1711,11 @@
 			$('#priceid').val(id);
 			$('#pt_name').html(selectedText);
 			$('#membership_opt_list').html('');
+		}
+
+		if(chk == 'product'){
+			$('#productid').val(id);
+			$('#products').html(selectedText);
 		}
 		/*if(chk == 'mpopt'){
 			$('#mp_name').html(selectedText);
@@ -1729,7 +1752,9 @@
 
 					var splittax =  data1[1].split('^^');
 					$('#duestax').val(splittax[0]);
-					//$('#salestax').val(splittax[1]);
+					var splitforaddon =  splittax[1].split('^!^');
+					$('#salestax').val(splitforaddon[0]);
+					$('.addondata').html(splitforaddon[1]);
 
 				}
 				if(chk == 'priceopt'){
@@ -1766,20 +1791,16 @@
 		var sub_tot = 0;
 		var sub_tot_tip = 0;
 		var sub_tot_dis = tax =salestax= duestax= 0;
-		var price = parseInt($('#price').val());
-		var dis = $('#dis_amt_drop').val();
-	 	var tip = $('#tip_amt_drop').val();
+
+		var price = parseInt($('#price').val()) || 0; 
+		var dis = $('#dis_amt_drop').val() || '';
+	 	var tip = $('#tip_amt_drop').val() || '';
 	 	
-	 	dis_val  = parseInt($('#dis_amt').val());
-		tip_val =parseInt($('#tip_amt').val());
-		//salestax = $('#salestax').val();
-		duestax = $('#duestax').val();
-		/*if(salestax == ''){
-			salestax = 0;
-		}*/
-		if(duestax == ''){
-			duestax = 0;
-		}
+	 	dis_val  = parseFloat($('#dis_amt').val()) || 0; 
+		tip_val = parseFloat($('#tip_amt').val()) || 0;
+		duestax =  parseFloat($('#duestax').val()) || 0;
+		//salestax = parseFloat($('#salestax').val()) || 0;
+
 		if(tip != undefined){
 	 		if($('#tip_amt').val() != ''){
 		 		if(tip == '' || tip == '%'){
@@ -1787,7 +1808,7 @@
 		 			$('#tip_amt_span').html($('#tip_amt').val() + ' %');
 		 		}else{
 		 			sub_tot_tip = tip_val;
-		 			$('#tip_amt_span').html($('#tip_amt').val() + ' $');
+		 			$('#tip_amt_span').html('$ ' + $('#tip_amt').val());
 		 		}
 		 		$('#tip_amt_val').val(sub_tot_tip);
 		 	}else{
@@ -1802,7 +1823,7 @@
 	 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
 		 		}else{
 		 			sub_tot_dis = dis_val;
-					$('#dis_amt_span').html($('#dis_amt').val() + ' $');
+					$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
 		 		}
 		 		$('#dis_amt_val').val(sub_tot_dis);
 	 		}else{
@@ -1810,7 +1831,6 @@
 	 		}
 	 	}
 	 	
-
 	 	if($('#price').val() != ''){
 	 		if($("#tax").is(":checked")){
 	 			tax = 0;
@@ -1831,7 +1851,11 @@
 	 			tot = dropval * tot;
 	 		}
 	 		
-	 		tot = tax + tot ; 
+	 		tot = tax + tot ;
+
+	 		var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPrice').val()) || 0;
+	 		tot = (addOnServicesTotalPrice != '') ? ( tot + addOnServicesTotalPrice) : tot; 
+	 		tot = tot.toFixed(2);
 	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(price);
 	 	}

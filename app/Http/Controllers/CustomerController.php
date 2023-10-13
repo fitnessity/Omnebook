@@ -468,7 +468,10 @@ class CustomerController extends Controller {
 
     public function addFamilyViaSearch(Request $request){
         $customer = Customer::find($request->cid);
-        $customer->update(['parent_cus_id' => $request->currentCid]);
+        $parentCustomer = Customer::find($request->currentCid);
+        if($parentCustomer->parent_cus_id != $customer->id && $customer->parent_cus_id != $customer->id){
+            $customer->update(['parent_cus_id' => $request->currentCid]);
+        }
     }
 
     public function update_customer(Request $request){

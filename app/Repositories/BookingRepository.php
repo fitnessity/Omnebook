@@ -397,7 +397,6 @@ class BookingRepository
             $end_activity_date = date('d-m-Y', strtotime(@$booking_details->expired_at));
         }
          
-
         if(@$booking_details->created_at != ''){
             $created_at = date('d-m-Y', strtotime(@$booking_details->created_at));
         }
@@ -430,6 +429,9 @@ class BookingRepository
             $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
         }
 
+        $addOnServicesId = $booking_details->addOnservice_ids;
+        $addOnServicesQty = $booking_details->addOnservice_qty;
+        $addOnPrice= $booking_details->addOnservice_total ?? 0;
         $pmt_type = $booking_status->getPaymentDetail();
         //var_dump($pmt_type);
         $last4 = $pmt_type;
@@ -467,6 +469,9 @@ class BookingRepository
             "categoty_name" =>   $categoty_name,
             "booking_id" =>   $oid,
             "order_id" => $orderdetailid,
+            "addOnServicesId" => $addOnServicesId,
+            "addOnServicesQty" => $addOnServicesQty,
+            "addOnPrice" => $addOnPrice,
         );
        /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
         return $one_array;
