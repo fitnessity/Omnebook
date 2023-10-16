@@ -269,7 +269,7 @@
 																	</div> -->
 																</div>
 
-																<div class="col-md-4 col-sm-4 col-xs-12">
+																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
 																	<div class="select0service mb-10">
 																		<label>Select Product  </label>
 																		<select name="product_list" id="product_list" class="form-select" onchange="loaddropdown('product',this,this.value);">
@@ -279,7 +279,7 @@
 																			@endforeach
 																		</select>
 																	</div>
-																</div>
+																</div> -->
 															</div>
 														</div>
 													</div>
