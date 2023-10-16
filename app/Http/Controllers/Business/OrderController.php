@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails};
+use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails,Products};
 use App\Repositories\BookingRepository;
 use App\Services\CheckoutRegisterCartService;
 
@@ -115,6 +115,7 @@ class OrderController extends BusinessBaseController
         }
           
         $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->get();
+        $products = Products::where(['user_id'=>Auth::user()->id, 'business_id'=>$companyId])->get();
 
         $modelchk = 0;
         $modeldata = '';
@@ -152,6 +153,7 @@ class OrderController extends BusinessBaseController
            'intent' => $intent, 
            'customer' => $customer,
            'participateName' => $participateName,
+           'products' => $products,
         ]);
     }
 
@@ -363,7 +365,10 @@ class OrderController extends BusinessBaseController
                 'user_id'=> $cUid,
                 'transfer_provider_status' =>'unpaid',
                 'payment_number' => '{}',
-                'order_from' => "Checkout Register"
+                'order_from' => "Checkout Register",
+                'addOnservice_ids' =>@$item['addOnServicesId'],
+                'addOnservice_qty' => @$item['addOnServicesQty'],
+                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
             ]);
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
@@ -666,6 +671,17 @@ class OrderController extends BusinessBaseController
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
+                                <label>ADD ON SERVICE:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="float-end text-right">
+                                <span>'.getAddonService(@$odt['addOnServicesId'],@$odt['addOnServicesQty']).'</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-6">
+                            <div class="text-left">
                                 <label>PARTICIPANT QUANTITY:</label>
                             </div>
                         </div>
@@ -879,7 +895,7 @@ class OrderController extends BusinessBaseController
         if(in_array($request->customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
             $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
-            $cartselectedcategoryid = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
+            $cartselectedcategory = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
             $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
             $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
             $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
@@ -892,8 +908,8 @@ class OrderController extends BusinessBaseController
             $childprice = $cartselectedpriceid['child_'.$priceType] ?? 0;
             $infantprice = $cartselectedpriceid['infant_'.$priceType] ?? 0;
 
-            $salestaxajax = $cartselectedcategoryid->sales_tax ?? '';
-            $duestaxajax = $cartselectedcategoryid->dues_tax ?? '';
+            $salestaxajax = $cartselectedcategory->sales_tax ?? '';
+            $duestaxajax = $cartselectedcategory->dues_tax ?? '';
 
             $aduqty = !empty($cart['adult']) ? ($cart['adult']['quantity'] != 0 ? $cart['adult']['quantity'] : 0) : 0;
             $childqty = !empty($cart['child']) ? ($cart['child']['quantity'] != 0 ? $cart['child']['quantity'] : 0) : 0;
@@ -905,7 +921,14 @@ class OrderController extends BusinessBaseController
             $pageid = $request->pageid;
             $p_session = $cart["p_session"];
             $indexOfAry = $request->customerId.'~~'.$request->priceid;
-            $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategoryid','program_list','catelist','pricelist','pageid','indexOfAry'));
+
+            $idsArray = explode(',', $cart['addOnServicesId']);
+            $qtysArray = explode(',', $cart['addOnServicesQty']);
+            $addOnServices = $cartselectedcategory  != '' ?  $cartselectedcategory->AddOnService: [];
+            $addOnData = view('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices ,'idsArray'=>$idsArray ,'qtysArray'=>$qtysArray ,'ajax'=>'ajax' ]);
+
+            $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategory','program_list','catelist','pricelist','pageid','indexOfAry',
+                'addOnData'));
 
             $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session'));
 
