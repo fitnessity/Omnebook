@@ -303,7 +303,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}"> </a>
 						</div>
 					
 						<div class="top-area">
@@ -371,7 +371,7 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">
+								<img src="{{ asset('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
@@ -380,7 +380,7 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                	<img src="{{ Auth::user()->getPic() ?? url('/images/user-icon.png')  }}"
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}"
                                      alt="Fitnessity" >
                                 </div>
 								<nav class="pc-sidebar">
@@ -390,7 +390,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                        <img src="{{ Auth::user()->getPic() ?? url('/images/user-icon.png')  }}" class="sidemenupic">
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -475,7 +475,7 @@ $total_quantity = 0;
 							<!-- old nav -->
                          	<div class="userblock">
                         		<div class="login_links">
-									<img class="sign-in-header" src="{{ asset('/public/images/login-header.png') }}" alt="cart">
+									<img class="sign-in-header" src="{{ asset('/public/images/login-header-black.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
 									<!--<img src="{{ asset('/public/images/user-icon.png') }}" alt="">-->
