@@ -85,7 +85,7 @@
 	    									$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));
 
 	    									$schedule = App\BusinessActivityScheduler::where('id', $item["actscheduleid"])->orderBy('id', 'ASC')->first();
-	    									$timeval = @$schedule->get_duration();
+	    									$timeval = @$schedule != '' ? @$schedule->get_duration() : '';
 
 	    									if(date('Y-m-d',strtotime($item["sesdate"])) == date('Y-m-d')){
 								                $start = new DateTime($schedule->shift_start);
@@ -140,7 +140,7 @@
 														<a class="fs-13 color-red-a" data-bs-toggle="modal" data-bs-target="#booking-details{{$it}}">Booking Details</a>
 														<div class="row">
 															<?php //$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
-																$family = getFamilyMember();
+																$family = getFamilyMember(@$act["cid"]);
 																//print_r($family);exit;
 																for($i=0; $i<$totalquantity ; $i++)
 																{ ?>
