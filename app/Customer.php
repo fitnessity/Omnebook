@@ -314,7 +314,7 @@ class Customer extends Authenticatable
             }else{
                 $this->stripe_customer_id = $FndCustomer->stripe_customer_id;
                 $this->save();
-                return $customer->id;
+                return $this->id;
             }
             
 	   }
