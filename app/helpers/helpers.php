@@ -64,15 +64,18 @@
         return $createCustomerForBusiness;
     }
 
-    function getFamilyMember(){
+    function getFamilyMember($cid = null){
         $user = Auth::user();
         $businessCustomer = $customers = [];
         /*$company = $user->company;
         foreach($company as $key=>$c){
             $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
         }*/
-
-        $company = $user->current_company;
+        if($cid){
+            $company = $user->company()->where('id',$cid)->first();
+        }else{
+            $company = $user->current_company;
+        }
         if($company != ''){
             $businessCustomer = $company->customers()->where('user_id', $user->id)->pluck('id')->toArray();
             //print_r($businessCustomer);exit;
