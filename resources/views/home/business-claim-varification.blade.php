@@ -98,7 +98,6 @@
                     if(response == 'Match'){
                         var url = "{{route('onboard_process.welcome',['cid' => 'val'])}}";
                         url = url.replace('val',cid);
-                        alert(url)
                        window.location = url;
                     }else if(response == 'Not Match'){
                         $('#error_msg').show();
