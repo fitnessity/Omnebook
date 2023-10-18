@@ -144,8 +144,10 @@ class OnBoardedController extends Controller {
     public function welcome(Request $request){
         $cid = $request->cid;
         $company = CompanyInformation::where('id', $cid)->first();
-        /*$user = User::find($company->user_id);
-        $user->update(['show_step' =>1]);*/
+        $user = User::find(@$company->user_id);
+        if($user){
+            $user->update(['show_step' =>1]);
+        }
         return view('on-boarded.welcome_provider',compact('cid'));
     }
 
