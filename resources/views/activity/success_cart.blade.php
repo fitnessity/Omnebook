@@ -667,7 +667,7 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 <!-- The Modal Registraion-->
-<div class="modal fade compare-model" id="registermodal" tabindex="-1" role="dialog" data-bs-focus="false">
+<div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
     <div class="modal-dialog registermodal">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
@@ -679,12 +679,13 @@ if(!empty($cart["cart_item"])) {
 			</div>
 
             <!-- Modal body -->
-            <div class="modal-body body-tbm register-bg">
+            <div class="modal-body body-space register-bg">
 				
             </div>
         </div>
     </div>
 </div>
+
 <!-- end modal -->
 
 @include('layouts.footer')
@@ -694,6 +695,7 @@ if(!empty($cart["cart_item"])) {
 	    maxDate: '01/01/2050',		
 	}); 
 </script>
+
 
 <script type="text/javascript">
 
@@ -735,12 +737,13 @@ if(!empty($cart["cart_item"])) {
             type: 'GET',
             success: function (response) {
             	$('.register-bg').html(response);
-            	$('#registermodal').modal('show');
+            	$('#registermodal').modal({ show: true, focus: false});
             }
         });
 	}
 
 </script>
+
 <script>
 	jQuery("#carousel-slider").owlCarousel({
 		autoplay: true,

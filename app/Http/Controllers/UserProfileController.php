@@ -56,7 +56,7 @@ class UserProfileController extends Controller {
      */
     public function __construct(UserRepository $users, PlanRepository $planRepository, ProfessionalRepository $professionals, SportsRepository $sports, BookingRepository $bookings) {
         
-        $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail']]);
+        $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail','varify_email_for_claim_business','varify_code_to_claim_business','resendOpt']]);
 
         $this->bookings = $bookings;
         $this->planRepository = $planRepository;
@@ -8888,7 +8888,7 @@ class UserProfileController extends Controller {
     }
 
     private function sendMessage($message, $recipients)
-    {
+    {   
         $account_sid = getenv("TWILIO_SID");
         $auth_token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_number = getenv("TWILIO_NUMBER");
@@ -8909,26 +8909,23 @@ class UserProfileController extends Controller {
     public function varify_code_to_claim_business(Request $request){
 
         $data = CompanyInformation::where(['id'=>$request->cid])->first();
-        $address = '';
-        $city = '';
-        $ZipCode = '';
-        $state = '';
+        $address = $city = $ZipCode = $state = '';
 
-       if($data != ''){
+        if(Auth::check()){
+            $id =  Auth::user()->id;
+        }else{
+            $id =  $request->id;
+        }
+        if($data != ''){
             if($data->claim_business_verification_code == $request->code){
-                
-                CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => Auth::user()->id]);
-                BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => Auth::user()->id]);
-                $user = User::where('id', Auth::user()->id)->update(['bstep' => 1, 'cid' => $request->cid]);
-                $detail_data_com=  [];
-                $detail_data_user =  [];
+                CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => $id]);
+                BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => $id]);
+                $user = User::where('id',$id)->update(['bstep' => 1, 'cid' => $request->cid]);
+                $detail_data_com = [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
                 $allDetail  = json_decode(json_encode($detail_data_com), true); ;
                 MailService::sendEmailafterclaimed($allDetail);
-
                 $msg = 'Match';
-
-
             }else{
                 $msg = 'Not Match';
             }   
@@ -8948,6 +8945,9 @@ class UserProfileController extends Controller {
     public function claim_reminder($cname , $cid){
         
         $data = CompanyInformation::where('id',$cid)->first();
+        if($data->user_id){
+            return redirect()->route('business_dashboard');
+        }
         $val = 'null';
         $address = '';
         
@@ -8966,6 +8966,7 @@ class UserProfileController extends Controller {
         if($data->zip_code != ''){
             $address .= $data->zip_code;
         }
+
         return view('home.business-claim-reminder',compact('cname','cid','address'));
     } 
 	public function createmanageStaff(Request $request){
